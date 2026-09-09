@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace SMSModForge.Services;
@@ -24,6 +25,9 @@ public static class EditorPrefs
     private static Dictionary<string, object>? _cache;
 
     private const string KeyConfirmOnSave = "confirmOnSave";
+    private const string KeyAutoVersion = "autoVersion";
+    private const string KeyWarnLowerVersion = "warnLowerVersion";
+    private const string KeyQuietExportSize = "quietExportSizeFor";
     private const string KeySpellCheckNodeText = "spellCheckNodeText";
 
     /// <summary>
@@ -35,6 +39,66 @@ public static class EditorPrefs
     {
         get => GetBool(KeyConfirmOnSave, defaultValue: true);
         set => SetBool(KeyConfirmOnSave, value);
+    }
+
+    /// <summary>
+    /// Whether a save moves the pack's version on its own.
+    /// <para/>
+    /// On by default. A version nobody remembers to bump is worse than no
+    /// version at all: it tells a player their copy is current when it is not.
+    /// Off is a real preference for an author who numbers releases by hand.
+    /// </summary>
+    public static bool AutoVersion
+    {
+        get => GetBool(KeyAutoVersion, defaultValue: true);
+        set => SetBool(KeyAutoVersion, value);
+    }
+
+    /// <summary>
+    /// Whether saving a version lower than the pack already had asks first.
+    /// <para/>
+    /// On by default, because going backwards is nearly always a typo — and
+    /// the one time it is not, a prompt costs a click.
+    /// </summary>
+    public static bool WarnOnLowerVersion
+    {
+        get => GetBool(KeyWarnLowerVersion, defaultValue: true);
+        set => SetBool(KeyWarnLowerVersion, value);
+    }
+
+    /// <summary>
+    /// Packs whose author has said they do not want the export size warning.
+    /// <para/>
+    /// Per pack rather than global: a big pack is big every time, and the
+    /// warning is worth keeping for the OTHER packs an author opens. Stored as
+    /// a list of pack ids.
+    /// </summary>
+    public static IReadOnlyCollection<string> PacksQuietOnExportSize
+        => GetString(KeyQuietExportSize, "").Split(',',
+               StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+    public static bool IsQuietOnExportSize(string? packId)
+    {
+        if (string.IsNullOrEmpty(packId)) return false;
+        foreach (string had in PacksQuietOnExportSize)
+            if (string.Equals(had, packId, StringComparison.OrdinalIgnoreCase)) return true;
+        return false;
+    }
+
+    public static void SetQuietOnExportSize(string? packId, bool quiet)
+    {
+        if (string.IsNullOrEmpty(packId)) return;
+
+        var have = new List<string>();
+        foreach (string had in PacksQuietOnExportSize)
+            if (!string.Equals(had, packId, StringComparison.OrdinalIgnoreCase)) have.Add(had);
+        if (quiet) have.Add(packId!);
+
+        // Commas separate them, so a pack id containing one would split into
+        // two. Ids are file-system names, which cannot, but strip it anyway
+        // rather than trust that.
+        SetString(KeyQuietExportSize,
+                  string.Join(",", have.Select(h => h.Replace(",", ""))));
     }
 
     /// <summary>

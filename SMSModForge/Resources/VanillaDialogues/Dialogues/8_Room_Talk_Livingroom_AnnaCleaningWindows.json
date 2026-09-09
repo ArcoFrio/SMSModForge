@@ -1,0 +1,641 @@
+{
+ "id": "8_Room_Talk/Livingroom/AnnaCleaningWindows",
+ "name": "AnnaCleaningWindows",
+ "index": 15,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  -147595485,
+  -1386612942,
+  937266018
+ ],
+ "nodes": {
+  "-147595485": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Ugh… I can’t reach that part properly. This stupid streak won't go away...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave3[2026bool-veryshort] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2026bool-veryshort",
+        "list": "Core_NoSave3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1386612942": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1365315116,
+    -1812813319,
+    -233814073,
+    705752893
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, hey sweetie. Do you… maybe have a moment? I could use a hand with these windows. It’s kinda embarrassing, but they’re really tall…",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1365315116": {
+   "kind": "text",
+   "parent": -1386612942,
+   "children": [
+    -905192257
+   ],
+   "actor": null,
+   "text": "Sure, let me help you out. No big deal.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-905192257": {
+   "kind": "text",
+   "parent": 1365315116,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You’re a lifesaver… really. I promise I’ll owe you one.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave3[2026bool-veryshort] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2026bool-veryshort",
+        "list": "Core_NoSave3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1812813319": {
+   "kind": "text",
+   "parent": -1386612942,
+   "children": [
+    1476622426
+   ],
+   "actor": null,
+   "text": "If I help, do I get a sticker and a juice box?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1476622426": {
+   "kind": "text",
+   "parent": -1812813319,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Only if you finish all your chores, mister.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave3[2026bool-veryshort] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2026bool-veryshort",
+        "list": "Core_NoSave3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-233814073": {
+   "kind": "text",
+   "parent": -1386612942,
+   "children": [
+    -1122164466
+   ],
+   "actor": null,
+   "text": "I’ll help… but only if I get a good view while I work.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1122164466": {
+   "kind": "text",
+   "parent": -233814073,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "W-What does that even mean...? You're terrible…",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave3[2026bool-veryshort] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2026bool-veryshort",
+        "list": "Core_NoSave3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "705752893": {
+   "kind": "text",
+   "parent": -1386612942,
+   "children": [
+    -1986359698
+   ],
+   "actor": null,
+   "text": "Nah, I’ve got stuff to do. You’ll manage.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1986359698": {
+   "kind": "text",
+   "parent": 705752893,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "...Right. Of course. I’ll just... figure it out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave3[2026bool-veryshort] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2026bool-veryshort",
+        "list": "Core_NoSave3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood and wait",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[MCorruption] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MCorruption",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "937266018": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Core_NoSave3[2026bool-veryshort] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2026bool-veryshort",
+        "list": "Core_NoSave3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active WindowComplete to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "WindowComplete",
+       "of": "GetGameObjectInstance",
+       "path": "WindowCleaning_Minigame/WindowComplete"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active WindowCleaning_Minigame to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "WindowCleaning_Minigame",
+       "of": "GetGameObjectInstance",
+       "path": "WindowCleaning_Minigame"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.02 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.02
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Livingroom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AnnaCleaningWindows and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[windowcleaning-weekcd] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "windowcleaning-weekcd",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "branches": [
+    "windowcleaning"
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[windowcleaning-weekcd] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "windowcleaning-weekcd",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "checkConditions",
+     "type": "InstructionLogicCheckConditions",
+     "title": "Check Not is Active WindowCleaning_Minigame",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "gameObjectActive",
+         "type": "ConditionGameObjectActive",
+         "title": "Not is Active WindowCleaning_Minigame",
+         "fields": {
+          "m_GameObject": {
+           "kind": "object",
+           "name": "WindowCleaning_Minigame",
+           "of": "GetGameObjectInstance",
+           "path": "WindowCleaning_Minigame"
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using SMSModForge.Model;
 
@@ -99,7 +99,37 @@ public sealed class ParamRowViewModel : ObservableObject
 
     /// <summary>Re-evaluate <see cref="IsEnabled"/>. Called on sibling rows
     /// when any row in the same params dict is written.</summary>
-    public void RefreshEnabled() => OnPropertyChanged(nameof(IsEnabled));
+    public void RefreshEnabled()
+    {
+        OnPropertyChanged(nameof(IsEnabled));
+
+        // The filter depends on a sibling too, and a picker still offering
+        // stills after the author switched the target to a scene would be a
+        // dead end they could only get out of by knowing about "All files".
+        OnPropertyChanged(nameof(PickerFilter));
+    }
+
+    /// <summary>
+    /// What the file dialog for this row offers.
+    /// <para/>
+    /// Animation is a Scenes-category feature, so a sprite aimed at a scene
+    /// offers moving art and one aimed at anything else does not. That is the
+    /// same condition the validator uses to reject an animated sprite pointed
+    /// elsewhere, read from the same sibling param — so the picker cannot
+    /// offer a file the validator will refuse.
+    /// </summary>
+    public string PickerFilter
+    {
+        get
+        {
+            if (Schema.Type != ParamType.SpriteRef) return View.PickerFilters.StillArt;
+
+            _params.TryGetValue("kind", out var target);
+            return string.Equals(target, "Scene", System.StringComparison.OrdinalIgnoreCase)
+                ? View.PickerFilters.SceneArt
+                : View.PickerFilters.StillArt;
+        }
+    }
 
     /// <summary>
     /// The current value as a string. Missing keys fall back to

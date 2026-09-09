@@ -1,0 +1,921 @@
+{
+ "id": "8_Room_Talk/Club/DefaultDialogue",
+ "name": "DefaultDialogue",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Alice"
+ ],
+ "roots": [
+  -1412109094,
+  1460118507,
+  2047117300,
+  266578222,
+  371933779
+ ],
+ "nodes": {
+  "1460118507": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    518570151,
+    1172690002,
+    449140533
+   ],
+   "actor": "Alice",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Well, look who finally decided to show up. Enjoying the scene so far?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[alice-club-first-talk-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-club-first-talk-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "518570151": {
+   "kind": "text",
+   "parent": 1460118507,
+   "children": [
+    -1838409313
+   ],
+   "actor": null,
+   "text": "It's pretty cool.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1172690002": {
+   "kind": "text",
+   "parent": 1460118507,
+   "children": [
+    2089849010
+   ],
+   "actor": null,
+   "text": "The music's a bit too loud.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2047117300": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hey, Alice! This place is sick. You look awesome, by the way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[alice-sharing-start] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-sharing-start",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[alice-club-first-talk-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-club-first-talk-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[alice-club-first-talk-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-club-first-talk-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "449140533": {
+   "kind": "text",
+   "parent": 1460118507,
+   "children": [
+    -1297874983
+   ],
+   "actor": null,
+   "text": "I prefer different kind of parties.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1297874983": {
+   "kind": "text",
+   "parent": 449140533,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Maybe one day you can show me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2089849010": {
+   "kind": "text",
+   "parent": 1172690002,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "You'll get used to it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1838409313": {
+   "kind": "text",
+   "parent": 518570151,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Yeah, it’s definitely something.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "266578222": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -471304968,
+    -162695496
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Of course I do. Now, are you two ready to dance, or are you just here to gawk?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[alice-sharing-start] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-sharing-start",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-471304968": {
+   "kind": "text",
+   "parent": 266578222,
+   "children": [
+    26063692
+   ],
+   "actor": null,
+   "text": "Let's go.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-162695496": {
+   "kind": "text",
+   "parent": 266578222,
+   "children": [
+    -1684221606
+   ],
+   "actor": null,
+   "text": "Maybe next time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "26063692": {
+   "kind": "text",
+   "parent": -471304968,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Hell yeah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[temp-stored-very-short-term] = AfterMiniGame",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "AfterMiniGame",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Club/AfterMiniGame"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Avoid it to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Avoid it",
+       "of": "GetGameObjectInstance",
+       "path": "Avoid it"
+      }
+     }
+    }
+   ]
+  },
+  "-1684221606": {
+   "kind": "text",
+   "parent": -162695496,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Hmpf, sure...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 9_MainCanvas to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "9_MainCanvas",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Club to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Club",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Club"
+      }
+     }
+    }
+   ]
+  },
+  "371933779": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1042921368,
+    228177582
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Now, are you ready to dance, or are you just here to gawk?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[alice-stealing-start] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-stealing-start",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1042921368": {
+   "kind": "text",
+   "parent": 371933779,
+   "children": [
+    1121129723
+   ],
+   "actor": null,
+   "text": "Let's dance.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "228177582": {
+   "kind": "text",
+   "parent": 371933779,
+   "children": [
+    -217842151
+   ],
+   "actor": null,
+   "text": "Maybe next time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1121129723": {
+   "kind": "text",
+   "parent": -1042921368,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Hell yeah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[temp-stored-very-short-term] = AfterMiniGame",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "AfterMiniGame",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Club/AfterMiniGame"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Avoid it to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Avoid it",
+       "of": "GetGameObjectInstance",
+       "path": "Avoid it"
+      }
+     }
+    }
+   ]
+  },
+  "-217842151": {
+   "kind": "text",
+   "parent": 228177582,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Your loss.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 9_MainCanvas to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "9_MainCanvas",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Club to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Club",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Club"
+      }
+     }
+    }
+   ]
+  },
+  "-1412109094": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1405411547
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "To be frank, I didn't expect to see you here. Hopefully, it's because of me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[alice-club-first-talk-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-club-first-talk-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1405411547": {
+   "kind": "text",
+   "parent": -1412109094,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Y-Yeah... I would like to spend more time with you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[alice-sharing-start] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-sharing-start",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Club/ClubConditions",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DefaultDialogue and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AliceBust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[club-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "club-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

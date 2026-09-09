@@ -1,0 +1,408 @@
+{
+ "id": "8_Room_Talk/Stageroom/Claudia_Interview",
+ "name": "Claudia_Interview",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Claudia",
+  "Continue"
+ ],
+ "roots": [
+  -797693448,
+  1711288159,
+  -1045607814,
+  -2006446748,
+  -2045783967,
+  1996847802,
+  -851628426,
+  -1347697870
+ ],
+ "nodes": {
+  "-797693448": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Claudia",
+   "expressionName": "neutral",
+   "text": "There you are. Anna, right? Got a moment?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1711288159": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Claudia",
+   "expression": 1,
+   "expressionName": "talk",
+   "text": "StarPulse Live wants a bite. Just a short interview... you know, how it feels to be here, your rise, the usual buzz.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2006446748": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1191765975,
+    -271641871
+   ],
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You’re late. I’ve already had three interviews and a panel today.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Mainstory[anna-heart-status] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-heart-status",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-2045783967": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -343400222,
+    -589473213
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Figured someone from StarPulse would sniff me out eventually. I’ve seen your reels, Claudia.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Mainstory[anna-heart-status] = 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-heart-status",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1996847802": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -174298844,
+    -730609462
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh—um... wow. Really? I didn’t think anyone here would actually… recognize me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Mainstory[anna-heart-status] ≤ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-heart-status",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1045607814": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -472583799,
+    -160311371
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "You want moans or quotes, Claudia?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1191765975": {
+   "kind": "text",
+   "parent": -2006446748,
+   "actor": "Claudia",
+   "expression": 1,
+   "expressionName": "talk",
+   "text": "You gonna turn me down?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-472583799": {
+   "kind": "text",
+   "parent": -1045607814,
+   "actor": "Claudia",
+   "expression": 1,
+   "expressionName": "talk",
+   "text": "Whichever gets clicks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-174298844": {
+   "kind": "text",
+   "parent": 1996847802,
+   "actor": "Claudia",
+   "expression": 1,
+   "expressionName": "talk",
+   "text": "Trust me, sweetheart. Your name’s been whispered in more than just inboxes. So… can I roll?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-343400222": {
+   "kind": "text",
+   "parent": -2045783967,
+   "actor": "Claudia",
+   "expression": 1,
+   "expressionName": "talk",
+   "text": "Then you know how good I make people look.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-730609462": {
+   "kind": "text",
+   "parent": 1996847802,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-yeah. Okay. Just... not too close, please.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-589473213": {
+   "kind": "text",
+   "parent": -2045783967,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "And how good you are at twisting their words. Let’s keep it cute, alright?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-271641871": {
+   "kind": "text",
+   "parent": -2006446748,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Only if you ask boring questions. Make it juicy, Claudia. My fans expect a show.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-160311371": {
+   "kind": "text",
+   "parent": -1045607814,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Then you’re getting both. Let’s make your viewers wish they had a backstage pass.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-851628426": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 5,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AFewMinutesLater to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AFewMinutesLater",
+       "of": "GetGameObjectInstance",
+       "path": "6_Effects/Effect_Canvas/AFewMinutesLater"
+      }
+     }
+    }
+   ]
+  },
+  "-1347697870": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Claudia",
+   "expressionName": "neutral",
+   "text": "Alright~ short, sweet, and just enough to break the feed. We're done here. Thank you, Anna.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Stageroom/ClaudiaInterviewcond",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Claudia_Interview and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "chance",
+     "type": "ConditionChance",
+     "title": "If 0.5 chance to pass",
+     "fields": {
+      "m_Threshold": {
+       "kind": "value",
+       "value": 0.5
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ClaudiaBust_StarCon to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ClaudiaBust_StarCon",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/ClaudiaBust_StarCon"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/ClaudiaBust_StarCon/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

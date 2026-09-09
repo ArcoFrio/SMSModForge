@@ -1,0 +1,155 @@
+{
+ "id": "8_Room_Talk/Kitchen/Pre_events/AnnaAdrianQuickyThanks",
+ "name": "AnnaAdrianQuickyThanks",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Anna"
+ ],
+ "roots": [
+  1151990690,
+  1831141533
+ ],
+ "nodes": {
+  "1151990690": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Thanks, {M}. I feel a lot better!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1831141533": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "You're welcome, honey. I'm glad I could help you relieve some tension....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Kitchen/Pre_events",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AnnaAdrianQuickyThanks and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[daily-random-event-kitchen] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "daily-random-event-kitchen",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-B-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-B-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "branches": [
+    "1"
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_SemiNude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_SemiNude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_SemiNude"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_SemiNude/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,194 @@
+{
+ "id": "8_Room_Talk/Kitchen/Annanotthere",
+ "name": "Annanotthere",
+ "index": 10,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "You"
+ ],
+ "roots": [
+  1151990690
+ ],
+ "nodes": {
+  "1151990690": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "You",
+   "expression": 3,
+   "text": "Hmm... No one here...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Kitchen",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Annanotthere and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_2[charlotte-anna-talks] ≤ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "charlotte-anna-talks",
+        "list": "Events_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[park-visit] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "park-visit",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Room_Talk/Kitchen/Kitchen_Conditions_1",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Annanotthere and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_2[charlotte-anna-talks] ≤ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "charlotte-anna-talks",
+        "list": "Events_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[park-visit] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "park-visit",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

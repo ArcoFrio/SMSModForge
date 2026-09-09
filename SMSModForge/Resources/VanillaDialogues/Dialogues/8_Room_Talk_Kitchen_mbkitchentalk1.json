@@ -1,0 +1,400 @@
+{
+ "id": "8_Room_Talk/Kitchen/mbkitchentalk1",
+ "name": "mbkitchentalk1",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Anna"
+ ],
+ "roots": [
+  -124361651,
+  -1677922513,
+  515995748,
+  -54265264,
+  1803277466,
+  575461614
+ ],
+ "nodes": {
+  "-124361651": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "{M}, can we have truffle pasta tonight? I'm  like really craving it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1677922513": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I wish we could, Adrian, but truffles are a bit too expensive right now. You know, with Dad losing his job and all.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "515995748": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Oh, right... I forgot. Okay, I get it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-54265264": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "How about we make carbonara instead? It's not truffle pasta, but it's still pretty good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1803277466": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "We can even add some cream.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "575461614": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Yeah, that sounds good. Thanks, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Kitchen",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play mbkitchentalk1 and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DaysPassed] ≥ 7",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DaysPassed",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 7
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[m-b-kitchentalk1] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "m-b-kitchentalk1",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[m-b-kitchentalk1] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "m-b-kitchentalk1",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Core_NoSave[Anna-Default-Outfit] to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Anna-Default-Outfit",
+        "list": "Core_NoSave",
+        "type": "game-object"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Room_Talk/Kitchen/Kitchen_Conditions_1",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play mbkitchentalk1 and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DaysPassed] ≥ 7",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DaysPassed",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 7
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[m-b-kitchentalk1] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "m-b-kitchentalk1",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[m-b-kitchentalk1] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "m-b-kitchentalk1",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Core_NoSave[Anna-Default-Outfit] to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Anna-Default-Outfit",
+        "list": "Core_NoSave",
+        "type": "game-object"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

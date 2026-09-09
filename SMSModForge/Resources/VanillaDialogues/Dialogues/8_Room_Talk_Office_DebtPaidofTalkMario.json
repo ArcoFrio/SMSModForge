@@ -1,0 +1,296 @@
+{
+ "id": "8_Room_Talk/Office/DebtPaidofTalkMario",
+ "name": "DebtPaidofTalkMario",
+ "index": 4,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Josef"
+ ],
+ "roots": [
+  -870097564,
+  551329097,
+  -742359064,
+  -215502591,
+  -1812078542,
+  270578868
+ ],
+ "nodes": {
+  "-870097564": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Di Luca paid off my debt!? ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Mainstory[DEBT-PAID-OFF] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DEBT-PAID-OFF",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Support Josef in paying off what he owes.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Debt",
+        "of": "Quest"
+       },
+       "m_TaskId": -989935106
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "551329097": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I... I can only imagine the struggles you had to endure working for this man...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-215502591": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I don't know what to say... This should be a reason to celebrate, but...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1812078542": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "But feeling this burden being lifted, I feel tired... I think your old man needs a nap...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "270578868": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You did good, I'm proud of you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Charm to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Charm",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Charm"
+      }
+     }
+    }
+   ]
+  },
+  "-742359064": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1914372930,
+    755519703,
+    -688843160
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "You should stay away from him in the future... Mario is a shark who always puts himself in first place.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1914372930": {
+   "kind": "text",
+   "parent": -742359064,
+   "actor": null,
+   "text": "It's fine, really. He's not that bad.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "755519703": {
+   "kind": "text",
+   "parent": -742359064,
+   "actor": null,
+   "text": "Yeah, he's a scumbag. But it wasn't too bad.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-688843160": {
+   "kind": "text",
+   "parent": -742359064,
+   "actor": null,
+   "text": "I'll never recover from this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Office",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DebtPaidofTalkMario and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[debt-paid-off-talk-incoming-d-mario] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "debt-paid-off-talk-incoming-d-mario",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[debt-paid-off-talk-incoming-d-mario] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "debt-paid-off-talk-incoming-d-mario",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

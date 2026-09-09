@@ -1,0 +1,348 @@
+{
+ "id": "8_Room_Talk/Beach/EmmaKatarinaBeachVisit",
+ "name": "EmmaKatarinaBeachVisit",
+ "index": 7,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Emma",
+  "Katarina"
+ ],
+ "roots": [
+  -1109375070,
+  1371620696,
+  144544733,
+  1961437082,
+  -1200622906,
+  -212044957,
+  2000233617,
+  1626466461,
+  172506908,
+  1896362714,
+  -969449686
+ ],
+ "nodes": {
+  "-1109375070": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "It’s a beautiful day, isn’t it? You don’t come to the beach often enough, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1371620696": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Beautiful? Hardly. All I see is sand, sunburnt skin, and… peasants.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "144544733": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You’re impossible, you know that? Try to relax a bit.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1961437082": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Relax? Among them? This entire place reeks of desperation. People squabbling over cheap trinkets and burning themselves like common livestock.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1200622906": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "They’re just enjoying themselves. Not everyone can afford a private island getaway.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-212044957": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "And that’s exactly why we shouldn’t be here. Mixing with the rabble… It’s beneath us, Emma. Your {F} would have never—",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2000233617": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Enough. He’s not here, and I’m not him. We came here to get away from all of that. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1626466461": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "You’re always talking about how much stress you’re under. Well, this is your chance to let go for once.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "172506908": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Let go… I suppose I could try. But if one more brat splashes sand on me, I’m ordering security to clear this beach.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1896362714": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I’ll keep that in mind. Come on, I’ll get us some drinks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-969449686": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Just make sure they have something decent—no cheap cocktails from a plastic cup. And don’t take too long, I feel like I’m on display here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Beach",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play EmmaKatarinaBeachVisit and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[emma-katarina-beach] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-katarina-beach",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[katarina-first-meeting] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-first-meeting",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[emma-first-meeting] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-first-meeting",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Emma_Swimwear to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Emma_Swimwear",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Emma_Swimwear"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina_Swimwear to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina_Swimwear",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Katarina_Swimwear"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[emma-katarina-beach] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-katarina-beach",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

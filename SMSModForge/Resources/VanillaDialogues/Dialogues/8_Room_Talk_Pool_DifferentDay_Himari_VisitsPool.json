@@ -1,0 +1,942 @@
+{
+ "id": "8_Room_Talk/Pool_DifferentDay/Himari_VisitsPool",
+ "name": "Himari_VisitsPool",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Himari"
+ ],
+ "roots": [
+  721257815,
+  975438225,
+  1930012065,
+  -83593973
+ ],
+ "nodes": {
+  "721257815": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "You’re late. I was starting to think you forgot I said I’d be here. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1930012065": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    261510698,
+    258908836,
+    27281271
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "…What? Don’t stare like that. It’s just a swimsuit. I didn’t pick it for you or anything.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[Himari-Pool-FirstTime] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Himari-Pool-FirstTime",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "261510698": {
+   "kind": "text",
+   "parent": 1930012065,
+   "children": [
+    -241543674
+   ],
+   "actor": null,
+   "text": "The pool suits you. You look relaxed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-241543674": {
+   "kind": "text",
+   "parent": 261510698,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "I am relaxed. Work has been annoying lately, so I needed this. The rooftop is surprisingly peaceful… I can see why you like living up here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "258908836": {
+   "kind": "text",
+   "parent": 1930012065,
+   "children": [
+    -993875094
+   ],
+   "actor": null,
+   "text": "That bikini is fighting for its life.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-993875094": {
+   "kind": "text",
+   "parent": 258908836,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Idiot. It’s called a bikini, it’s supposed to look like this. You really have no sense of fashion… but I guess your reaction means it’s doing its job.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "27281271": {
+   "kind": "text",
+   "parent": 1930012065,
+   "children": [
+    2106969591
+   ],
+   "actor": null,
+   "text": "Hard not to stare. You look incredible.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2106969591": {
+   "kind": "text",
+   "parent": 27281271,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Y-You don’t have to say it so directly… but thank you. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-83593973": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1616848913,
+    -1079964770,
+    1103572840,
+    434051353
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "So? You didn’t come up here just to stand around awkwardly, right?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_11[Himari-Pool-FirstTime] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Himari-Pool-FirstTime",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1616848913": {
+   "kind": "text",
+   "parent": -83593973,
+   "children": [
+    -2022862464,
+    -119458332,
+    1954897511,
+    -629259709,
+    -1306109643,
+    799780250,
+    1803001725,
+    -1031959520,
+    -1488681507,
+    -1402252042
+   ],
+   "actor": null,
+   "text": "Now I'm kinda hard...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2022862464": {
+   "kind": "text",
+   "parent": 1616848913,
+   "actor": "Himari",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "You’re unbelievable… jumping straight to that without hesitation.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "434051353": {
+   "kind": "text",
+   "parent": -83593973,
+   "children": [
+    -942999115
+   ],
+   "actor": null,
+   "text": "I’ll let you relax. Just wanted to check in.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-942999115": {
+   "kind": "text",
+   "parent": 434051353,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Hm. That’s… considerate of you. I don’t mind you staying, though.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "975438225": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "The water’s perfect, by the way. Quiet, warm, and private. Exactly how I like it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[Himari-Pool-FirstTime] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Himari-Pool-FirstTime",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-119458332": {
+   "kind": "text",
+   "parent": 1616848913,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Fine. But only because you asked nicely. Don't get used to it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1954897511": {
+   "kind": "random",
+   "parent": 1616848913,
+   "children": [
+    -375705852,
+    -508273491,
+    -87656559
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "If your {M} catches us, that conversation is entirely your problem.",
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Himari_PoolSex (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Himari_PoolSex (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Himari_PoolSex (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-375705852": {
+   "kind": "text",
+   "parent": 1954897511,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "…Wow, cryptocurrency again? People never learn. Volatile assets attract idiots who think they’re geniuses.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-508273491": {
+   "kind": "text",
+   "parent": 1954897511,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Hm… Kimura Motors stock is up again. Obviously. Good leadership produces predictable results.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-87656559": {
+   "kind": "text",
+   "parent": 1954897511,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Oh, that tech startup dropped six percent overnight. Amateur investors panic too easily. It’s embarrassing to watch.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-629259709": {
+   "kind": "random",
+   "parent": 1616848913,
+   "children": [
+    637492859,
+    -395027438,
+    1007803625
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Are you close? ",
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "637492859": {
+   "kind": "text",
+   "parent": -629259709,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Oh, dividends posted already… nice. Passive income is always satisfying.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-395027438": {
+   "kind": "text",
+   "parent": -629259709,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Don’t look at me like that. I’m allowed to check my portfolio while we’re… spending time together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1007803625": {
+   "kind": "text",
+   "parent": -629259709,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "The market closes in twenty minutes… timing really is everything, isn’t it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1306109643": {
+   "kind": "text",
+   "parent": 1616848913,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "There. I think you're close. Don't make a mess on my hair.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "799780250": {
+   "kind": "text",
+   "parent": 1616848913,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Here, let me just… guide you a little. Between them.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Himari_PoolSex (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Himari_PoolSex (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Himari_PoolSex (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1803001725": {
+   "kind": "text",
+   "parent": 1616848913,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "You like that, don't you? Seeing it disappear like that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1031959520": {
+   "kind": "text",
+   "parent": 1616848913,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "…You're getting my cleavage all sticky. I hope you're pleased with yourself.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1488681507": {
+   "kind": "text",
+   "parent": 1616848913,
+   "actor": "Himari",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "And now my chin. Great. Just perfect.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1402252042": {
+   "kind": "text",
+   "parent": 1616848913,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Don't just lie there. Get me a towel or something.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1079964770": {
+   "kind": "text",
+   "parent": -83593973,
+   "children": [
+    1237374916,
+    -619298403,
+    -558768985,
+    -128410704,
+    520343954,
+    1362351094
+   ],
+   "actor": null,
+   "text": "Turn around for a second.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1103572840": {
+   "kind": "text",
+   "parent": -83593973,
+   "children": [
+    868450409,
+    -1966275791,
+    -147666378,
+    239290550,
+    207572773,
+    217694851,
+    -1763464936,
+    -1846938055,
+    -1158503808
+   ],
+   "actor": null,
+   "text": "Stand awkwardly, huh? (Tickle her)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1237374916": {
+   "kind": "text",
+   "parent": -1079964770,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Oh? Giving me orders now?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-619298403": {
+   "kind": "text",
+   "parent": -1079964770,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "…Fine. If you’re going to gawk anyway, I might as well make it worth your attention.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Himari_PoolSex (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Himari_PoolSex (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Himari_PoolSex (0)"
+      }
+     }
+    }
+   ]
+  },
+  "-558768985": {
+   "kind": "text",
+   "parent": -1079964770,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "There. Take a good look. Slowly, okay? I know your brain needs time to process what you’re seeing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-128410704": {
+   "kind": "text",
+   "parent": -1079964770,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Honestly, your eyes have been glued to this bikini since you arrived. You’re not subtle at all. It’s kind of cute… in a pathetic way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "520343954": {
+   "kind": "text",
+   "parent": -1079964770,
+   "actor": "Himari",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Alright, that’s enough.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1362351094": {
+   "kind": "text",
+   "parent": -1079964770,
+   "actor": "Himari",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "You know, if I’d realized how easy it was to make you stare like this, I would’ve worn something like this sooner.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "868450409": {
+   "kind": "text",
+   "parent": 1103572840,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "H-Hey! What are you doing?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1966275791": {
+   "kind": "text",
+   "parent": 1103572840,
+   "actor": "Himari",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "S-Stop that! That tickles, idiot!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-147666378": {
+   "kind": "text",
+   "parent": 1103572840,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You really don’t value your life, do you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "239290550": {
+   "kind": "text",
+   "parent": 1103572840,
+   "actor": "Himari",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Heh.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Himari_PoolSex (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Himari_PoolSex (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Himari_PoolSex (1)"
+      }
+     }
+    }
+   ]
+  },
+  "207572773": {
+   "kind": "text",
+   "parent": 1103572840,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Big mistake.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "217694851": {
+   "kind": "text",
+   "parent": 1103572840,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "My turn.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1763464936": {
+   "kind": "text",
+   "parent": 1103572840,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AFewMinutesLater to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AFewMinutesLater",
+       "of": "GetGameObjectInstance",
+       "path": "6_Effects/Effect_Canvas/AFewMinutesLater"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1846938055": {
+   "kind": "text",
+   "parent": 1103572840,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Idiot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1158503808": {
+   "kind": "text",
+   "parent": 1103572840,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "<size=70%>…That was actually kind of fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Pool_DifferentDay",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Himari_VisitsPool and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "chance",
+     "type": "ConditionChance",
+     "title": "If 0.35 chance to pass",
+     "fields": {
+      "m_Threshold": {
+       "kind": "value",
+       "value": 0.35
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[Himari-Pool-Invited] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Himari-Pool-Invited",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Himari_Beachbust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Himari_Beachbust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Himari_Beachbust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Himari_Beachbust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

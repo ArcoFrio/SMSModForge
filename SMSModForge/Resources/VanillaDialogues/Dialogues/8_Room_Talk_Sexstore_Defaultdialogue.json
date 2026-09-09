@@ -1,0 +1,799 @@
+{
+ "id": "8_Room_Talk/Sexstore/Defaultdialogue",
+ "name": "Defaultdialogue",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Miss Zero"
+ ],
+ "roots": [
+  -1090608079
+ ],
+ "nodes": {
+  "-1090608079": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -84750646,
+    -108287093,
+    1960920139,
+    -1170526136,
+    2015384428,
+    -405589979
+   ],
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Looking for something special or just here to browse?",
+   "tag": "start",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-84750646": {
+   "kind": "text",
+   "parent": -1090608079,
+   "children": [
+    -2083515681
+   ],
+   "actor": null,
+   "text": "Show me your wares. [Shop]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-405589979": {
+   "kind": "text",
+   "parent": -1090608079,
+   "children": [
+    201372259
+   ],
+   "actor": null,
+   "text": "I'm good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2083515681": {
+   "kind": "text",
+   "parent": -84750646,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "It can be all yours...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[active-store] = 5",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "active-store",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 5
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ShopCore to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ShopCore",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/ShopCore"
+      }
+     }
+    }
+   ]
+  },
+  "201372259": {
+   "kind": "text",
+   "parent": -405589979,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Take care, sweetie. And don’t be a stranger. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-108287093": {
+   "kind": "text",
+   "parent": -1090608079,
+   "children": [
+    -2042763130,
+    -1879736160
+   ],
+   "actor": null,
+   "text": "How did you get into this business?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1960920139": {
+   "kind": "text",
+   "parent": -1090608079,
+   "children": [
+    1159092741,
+    1170232872
+   ],
+   "actor": null,
+   "text": "What’s the craziest thing you’ve ever sold?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2042763130": {
+   "kind": "text",
+   "parent": -108287093,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Started off in the underground punk scene, got a knack for tech and pleasure. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1159092741": {
+   "kind": "text",
+   "parent": 1960920139,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Oh, that’s a tough one. Probably one of them ovipositor toys. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1170232872": {
+   "kind": "text",
+   "parent": 1960920139,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Not for the faint of heart, but for those who dare... it’s a whole new world.",
+   "jump": {
+    "mode": "Jump",
+    "to": "start"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1879736160": {
+   "kind": "text",
+   "parent": -108287093,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Decided to combine the two and, voila, Miss Zero’s Emporium was born.",
+   "jump": {
+    "mode": "Jump",
+    "to": "start"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2015384428": {
+   "kind": "text",
+   "parent": -1090608079,
+   "children": [
+    -1936293428,
+    -1425701365,
+    1673222541,
+    -1044799098,
+    -768212065,
+    -340616482,
+    -892914767,
+    1426702758,
+    716883228
+   ],
+   "actor": null,
+   "text": "(Pervert) Wanna see my cock? I'm massive!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[Pervert-5] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Pervert-5",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1936293428": {
+   "kind": "text",
+   "parent": 2015384428,
+   "children": [
+    -1770594960,
+    1533567275
+   ],
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "I doubt it grew since the last time I've seen it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[zero-first-time] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zero-first-time",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1770594960": {
+   "kind": "text",
+   "parent": -1936293428,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "But that's not needed... You are so friggin huge!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MissZero to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MissZero",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/MissZero"
+      }
+     }
+    }
+   ]
+  },
+  "1533567275": {
+   "kind": "text",
+   "parent": -1936293428,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Let's... Let's put it where it belongs... Into my slut pussy!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1425701365": {
+   "kind": "text",
+   "parent": 2015384428,
+   "children": [
+    1225818411,
+    789852125,
+    66416143,
+    -729136464
+   ],
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Huh? Do you really think a simple cock would...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[zero-first-time] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zero-first-time",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1225818411": {
+   "kind": "text",
+   "parent": -1425701365,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "HOLY MOLY! .... You were hiding a MONSTER!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[zero-first-time] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zero-first-time",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MissZero to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MissZero",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/MissZero"
+      }
+     }
+    }
+   ]
+  },
+  "789852125": {
+   "kind": "text",
+   "parent": -1425701365,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "The size! The shape! ... Jesus, boy... Were you made in a lab or something?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "66416143": {
+   "kind": "text",
+   "parent": -1425701365,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "I... I think a cock like that deserves to be in a fitting place... A warm, needy place...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-729136464": {
+   "kind": "text",
+   "parent": -1425701365,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Let me... Let me ride it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1673222541": {
+   "kind": "text",
+   "parent": 2015384428,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "OH MY FUCKING GOD...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MissZero (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MissZero (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/MissZero (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1044799098": {
+   "kind": "text",
+   "parent": 2015384428,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "BEST COCK EVER... I wish I could ride you for the rest of my life! Hnggaaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-768212065": {
+   "kind": "text",
+   "parent": 2015384428,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Let me ride it... I want to... Yay! Haaaaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-340616482": {
+   "kind": "text",
+   "parent": 2015384428,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Fill me up, {PC}! Fuck... Fuck my slut pussy! FEED IT!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MissZero (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MissZero (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/MissZero (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-892914767": {
+   "kind": "text",
+   "parent": 2015384428,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "JESUS CHRIST! You are flooding my womb! HNGAAAAGH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1426702758": {
+   "kind": "text",
+   "parent": 2015384428,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Fhack! Oh my god... You are literally my favorite customer now...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "716883228": {
+   "kind": "text",
+   "parent": 2015384428,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "P-Please, whenever you are nearby and need a wet hole to fuck... Visit me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1170526136": {
+   "kind": "text",
+   "parent": -1090608079,
+   "children": [
+    -242173197,
+    822824344,
+    23415353
+   ],
+   "actor": null,
+   "text": "Miss Zero… Nyxara’s been kind of mean to me lately.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[nyxara-toldmisszero] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxara-toldmisszero",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[nyxaratoystore-met] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxaratoystore-met",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-242173197": {
+   "kind": "text",
+   "parent": -1170526136,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Oh, sweetheart… I’m sorry she’s giving you a hard time. You don’t deserve that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[nyxara-toldmisszero] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxara-toldmisszero",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "23415353": {
+   "kind": "text",
+   "parent": -1170526136,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Don’t you worry. I’ll have a talk with her. Nyxara listens to me, even if she pretends not to. I’ll make sure she treats you more kindly.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "822824344": {
+   "kind": "text",
+   "parent": -1170526136,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "I know she's a demon from a different dimension, but that doesn't give her the right to be mean!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Sexstore",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Defaultdialogue and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_ShadyVendor to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_ShadyVendor",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_ShadyVendor"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

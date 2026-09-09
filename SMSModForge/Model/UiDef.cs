@@ -74,6 +74,57 @@ public sealed class UiDef
     public bool StartsOpen { get; set; }
 
     /// <summary>
+    /// What every button on this screen sounds like when it is pressed.
+    /// <para/>
+    /// One of the pack's own sounds by its key, or one of the game's by its
+    /// name - the same two places a Play SFX action looks, and in the same
+    /// order, so a pack can shadow a game sound with one of its own.
+    /// <para/>
+    /// Empty means the game's own button click, which is what a button does
+    /// unless something says otherwise. Silence is <see cref="SilentButtons"/>
+    /// rather than an empty name: "I have not chosen a sound" and "I want no
+    /// sound" are different answers, and only one of them should be what you
+    /// get for leaving a field alone.
+    /// </summary>
+    [JsonProperty("buttonSound", Order = 6, NullValueHandling = NullValueHandling.Ignore)]
+    public string ButtonSound { get; set; } = "";
+
+    /// <summary>
+    /// Whether this screen's buttons stay quiet. False - buttons make a sound -
+    /// unless a pack says otherwise, which is why the stored word is the
+    /// unusual one: an absent field means the ordinary behaviour.
+    /// </summary>
+    [JsonProperty("silentButtons", Order = 7, NullValueHandling = NullValueHandling.Ignore)]
+    public bool SilentButtons { get; set; }
+
+    /// <summary>How this screen arrives when it is switched on, or null to
+    /// simply appear - which is what most of the game's screens do.</summary>
+    [JsonProperty("open", Order = 8, NullValueHandling = NullValueHandling.Ignore)]
+    public UiOpenDef? Open { get; set; }
+
+    /// <summary>
+    /// How this screen leaves when an action switches it off, or null to simply
+    /// vanish.
+    /// <para/>
+    /// Only an action can play it. Something switched off by an activation
+    /// condition goes at once, because nothing asked first and a deactivated
+    /// object has no way to animate itself away.
+    /// </summary>
+    [JsonProperty("close", Order = 9, NullValueHandling = NullValueHandling.Ignore)]
+    public UiOpenDef? Close { get; set; }
+
+    /// <summary>
+    /// The sound a button makes when no one has chosen one - the game's own
+    /// button click.
+    /// <para/>
+    /// The runtime holds the same name and is what actually plays it; this copy
+    /// exists so the editor can say what an empty field will do. A test keeps
+    /// the two in step, since the editor and the plugin cannot reference each
+    /// other.
+    /// </summary>
+    public const string DefaultButtonSound = "Mountain Audio - Bubble Button 1";
+
+    /// <summary>
     /// Draw order against other independent UI. Higher is nearer the front.
     /// <para/>
     /// Only consulted when <see cref="HidesWithGameplayUi"/> is false, because
@@ -100,6 +151,10 @@ public sealed class UiDef
 
     public bool ShouldSerializeSource() => IsVanillaBased;
     public bool ShouldSerializeStartsOpen() => StartsOpen;
+    public bool ShouldSerializeButtonSound() => !string.IsNullOrEmpty(ButtonSound);
+    public bool ShouldSerializeOpen() => Open != null && Open.DoesAnything;
+    public bool ShouldSerializeClose() => Close != null && Close.DoesAnything;
+    public bool ShouldSerializeSilentButtons() => SilentButtons;
     public bool ShouldSerializeSortingOrder() => SortingOrder != 0;
     public bool ShouldSerializeTemplate() => !string.IsNullOrEmpty(Template);
     public bool ShouldSerializeNodes() => Nodes.Count > 0;

@@ -207,6 +207,101 @@ public class UiBindingTests
     }
 
     [Fact]
+    public void The_hint_gives_way_to_the_property_panel_when_a_row_is_chosen()
+    {
+        // Reported as overlapping text: the "select an object" hint and the
+        // property fields share a Grid cell on purpose, so exactly one of them
+        // must ever be visible.
+        WindowHarness.Run(window =>
+        {
+            if (!VanillaUiLibrary.IsAvailable) { _out.WriteLine("no extraction - skipping"); return; }
+
+            var vm = (MainViewModel)window.DataContext;
+            var tabs = (TabControl)window.FindName("MainTabs");
+            var hint = (System.Windows.Controls.TextBlock)window.FindName("UiNoSelectionHint");
+            Assert.NotNull(hint);
+
+            tabs.SelectedIndex = tabs.Items.Count - 1;
+            WindowHarness.Pump();
+
+            vm.AddVanillaUiCommand.Execute(null);
+            vm.Uis[0].Source = "vanillaui:9_MainCanvas/Quitagme";
+            WindowHarness.Pump();
+            Assert.Equal(System.Windows.Visibility.Visible, hint.Visibility);
+
+            // And the fields are NOT showing at the same time, which is the
+            // overlap that was reported: two things in one Grid cell.
+            var fields = (System.Windows.FrameworkElement)window.FindName("UiNodeFields");
+            _out.WriteLine("fields with nothing selected: " + fields.Visibility);
+            Assert.Equal(System.Windows.Visibility.Collapsed, fields.Visibility);
+
+            vm.Uis[0].SelectedNode = vm.Uis[0].Nodes[0];
+            WindowHarness.Pump();
+            _out.WriteLine("hint after selecting: " + hint.Visibility);
+            Assert.Equal(System.Windows.Visibility.Collapsed, hint.Visibility);
+        });
+    }
+
+    [Fact]
+    public void The_hint_and_the_fields_are_never_both_visible()
+    {
+        // They share a Grid cell, so two visible at once is overlapping text.
+        // Swept across states rather than checked in one, because the reported
+        // sighting was in a state the single check did not reach.
+        WindowHarness.Run(window =>
+        {
+            var vm = (MainViewModel)window.DataContext;
+            var tabs = (TabControl)window.FindName("MainTabs");
+            var hint = (System.Windows.FrameworkElement)window.FindName("UiNoSelectionHint");
+            var fields = (System.Windows.FrameworkElement)window.FindName("UiNodeFields");
+
+            tabs.SelectedIndex = tabs.Items.Count - 1;
+            WindowHarness.Pump();
+
+            void Check(string state)
+            {
+                WindowHarness.Pump();
+                bool both = hint.Visibility == System.Windows.Visibility.Visible
+                         && fields.Visibility == System.Windows.Visibility.Visible;
+                _out.WriteLine($"{state,-34} hint={hint.Visibility,-9} fields={fields.Visibility}");
+                Assert.False(both, $"both visible with {state}");
+            }
+
+            Check("nothing at all");
+
+            vm.AddOwnUiCommand.Execute(null);
+            Check("a UI of the pack's own");
+
+            vm.Uis[0].SelectedNode = vm.Uis[0].Nodes.FirstOrDefault();
+            Check("with its root selected");
+
+            vm.AddVanillaUiCommand.Execute(null);
+            Check("a vanilla row, nothing chosen");
+
+            if (VanillaUiLibrary.IsAvailable)
+            {
+                vm.Uis[1].Source = "vanillaui:9_MainCanvas/Quitagme";
+                Check("a screen chosen");
+
+                vm.Uis[1].SelectedNode = vm.Uis[1].Nodes[0].Children.FirstOrDefault();
+                Check("a child selected");
+
+                vm.Uis[1].Source = "vanillaui:9_MainCanvas/Payout";
+                Check("after switching screen");
+            }
+
+            vm.SelectedUi = vm.Uis[0];
+            Check("after switching row");
+
+            vm.RemoveUiCommand.Execute(null);
+            Check("after removing one");
+
+            while (vm.Uis.Count > 0) vm.RemoveUiCommand.Execute(null);
+            Check("after removing them all");
+        });
+    }
+
+    [Fact]
     public void Adding_an_object_puts_it_in_the_tree_and_on_the_picture()
     {
         WindowHarness.Run(window =>
@@ -267,6 +362,68 @@ public class UiBindingTests
 
             Assert.Single(tree.Items);
             _out.WriteLine($"tree root: {((UiNodeViewModel)tree.Items[0]!).Display}");
+        });
+    }
+
+    [Fact]
+    public void The_template_menus_offer_something_that_works()
+    {
+        // A menu builds its items only when it is opened, so the bindings
+        // inside ItemContainerStyle are invisible to the sweep above - it
+        // drives the tab but never opens a menu. Every one of those bindings
+        // reaches across to the window's DataContext, which is exactly the
+        // shape that has failed silently here before.
+        using var watch = new BindingWatch();
+        WindowHarness.Run(window =>
+        {
+            var vm = (MainViewModel)window.DataContext;
+            var tabs = (TabControl)window.FindName("MainTabs");
+            tabs.SelectedIndex = tabs.Items.Count - 1;
+            WindowHarness.Pump();
+
+            // "+ Piece" hangs off the selected UI, so there has to be one.
+            vm.AddOwnUiCommand.Execute(null);
+            vm.SelectedUi = vm.Uis[^1];
+            WindowHarness.Pump();
+
+            // Everything that adds an object now lives on the tree; the list
+            // only makes and removes whole screens.
+            foreach (string name in new[] { "AddShapeMenu", "AddPieceMenu", "AddCopyChildMenu" })
+            {
+                var menu = (MenuItem)window.FindName(name);
+                Assert.NotNull(menu);
+
+                menu.IsSubmenuOpen = true;
+                WindowHarness.Pump();
+
+                var items = menu.Items.Cast<object>()
+                    .Select(i => menu.ItemContainerGenerator.ContainerFromItem(i))
+                    .OfType<MenuItem>()
+                    .ToList();
+
+                _out.WriteLine($"{name}: {items.Count} item(s)");
+                Assert.NotEmpty(items);
+
+                foreach (var item in items)
+                {
+                    Assert.False(string.IsNullOrWhiteSpace(item.Header as string));
+                    Assert.NotNull(item.Command);
+
+                    // A shape or a piece passes a template; copying a screen
+                    // passes the screen. Either way it must pass SOMETHING -
+                    // a null parameter is a menu entry that does nothing.
+                    Assert.NotNull(item.CommandParameter);
+                }
+
+                menu.IsSubmenuOpen = false;
+                WindowHarness.Pump();
+            }
+
+            foreach (var complaint in watch.Complaints.Distinct().Take(6))
+                _out.WriteLine(complaint);
+            Assert.True(watch.Complaints.Count == 0,
+                $"{watch.Complaints.Count} broken binding(s); first: " +
+                (watch.Complaints.FirstOrDefault() ?? ""));
         });
     }
 }

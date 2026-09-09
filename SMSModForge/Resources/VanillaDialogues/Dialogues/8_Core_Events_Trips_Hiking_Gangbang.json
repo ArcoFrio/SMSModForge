@@ -1,0 +1,1053 @@
+{
+ "id": "8_Core_Events/Trips/Hiking/Gangbang",
+ "name": "Gangbang",
+ "index": 8,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Anna",
+  "Continue",
+  "Josef"
+ ],
+ "roots": [
+  -1270996933,
+  -1493134087,
+  -311630222,
+  578729645,
+  -1483062827,
+  1614141552,
+  1611998839,
+  295096829,
+  -1714308654,
+  1191075838,
+  1476961592,
+  1134160242,
+  -208749623,
+  1691348037,
+  2140415427,
+  -365424044,
+  -751800197,
+  581213948,
+  -1022703656,
+  397395949,
+  -282543067,
+  1805533120,
+  962488817,
+  599360111,
+  -1205844528,
+  -2091192491,
+  -825651707,
+  -606330740,
+  105683750,
+  1151098045,
+  41130682,
+  1853760579,
+  -788567788,
+  1601562046,
+  -1550981478,
+  -1544553650,
+  843621221,
+  -1182033980,
+  2045380788,
+  682959608
+ ],
+ "nodes": {
+  "-1270996933": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "It's great that we're all getting together like this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1493134087": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You know what? I think I’m going to take a quick dip in the lake. It’s been a long day, and the water looks so inviting.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-311630222": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "You're sure? I don't think we packed any swimwear.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "578729645": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, that's not a problem!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Hiking/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1483062827": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HikingDipping to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HikingDipping",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/HikingDipping"
+      }
+     }
+    }
+   ]
+  },
+  "1614141552": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    2061752235,
+    412838946,
+    -488508145
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "That woman always knows how to enjoy herself.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2061752235": {
+   "kind": "text",
+   "parent": 1614141552,
+   "children": [
+    1103440398
+   ],
+   "actor": null,
+   "text": "It’s one of the things I love about her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "412838946": {
+   "kind": "text",
+   "parent": 1614141552,
+   "children": [
+    -184194773
+   ],
+   "actor": null,
+   "text": "Sometimes she's enjoying herself too much....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-488508145": {
+   "kind": "text",
+   "parent": 1614141552,
+   "children": [
+    -501656221,
+    -1108265919
+   ],
+   "actor": null,
+   "text": "I think {M}'s trying to get us worked up...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-501656221": {
+   "kind": "text",
+   "parent": -488508145,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "W-What?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-184194773": {
+   "kind": "text",
+   "parent": 412838946,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I-Is there even such a thing as enjoying yourself too much?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1103440398": {
+   "kind": "text",
+   "parent": 2061752235,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1108265919": {
+   "kind": "text",
+   "parent": -488508145,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Yeah, that must be it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1611998839": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "This is amazing! The water was so refreshing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Nude"
+      }
+     }
+    }
+   ]
+  },
+  "295096829": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "This is just what I needed....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1714308654": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -409731311,
+    -1724359716
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Hmmm.... I wonder what else I need....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-409731311": {
+   "kind": "text",
+   "parent": -1714308654,
+   "children": [
+    -1537816093
+   ],
+   "actor": null,
+   "text": "Our cocks?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1724359716": {
+   "kind": "text",
+   "parent": -1714308654,
+   "children": [
+    889846213,
+    -1323505815,
+    -428671660
+   ],
+   "actor": null,
+   "text": "Some marshmallows and a towel?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "889846213": {
+   "kind": "text",
+   "parent": -1724359716,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes, that sounds great.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1323505815": {
+   "kind": "text",
+   "parent": -1724359716,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Once you've dried up we should get some rest.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-428671660": {
+   "kind": "text",
+   "parent": -1724359716,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Then it's back home tomorrow.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1537816093": {
+   "kind": "text",
+   "parent": -409731311,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes! That's it, I need cocks...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1191075838": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -240351054,
+    1740297151,
+    -40834090,
+    1830380195
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "W-Wait, so  {D} knows that {M}....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[WHOLE-F-INVOLVED] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "WHOLE-F-INVOLVED",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-240351054": {
+   "kind": "text",
+   "parent": 1191075838,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Of course, he does. {PC} and Josef took good care of me before...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1740297151": {
+   "kind": "text",
+   "parent": 1191075838,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "A-And now you want us to.. to...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-40834090": {
+   "kind": "text",
+   "parent": 1191075838,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "No need to be shy, {S}. It's not like I haven't seen your cock before.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1830380195": {
+   "kind": "text",
+   "parent": 1191075838,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Your {D} is right! Everyone! Please show me your big cocks!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Mainstory[WHOLE-F-INVOLVED] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "WHOLE-F-INVOLVED",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1476961592": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Hikinggb1 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Hikinggb1",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Hikinggb1"
+      }
+     }
+    }
+   ]
+  },
+  "1134160242": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So many cocks...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-208749623": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "M-{M}... Please lick my dick...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1691348037": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Don't forget about me, Anna...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2140415427": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "D-Don't press all your dicks on me at the same time!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-365424044": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "P-Please, {M}... I want to put it in...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-751800197": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I'm Anna's husband, and I should be the first one to...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "581213948": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hmmm... I want to ride {PC} first. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1022703656": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Hikinggb1 (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Hikinggb1 (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Hikinggb1 (1)"
+      }
+     }
+    }
+   ]
+  },
+  "397395949": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "G-God, I'll never cease to be amazed at how big you are, {PC}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-282543067": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Darling, open wide for me. My cock is waiting for you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1805533120": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "H-Hey, what about me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "962488817": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, sweetheart, I'm so sorry! How about you fuck my ass?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "599360111": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "O-Okay!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1205844528": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Not fair...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2091192491": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Hikinggb1 (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Hikinggb1 (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Hikinggb1 (2)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HikingDipping to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HikingDipping",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/HikingDipping"
+      }
+     }
+    }
+   ]
+  },
+  "-825651707": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Fuckkk... {M} is so tight... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-606330740": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "MMphmmmm! Mghmmmmm!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "105683750": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "You're not ready for her ass. You're way too inexperienced.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1151098045": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Hah! Look at how {M} is moaning, I think she likes our younger cocks better!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "41130682": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "D-Don't fight, guy!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1853760579": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "The more dicks the better! Hnmmmgg.....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-788567788": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{PC}! Adrian! Keep fucking my holes like there's no tomorrow!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1550981478": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "F-Fuck, {M}. I'm getting close!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1544553650": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "M-Me too....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "843621221": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Please! Go ahead and relieve yourselves all over {M}'s face!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1182033980": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Hikinggb1 (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Hikinggb1 (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Hikinggb1 (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Hikinggb1 (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Hikinggb1 (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Hikinggb1 (3)"
+      }
+     }
+    }
+   ]
+  },
+  "2045380788": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So much warm goo..",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Achievements[happy-together] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "happy-together",
+        "list": "Achievements",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[achivement-unlocked] = Happy Together",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Happy Together"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "achivement-unlocked",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Achievements[happy-together] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "happy-together",
+        "list": "Achievements",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "682959608": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Getting married was the best idea ever...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1601562046": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm... I'm... Cummingg!!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Trips/Hiking/Gangbangcondition",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Gangbang and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-B-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-B-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

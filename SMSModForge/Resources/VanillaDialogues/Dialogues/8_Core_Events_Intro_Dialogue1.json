@@ -1,0 +1,1775 @@
+{
+ "id": "8_Core_Events/Intro/Dialogue1",
+ "name": "Dialogue1",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian"
+ ],
+ "roots": [
+  1066755880
+ ],
+ "nodes": {
+  "1066755880": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1531955118,
+    -1127249016
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Hey, um... {B}... I'm really sorry to disturb you, but {M} and {D} seem to be having a bit of a problem. I've never seen {D} this unhinged before...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1531955118": {
+   "kind": "text",
+   "parent": 1066755880,
+   "children": [
+    -427365046
+   ],
+   "actor": null,
+   "text": "Oh shit, really? Let's see what's going on.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1127249016": {
+   "kind": "text",
+   "parent": 1066755880,
+   "children": [
+    -1046707820,
+    -1297632429
+   ],
+   "actor": null,
+   "text": "I'm sure it's fine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1046707820": {
+   "kind": "text",
+   "parent": -1127249016,
+   "actor": "Adrian",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I really don't think so, {B}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-427365046": {
+   "kind": "text",
+   "parent": 1531955118,
+   "actor": "Adrian",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I hope no one has died or something...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1297632429": {
+   "kind": "choice",
+   "parent": -1127249016,
+   "children": [
+    962303654,
+    51556959
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Come on, it's just going to take a few minutes. I don't want to go in there alone.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "962303654": {
+   "kind": "text",
+   "parent": -1297632429,
+   "actor": null,
+   "text": "Alright, let's go.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "51556959": {
+   "kind": "text",
+   "parent": -1297632429,
+   "actor": null,
+   "text": "Sure, but you owe me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Intro",
+   "script": "Trigger",
+   "event": "EventOnStart",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dialogue1 and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Canvas to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Canvas",
+       "of": "GetGameObjectInstance",
+       "path": "8_Core_Events/Intro/Canvas"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Navigator to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Navigator",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator"
+      }
+     }
+    },
+    {
+     "type": "InstructionCursorTexture",
+     "title": "Set Cursor Texture to CoreCursor",
+     "fields": {
+      "m_Texture": {
+       "kind": "raw",
+       "type": "GetTextureInstance",
+       "data": {
+        "m_Texture": {
+         "$unity": "CoreCursor",
+         "$type": "Texture2D"
+        }
+       }
+      },
+      "m_Tip": {
+       "x": 0,
+       "y": 0
+      },
+      "m_Mode": "Auto"
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "checkConditions",
+     "type": "InstructionLogicCheckConditions",
+     "title": "Check If Mainstory[Intro-Done] = False",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "compareBool",
+         "type": "ConditionMathCompareBooleans",
+         "title": "If Mainstory[Intro-Done] = False",
+         "fields": {
+          "m_Value": {
+           "kind": "variable",
+           "variable": {
+            "scope": "global",
+            "name": "Intro-Done",
+            "list": "Mainstory",
+            "type": "boolean"
+           }
+          },
+          "m_Comparison": "Equals",
+          "m_CompareTo": {
+           "kind": "value",
+           "value": false
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "type": "InstructionQuestsActivate",
+     "title": "Activate Debt",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Debt",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    },
+    {
+     "type": "InstructionQuestsActivate",
+     "title": "Activate Going Viral (Anna)",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Going Viral (Anna)",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Conditions and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "Conditions",
+       "of": "GetGameObjectConditions",
+       "path": "8_Core_Events/Intro/Conditions"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PlayerRoom_ButtonCanvas to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PlayerRoom_ButtonCanvas",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PlayerRoom_ButtonCanvas to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PlayerRoom_ButtonCanvas",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 9_MainCanvas to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "9_MainCanvas",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: door-knock",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "door-knock",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Door Open",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Door Open",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeInBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeInBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 5_MyRoom to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "5_MyRoom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/5_MyRoom"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 3_LivingRoom to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "3_LivingRoom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/3_LivingRoom"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.5 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.5
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Dialogue2 and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Dialogue2",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Core_Events/Intro/Dialogue2"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Dialogue3 and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Dialogue3",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Core_Events/Intro/Dialogue3"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "type": "InstructionCommonAudioSourceVolume",
+     "title": "Volume of Music = 0",
+     "fields": {
+      "m_AudioSource": {
+       "kind": "object",
+       "name": "Music",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Music"
+      },
+      "m_Volume": {
+       "kind": "value",
+       "value": 0
+      },
+      "m_Transition": {
+       "m_Duration": 3,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": false
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeInBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeInBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 3 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 3
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_Maps to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_Maps",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_Maps"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 12_Bakery to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "12_Bakery",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/12_Bakery"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Amelia_Barista to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Amelia_Barista",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Amelia_Barista"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CityNoises to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CityNoises",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/CityNoises"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Dialogue4 and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Dialogue4",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Core_Events/Intro/Dialogue4"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeInBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeInBlack"
+      }
+     }
+    },
+    {
+     "type": "InstructionCommonAudioSourceVolume",
+     "title": "Volume of CityNoises = 0",
+     "fields": {
+      "m_AudioSource": {
+       "kind": "object",
+       "name": "CityNoises",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/CityNoises"
+      },
+      "m_Volume": {
+       "kind": "value",
+       "value": 0
+      },
+      "m_Transition": {
+       "m_Duration": 2,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": false
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CityNoises to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CityNoises",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/CityNoises"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_Maps to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_Maps",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_Maps"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Dialogue5 and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Dialogue5",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Core_Events/Intro/Dialogue5"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "type": "InstructionCommonAudioSourceVolume",
+     "title": "Volume of Music = 0.5",
+     "fields": {
+      "m_AudioSource": {
+       "kind": "object",
+       "name": "Music",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Music"
+      },
+      "m_Volume": {
+       "kind": "value",
+       "value": 0.5
+      },
+      "m_Transition": {
+       "m_Duration": 3,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 3_LivingRoom to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "3_LivingRoom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/3_LivingRoom"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Dialogue6 and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Dialogue6",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Core_Events/Intro/Dialogue6"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeInBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeInBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_Maps to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_Maps",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_Maps"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 5_MyRoom to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "5_MyRoom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/5_MyRoom"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: door-knock",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "door-knock",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 3 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 3
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Door Open",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Door Open",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Dialogue7 and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Dialogue7",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Core_Events/Intro/Dialogue7"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "checkConditions",
+     "type": "InstructionLogicCheckConditions",
+     "title": "Check Not is Active 17_ending",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "gameObjectActive",
+         "type": "ConditionGameObjectActive",
+         "title": "Not is Active 17_ending",
+         "fields": {
+          "m_GameObject": {
+           "kind": "object",
+           "name": "17_ending",
+           "of": "GetGameObjectInstance",
+           "path": "17_ending"
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 9_MainCanvas to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "9_MainCanvas",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active OtherHud to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "OtherHud",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/OtherHud"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Navigator to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Navigator",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Starmaker to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Starmaker",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Starmaker"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 6 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 6
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Starmaker to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Starmaker",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Starmaker"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PlayerRoom_ButtonCanvas to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PlayerRoom_ButtonCanvas",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.1 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PlayerRoom_ButtonCanvas to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PlayerRoom_ButtonCanvas",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Dialogue8 and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Dialogue8",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Core_Events/Intro/Dialogue8"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 9_MainCanvas to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "9_MainCanvas",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active OtherHud to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "OtherHud",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/OtherHud"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Navigator to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Navigator",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Comments[1] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "1",
+        "list": "Comments",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Follower] + 12",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Follower",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 12
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Subscriber] + 3",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Subscriber",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 3
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Daily-Income] + 3",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Daily-Income",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 3
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Mainstory[Intro-Done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Intro-Done",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PlayerRoom_ButtonCanvas to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PlayerRoom_ButtonCanvas",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run TutorialTrigger_FirstSteps and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "TutorialTrigger_FirstSteps",
+       "of": "GetGameObjectConditions",
+       "path": "10_Gameplay/TutorialTrigger_FirstSteps"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

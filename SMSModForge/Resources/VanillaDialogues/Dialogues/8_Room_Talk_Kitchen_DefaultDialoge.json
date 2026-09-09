@@ -1,0 +1,2305 @@
+{
+ "id": "8_Room_Talk/Kitchen/DefaultDialoge",
+ "name": "DefaultDialoge",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  828494319
+ ],
+ "nodes": {
+  "828494319": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -591360552,
+    1531132399,
+    -1540934822,
+    1229421652,
+    1416268923,
+    1238341562
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": {
+    "kind": "variable",
+    "variable": {
+     "scope": "global",
+     "name": "unique-response",
+     "list": "Core_NoSave2",
+     "type": "string"
+    }
+   },
+   "tag": "start",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-591360552": {
+   "kind": "text",
+   "parent": 828494319,
+   "children": [
+    1688790065,
+    -1890571615,
+    1786834836,
+    1882818052,
+    847713325,
+    1638546217,
+    -746009091
+   ],
+   "actor": null,
+   "text": "Let's take a photo.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[photo-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "photo-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "494747330": {
+   "kind": "text",
+   "parent": -221142713,
+   "children": [
+    -299261732,
+    -65334474,
+    371939062
+   ],
+   "actor": null,
+   "text": "How are you doing?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Subscriber] ≤ 3000",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Subscriber",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3000
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-516103510": {
+   "kind": "text",
+   "parent": -221142713,
+   "children": [
+    -1391845533,
+    -1279899361
+   ],
+   "actor": null,
+   "text": "Anything I can do?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1238341562": {
+   "kind": "text",
+   "parent": 828494319,
+   "children": [
+    1401604726
+   ],
+   "actor": null,
+   "text": "See you around, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1401604726": {
+   "kind": "text",
+   "parent": 1238341562,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": {
+    "kind": "variable",
+    "variable": {
+     "scope": "global",
+     "name": "custom-npc-goodbye",
+     "list": "Core_NoSave2",
+     "type": "string"
+    }
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1391845533": {
+   "kind": "text",
+   "parent": -516103510,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You've been working like crazy all month, hun. Don't burn yourself out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-299261732": {
+   "kind": "text",
+   "parent": 494747330,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm fine, hun. You shouldn't be worrying about me, it should be the other way around...",
+   "jump": {
+    "mode": "Jump",
+    "to": "start"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-touching] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-touching",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1882818052": {
+   "kind": "random",
+   "parent": -591360552,
+   "children": [
+    1479876860,
+    -629890629,
+    -2028035140,
+    285870854,
+    -90746701
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Sure!",
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1279899361": {
+   "kind": "text",
+   "parent": -516103510,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "But if you really want to help, we can cover the rent if we get my Starmaker page to 2k a month, combined with my salary from the flower store.",
+   "jump": {
+    "mode": "Jump",
+    "to": "start"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Daily-Income] ≤ 1999",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Daily-Income",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1999
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1479876860": {
+   "kind": "text",
+   "parent": 1882818052,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 05_MKitchen1 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "05_MKitchen1",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/05_MKitchen1"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'flash'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "flash"
+      }
+     }
+    }
+   ]
+  },
+  "-629890629": {
+   "kind": "text",
+   "parent": 1882818052,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 06_MKitchen2 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "06_MKitchen2",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/06_MKitchen2"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'flash'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "flash"
+      }
+     }
+    }
+   ]
+  },
+  "-2028035140": {
+   "kind": "text",
+   "parent": 1882818052,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 07_MKitchen3 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "07_MKitchen3",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/07_MKitchen3"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'flash'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "flash"
+      }
+     }
+    }
+   ]
+  },
+  "1638546217": {
+   "kind": "text",
+   "parent": -591360552,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Okay… done.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Kitchen_Condition_AfterPhoto and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "Kitchen_Condition_AfterPhoto",
+       "of": "GetGameObjectConditions",
+       "path": "8_Room_Talk/Kitchen/Kitchen_Condition_AfterPhoto"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1540934822": {
+   "kind": "text",
+   "parent": 828494319,
+   "children": [
+    179374438,
+    -1540627653
+   ],
+   "actor": null,
+   "text": "I have a gift for you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1540627653": {
+   "kind": "text",
+   "parent": -1540934822,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A gift? For me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active UI_GiftItem_Canvas to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "UI_GiftItem_Canvas",
+       "of": "GetGameObjectInstance",
+       "path": "UI_GiftItem_Canvas"
+      }
+     }
+    }
+   ]
+  },
+  "285870854": {
+   "kind": "text",
+   "parent": 1882818052,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-touching] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-touching",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 28_kitchen4 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "28_kitchen4",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/28_kitchen4"
+      }
+     }
+    }
+   ]
+  },
+  "-90746701": {
+   "kind": "text",
+   "parent": 1882818052,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-touching] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-touching",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 29_kitchen5 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "29_kitchen5",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/29_kitchen5"
+      }
+     }
+    }
+   ]
+  },
+  "-746009091": {
+   "kind": "text",
+   "parent": -591360552,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": {
+    "kind": "variable",
+    "variable": {
+     "scope": "global",
+     "name": "custom-npc-greeting",
+     "list": "Core_NoSave2",
+     "type": "string"
+    }
+   },
+   "jump": {
+    "mode": "Jump",
+    "to": "start"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Daily-Income] + 5",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Daily-Income",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 5
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[photo-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "photo-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1229421652": {
+   "kind": "text",
+   "parent": 828494319,
+   "children": [
+    -47559598,
+    715360599,
+    -127636814,
+    -1831414804,
+    853759661,
+    1627819363,
+    1555252446
+   ],
+   "actor": null,
+   "text": "[Grope her]",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[only-cock-photo-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "only-cock-photo-done",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[anna-grope-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-grope-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-127636814": {
+   "kind": "random",
+   "parent": 1229421652,
+   "children": [
+    1966836122,
+    95174421
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "1966836122": {
+   "kind": "text",
+   "parent": -127636814,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active gropekitchen to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "gropekitchen",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/gropekitchen"
+      }
+     }
+    }
+   ]
+  },
+  "95174421": {
+   "kind": "text",
+   "parent": -127636814,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active gropekitchen2 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "gropekitchen2",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/gropekitchen2"
+      }
+     }
+    }
+   ]
+  },
+  "-1831414804": {
+   "kind": "text",
+   "parent": 1229421652,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{S}!? N-Not here... Wait...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[WHOLE-F-INVOLVED] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "WHOLE-F-INVOLVED",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[anna-grope-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-grope-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "853759661": {
+   "kind": "text",
+   "parent": 1229421652,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "God... Your hands feel so strong...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1627819363": {
+   "kind": "text",
+   "parent": 1229421652,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "P-Please stop... It's too dangerous here...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[horny-m] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "horny-m",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood and wait",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-65334474": {
+   "kind": "text",
+   "parent": 494747330,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I don't know... I like being with you... Sometimes it worries me how much I like it...",
+   "jump": {
+    "mode": "Jump",
+    "to": "start"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-touching] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-touching",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "371939062": {
+   "kind": "text",
+   "parent": 494747330,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm having so much fun... I get to ride your fat cock... We're drowning in cash... I love it!",
+   "jump": {
+    "mode": "Jump",
+    "to": "start"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1555252446": {
+   "kind": "text",
+   "parent": 1229421652,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "D-Don't stop... Grope them... Y-Yes....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[horny-m] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "horny-m",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-47559598": {
+   "kind": "text",
+   "parent": 1229421652,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[temp-stored-very-short-term] = AnnaGropeSlut",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "AnnaGropeSlut",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Kitchen/AnnaGropeSlut"
+      }
+     }
+    }
+   ]
+  },
+  "715360599": {
+   "kind": "text",
+   "parent": 1229421652,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Romanced] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Romanced",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[temp-stored-very-short-term] = AnnaGropeLove",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "AnnaGropeLove",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Kitchen/AnnaGropeLove"
+      }
+     }
+    }
+   ]
+  },
+  "-1890571615": {
+   "kind": "text",
+   "parent": -591360552,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[temp-stored-very-short-term] = AnnaPhotoSlut",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "AnnaPhotoSlut",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Kitchen/AnnaPhotoSlut"
+      }
+     }
+    }
+   ]
+  },
+  "1786834836": {
+   "kind": "text",
+   "parent": -591360552,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Romanced] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Romanced",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[temp-stored-very-short-term] = AnnaPhotoLove",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "AnnaPhotoLove",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Kitchen/AnnaPhotoLove"
+      }
+     }
+    }
+   ]
+  },
+  "1416268923": {
+   "kind": "text",
+   "parent": 828494319,
+   "children": [
+    986449253,
+    646885655
+   ],
+   "actor": null,
+   "text": "{M}, I'm horny.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[kitchensexcooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kitchensexcooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "646885655": {
+   "kind": "text",
+   "parent": 1416268923,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Hmmm... Alright, get on the table. Let's have a quickie!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core_NoSave[after-condition-number] = 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "after-condition-number",
+        "list": "Core_NoSave",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "847713325": {
+   "kind": "random",
+   "parent": -591360552,
+   "children": [
+    2128590978,
+    -1705116512,
+    1341787243
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hmm, let's take another one... Just for good measure!",
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Skill_Tree[two-photos] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "two-photos",
+        "list": "Skill_Tree",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "2128590978": {
+   "kind": "text",
+   "parent": 847713325,
+   "children": [
+    706052149
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A76_PhotoTraitPhoto (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A76_PhotoTraitPhoto (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A76_PhotoTraitPhoto (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1705116512": {
+   "kind": "text",
+   "parent": 847713325,
+   "children": [
+    -1344367940
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A76_PhotoTraitPhoto (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A76_PhotoTraitPhoto (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A76_PhotoTraitPhoto (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1341787243": {
+   "kind": "text",
+   "parent": 847713325,
+   "children": [
+    157583588
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A78_PhotoTraitPhoto (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A78_PhotoTraitPhoto (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A78_PhotoTraitPhoto (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1531132399": {
+   "kind": "text",
+   "parent": 828494319,
+   "children": [
+    -1739463347,
+    -221142713
+   ],
+   "actor": null,
+   "text": "I want to talk to you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-221142713": {
+   "kind": "choice",
+   "parent": 1531132399,
+   "children": [
+    494747330,
+    -516103510,
+    1147404228,
+    -901422520
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Sure, hun. What's on your mind? ...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave2[unique-response] = Was there something else on your mind?",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Was there something else on your mind?"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "unique-response",
+        "list": "Core_NoSave2",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-901422520": {
+   "kind": "text",
+   "parent": -221142713,
+   "children": [
+    1145362461
+   ],
+   "actor": null,
+   "text": "Actually, nevermind.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1147404228": {
+   "kind": "text",
+   "parent": -221142713,
+   "children": [
+    341085123,
+    1363021404,
+    -2141252615,
+    -861298367
+   ],
+   "actor": null,
+   "text": "Anna, I need your help with the human milk farm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[milk-searchforcandidates] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milk-searchforcandidates",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[bafa-annaaccepted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-annaaccepted",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "341085123": {
+   "kind": "text",
+   "parent": 1147404228,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Wh–what?! Are you insane? You want me to sit there and… and let you milk me like some cow? That’s disgusting! I can’t believe you’d even ask me that.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-touching] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-touching",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1363021404": {
+   "kind": "text",
+   "parent": 1147404228,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Human… milk? Oh… oh my. That’s… that’s so shameless. I don’t know if I could...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2141252615": {
+   "kind": "text",
+   "parent": 1147404228,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I must be crazy… but if it matters this much to you, then… fine. I’ll do it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-861298367": {
+   "kind": "text",
+   "parent": 1147404228,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I’ll probably be red as a tomato the whole time. But… I’ll try. For you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Milking Save[bafa-annaaccepted] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-annaaccepted",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1145362461": {
+   "kind": "text",
+   "parent": -901422520,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, okay.",
+   "jump": {
+    "mode": "Jump",
+    "to": "start"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1739463347": {
+   "kind": "text",
+   "parent": 1531132399,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I can’t do this right now. Please let me breathe.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_2[anna-current-mood] = -2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-current-mood",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": -2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "986449253": {
+   "kind": "text",
+   "parent": 1416268923,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I’m sorry, sweetheart… I just don’t have it in me today. I’m too worn down.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_2[anna-current-mood] = -2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-current-mood",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": -2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1688790065": {
+   "kind": "text",
+   "parent": -591360552,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I don’t have the energy to pose or smile. Not today.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_2[anna-current-mood] = -2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-current-mood",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": -2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "179374438": {
+   "kind": "text",
+   "parent": -1540934822,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh honey… you already gave me something today. Save it for another time, okay?",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If InventoryTwo[Gift-Given-Today] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gift-Given-Today",
+        "list": "InventoryTwo",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "157583588": {
+   "kind": "text",
+   "parent": 1341787243,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "If this one doesn’t get likes, they’re blind.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1344367940": {
+   "kind": "text",
+   "parent": -1705116512,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Not bad, right? I still got it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "706052149": {
+   "kind": "text",
+   "parent": 2128590978,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Another one for the feed… hope they’re ready.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Kitchen",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DefaultDialoge and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Core_NoSave[Anna-Default-Outfit] to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Anna-Default-Outfit",
+        "list": "Core_NoSave",
+        "type": "game-object"
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Pre_events and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "Pre_events",
+       "of": "GetGameObjectConditions",
+       "path": "8_Room_Talk/Kitchen/Pre_events"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[daily-random-event-kitchen] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "daily-random-event-kitchen",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Room_Talk/Kitchen/Kitchen_Conditions_1",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DefaultDialoge and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Core_NoSave[Anna-Default-Outfit] to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Anna-Default-Outfit",
+        "list": "Core_NoSave",
+        "type": "game-object"
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Pre_events and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "Pre_events",
+       "of": "GetGameObjectConditions",
+       "path": "8_Room_Talk/Kitchen/Pre_events"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[daily-random-event-kitchen] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "daily-random-event-kitchen",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

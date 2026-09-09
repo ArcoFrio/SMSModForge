@@ -1,0 +1,883 @@
+{
+ "id": "8_Vacation_Stories/Tropical_Hotelroom/Default",
+ "name": "Default",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna"
+ ],
+ "roots": [
+  -2038680476,
+  -962801058,
+  -843759257,
+  2021033931
+ ],
+ "nodes": {
+  "-2038680476": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1265396088
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Back here again... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[First-time-tropic] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "First-time-tropic",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-Day-One-Done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-Day-One-Done",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-962801058": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    820467289,
+    -1549192523
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Wow, this place is... breathtaking. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[First-time-tropic] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "First-time-tropic",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-Day-One-Done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-Day-One-Done",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1265396088": {
+   "kind": "choice",
+   "parent": -2038680476,
+   "children": [
+    1500988934,
+    -1690419286,
+    1298198521
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "It’s starting to feel like our little escape, isn’t it?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1500988934": {
+   "kind": "text",
+   "parent": -1265396088,
+   "children": [
+    -1758909284
+   ],
+   "actor": null,
+   "text": "I’m glad we’re making this a thing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1690419286": {
+   "kind": "text",
+   "parent": -1265396088,
+   "children": [
+    1621350600,
+    1611304172
+   ],
+   "actor": null,
+   "text": "Do you often think about escaping with me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1298198521": {
+   "kind": "text",
+   "parent": -1265396088,
+   "children": [
+    -1865722998
+   ],
+   "actor": null,
+   "text": "My beautiful {M} only deserves the very best.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1758909284": {
+   "kind": "text",
+   "parent": 1500988934,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Me too. It’s a nice reminder that even with everything going on, we can still enjoy moments like this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1621350600": {
+   "kind": "text",
+   "parent": -1690419286,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Don't tease me! We both know my answer, sweetheart.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1865722998": {
+   "kind": "text",
+   "parent": 1298198521,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh, stop it... Hahaha....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2021033931": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -107515042
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So, what’s the plan for today? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[First-time-tropic] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "First-time-tropic",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1611304172": {
+   "kind": "text",
+   "parent": -1690419286,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That's not quite what I meant... You know that, don't you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "820467289": {
+   "kind": "text",
+   "parent": -962801058,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I can't remember the last time I could hear the ocean...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1549192523": {
+   "kind": "choice",
+   "parent": -962801058,
+   "children": [
+    -360337261,
+    -800001962,
+    -1609682335
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Maybe this is just what we needed.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-360337261": {
+   "kind": "text",
+   "parent": -1549192523,
+   "children": [
+    -206802143
+   ],
+   "actor": null,
+   "text": "You’ve been working so hard lately. You deserve this break, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-800001962": {
+   "kind": "text",
+   "parent": -1549192523,
+   "children": [
+    -1974958823
+   ],
+   "actor": null,
+   "text": "Why’d you pick this island, though? It’s a bit out of the way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1609682335": {
+   "kind": "text",
+   "parent": -1549192523,
+   "children": [
+    -270691588
+   ],
+   "actor": null,
+   "text": "That dress you’re wearing... it’s perfect for this place.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-206802143": {
+   "kind": "text",
+   "parent": -360337261,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That’s sweet of you to say. It’s nice to finally relax... and to spend some time with you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1974958823": {
+   "kind": "text",
+   "parent": -800001962,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I heard about it from Charlotte, actually. She said it’s private, quiet... perfect for unwinding.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-270691588": {
+   "kind": "text",
+   "parent": -1609682335,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh... Thank you. It’s been a while since I got to wear something like this. I’m glad you noticed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-107515042": {
+   "kind": "choice",
+   "parent": 2021033931,
+   "children": [
+    -941776985,
+    -2047219801,
+    2100652320
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Should we just go with the flow, or do you have something in mind?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-941776985": {
+   "kind": "text",
+   "parent": -107515042,
+   "children": [
+    604808229
+   ],
+   "actor": null,
+   "text": "How about we just hit the beach and unwind?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[cdw-tropical-beach] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cdw-tropical-beach",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "604808229": {
+   "kind": "text",
+   "parent": -941776985,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That sounds perfect. The sun, the waves... I could use a little break from everything. Let’s find a good spot to soak it all in.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core_NoSave[incoming-vacation-map] = 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "incoming-vacation-map",
+        "list": "Core_NoSave",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[cdw-tropical-beach] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cdw-tropical-beach",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[IMP-Day-One-Done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-Day-One-Done",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2047219801": {
+   "kind": "text",
+   "parent": -107515042,
+   "children": [
+    -18191058
+   ],
+   "actor": null,
+   "text": "There’s a bar near the resort that looked pretty fun. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[cdw-tropical-bar] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cdw-tropical-bar",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-18191058": {
+   "kind": "text",
+   "parent": -2047219801,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A bar? Hmm, I could go for a drink... or two. Let’s see what kind of tropical cocktails they have!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core_NoSave[incoming-vacation-map] = 2",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "incoming-vacation-map",
+        "list": "Core_NoSave",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 2
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[cdw-tropical-bar] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cdw-tropical-bar",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[IMP-Day-One-Done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-Day-One-Done",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "2100652320": {
+   "kind": "text",
+   "parent": -107515042,
+   "children": [
+    1159934621
+   ],
+   "actor": null,
+   "text": "The resort is holding a beauty contest. You’d totally win.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[beauty-contest-won] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "beauty-contest-won",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[cdw-tropical-contest] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cdw-tropical-contest",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1159934621": {
+   "kind": "text",
+   "parent": 2100652320,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A beauty contest? Oh, come on. That’s not really my thing... but... We can check it out I guess...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core_NoSave[incoming-vacation-map] = 3",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "incoming-vacation-map",
+        "list": "Core_NoSave",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 3
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[cdw-tropical-contest] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cdw-tropical-contest",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[IMP-Day-One-Done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-Day-One-Done",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-843759257": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Another day in paradise...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-Day-One-Done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-Day-One-Done",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[IMP-First-Vacation-Event] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Tropical_Hotelroom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Default and wait",
+   "as": "Dialogue",
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 9_Vacation_Teleport_Tropical to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "9_Vacation_Teleport_Tropical",
+       "of": "GetGameObjectInstance",
+       "path": "9_Vacation_Teleport_Tropical"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

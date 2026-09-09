@@ -1,4 +1,4 @@
-// SMSModForge — the JSON writer the Unity extractors share.
+﻿// SMSModForge — the JSON writer the Unity extractors share.
 //
 // Hand-rolled because the trees these tools produce are arbitrary and Unity's
 // JsonUtility only serialises fields on a serialisable class. It tracks whether
@@ -52,6 +52,7 @@ namespace SMSModForge.EditorTools
             return this;
         }
 
+        public Json Null() { Separate(); _sb.Append("null"); return this; }
         public Json Value(string v) { Separate(); _sb.Append(JsonText.Quote(v)); return this; }
         public Json Value(bool v) { Separate(); _sb.Append(v ? "true" : "false"); return this; }
         public Json Value(int v) { Separate(); _sb.Append(v.ToString(CultureInfo.InvariantCulture)); return this; }

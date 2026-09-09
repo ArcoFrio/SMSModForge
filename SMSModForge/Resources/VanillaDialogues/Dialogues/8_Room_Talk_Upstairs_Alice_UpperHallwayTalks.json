@@ -1,0 +1,961 @@
+{
+ "id": "8_Room_Talk/Upstairs/Alice_UpperHallwayTalks",
+ "name": "Alice_UpperHallwayTalks",
+ "index": 7,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Alice",
+  "Anna",
+  "Continue",
+  "Josef"
+ ],
+ "roots": [
+  1349890431,
+  1664865252,
+  -927535680,
+  -1041457618
+ ],
+ "nodes": {
+  "1349890431": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    1760977849,
+    -1212038537,
+    -2060582288
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    }
+   ]
+  },
+  "-927535680": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    -685495518,
+    -1137944139,
+    654701748
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    }
+   ]
+  },
+  "-1041457618": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    812920492,
+    60234038,
+    -252190714
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    }
+   ]
+  },
+  "812920492": {
+   "kind": "text",
+   "parent": -1041457618,
+   "children": [
+    -1740021592,
+    -649749603,
+    784582777
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Y’know, Anna, this house is so cozy… I might just move in.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1760977849": {
+   "kind": "text",
+   "parent": 1349890431,
+   "children": [
+    1221991064,
+    -1197261672
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Mr. J, you’re always working so hard. Don’t you ever get lonely?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-685495518": {
+   "kind": "text",
+   "parent": -927535680,
+   "children": [
+    354698794,
+    -1941343596
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Adrian, be a good boy and grab my bag, would ya?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1212038537": {
+   "kind": "text",
+   "parent": 1349890431,
+   "children": [
+    -43815030,
+    1202585797
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Alice, if Adrian starts picking up any bad habits from you, we’re gonna have a problem.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2060582288": {
+   "kind": "text",
+   "parent": 1349890431,
+   "children": [
+    1234208869,
+    -1750054529,
+    1943420519,
+    4921161,
+    1037865845,
+    392316065
+   ],
+   "actor": "Josef",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Alice, I need to ask—what exactly are your intentions with Adrian and {PC}?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1137944139": {
+   "kind": "text",
+   "parent": -927535680,
+   "children": [
+    -309519595,
+    -1310289335
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "You should be honored, Adrian.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "654701748": {
+   "kind": "text",
+   "parent": -927535680,
+   "children": [
+    -1307321743,
+    1519470052
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Hey.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "60234038": {
+   "kind": "text",
+   "parent": -1041457618,
+   "children": [
+    1876305395,
+    -1332559441,
+    -641337182
+   ],
+   "actor": "Alice",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Mmm, you’re such a perfect little housewife, Anna. Cooking, cleaning, keeping everything so nice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-252190714": {
+   "kind": "text",
+   "parent": -1041457618,
+   "children": [
+    -1449451565,
+    -1848271465,
+    -1878434979
+   ],
+   "actor": "Alice",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Ever think about taking a vacation, Anna? You deserve a break.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1221991064": {
+   "kind": "text",
+   "parent": 1760977849,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I have my family, Alice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-43815030": {
+   "kind": "text",
+   "parent": -1212038537,
+   "actor": "Alice",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh, relax, Mr. J. I’m just expanding his worldview!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1234208869": {
+   "kind": "text",
+   "parent": -2060582288,
+   "actor": "Alice",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Ooh, Mr. J, you make it sound so serious.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "354698794": {
+   "kind": "text",
+   "parent": -685495518,
+   "actor": "Adrian",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "B-But you can carry it yourself...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-309519595": {
+   "kind": "text",
+   "parent": -1137944139,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Why?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1307321743": {
+   "kind": "text",
+   "parent": 654701748,
+   "actor": "Adrian",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Wow. You sound thrilled to see me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1740021592": {
+   "kind": "text",
+   "parent": 812920492,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Oh really? And where exactly would you sleep?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1876305395": {
+   "kind": "text",
+   "parent": 60234038,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Well, someone has to keep things together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1449451565": {
+   "kind": "text",
+   "parent": -252190714,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I wish—but someone has to keep things running here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1848271465": {
+   "kind": "text",
+   "parent": -252190714,
+   "actor": "Alice",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Well, if you ever need someone to step in… I do look good in an apron.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1332559441": {
+   "kind": "text",
+   "parent": 60234038,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "True, true… but wouldn’t it be fun if someone else did it for a change? Maybe me~?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-649749603": {
+   "kind": "text",
+   "parent": 812920492,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Oh, I dunno… your bed seems nice. Might have to kick someone out, though.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1519470052": {
+   "kind": "text",
+   "parent": 654701748,
+   "actor": "Alice",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Sorry, wanna see me smile? Go and grab me some ice-cream. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1310289335": {
+   "kind": "text",
+   "parent": -1137944139,
+   "actor": "Alice",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Most guys bore me in five minutes. You? You’ve been my favorite waste of time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1941343596": {
+   "kind": "text",
+   "parent": -685495518,
+   "actor": "Alice",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Tsk tsk. Bad dog.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1750054529": {
+   "kind": "text",
+   "parent": -2060582288,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Because it is serious. Adrian practically follows you around like a lost puppy, and {PC}… well, I don’t even know what’s going on there.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1202585797": {
+   "kind": "text",
+   "parent": -1212038537,
+   "actor": "Josef",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I don’t need Adrian’s ‘worldview’ to include skipping rent and questionable life choices.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1197261672": {
+   "kind": "text",
+   "parent": 1760977849,
+   "actor": "Alice",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Mmmhmm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "784582777": {
+   "kind": "text",
+   "parent": 812920492,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Excuse me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-641337182": {
+   "kind": "text",
+   "parent": 60234038,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "What?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1878434979": {
+   "kind": "text",
+   "parent": -252190714,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I bet you do...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1943420519": {
+   "kind": "text",
+   "parent": -2060582288,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Mmm… yeah, Adrian’s kinda cute like that. Not sure what I’ll do with him yet. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceShowsAss (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceShowsAss (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AliceShowsAss (1)"
+      }
+     }
+    }
+   ]
+  },
+  "4921161": {
+   "kind": "text",
+   "parent": -2060582288,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "As for {PC}… You don't wanna know. Trust me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1037865845": {
+   "kind": "text",
+   "parent": -2060582288,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "*Gulp*",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "392316065": {
+   "kind": "text",
+   "parent": -2060582288,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Now hush, I'm sure Anna's waiting for you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1664865252": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1665458193
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Hey, have you seen Adrian?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1665458193": {
+   "kind": "text",
+   "parent": 1664865252,
+   "actor": "Alice",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I think he's tring to hide from me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Upstairs",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Alice_UpperHallwayTalks and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] ≤ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[alice-sex-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-sex-done",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "branches": [
+    "alice"
+   ],
+   "before": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[DialogueVariation] = Random3[Random]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random3",
+        "pick": "random",
+        "type": "number"
+       }
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AliceBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[upstairs-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "upstairs-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

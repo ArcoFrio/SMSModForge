@@ -1,0 +1,240 @@
+{
+ "id": "8_Room_Talk/Tasha_Store_AfterTabletop/Tashagamewon",
+ "name": "Tashagamewon",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Tasha"
+ ],
+ "roots": [
+  378084120,
+  -383742310
+ ],
+ "nodes": {
+  "378084120": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    -1456977725,
+    -206355080,
+    2009250990,
+    598455007,
+    -590391800
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1456977725": {
+   "kind": "text",
+   "parent": 378084120,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "I really liked how you got into it. You played with the group, asked the right questions, and made it feel like a real adventure.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-206355080": {
+   "kind": "text",
+   "parent": 378084120,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Okay, I’ll admit it—I was expecting you to be a total mess, but you kept up, stayed in character, and even made me laugh once. Maybe twice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2009250990": {
+   "kind": "text",
+   "parent": 378084120,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "You survived my dungeon, didn’t beg for rule explanations every five minutes, and you didn’t try to seduce the boss monster. Honestly, that’s a win.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "598455007": {
+   "kind": "text",
+   "parent": 378084120,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "You’re better at this than you let on. Strategic, sharp, and a little chaotic. I like it. Remind me not to go easy on you next time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-590391800": {
+   "kind": "text",
+   "parent": 378084120,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Hey, nice job tonight. You picked things up quick, stayed in the story, and kept the table flowing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-383742310": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Tasha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "We gotta do that again sometime!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Tabletop Save[dnd-tashacoins] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "dnd-tashacoins",
+        "list": "Tabletop Save",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = Tasha Coin",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Tasha Coin"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Tasha_Store_AfterTabletop",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Tashagamewon and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Tabletop Combat[tabletop-won] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tabletop-won",
+        "list": "Tabletop Combat",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Tasha_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Tasha_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Tasha_Default"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

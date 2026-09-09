@@ -1,0 +1,646 @@
+{
+ "id": "8_Core_Events/Trips/RiverVisit/RiverVisitGirlfriend",
+ "name": "RiverVisitGirlfriend",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "River"
+ ],
+ "roots": [
+  2023353433,
+  -206835059,
+  240983571
+ ],
+ "nodes": {
+  "2023353433": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "H-Hey, {PC}! I'm looking forward to spending time with you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[river-last-visit-first-time] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-last-visit-first-time",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set CoreFinalStates[cs-riverfinalstage] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cs-riverfinalstage",
+        "list": "CoreFinalStates",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-206835059": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -963750505,
+    973117690
+   ],
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "H-Hey...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[river-last-visit-first-time] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-last-visit-first-time",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set CoreFinalStates[cs-riverfinalstage] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cs-riverfinalstage",
+        "list": "CoreFinalStates",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-963750505": {
+   "kind": "choice",
+   "parent": -206835059,
+   "children": [
+    -924580784,
+    1096136773,
+    906150975
+   ],
+   "actor": "River",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "W-What do you think... You can be honest...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[river-last-visit-first-time] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-last-visit-first-time",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-924580784": {
+   "kind": "text",
+   "parent": -963750505,
+   "actor": null,
+   "text": "You look so cute.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1096136773": {
+   "kind": "text",
+   "parent": -963750505,
+   "actor": null,
+   "text": "You are beautiful, River.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "906150975": {
+   "kind": "text",
+   "parent": -963750505,
+   "children": [
+    985761941
+   ],
+   "actor": null,
+   "text": "Ehm... I don't really like it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "985761941": {
+   "kind": "text",
+   "parent": 906150975,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "O-Oh... Okay... I'll go home to change then...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_4[River-at-home] = -5",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "River-at-home",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": -5
+      }
+     }
+    }
+   ]
+  },
+  "973117690": {
+   "kind": "text",
+   "parent": -206835059,
+   "actor": "River",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "R-Really? ... Thank you....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Charm to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Charm",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Charm"
+      }
+     }
+    }
+   ]
+  },
+  "240983571": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    596297048,
+    432023532,
+    -225899212,
+    -106535456
+   ],
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Any plans for today? ....",
+   "tag": "RootyRiver",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "596297048": {
+   "kind": "text",
+   "parent": 240983571,
+   "children": [
+    1144238013,
+    -1357103550,
+    1830434082,
+    -1921070481,
+    -1333876501,
+    367576503,
+    641575168,
+    748767504,
+    -516669311
+   ],
+   "actor": null,
+   "text": "Wanna have fun?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "432023532": {
+   "kind": "text",
+   "parent": 240983571,
+   "children": [
+    -1058171691
+   ],
+   "actor": null,
+   "text": "How are you doing, River?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-225899212": {
+   "kind": "text",
+   "parent": 240983571,
+   "children": [
+    563250599,
+    1161850849
+   ],
+   "actor": null,
+   "text": "Wanna go grab some food?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-106535456": {
+   "kind": "text",
+   "parent": 240983571,
+   "children": [
+    -1869416594,
+    731368057
+   ],
+   "actor": null,
+   "text": "Let's watch a movie.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1869416594": {
+   "kind": "text",
+   "parent": -106535456,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Yay!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "563250599": {
+   "kind": "text",
+   "parent": -225899212,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Yes!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1058171691": {
+   "kind": "text",
+   "parent": 432023532,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I'm happy, {PC}... Thanks to you...",
+   "jump": {
+    "mode": "Jump",
+    "to": "RootyRiver"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1144238013": {
+   "kind": "text",
+   "parent": 596297048,
+   "actor": "River",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Yes!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1161850849": {
+   "kind": "text",
+   "parent": -225899212,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "That was so tasty... T-Thank you for inviting me... I will see you, yes?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "731368057": {
+   "kind": "text",
+   "parent": -106535456,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "That was really fun... I love spending time with you... Please, let's do that again soon, yes?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1357103550": {
+   "kind": "text",
+   "parent": 596297048,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "P-Please sit down... I want to make your cock feel good...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1830434082": {
+   "kind": "text",
+   "parent": 596297048,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "It's in... Y-Yes... So good...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Riverdress (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Riverdress (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Riverdress (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1921070481": {
+   "kind": "text",
+   "parent": 596297048,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Please... Make love to me, {PC}... Share this moment with me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1333876501": {
+   "kind": "text",
+   "parent": 596297048,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I'm getting close.... I'm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Riverdress (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Riverdress (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Riverdress (2)"
+      }
+     }
+    }
+   ]
+  },
+  "367576503": {
+   "kind": "text",
+   "parent": 596297048,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Hnnyeehhaa! Hnaaaah!! ... Haaaah!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "641575168": {
+   "kind": "text",
+   "parent": 596297048,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I... I can feel your dick pumping its cream inside of me... It's so... I love it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-516669311": {
+   "kind": "text",
+   "parent": 596297048,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I... I hope we can repeat that soon...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "748767504": {
+   "kind": "text",
+   "parent": 596297048,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "O-Oh! And I'm so sorry for making such a mess on your table... Please forgive me....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Trips/RiverVisit",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play RiverVisitGirlfriend and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_4[River-at-home] ≥ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "River-at-home",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[rive-girl-route] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "rive-girl-route",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active River_Dress to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "River_Dress",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/River_Dress"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1100 @@
+{
+ "id": "8_Room_Talk/Villa_Sauna/EmmaSaunaDefault",
+ "name": "EmmaSaunaDefault",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Emma"
+ ],
+ "roots": [
+  561159366,
+  1165091822,
+  -1405251960,
+  1601834219,
+  1786170920,
+  -2097307469,
+  -1295982568
+ ],
+ "nodes": {
+  "561159366": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Get away from me! I don't want you here, why are you still here!?",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Mario-In-Prison] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-In-Prison",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[emma-corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-corrupted",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1405251960": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -637515030
+   ],
+   "actor": "Emma",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "W-What are you doing here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[emma-first-time-sauna] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-first-time-sauna",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1601834219": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -639488036,
+    1747221830,
+    1543265817
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Just sit down already, you're making me nervous...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1165091822": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "{PC}... You're here...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[emma-first-time-sauna] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-first-time-sauna",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-637515030": {
+   "kind": "choice",
+   "parent": -1405251960,
+   "children": [
+    -505327306,
+    2111735523,
+    395823718
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Are you blind? It's occupied!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[emma-first-time-sauna] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-first-time-sauna",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-505327306": {
+   "kind": "text",
+   "parent": -637515030,
+   "children": [
+    1159215143
+   ],
+   "actor": null,
+   "text": "Are you afraid of me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2111735523": {
+   "kind": "text",
+   "parent": -637515030,
+   "children": [
+    -601313766
+   ],
+   "actor": null,
+   "text": "Sorry, I can go if you like.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "395823718": {
+   "kind": "text",
+   "parent": -637515030,
+   "children": [
+    -577858810
+   ],
+   "actor": null,
+   "text": "Shut up, your {D} told me to feel at home.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1159215143": {
+   "kind": "text",
+   "parent": -505327306,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "N-No... Why should I... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-601313766": {
+   "kind": "text",
+   "parent": 2111735523,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "... It's fine, just... If I catch you doing anything weird I'll tell my {D}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-577858810": {
+   "kind": "text",
+   "parent": 395823718,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Yeah, well, if you touch me I'll tell him and you... You'll regret it!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-639488036": {
+   "kind": "text",
+   "parent": 1601834219,
+   "actor": null,
+   "text": "(Put on a towel and sit down)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1747221830": {
+   "kind": "text",
+   "parent": 1601834219,
+   "children": [
+    515690567
+   ],
+   "actor": null,
+   "text": "(Go in nude and sit down)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1543265817": {
+   "kind": "text",
+   "parent": 1601834219,
+   "children": [
+    503611273
+   ],
+   "actor": null,
+   "text": "Nah, I no longer feel it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "503611273": {
+   "kind": "text",
+   "parent": 1543265817,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Whatever...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "515690567": {
+   "kind": "text",
+   "parent": 1747221830,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Y-Your c-co... There are towels outside, why... Hmmm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1786170920": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    365725671,
+    1254498032,
+    793091719
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_4[emma-storyline] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-storyline",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-2097307469": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1230038222,
+    514193484,
+    -1102164506
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "So it's just a matter of time until my {D} no longer needs you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_4[emma-storyline] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-storyline",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1295982568": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    951609427,
+    1808580348,
+    2135229494
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "You're still here...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_4[emma-storyline] ≥ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-storyline",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "365725671": {
+   "kind": "choice",
+   "parent": 1786170920,
+   "children": [
+    1987941588,
+    1167546929,
+    -548816823
+   ],
+   "actor": "Emma",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You're just here to creep at me. Admit it.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1254498032": {
+   "kind": "text",
+   "parent": 1786170920,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I... I'll leave you alone now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "793091719": {
+   "kind": "text",
+   "parent": 1786170920,
+   "actor": "Emma",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Don't you dare stare at my butt when I walk out...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Emma_Towel/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1230038222": {
+   "kind": "text",
+   "parent": -2097307469,
+   "actor": "Emma",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "So I can ask you any question, since at some point I won't have to see your face ever again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "514193484": {
+   "kind": "choice",
+   "parent": -2097307469,
+   "children": [
+    1498754658,
+    1303225173,
+    -1475292531
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "S-So... What do you think of my breasts? Are they too big?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1102164506": {
+   "kind": "text",
+   "parent": -2097307469,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I... I need to go now...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Emma_Towel/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "951609427": {
+   "kind": "text",
+   "parent": -1295982568,
+   "actor": "Emma",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "You're pretty fit, you know... Do you work out or something? Your arms are huge...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1808580348": {
+   "kind": "choice",
+   "parent": -1295982568,
+   "children": [
+    1742794418,
+    228964629,
+    -1638545257
+   ],
+   "actor": "Emma",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "N-Never mind what I just said, the temperature in here is...messing with my head...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2135229494": {
+   "kind": "choice",
+   "parent": -1295982568,
+   "children": [
+    -405486017,
+    829101018
+   ],
+   "actor": "Emma",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I was thinking... maybe I could sit on your lap for a bit? ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1987941588": {
+   "kind": "text",
+   "parent": 365725671,
+   "children": [
+    555104577
+   ],
+   "actor": null,
+   "text": "Yeah, you're quite attractive.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1167546929": {
+   "kind": "text",
+   "parent": 365725671,
+   "children": [
+    34223407
+   ],
+   "actor": null,
+   "text": "So what? You can leave whenever you want.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-548816823": {
+   "kind": "text",
+   "parent": 365725671,
+   "children": [
+    -1891232573
+   ],
+   "actor": null,
+   "text": "Nonsense, I just want to sweat a bit.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1891232573": {
+   "kind": "text",
+   "parent": -548816823,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Sure...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "34223407": {
+   "kind": "text",
+   "parent": 1167546929,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Hmpf...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "555104577": {
+   "kind": "text",
+   "parent": 1987941588,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Ugh... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1498754658": {
+   "kind": "text",
+   "parent": 514193484,
+   "children": [
+    -1414045975
+   ],
+   "actor": null,
+   "text": "Perfection. They are just the right size. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1414045975": {
+   "kind": "text",
+   "parent": 1498754658,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Perfection? ... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1303225173": {
+   "kind": "text",
+   "parent": 514193484,
+   "children": [
+    2069064226
+   ],
+   "actor": null,
+   "text": "Yeah, you should lose some weight.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2069064226": {
+   "kind": "text",
+   "parent": 1303225173,
+   "actor": "Emma",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1475292531": {
+   "kind": "text",
+   "parent": 514193484,
+   "children": [
+    -233335554
+   ],
+   "actor": null,
+   "text": "The towel is in the way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-233335554": {
+   "kind": "text",
+   "parent": -1475292531,
+   "actor": "Emma",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I... I'm not going expose myself in front of you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1742794418": {
+   "kind": "text",
+   "parent": 1808580348,
+   "children": [
+    -1301843685
+   ],
+   "actor": null,
+   "text": "Do you need help?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1301843685": {
+   "kind": "text",
+   "parent": 1742794418,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "H-Help? ... Maybe... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "228964629": {
+   "kind": "text",
+   "parent": 1808580348,
+   "children": [
+    -2028035474
+   ],
+   "actor": null,
+   "text": "You can use me, if you like.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2028035474": {
+   "kind": "text",
+   "parent": 228964629,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "U-Use you? ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1638545257": {
+   "kind": "text",
+   "parent": 1808580348,
+   "children": [
+    2127187181
+   ],
+   "actor": null,
+   "text": "Looks like someone's horny.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2127187181": {
+   "kind": "text",
+   "parent": -1638545257,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Shut it... Idiot...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-405486017": {
+   "kind": "text",
+   "parent": 2135229494,
+   "children": [
+    981972532
+   ],
+   "actor": null,
+   "text": "Feel free.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "829101018": {
+   "kind": "text",
+   "parent": 2135229494,
+   "children": [
+    -1508018083
+   ],
+   "actor": null,
+   "text": "Nah, you're too heavy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1508018083": {
+   "kind": "text",
+   "parent": 829101018,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "God, you're such an asshole...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "981972532": {
+   "kind": "text",
+   "parent": -405486017,
+   "actor": "Emma",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Don't think anything of it... Y-You're just... A tool I need right now...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[temp-stored-very-short-term] = EmmaSaunaSex",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "EmmaSaunaSex",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Villa_Sauna/EmmaSaunaSex"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Villa_Sauna",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play EmmaSaunaDefault and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[emma-week-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-week-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_4[emma-storyline] ≤ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-storyline",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[emma-first-meeting] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-first-meeting",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Emma_Towel to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Emma_Towel",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Emma_Towel"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_4[emma-storyline] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-storyline",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

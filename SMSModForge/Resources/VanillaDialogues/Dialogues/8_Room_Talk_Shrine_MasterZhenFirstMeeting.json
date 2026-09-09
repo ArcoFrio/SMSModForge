@@ -1,0 +1,461 @@
+{
+ "id": "8_Room_Talk/Shrine/MasterZhenFirstMeeting",
+ "name": "MasterZhenFirstMeeting",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Master Zhen"
+ ],
+ "roots": [
+  1667439346,
+  -518566460,
+  -1254963323,
+  -632148219
+ ],
+ "nodes": {
+  "1667439346": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "So, you’re going in...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1254963323": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -297815425,
+    -1629757056,
+    881623768,
+    339672217,
+    -530934289
+   ],
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "If you see that mist, don’t go in unless you’re truly prepared.",
+   "tag": "rootshrine",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-297815425": {
+   "kind": "text",
+   "parent": -1254963323,
+   "children": [
+    179349106,
+    -620293919
+   ],
+   "actor": null,
+   "text": "What happens if I lose?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "179349106": {
+   "kind": "text",
+   "parent": -297815425,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "You won’t die. Your body stays here, untouched. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1629757056": {
+   "kind": "text",
+   "parent": -1254963323,
+   "children": [
+    733313867
+   ],
+   "actor": null,
+   "text": "How can I tell how dangerous it is?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "733313867": {
+   "kind": "text",
+   "parent": -1629757056,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "You’ll know. If the air turns red and thick like blood, if it feels like every shadow’s watching you… that’s when you turn around. ",
+   "jump": {
+    "mode": "Jump",
+    "to": "rootshrine"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "881623768": {
+   "kind": "text",
+   "parent": -1254963323,
+   "children": [
+    -1493092992
+   ],
+   "actor": null,
+   "text": "How do I know if we’re making progress?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1493092992": {
+   "kind": "text",
+   "parent": 881623768,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "I’ll sense it. When you weaken the spirits, I’ll feel the shift. Until then, keep cutting them down.",
+   "jump": {
+    "mode": "Jump",
+    "to": "rootshrine"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-632148219": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Good. Enough talking. Go do what you came here to do.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-518566460": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Listen. The spirits are like the weather—always shifting. Some days it’s calm… other days, the air is filled with red mist, and the whole place becomes a death trap.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-530934289": {
+   "kind": "text",
+   "parent": -1254963323,
+   "actor": null,
+   "text": "I don’t have any more questions.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-620293919": {
+   "kind": "text",
+   "parent": -297815425,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "But the spirits will take their payment in a different form—they’ll steal some of your coin. Call it a toll for your failure.",
+   "jump": {
+    "mode": "Jump",
+    "to": "rootshrine"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "339672217": {
+   "kind": "text",
+   "parent": -1254963323,
+   "children": [
+    -1726879383
+   ],
+   "actor": null,
+   "text": "How much time we have left?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1726879383": {
+   "kind": "text",
+   "parent": 339672217,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Do not worry about time. While I cannot cleanse the curse ahead, I can protect the city behind us.",
+   "jump": {
+    "mode": "Jump",
+    "to": "rootshrine"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Shrine",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play MasterZhenFirstMeeting and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[masterzhen-accepted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "masterzhen-accepted",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_6[masterzhen-story] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "masterzhen-story",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_6[masterzhen-story] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "masterzhen-story",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Master_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Master_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Master_Default"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Master_Default/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[masterzhen-met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "masterzhen-met",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Canvas to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Canvas",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/80_Shrine/Canvas"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

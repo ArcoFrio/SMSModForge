@@ -1,0 +1,450 @@
+{
+ "id": "8_Room_Talk/C_HikingPathEnd/CoreRandomTalk/JosefHikePath",
+ "name": "JosefHikePath",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Josef"
+ ],
+ "roots": [
+  1733759432,
+  975002162
+ ],
+ "nodes": {
+  "975002162": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1657589182,
+    868002012,
+    1277852313,
+    -556517294,
+    1514942202
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Huh… didn’t expect company out here. Thought I’d have the cliff to myself today.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[hikepathoptalkdone-josef] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hikepathoptalkdone-josef",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[hikepathoptalkdone-josef] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hikepathoptalkdone-josef",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1657589182": {
+   "kind": "choice",
+   "parent": 975002162,
+   "children": [
+    -176119853,
+    685340995,
+    1747375636
+   ],
+   "actor": "Josef",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Don’t worry, I’m not doing anything stupid. I just… come here when everything starts to pile up. Helps me think.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1733759432": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    -779361933,
+    -706703381,
+    1845653429
+   ],
+   "actor": "Continue",
+   "expression": 1,
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.2,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[hikepathoptalkdone-josef] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hikepathoptalkdone-josef",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-779361933": {
+   "kind": "text",
+   "parent": 1733759432,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Guess I’m becoming part of the scenery up here, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-706703381": {
+   "kind": "text",
+   "parent": 1733759432,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Don’t mind me, just needed another round of silence.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1845653429": {
+   "kind": "text",
+   "parent": 1733759432,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Funny how the view never changes, but I still keep coming back.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-176119853": {
+   "kind": "text",
+   "parent": -1657589182,
+   "children": [
+    -672244184
+   ],
+   "actor": null,
+   "text": "You okay, {D}? You look tired.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "685340995": {
+   "kind": "text",
+   "parent": -1657589182,
+   "children": [
+    -738244491
+   ],
+   "actor": null,
+   "text": "Everyone needs an escape sometimes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1747375636": {
+   "kind": "text",
+   "parent": -1657589182,
+   "children": [
+    735025809
+   ],
+   "actor": null,
+   "text": "You must really hate your life, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-672244184": {
+   "kind": "text",
+   "parent": -176119853,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Tired’s one word for it. Feels like I’ve been holding up the house on my back for years.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-738244491": {
+   "kind": "text",
+   "parent": 685340995,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Yeah. Up here, no one’s asking for anything. It’s just quiet, finally.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "735025809": {
+   "kind": "text",
+   "parent": 1747375636,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I don’t hate anyone. I just… need space. You ever get that feeling? Like you’ll snap if someone asks one more thing of you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "868002012": {
+   "kind": "text",
+   "parent": 975002162,
+   "actor": "Josef",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I used to come here with your {M}, back when life still felt… lighter.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1277852313": {
+   "kind": "choice",
+   "parent": 975002162,
+   "children": [
+    -83886562,
+    1289603451,
+    -1526698448
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I guess I just wanted to remember that part of it still exists somewhere.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-83886562": {
+   "kind": "text",
+   "parent": 1277852313,
+   "actor": null,
+   "text": "You should bring her here again. She’d like that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1289603451": {
+   "kind": "text",
+   "parent": 1277852313,
+   "actor": null,
+   "text": "Memories fade when you stop making new ones.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1526698448": {
+   "kind": "text",
+   "parent": 1277852313,
+   "actor": null,
+   "text": "Then stop standing here and actually fix it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-556517294": {
+   "kind": "text",
+   "parent": 975002162,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Maybe you’re right. Maybe I’ve been waiting for peace to come to me instead of chasing it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1514942202": {
+   "kind": "text",
+   "parent": 975002162,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thanks for listening, kid… even if I didn’t plan on talking. Let’s head back before it gets dark.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/C_HikingPathEnd/CoreRandomTalk",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play JosefHikePath and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef_CasualShirtBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef_CasualShirtBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef_CasualShirtBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef_CasualShirtBust/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

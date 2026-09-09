@@ -1,0 +1,1221 @@
+{
+ "id": "8_Room_Talk/Basement/Unique/FirstSexCondom",
+ "name": "FirstSexCondom",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  718609112,
+  201448963,
+  -2014534784,
+  2012487808,
+  1018798822,
+  -1238402464,
+  -1342825332,
+  1408039586,
+  -1802593797,
+  1002939585,
+  -1923457923,
+  -1696442793,
+  1117251768,
+  1069342162,
+  -94874531,
+  -1609974861,
+  1364361588,
+  -868579731,
+  -1233746683,
+  -419445156,
+  -1726800579,
+  1849587808,
+  1438146079,
+  340124059,
+  -1779399178
+ ],
+ "nodes": {
+  "718609112": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "{PC}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Put your hands on her and watch her give in.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Going Viral (Anna)",
+        "of": "Quest"
+       },
+       "m_TaskId": -1511511112
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "201448963": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{PC}, there’s something I need to tell you....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2014534784": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    820372940,
+    1916589927
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Joanne... Joanne isn’t real. I invented her. She doesn’t exist.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "820372940": {
+   "kind": "text",
+   "parent": -2014534784,
+   "actor": null,
+   "text": "What? What do you mean, {M}?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1916589927": {
+   "kind": "text",
+   "parent": -2014534784,
+   "actor": null,
+   "text": "I thought so...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2012487808": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I made her up as an excuse to start my Starmaker page...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1018798822": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "The Starmaker page... Wearing these revealing outfits... Sucking your big cock...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1238402464": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1602571698,
+    -968086321,
+    790931001,
+    1818101539
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "These were all MY decisions.",
+   "tag": "root",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1602571698": {
+   "kind": "text",
+   "parent": -1238402464,
+   "children": [
+    25901952
+   ],
+   "actor": null,
+   "text": "But why?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-968086321": {
+   "kind": "text",
+   "parent": -1238402464,
+   "children": [
+    924043230
+   ],
+   "actor": null,
+   "text": "Why ask me for help then?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "790931001": {
+   "kind": "text",
+   "parent": -1238402464,
+   "children": [
+    -722467326
+   ],
+   "actor": null,
+   "text": "What about {D}?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1818101539": {
+   "kind": "text",
+   "parent": -1238402464,
+   "actor": null,
+   "text": "But why are you nude right now? (Contine)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "25901952": {
+   "kind": "text",
+   "parent": -1602571698,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I grew tired of being just a housewife, tired of being forgotten and feeling invisible...",
+   "jump": {
+    "mode": "Jump",
+    "to": "root"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "924043230": {
+   "kind": "text",
+   "parent": -968086321,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Take a look in the mirror... God, you are so handsome. Your big cock and your wonderful personality...",
+   "jump": {
+    "mode": "Jump",
+    "to": "root"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-722467326": {
+   "kind": "text",
+   "parent": 790931001,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I love your {D}... We must keep this a secret...",
+   "jump": {
+    "mode": "Jump",
+    "to": "root"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1342825332": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "B-because...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1408039586": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1576381135,
+    925490944,
+    -597670882
+   ],
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I want to feel you inside me...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = Condoms",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Condoms"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-1576381135": {
+   "kind": "text",
+   "parent": 1408039586,
+   "children": [
+    -920842810
+   ],
+   "actor": null,
+   "text": "I want the same... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "925490944": {
+   "kind": "text",
+   "parent": 1408039586,
+   "children": [
+    -199953643
+   ],
+   "actor": null,
+   "text": "Do you crave cock that much?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-597670882": {
+   "kind": "text",
+   "parent": 1408039586,
+   "children": [
+    -1663835370
+   ],
+   "actor": null,
+   "text": "N-No... It's wrong, you are my {M}. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1663835370": {
+   "kind": "text",
+   "parent": -597670882,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "But... Then I... God, what have I done...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[Active-Ending] = 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Active-Ending",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 17_ending to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "17_ending",
+       "of": "GetGameObjectInstance",
+       "path": "17_ending"
+      }
+     }
+    }
+   ]
+  },
+  "-199953643": {
+   "kind": "text",
+   "parent": 925490944,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Your {M} can't stop thinking about how big you are... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[MCorruption] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MCorruption",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-920842810": {
+   "kind": "text",
+   "parent": -1576381135,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I love you, my beautiful {S}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[MLove] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MLove",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-1802593797": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Now take a good look...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1002939585": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 67_condomsx1 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "67_condomsx1",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/67_condomsx1"
+      }
+     }
+    }
+   ]
+  },
+  "-1923457923": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Look how wet I am for you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1696442793": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So p-please! Put it in! I can't wait a single second longer!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1117251768": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 68_condomsx1 (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "68_condomsx1 (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/68_condomsx1 (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1069342162": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fhuaackkk! God, I never had such huge cock before....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-94874531": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "This feels SOOOO good...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Mainstory[Inner-Regret] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Inner-Regret",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionQuestsActivate",
+     "title": "Activate Inner Regret",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Inner Regret",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    },
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-868579731": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1498995832,
+    -1506392372,
+    -1781440882
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Take me, {PC}... Don't hold back... I want you to fuck me...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1233746683": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes, {M} is... is coming! I'M... HNGGHUAAH!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-419445156": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 69_condomsx1 (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "69_condomsx1 (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/69_condomsx1 (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1726800579": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god, that was the best sex I ever had...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[anna-heart-status] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-heart-status",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "1849587808": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "And it was with my  {S}... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1438146079": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "And I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Subscriber] + 520",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Subscriber",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 520
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Daily-Income] + 780",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Daily-Income",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 780
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Follower] + 2400",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Follower",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 2400
+      }
+     }
+    }
+   ]
+  },
+  "1498995832": {
+   "kind": "text",
+   "parent": -868579731,
+   "actor": null,
+   "text": "Fuck, {M}... This feels so good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1506392372": {
+   "kind": "text",
+   "parent": -868579731,
+   "actor": null,
+   "text": "Your pussy is literally milking my cock... Hng....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1781440882": {
+   "kind": "text",
+   "parent": -868579731,
+   "actor": null,
+   "text": "I'm glad to be back home...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "340124059": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I don't care... I don't regret it... I haven't been this happy in many years...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionQuestsActivate",
+     "title": "Activate No Going Back (Anna)",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "No Going Back (Anna)",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-1779399178": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thank you, hun... for helping your old {M} feel happy again...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Lewd to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Lewd",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Lewd"
+      }
+     }
+    }
+   ]
+  },
+  "-1609974861": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "P-Please... I... Take me... Make love to me..... Be my man... Yes....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Mainstory[MLove] > Mainstory[MCorruption]",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MLove",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Greater",
+       "m_CompareTo": {
+        "kind": "variable",
+        "variable": {
+         "scope": "global",
+         "name": "MCorruption",
+         "list": "Mainstory",
+         "type": "number"
+        }
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Mainstory[M-Stage-6A-Romanced] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Romanced",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1364361588": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hngaah... I... {M} can't stop thinking about fat cocks! ... I... I love cocks! I love them! I love them!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Mainstory[MLove] ≤ Mainstory[MCorruption]",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MLove",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "variable",
+        "variable": {
+         "scope": "global",
+         "name": "MCorruption",
+         "list": "Mainstory",
+         "type": "number"
+        }
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Basement",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play FirstSexCondom and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-Everything-but-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-Everything-but-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Mainstory[really-horny-m] ≥ 8",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "really-horny-m",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 8
+       }
+      }
+     }
+    }
+   ],
+   "branches": [
+    "firstsex"
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Nude"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Mainstory[M-Stage-4-sex] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

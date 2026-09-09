@@ -1,0 +1,354 @@
+{
+ "id": "8_Room_Talk/Sexstore/Firstdialogue",
+ "name": "Firstdialogue",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Miss Zero"
+ ],
+ "roots": [
+  1383101289,
+  1865755685,
+  126367263,
+  1908903045
+ ],
+ "nodes": {
+  "1383101289": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1153363246,
+    1405641223,
+    1816445301
+   ],
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Well, look who wandered into my little den of delights. What can I do for you, sweetie? ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1153363246": {
+   "kind": "text",
+   "parent": 1383101289,
+   "children": [
+    1602107999
+   ],
+   "actor": null,
+   "text": "Uh, hi. I’m {PC}. Just curious about what you have here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1405641223": {
+   "kind": "text",
+   "parent": 1383101289,
+   "actor": null,
+   "text": "Well.. Hello there.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1816445301": {
+   "kind": "text",
+   "parent": 1383101289,
+   "children": [
+    -1584856106
+   ],
+   "actor": null,
+   "text": "I’m {PC} and I need your strongest potions.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1584856106": {
+   "kind": "text",
+   "parent": 1816445301,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Potions? Oh no, sweetie. We're not selling any potions here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1602107999": {
+   "kind": "text",
+   "parent": 1153363246,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Curiosity, huh? That’s a good start. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1865755685": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Name’s Miss Zero. I run this joint. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "126367263": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -606460945,
+    -398996034,
+    -1498001952
+   ],
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "We’ve got everything you can imagine and a few things you probably can’t. So, what’s your pleasure?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-606460945": {
+   "kind": "text",
+   "parent": 126367263,
+   "children": [
+    -494547407
+   ],
+   "actor": null,
+   "text": "What’s your most popular item?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-398996034": {
+   "kind": "text",
+   "parent": 126367263,
+   "children": [
+    813427908
+   ],
+   "actor": null,
+   "text": "Got anything that’s fun and... unexpected?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1498001952": {
+   "kind": "text",
+   "parent": 126367263,
+   "children": [
+    1679673888
+   ],
+   "actor": null,
+   "text": "It’s my first time in a place like this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-494547407": {
+   "kind": "text",
+   "parent": -606460945,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Popular, huh? Well, our Suc Suction Suckers are a big hit. Top of the line, fully customizable. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "813427908": {
+   "kind": "text",
+   "parent": -398996034,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Oh, I’ve got plenty of unexpected. How about our VR fantasy simulator? Takes you places you’ve only dreamed of.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1679673888": {
+   "kind": "text",
+   "parent": -1498001952,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "No worries, sweetie. Everyone’s got a first time. Let’s find something that’ll blow your... mind. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1908903045": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "You can ring the bell if you see anything you would like to... buy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Sexstore",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Firstdialogue and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[sex-store-first-time-visited] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sex-store-first-time-visited",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_ShadyVendor to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_ShadyVendor",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_ShadyVendor"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[sex-store-first-time-visited] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sex-store-first-time-visited",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

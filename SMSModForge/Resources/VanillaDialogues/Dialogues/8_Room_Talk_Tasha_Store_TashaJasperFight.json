@@ -1,0 +1,807 @@
+{
+ "id": "8_Room_Talk/Tasha_Store/TashaJasperFight",
+ "name": "TashaJasperFight",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Jasper",
+  "Tasha"
+ ],
+ "roots": [
+  -1690522583,
+  -1666030493,
+  -1224924491,
+  1746843108,
+  -608281336,
+  -1210832921,
+  1770842465,
+  -1894145375,
+  1048828287,
+  302126016,
+  522347421,
+  864773017,
+  -1186362505,
+  1382640056,
+  148926682,
+  -941392690,
+  52116419,
+  -1218684217
+ ],
+ "nodes": {
+  "-1690522583": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Tasha",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Oh, great. Just great, Jasper. You really think I wouldn’t notice? That’s definitely not my perfume I'm smelling on you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1666030493": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Jasper",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Again? Are you serious right now? You said this last time, and I already told you—it’s nothing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1224924491": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Tasha",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Nothing? Nothing smells like vanilla and cheap flowers? What, did you trip into another woman’s neck?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1746843108": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Jasper",
+   "expressionName": "neutral",
+   "text": "You’re overthinking this, Tash. You always jump to the worst conclusion.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1210832921": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1204803007,
+    802070129
+   ],
+   "actor": "Tasha",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "You... You're right. I'm sorry... You know that I can be a bit...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-608281336": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Jasper",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Do you even hear yourself? I work with people all the time. Maybe one of them wore too much perfume, and it rubbed off. It’s not some grand conspiracy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1770842465": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "...Oh. It’s you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1894145375": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Jasper",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Hey. Sorry you had to walk into... whatever this is.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1048828287": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Jasper",
+   "expressionName": "neutral",
+   "text": "I'll see you at home, Tasha. I love you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Jasper_Default/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "302126016": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "I love you too.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "522347421": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "864773017": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Tasha",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Well, that was a disaster.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1186362505": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Sorry you had to see that. Jasper’s... he’s not a bad guy. But sometimes, he just—",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1382640056": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1461206367,
+    1530431813,
+    945556525,
+    769975846
+   ],
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "He makes it really hard to believe him.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1461206367": {
+   "kind": "text",
+   "parent": 1382640056,
+   "children": [
+    -333211741,
+    563894061,
+    1456725994
+   ],
+   "actor": null,
+   "text": "Do you want to talk about it? You seem really upset.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1530431813": {
+   "kind": "text",
+   "parent": 1382640056,
+   "children": [
+    2071527293,
+    -1134863454,
+    1746191409
+   ],
+   "actor": null,
+   "text": "That didn’t look fun. Are you okay?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "945556525": {
+   "kind": "text",
+   "parent": 1382640056,
+   "children": [
+    1221673644,
+    1797516600
+   ],
+   "actor": null,
+   "text": "Well, didn't thought you would be a drama queen.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-333211741": {
+   "kind": "text",
+   "parent": -1461206367,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Thanks, but... it’s complicated.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2071527293": {
+   "kind": "text",
+   "parent": 1530431813,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "I’m fine. Or, at least, I will be. This isn’t my first rodeo.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1221673644": {
+   "kind": "text",
+   "parent": 945556525,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Oh, yeah. Welcome to the Tasha Soap Opera. Tune in next time for more drama and questionable life choices.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1204803007": {
+   "kind": "text",
+   "parent": -1210832921,
+   "actor": null,
+   "text": "Um, hello?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "802070129": {
+   "kind": "text",
+   "parent": -1210832921,
+   "actor": null,
+   "text": "(Cough)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1797516600": {
+   "kind": "text",
+   "parent": 945556525,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "I know I can be... intense about this kind of thing. But I’ve been through a lot. Guys lying to my face, sneaking around, making me feel like I’m the crazy one for catching them.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1134863454": {
+   "kind": "text",
+   "parent": 1530431813,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "It’s just... trust has always been a sore spot for me. I’ve been burned enough times that even the smallest thing can set me off. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "563894061": {
+   "kind": "text",
+   "parent": -1461206367,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Jasper’s not the first guy I’ve had... issues with. Let’s just say I haven’t exactly hit the jackpot in the trust department.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1456725994": {
+   "kind": "text",
+   "parent": -1461206367,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Last couple of relationships? Lies. Cheating. You name it. So, now, even when someone says they’re being honest, my brain’s already playing the worst-case scenario.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1746191409": {
+   "kind": "text",
+   "parent": 1530431813,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Jasper knows that, and he still finds ways to push those buttons.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "148926682": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Sometimes, I wonder if it’s just me. Like, maybe I’m the one who’s broken, y’know?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-941392690": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Tasha",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Jasper’s job doesn’t make this any easier.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "52116419": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "He works as an event coordinator for clubs—always around people, always surrounded by... attractive women.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1218684217": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -704890599,
+    1378548935
+   ],
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "I try to trust him, I really do. But when he comes home late, smelling like someone else’s perfume? It’s hard not to let my brain spiral.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-704890599": {
+   "kind": "text",
+   "parent": -1218684217,
+   "children": [
+    -1668266784,
+    1579671230,
+    -1016074585,
+    548199567,
+    1453946480,
+    -198077598
+   ],
+   "actor": null,
+   "text": "Do you want me to look into it? See if there’s anything going on?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1668266784": {
+   "kind": "text",
+   "parent": -704890599,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Wait... you’d actually do that? Like, what, play private investigator for me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1579671230": {
+   "kind": "text",
+   "parent": -704890599,
+   "actor": "Tasha",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I mean... part of me says no, because what kind of person asks someone else to spy on their boyfriend, right? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1016074585": {
+   "kind": "text",
+   "parent": -704890599,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "But the other part... the part that’s been burned too many times... kind of wants to say yes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "548199567": {
+   "kind": "choice",
+   "parent": -704890599,
+   "children": [
+    -1666022206,
+    572689449,
+    -1460871449
+   ],
+   "actor": "Tasha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You’d really do that for me?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1378548935": {
+   "kind": "text",
+   "parent": -1218684217,
+   "children": [
+    574770264
+   ],
+   "actor": null,
+   "text": "Well, I'm sure you will figure something out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "574770264": {
+   "kind": "text",
+   "parent": 1378548935,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Yeah... Things always work out in the end, right? ... Right? ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1666022206": {
+   "kind": "text",
+   "parent": 548199567,
+   "actor": null,
+   "text": "Only if you want me to. I just want to help you feel better about all this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "572689449": {
+   "kind": "text",
+   "parent": 548199567,
+   "actor": null,
+   "text": "Hey, think of it as me practicing for my new detective career.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1460871449": {
+   "kind": "text",
+   "parent": 548199567,
+   "actor": null,
+   "text": "It’s up to you. I’m just putting it out there.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1453946480": {
+   "kind": "text",
+   "parent": -704890599,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Alright. If you’re really willing to do this... yeah. I think I’d feel better knowing for sure.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-198077598": {
+   "kind": "text",
+   "parent": -704890599,
+   "actor": "Tasha",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Guess this makes me one of those girlfriends, huh? The ones who send people to spy on their boyfriends. God, what’s wrong with me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[tasha-jasper-quest] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tasha-jasper-quest",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "769975846": {
+   "kind": "text",
+   "parent": 1382640056,
+   "children": [
+    -2032392439
+   ],
+   "actor": null,
+   "text": "(Smart) Then watch what he does, not what he says.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Smart] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Smart",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-2032392439": {
+   "kind": "text",
+   "parent": 769975846,
+   "actor": "Tasha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "…Yeah. You’re right. Actions don’t lie, even when words sound perfect.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Tasha_Store",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play TashaJasperFight and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_6[Tasha-questone] = 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Tasha-questone",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_6[Tasha-questone] = 5",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Tasha-questone",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 5
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Tasha_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Tasha_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Tasha_Default"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Jasper_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Jasper_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Jasper_Default"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

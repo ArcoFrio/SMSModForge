@@ -1,0 +1,1606 @@
+{
+ "id": "8_Core_Events/Trips/RiverVisit/Rivervisit1",
+ "name": "Rivervisit1",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Elfina",
+  "River"
+ ],
+ "roots": [
+  2023353433,
+  -382892254,
+  932669895
+ ],
+ "nodes": {
+  "-382892254": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1979564757
+   ],
+   "actor": "River",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Your place is really nice...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[river-first-time-at-home] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-first-time-at-home",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1979564757": {
+   "kind": "choice",
+   "parent": -382892254,
+   "children": [
+    -740007527,
+    -1768117008,
+    1023793942
+   ],
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Um... ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[river-first-time-at-home] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-first-time-at-home",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-740007527": {
+   "kind": "text",
+   "parent": -1979564757,
+   "children": [
+    -1286419214
+   ],
+   "actor": null,
+   "text": "Make yourself at home. Would you like something to drink?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1768117008": {
+   "kind": "text",
+   "parent": -1979564757,
+   "children": [
+    -1442440959
+   ],
+   "actor": null,
+   "text": "How was the drive here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1023793942": {
+   "kind": "text",
+   "parent": -1979564757,
+   "children": [
+    -560952593
+   ],
+   "actor": null,
+   "text": "Don't just stand there. Sit down!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-560952593": {
+   "kind": "text",
+   "parent": 1023793942,
+   "actor": "River",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Y-Yes!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1442440959": {
+   "kind": "text",
+   "parent": -1768117008,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Oh, I was walking here,  my legs are tired... Hih...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1286419214": {
+   "kind": "text",
+   "parent": -740007527,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "T-Thanks... Um... Maybe a glass of cola?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2023353433": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "T-Thank you for inviting me.. I'm glad to be here...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[river-first-time-at-home] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-first-time-at-home",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "932669895": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    768551896,
+    1221232682
+   ],
+   "actor": "River",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "S-Should we do something? ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "768551896": {
+   "kind": "text",
+   "parent": 932669895,
+   "children": [
+    -1303527116,
+    -218549874,
+    2117712603,
+    1037515041,
+    -1513982810,
+    644473627,
+    706122961,
+    531477744,
+    -729902151,
+    1630798776
+   ],
+   "actor": null,
+   "text": "What do you want to do?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1221232682": {
+   "kind": "text",
+   "parent": 932669895,
+   "children": [
+    -1849689366,
+    -63553713
+   ],
+   "actor": null,
+   "text": "Wanna chill and play some games? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1849689366": {
+   "kind": "text",
+   "parent": 1221232682,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "T-That sounds fun!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "-63553713": {
+   "kind": "text",
+   "parent": 1221232682,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "You're really good at this... You carried my ass.... Oh! I... I have to go now! Work is calling!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1303527116": {
+   "kind": "choice",
+   "parent": 768551896,
+   "children": [
+    286230608,
+    1139331983,
+    950802772
+   ],
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I'm... I'm working on my own fantasy novel... If you like, I could tell you about it? ...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[river-slut-route] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-slut-route",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[rive-girl-route] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "rive-girl-route",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-218549874": {
+   "kind": "text",
+   "parent": 768551896,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "O-Okay...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "286230608": {
+   "kind": "text",
+   "parent": -1303527116,
+   "actor": null,
+   "text": "That sounds lovely.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "950802772": {
+   "kind": "text",
+   "parent": -1303527116,
+   "children": [
+    1382111545
+   ],
+   "actor": null,
+   "text": "That's not really my thing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1382111545": {
+   "kind": "text",
+   "parent": 950802772,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "O-Oh... Okay... Um... T-Then maybe let's watch a movie or something? ...",
+   "values": [
+    {
+     "m_Value": {
+      "kind": "value",
+      "value": ""
+     },
+     "m_InBold": false,
+     "m_InItalic": false,
+     "m_UseColor": false,
+     "m_Color": {
+      "kind": "value",
+      "value": "Yellow",
+      "of": "GetColorColorsYellow"
+     }
+    }
+   ],
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1139331983": {
+   "kind": "text",
+   "parent": -1303527116,
+   "actor": null,
+   "text": "I can give it a try.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2117712603": {
+   "kind": "text",
+   "parent": 768551896,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "T-There's this strong-looking elvish mage.... She's wearing a dark dress and has a pretty full figure.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Music to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Music",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Music"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active fantasy to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "fantasy",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/fantasy"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active River_Base to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "River_Base",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/River_Base"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_Elfina to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_Elfina",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Elfina"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 5_MyRoom to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "5_MyRoom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/5_MyRoom"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 62_FantasyForest to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "62_FantasyForest",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/62_FantasyForest"
+      }
+     }
+    }
+   ]
+  },
+  "1037515041": {
+   "kind": "text",
+   "parent": 768551896,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Her... Her name is Elfina.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "644473627": {
+   "kind": "text",
+   "parent": 768551896,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Elves live a long time, you know? So she takes her time... gathering ingredients for potions in grassy plains.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "706122961": {
+   "kind": "text",
+   "parent": 768551896,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "But then she notices clouds gathering, so she quickly makes her way back to the village before the storm hits.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-729902151": {
+   "kind": "choice",
+   "parent": 768551896,
+   "children": [
+    -705703304,
+    -1601258405
+   ],
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "But she's not fast enough. It'll start to rain soon. But there's more in store for her. On her way back, she meets... Uh...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 62_FantasyForest to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "62_FantasyForest",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/62_FantasyForest"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 65_FantasyForestDark to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "65_FantasyForestDark",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/65_FantasyForestDark"
+      }
+     }
+    }
+   ]
+  },
+  "-705703304": {
+   "kind": "text",
+   "parent": -729902151,
+   "children": [
+    2032330269,
+    -875542479,
+    1275385731,
+    1315406762,
+    18464348,
+    -809190746,
+    -450995150,
+    -83383541,
+    -2119853606,
+    39269049,
+    -1402153134,
+    -1447486893
+   ],
+   "actor": null,
+   "text": "A knight in shining armor. (River Romance Route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1601258405": {
+   "kind": "text",
+   "parent": -729902151,
+   "children": [
+    -1039510839,
+    -1170698608,
+    492854944,
+    757366829,
+    1705658331,
+    -146295822,
+    775875394,
+    -1124979702,
+    195238236,
+    -360718519
+   ],
+   "actor": null,
+   "text": "A bunch of horny goblins. (River Slut Route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2032330269": {
+   "kind": "text",
+   "parent": -705703304,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Y-Yes... A handsome knight... Elfina falls head over heels for him at first sight. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1039510839": {
+   "kind": "text",
+   "parent": -1601258405,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Y-Yes... She's too busy watching the approaching storm to notice the goblins.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-875542479": {
+   "kind": "text",
+   "parent": -705703304,
+   "actor": "Elfina",
+   "expressionName": "neutral",
+   "text": "Oh my!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[rive-girl-route] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "rive-girl-route",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1170698608": {
+   "kind": "text",
+   "parent": -1601258405,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "They... They sneak upon her and then it's too late...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "492854944": {
+   "kind": "text",
+   "parent": -1601258405,
+   "actor": "Elfina",
+   "expressionName": "neutral",
+   "text": "W-What!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[river-slut-route] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-slut-route",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Elf (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Elf (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Elf (4)"
+      }
+     }
+    }
+   ]
+  },
+  "757366829": {
+   "kind": "text",
+   "parent": -1601258405,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "The goblins fondle her massive tits... The virgin elf is being used like... like...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1705658331": {
+   "kind": "text",
+   "parent": -1601258405,
+   "actor": "Elfina",
+   "expressionName": "neutral",
+   "text": "You disgusting creatures! How dare you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-146295822": {
+   "kind": "text",
+   "parent": -1601258405,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "But they want more... They want her... They want to destroy her beauty...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Elf (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Elf (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Elf (5)"
+      }
+     }
+    }
+   ]
+  },
+  "775875394": {
+   "kind": "text",
+   "parent": -1601258405,
+   "actor": "Elfina",
+   "expressionName": "neutral",
+   "text": "Oh spirits! My body is getting claimed by these dirty creatures!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1124979702": {
+   "kind": "text",
+   "parent": -1601258405,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "She's taking their cocks... And they don't hold back... They use her lustful body for their own pleasure...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Elf (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Elf (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Elf (6)"
+      }
+     }
+    }
+   ]
+  },
+  "195238236": {
+   "kind": "text",
+   "parent": -1601258405,
+   "actor": "Elfina",
+   "expressionName": "neutral",
+   "text": "Y-Yes... I love your dirty goblin dicks! Please! Harder!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-360718519": {
+   "kind": "text",
+   "parent": -1601258405,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "And... She's so horny... She...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1275385731": {
+   "kind": "text",
+   "parent": -705703304,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "The knight helps Elfina find shelter from the storm in a nearby cave....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 65_FantasyForestDark to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "65_FantasyForestDark",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/65_FantasyForestDark"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 64_FantasyCave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "64_FantasyCave",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/64_FantasyCave"
+      }
+     }
+    }
+   ]
+  },
+  "18464348": {
+   "kind": "text",
+   "parent": -705703304,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "She... She knows this is her only chance to be with him. Once the storm is over, they'll go their separate ways.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Elf (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Elf (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Elf (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-450995150": {
+   "kind": "text",
+   "parent": -705703304,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "She's trying to get the knight's attention by showing off her large butt....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Elf (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Elf (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Elf (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-2119853606": {
+   "kind": "text",
+   "parent": -705703304,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Thankfully, the knight gives in and before long, they make love...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Elf (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Elf (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Elf (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1402153134": {
+   "kind": "text",
+   "parent": -705703304,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "His hard cock thrusting into her tight slit... She finally found her protector, her guardian, her one true love.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1447486893": {
+   "kind": "text",
+   "parent": -705703304,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "And....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1513982810": {
+   "kind": "text",
+   "parent": 768551896,
+   "actor": "Elfina",
+   "expressionName": "neutral",
+   "text": "What a lovely day to collect plants for my potions! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "531477744": {
+   "kind": "text",
+   "parent": 768551896,
+   "actor": "Elfina",
+   "expressionName": "neutral",
+   "text": "Oh, no! There's a storm brewing! I really need to get back home before I get caught!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[fantasy-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "fantasy-done",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-809190746": {
+   "kind": "text",
+   "parent": -705703304,
+   "actor": "Elfina",
+   "expressionName": "neutral",
+   "text": "M-My body is so wet from the rain... I'm so sorry you have to see me like this...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-83383541": {
+   "kind": "text",
+   "parent": -705703304,
+   "actor": "Elfina",
+   "expressionName": "neutral",
+   "text": "Even my large butt is all wet and glistening....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "39269049": {
+   "kind": "text",
+   "parent": -705703304,
+   "actor": "Elfina",
+   "expressionName": "neutral",
+   "text": "Spirits! Y-Yes... Please, take me... Take me, my love!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1315406762": {
+   "kind": "text",
+   "parent": -705703304,
+   "actor": "Elfina",
+   "expressionName": "neutral",
+   "text": "T-Thank you for saving me, Mr. Knight!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1630798776": {
+   "kind": "choice",
+   "parent": 768551896,
+   "children": [
+    927665121,
+    1355650391
+   ],
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "And then...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_Maps to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_Maps",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_Maps"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active fantasy to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "fantasy",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/fantasy"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Music to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Music",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Music"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.01 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.01
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active River_Base to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "River_Base",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/River_Base"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 5_MyRoom to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "5_MyRoom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/5_MyRoom"
+      }
+     }
+    }
+   ]
+  },
+  "927665121": {
+   "kind": "text",
+   "parent": 1630798776,
+   "children": [
+    -368600802,
+    -814390380
+   ],
+   "actor": null,
+   "text": "(Kiss River)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1355650391": {
+   "kind": "text",
+   "parent": 1630798776,
+   "children": [
+    -880432207,
+    -105651888
+   ],
+   "actor": null,
+   "text": "The story ends.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-880432207": {
+   "kind": "text",
+   "parent": 1355650391,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Y-Yes... The story ends...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-368600802": {
+   "kind": "text",
+   "parent": 927665121,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": ".... !!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Riverkiss to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Riverkiss",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Riverkiss"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[River-Kissed] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "River-Kissed",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_4[River-at-home] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "River-at-home",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-814390380": {
+   "kind": "text",
+   "parent": 927665121,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I... I must go home now... It's getting late... I'm sorry, please don't hate me... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-105651888": {
+   "kind": "text",
+   "parent": 1355650391,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "... And I should get going now... T-Thank you for having me... Goodbye, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Trips/RiverVisit",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Rivervisit1 and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_4[River-at-home] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "River-at-home",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active River_Base to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "River_Base",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/River_Base"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

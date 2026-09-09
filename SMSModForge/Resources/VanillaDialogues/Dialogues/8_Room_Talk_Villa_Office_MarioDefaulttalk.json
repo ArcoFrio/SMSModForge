@@ -1,0 +1,2794 @@
+{
+ "id": "8_Room_Talk/Villa_Office/MarioDefaulttalk",
+ "name": "MarioDefaulttalk",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Emma",
+  "Mario",
+  "Player"
+ ],
+ "roots": [
+  561159366,
+  -1952813453,
+  -634949939,
+  -1455863336,
+  1571904556,
+  -1650568754
+ ],
+ "nodes": {
+  "1571904556": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    235702393,
+    1258521389,
+    -1262557485
+   ],
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Ah, {PC}. You met my wife? Sorry about that. She can be a bit... particular about who comes around.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[mario-villa-first-meeting] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mario-villa-first-meeting",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "235702393": {
+   "kind": "text",
+   "parent": 1571904556,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Let’s get down to business. I’ve got a task for you, one that requires a bit of discretion and a sharp eye.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1258521389": {
+   "kind": "text",
+   "parent": 1571904556,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "I have some client data here—details they provided about themselves and their business dealings. I’ve also got information from a detective I hired. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1262557485": {
+   "kind": "text",
+   "parent": 1571904556,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Your job is to compare the two and see if there are any discrepancies, any lies. If you find anything that doesn’t match up, mark it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionQuestsActivate",
+     "title": "Activate Bishop (Mario)",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Bishop (Mario)",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-1650568754": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    357985204,
+    1059691565,
+    349330870,
+    143506473,
+    1526400928,
+    1342054389,
+    1305121193,
+    -1456907319
+   ],
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Tell me, what brings you by today?",
+   "tag": "whyhere",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-634949939": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "{PC}. My time's precious but I can spare a minute.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[mario-villa-first-meeting] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mario-villa-first-meeting",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[emma-corrupted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-corrupted",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "357985204": {
+   "kind": "text",
+   "parent": -1650568754,
+   "children": [
+    739118014,
+    945451429,
+    -1179270285
+   ],
+   "actor": null,
+   "text": "I'm ready to work.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[agreed-to-bang-katarina] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "agreed-to-bang-katarina",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1305121193": {
+   "kind": "text",
+   "parent": -1650568754,
+   "children": [
+    1205653259
+   ],
+   "actor": null,
+   "text": "I have a few questions.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1456907319": {
+   "kind": "text",
+   "parent": -1650568754,
+   "children": [
+    -2107196550
+   ],
+   "actor": null,
+   "text": "I should go.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2107196550": {
+   "kind": "text",
+   "parent": -1456907319,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Stay safe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1205653259": {
+   "kind": "choice",
+   "parent": 1305121193,
+   "children": [
+    -2011521693,
+    113641507,
+    -36333874,
+    -1933891468,
+    -1395987536,
+    -243118769
+   ],
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Many people are willing to pay for my time, so keep this in mind as you ask me your questions.",
+   "tag": "questions",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "739118014": {
+   "kind": "text",
+   "parent": 357985204,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "You're eager, I like that. Come back next week, there should be new work for you then.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[mario-week-cooldown] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mario-week-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2011521693": {
+   "kind": "text",
+   "parent": 1205653259,
+   "children": [
+    -1737220362
+   ],
+   "actor": null,
+   "text": "How did you become Governor?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "113641507": {
+   "kind": "text",
+   "parent": 1205653259,
+   "children": [
+    306143769
+   ],
+   "actor": null,
+   "text": "Why choose me to help you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-36333874": {
+   "kind": "text",
+   "parent": 1205653259,
+   "children": [
+    -1364245435
+   ],
+   "actor": null,
+   "text": "How do you know my {D}?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-243118769": {
+   "kind": "text",
+   "parent": 1205653259,
+   "children": [
+    870163565
+   ],
+   "actor": null,
+   "text": "I have no more questions.",
+   "jump": {
+    "mode": "Jump",
+    "to": "whyhere"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "870163565": {
+   "kind": "text",
+   "parent": -243118769,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Very well.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1737220362": {
+   "kind": "text",
+   "parent": -2011521693,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Connections and charm, kid. In politics, it’s not just about what you know, but who you know. I made the right friends and played the game well. Now, here I am.",
+   "jump": {
+    "mode": "Jump",
+    "to": "questions"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "306143769": {
+   "kind": "text",
+   "parent": 113641507,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "You’ve got potential, {PC}. Fresh eyes, no baggage, and a little loyalty. I needed someone who could handle things quietly and efficiently. You fit the bill.",
+   "jump": {
+    "mode": "Jump",
+    "to": "questions"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1364245435": {
+   "kind": "text",
+   "parent": -36333874,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Your {D} and I go way back. Business ties, favors owed, that sort of thing. He’s a good man, but sometimes even good men need a little... guidance.",
+   "jump": {
+    "mode": "Jump",
+    "to": "questions"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "945451429": {
+   "kind": "text",
+   "parent": 357985204,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "There's no more work for you, kid. At least none of that boring paper stuff.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[detective-minigame-complete] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "detective-minigame-complete",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1179270285": {
+   "kind": "text",
+   "parent": 357985204,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Great. Remember, if the information doesn't match, mark it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Compareit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Compareit",
+       "of": "GetGameObjectInstance",
+       "path": "16_Minigames/Compareit"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[mario-week-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mario-week-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1059691565": {
+   "kind": "text",
+   "parent": -1650568754,
+   "children": [
+    1093635981,
+    -1015266015
+   ],
+   "actor": null,
+   "text": "I'm ready for Katarina.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[agreed-to-bang-katarina] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "agreed-to-bang-katarina",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Katarina-Left] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Katarina-Left",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[emma-corrupted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-corrupted",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[katarinamallcooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarinamallcooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1093635981": {
+   "kind": "text",
+   "parent": 1059691565,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Great. Let me call her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[katarina-player-friends] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-player-friends",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[temp-stored-very-short-term] = PlayerKatarineAngry",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "PlayerKatarineAngry",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Villa_Office/PlayerKatarineAngry"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[katarinamallcooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarinamallcooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "561159366": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "{PC}. You are no longer welcome here. I suggest you leave, unless you prefer my security handling the situation?",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Mario-No-More-Talk] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-No-More-Talk",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1933891468": {
+   "kind": "text",
+   "parent": 1205653259,
+   "children": [
+    576475805,
+    -669779893
+   ],
+   "actor": null,
+   "text": "Explain how seducing Emma helps your plan.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[Mario-Plan-Agreed] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-Plan-Agreed",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[mario-plan-completed] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mario-plan-completed",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[emma-corrupted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-corrupted",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "576475805": {
+   "kind": "text",
+   "parent": -1933891468,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "She's been living in a world of temptation. She hasn't given in yet—and she won't. Unless someone give her a push.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-669779893": {
+   "kind": "text",
+   "parent": -1933891468,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "That can't be me. Someone else has to do it. Show her how much fun it is to… give in.",
+   "jump": {
+    "mode": "Jump",
+    "to": "questions"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1342054389": {
+   "kind": "text",
+   "parent": -1650568754,
+   "children": [
+    476674704,
+    -2056320209
+   ],
+   "actor": null,
+   "text": "Emma is ready.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_5[emma-c-progress] ≥ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-c-progress",
+        "list": "Events_5",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[mario-emma-incoming] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mario-emma-incoming",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[emma-corrupted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-corrupted",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[emma-player-friends] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-player-friends",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "476674704": {
+   "kind": "choice",
+   "parent": 1342054389,
+   "children": [
+    2081370179,
+    1225905364,
+    -271634470
+   ],
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That’s… fantastic. I take it that you took good care of her holes?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2081370179": {
+   "kind": "text",
+   "parent": 476674704,
+   "children": [
+    1079625608
+   ],
+   "actor": null,
+   "text": "She can't stop thinking about cocks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1225905364": {
+   "kind": "text",
+   "parent": 476674704,
+   "children": [
+    1112987069
+   ],
+   "actor": null,
+   "text": "She was begging for more.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-271634470": {
+   "kind": "text",
+   "parent": 476674704,
+   "children": [
+    -1348894740
+   ],
+   "actor": null,
+   "text": "You should see for yourself.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1079625608": {
+   "kind": "text",
+   "parent": 2081370179,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Great... I'm getting excited just thinking about it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1112987069": {
+   "kind": "text",
+   "parent": 1225905364,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Oh, that she will get. Because I want you to be present when I finally claim her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1348894740": {
+   "kind": "text",
+   "parent": -271634470,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Oh, I will...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2056320209": {
+   "kind": "text",
+   "parent": 1342054389,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "The next time you stretch her pussy, I will join in and then your {D}'s debt will be paid.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[mario-emma-incoming] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mario-emma-incoming",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1455863336": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    95999751
+   ],
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "{PC}. It's good to see you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[emma-corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-corrupted",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "95999751": {
+   "kind": "text",
+   "parent": -1455863336,
+   "actor": "Emma",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh, {PC}! Yay... Are you two going to fuck me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "143506473": {
+   "kind": "text",
+   "parent": -1650568754,
+   "children": [
+    -1909702790
+   ],
+   "actor": null,
+   "text": "Let's have some fun. Right, Emma?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[emma-corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-corrupted",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1909702790": {
+   "kind": "text",
+   "parent": 143506473,
+   "actor": "Emma",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yisssss!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[temp-stored-very-short-term] = EmmaMario",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "EmmaMario",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Villa_Office/EmmaMario"
+      }
+     }
+    }
+   ]
+  },
+  "349330870": {
+   "kind": "text",
+   "parent": -1650568754,
+   "children": [
+    1441238525,
+    1117361400,
+    483130031,
+    -563418111,
+    -1490883599,
+    1349930627
+   ],
+   "actor": null,
+   "text": "(Start recording) There's something I don't undertand... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[mario-week-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mario-week-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Enough-Evidence-Gathered] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Enough-Evidence-Gathered",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Recording-Route-Active] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Recording-Route-Active",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_5[recording-progress] = 0",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "recording-progress",
+        "list": "Events_5",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 0
+      }
+     }
+    }
+   ]
+  },
+  "1441238525": {
+   "kind": "choice",
+   "parent": 349330870,
+   "children": [
+    800565463,
+    -738796075,
+    1411973234
+   ],
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Alright, shoot. Let’s hear what you’ve got.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[mario-week-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mario-week-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "800565463": {
+   "kind": "text",
+   "parent": 1441238525,
+   "children": [
+    -1288920650
+   ],
+   "actor": null,
+   "text": "How do you keep everything so well-hidden?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-738796075": {
+   "kind": "text",
+   "parent": 1441238525,
+   "children": [
+    -921350052
+   ],
+   "actor": null,
+   "text": "What’s your favorite part of this job?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-921350052": {
+   "kind": "text",
+   "parent": -738796075,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Favorite part? This isn’t exactly a 9-to-5, {PC}. Let’s talk about something more interesting.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1288920650": {
+   "kind": "text",
+   "parent": 800565463,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Ah, that’s the key, isn’t it? It’s all about keeping the right people happy and knowing when to pull the strings. A little pressure here, a little favor there, and everything stays under control.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_5[recording-progress] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "recording-progress",
+        "list": "Events_5",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "1411973234": {
+   "kind": "text",
+   "parent": 1441238525,
+   "children": [
+    -1581852579
+   ],
+   "actor": null,
+   "text": "How do you unwind after a long day?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1581852579": {
+   "kind": "text",
+   "parent": 1411973234,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Unwind? That’s not exactly relevant right now, is it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1117361400": {
+   "kind": "choice",
+   "parent": 349330870,
+   "children": [
+    -2073946159,
+    1720821669,
+    1958334253
+   ],
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Hmm, anything else? I have to say, it's quite charming playing the mentor.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2073946159": {
+   "kind": "text",
+   "parent": 1117361400,
+   "children": [
+    -1635885238
+   ],
+   "actor": null,
+   "text": "What’s the hardest part of running everything?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1635885238": {
+   "kind": "text",
+   "parent": -2073946159,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Hardest part? You’re losing me, {PC}. Try again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1720821669": {
+   "kind": "text",
+   "parent": 1117361400,
+   "children": [
+    86793512
+   ],
+   "actor": null,
+   "text": "Why Emma. You could have everyone?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "86793512": {
+   "kind": "text",
+   "parent": 1720821669,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "She's smart yet submissive. Yes, she is my {DA}, but she's also a walking pair of fat tits begging to be used.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_5[recording-progress] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "recording-progress",
+        "list": "Events_5",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "1958334253": {
+   "kind": "text",
+   "parent": 1117361400,
+   "children": [
+    196129926
+   ],
+   "actor": null,
+   "text": "Do you ever get tired of the game?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "196129926": {
+   "kind": "text",
+   "parent": 1958334253,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Tired? If you get tired, you're weak and I'm not weak.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "483130031": {
+   "kind": "choice",
+   "parent": 349330870,
+   "children": [
+    -211707917,
+    -88260687,
+    316928515
+   ],
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "I commend your curiosity, {PC}. Others can learn from you.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-211707917": {
+   "kind": "text",
+   "parent": 483130031,
+   "children": [
+    1536149977
+   ],
+   "actor": null,
+   "text": "What do you think about expanding your operations?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1536149977": {
+   "kind": "text",
+   "parent": -211707917,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Let’s stick to the here and now, shall we?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-88260687": {
+   "kind": "text",
+   "parent": 483130031,
+   "children": [
+    803919705
+   ],
+   "actor": null,
+   "text": "How do you manage to keep everyone loyal?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "803919705": {
+   "kind": "text",
+   "parent": -88260687,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Money, {PC}. There's no one you can't buy. And if that doesn't work, you add a pint of fear. Step out of line, and they know what happens.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_5[recording-progress] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "recording-progress",
+        "list": "Events_5",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "316928515": {
+   "kind": "text",
+   "parent": 483130031,
+   "children": [
+    -1553203829
+   ],
+   "actor": null,
+   "text": "Any plans for retirement?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1553203829": {
+   "kind": "text",
+   "parent": 316928515,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Retirement? What do you take me for, an old man looking for a rocking chair?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1490883599": {
+   "kind": "text",
+   "parent": 349330870,
+   "actor": "Player",
+   "expressionName": "default",
+   "text": "That should be enough information. I should return to Sofia.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_5[recording-progress] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "recording-progress",
+        "list": "Events_5",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[Enough-Evidence-Gathered] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Enough-Evidence-Gathered",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1349930627": {
+   "kind": "text",
+   "parent": 349330870,
+   "actor": "Player",
+   "expressionName": "default",
+   "text": "Fuck, that's not enough intel. I should try again next week...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_5[recording-progress] ≤ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "recording-progress",
+        "list": "Events_5",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-563418111": {
+   "kind": "text",
+   "parent": 349330870,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Now if you excuse me, work is waiting.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1526400928": {
+   "kind": "text",
+   "parent": -1650568754,
+   "children": [
+    29491560
+   ],
+   "actor": null,
+   "text": "There's something I need to tell you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Sofia-Cop-Reveal] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Sofia-Cop-Reveal",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[sofia-taken-by-mob] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-taken-by-mob",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "29491560": {
+   "kind": "choice",
+   "parent": 1526400928,
+   "children": [
+    -1549408962,
+    60117577
+   ],
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "What is it?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1549408962": {
+   "kind": "text",
+   "parent": 29491560,
+   "children": [
+    1358966331,
+    -1381061580
+   ],
+   "actor": null,
+   "text": "There's a cop hunting you. Sofia.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "60117577": {
+   "kind": "text",
+   "parent": 29491560,
+   "actor": null,
+   "text": "Actually, nevermind.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1358966331": {
+   "kind": "text",
+   "parent": -1549408962,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "A cop named Sofia, huh? Thanks for the tip. My guys will handle her. You’ve just earned my trust, kid.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1381061580": {
+   "kind": "text",
+   "parent": -1549408962,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "And I don’t want anyone thinking Mario di Luca doesn’t reward loyalty. So here, take this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[sofia-taken-by-mob] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-taken-by-mob",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + 5000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 5000
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = $5000",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "$5000"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1952813453": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -365338891,
+    -839234258,
+    -734333291,
+    1715600311,
+    -270472789
+   ],
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You didn’t just follow orders—you came straight to me when the cops tried to flip you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[mariogstroominc] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mariogstroominc",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Inventory[marioguestroomkey] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "marioguestroomkey",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-365338891": {
+   "kind": "text",
+   "parent": -1952813453,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "That’s more than just doing what’s asked… that’s loyalty beyond measure. You deserve this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[DEBT-PAID-OFF] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DEBT-PAID-OFF",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Inventory[marioguestroomkey] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "marioguestroomkey",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = Guest Key",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Guest Key"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-734333291": {
+   "kind": "text",
+   "parent": -1952813453,
+   "actor": "Emma",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yay!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1715600311": {
+   "kind": "text",
+   "parent": -1952813453,
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Welcome to the family, kid.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-270472789": {
+   "kind": "text",
+   "parent": -1952813453,
+   "actor": "Mario",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh, And there's a gift waiting for you there. Enjoy it. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1015266015": {
+   "kind": "text",
+   "parent": 1059691565,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Great. Let me call her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[katarina-player-friends] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-player-friends",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[temp-stored-very-short-term] = PlayerKatarineHorny",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "PlayerKatarineHorny",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Villa_Office/PlayerKatarineHorny"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[katarinamallcooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarinamallcooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-839234258": {
+   "kind": "text",
+   "parent": -1952813453,
+   "children": [
+    -1366296764,
+    421677973,
+    -991822283
+   ],
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Funny thing, though. Josef’s debt? Already paid off. I assume you took care of it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[DEBT-PAID-OFF] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DEBT-PAID-OFF",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1366296764": {
+   "kind": "text",
+   "parent": -839234258,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "You kept working. You bled for me. Risked getting caughted by that bimbo cop.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_8[mariobonushappy] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mariobonushappy",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "421677973": {
+   "kind": "text",
+   "parent": -839234258,
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You’re not just some kid who did what I asked. You’re a man who stood when no one was watching.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-991822283": {
+   "kind": "text",
+   "parent": -839234258,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Whatever you need... you come to me. No threats. No deals. Just say the word.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Inventory[marioguestroomkey] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "marioguestroomkey",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = Guest Key",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Guest Key"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1395987536": {
+   "kind": "text",
+   "parent": 1205653259,
+   "children": [
+    -2112598684,
+    -1833061008,
+    1485025432,
+    7314746
+   ],
+   "actor": null,
+   "text": "Mrs. Kimura offered me a deal but I’m not sure how to handle it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[milking-mainstory] = 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milking-mainstory",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[bafa-mrskimura-howtonegotiate] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-mrskimura-howtonegotiate",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-2112598684": {
+   "kind": "text",
+   "parent": -1395987536,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Hah. Of course you’ve been offered a deal. Power attracts parasites.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Milking Save[bafa-mrskimura-howtonegotiate] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-mrskimura-howtonegotiate",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1833061008": {
+   "kind": "text",
+   "parent": -1395987536,
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "The trick is simple: feed their appetite without letting them devour you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1485025432": {
+   "kind": "text",
+   "parent": -1395987536,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Offer a 50/50 split. It’s just enough to satisfy their greed, and just enough to keep your hands on the reins.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "7314746": {
+   "kind": "text",
+   "parent": -1395987536,
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "They’ll think you’re generous… when in truth, you’re the one holding the leash.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Villa_Office",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play MarioDefaulttalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Mario-In-Prison] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-In-Prison",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[emma-corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-corrupted",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Mario_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Mario_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Mario_Nude"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Emma_Lingerie to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Emma_Lingerie",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Emma_Lingerie"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[mario-villa-first-meeting] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mario-villa-first-meeting",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Room_Talk/Villa_Office",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play MarioDefaulttalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Mario-In-Prison] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-In-Prison",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Mario_Normal to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Mario_Normal",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Mario_Normal"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[mario-villa-first-meeting] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mario-villa-first-meeting",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

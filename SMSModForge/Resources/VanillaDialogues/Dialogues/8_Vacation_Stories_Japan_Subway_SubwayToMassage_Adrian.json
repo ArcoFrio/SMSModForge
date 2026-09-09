@@ -1,0 +1,221 @@
+{
+ "id": "8_Vacation_Stories/Japan_Subway/SubwayToMassage_Adrian",
+ "name": "SubwayToMassage_Adrian",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian"
+ ],
+ "roots": [
+  -906890162,
+  1932090976
+ ],
+ "nodes": {
+  "-906890162": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1041379784,
+    1316993580,
+    -1175737424,
+    934507561
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I’m so excited—this is the first time I’m getting an actual massage. Like, from a real professional. What about you?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[firsttime-massageplace] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "firsttime-massageplace",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1041379784": {
+   "kind": "text",
+   "parent": -906890162,
+   "children": [
+    -560508936
+   ],
+   "actor": null,
+   "text": "It’s my first time too. I’m curious to see how it feels.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-560508936": {
+   "kind": "text",
+   "parent": -1041379784,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Then we’re both diving into something new. Let’s see what all the hype’s about!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1316993580": {
+   "kind": "text",
+   "parent": -906890162,
+   "children": [
+    123262416
+   ],
+   "actor": null,
+   "text": "I’ve had one before, but not in a place as fancy as this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "123262416": {
+   "kind": "text",
+   "parent": 1316993580,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Fancy or not, this one’s going to be awesome. I can feel it already.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1175737424": {
+   "kind": "text",
+   "parent": -906890162,
+   "children": [
+    -1346086518
+   ],
+   "actor": null,
+   "text": "I’ve had a few before. They’re always worth it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1346086518": {
+   "kind": "text",
+   "parent": -1175737424,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Alright, massage expert. I’ll trust you if you say it’s that good!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "934507561": {
+   "kind": "text",
+   "parent": -906890162,
+   "children": [
+    896255488
+   ],
+   "actor": null,
+   "text": "I’ve never really been into massages, but hey, I’m open to being convinced.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "896255488": {
+   "kind": "text",
+   "parent": 934507561,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "That’s the spirit. If this doesn’t change your mind, nothing will.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1932090976": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "It's insane how clean the subway is in this country...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[firsttime-massageplace] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "firsttime-massageplace",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Japan_Subway",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play SubwayToMassage_Adrian and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_NoSave[incoming-vacation-map] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "incoming-vacation-map",
+        "list": "Core_NoSave",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

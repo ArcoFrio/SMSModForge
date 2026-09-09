@@ -1,0 +1,425 @@
+{
+ "id": "8_Room_Talk/doctorroom/doctorfirsttalk",
+ "name": "doctorfirsttalk",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "DrFrost"
+ ],
+ "roots": [
+  784360404,
+  -2145821092,
+  1832701301,
+  -2107859638,
+  433715102,
+  -1729620493,
+  -1489109523,
+  1815315669
+ ],
+ "nodes": {
+  "784360404": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Ah, it’s you. I’ve been reviewing your records.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2145821092": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "You’re quite an intriguing subject.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1832701301": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "You’ve sustained injuries that would incapacitate an average person, yet you recover quickly and show resilience. Fascinating.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2107859638": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "It got me thinking… You might be a suitable candidate for a more unconventional line of treatment I’ve been developing. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "433715102": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Experimental, of course. It’s designed to increase strength, stamina, and overall combat capabilities.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1729620493": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "However, there’s a complication. It’s not covered by insurance, naturally. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1489109523": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Experimental procedures like these tend to cost a substantial amount… and I have no budget to cover your treatment.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1815315669": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1230726825,
+    -1549302636,
+    1937613046,
+    -597636501
+   ],
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "So, if you’re willing to bear the cost, we can begin immediately. If not, feel free to leave. The choice is yours.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1230726825": {
+   "kind": "text",
+   "parent": 1815315669,
+   "children": [
+    -1122565652,
+    1015121981,
+    -1099651809
+   ],
+   "actor": null,
+   "text": "What exactly does this treatment do?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1549302636": {
+   "kind": "text",
+   "parent": 1815315669,
+   "children": [
+    -255122016,
+    -1221779385,
+    -1276664021
+   ],
+   "actor": null,
+   "text": "Sounds risky. What are the side effects?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1937613046": {
+   "kind": "text",
+   "parent": 1815315669,
+   "children": [
+    1041397706
+   ],
+   "actor": null,
+   "text": "I’m interested. Let’s do it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-597636501": {
+   "kind": "text",
+   "parent": 1815315669,
+   "children": [
+    1142696288,
+    1308410951
+   ],
+   "actor": null,
+   "text": "I’m not paying for some experiment. I’ll pass.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1122565652": {
+   "kind": "text",
+   "parent": 1230726825,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "In essence, it enhances muscle fiber density and neural response time. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-255122016": {
+   "kind": "text",
+   "parent": -1549302636,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Common side effects include fatigue, nausea, migraines… and in rare cases, temporary loss of motor function. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1041397706": {
+   "kind": "text",
+   "parent": 1937613046,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Very well. I’ll make the necessary arrangements. Payment must be made up front. Once we start, there’s no turning back.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1142696288": {
+   "kind": "text",
+   "parent": -597636501,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Suit yourself. I’m not in the business of persuasion. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1015121981": {
+   "kind": "text",
+   "parent": 1230726825,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Think of it as pushing your body past its natural limits—becoming stronger, faster, more resilient.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1221779385": {
+   "kind": "text",
+   "parent": -1549302636,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "But you strike me as someone accustomed to risk, yes?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1308410951": {
+   "kind": "text",
+   "parent": -597636501,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "When you’re ready to exceed your limits—or if you change your mind—you know where to find me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1099651809": {
+   "kind": "text",
+   "parent": 1230726825,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "I’m not in the business of persuasion. When you’re ready to exceed your limits, you know where to find me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1276664021": {
+   "kind": "text",
+   "parent": -1549302636,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "I’m not in the business of persuasion. When you’re ready to exceed your limits, you know where to find me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/doctorroom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play doctorfirsttalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[doctorfrost-met] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "doctorfrost-met",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Evelyn_bust_condition and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "Evelyn_bust_condition",
+       "of": "GetGameObjectConditions",
+       "path": "8_Room_Talk/doctorroom/Evelyn_bust_condition"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[doctorfrost-met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "doctorfrost-met",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,226 @@
+{
+ "id": "8_Room_Talk/Entrance/Dtalk1",
+ "name": "Dtalk1",
+ "index": 4,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Josef"
+ ],
+ "roots": [
+  1965100072,
+  971808862,
+  -2143075526
+ ],
+ "nodes": {
+  "1965100072": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1322263769,
+    -651451739,
+    1925052782
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "So, remember that old treehouse we built in the backyard?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1322263769": {
+   "kind": "text",
+   "parent": 1965100072,
+   "children": [
+    -1929163042
+   ],
+   "actor": null,
+   "text": "Oh, how could I forget?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-651451739": {
+   "kind": "text",
+   "parent": 1965100072,
+   "children": [
+    164667574
+   ],
+   "actor": null,
+   "text": "We spent an entire summer working on that thing. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1925052782": {
+   "kind": "text",
+   "parent": 1965100072,
+   "children": [
+    -729778891
+   ],
+   "actor": null,
+   "text": "I didn't really like it... It was your idea.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-729778891": {
+   "kind": "text",
+   "parent": 1925052782,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I.. I'm sorry you think that way. Maybe I should have listened more closely...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "164667574": {
+   "kind": "text",
+   "parent": -651451739,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Yeah, I remember pretending it was our secret base. Good times.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1929163042": {
+   "kind": "text",
+   "parent": -1322263769,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Yeah, I remember pretending it was our secret base. Good times.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "971808862": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Sometimes, it’s nice to think back on those simpler days. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2143075526": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Even if our memories sometimes betray us...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Entrance/dtalkcond",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dtalk1 and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[beer-given] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "beer-given",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events[D-talks-beer] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-talks-beer",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events[D-talks-beer] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-talks-beer",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[beer-given] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "beer-given",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

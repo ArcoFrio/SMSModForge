@@ -1,0 +1,2449 @@
+{
+ "id": "8_Room_Talk/Mall/DefaultDialoge",
+ "name": "DefaultDialoge",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "Zuri"
+ ],
+ "roots": [
+  1518696565,
+  -1384965032
+ ],
+ "nodes": {
+  "1518696565": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thanks for driving me, hun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[m-at-mall-restroom] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "m-at-mall-restroom",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood and wait",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ]
+  },
+  "-1384965032": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1373349983,
+    -1673030051,
+    -684493744,
+    1468194993
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'll take the bus back home, so don't wait for me!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave2[anna-car-reflection] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-car-reflection",
+        "list": "Core_NoSave2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1373349983": {
+   "kind": "text",
+   "parent": -1384965032,
+   "children": [
+    1840897975,
+    1501870474,
+    514720765,
+    -1912127615,
+    807617254
+   ],
+   "actor": null,
+   "text": "(Activate the egg vibrator)",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[Anna-vibrating-egg-equipped] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Anna-vibrating-egg-equipped",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1468194993": {
+   "kind": "text",
+   "parent": -1384965032,
+   "actor": null,
+   "text": "See you later.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1840897975": {
+   "kind": "text",
+   "parent": 1373349983,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{PC}... T-There's people here... I... Hngahh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaToyMall (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaToyMall (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaToyMall (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1501870474": {
+   "kind": "text",
+   "parent": 1373349983,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god... I'm... N-Not here... There's....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "514720765": {
+   "kind": "text",
+   "parent": 1373349983,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hngghh... Mhmmm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1912127615": {
+   "kind": "text",
+   "parent": 1373349983,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "L-Look how wet {M} is because of you... I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaToyMall (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaToyMall (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaToyMall (2)"
+      }
+     }
+    }
+   ]
+  },
+  "807617254": {
+   "kind": "text",
+   "parent": 1373349983,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I need to use the restroom....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-684493744": {
+   "kind": "text",
+   "parent": -1384965032,
+   "children": [
+    662930525
+   ],
+   "actor": null,
+   "text": "($30) You should take a taxi. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 30",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 30
+       }
+      }
+     }
+    }
+   ]
+  },
+  "662930525": {
+   "kind": "text",
+   "parent": -684493744,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Good idea, thanks, huh.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -30",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -30
+      }
+     }
+    }
+   ]
+  },
+  "-1673030051": {
+   "kind": "text",
+   "parent": -1384965032,
+   "children": [
+    1122415648,
+    407574520,
+    -1635562547,
+    -1560069173,
+    -319248026,
+    1981912714,
+    778470956,
+    1084639256,
+    2092622207,
+    1375634843,
+    1298083004,
+    -93132294,
+    477028461,
+    190106563,
+    2087222845,
+    -1798257171,
+    339303139,
+    -1942379617,
+    815955611,
+    -886627674,
+    -1127048794,
+    -1163960177,
+    -2106897062,
+    -516476398,
+    -2064824863,
+    -2068426706,
+    654215157,
+    -1405181682
+   ],
+   "actor": null,
+   "text": "I can just stick around. I’ve got time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1122415648": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You would? That’s… actually really sweet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Anna_ComfyDateValueIncrease_action and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "Anna_ComfyDateValueIncrease_action",
+       "of": "GetGameObjectConditions",
+       "path": "Anna_ComfyDateValueIncrease_action"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ]
+  },
+  "407574520": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I wouldn’t mind the company. And maybe… a little help carrying things if I get carried away.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1635562547": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 5,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AWhileLater to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AWhileLater",
+       "of": "GetGameObjectInstance",
+       "path": "6_Effects/Effect_Canvas/AWhileLater"
+      }
+     }
+    }
+   ]
+  },
+  "-1560069173": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Alright… next stop is Zuri’s store.\n",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-319248026": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I need something “casual but flattering.”",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1981912714": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Gallery-Active] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gallery-Active",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 25_Mall to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "25_Mall",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/25_Mall"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 30_Clothstore to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "30_Clothstore",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/30_Clothstore"
+      }
+     }
+    }
+   ]
+  },
+  "778470956": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Zuri",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Anna. Always a pleasure. And you brought… assistance.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Zuri to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Zuri",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Zuri"
+      }
+     }
+    }
+   ]
+  },
+  "1084639256": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "He insisted on carrying things. I didn’t force him.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2092622207": {
+   "kind": "choice",
+   "parent": -1673030051,
+   "children": [
+    -1769684785,
+    -1615680195,
+    936144414
+   ],
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Of course he did.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1769684785": {
+   "kind": "text",
+   "parent": 2092622207,
+   "children": [
+    -413367160,
+    1530547287,
+    -1664367664,
+    -1395740586
+   ],
+   "actor": null,
+   "text": "Happy to help. I’m just here for moral support.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-413367160": {
+   "kind": "text",
+   "parent": -1769684785,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Moral support is underrated. Especially when shopping with Anna.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1615680195": {
+   "kind": "text",
+   "parent": 2092622207,
+   "children": [
+    961620030,
+    1824940191,
+    -319917427
+   ],
+   "actor": null,
+   "text": "I’ve been promoted to “Bag Holder Level 3.”",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "961620030": {
+   "kind": "text",
+   "parent": -1615680195,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Promotion already? Impressive.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "936144414": {
+   "kind": "text",
+   "parent": 2092622207,
+   "children": [
+    -2074708332,
+    1732737355,
+    171240574
+   ],
+   "actor": null,
+   "text": "Someone has to make sure she doesn’t buy the whole store.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2074708332": {
+   "kind": "text",
+   "parent": 936144414,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I do not buy that much!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1530547287": {
+   "kind": "text",
+   "parent": -1769684785,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Hey… I am not that indecisive.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1664367664": {
+   "kind": "text",
+   "parent": -1769684785,
+   "actor": "Zuri",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You tried on seven sweaters last time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1395740586": {
+   "kind": "text",
+   "parent": -1769684785,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "They were different sweaters.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1824940191": {
+   "kind": "text",
+   "parent": -1615680195,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Careful, or I’ll assign you more responsibilities.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-319917427": {
+   "kind": "text",
+   "parent": -1615680195,
+   "actor": "Zuri",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "He looks capable.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1732737355": {
+   "kind": "text",
+   "parent": 936144414,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "You once apologized to your credit card out loud.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "171240574": {
+   "kind": "text",
+   "parent": 936144414,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "It was a stressful day.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1375634843": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Anna, you always buy safe clothes. Soft colors. Comfortable cuts. Predictable silhouettes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1298083004": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "There’s nothing wrong with comfortable…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-93132294": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Zuri",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "There isn’t. But you didn’t come here for comfortable today.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "477028461": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Zuri",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "You’re changing lately. You should dress like it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1798257171": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I don’t even know what that means… But fine. I'll try one.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Romanced] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Romanced",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "339303139": {
+   "kind": "random",
+   "parent": -1673030051,
+   "children": [
+    -315459584,
+    1680519209,
+    860446091
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    }
+   ]
+  },
+  "-315459584": {
+   "kind": "text",
+   "parent": 339303139,
+   "children": [
+    1835983466,
+    458031568,
+    -1911027208,
+    67429800,
+    -608823099,
+    1133678765
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I feel ridiculous…",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_MallChill (10) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_MallChill (10)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Anna_MallChill (10)"
+      }
+     }
+    }
+   ]
+  },
+  "1680519209": {
+   "kind": "text",
+   "parent": 339303139,
+   "children": [
+    -1779451906,
+    216138204,
+    -842377288,
+    576454254,
+    752353564,
+    633505596
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh… wow. This feels… powerful.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_MallChill (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_MallChill (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Anna_MallChill (5)"
+      }
+     }
+    }
+   ]
+  },
+  "860446091": {
+   "kind": "text",
+   "parent": 339303139,
+   "children": [
+    33964835,
+    1541208317,
+    2130171298,
+    -1197717745,
+    -1568234497,
+    87042171,
+    -1812707717,
+    -142504123,
+    -393799951,
+    596409952,
+    -734193798
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "…Oh. I don’t like this one.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_MallChill (8) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_MallChill (8)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Anna_MallChill (8)"
+      }
+     }
+    }
+   ]
+  },
+  "-1942379617": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "33964835": {
+   "kind": "text",
+   "parent": 860446091,
+   "actor": "Zuri",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You haven’t even looked in the mirror.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1779451906": {
+   "kind": "text",
+   "parent": 1680519209,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Stand straight.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1835983466": {
+   "kind": "text",
+   "parent": -315459584,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "This is way too young for me, isn’t it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "458031568": {
+   "kind": "text",
+   "parent": -315459584,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Turn around.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1911027208": {
+   "kind": "text",
+   "parent": -315459584,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Zuri, these pants barely exists… How do people sit in this?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_MallChill (9) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_MallChill (9)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Anna_MallChill (9)"
+      }
+     }
+    }
+   ]
+  },
+  "67429800": {
+   "kind": "text",
+   "parent": -315459584,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "They don’t sit.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "216138204": {
+   "kind": "text",
+   "parent": 1680519209,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I feel like I should fire someone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-842377288": {
+   "kind": "text",
+   "parent": 1680519209,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "576454254": {
+   "kind": "text",
+   "parent": 1680519209,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Is this how confident women walk around all day? Because I kind of understand it now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_MallChill (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_MallChill (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Anna_MallChill (6)"
+      }
+     }
+    }
+   ]
+  },
+  "1541208317": {
+   "kind": "text",
+   "parent": 860446091,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I don’t need to. This feels like I’m pretending to be someone else.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2130171298": {
+   "kind": "text",
+   "parent": 860446091,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Like I’m trying to be… Celeste or something. All shiny and perfect and untouchable.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1197717745": {
+   "kind": "text",
+   "parent": 860446091,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That’s not me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-608823099": {
+   "kind": "text",
+   "parent": -315459584,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I look like I’m trying to sneak into a nightclub with a fake ID…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1133678765": {
+   "kind": "text",
+   "parent": -315459584,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "This one definitely isn’t me. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "752353564": {
+   "kind": "text",
+   "parent": 1680519209,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Okay… this one’s dangerous. I might start bossing everyone around at home.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "633505596": {
+   "kind": "text",
+   "parent": 1680519209,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "But I like it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1568234497": {
+   "kind": "text",
+   "parent": 860446091,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Look anyway.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "87042171": {
+   "kind": "text",
+   "parent": 860446091,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It’s pretty… But I feel like I’m disappearing inside it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_MallChill (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_MallChill (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Anna_MallChill (7)"
+      }
+     }
+    }
+   ]
+  },
+  "-1812707717": {
+   "kind": "text",
+   "parent": 860446091,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let’s go back to being me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "815955611": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Well, we've larned something.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-886627674": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That I should stick to yellow?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    }
+   ]
+  },
+  "-1127048794": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "That you’re still figuring out who you want to be.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-142504123": {
+   "kind": "text",
+   "parent": 860446091,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Anna. Your left nipple is visible.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-393799951": {
+   "kind": "text",
+   "parent": 860446091,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "WHA—?! Zuri!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "596409952": {
+   "kind": "text",
+   "parent": 860446091,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "The dress has no structural support. It’s designed for a different body type.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-734193798": {
+   "kind": "text",
+   "parent": 860446091,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I hate this dress. I hate it so much.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1163960177": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Since we’re experimenting today… Do you want to try something too? {PC}?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2106897062": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Actually… yes. You do need new swimming trunks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-516476398": {
+   "kind": "choice",
+   "parent": -1673030051,
+   "children": [
+    -2123504307,
+    -1227171701
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "The ones you wore to the beach last time are… well, let’s just say they’ve seen better days.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2123504307": {
+   "kind": "text",
+   "parent": -516476398,
+   "children": [
+    1599667098,
+    2015016701,
+    -2053643799,
+    1046542036,
+    594033726,
+    -233164293,
+    -505324905,
+    -240412269,
+    1516167483,
+    1271512300,
+    1331107917
+   ],
+   "actor": null,
+   "text": "Alright, fine. I’ll try a pair.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1599667098": {
+   "kind": "text",
+   "parent": -2123504307,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    }
+   ]
+  },
+  "-1227171701": {
+   "kind": "text",
+   "parent": -516476398,
+   "children": [
+    -347315289
+   ],
+   "actor": null,
+   "text": "Maybe next time. I’m good for now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-347315289": {
+   "kind": "text",
+   "parent": -1227171701,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Alright… I think that’s enough fashion drama for one day.´ Food court?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2064824863": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.5,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Zuri to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Zuri",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Zuri"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 30_Clothstore to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "30_Clothstore",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/30_Clothstore"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 25_Mall to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "25_Mall",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/25_Mall"
+      }
+     }
+    }
+   ]
+  },
+  "-2053643799": {
+   "kind": "text",
+   "parent": -2123504307,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "The fit is correct.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1046542036": {
+   "kind": "text",
+   "parent": -2123504307,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Though the fabric tension in the front is… noticeable.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "594033726": {
+   "kind": "text",
+   "parent": -2123504307,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Zuri!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-505324905": {
+   "kind": "text",
+   "parent": -2123504307,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I-it’s just… Those trunks are… um… very form-fitting.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_MallChill (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_MallChill (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Anna_MallChill (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-240412269": {
+   "kind": "text",
+   "parent": -2123504307,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Maybe a little too form-fitting.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1516167483": {
+   "kind": "text",
+   "parent": -2123504307,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Still… they do look good on you. Way better than the old ones.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1331107917": {
+   "kind": "text",
+   "parent": -2123504307,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "I will ring these up. This has been… educational.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "2015016701": {
+   "kind": "text",
+   "parent": -2123504307,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh! Those actually look really good on you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_MallChill (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_MallChill (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Anna_MallChill (0)"
+      }
+     }
+    }
+   ]
+  },
+  "-233164293": {
+   "kind": "text",
+   "parent": -2123504307,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "He's big... It's not his fault.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1271512300": {
+   "kind": "text",
+   "parent": -2123504307,
+   "children": [
+    -299462931,
+    1706066658,
+    -145878814,
+    1373445491,
+    -153876903,
+    -1396101491,
+    1649528393,
+    1137300853,
+    -546975693,
+    -662368373,
+    1755718971,
+    -89252415
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'll help you change back. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-299462931": {
+   "kind": "choice",
+   "parent": 1271512300,
+   "children": [
+    -910860124,
+    1224965235,
+    7452174
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Come on.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-910860124": {
+   "kind": "text",
+   "parent": -299462931,
+   "actor": null,
+   "text": "{M}?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1224965235": {
+   "kind": "text",
+   "parent": -299462931,
+   "actor": null,
+   "text": "Uh, why? I can do it myself...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "7452174": {
+   "kind": "text",
+   "parent": -299462931,
+   "actor": null,
+   "text": "I won't say no to a little help...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1706066658": {
+   "kind": "text",
+   "parent": 1271512300,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Just... let me... get a better look. Right here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-145878814": {
+   "kind": "choice",
+   "parent": 1271512300,
+   "children": [
+    -606124349,
+    959777845,
+    28936350
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Baby, I need... I need to taste it. Just for a second. No one will know.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1373445491": {
+   "kind": "text",
+   "parent": 1271512300,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Please. Let {M} just...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_MallChill (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_MallChill (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Anna_MallChill (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-153876903": {
+   "kind": "text",
+   "parent": 1271512300,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mwuaaahmmm! Mhmmmm!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1649528393": {
+   "kind": "text",
+   "parent": 1271512300,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "GLPHH! GHMMPH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-546975693": {
+   "kind": "text",
+   "parent": 1271512300,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "MPPGH! Mmwaaah!~ ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_MallChill (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_MallChill (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Anna_MallChill (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_MallChill (0) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_MallChill (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Anna_MallChill (0)"
+      }
+     }
+    }
+   ]
+  },
+  "-89252415": {
+   "kind": "text",
+   "parent": 1271512300,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "We should... we should probably get going now... Before Zuri notices...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1137300853": {
+   "kind": "choice",
+   "parent": 1271512300,
+   "children": [
+    1314074034,
+    -1317584500,
+    1637776288
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I need you to come for me... right in my mouth...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1396101491": {
+   "kind": "text",
+   "parent": 1271512300,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Is this okay? Do you like it when {M} does this?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-662368373": {
+   "kind": "text",
+   "parent": 1271512300,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm... oh, hun... you taste so good... so warm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1755718971": {
+   "kind": "text",
+   "parent": 1271512300,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I swallowed everything...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-606124349": {
+   "kind": "text",
+   "parent": -145878814,
+   "actor": null,
+   "text": "Do it... I'm so hard for your lips, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "959777845": {
+   "kind": "text",
+   "parent": -145878814,
+   "actor": null,
+   "text": "Fuck, you're so greedy today....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "28936350": {
+   "kind": "text",
+   "parent": -145878814,
+   "actor": null,
+   "text": "(Say nothing)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1314074034": {
+   "kind": "text",
+   "parent": 1137300853,
+   "actor": null,
+   "text": "Take it all, {M}... Drink it! Fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1317584500": {
+   "kind": "text",
+   "parent": 1137300853,
+   "actor": null,
+   "text": "I'm so close, Anna. Hngaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1637776288": {
+   "kind": "text",
+   "parent": 1137300853,
+   "actor": null,
+   "text": "(Fill her mouth)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2068426706": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thanks again for driving me. And for staying.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "654215157": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I should head home and start dinner before it gets too late.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1405181682": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Drive safe, okay? And… thanks again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Gallery-Active] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gallery-Active",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "190106563": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I’m still me, don’t worry… but trying something new doesn’t mean I’ve forgotten that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Romanced] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Romanced",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "2087222845": {
+   "kind": "text",
+   "parent": -1673030051,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I know exactly who I am, Zuri… but if I’m going to turn heads, I might as well dress like I mean it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Mall",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DefaultDialoge and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[anna-to-mall] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-to-mall",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[anna-to-mall] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-to-mall",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

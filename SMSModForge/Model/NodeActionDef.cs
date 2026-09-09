@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace SMSModForge.Model;
@@ -311,16 +311,45 @@ public static class NodeActionTypes
     public const string DeactivateAllScenes = "DeactivateAllScenes";
 
     /// <summary>All action types recognised by the editor's picker.</summary>
+    /// <summary>
+    /// A Game Creator step this editor has no equivalent for, kept so it can be
+    /// SEEN rather than silently dropped. Params: <c>vanilla</c> (the Game
+    /// Creator type), <c>title</c> (the game's own one-line description),
+    /// <c>details</c> (its parameters, as JSON, for display).
+    /// <para/>
+    /// It exists because a vanilla dialogue does things this editor cannot
+    /// express — quests, transforms, particle systems, Game Creator's own
+    /// Actions assets. Leaving those out of the list would make an extension
+    /// look like it had removed them, and an author who deleted the step
+    /// afterwards would have deleted something they were never shown.
+    /// <para/>
+    /// The pack runtime does nothing with it: the real step is the game's own,
+    /// and it keeps running as the game runs it. What the editor offers is the
+    /// ability to see it, order around it, and delete it — deleting it here is
+    /// what removes it from the dialogue when the extension is applied.
+    /// <para/>
+    /// Deliberately absent from <see cref="All"/>: it is not something to
+    /// author, only something to find already there.
+    /// </summary>
+    public const string VanillaStep = "VanillaStep";
+
     public static readonly string[] All =
     {
         SetVariable, IncrementVariable,
         SetSpriteFocus, LeaveBust,
-        SetGameObjectActive, SetSprite, EmitSignal, EmitSignalDelayed, LeaveUiFaded,
+        // EmitSignalDelayed is not offered: EmitSignal carries a delay now, and
+        // two entries for one thing made an author choose before knowing there
+        // was a choice. Packs naming it still load and still run - see
+        // PackMigration.MergeSupersededActions.
+        SetGameObjectActive, SetSprite, EmitSignal, LeaveUiFaded,
         TransitionLevels, FadeSprite, SetComponentProperty, MoveGameObject, SpinGameObject,
         SwitchMusic, PlaySFX,
         Wait,
         PickRandomFromList, AddToList, RemoveFromList, ClearList, CountList,
         DiceRoll, SetWeather,
-        ActivateScene, DeactivateAllScenes,
+        // ActivateScene likewise: it is SetGameObjectActive aimed at a scene,
+        // which the runtime has treated it as for some time. DeactivateAll is a
+        // different verb - no target at all - and stays.
+        DeactivateAllScenes,
     };
 }

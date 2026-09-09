@@ -1,0 +1,516 @@
+{
+ "id": "8_Room_Talk/ToniHome_Events/Toni_FirstVsiit",
+ "name": "Toni_FirstVsiit",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Toni"
+ ],
+ "roots": [
+  -1901436921,
+  504005442,
+  1414359943,
+  1157514296
+ ],
+ "nodes": {
+  "-1901436921": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Didn’t think you’d actually show up. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "504005442": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    461001996,
+    -1422711874,
+    2102684856
+   ],
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Well, c’mon in, but don’t judge the mess, or I’m kicking you out.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "461001996": {
+   "kind": "text",
+   "parent": 504005442,
+   "children": [
+    847048411,
+    1008982062
+   ],
+   "actor": null,
+   "text": "Nice place. Real… cozy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1422711874": {
+   "kind": "text",
+   "parent": 504005442,
+   "children": [
+    178502952,
+    -1166737118
+   ],
+   "actor": null,
+   "text": "Did a tornado hit, or is this just how you live?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2102684856": {
+   "kind": "text",
+   "parent": 504005442,
+   "children": [
+    1227595346,
+    750921883
+   ],
+   "actor": null,
+   "text": "I gotta say, wasn’t expecting the pink.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "847048411": {
+   "kind": "text",
+   "parent": 461001996,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yeah, yeah, laugh it up. It’s a shoebox, I know. But hey, rent’s cheap, and I don’t need much.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "178502952": {
+   "kind": "text",
+   "parent": -1422711874,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hey, it’s organized chaos, alright? I know where everything is… mostly. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1227595346": {
+   "kind": "text",
+   "parent": 2102684856,
+   "actor": "Toni",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Tch—okay, first off, don’t get any ideas. These were on sale. Dirt cheap. And they’re comfy as hell. That’s it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1008982062": {
+   "kind": "text",
+   "parent": 461001996,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Just a bed, a workbench, and enough space to not trip over my own shit. …Which, okay, I fail at, but still.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1166737118": {
+   "kind": "text",
+   "parent": -1422711874,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "If you think this is bad, you should see my old garage. Had to dig for my own damn wrenches.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "750921883": {
+   "kind": "choice",
+   "parent": 2102684856,
+   "children": [
+    -1827772686,
+    -1044741679,
+    -1802474243
+   ],
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I mean, what, you think I sleep in my work clothes? That’d be psycho.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1827772686": {
+   "kind": "text",
+   "parent": 750921883,
+   "children": [
+    -1600723774,
+    647341726
+   ],
+   "actor": null,
+   "text": "Hey, I get it. Comfort over style, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1044741679": {
+   "kind": "text",
+   "parent": 750921883,
+   "children": [
+    1568211441,
+    1639542447
+   ],
+   "actor": null,
+   "text": "Bet you’ve got a whole stash of cute pajamas hidden somewhere.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1802474243": {
+   "kind": "text",
+   "parent": 750921883,
+   "children": [
+    -700362904
+   ],
+   "actor": null,
+   "text": "I dunno, Toni. Soft pink? Looks kinda good on you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-700362904": {
+   "kind": "text",
+   "parent": -1802474243,
+   "actor": "Toni",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "... I ... It does? ... Um...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1568211441": {
+   "kind": "text",
+   "parent": -1044741679,
+   "actor": "Toni",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You shut your damn mouth. I do not have a stash of cute shit.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1600723774": {
+   "kind": "text",
+   "parent": -1827772686,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Damn right. Can’t exactly sleep in a grease-stained tank top every night.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "647341726": {
+   "kind": "text",
+   "parent": -1827772686,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Not that I haven’t tried.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1639542447": {
+   "kind": "text",
+   "parent": -1044741679,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "…And if I did, you’d never find it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1414359943": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Anyway, you wanted to see my place? Congrats, you’ve seen it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1157514296": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Now, unless you’re here to help clean—which you’re not—grab a seat or something. I got beer in the fridge. Probably.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_7[tonihome-visited] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tonihome-visited",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/ToniHome_Events",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Toni_FirstVsiit and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] ≠ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Different",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_7[tonihome-visited] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tonihome-visited",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[temp-stored-very-short-term] = None",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "none"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active TomboyToni_BustCutie to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "TomboyToni_BustCutie",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/TomboyToni_BustCutie"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_7[tonihome-visited] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tonihome-visited",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

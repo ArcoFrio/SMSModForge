@@ -1,0 +1,356 @@
+{
+ "id": "8_Room_Talk/Hospitalhallway/DocAndKatarina",
+ "name": "DocAndKatarina",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "DrFrost",
+  "Katarina"
+ ],
+ "roots": [
+  -1625103779,
+  1061625545,
+  -191549024,
+  -1263460421,
+  -1043470389,
+  528224766,
+  -1086985418
+ ],
+ "nodes": {
+  "-1625103779": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Doctor, I need to discuss a matter of utmost importance… my face.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1061625545": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "You’re aging. It happens. What do you want me to do?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-191549024": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "A facelift, obviously. I can’t afford to look… tired.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1263460421": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Your skin elasticity is shot, and fillers won’t do much anymore. A facelift’s your best bet if you want anything remotely effective.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1043470389": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "How subtle can you make it? I don’t want to look… done.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "528224766": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "There’s no magic trick. If you want subtle, expect less dramatic results. Decide if you want natural or noticeable.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1086985418": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Fine. Schedule me in. I can’t stand looking at these wrinkles a day longer.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Hospitalhallway",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DocAndKatarina and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[katarina-first-meeting] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-first-meeting",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[hospitalhallwaycooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hospitalhallwaycooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Evelyn_bust_condition and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "Evelyn_bust_condition",
+       "of": "GetGameObjectConditions",
+       "path": "8_Room_Talk/Hospitalhallway/Evelyn_bust_condition"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina_Normal to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina_Normal",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Katarina_Normal"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[hospitalhallwaycooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hospitalhallwaycooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,794 @@
+{
+ "id": "Holiday_Hallway_Conditions/Annas_SoloAnniversary/Dialogue_1",
+ "name": "Dialogue_1",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna"
+ ],
+ "roots": [
+  1640528651,
+  409383103,
+  -1353248084
+ ],
+ "nodes": {
+  "1640528651": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh, {PC}. I was looking for you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "409383103": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -467649055,
+    -973601471,
+    1961017110
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Would you mind spending some time with me today? I... I'm feeling a bit lonely.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1353248084": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    2118647846,
+    1835221703
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Come on, I promise... You will like it.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-467649055": {
+   "kind": "text",
+   "parent": 409383103,
+   "children": [
+    1172143373
+   ],
+   "actor": null,
+   "text": "You know I love being with you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-973601471": {
+   "kind": "text",
+   "parent": 409383103,
+   "children": [
+    -1990464300
+   ],
+   "actor": null,
+   "text": "Isn't today you and {D}'s anniversary?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1961017110": {
+   "kind": "text",
+   "parent": 409383103,
+   "children": [
+    -319691852
+   ],
+   "actor": null,
+   "text": "Does it involve my cock getting sucked?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2118647846": {
+   "kind": "text",
+   "parent": -1353248084,
+   "children": [
+    -649224978
+   ],
+   "actor": null,
+   "text": "I'm right behind you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1835221703": {
+   "kind": "text",
+   "parent": -1353248084,
+   "children": [
+    -1258674475
+   ],
+   "actor": null,
+   "text": "I've got other things to do today. Sorry.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1258674475": {
+   "kind": "text",
+   "parent": 1835221703,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "... I won't force you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-649224978": {
+   "kind": "text",
+   "parent": 2118647846,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "This way...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_At_StartCheck_If_Going to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_At_StartCheck_If_Going",
+       "of": "GetGameObjectInstance",
+       "path": "Holiday_Hallway_Conditions/Annas_SoloAnniversary/Disable_At_StartCheck_If_Going"
+      }
+     }
+    },
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-319691852": {
+   "kind": "text",
+   "parent": 1961017110,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "You'll have to follow me to find out...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1990464300": {
+   "kind": "text",
+   "parent": -973601471,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Y-Yes... But, let's not talk about that right now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1172143373": {
+   "kind": "text",
+   "parent": -467649055,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I know....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "Holiday_Hallway_Conditions/Annas_SoloAnniversary",
+   "script": "Actions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dialogue_1 and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave2[holidayhallway-check] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "holidayhallway-check",
+        "list": "Core_NoSave2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Holidays[big-holiday-trip] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "big-holiday-trip",
+        "list": "Holidays",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[anna-halloweenbathinc] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-halloweenbathinc",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueStart'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueStart"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_At_StartCheck_If_Going to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_At_StartCheck_If_Going",
+       "of": "GetGameObjectInstance",
+       "path": "Holiday_Hallway_Conditions/Annas_SoloAnniversary/Disable_At_StartCheck_If_Going"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Annas_SoloAnniversary and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "Annas_SoloAnniversary",
+       "of": "GetGameObjectConditions",
+       "path": "Holiday_Hallway_Conditions/Annas_SoloAnniversary"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "checkConditions",
+     "type": "InstructionLogicCheckConditions",
+     "title": "Check If is Active Disable_At_StartCheck_If_Going",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "gameObjectActive",
+         "type": "ConditionGameObjectActive",
+         "title": "If is Active Disable_At_StartCheck_If_Going",
+         "fields": {
+          "m_GameObject": {
+           "kind": "object",
+           "name": "Disable_At_StartCheck_If_Going",
+           "of": "GetGameObjectInstance",
+           "path": "Holiday_Hallway_Conditions/Annas_SoloAnniversary/Disable_At_StartCheck_If_Going"
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Gallery-Active] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gallery-Active",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeInBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeInBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 9_Hallway to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "9_Hallway",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/9_Hallway"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 1_Master_Bedrooom to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "1_Master_Bedrooom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/1_Master_Bedrooom"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.1 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaWedding to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaWedding",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AnnaWedding"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Dialogue_2 and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Dialogue_2",
+       "of": "GetGameObjectDialogue",
+       "path": "Holiday_Hallway_Conditions/Annas_SoloAnniversary/Dialogue_2"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeInBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeInBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 9_Hallway to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "9_Hallway",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/9_Hallway"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 1_Master_Bedrooom to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "1_Master_Bedrooom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/1_Master_Bedrooom"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Music to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Music",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Music"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HalloweenMusic to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HalloweenMusic",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/HalloweenMusic"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Gallery-Active] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gallery-Active",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueEnd'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueEnd"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

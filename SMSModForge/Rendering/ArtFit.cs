@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace SMSModForge.Rendering;
 
@@ -27,6 +27,11 @@ internal static class ArtFit
     public const int LevelWidth = 2048;
     public const int LevelHeight = 1136;
 
+    /// <summary>A scene's art. The same square the prototype's Core/Art is
+    /// cut for, and the size every one of the game's own scenes is drawn
+    /// at.</summary>
+    public const int ScenePixels = 256;
+
     /// <summary>A level's mask.</summary>
     public const int LevelMaskWidth = 256;
     public const int LevelMaskHeight = 143;
@@ -52,4 +57,15 @@ internal static class ArtFit
     /// <summary>The scale for a bust or one of its overlays.</summary>
     public static double BustScale(double width, double height)
         => Scale(width, height, BustPixels, BustPixels);
+
+    /// <summary>
+    /// The scale for a scene's art.
+    /// <para/>
+    /// Deliberately NOT applied to a scene's FRAME. Art is content and belongs
+    /// at one size whatever it was drawn at; a frame is a piece of design whose
+    /// size is the point, and the two the tool ships are 297x310 and 388x405.
+    /// Fitting those to a 256 square would shrink both.
+    /// </summary>
+    public static double SceneScale(double width, double height)
+        => Scale(width, height, ScenePixels, ScenePixels);
 }

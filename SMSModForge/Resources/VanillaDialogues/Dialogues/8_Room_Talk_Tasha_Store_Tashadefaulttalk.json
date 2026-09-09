@@ -1,0 +1,2303 @@
+{
+ "id": "8_Room_Talk/Tasha_Store/Tashadefaulttalk",
+ "name": "Tashadefaulttalk",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Tasha"
+ ],
+ "roots": [
+  -1265202455,
+  561159366
+ ],
+ "nodes": {
+  "561159366": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1145938092,
+    1311506549,
+    1395227394,
+    -964959531,
+    85141350,
+    2094510084,
+    -1515779924,
+    -809665584
+   ],
+   "actor": "Tasha",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": {
+    "kind": "variable",
+    "variable": {
+     "scope": "localList",
+     "on": {
+      "kind": "object",
+      "name": "Tashadefaulttalk",
+      "of": "GetGameObjectInstance",
+      "path": "8_Room_Talk/Tasha_Store/Tashadefaulttalk"
+     },
+     "pick": "random",
+     "type": "string"
+    }
+   },
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1145938092": {
+   "kind": "text",
+   "parent": 561159366,
+   "children": [
+    -740984200
+   ],
+   "actor": null,
+   "text": "Do you sell Minis?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1311506549": {
+   "kind": "text",
+   "parent": 561159366,
+   "children": [
+    -227003306
+   ],
+   "actor": null,
+   "text": "Can I ask you a question?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-809665584": {
+   "kind": "text",
+   "parent": 561159366,
+   "children": [
+    127755274
+   ],
+   "actor": null,
+   "text": "Until then.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "127755274": {
+   "kind": "text",
+   "parent": -809665584,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Later.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-227003306": {
+   "kind": "choice",
+   "parent": 1311506549,
+   "children": [
+    383914980,
+    1603494206,
+    -5001464,
+    -1079782399
+   ],
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "I don't know, can you?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "383914980": {
+   "kind": "text",
+   "parent": -227003306,
+   "children": [
+    -1795759219,
+    1688341160
+   ],
+   "actor": null,
+   "text": "You don’t exactly fit the nerd stereotype.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1603494206": {
+   "kind": "text",
+   "parent": -227003306,
+   "children": [
+    698146624
+   ],
+   "actor": null,
+   "text": "You look pretty young. How did you afford this place?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-5001464": {
+   "kind": "text",
+   "parent": -227003306,
+   "children": [
+    1927327321
+   ],
+   "actor": null,
+   "text": "So, how’s business been for you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1079782399": {
+   "kind": "text",
+   "parent": -227003306,
+   "children": [
+    805863795
+   ],
+   "actor": null,
+   "text": "You’re looking pretty cool today, Tasha.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "805863795": {
+   "kind": "text",
+   "parent": -1079782399,
+   "actor": "Tasha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Nice try. You think that’s gonna get you a discount? Better luck next time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1927327321": {
+   "kind": "text",
+   "parent": -5001464,
+   "actor": "Tasha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Not bad, considering it’s out of town. You’d be surprised how many people will drive a bit further for something different. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "698146624": {
+   "kind": "text",
+   "parent": 1603494206,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "That's the big mystery, isn't it? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1795759219": {
+   "kind": "text",
+   "parent": 383914980,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "I'm not a nerd, dude. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1688341160": {
+   "kind": "text",
+   "parent": 383914980,
+   "actor": "Tasha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Grew up on ‘80s comics. Dark fantasy, indie stuff with real grit. Nothing mainstream.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-740984200": {
+   "kind": "text",
+   "parent": -1145938092,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "In fact I do... Here, take a look.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[active-store] = 6",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "active-store",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 6
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ShopCore to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ShopCore",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/ShopCore"
+      }
+     }
+    }
+   ]
+  },
+  "-1265202455": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -763505254,
+    -631017468,
+    1016813661
+   ],
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Hey, there you are. Got a second? I’ve been meaning to ask you something.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[tasha-master-delievery] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tasha-master-delievery",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[tasha-store-photo] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tasha-store-photo",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[tasha-photo-declined] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tasha-photo-declined",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-763505254": {
+   "kind": "text",
+   "parent": -1265202455,
+   "actor": "Tasha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I heard you’ve got a knack for photography. You know... with all that artsy stuff you do. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-631017468": {
+   "kind": "choice",
+   "parent": -1265202455,
+   "children": [
+    1808702679,
+    -1772037481
+   ],
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "I, uh, might have a job for you—if you’re interested, that is.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1808702679": {
+   "kind": "text",
+   "parent": -631017468,
+   "children": [
+    1286770438,
+    417992128,
+    -973320665
+   ],
+   "actor": null,
+   "text": "I’m listening. What’s up?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1286770438": {
+   "kind": "text",
+   "parent": 1808702679,
+   "actor": "Tasha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Okay, cool. So, here’s the deal—my shop could use a little... exposure.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1772037481": {
+   "kind": "text",
+   "parent": -631017468,
+   "children": [
+    -2142708634,
+    -714162104
+   ],
+   "actor": null,
+   "text": "Tasha needing help? I never thought I’d see the day.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2142708634": {
+   "kind": "text",
+   "parent": -1772037481,
+   "actor": "Tasha",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Yeah, yeah, laugh it up. I don’t ask for favors often, okay? But here’s the thing—I want to run an ad for the shop. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "417992128": {
+   "kind": "text",
+   "parent": 1808702679,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "I’m working on an ad to bring in more people, and I thought, hey, maybe a few killer photos could help. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-973320665": {
+   "kind": "text",
+   "parent": 1808702679,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "You know, something that really shows off the vibe of the place. Comics, art, all that good stuff.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-714162104": {
+   "kind": "text",
+   "parent": -1772037481,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Figured I’d try something new. Thought you’d want to lend me a hand since you’re the only photo guy I know and all.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1016813661": {
+   "kind": "choice",
+   "parent": -1265202455,
+   "children": [
+    2089595976,
+    -1933154140
+   ],
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "And don’t think you’re doing this for free, either. $150 should cover it, right?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2089595976": {
+   "kind": "text",
+   "parent": 1016813661,
+   "children": [
+    -549214191,
+    -2001320192,
+    -945580099,
+    -287825258,
+    1112894250
+   ],
+   "actor": null,
+   "text": "Let's do this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1933154140": {
+   "kind": "text",
+   "parent": 1016813661,
+   "children": [
+    438048757
+   ],
+   "actor": null,
+   "text": "Sorry, but I'm too busy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "438048757": {
+   "kind": "text",
+   "parent": -1933154140,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Ah, damn. Well, I get it. Time's short these days.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[tasha-photo-declined] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tasha-photo-declined",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-549214191": {
+   "kind": "text",
+   "parent": 2089595976,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Awesome.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_6[Tasha-questone] = 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Tasha-questone",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-2001320192": {
+   "kind": "text",
+   "parent": 2089595976,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Okay, so... how does this work? Do I just stand there looking cool, or do I need to, like... do poses or something?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-945580099": {
+   "kind": "choice",
+   "parent": 2089595976,
+   "children": [
+    -57180058,
+    -336613901,
+    -273348296
+   ],
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Be honest—if I do something dumb, you’re gonna tell me, right? I don’t wanna end up looking like one of those cringy wannabe influencers.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-57180058": {
+   "kind": "text",
+   "parent": -945580099,
+   "children": [
+    1962522736,
+    -1710221121
+   ],
+   "actor": null,
+   "text": "Relax. Just be yourself.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-336613901": {
+   "kind": "text",
+   "parent": -945580099,
+   "children": [
+    -2061707400,
+    1551214119
+   ],
+   "actor": null,
+   "text": "Give me your smiliest smile! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-273348296": {
+   "kind": "text",
+   "parent": -945580099,
+   "children": [
+    -1300851171,
+    285088327
+   ],
+   "actor": null,
+   "text": "Turn around and look towards the camera...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1962522736": {
+   "kind": "text",
+   "parent": -57180058,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Sure, I've learned all my life how to be myself...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active TashaPhoto (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "TashaPhoto (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/TashaPhoto (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-2061707400": {
+   "kind": "text",
+   "parent": -336613901,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Um, sure... Eeeeeeeeeeeh!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active TashaPhoto (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "TashaPhoto (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/TashaPhoto (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1300851171": {
+   "kind": "text",
+   "parent": -273348296,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "This doesn't feel right... Are you sure this will make for a good photo?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active TashaPhoto (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "TashaPhoto (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/TashaPhoto (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-287825258": {
+   "kind": "text",
+   "parent": 2089595976,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Hey, thanks for doing this. Guess I owe you one. Well, besides the 150 bucks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + 150",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 150
+      }
+     }
+    }
+   ]
+  },
+  "285088327": {
+   "kind": "text",
+   "parent": -273348296,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Well, um... Alright. That should work.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1710221121": {
+   "kind": "text",
+   "parent": -57180058,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Yeah, this looks cool. Nice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1551214119": {
+   "kind": "text",
+   "parent": -336613901,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "I'm... I'm not sure about this. But I trust your judgement.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1112894250": {
+   "kind": "text",
+   "parent": 2089595976,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Anyway, I’ll let you know how it turns out. Thanks again.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[tasha-store-photo] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tasha-store-photo",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1395227394": {
+   "kind": "text",
+   "parent": 561159366,
+   "children": [
+    -605682146,
+    1178274495,
+    1771171183,
+    529054600,
+    1182355652,
+    2064590576
+   ],
+   "actor": null,
+   "text": "Jasper is cheating on you. (Show her the photo)",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[player-got-jasper-photo] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "player-got-jasper-photo",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[tasha-quest-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tasha-quest-done",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-605682146": {
+   "kind": "text",
+   "parent": 1395227394,
+   "actor": "Tasha",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "...No. No way. Are you kidding me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1178274495": {
+   "kind": "text",
+   "parent": 1395227394,
+   "actor": "Tasha",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "That’s Roxy. I’ve seen her around—she’s one of those club girls he works with. He told me they were just friends.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1771171183": {
+   "kind": "text",
+   "parent": 1395227394,
+   "actor": "Tasha",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "God, I knew something wasn’t right. I felt it every damn time he came home late, every time he brushed me off with some bullshit excuse.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "529054600": {
+   "kind": "text",
+   "parent": 1395227394,
+   "actor": "Tasha",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "And the worst part? I let him make me think it was me. Like I was the crazy one for not trusting him!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1182355652": {
+   "kind": "choice",
+   "parent": 1395227394,
+   "children": [
+    -1847232646,
+    1177852013,
+    -369179344
+   ],
+   "actor": "Tasha",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "...Thank you. For showing me this. I don’t know if I would’ve ever found out otherwise.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2064590576": {
+   "kind": "text",
+   "parent": 1395227394,
+   "actor": "Tasha",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Jasper's done. He can go to hell. Excuse me, I gotta make a call.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[tasha-quest-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tasha-quest-done",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Charm to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Charm",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Charm"
+      }
+     }
+    }
+   ]
+  },
+  "-1847232646": {
+   "kind": "text",
+   "parent": 1182355652,
+   "actor": null,
+   "text": "Whatever you decide, I’ve got your back.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1177852013": {
+   "kind": "text",
+   "parent": 1182355652,
+   "actor": null,
+   "text": "You deserve better, Tasha. Someone who actually respects you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-369179344": {
+   "kind": "text",
+   "parent": 1182355652,
+   "actor": null,
+   "text": "Take your time. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-964959531": {
+   "kind": "text",
+   "parent": 561159366,
+   "children": [
+    -1169158545,
+    -288434838,
+    775038121,
+    798271640,
+    -366162097,
+    -1618470272,
+    837467962
+   ],
+   "actor": null,
+   "text": "Hey Tasha... So, how are things?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[tasha-is-ready] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tasha-is-ready",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[tasha-blowjob-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tasha-blowjob-done",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1169158545": {
+   "kind": "text",
+   "parent": -964959531,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Well, you’ll be happy to know... I ended things with Jasper.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-288434838": {
+   "kind": "text",
+   "parent": -964959531,
+   "actor": "Tasha",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Honestly, I thought it’d be harder. But after seeing those photos... yeah, there was no coming back from that. I told him to pack his crap and get out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "775038121": {
+   "kind": "choice",
+   "parent": -964959531,
+   "children": [
+    -982832526,
+    1367370176,
+    -1297858258
+   ],
+   "actor": "Tasha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "And don’t worry—he didn’t leave without a good verbal beatdown to remember me by.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-982832526": {
+   "kind": "text",
+   "parent": 775038121,
+   "children": [
+    739270828,
+    206092219
+   ],
+   "actor": null,
+   "text": "Good for you, Tasha. You deserve better than that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1367370176": {
+   "kind": "text",
+   "parent": 775038121,
+   "children": [
+    87719669,
+    -1853437504,
+    1319399890
+   ],
+   "actor": null,
+   "text": "I bet he’s still recovering from that beatdown.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1297858258": {
+   "kind": "text",
+   "parent": 775038121,
+   "children": [
+    615362812,
+    -396735054
+   ],
+   "actor": null,
+   "text": "So... does this mean you’re single now?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "87719669": {
+   "kind": "text",
+   "parent": 1367370176,
+   "actor": "Tasha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh, he’s definitely licking his wounds.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "739270828": {
+   "kind": "text",
+   "parent": -982832526,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Thanks. I mean, I know I deserve better. It just sucks, y’know? Investing time in someone who turns out to be... that guy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "615362812": {
+   "kind": "text",
+   "parent": -1297858258,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "That’s one way to put it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "206092219": {
+   "kind": "text",
+   "parent": -982832526,
+   "actor": "Tasha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "At least I’ve got good friends to back me up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1853437504": {
+   "kind": "text",
+   "parent": 1367370176,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "I didn’t hold back. Told him exactly what I thought of him and his little side hustle with Roxy. Pretty sure I even made the neighbors uncomfortable.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1319399890": {
+   "kind": "text",
+   "parent": 1367370176,
+   "actor": "Tasha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Totally worth it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-396735054": {
+   "kind": "choice",
+   "parent": -1297858258,
+   "children": [
+    1879849007,
+    1309581836,
+    -658433489
+   ],
+   "actor": "Tasha",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Guess I am single now. Why, you interested in taking Jasper’s place? Or do you just like the view from the sidelines?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1879849007": {
+   "kind": "text",
+   "parent": -396735054,
+   "actor": null,
+   "text": "I think I’d do a way better job than Jasper ever did.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1309581836": {
+   "kind": "text",
+   "parent": -396735054,
+   "actor": null,
+   "text": "Depends—what’s the job description?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-658433489": {
+   "kind": "text",
+   "parent": -396735054,
+   "actor": null,
+   "text": "I mean, I might be. What do you think?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "798271640": {
+   "kind": "text",
+   "parent": -964959531,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Look, I’m not gonna lie—I’m still kinda raw from all this. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-366162097": {
+   "kind": "text",
+   "parent": -964959531,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Jasper and I were together for a year, and even if it wasn’t perfect, it’s hard to just flip a switch and move on",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1618470272": {
+   "kind": "text",
+   "parent": -964959531,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "I’m not ready to dive into another relationship just yet. I need time to figure my shit out, y’know? Heal, or whatever people call it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "837467962": {
+   "kind": "choice",
+   "parent": -964959531,
+   "children": [
+    1249033063,
+    -1496659468,
+    1615970305
+   ],
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "But... that doesn’t mean I couldn’t use a little distraction now and then.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1249033063": {
+   "kind": "text",
+   "parent": 837467962,
+   "children": [
+    1420853009,
+    -1702016874,
+    1568233316,
+    1889258116,
+    930586186,
+    -1767353067,
+    -910485534,
+    -93125968,
+    674346376
+   ],
+   "actor": null,
+   "text": "Could this distract you? (Show her your cock)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1496659468": {
+   "kind": "text",
+   "parent": 837467962,
+   "children": [
+    1380704318,
+    -921165613
+   ],
+   "actor": null,
+   "text": "I appreciate you, Tasha.... As a friend.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1615970305": {
+   "kind": "text",
+   "parent": 837467962,
+   "children": [
+    725299963,
+    -1267196802
+   ],
+   "actor": null,
+   "text": "Sorry, not into you. I was just trying to help.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1420853009": {
+   "kind": "text",
+   "parent": 1249033063,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Holy crap! That's your... Oh my god.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1702016874": {
+   "kind": "text",
+   "parent": 1249033063,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "That's exactly the kind of distraction I was hoping for...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active TashaBlowjob (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "TashaBlowjob (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/TashaBlowjob (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1568233316": {
+   "kind": "choice",
+   "parent": 1249033063,
+   "children": [
+    -1937183848,
+    -1711534881,
+    463147489
+   ],
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "I guess you make lots of women happy with that beast, huh?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1889258116": {
+   "kind": "text",
+   "parent": 1249033063,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "I wanna try... I... Glllurrrph... Mwwuaaah....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active TashaBlowjob (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "TashaBlowjob (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/TashaBlowjob (2)"
+      }
+     }
+    }
+   ]
+  },
+  "930586186": {
+   "kind": "text",
+   "parent": 1249033063,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Smmoo fckkinng biiggg... Mwuaaah... Glph! GLPH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1767353067": {
+   "kind": "choice",
+   "parent": 1249033063,
+   "children": [
+    -2118637432,
+    1231339615,
+    -285229137
+   ],
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Fmmuckkk... Mmmee... *Slurp* ... Mpphhh!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1380704318": {
+   "kind": "text",
+   "parent": -1496659468,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "A good friend, huh? I get it... It's fine. I'm glad you're my friend.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "725299963": {
+   "kind": "text",
+   "parent": 1615970305,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Well, uh... I... I appreciate your honesty. I do. Especially after everything with Jasper.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1267196802": {
+   "kind": "text",
+   "parent": 1615970305,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Well, See you around...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-921165613": {
+   "kind": "text",
+   "parent": -1496659468,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Well, See you around...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-910485534": {
+   "kind": "text",
+   "parent": 1249033063,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "H-Holy fuck... *Cough* ... That's a fuck ton of cum, {PC}... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active TashaBlowjob (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "TashaBlowjob (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/TashaBlowjob (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-93125968": {
+   "kind": "text",
+   "parent": 1249033063,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Your... It tastes so pure, so raw... It's very different from... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[tasha-blowjob-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tasha-blowjob-done",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1937183848": {
+   "kind": "text",
+   "parent": 1568233316,
+   "actor": null,
+   "text": "Yeah, I've got quite a few gigs going on.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1711534881": {
+   "kind": "text",
+   "parent": 1568233316,
+   "actor": null,
+   "text": "Why don't you find out yourself?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "463147489": {
+   "kind": "text",
+   "parent": 1568233316,
+   "actor": null,
+   "text": "Nope. This one's all yours. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2118637432": {
+   "kind": "text",
+   "parent": -1767353067,
+   "actor": null,
+   "text": "W-Watch out, I'm... I'm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1231339615": {
+   "kind": "text",
+   "parent": -1767353067,
+   "actor": null,
+   "text": "F-Fuck, your tongue's skilled.. You are making me... I'm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-285229137": {
+   "kind": "text",
+   "parent": -1767353067,
+   "actor": null,
+   "text": "(Cum inside her mouth)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "674346376": {
+   "kind": "text",
+   "parent": 1249033063,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "T-Thanks for the distraction... So this means we're friends.... with benefits now, huh? I like that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "2094510084": {
+   "kind": "text",
+   "parent": 561159366,
+   "children": [
+    -1394058135
+   ],
+   "actor": null,
+   "text": "In the mood for... a distraction?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[tasha-blowjob-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tasha-blowjob-done",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1394058135": {
+   "kind": "text",
+   "parent": 2094510084,
+   "actor": "Tasha",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Y-Yeah... Let me just close shop... Can't have any customers walking in on... us.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave2[tashasex-incoming] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tashasex-incoming",
+        "list": "Core_NoSave2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "85141350": {
+   "kind": "text",
+   "parent": 561159366,
+   "children": [
+    1918381412,
+    -482303442,
+    1046297519
+   ],
+   "actor": null,
+   "text": "Got any cosplays in stock? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[tasha-meetriver] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tasha-meetriver",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1918381412": {
+   "kind": "text",
+   "parent": 85141350,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Pfft. Nah, I don’t do cosplays. Closest thing I got is some cheap Halloween crap, and trust me, you don’t want that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-482303442": {
+   "kind": "text",
+   "parent": 85141350,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Buuut lucky for you, I know a guy. He’s crazy good—custom work, real quality.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1046297519": {
+   "kind": "choice",
+   "parent": 85141350,
+   "children": [
+    -692381790,
+    1719524365
+   ],
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "I just hit him up. Told him to meet you at the park. Should be there soon.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_8[tasha-meetriver] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tasha-meetriver",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-692381790": {
+   "kind": "text",
+   "parent": 1046297519,
+   "actor": null,
+   "text": "Thanks, Tasha. I owe you one.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1719524365": {
+   "kind": "text",
+   "parent": 1046297519,
+   "actor": null,
+   "text": "Got it. I'll be there.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1515779924": {
+   "kind": "text",
+   "parent": 561159366,
+   "children": [
+    1894682607,
+    133061160
+   ],
+   "actor": null,
+   "text": "Let's play some Dungeon Master.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[tabletop-tashaintroductiondone] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tabletop-tashaintroductiondone",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1894682607": {
+   "kind": "text",
+   "parent": -1515779924,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Slow down, dungeon junkie. I need time to prep the next session.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[tabletop-minigamecooldown] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tabletop-minigamecooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "133061160": {
+   "kind": "text",
+   "parent": -1515779924,
+   "actor": "Tasha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yeah, let’s do it. I’ve got the maps ready.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Tabletop II[tabletop-game-incoming] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tabletop-game-incoming",
+        "list": "Tabletop II",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Tabletop_Minigame to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Tabletop_Minigame",
+       "of": "GetGameObjectInstance",
+       "path": "Tabletop_Minigame"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 5_Levels to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "5_Levels",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 2_Bust_Manager to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "2_Bust_Manager",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Tasha_Store",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Tashadefaulttalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[Tasha-met] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Tasha-met",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[Tasha-met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Tasha-met",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Tasha_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Tasha_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Tasha_Default"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

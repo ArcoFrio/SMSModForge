@@ -60,7 +60,11 @@ namespace SMSModForge.PackPlugin
                 case "IncrementVariable":
                     {
                         string name = (string)p["name"];
-                        float.TryParse((string)p["delta"] ?? "0", NumberStyles.Float, CultureInfo.InvariantCulture, out var delta);
+                        // Through the deref, so a delta can be another
+                        // variable's value. Read raw it parsed as zero, which
+                        // is an increment that quietly does nothing.
+                        float.TryParse(DerefParam(p, "delta", ctx), NumberStyles.Float,
+                                       CultureInfo.InvariantCulture, out var delta);
                         if (IsVanilla(p))
                         {
                             GameVariableBridge.SetDouble(name, GameVariableBridge.GetNumber(name) + delta);
@@ -142,59 +146,39 @@ namespace SMSModForge.PackPlugin
                         }
                         else
                         {
-                            // Level Overlay with an explicit 'overlayLevel': resolve the
-                            // overlay strictly WITHIN that level (including inactive
-                            // children), so an overlay in a level we're transitioning into
-                            // is found there — not in a same-named object still active in
-                            // the previous level. Any other kind, or no level token, uses
-                            // the global resolve (which also finds inactive objects, so an
-                            // overlay that starts disabled can still be activated).
-                            GameObject levelGo = null;
-                            if (IsOverlayKind(kind))
-                            {
-                                string overlayLevel = Deref((string)p["overlayLevel"] ?? "", ctx);
-                                if (!string.IsNullOrEmpty(overlayLevel))
-                                {
-                                    var level5 = GameObject.Find("5_Levels")?.transform;
-                                    levelGo = Plugin.ResolveLevelTarget(overlayLevel, ctx.PackId, level5);
-                                }
-                            }
-
-                            GameObject go;
-                            if (kind == "Places")
-                            {
-                                // The target is a place TOKEN (place:Key / vanilla:GoName),
-                                // not a GameObject name — the level's actual GO carries a
-                                // build-time index prefix, so a plain name lookup never
-                                // finds it. Same resolution ResolveByKind uses for the
-                                // Fade/Move/Spin family, so a level is addressed
-                                // identically whichever action is acting on it.
-                                var level5 = GameObject.Find("5_Levels")?.transform;
-                                go = Plugin.ResolveLevelTarget(target, ctx.PackId, level5)
-                                     ?? TransformExtensions.ResolveGameObject(target);
-                                if (go == null)
-                                    ctx.Log?.LogWarning("[SMSModForge.PackPlugin] SetGameObjectActive: level '" +
-                                        target + "' not found");
-                            }
-                            else if (levelGo != null)
-                            {
-                                go = TransformExtensions.FindDescendantIncludingInactive(levelGo.transform, target);
-                                if (go == null)
-                                    ctx.Log?.LogWarning("[SMSModForge.PackPlugin] SetGameObjectActive: overlay '" +
-                                        target + "' not found under level '" + (string)p["overlayLevel"] + "'");
-                            }
-                            else
-                            {
-                                go = TransformExtensions.ResolveGameObject(target);
-                                if (go == null)
-                                    ctx.Log?.LogWarning("[SMSModForge.PackPlugin] SetGameObjectActive: '" + target + "' not found");
-                            }
+                            // One dispatch for every kind, shared with the
+                            // Fade/Move/Spin family - see ResolveByKind. This used
+                            // to be a second copy that knew Places, overlays and
+                            // nothing else, so the UI category the editor offers
+                            // here fell through to a plain name lookup and went
+                            // looking for a GameObject called "giftshop" when the
+                            // screen it wanted is "Pack_giftshop". A kind wired
+                            // into one of two resolvers is a kind that works in
+                            // half the actions that offer it.
+                            GameObject go = ResolveByKind(p, ctx);
+                            if (go == null)
+                                ctx.Log?.LogWarning("[SMSModForge.PackPlugin] SetGameObjectActive: "
+                                    + DescribeMissing(kind, target, p) + " not found");
                             // activeSelf, not activeInHierarchy: the question is what
                             // THIS object is set to, not whether a parent happens to be
                             // switched off around it. Flipping on activeInHierarchy would
                             // read an object inside a hidden room as "off" and turn it on
                             // to no effect, then off again next time.
-                            if (go != null) go.SetActive(toggle ? !go.activeSelf : active);
+                            if (go != null)
+                            {
+                                bool wanted = toggle ? !go.activeSelf : active;
+
+                                // Going away, with something to say about it:
+                                // hand the switching-off over so the animation
+                                // has an object to run on. It cannot be done
+                                // from OnDisable - a deactivated object stops
+                                // its coroutines - so whoever asks has to wait.
+                                var leaving = !wanted && go.activeSelf
+                                            ? go.GetComponent<UiCloseAnimation>() : null;
+
+                                if (leaving != null && leaving.DoesAnything) leaving.Close();
+                                else go.SetActive(wanted);
+                            }
                         }
                         return false;
                     }
@@ -223,6 +207,37 @@ namespace SMSModForge.PackPlugin
                         }
 
                         string spriteRel = DerefParam(p, "sprite", ctx);
+
+                        // An animation, if the file the author named is one.
+                        //
+                        // Scenes only, for now, and refused out loud elsewhere.
+                        // A bust or a level layer is drawn on a rig this knows
+                        // nothing about - jiggle materials, masks, expression
+                        // overlays - and quietly animating one would break it
+                        // in ways an author could not diagnose. Saying so is
+                        // the difference between "not yet" and "broken".
+                        if (!string.IsNullOrEmpty(spriteRel)
+                            && SMSModForge.Shared.MediaKinds.IsAnimated(spriteRel))
+                        {
+                            if ((string)p["kind"] != "Scene")
+                            {
+                                ctx.Log?.LogWarning(
+                                    "[SMSModForge.PackPlugin] SetSprite: '" + spriteRel
+                                    + "' is animated, and animation is only supported for the "
+                                    + "Scene category - this action targets '"
+                                    + ((string)p["kind"] ?? "?")
+                                    + "'. Nothing was changed.");
+                                return false;
+                            }
+
+                            if (Animate(go, sr, spriteRel, p, ctx)) return false;
+
+                            ctx.Log?.LogWarning("[SMSModForge.PackPlugin] SetSprite: '" + spriteRel
+                                                + "' could not be played - the sprite was left "
+                                                + "as it was.");
+                            return false;
+                        }
+
                         if (!string.IsNullOrEmpty(spriteRel))
                         {
                             var tex = LoadPackTexture(ctx, spriteRel, linear: false);
@@ -298,8 +313,23 @@ namespace SMSModForge.PackPlugin
                     }
 
                 case "EmitSignal":
-                    EmitGc2Signal((string)p["signal"], ctx);
-                    return false;
+                    {
+                        // One action for both: a delay of zero is "now", which
+                        // is what the separate immediate action was. Packs
+                        // written before the merge carry no seconds at all and
+                        // land here reading 0, so they behave exactly as they
+                        // did.
+                        string sig = (string)p["signal"];
+                        float.TryParse((string)p["seconds"] ?? "0", NumberStyles.Float,
+                                       CultureInfo.InvariantCulture, out var wait);
+
+                        if (string.IsNullOrEmpty(sig)) return false;
+                        if (wait > 0f && ctx.Plugin != null)
+                            ctx.Plugin.StartCoroutine(EmitSignalAfter(wait, sig, ctx));
+                        else
+                            EmitGc2Signal(sig, ctx);
+                        return false;
+                    }
 
                 // Hand the faded gameplay UI to whatever this node just opened,
                 // so the dialogue's own ending doesn't fade it back in over the
@@ -308,15 +338,11 @@ namespace SMSModForge.PackPlugin
                     DialogueDispatcher.ReleaseUiOwnership();
                     return false;
 
+                // EmitSignalDelayed folded into EmitSignal above. Still read,
+                // because a pack written before the merge names it and must
+                // keep working whether or not its author has re-saved.
                 case "EmitSignalDelayed":
-                    {
-                        string sig = (string)p["signal"];
-                        float.TryParse((string)p["seconds"] ?? "0", NumberStyles.Float,
-                                        CultureInfo.InvariantCulture, out var delay);
-                        if (!string.IsNullOrEmpty(sig) && ctx.Plugin != null)
-                            ctx.Plugin.StartCoroutine(EmitSignalAfter(delay, sig, ctx));
-                        return false;
-                    }
+                    goto case "EmitSignal";
 
                 case "TransitionLevels":
                     {
@@ -512,8 +538,23 @@ namespace SMSModForge.PackPlugin
                         var entry = ctx.Sfx?.Get(clipName);
                         if (entry == null)
                         {
+                            // Not one of the pack's own: try the game's, so a
+                            // pack can use a sound the player already has rather
+                            // than shipping a copy of it.
+                            var vanillaClip = UiAssets.Sound(clipName);
+                            if (vanillaClip != null)
+                            {
+                                float vanillaVolume = 1f;
+                                if (p["volume"] != null)
+                                    float.TryParse((string)p["volume"], NumberStyles.Float,
+                                                    CultureInfo.InvariantCulture, out vanillaVolume);
+                                TryPlayOneShot(vanillaClip, vanillaVolume, ctx);
+                                return false;
+                            }
+
                             ctx.Log?.LogWarning("[SMSModForge.PackPlugin] PlaySFX: " +
-                                "clip '" + clipName + "' not declared in pack '" + ctx.PackId + "'.");
+                                "clip '" + clipName + "' is neither one of pack '" + ctx.PackId +
+                                "'s own sounds nor one of the game's.");
                             return false;
                         }
                         float volume = entry.DefaultVolume;
@@ -589,7 +630,9 @@ namespace SMSModForge.PackPlugin
                         // 'fromList' (Variable operation) names a List variable
                         // directly — no '$' prefix. The standalone 'source' param
                         // accepts a literal CSV, '$varName', or a bare list name.
-                        string fromList = (string)p["fromList"];
+                        // Left as authored: ReadListParam below resolves it,
+                        // and doing it here as well would resolve a name twice.
+                        string fromList = (string)p["fromList"] ?? "";
                         string source = !string.IsNullOrEmpty(fromList) ? fromList : ((string)p["source"] ?? "");
                         var items = ReadListParam(source, ctx, treatBareAsVarName: !string.IsNullOrEmpty(fromList));
                         // 'excluding' subtracts a second list before picking —
@@ -627,7 +670,7 @@ namespace SMSModForge.PackPlugin
 
                 case "AddToList":
                     {
-                        string listName = (string)p["list"] ?? "";
+                        string listName = Deref((string)p["list"] ?? "", ctx);
                         string value = DerefParam(p, "value", ctx);
                         bool unique = bool.TryParse((string)p["unique"], out var u) && u;
                         if (unique)
@@ -641,7 +684,7 @@ namespace SMSModForge.PackPlugin
 
                 case "RemoveFromList":
                     {
-                        string listName = (string)p["list"] ?? "";
+                        string listName = Deref((string)p["list"] ?? "", ctx);
                         string value = DerefParam(p, "value", ctx);
                         ctx.Vars?.ListRemove(listName, value);
                         return false;
@@ -649,7 +692,7 @@ namespace SMSModForge.PackPlugin
 
                 case "ClearList":
                     {
-                        string listName = (string)p["list"] ?? "";
+                        string listName = Deref((string)p["list"] ?? "", ctx);
                         ctx.Vars?.ListClear(listName);
                         return false;
                     }
@@ -712,7 +755,7 @@ namespace SMSModForge.PackPlugin
                     {
                         // The Variable action's "List count" operation: write the
                         // number of entries in a List variable into the target.
-                        string listName = (string)p["fromList"] ?? (string)p["list"] ?? "";
+                        string listName = Deref((string)p["fromList"] ?? (string)p["list"] ?? "", ctx);
                         string target = (string)p["name"] ?? (string)p["target"] ?? "";
                         if (string.IsNullOrEmpty(listName) || string.IsNullOrEmpty(target) || ctx.Vars == null)
                             return false;
@@ -867,16 +910,35 @@ namespace SMSModForge.PackPlugin
         /// </summary>
         internal static string Deref(string raw, PackContext ctx)
         {
-            if (string.IsNullOrEmpty(raw) || raw[0] != '$') return raw;
-            if (raw.Length > 1 && raw[1] == '$') return raw.Substring(1);   // "$$x" → literal "$x"
-            string name = raw.Substring(1);
-            if (ctx?.Vars == null) return "";
-            return ctx.Vars.GetString(name) ?? "";
+            // Anywhere in the string, not only at the front: a name is often
+            // BUILT from a variable - "Gifting_Gifted_$Gifting_Target" - and
+            // read at the moment it is used, so it follows the variable rather
+            // than being fixed when the pack loaded.
+            return SMSModForge.Shared.VarText.Resolve(
+                raw, name => ctx?.Vars == null ? "" : ctx.Vars.GetString(name));
         }
 
-        /// <summary>Reads a param and dereferences a <c>$varName</c> in it.</summary>
+        /// <summary>
+        /// Reads a param and dereferences a <c>$varName</c> in it, against
+        /// whichever store the action's <c>valueSource</c> names.
+        /// <para/>
+        /// The mirror of the condition side, and of this action's own
+        /// <c>source</c>: that says where the value is WRITTEN, this says where
+        /// a value READ into it comes from. Without it "set this variable to
+        /// whatever that one holds" only worked when the other one was the
+        /// pack's own, so the game's own steps - "Set Core[Cash] =
+        /// Core[Cash] - Core_2[frankmoneyrequest]" - had no equivalent.
+        /// </summary>
         private static string DerefParam(JObject p, string key, PackContext ctx)
-            => Deref((string)p[key] ?? "", ctx);
+        {
+            string raw = (string)p[key] ?? "";
+            if (!string.Equals((string)p["valueSource"], "vanilla",
+                               System.StringComparison.OrdinalIgnoreCase))
+                return Deref(raw, ctx);
+
+            return SMSModForge.Shared.VarText.Resolve(
+                raw, name => SMSModForge.Shared.VarCompare.Text(GameVariableBridge.Get(name)));
+        }
 
         /// <summary>
         /// Reads a list-shaped param into its items. Accepts the three shapes
@@ -891,14 +953,25 @@ namespace SMSModForge.PackPlugin
         /// </list>
         /// Returns an empty list rather than null for anything unresolvable.
         /// </summary>
+        /// <summary>Names inside a string, resolved against the pack's
+        /// variables. The same routine everything else uses - see VarText.</summary>
+        private static string Text(string raw, PackContext ctx)
+            => SMSModForge.Shared.VarText.Resolve(
+                raw, name => ctx?.Vars == null ? "" : ctx.Vars.GetString(name));
+
         internal static System.Collections.Generic.List<string> ReadListParam(
             string spec, PackContext ctx, bool treatBareAsVarName = false)
         {
             var items = new System.Collections.Generic.List<string>();
             if (string.IsNullOrEmpty(spec)) return items;
 
-            string varRef = spec.StartsWith("$") ? spec.Substring(1)
-                          : treatBareAsVarName ? spec : null;
+            // A leading '$' means "the rest is a list's NAME" and that name
+            // can itself be built from variables, so it is resolved as text
+            // before being used to look anything up. A literal CSV gets the
+            // same treatment, so "A,B,$Chosen" works as it reads.
+            string varRef = spec.StartsWith("$") ? Text(spec.Substring(1), ctx)
+                          : treatBareAsVarName ? Text(spec, ctx) : null;
+            if (varRef == null) spec = Text(spec, ctx);
 
             if (varRef != null && ctx?.Vars != null)
             {
@@ -1052,6 +1125,72 @@ namespace SMSModForge.PackPlugin
             return tex;
         }
 
+        /// <summary>
+        /// Swap a scene's art for an animation, mid-dialogue.
+        /// <para/>
+        /// The same two routes the scene factory uses, for the same reasons —
+        /// decoded frames for a GIF, the engine's player for a video — and the
+        /// same fitting, so a swapped-in animation is the size the scene it
+        /// replaced was.
+        /// <para/>
+        /// Any existing animation on the object is torn off first. Without
+        /// that, swapping twice leaves two players driving one renderer and
+        /// the picture flickers between them.
+        /// </summary>
+        private static bool Animate(GameObject go, SpriteRenderer sr, string rel,
+                                    JObject p, PackContext ctx)
+        {
+            foreach (var running in go.GetComponents<AnimatedSprite>())
+                UnityEngine.Object.Destroy(running);
+
+            // The driver first: it owns the player and tears it down cleanly,
+            // and destroying the player out from under it would leave a
+            // component copying from a texture that no longer exists.
+            foreach (var running in go.GetComponents<VideoSprite>())
+                UnityEngine.Object.Destroy(running);
+            foreach (var running in go.GetComponents<UnityEngine.Video.VideoPlayer>())
+            {
+                running.Stop();
+                UnityEngine.Object.Destroy(running);
+            }
+
+            bool loop = p["loop"] == null || (bool)p["loop"];
+            int kind = SMSModForge.Shared.MediaKinds.KindOf(rel);
+
+            if (kind == SMSModForge.Shared.MediaKinds.Gif)
+            {
+                double[] delays;
+                var frames = AnimatedSprite.LoadFrames(
+                    ctx.Pack, rel, out delays, tex => FittedSprite.CreateScene(tex));
+                if (frames == null || frames.Length == 0)
+                {
+                    ctx.Log?.LogWarning("[SMSModForge.PackPlugin] SetSprite: '" + rel
+                                        + "' has no decoded frames beside it ("
+                                        + SMSModForge.Shared.MediaKinds.FramesFolderFor(rel)
+                                        + "). Re-save the pack in ModForge to write them.");
+                    return false;
+                }
+
+                sr.sprite = frames[0];
+                go.AddComponent<AnimatedSprite>().Play(sr, frames, delays, loop);
+                return true;
+            }
+
+            if (kind == SMSModForge.Shared.MediaKinds.Video)
+            {
+                string onDisk = ctx.Pack == null ? null : ctx.Pack.ExtractToTemp(rel);
+                if (string.IsNullOrEmpty(onDisk)) return false;
+
+                float volume = p["volume"] == null ? 1f : (float)p["volume"];
+                return AnimatedSprite.PlayVideo(
+                    go, sr, onDisk, loop, volume,
+                    (int)FittedSprite.ScenePixels, (int)FittedSprite.ScenePixels,
+                    ctx.Log) != null;
+            }
+
+            return false;
+        }
+
         private static GameObject ResolveByKind(JObject p, PackContext ctx)
         {
             // Same $varName support as the Set-Active path above.
@@ -1094,9 +1233,61 @@ namespace SMSModForge.PackPlugin
                     return bustManager?.FindChildIgnoreCase(target)?.gameObject
                            ?? TransformExtensions.ResolveGameObject(target);
                 }
+                case "UI":
+                    return ResolveUiTarget(target);
                 default:
                     return ResolveActionTarget(target, ctx);
             }
+        }
+
+        /// <summary>
+        /// A screen the pack built, by the id the pack gave it - not by object
+        /// name, since the built object is called <c>Pack_&lt;id&gt;</c> and an
+        /// author should not have to know that.
+        /// <para/>
+        /// A slash addresses one object inside a screen
+        /// (<c>settings/Panel/Close</c>), so a button on one screen can switch a
+        /// single object of another.
+        /// </summary>
+        private static GameObject ResolveUiTarget(string target)
+        {
+            if (string.IsNullOrEmpty(target)) return null;
+
+            var ui = UiRegistry.Find(target);
+            if (ui != null) return ui;
+
+            int slash = target.IndexOf('/');
+            if (slash > 0)
+            {
+                var owner = UiRegistry.Find(target.Substring(0, slash));
+                if (owner != null)
+                    return TransformExtensions.FindDescendantIncludingInactive(
+                        owner.transform, target.Substring(slash + 1));
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// What to call the thing that was not found, so the log says which kind
+        /// of lookup missed. "'giftshop' not found" sends an author hunting for a
+        /// GameObject; "no screen with id 'giftshop'" says where to look.
+        /// </summary>
+        private static string DescribeMissing(string kind, string target, JObject p)
+        {
+            if (string.Equals(kind, "UI", System.StringComparison.OrdinalIgnoreCase))
+                return "no screen with id '" + target + "'";
+
+            if (string.Equals(kind, "Places", System.StringComparison.OrdinalIgnoreCase))
+                return "level '" + target + "'";
+
+            if (IsOverlayKind(kind))
+            {
+                string level = (string)p["overlayLevel"];
+                if (!string.IsNullOrEmpty(level))
+                    return "overlay '" + target + "' under level '" + level + "'";
+            }
+
+            return "'" + target + "'";
         }
 
         /// <summary>

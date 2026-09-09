@@ -1,0 +1,1873 @@
+{
+ "id": "8_Room_Talk/Sexstore/Nyxara_DefaultToystore",
+ "name": "Nyxara_DefaultToystore",
+ "index": 4,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Miss Zero",
+  "Nyxara"
+ ],
+ "roots": [
+  -1417062290,
+  1652952721,
+  -123447147,
+  -1874944022
+ ],
+ "nodes": {
+  "1652952721": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_ShadyVendor/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1417062290": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    1121053877,
+    1013070162,
+    836850162,
+    749908799,
+    824506187
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "1121053877": {
+   "kind": "text",
+   "parent": -1417062290,
+   "children": [
+    1833316881
+   ],
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "You see, Nyxara? Five minutes on the floor with that toy, and I sold out the whole box.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1013070162": {
+   "kind": "text",
+   "parent": -1417062290,
+   "children": [
+    -1849955417
+   ],
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Don’t pout. The way you screamed when it slipped inside? That alone was worth three sales.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "836850162": {
+   "kind": "text",
+   "parent": -1417062290,
+   "children": [
+    1640322345
+   ],
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "You’ll need to clean yourself up before the next demo.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "749908799": {
+   "kind": "text",
+   "parent": -1417062290,
+   "children": [
+    -606926786
+   ],
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Consider that plug officially tested. Twice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "824506187": {
+   "kind": "text",
+   "parent": -1417062290,
+   "children": [
+    277416529
+   ],
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Relax, Nyxara. You’re not just selling toys~  you’re selling yourself.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1833316881": {
+   "kind": "text",
+   "parent": 1121053877,
+   "actor": "Nyxara",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "M-maybe next time warn me before you turn it to max…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1849955417": {
+   "kind": "text",
+   "parent": 1013070162,
+   "actor": "Nyxara",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Hahh… pathetic mortals, buying it just because they saw me drool.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1640322345": {
+   "kind": "text",
+   "parent": 836850162,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Or maybe I’ll leave the mess. Customers like seeing me used.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-606926786": {
+   "kind": "text",
+   "parent": 749908799,
+   "actor": "Nyxara",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "T-twice?! You had me on my knees for an hour!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "277416529": {
+   "kind": "text",
+   "parent": 824506187,
+   "actor": "Nyxara",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Then I must be the shop’s best product… because they can’t stop staring.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1874944022": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    591518979,
+    -469394368,
+    2036970380,
+    56886439,
+    -321484647
+   ],
+   "actor": "Nyxara",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Mortal… I was just thinking of you. How tragic.",
+   "tag": "nyxaratree",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "591518979": {
+   "kind": "text",
+   "parent": -1874944022,
+   "children": [
+    -1144840245,
+    -1113761068
+   ],
+   "actor": null,
+   "text": "How do you like the modern world?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-469394368": {
+   "kind": "text",
+   "parent": -1874944022,
+   "children": [
+    -382087441
+   ],
+   "actor": null,
+   "text": "What do you really think of humans?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2036970380": {
+   "kind": "text",
+   "parent": -1874944022,
+   "children": [
+    -1791050050
+   ],
+   "actor": null,
+   "text": "What do you think of Miss Zero?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-321484647": {
+   "kind": "text",
+   "parent": -1874944022,
+   "children": [
+    -2098723391
+   ],
+   "actor": null,
+   "text": "Have fun, Nyxara.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2098723391": {
+   "kind": "text",
+   "parent": -321484647,
+   "actor": "Nyxara",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Oh, I will!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1791050050": {
+   "kind": "text",
+   "parent": 2036970380,
+   "actor": "Nyxara",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "She's... N-No~ That's none of your buisness!",
+   "jump": {
+    "mode": "Jump",
+    "to": "nyxaratree"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-382087441": {
+   "kind": "text",
+   "parent": -469394368,
+   "actor": "Nyxara",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Weak. Desperate. Always hungry. But that hunger makes you useful… you’ll pay anything for relief, and beg anyone who gives it. Even me.",
+   "jump": {
+    "mode": "Jump",
+    "to": "nyxaratree"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1144840245": {
+   "kind": "text",
+   "parent": 591518979,
+   "actor": "Nyxara",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh, it’s delightful. In feudal times, mortals fought with swords and prayed for mercy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1113761068": {
+   "kind": "text",
+   "parent": 591518979,
+   "actor": "Nyxara",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Now they fight over paper slips and beg for likes on glowing screens. You’ve only grown more pathetic… and more amusing.",
+   "jump": {
+    "mode": "Jump",
+    "to": "nyxaratree"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-123447147": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -217398856,
+    -1379056840,
+    -1545702714
+   ],
+   "actor": "Nyxara",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "So… you ran crying to Miss Zero like a little pet, hm? Couldn’t handle me teasing you? Pathetic.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[nyxara-toldmisszero] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxara-toldmisszero",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[nyxara-leashingout] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxara-leashingout",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-217398856": {
+   "kind": "text",
+   "parent": -123447147,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Do you have any idea what you’ve done? She ordered me to ‘treat you more kindly.’ Do you know what that means for me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[nyxara-leashingout] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxara-leashingout",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1379056840": {
+   "kind": "text",
+   "parent": -123447147,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "It means I can’t just torment you anymore. No… now I have to let you use me. My body. My holes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1545702714": {
+   "kind": "choice",
+   "parent": -123447147,
+   "children": [
+    1303969268,
+    -131952274,
+    -1283180136
+   ],
+   "actor": "Nyxara",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Congratulations, snitch. You’ve got the demoness on a leash now.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1303969268": {
+   "kind": "text",
+   "parent": -1545702714,
+   "children": [
+    1720050209
+   ],
+   "actor": null,
+   "text": "Good. Get on your knees.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-131952274": {
+   "kind": "text",
+   "parent": -1545702714,
+   "children": [
+    -1981538677
+   ],
+   "actor": null,
+   "text": "I didn’t want this… I just wanted you to stop being cruel.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1283180136": {
+   "kind": "text",
+   "parent": -1545702714,
+   "children": [
+    -2010676695
+   ],
+   "actor": null,
+   "text": "You’re acting tough, but I can see you like this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1720050209": {
+   "kind": "text",
+   "parent": 1303969268,
+   "actor": "Nyxara",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Grrrrrrr....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1981538677": {
+   "kind": "text",
+   "parent": -131952274,
+   "actor": "Nyxara",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Too late for that. You’re stuck with me spreading my legs for you now, human.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2010676695": {
+   "kind": "text",
+   "parent": -1283180136,
+   "actor": "Nyxara",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Shut up! Just… shut up and use me already.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "56886439": {
+   "kind": "text",
+   "parent": -1874944022,
+   "children": [
+    -807109016,
+    898133889,
+    767906607,
+    888188627,
+    1651813578
+   ],
+   "actor": null,
+   "text": "I want to use your holes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[nyxara-leashingout] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxara-leashingout",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-807109016": {
+   "kind": "text",
+   "parent": 56886439,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "About time. You’ve been eyeing me since Miss Zero clipped my wings. Don’t lie.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraToystoreArt (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraToystoreArt (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NyxaraToystoreArt (1)"
+      }
+     }
+    }
+   ]
+  },
+  "898133889": {
+   "kind": "text",
+   "parent": 56886439,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Look at me, human. All of this… every hole… is yours. Because she ordered it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "767906607": {
+   "kind": "text",
+   "parent": 56886439,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Isn’t that delicious? I’m better than you, and yet I have to spread myself for you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraToystoreArt (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraToystoreArt (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NyxaraToystoreArt (2)"
+      }
+     }
+    }
+   ]
+  },
+  "888188627": {
+   "kind": "text",
+   "parent": 56886439,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "But here’s the truth… I’m wet just thinking about it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1651813578": {
+   "kind": "choice",
+   "parent": 56886439,
+   "children": [
+    675938225,
+    -1459922605,
+    -1116886505
+   ],
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "You’re not forcing me at all, sugar. I’m dying for it. So tell me… Do you want to fill my womb with your pathetic seed?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraToystoreArt (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraToystoreArt (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NyxaraToystoreArt (3)"
+      }
+     }
+    }
+   ]
+  },
+  "675938225": {
+   "kind": "text",
+   "parent": 1651813578,
+   "children": [
+    1070404340,
+    207864852,
+    -1644635873,
+    739845031,
+    1792370134,
+    1270817421,
+    1236686533,
+    -327808772,
+    -1408276630,
+    -297374086,
+    61628417,
+    1845666629,
+    -1412813387
+   ],
+   "actor": null,
+   "text": "I'm gonna flood your pussy, Nyxara.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1459922605": {
+   "kind": "text",
+   "parent": 1651813578,
+   "children": [
+    -931507193,
+    302457835,
+    1955148402,
+    1437874089,
+    -1199699839,
+    -493285209,
+    504617427,
+    -1243837102,
+    -1807162555,
+    -1174618566,
+    -973760502,
+    -2029774505,
+    -336598427,
+    167379725
+   ],
+   "actor": null,
+   "text": "I think I want to fuck your ass, demon.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1116886505": {
+   "kind": "text",
+   "parent": 1651813578,
+   "children": [
+    -1846646293
+   ],
+   "actor": null,
+   "text": "Actually, forget it. My {D} always said: Never stick your dick in crazy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1846646293": {
+   "kind": "text",
+   "parent": -1116886505,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "WHY ARE YOU LIKE THIS!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-931507193": {
+   "kind": "text",
+   "parent": -1459922605,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Wait… you want that hole? Why? The other one is tight, wet, perfect. Why use… that one?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraToystoreArt (3) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraToystoreArt (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NyxaraToystoreArt (3)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraToystoreArt (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraToystoreArt (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NyxaraToystoreArt (2)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraToystoreArt (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraToystoreArt (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NyxaraToystoreArt (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1070404340": {
+   "kind": "text",
+   "parent": 675938225,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Mmh… slide in. I’ll milk you until you’re begging for mercy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraToystoreArt (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraToystoreArt (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NyxaraToystoreArt (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraToystoreArt (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraToystoreArt (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NyxaraToystoreArt (2)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraToystoreArt (3) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraToystoreArt (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NyxaraToystoreArt (3)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraToystoreArt (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraToystoreArt (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NyxaraToystoreArt (4)"
+      }
+     }
+    }
+   ]
+  },
+  "207864852": {
+   "kind": "text",
+   "parent": 675938225,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "I should hate this… but ohhh, I love being your toy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[nyxaratoystore-sexdone] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxaratoystore-sexdone",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1644635873": {
+   "kind": "text",
+   "parent": 675938225,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Mmh—yes… paint me, claim me… fuck, you’re huge. I should be cursing you, but I just want to spread myself wider.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraToystoreArt (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraToystoreArt (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NyxaraToystoreArt (5)"
+      }
+     }
+    }
+   ]
+  },
+  "739845031": {
+   "kind": "text",
+   "parent": 675938225,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Stop tormenting me, human! I’m supposed to be the demon here, but you’re the cruel one… just shove it inside already!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1792370134": {
+   "kind": "text",
+   "parent": 675938225,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Yessss! Split me open! Gods, I can feel every vein—ahh, more, harder, ruin me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraToystoreArt (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraToystoreArt (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NyxaraToystoreArt (6)"
+      }
+     }
+    }
+   ]
+  },
+  "1270817421": {
+   "kind": "choice",
+   "parent": 675938225,
+   "children": [
+    -1398311064,
+    -1018161049,
+    -485515922
+   ],
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Mmh… that’s it, darling… take all of me. Use me like the little toy Miss Zero said I have to be. Doesn’t it feel good, knowing I’m powerless against your cock?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1236686533": {
+   "kind": "text",
+   "parent": 675938225,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Ohhh gods why does it feel this good? I should hate you but all I want is more…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-327808772": {
+   "kind": "text",
+   "parent": 675938225,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Yessss use me, treat me like your whore, ahhh deeper, fuck me DEEPER!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraToystoreArt (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraToystoreArt (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NyxaraToystoreArt (7)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraToystoreArt (4) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraToystoreArt (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NyxaraToystoreArt (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-1408276630": {
+   "kind": "text",
+   "parent": 675938225,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Mmh listen to me! A demon begging a mortal to fuck her harder. Miss Zero must be laughing herself sick. But I don’t care, just break me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-297374086": {
+   "kind": "choice",
+   "parent": 675938225,
+   "children": [
+    29695785,
+    2137985319,
+    1492607565
+   ],
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Ahhh ahhh fuck, I’m gonna cum, I can’t stop, I’m gonna squirt all over your cock!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "61628417": {
+   "kind": "text",
+   "parent": 675938225,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Yes yes fill me, stuff me full, make me your bitch in front of everyone, I don’t care, ahhhhhh!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraToystoreArt (8) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraToystoreArt (8)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NyxaraToystoreArt (8)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraToystoreArt (5) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraToystoreArt (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NyxaraToystoreArt (5)"
+      }
+     }
+    }
+   ]
+  },
+  "-1412813387": {
+   "kind": "text",
+   "parent": 675938225,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "You fucked me like I was yours, and now, maybe I am. But don’t think you’re done with me, snitch. Next time, I’m riding you until you scream.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1845666629": {
+   "kind": "text",
+   "parent": 675938225,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Ohhh gods yes breed me, ruin me, make me your little cocksleeve!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "302457835": {
+   "kind": "text",
+   "parent": -1459922605,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Tch. Fine. Have it your way. Shove it in and split me open. But don’t think I’ll like it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[nyxaratoystore-sexdone] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxaratoystore-sexdone",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1955148402": {
+   "kind": "text",
+   "parent": -1459922605,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Nngh! Gods, it’s too big. Fuck… it burns… why would you choose this hole…?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraToystoreArt (9) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraToystoreArt (9)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NyxaraToystoreArt (9)"
+      }
+     }
+    }
+   ]
+  },
+  "1437874089": {
+   "kind": "text",
+   "parent": -1459922605,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Damn you… damn you… it feels… too good…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1199699839": {
+   "kind": "choice",
+   "parent": -1459922605,
+   "children": [
+    965768731,
+    1227052090,
+    -1057065130
+   ],
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "No, no, no—don’t you dare make me like this! I’m a demon, not some whore to be taken in the ass!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-493285209": {
+   "kind": "text",
+   "parent": -1459922605,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Yes! Fine! I love it! You’re pounding my ass and I’m losing my mind—fuck me harder!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraToystoreArt (10) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraToystoreArt (10)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NyxaraToystoreArt (10)"
+      }
+     }
+    }
+   ]
+  },
+  "-1243837102": {
+   "kind": "text",
+   "parent": -1459922605,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Yes, yes, fill my ass, make it yours, gods it’s leaking out of me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraToystoreArt (11) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraToystoreArt (11)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NyxaraToystoreArt (11)"
+      }
+     }
+    }
+   ]
+  },
+  "-1807162555": {
+   "kind": "text",
+   "parent": -1459922605,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "You fucked my asshole… and still made me cum like a bitch in heat.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1174618566": {
+   "kind": "choice",
+   "parent": -1459922605,
+   "children": [
+    -1685454301,
+    1341441901,
+    -2060947732
+   ],
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Pathetic human… you actually dared to use me like that. My ass, of all things. You’re nothing~  A worm.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraToystoreArt (12) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraToystoreArt (12)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NyxaraToystoreArt (12)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraToystoreArt (9) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraToystoreArt (9)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NyxaraToystoreArt (9)"
+      }
+     }
+    }
+   ]
+  },
+  "504617427": {
+   "kind": "choice",
+   "parent": -1459922605,
+   "children": [
+    -789984460,
+    -31964231,
+    543204647
+   ],
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "I can’t—I can’t hold it—I’m gonna cum from my ass, fuck! Keep going, don’t you dare stop, fill me, fill me!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-973760502": {
+   "kind": "text",
+   "parent": -1459922605,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Look at this. Your filthy seed dripping out of a demoness. Is this what you wanted? To stain me? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2029774505": {
+   "kind": "text",
+   "parent": -1459922605,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "To make me squat like some fucked-out sow while your filth runs out of me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-336598427": {
+   "kind": "text",
+   "parent": -1459922605,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "There. That’s all you are to me. A stain. A disgusting puddle on the floor. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "167379725": {
+   "kind": "text",
+   "parent": -1459922605,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Now clean yourself up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "965768731": {
+   "kind": "text",
+   "parent": -1199699839,
+   "actor": null,
+   "text": "We both know that you like it, don't you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1227052090": {
+   "kind": "text",
+   "parent": -1199699839,
+   "actor": null,
+   "text": "Just moan already, you demonic slut...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1057065130": {
+   "kind": "text",
+   "parent": -1199699839,
+   "actor": null,
+   "text": "You love my cock~ Admit it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-789984460": {
+   "kind": "text",
+   "parent": 504617427,
+   "actor": null,
+   "text": "Shit~ Here it comes, a whole fucking load for your ass!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-31964231": {
+   "kind": "text",
+   "parent": 504617427,
+   "actor": null,
+   "text": "Gods, your demon ass is so good... I'm.. Fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "543204647": {
+   "kind": "text",
+   "parent": 504617427,
+   "actor": null,
+   "text": "(Blow your load)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1685454301": {
+   "kind": "text",
+   "parent": -1174618566,
+   "actor": null,
+   "text": "Come on, we both had fun. Stop whining.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1341441901": {
+   "kind": "text",
+   "parent": -1174618566,
+   "actor": null,
+   "text": "You get what you fucking deserve, Nyxara.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2060947732": {
+   "kind": "text",
+   "parent": -1174618566,
+   "children": [
+    1881393799
+   ],
+   "actor": null,
+   "text": "Do you need a tower or something?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1881393799": {
+   "kind": "text",
+   "parent": -2060947732,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "N-No~ Why... Stop being cute! Hells!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "29695785": {
+   "kind": "text",
+   "parent": -297374086,
+   "actor": null,
+   "text": "H-Here it comes! I'll breed your demonic womb!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2137985319": {
+   "kind": "text",
+   "parent": -297374086,
+   "actor": null,
+   "text": "I'm coming, Nyxara. You're making my hard cock blow... Fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1492607565": {
+   "kind": "text",
+   "parent": -297374086,
+   "actor": null,
+   "text": "(Fill her womb)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1398311064": {
+   "kind": "text",
+   "parent": 1270817421,
+   "actor": null,
+   "text": "You like it. My human cock stretching this tight demonic pussy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1018161049": {
+   "kind": "text",
+   "parent": 1270817421,
+   "actor": null,
+   "text": "Fuck, you're actually a pretty good slut, Nyxara...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-485515922": {
+   "kind": "text",
+   "parent": 1270817421,
+   "actor": null,
+   "text": "(Pound her harder)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Sexstore",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Nyxara_DefaultToystore and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[nyxara-free] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxara-free",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[nyxaratoystore-met] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxaratoystore-met",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "chance",
+     "type": "ConditionChance",
+     "title": "If 0.4 chance to pass",
+     "fields": {
+      "m_Threshold": {
+       "kind": "value",
+       "value": 0.4
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraBust_WorkerBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraBust_WorkerBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/NyxaraBust_WorkerBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_ShadyVendor to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_ShadyVendor",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_ShadyVendor"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

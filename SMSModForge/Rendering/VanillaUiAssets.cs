@@ -141,7 +141,86 @@ public sealed class VanillaUiAssets : IUiAssets
         return _ppuByName.TryGetValue(name + "#1", out v) && v > 0 ? v : 100f;
     }
 
-    public UiSprite? SpriteByName(string name) => Sprite(KeyFor(name));
+    /// <summary>
+    /// Where the pack's own art lives, so the preview can draw it.
+    /// <para/>
+    /// Without this a pack-shipped picture is simply absent from the preview -
+    /// the extraction knows the game's 840 sprites and nothing else - so a shop
+    /// full of the pack's own item art previewed as empty frames while being
+    /// perfectly correct in the game. The runtime has always read these; only
+    /// the preview could not.
+    /// </summary>
+    public string? PackRoot { get; set; }
+
+    public UiSprite? SpriteByName(string name)
+    {
+        // A name carrying a separator or an extension is a file the pack ships,
+        // not one of the game's sprites - the same test the runtime uses to
+        // tell them apart.
+        if (LooksLikeFile(name))
+        {
+            var fromPack = PackSprite(name);
+            if (fromPack != null) return fromPack;
+        }
+        return Sprite(KeyFor(name));
+    }
+
+    private static bool LooksLikeFile(string name)
+        => !string.IsNullOrEmpty(name)
+        && (name.IndexOf('/') >= 0 || name.IndexOf(System.IO.Path.DirectorySeparatorChar) >= 0 || name.IndexOf('.') >= 0);
+
+    private readonly Dictionary<string, UiSprite?> _packSprites = new(StringComparer.OrdinalIgnoreCase);
+
+    private UiSprite? PackSprite(string name)
+    {
+        if (string.IsNullOrEmpty(PackRoot)) return null;
+        if (_packSprites.TryGetValue(name, out var cached)) return cached;
+
+        UiSprite? made = null;
+        try
+        {
+            string path = Path.Combine(PackRoot, name.Replace('/', Path.DirectorySeparatorChar));
+
+            // Case matters on the way in even where the file system does not
+            // care: a pack authored as ".PNG" against a file named ".png" works
+            // on Windows and fails wherever it is read case-sensitively, so the
+            // real name is found rather than assumed.
+            if (!File.Exists(path)) path = FindIgnoringCase(path);
+            if (path.Length > 0) made = DecodePremultiplied(path);
+        }
+        catch { /* an unreadable file draws nothing, which is visible */ }
+
+        _packSprites[name] = made;
+        return made;
+    }
+
+    private static string FindIgnoringCase(string path)
+    {
+        try
+        {
+            string? dir = Path.GetDirectoryName(path);
+            string want = Path.GetFileName(path);
+            if (string.IsNullOrEmpty(dir) || !Directory.Exists(dir)) return "";
+
+            foreach (string file in Directory.EnumerateFiles(dir))
+                if (string.Equals(Path.GetFileName(file), want, StringComparison.OrdinalIgnoreCase))
+                    return file;
+        }
+        catch { }
+        return "";
+    }
+
+    /// <summary>Where a sprite's PNG is on disk, or empty when it has none.
+    /// For showing one at its own size - a picker listing 840 names is
+    /// guesswork without a picture, since most of the names describe
+    /// nothing.</summary>
+    public string FileFor(string name)
+    {
+        string key = KeyFor(name);
+        return !string.IsNullOrEmpty(key) && _spriteFiles.TryGetValue(key, out string? file)
+             ? Path.Combine(_root, "Sprites", file)
+             : "";
+    }
 
     /// <summary>The key a name refers to. A bare name that only exists in
     /// suffixed form falls back to the first crop, so a manifest written before

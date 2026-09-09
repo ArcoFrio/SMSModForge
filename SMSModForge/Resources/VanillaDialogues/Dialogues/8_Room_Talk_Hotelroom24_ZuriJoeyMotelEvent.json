@@ -1,0 +1,884 @@
+{
+ "id": "8_Room_Talk/Hotelroom24/ZuriJoeyMotelEvent",
+ "name": "ZuriJoeyMotelEvent",
+ "index": 7,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Joey",
+  "Zuri"
+ ],
+ "roots": [
+  -577512381,
+  680588847,
+  -462406298,
+  -568114975,
+  1391767546,
+  -72885570,
+  194769010,
+  -1959368205,
+  -1161473638,
+  -1913235289,
+  -78555426,
+  604599405,
+  -608463917,
+  -1520209663,
+  7619081,
+  1063025865,
+  -1445794589,
+  -1398177572,
+  -2009773296,
+  1648558905,
+  737534792
+ ],
+ "nodes": {
+  "-577512381": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Joey",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hey!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "680588847": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "Zuri said she’s “getting ready” in the bath, and that I should “compose myself.”",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-462406298": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1855391563,
+    -509737412,
+    -1623754983
+   ],
+   "actor": "Joey",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "What does that even mean? How does one compose when Zuri's undressing behind a wall?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1855391563": {
+   "kind": "text",
+   "parent": -462406298,
+   "actor": null,
+   "text": "Very carefully.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-509737412": {
+   "kind": "text",
+   "parent": -462406298,
+   "actor": null,
+   "text": "Yeah. Not possible.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-568114975": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Joey",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "This woman terrifies me. I love her so much.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1623754983": {
+   "kind": "text",
+   "parent": -462406298,
+   "actor": null,
+   "text": "You’re in deep, man.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1391767546": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Gentlemen. I hope you’ve stretched. I don’t have the patience for warm-ups.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Zuri_MotelBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Zuri_MotelBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Zuri_MotelBust"
+      }
+     }
+    }
+   ]
+  },
+  "-72885570": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Joey",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Okay. Yep. Uh… hi. Hello. Yep. Everything’s fine. My body is fine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "194769010": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    435718599,
+    2038564532,
+    -769568854
+   ],
+   "actor": "Zuri",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Still breathing. That’s a good start.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1959368205": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "If my 18-year-old self could see me now, she'd be pretty disappointed. Getting naughty with two white guys in some run-down motel room...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Zuri_MotelFun (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Zuri_MotelFun (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Zuri_MotelFun (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1161473638": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1032596179,
+    -362611875,
+    -439456264
+   ],
+   "actor": "Zuri",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "You guys are both in your twenties, right? Fuck... ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1913235289": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Zuri",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Get over here... I want to feel you both real close up my face...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-78555426": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Mmmhmmm... Mmwuaah...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Zuri_MotelFun (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Zuri_MotelFun (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Zuri_MotelFun (4)"
+      }
+     }
+    }
+   ]
+  },
+  "604599405": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "Z-Zuri, your sucking me too hard... Fuck....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-608463917": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Mwuaah... Stop whining, babe and keep my round tits in place for {PC}.... Mwuaah! Mmhmmm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1520209663": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    684761120,
+    1213893423
+   ],
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "Y-Yes, of course. Sorry, babe... I'm.. Fuck...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "684761120": {
+   "kind": "text",
+   "parent": -1520209663,
+   "children": [
+    2086989117,
+    211379288,
+    1601432049,
+    -726468395,
+    994596886,
+    2145010445
+   ],
+   "actor": null,
+   "text": "Get up, Zuri. I want to pound that fine ass of yours.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1213893423": {
+   "kind": "text",
+   "parent": -1520209663,
+   "children": [
+    101852278,
+    -1227588983,
+    -757055130,
+    2036912294,
+    1914164597,
+    -1124936615
+   ],
+   "actor": null,
+   "text": "Move over, Joey. I wanna try that mouth of hers.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "7619081": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Mwuah! Up, boys... I... I want to taste it... Cover me in your virile thick seed!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1063025865": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "F-Fuck, here it comes... Take it, Zuri. Take my....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Zuri_MotelFun (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Zuri_MotelFun (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Zuri_MotelFun (7)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Zuri_MotelFun (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Zuri_MotelFun (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Zuri_MotelFun (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1445794589": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Yes! Keep at it.. Let it all out... Mmmhmm... So much! Cover me! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "101852278": {
+   "kind": "text",
+   "parent": 1213893423,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Yes~ Let me... Mwuaah! ... Worship your fat cock, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Zuri_MotelFun (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Zuri_MotelFun (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Zuri_MotelFun (6)"
+      }
+     }
+    }
+   ]
+  },
+  "2086989117": {
+   "kind": "text",
+   "parent": 684761120,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Yes... Time for the real fun to begin, huh? ... Hngaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Zuri_MotelFun (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Zuri_MotelFun (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Zuri_MotelFun (5)"
+      }
+     }
+    }
+   ]
+  },
+  "1601432049": {
+   "kind": "text",
+   "parent": 684761120,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Time for me to work both cocks, huh? Mwuaaah! Mwwwhmm~ *Sluuuurp* ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-726468395": {
+   "kind": "text",
+   "parent": 684761120,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "That's it... Fuck~ Look at her go, she's so eager... Such a perfect hot goddess~",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "994596886": {
+   "kind": "text",
+   "parent": 684761120,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Mwwahhh... *Sluuuuurp*... Gllphh! Gllph! Glllph!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2145010445": {
+   "kind": "text",
+   "parent": 684761120,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "I'm... I'm getting close, Zuri. Your mouth's just too good, it's milking me so~ Fuck, I'm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1227588983": {
+   "kind": "text",
+   "parent": 1213893423,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "I love it... Such a strong, virile smell... So hard, so... demanding...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-757055130": {
+   "kind": "text",
+   "parent": 1213893423,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "Hngah~ Y-You're so wet, Zuri... Your pussy~ It's dripping....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2036912294": {
+   "kind": "text",
+   "parent": 1213893423,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "T-That's it, cuties. Fuck me... *Sluurp* ... Mwuaaah! F-Fuck me hard and rough!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1914164597": {
+   "kind": "text",
+   "parent": 1213893423,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Mwwahhh... *Sluuuuurp*... Gllphh! Gllph! Glllph!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "211379288": {
+   "kind": "text",
+   "parent": 684761120,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Hngaah~ I'll never get used to that fat fucking cock of yours, {PC}",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1124936615": {
+   "kind": "text",
+   "parent": 1213893423,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "Oh fuck... I'm close... I can't, it feels as if her pussy's trying to... Hngaaah~",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1398177572": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "So much~ Oh my, is that all for me? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2009773296": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "Y-Yes! It's all for you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1648558905": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Then I better give it a try... Mmmm, so salty, so fresh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "737534792": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "That was fun, you two are such good fucks... You really know how to push my buttons, {PC}. Hihi~",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1032596179": {
+   "kind": "text",
+   "parent": -1161473638,
+   "children": [
+    -593700749
+   ],
+   "actor": null,
+   "text": "You like them young?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-362611875": {
+   "kind": "text",
+   "parent": -1161473638,
+   "children": [
+    417935978,
+    1309743419
+   ],
+   "actor": null,
+   "text": "How old are you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-439456264": {
+   "kind": "text",
+   "parent": -1161473638,
+   "actor": null,
+   "text": "Someone's excited, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "417935978": {
+   "kind": "text",
+   "parent": -362611875,
+   "actor": "Zuri",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "What a rude question to ask me in such a... vulnerable position.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-593700749": {
+   "kind": "text",
+   "parent": 1032596179,
+   "actor": "Zuri",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Don't tease me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1309743419": {
+   "kind": "text",
+   "parent": -362611875,
+   "actor": "Zuri",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I'm in my mid thirties, cutie.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "435718599": {
+   "kind": "text",
+   "parent": 194769010,
+   "actor": null,
+   "text": "Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2038564532": {
+   "kind": "text",
+   "parent": 194769010,
+   "actor": null,
+   "text": "Alright, yeah, that's it. I'm hard.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-769568854": {
+   "kind": "text",
+   "parent": 194769010,
+   "actor": null,
+   "text": "(Stare at her tits)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Hotelroom24",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play ZuriJoeyMotelEvent and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Eve_NoSave1[joandzuwaitinmotel] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "joandzuwaitinmotel",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active JoeyCoolCasualBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "JoeyCoolCasualBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/JoeyCoolCasualBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[joandzuwaitinmotel] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "joandzuwaitinmotel",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

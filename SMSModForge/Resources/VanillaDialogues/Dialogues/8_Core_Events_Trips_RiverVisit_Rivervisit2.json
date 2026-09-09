@@ -1,0 +1,914 @@
+{
+ "id": "8_Core_Events/Trips/RiverVisit/Rivervisit2",
+ "name": "Rivervisit2",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "River"
+ ],
+ "roots": [
+  2023353433,
+  528769510,
+  2117860007,
+  2047691277,
+  405189713,
+  -1958294137,
+  1527113171,
+  972994642,
+  -329448894,
+  484477398,
+  -1823233665,
+  504477828,
+  2132932601,
+  2087857475,
+  -1117408028,
+  493081730,
+  -1919144082,
+  475807749,
+  1222210409
+ ],
+ "nodes": {
+  "2023353433": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "H-Hey... Um...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "528769510": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1677559487,
+    -568374513,
+    140706791
+   ],
+   "actor": "River",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "W-Why did you kiss me?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1677559487": {
+   "kind": "text",
+   "parent": 528769510,
+   "children": [
+    -1996916292
+   ],
+   "actor": null,
+   "text": "Because I have feelings for you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1996916292": {
+   "kind": "text",
+   "parent": -1677559487,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I... I have feelings for you too, but everything is so confusing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-568374513": {
+   "kind": "text",
+   "parent": 528769510,
+   "children": [
+    -2020970986
+   ],
+   "actor": null,
+   "text": "Your story got me really horny.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2020970986": {
+   "kind": "text",
+   "parent": -568374513,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I liked it too, but I'm still trying to figure things out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "140706791": {
+   "kind": "text",
+   "parent": 528769510,
+   "children": [
+    1674813606
+   ],
+   "actor": null,
+   "text": "Because your lips looked very inviting.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1674813606": {
+   "kind": "text",
+   "parent": 140706791,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "They do what? ... I ... I just... need time to process.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2117860007": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I liked the kiss, but I'm still trying to understand myself. I'm not sure who I am yet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2047691277": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "But...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "405189713": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1596988105,
+    288720021
+   ],
+   "actor": "River",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "M-Maybe we could have a bit of fun until I get there? ...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1596988105": {
+   "kind": "text",
+   "parent": 405189713,
+   "actor": null,
+   "text": "That sounds great. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "288720021": {
+   "kind": "text",
+   "parent": 405189713,
+   "children": [
+    58261655,
+    1391045623
+   ],
+   "actor": null,
+   "text": "Let's just stay friends, yes?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "58261655": {
+   "kind": "text",
+   "parent": 288720021,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Oh.. Uh... Okay?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1391045623": {
+   "kind": "text",
+   "parent": 288720021,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I'm sorry... I have to go now...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_4[River-at-home] = -5",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "River-at-home",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": -5
+      }
+     }
+    }
+   ]
+  },
+  "-1958294137": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "No way... There is no way you are this large....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active RiverBlowjob (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "RiverBlowjob (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/RiverBlowjob (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1527113171": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1033127942,
+    -70299851
+   ],
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "How am I... C-Can I like it? ... It's cool if you don't want me to....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1033127942": {
+   "kind": "text",
+   "parent": 1527113171,
+   "actor": null,
+   "text": "Relax, and sure. Have fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-70299851": {
+   "kind": "text",
+   "parent": 1527113171,
+   "actor": null,
+   "text": "It's all yours.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "972994642": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "It tastes so good... I love the smell... This just feels right... I... This is me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active RiverBlowjob (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "RiverBlowjob (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/RiverBlowjob (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-329448894": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I'm.. I'm sorry for tearing up.. I'm just so happy!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "484477398": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1774422272,
+    -784583605
+   ],
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Would you like... Would you like to....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active RiverBlowjob (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "RiverBlowjob (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/RiverBlowjob (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1774422272": {
+   "kind": "text",
+   "parent": 484477398,
+   "actor": null,
+   "text": "Yes...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-784583605": {
+   "kind": "text",
+   "parent": 484477398,
+   "children": [
+    93280653,
+    -1589268503
+   ],
+   "actor": null,
+   "text": "I'm sorry. I can't...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "93280653": {
+   "kind": "text",
+   "parent": -784583605,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1589268503": {
+   "kind": "text",
+   "parent": -784583605,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "No...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_4[River-at-home] = -5",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "River-at-home",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": -5
+      }
+     }
+    }
+   ]
+  },
+  "-1823233665": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "... Please be gentle ... This is my... My first time...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "504477828": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Hnnghh... Y-You are so big... I'm not sure if I can take it... But... B-But...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Riveranal (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Riveranal (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Riveranal (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active RiverBlowjob (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "RiverBlowjob (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/RiverBlowjob (1)"
+      }
+     }
+    }
+   ]
+  },
+  "2132932601": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    82480017,
+    1940534467,
+    1999988101
+   ],
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "But please don't stop! ... Please let me show you how much I want you!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2087857475": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "That's it... Yes... Please... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active RiverBlowjob (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "RiverBlowjob (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/RiverBlowjob (2)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Riveranal (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Riveranal (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Riveranal (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1117408028": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I... You are making me... I'm close, {PC}...  I'm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "493081730": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Hyyeeeh! Haaaah! ... Mmhaaaahh!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Riveranal (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Riveranal (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Riveranal (3)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active RiverBlowjob (3) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "RiverBlowjob (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/RiverBlowjob (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1919144082": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -483821097,
+    1536485515
+   ],
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Heh... W-Would it... Would it be okay if I take a shower before I go to work... Please?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "475807749": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I... I really enjoyed it... It felt so right... Your cock felt so... It felt so good...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "82480017": {
+   "kind": "text",
+   "parent": 2132932601,
+   "children": [
+    -14022714
+   ],
+   "actor": null,
+   "text": "You don't have to show me anything... I want this...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1940534467": {
+   "kind": "text",
+   "parent": 2132932601,
+   "children": [
+    -1456157238
+   ],
+   "actor": null,
+   "text": "Your ass is so tight, River....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1999988101": {
+   "kind": "text",
+   "parent": 2132932601,
+   "children": [
+    -1238854872
+   ],
+   "actor": null,
+   "text": "Take my cock, you little slut...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1238854872": {
+   "kind": "text",
+   "parent": 1999988101,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Y-Yes.... Please.... Harder, {PC}....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1456157238": {
+   "kind": "text",
+   "parent": 1940534467,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I'm sorry... I.. I hope it still feels good!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-14022714": {
+   "kind": "text",
+   "parent": 82480017,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "T-Thank you! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-483821097": {
+   "kind": "text",
+   "parent": -1919144082,
+   "children": [
+    -653930859
+   ],
+   "actor": null,
+   "text": "Of course... Let me show you the way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-653930859": {
+   "kind": "text",
+   "parent": -483821097,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "T-Thank you....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1536485515": {
+   "kind": "text",
+   "parent": -1919144082,
+   "children": [
+    1179331177
+   ],
+   "actor": null,
+   "text": "You don't need a shower.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1179331177": {
+   "kind": "text",
+   "parent": 1536485515,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "O-Okay...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1222210409": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "T-Thank you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_4[River-at-home] = 2",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "River-at-home",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 2
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Spend some quality time with River.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Another Time (River",
+        "of": "Quest"
+       },
+       "m_TaskId": -210829219
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Trips/RiverVisit",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Rivervisit2 and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_4[River-at-home] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "River-at-home",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active River_Base to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "River_Base",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/River_Base"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

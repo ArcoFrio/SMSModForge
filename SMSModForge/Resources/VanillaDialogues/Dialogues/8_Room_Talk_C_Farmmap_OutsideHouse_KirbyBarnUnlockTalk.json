@@ -1,0 +1,585 @@
+{
+ "id": "8_Room_Talk/C_Farmmap_OutsideHouse/KirbyBarnUnlockTalk",
+ "name": "KirbyBarnUnlockTalk",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Kirby"
+ ],
+ "roots": [
+  -1537999583,
+  -1950929633,
+  -1838698250,
+  -1432733156,
+  -293575018,
+  2095338421,
+  -138764934,
+  35166899,
+  -1838266930
+ ],
+ "nodes": {
+  "-1537999583": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1065527401,
+    -1743729369
+   ],
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "{PC}!? {PC}!?? Good news? Pleaseeeee... ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1065527401": {
+   "kind": "text",
+   "parent": -1537999583,
+   "actor": null,
+   "text": "I got something for you, Kirby.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1743729369": {
+   "kind": "text",
+   "parent": -1537999583,
+   "actor": null,
+   "text": "(Show her the Lactation Inducer)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1950929633": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Huh? You did? …Wait—no way, is that the thing?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1838698250": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    163401542,
+    607599665,
+    298156980
+   ],
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "The lactation booster?! Ohhh this is amazing! We can finally start for real!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "163401542": {
+   "kind": "text",
+   "parent": -1838698250,
+   "children": [
+    1941922044
+   ],
+   "actor": null,
+   "text": "I’m glad you’re excited. This could save the farm.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "607599665": {
+   "kind": "text",
+   "parent": -1838698250,
+   "children": [
+    -1404837631
+   ],
+   "actor": null,
+   "text": "Don’t celebrate too soon. This is just the beginning.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "298156980": {
+   "kind": "text",
+   "parent": -1838698250,
+   "children": [
+    -270390670
+   ],
+   "actor": null,
+   "text": "Can’t wait to test it on you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-270390670": {
+   "kind": "text",
+   "parent": 298156980,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Heehee… you’re so bad! But also, yes please.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1404837631": {
+   "kind": "text",
+   "parent": 607599665,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Well duh! But beginnings are the best part. That’s when you get all hyped up!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1941922044": {
+   "kind": "text",
+   "parent": 163401542,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Yeah! We’ll be overflowing with bottles in no time. Moo-power!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1432733156": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Alright, listen. We’ve got two big things to do now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-293575018": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "First, we need more women. I can’t fill the quota by myself, no matter how much milk I make. You’ll have to go find other girls willing to… join the herd.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2095338421": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    150354281,
+    -991365574,
+    550686468
+   ],
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Second, we’ll need someone to actually do the milking in the barn. That’s where you come in. Heehee. Don’t worry, it’ll be fun.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "150354281": {
+   "kind": "text",
+   "parent": 2095338421,
+   "children": [
+    -1456782839
+   ],
+   "actor": null,
+   "text": "I’ll help however I can.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-991365574": {
+   "kind": "text",
+   "parent": 2095338421,
+   "children": [
+    -354365781
+   ],
+   "actor": null,
+   "text": "Do I at least get paid in cookies?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "550686468": {
+   "kind": "text",
+   "parent": 2095338421,
+   "children": [
+    1288108566
+   ],
+   "actor": null,
+   "text": "I don’t mind handling your udders myself.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1456782839": {
+   "kind": "text",
+   "parent": 150354281,
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Knew I could count on you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-354365781": {
+   "kind": "text",
+   "parent": -991365574,
+   "actor": "Kirby",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Sure! Cookies, hugs, and fresh milk. Best deal ever.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1288108566": {
+   "kind": "text",
+   "parent": 550686468,
+   "actor": "Kirby",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Pfft! Naughty… but yes, that’s exactly the plan.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-138764934": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Oh, and one more thing. Clay’s still got a bunch of old stuff lying around from the previous owners of the farm.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "35166899": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Tools, gear, weird junk… I think he might even sell some of it if you ask nice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Head back to Kirby with what you’ve learned.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Moo! (Kirby)",
+        "of": "Quest"
+       },
+       "m_TaskId": 13458008
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-1838266930": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Time to milk the future! …That sounded cooler in my head.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/C_Farmmap_OutsideHouse",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play KirbyBarnUnlockTalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[milking-mainstory] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milking-mainstory",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KirbyBustDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KirbyBustDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/KirbyBustDefault"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Milking Save[milking-mainstory] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milking-mainstory",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Milking Save[barn-unlocked] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "barn-unlocked",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Milking Save[milk-searchforcandidates] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milk-searchforcandidates",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 125_BarnInteriorButton to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "125_BarnInteriorButton",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator/MapButtons/125_BarnInteriorButton"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

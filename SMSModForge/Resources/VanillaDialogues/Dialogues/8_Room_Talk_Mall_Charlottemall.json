@@ -1,0 +1,666 @@
+{
+ "id": "8_Room_Talk/Mall/Charlottemall",
+ "name": "Charlottemall",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Charlotte"
+ ],
+ "roots": [
+  262358743,
+  -2038969881,
+  512198485,
+  -482918405,
+  1409124936,
+  1727407991
+ ],
+ "nodes": {
+  "262358743": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "{PC} It's so lovely to see you here! I hope your {M} is well? Nevermind, I'm sure you can keep her happy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[Charlotte-romanced] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Charlotte-romanced",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-2038969881": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "My wonderful, gorgeous boyfriend... Look at how everyone's staring at us... They must be so jealous of us!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[Charlotte-romanced] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Charlotte-romanced",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "512198485": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1483173181,
+    1778917928,
+    -924964259,
+    -1042419734
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "I'm just doing a little shopping. I hope to see you on Monday.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1483173181": {
+   "kind": "text",
+   "parent": 512198485,
+   "children": [
+    -2120912365
+   ],
+   "actor": null,
+   "text": "Of course, I wouldn't want to miss it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1778917928": {
+   "kind": "text",
+   "parent": 512198485,
+   "children": [
+    1630787745
+   ],
+   "actor": null,
+   "text": "Maybe buy some condoms?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1630787745": {
+   "kind": "text",
+   "parent": 1778917928,
+   "actor": "Charlotte",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh my, haha! You're naughty, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2120912365": {
+   "kind": "text",
+   "parent": -1483173181,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Great.. I'm looking forward to it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-482918405": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1151395012
+   ],
+   "actor": "Charlotte",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Is the air conditioning out here? I'm sweating like crazy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte1 (18) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte1 (18)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Charlotte1 (18)"
+      }
+     }
+    }
+   ]
+  },
+  "1409124936": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1765984094
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "I'm just wondering if the dress is a bit too tight...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte1 (19) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte1 (19)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Charlotte1 (19)"
+      }
+     }
+    }
+   ]
+  },
+  "1727407991": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Well, that’s all for now. I hope to see you again sometime soon, cutie.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-924964259": {
+   "kind": "text",
+   "parent": 512198485,
+   "children": [
+    1056736757
+   ],
+   "actor": null,
+   "text": "You look incredible, Charlotte.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1056736757": {
+   "kind": "text",
+   "parent": -924964259,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh, thank you! I purchased this dress from a store nearby. The saleswoman really knows her stuff when it comes to fashion!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1042419734": {
+   "kind": "text",
+   "parent": 512198485,
+   "children": [
+    -1247574822
+   ],
+   "actor": null,
+   "text": "If I can make the time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1247574822": {
+   "kind": "text",
+   "parent": -1042419734,
+   "actor": "Charlotte",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Aw, come on... It will be fun!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1151395012": {
+   "kind": "text",
+   "parent": -482918405,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Goodness, I hope this dress can take it. It would be so embarrassing if people could see any details!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1765984094": {
+   "kind": "text",
+   "parent": 1409124936,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Oh, it does make my butt appear large, doesn't it? Well, I still love it, so I guess I'll just have to ignore that!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Mall",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Charlottemall and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[mall-random-talk-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mall-random-talk-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[Charlotte-Met] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Charlotte-Met",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "branches": [
+    "3"
+   ],
+   "before": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[DialogueVariation] = Random5[Random]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random5",
+        "pick": "random",
+        "type": "number"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[DialogueVariation-Subchoice] = Random3[Random]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random3",
+        "pick": "random",
+        "type": "number"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte_Dress to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte_Dress",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Charlotte_Dress"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Charlotte_Dress/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[mall-random-talk-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mall-random-talk-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

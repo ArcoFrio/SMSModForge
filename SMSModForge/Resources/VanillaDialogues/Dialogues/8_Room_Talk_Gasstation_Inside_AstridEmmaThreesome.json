@@ -1,0 +1,882 @@
+{
+ "id": "8_Room_Talk/Gasstation_Inside/AstridEmmaThreesome",
+ "name": "AstridEmmaThreesome",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Astrid",
+  "Continue",
+  "Emma"
+ ],
+ "roots": [
+  -529980126,
+  -1095895923,
+  -663754385,
+  364410575,
+  1218866625,
+  -1284074298,
+  -534739572,
+  1842746136,
+  458502519,
+  -610500847,
+  267536935,
+  579346382,
+  705110271,
+  1171962844,
+  -931623324,
+  1619137902,
+  -1685192277,
+  1667634220,
+  -614932810,
+  -1251394710,
+  -60502180,
+  158240544,
+  -1396652080,
+  1368317681,
+  -1063496646,
+  -650542117,
+  -968214837,
+  -924897527,
+  -703182596
+ ],
+ "nodes": {
+  "-529980126": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Well, look who wandered in from the shadows.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1095895923": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "We’re not here to cause trouble. I just... need some answers. About my {D}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-663754385": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "That’s new. Who’s daddy, sweetheart?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "364410575": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Mario di Luca. He ran experiments... awful ones.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1218866625": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "We found something in the sewers recently... and I think he made it. And you... {PC} told me you're not just human.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1284074298": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Mario di Luca… Sorry, darling. That name means nothing to me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-534739572": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "I’m not one of his toys. I’m something a little older than science.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1842746136": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "If you’re really not part of it, then I’m sorry for assuming. I’m trying to fix what my {D} broke. All of it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "458502519": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "That’s a heavy promise. You’ve got a good heart, Emma. I can smell it from here. Warm… Very warm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-610500847": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Warm... Why do I feel weird? {PC}?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "267536935": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Mmm… there it is. That heartbeat. It’s singing through you, Emma.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "579346382": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I... I can feel it. It’s like... everything’s pulsing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "705110271": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Don’t fight it. Let it move through you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaXAstrid (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaXAstrid (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/EmmaXAstrid (0)"
+      }
+     }
+    }
+   ]
+  },
+  "1171962844": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Astrid... I feel so... strange.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-931623324": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1328918412,
+    437541760,
+    780212819
+   ],
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "That’s the hunger talking. Don’t be afraid.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1328918412": {
+   "kind": "text",
+   "parent": -931623324,
+   "children": [
+    -916667571
+   ],
+   "actor": null,
+   "text": "She’s overwhelmed, Astrid. Slow down.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-916667571": {
+   "kind": "text",
+   "parent": -1328918412,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Maybe I do. But don’t worry, sweet things... this isn’t pain.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "437541760": {
+   "kind": "text",
+   "parent": -931623324,
+   "children": [
+    -402172559
+   ],
+   "actor": null,
+   "text": "It’s okay. Let her feel it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-402172559": {
+   "kind": "text",
+   "parent": 437541760,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "I do... All the sweet things...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "780212819": {
+   "kind": "text",
+   "parent": -931623324,
+   "children": [
+    102126689
+   ],
+   "actor": null,
+   "text": "You’re making her melt...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "102126689": {
+   "kind": "text",
+   "parent": 780212819,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Maybe I do. But don’t worry, sweet things... this isn’t pain.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1619137902": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -456873360,
+    818767610,
+    -1987690116
+   ],
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "It’s life. Too much life, rushing in all at once.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1685192277": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Oh god... yes, just like that... squeeze us tighter...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaXAstrid (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaXAstrid (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/EmmaXAstrid (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-456873360": {
+   "kind": "text",
+   "parent": 1619137902,
+   "actor": null,
+   "text": "I feel strange... I have to... I must...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "818767610": {
+   "kind": "text",
+   "parent": 1619137902,
+   "actor": null,
+   "text": "Fuck, I'm so hard... What are you doing to us...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1987690116": {
+   "kind": "text",
+   "parent": 1619137902,
+   "actor": null,
+   "text": "Astrid, stop...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1667634220": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Look at him, Emma... how perfectly he fits between us... doesn't it feel incredible?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-614932810": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Mmmf... so good... Astrid, your skin... it's so cool and perfect against mine... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1251394710": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Let him feel everything... your warmth, my chill... he deserves all of it, doesn't he? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-60502180": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Yes... yes he does... fuck, I can't think straight... just more... please, more...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "158240544": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Don't stop... god, the way you're thrusting... I'm losing my mind...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaXAstrid (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaXAstrid (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/EmmaXAstrid (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1396652080": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "You're both so beautiful like this... completely lost in each other and me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1368317681": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Astrid... I can't... I'm so close just from this...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1063496646": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Then let go, darling... we're both here for you... for him...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-650542117": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Yes... yes... fuck... I'm coming...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-968214837": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AstridStoreBust to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AstridStoreBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AstridStoreBust"
+      }
+     }
+    }
+   ]
+  },
+  "-924897527": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    574845594,
+    -1342329518,
+    -1363240106
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "...Mm. What... happened?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-703182596": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Ugh, I... I need some sleep, {PC}. I guess this was a dead end... See you next tuesday, yes?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[astrid-warningtalkincoming] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "astrid-warningtalkincoming",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Emma_Normal/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "574845594": {
+   "kind": "text",
+   "parent": -924897527,
+   "actor": null,
+   "text": "I have no idea...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1342329518": {
+   "kind": "text",
+   "parent": -924897527,
+   "children": [
+    -1930842032
+   ],
+   "actor": null,
+   "text": "I think Astrid was... Fuck, my head hurts.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1363240106": {
+   "kind": "text",
+   "parent": -924897527,
+   "children": [
+    -1998014281
+   ],
+   "actor": null,
+   "text": "Are you okay, Emma?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1998014281": {
+   "kind": "text",
+   "parent": -1363240106,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Yeah. Just... tired. But it’s weird... I feel calm",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1930842032": {
+   "kind": "text",
+   "parent": -1342329518,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Astrid? Who?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Gasstation_Inside",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AstridEmmaThreesome and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[emma-cryptidhuntactive] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-cryptidhuntactive",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_10[emma-hunttypenumber] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-hunttypenumber",
+        "list": "Events_10",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AstridStoreBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AstridStoreBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AstridStoreBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Emma_Normal to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Emma_Normal",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Emma_Normal"
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[emma-cryptidhuntactive] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-cryptidhuntactive",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_10[emma-cryptidhuntquest] = 4",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-cryptidhuntquest",
+        "list": "Events_10",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 4
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

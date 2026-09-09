@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
@@ -225,16 +225,111 @@ public sealed class TmpFont
     /// <param name="alpha">Stored value, 0..1.</param>
     /// <param name="pixelsPerTexel">Destination pixels per atlas texel.</param>
     public double Coverage(double alpha, double pixelsPerTexel)
+        => Coverage(alpha, pixelsPerTexel, 0, 0);
+
+    /// <summary>
+    /// As <see cref="Coverage(double, double)"/>, with the edge moved and the
+    /// ramp blunted - which is all any of the material's face, outline and
+    /// underlay settings actually do.
+    /// </summary>
+    /// <param name="shift">Moves the edge outwards, in stored-alpha units.</param>
+    /// <param name="softness">Flattens the ramp. 0 leaves it as sharp as the
+    /// drawing scale allows.</param>
+    public double Coverage(double alpha, double pixelsPerTexel,
+                           double shift, double softness)
     {
         double? spread = SdfSpread;
         if (spread is not > 0) return alpha < 0 ? 0 : alpha > 1 ? 1 : alpha;
 
-        // Distance from the edge in texels, then in destination pixels.
-        double texels = (alpha - 0.5) * spread.Value;
-        double pixels = texels * pixelsPerTexel;
-        double coverage = 0.5 + pixels;
+        // How many destination pixels the field crosses per unit of alpha.
+        double sharpness = spread.Value * pixelsPerTexel;
+        if (softness > 0) sharpness /= 1 + softness * sharpness;
+
+        double coverage = 0.5 + (alpha - 0.5 + shift) * sharpness;
         return coverage < 0 ? 0 : coverage > 1 ? 1 : coverage;
     }
+
+    // -- The material: how the glyph is drawn, not which glyph ---------
+    //
+    // A TextMeshPro font asset carries a material as well as an atlas, and the
+    // material is half of what the text looks like. Ignoring it draws the bare
+    // glyph shape: no thickening, no outline, no shadow - which is thinner and
+    // flatter than the same font in the game, and reads as the wrong typeface
+    // rather than as a missing effect.
+    //
+    // The shader turns the stored distance into coverage with
+    //
+    //     coverage = 0.5 + (alpha - 0.5 + shift) * spread * pixelsPerTexel
+    //
+    // which is Coverage() below. Every one of these settings is a SHIFT of that
+    // edge, in the same units as the stored alpha, so they all go through the
+    // one function rather than each growing its own maths.
+
+    /// <summary>How much thicker than its outline the face is drawn. TMP calls
+    /// it dilate; it moves the edge outwards, so a positive value fattens every
+    /// glyph.</summary>
+    public double FaceShift
+        => (Number("WeightNormal") / 4.0 + Number("FaceDilate")) * Number("ScaleRatioA", 1) * 0.5;
+
+    /// <summary>Half the outline's width. It is centred ON the edge - half
+    /// outside the glyph and half eaten out of the face - which is why an
+    /// outline makes letters look no bigger, only heavier.</summary>
+    public double OutlineShift
+        => Number("OutlineWidth") * Number("ScaleRatioA", 1) * 0.5;
+
+    public UiColor OutlineColor => Color("OutlineColor");
+
+    public bool HasOutline => OutlineShift > 0 && OutlineColor.A > 0;
+
+    /// <summary>Softness blunts the edge by flattening the ramp, so it divides
+    /// the sharpness rather than moving anything.</summary>
+    public double OutlineSoftness => Number("OutlineSoftness") * Number("ScaleRatioA", 1);
+
+    /// <summary>The drop shadow. TMP calls it an underlay: the same glyph drawn
+    /// again, offset, fattened and blurred, behind the text.</summary>
+    public UiColor UnderlayColor => Color("UnderlayColor");
+
+    public double UnderlayShift => Number("UnderlayDilate") * Number("ScaleRatioC", 1) * 0.5;
+
+    public double UnderlaySoftness => Number("UnderlaySoftness") * Number("ScaleRatioC", 1);
+
+    /// <summary>How far the shadow moves, in atlas texels. Positive X is right
+    /// and positive Y is up, as in the material inspector.</summary>
+    public (double X, double Y) UnderlayOffsetTexels
+    {
+        get
+        {
+            double k = Number("ScaleRatioC", 1) * Number("GradientScale", 1);
+            return (Number("UnderlayOffsetX") * k, Number("UnderlayOffsetY") * k);
+        }
+    }
+
+    public bool HasUnderlay
+    {
+        get
+        {
+            if (UnderlayColor.A == 0) return false;
+            var (x, y) = UnderlayOffsetTexels;
+            return x != 0 || y != 0 || UnderlayShift != 0;
+        }
+    }
+
+    private double Number(string key, double fallback = 0) => MaterialNumber(key) ?? fallback;
+
+    /// <summary>
+    /// A colour the material names, or nothing at all.
+    /// <para/>
+    /// Absent has to mean transparent here, not <see cref="UiColor.Parse"/>'s
+    /// opaque white. White is the right answer for a missing TINT, which is
+    /// what Parse is for - it leaves a sprite its own colours. For an outline
+    /// or a shadow there is no underlying colour to leave alone, so the same
+    /// answer would paint a white halo round every letter of a font that never
+    /// asked for one.
+    /// </summary>
+    private UiColor Color(string key)
+        => Material != null && Material.TryGetValue(key, out object? raw) && raw is string hex
+           ? UiColor.Parse(hex)
+           : default;
 
     /// <summary>Destination pixels per font unit when drawing at this size.
     /// Every metric in the asset is in units of <see cref="FaceInfo.PointSize"/>,

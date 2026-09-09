@@ -1,0 +1,856 @@
+{
+ "id": "8_Room_Talk/SofiaHome/SofiaThankyou",
+ "name": "SofiaThankyou",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Sofia"
+ ],
+ "roots": [
+  1359736072,
+  -1517629207,
+  -61787727,
+  174656544,
+  -2044656906,
+  1726380783,
+  321719290,
+  -1190776304,
+  -433209408,
+  478390049,
+  -1536968055,
+  -783970543,
+  -932670995,
+  1277449650,
+  2075602545,
+  -711997275,
+  640361190,
+  -2027298474,
+  389844278,
+  -1267733698,
+  -1719528751
+ ],
+ "nodes": {
+  "1359736072": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "You know… I’ve stared down a lot of bad guys in my time, but that… that was something else.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1517629207": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I really thought he was going to kill me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-61787727": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I can’t keep being this reckless. But… it’s hard, you know? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "174656544": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1713954357,
+    -80295422,
+    -1278328743
+   ],
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "When you’re so used to doing things on your own, trusting yourself to handle everything… then you realize you’re not as invincible as you thought.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1713954357": {
+   "kind": "text",
+   "parent": 174656544,
+   "children": [
+    -642511079
+   ],
+   "actor": null,
+   "text": "You’re stronger than you give yourself credit for. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-80295422": {
+   "kind": "text",
+   "parent": 174656544,
+   "children": [
+    564825331
+   ],
+   "actor": null,
+   "text": "I think you like having me around to rescue you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1278328743": {
+   "kind": "text",
+   "parent": 174656544,
+   "children": [
+    -1488749815
+   ],
+   "actor": null,
+   "text": "I'm here. You don’t have to do everything alone. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1488749815": {
+   "kind": "text",
+   "parent": -1278328743,
+   "actor": "Sofia",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "It’s hard for me to let people in, but… I’m starting to realize I don’t want to push you away. I don’t want to face things alone anymore.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "564825331": {
+   "kind": "text",
+   "parent": -80295422,
+   "actor": "Sofia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Maybe I do. But don’t get too cocky. Next time, I’ll be the one doing the rescuing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-642511079": {
+   "kind": "text",
+   "parent": 1713954357,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Yeah, but it doesn’t feel like enough sometimes. Still… hearing you say that means more than you know.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2044656906": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "You’ve broken down every wall I’ve put up. And I… I think I needed that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1726380783": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Oh, I just noticed I'm still in my uniform... I'll change into something more comfortable.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Sofia_Police/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "321719290": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 3 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 3
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia_Lingerie to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia_Lingerie",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Sofia_Lingerie"
+      }
+     }
+    }
+   ]
+  },
+  "-1190776304": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1783322993,
+    1179394251,
+    -553630173
+   ],
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "I don’t know what this is between us. But I know it’s something real. Something I’m not willing to lose.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1783322993": {
+   "kind": "text",
+   "parent": -1190776304,
+   "children": [
+    745817955
+   ],
+   "actor": null,
+   "text": "I feel the same. I don’t want to lose you either.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1179394251": {
+   "kind": "text",
+   "parent": -1190776304,
+   "children": [
+    -67276599
+   ],
+   "actor": null,
+   "text": "(Lean in and kiss her)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-553630173": {
+   "kind": "text",
+   "parent": -1190776304,
+   "children": [
+    296776465
+   ],
+   "actor": null,
+   "text": "I don't feel the same way, Sofia.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "296776465": {
+   "kind": "text",
+   "parent": -553630173,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Of course you don't... It would have been too good to be true... I... I want to be alone now, {PC}.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-67276599": {
+   "kind": "text",
+   "parent": 1179394251,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Mhmmm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'kiss'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "kiss"
+      }
+     }
+    }
+   ]
+  },
+  "745817955": {
+   "kind": "text",
+   "parent": -1783322993,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Then let’s make sure we don’t. Together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-433209408": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "I... I want to thank you... Undress...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "478390049": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Fuck, your cock tastes so good...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SofiaHome (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SofiaHome (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SofiaHome (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1536968055": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "I've been wanting this since I first... Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-783970543": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Fuck me hard... I want to feel every inch of you pounding into me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-932670995": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1362139623,
+    -129013558,
+    1732688715
+   ],
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Oh fuck yes! You're stretching me out so good!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SofiaHome (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SofiaHome (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SofiaHome (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1277449650": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Harder! Hnaagh... F-Fuck me like you mean it....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2075602545": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Oh god, I'm coming! I'm... God... Hngaaaahhh!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SofiaHome (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SofiaHome (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SofiaHome (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-711997275": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "F-Fill me up with your hot cum! Make...  Make me forget everything.... Haaaaaanngghh!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "640361190": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Fuck, That was amazing...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1362139623": {
+   "kind": "text",
+   "parent": -932670995,
+   "actor": null,
+   "text": "F-Fuck... Yo are so fucking hot, Sofia.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-129013558": {
+   "kind": "text",
+   "parent": -932670995,
+   "actor": null,
+   "text": "You are so tight... I'm geting close...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1732688715": {
+   "kind": "text",
+   "parent": -932670995,
+   "actor": null,
+   "text": "(Grope her ass)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2027298474": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I hope you didn't just fuck me out of pity... I know I'm flawed and you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "389844278": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "You're so fucking perfect that it makes me wish I could hate you for it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1267733698": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "But I don't... I like you... A lot...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1719528751": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I hope you visit me again... This whole ride was quite something...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/SofiaHome",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play SofiaThankyou and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[sofia-saved] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-saved",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[sofiakidnapthanks] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofiakidnapthanks",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia_Police to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia_Police",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Sofia_Police"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[SofioaHomecooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "SofioaHomecooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[sofiakidnapthanks] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofiakidnapthanks",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

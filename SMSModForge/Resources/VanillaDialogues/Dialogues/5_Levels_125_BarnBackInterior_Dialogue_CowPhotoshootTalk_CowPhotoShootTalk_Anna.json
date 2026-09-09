@@ -1,0 +1,1012 @@
+{
+ "id": "5_Levels/125_BarnBackInterior/Dialogue_CowPhotoshootTalk/CowPhotoShootTalk_Anna",
+ "name": "CowPhotoShootTalk_Anna",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  387509314,
+  -676845445,
+  -275872523,
+  -562047180,
+  -612522340,
+  -1400969296,
+  -976512044,
+  -1752177499,
+  -763985025,
+  -837182159,
+  -131579557,
+  -593201893,
+  -395818949,
+  46988690,
+  1894292359,
+  -1942776694,
+  -484054727,
+  -1132168322,
+  -92771881,
+  -2127259670
+ ],
+ "nodes": {
+  "387509314": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_CowBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_CowBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_CowBust"
+      }
+     }
+    }
+   ]
+  },
+  "-676845445": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh... this outfit is... a little much, isn’t it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-275872523": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1552967570,
+    1804836794,
+    -1317928835
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I feel so silly... but maybe that’s the point.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1552967570": {
+   "kind": "text",
+   "parent": -275872523,
+   "children": [
+    349400872
+   ],
+   "actor": null,
+   "text": "You look beautiful, Anna. It really suits you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1804836794": {
+   "kind": "text",
+   "parent": -275872523,
+   "children": [
+    -1238489625
+   ],
+   "actor": null,
+   "text": "You’re blushing already? Thought you’d be used to this by now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1317928835": {
+   "kind": "text",
+   "parent": -275872523,
+   "children": [
+    507214162
+   ],
+   "actor": null,
+   "text": "Careful, someone might mistake you for a real cow out here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "507214162": {
+   "kind": "text",
+   "parent": -1317928835,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Stop it! That’s so mean... but I can’t help laughing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1238489625": {
+   "kind": "text",
+   "parent": 1804836794,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "W-well, it’s different! This one’s... really shameless. I can’t help it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "349400872": {
+   "kind": "text",
+   "parent": -1552967570,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "You always know what to say… thank you. Maybe I can pull this off after all.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-562047180": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Where do you want me? Like this… leaning on the fence? Or down in the grass?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A91_AnnaCowPhoto (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A91_AnnaCowPhoto (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A91_AnnaCowPhoto (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-612522340": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -260971394,
+    2043428851
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I can’t believe I’m doing this… but with you here, I feel... bolder.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-260971394": {
+   "kind": "text",
+   "parent": -612522340,
+   "children": [
+    675014766
+   ],
+   "actor": null,
+   "text": "Turn around and spread those cheeks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2043428851": {
+   "kind": "text",
+   "parent": -612522340,
+   "children": [
+    -371544925
+   ],
+   "actor": null,
+   "text": "Show me how much your breasts ache for release...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-371544925": {
+   "kind": "text",
+   "parent": 2043428851,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "…You really don’t hold back, do you? Alright… but only because it’s you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A91_AnnaCowPhoto (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A91_AnnaCowPhoto (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A91_AnnaCowPhoto (3)"
+      }
+     }
+    }
+   ]
+  },
+  "675014766": {
+   "kind": "text",
+   "parent": -260971394,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Like this? Soft... but a little playful?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A91_AnnaCowPhoto (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A91_AnnaCowPhoto (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A91_AnnaCowPhoto (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1400969296": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "My heart is racing… but that was exciting. I never thought I’d enjoy something like this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Milking Save[bafarm-promophotostaken] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafarm-promophotostaken",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-976512044": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Thank you for being here with me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1752177499": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Sweetie… be honest. Did {M}'s little cowgirl routine leave you all… pent up?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-763985025": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1294410737,
+    722679583
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "We could… ahem… milk that problem real quick. Just say the word.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1294410737": {
+   "kind": "text",
+   "parent": -763985025,
+   "actor": null,
+   "text": "Yes.... Please, {M}. Milk my cock...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "722679583": {
+   "kind": "text",
+   "parent": -763985025,
+   "children": [
+    1713103146
+   ],
+   "actor": null,
+   "text": "I'm kinda tired, {M}. Maybe later?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1713103146": {
+   "kind": "text",
+   "parent": 722679583,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Sure, hun. Alright~ Let's go back home then.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-837182159": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh my god... sweetie, you're so so hard already... Don't worry, I'll take care of you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCowPrintTitfuck (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCowPrintTitfuck (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaCowPrintTitfuck (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-131579557": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fuck... just looking at you like this is making my panties stick—",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-593201893": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2061593156,
+    -183213703,
+    683486464
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "God, listen to me... what kind of {M} says these things? But... nngh... I can't stop staring..",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-395818949": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Now... Fuck... Let me help you~ Please....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2061593156": {
+   "kind": "text",
+   "parent": -593201893,
+   "children": [
+    1922459098,
+    -654751766,
+    -1890619401
+   ],
+   "actor": null,
+   "text": "(Rub your cock against her tits)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1922459098": {
+   "kind": "text",
+   "parent": -2061593156,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ohhh god... sweetie, you're smearing pre-cum all over my boobs...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCowPrintTitfuck (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCowPrintTitfuck (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaCowPrintTitfuck (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-183213703": {
+   "kind": "text",
+   "parent": -593201893,
+   "children": [
+    -1780077838,
+    -1741614825,
+    1945540280,
+    1109243255
+   ],
+   "actor": null,
+   "text": "(Grope and squeeze her tits)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1780077838": {
+   "kind": "text",
+   "parent": -183213703,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "O-Oh! Sweetie, careful~ Nngh... You're making me leak everywhere..",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCowPrintTitfuck (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCowPrintTitfuck (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaCowPrintTitfuck (3)"
+      }
+     }
+    }
+   ]
+  },
+  "683486464": {
+   "kind": "text",
+   "parent": -593201893,
+   "children": [
+    -2055104685,
+    1388334193,
+    -1161117562
+   ],
+   "actor": null,
+   "text": "(Suck and lick her tits)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2055104685": {
+   "kind": "text",
+   "parent": 683486464,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ohhh fuck~ Sweetie, that's—nngh—right on the sensitive spot~",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCowPrintTitfuck (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCowPrintTitfuck (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaCowPrintTitfuck (4)"
+      }
+     }
+    }
+   ]
+  },
+  "1388334193": {
+   "kind": "text",
+   "parent": 683486464,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm, drink up, baby... {M}'s got plenty to share...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1161117562": {
+   "kind": "text",
+   "parent": 683486464,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "God, your mouth feels—ah!—so much better than the pump...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1741614825": {
+   "kind": "text",
+   "parent": -183213703,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm, that's... ah!... that's the spot that gets the milk flowing..",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1945540280": {
+   "kind": "text",
+   "parent": -183213703,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "F-Feel how heavy they are? All because I've been... ngh... thinking about you too much...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-654751766": {
+   "kind": "text",
+   "parent": -2061593156,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "F-Fuck, that's so... ah!... messy. Guess I'm not the only one leaking now...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1890619401": {
+   "kind": "text",
+   "parent": -2061593156,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm, your cock feels even hotter against my wet nipples... like you were made for this...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1109243255": {
+   "kind": "text",
+   "parent": -183213703,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "God, listen to me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "46988690": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmph... feels even thicker between my tits than I imagined..",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCowPrintTitfuck (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCowPrintTitfuck (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaCowPrintTitfuck (5)"
+      }
+     }
+    }
+   ]
+  },
+  "1894292359": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god... Looks like we're making our own lube, hun...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1942776694": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "God, the way your tip keeps poking my chin—nngh—you wanna cum on your {M}'s face that bad?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-484054727": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1446195359,
+    1372054044,
+    -1625315942
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "F-Faster—yes! Just like that—wanna feel you burst all over me!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1132168322": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mwuaah! Mhmmhmm.... Gulp~ Gulp~ Gulp~ Ohhh hun, that was even more than I expected... Fuck... So much~",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCowPrintTitfuck (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCowPrintTitfuck (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaCowPrintTitfuck (6)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCowPrintTitfuck (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCowPrintTitfuck (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaCowPrintTitfuck (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-92771881": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That's it… let me taste every last drop… mmm, so thick…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1446195359": {
+   "kind": "text",
+   "parent": -484054727,
+   "actor": null,
+   "text": "Fuck! {M}, I'm coming! I'm... I'M... HNGAAH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1372054044": {
+   "kind": "text",
+   "parent": -484054727,
+   "actor": null,
+   "text": "God, fuck me... This is too much! Anna! I'll... Fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1625315942": {
+   "kind": "text",
+   "parent": -484054727,
+   "actor": null,
+   "text": "(Blow your load)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2127259670": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Who taught you to cum like that? God... Let's get cleaned up... I could really go for a milkshake now...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "5_Levels/125_BarnBackInterior/Dialogue_MilkDefaulttalk/Defaultmilktalk_Anna",
+   "script": "Dialogue",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core_NoSave2[2025-shortgo-saveTHREE] = CowPhotoShootTalk_Anna",
+   "as": "GameObject",
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[cooldown-cowphotofarm] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cooldown-cowphotofarm",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

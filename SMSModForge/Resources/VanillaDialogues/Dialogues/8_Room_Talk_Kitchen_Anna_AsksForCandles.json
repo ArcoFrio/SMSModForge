@@ -1,0 +1,294 @@
+{
+ "id": "8_Room_Talk/Kitchen/Anna_AsksForCandles",
+ "name": "Anna_AsksForCandles",
+ "index": 27,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna"
+ ],
+ "roots": [
+  84432427,
+  -78941819
+ ],
+ "nodes": {
+  "84432427": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hey… Would you mind picking up some scented candles?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = None",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "none"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-78941819": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -695487348,
+    -334466031,
+    990548804
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I know it’s dumb, but... It feels like it’s been a year since I had a proper bath. Like—one where I didn’t feel guilty just for relaxing.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-695487348": {
+   "kind": "text",
+   "parent": -78941819,
+   "children": [
+    -974296876
+   ],
+   "actor": null,
+   "text": "It’s not dumb. You deserve one.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-974296876": {
+   "kind": "text",
+   "parent": -695487348,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thanks. I just want to feel human again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-334466031": {
+   "kind": "text",
+   "parent": -78941819,
+   "children": [
+    -1485498201
+   ],
+   "actor": null,
+   "text": "Planning a steamy night in, huh? Should I bring wine too?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1485498201": {
+   "kind": "text",
+   "parent": -334466031,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "If you do, I’m locking the door.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "990548804": {
+   "kind": "text",
+   "parent": -78941819,
+   "children": [
+    -794523814
+   ],
+   "actor": null,
+   "text": "Any scent you want?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-794523814": {
+   "kind": "text",
+   "parent": 990548804,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Something soft. Warm. Anything that doesn’t smell like stress.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Kitchen/Kitchen_Conditions_2",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Anna_AsksForCandles and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Holidays[holiday-annabd] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "holiday-annabd",
+        "list": "Holidays",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Holidays[Holiday-VarQuest-One] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Holiday-VarQuest-One",
+        "list": "Holidays",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Core_NoSave[Anna-Default-Outfit] to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Anna-Default-Outfit",
+        "list": "Core_NoSave",
+        "type": "game-object"
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Condition-Split] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Condition-Split",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Holidays[Holiday-VarQuest-One] = 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Holiday-VarQuest-One",
+        "list": "Holidays",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

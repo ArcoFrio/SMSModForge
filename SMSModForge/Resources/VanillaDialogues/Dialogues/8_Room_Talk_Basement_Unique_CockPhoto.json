@@ -1,0 +1,1117 @@
+{
+ "id": "8_Room_Talk/Basement/Unique/CockPhoto",
+ "name": "CockPhoto",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  718609112,
+  -927310194,
+  584665440,
+  -679385624,
+  914762902,
+  -1733355734,
+  -1396405169,
+  83744748,
+  475809245,
+  -2057600095,
+  -1148537974,
+  121692178,
+  -717022079,
+  -969334405,
+  -1082552377,
+  -2049108205,
+  -1503768655,
+  472017903,
+  -1059568862,
+  -1848385723,
+  544884075,
+  484902000,
+  -2037490706,
+  -1759521556
+ ],
+ "nodes": {
+  "718609112": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Sweetie! We just reached 2,500 subscribers on Starmaker.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Take plenty of photos of Anna",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Going Viral (Anna)",
+        "of": "Quest"
+       },
+       "m_TaskId": 641073902
+      },
+      "m_WaitToComplete": false
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Check in on Anna.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Going Viral (Anna)",
+        "of": "Quest"
+       },
+       "m_TaskId": 1689069395
+      },
+      "m_WaitToComplete": false
+     }
+    },
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-927310194": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I have a present for you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "584665440": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1301093861,
+    602722012,
+    -628141413
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I hope you like it!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Inventory[expensive-watch] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "expensive-watch",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = Expensive Watch",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Expensive Watch"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1301093861": {
+   "kind": "text",
+   "parent": 584665440,
+   "children": [
+    -2034015301
+   ],
+   "actor": null,
+   "text": "Thanks, {M}. It looks expensive.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "602722012": {
+   "kind": "text",
+   "parent": 584665440,
+   "children": [
+    650751487
+   ],
+   "actor": null,
+   "text": "You shouldn't waste the money on stuff like that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-628141413": {
+   "kind": "text",
+   "parent": 584665440,
+   "children": [
+    442512817
+   ],
+   "actor": null,
+   "text": "Thanks, Anna. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "442512817": {
+   "kind": "text",
+   "parent": -628141413,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A-Anna? I'm your {M}... It feels weird...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "650751487": {
+   "kind": "text",
+   "parent": 602722012,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "It's a present, {PC}. Sometimes gestures are more important than money...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2034015301": {
+   "kind": "text",
+   "parent": -1301093861,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It is... But when I saw it at the mall I just had to buy it for you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-679385624": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Well, those were the good news, but unfortunately, I also have... bad news.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "914762902": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I've decided to follow Joanne's advice to grow the channel even further...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1733355734": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I want to take a photo with a... cock in it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1396405169": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    700356515,
+    1942392601,
+    2089290820
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Your cock...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "700356515": {
+   "kind": "text",
+   "parent": -1396405169,
+   "actor": null,
+   "text": "I'm sorry, what?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1942392601": {
+   "kind": "text",
+   "parent": -1396405169,
+   "actor": null,
+   "text": "Are you sure about this?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2089290820": {
+   "kind": "text",
+   "parent": -1396405169,
+   "actor": null,
+   "text": "Hell yeah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "83744748": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It would be just a photo...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "475809245": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Obviously we would make sure that there's a proper distance between... it and me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2057600095": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -417464226,
+    1871447947
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It would be like a... prop. decoration. ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-417464226": {
+   "kind": "text",
+   "parent": -2057600095,
+   "children": [
+    1805325171
+   ],
+   "actor": null,
+   "text": "If Joanne says it's for the best, I will do it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1871447947": {
+   "kind": "text",
+   "parent": -2057600095,
+   "children": [
+    1185351450
+   ],
+   "actor": null,
+   "text": "Sounds awesome, I'm ready!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1805325171": {
+   "kind": "text",
+   "parent": -417464226,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "She does...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1185351450": {
+   "kind": "text",
+   "parent": 1871447947,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm not sure if I like your excitement...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1148537974": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1986862235
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Alright... Let me know when you are... ready...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1986862235": {
+   "kind": "text",
+   "parent": -1148537974,
+   "actor": null,
+   "text": "[Pull out your cock]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "121692178": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1503768655": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1880099247,
+    -967088501,
+    2021735080
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Please hurry... I can smell your...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1880099247": {
+   "kind": "text",
+   "parent": -1503768655,
+   "children": [
+    -1389403299
+   ],
+   "actor": null,
+   "text": "I can feel your breath on my cock, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-967088501": {
+   "kind": "text",
+   "parent": -1503768655,
+   "children": [
+    1372523081
+   ],
+   "actor": null,
+   "text": "Stop moving, I'm trying!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2021735080": {
+   "kind": "text",
+   "parent": -1503768655,
+   "children": [
+    1130005079
+   ],
+   "actor": null,
+   "text": "[Wiggle your hips a bit]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1130005079": {
+   "kind": "text",
+   "parent": 2021735080,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Careful! You almost touched my lips!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[MCorruption] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MCorruption",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "1372523081": {
+   "kind": "text",
+   "parent": -967088501,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm trying to get as close without touching it... It's not that easy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[MLove] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MLove",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-1389403299": {
+   "kind": "text",
+   "parent": -1880099247,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm.. I'm sorry...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-717022079": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh. My. God.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 56_Pen1 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "56_Pen1",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/56_Pen1"
+      }
+     }
+    },
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-969334405": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You're... You're very well endowed...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1082552377": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    671374438,
+    722241829,
+    -1130345624
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Your future wife is gonna be VERY lucky...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "671374438": {
+   "kind": "text",
+   "parent": -1082552377,
+   "actor": null,
+   "text": "Thanks, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "722241829": {
+   "kind": "text",
+   "parent": -1082552377,
+   "children": [
+    1485089509
+   ],
+   "actor": null,
+   "text": "You can touch it if you like.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1130345624": {
+   "kind": "text",
+   "parent": -1082552377,
+   "actor": null,
+   "text": "I'm sure of it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1485089509": {
+   "kind": "text",
+   "parent": 722241829,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "N-No! I can't! It would be... wrong. Very, very wrong...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[MCorruption] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MCorruption",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Lewd to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Lewd",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Lewd"
+      }
+     }
+    }
+   ]
+  },
+  "-2049108205": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A-Alright.... Hold still... I'll position myself for a good shot...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 57_Pen2 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "57_Pen2",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/57_Pen2"
+      }
+     }
+    }
+   ]
+  },
+  "472017903": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Finally done...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'flash'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "flash"
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1059568862": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "100 new followers already...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Follower] + 500",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Follower",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 500
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Subscriber] + 100",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Subscriber",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 100
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Daily-Income] + 300",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Daily-Income",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 300
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[anna-heart-status] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-heart-status",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-1848385723": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "200....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "544884075": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "300... God...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "484902000": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Joanne was right...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2037490706": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... Thank you for being so brave and helping me with this... I know it must have been... hard.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1759521556": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I should be making breakfast now. Adrian and your {D} are already waiting I assume.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[only-cock-photo-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "only-cock-photo-done",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Basement",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play CockPhoto and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[only-cock-photo-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "only-cock-photo-done",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Subscriber] ≥ 2500",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Subscriber",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2500
+       }
+      }
+     }
+    }
+   ],
+   "branches": [
+    "cockpic"
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[only-cock-photo-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "only-cock-photo-done",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

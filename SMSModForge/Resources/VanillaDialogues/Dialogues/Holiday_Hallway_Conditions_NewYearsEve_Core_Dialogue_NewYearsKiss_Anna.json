@@ -1,0 +1,718 @@
+{
+ "id": "Holiday_Hallway_Conditions/NewYearsEve_Core/Dialogue_NewYearsKiss_Anna",
+ "name": "Dialogue_NewYearsKiss_Anna",
+ "index": 10,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna"
+ ],
+ "roots": [
+  -1760076591,
+  472631743,
+  2010523524,
+  -1122529559,
+  -1023837080,
+  -1892441881,
+  1614319451,
+  -1732395148,
+  1555745630,
+  119066764,
+  2046313864,
+  -1837325156,
+  1954415732,
+  -793249494
+ ],
+ "nodes": {
+  "-1760076591": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Figured I’d find you out here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "472631743": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    79394421,
+    -1428085240,
+    -1812402705
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It’s a little cold for brooding, don’t you think?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "79394421": {
+   "kind": "text",
+   "parent": 472631743,
+   "children": [
+    -1579302342
+   ],
+   "actor": null,
+   "text": "Just needed some air. Gets loud in there.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1428085240": {
+   "kind": "text",
+   "parent": 472631743,
+   "actor": null,
+   "text": "Hey, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1812402705": {
+   "kind": "text",
+   "parent": 472631743,
+   "children": [
+    1706406511,
+    693340873
+   ],
+   "actor": null,
+   "text": "Shouldn't you be inside? It's almost midnight.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1579302342": {
+   "kind": "text",
+   "parent": 79394421,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmh. And complicated.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1706406511": {
+   "kind": "text",
+   "parent": -1812402705,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "But All I want is out here...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "693340873": {
+   "kind": "text",
+   "parent": -1812402705,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Your {D} can wait a bit.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "2010523524": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hard to believe this year’s already over...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1122529559": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Feels like it started yesterday... or five years ago.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1023837080": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -959721663,
+    -341872072,
+    -1635880416
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You’ve changed. I see it. ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-959721663": {
+   "kind": "text",
+   "parent": -1023837080,
+   "children": [
+    1047769057
+   ],
+   "actor": null,
+   "text": "You changed too. We both did.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-341872072": {
+   "kind": "text",
+   "parent": -1023837080,
+   "children": [
+    2068563967,
+    -833741653
+   ],
+   "actor": null,
+   "text": "I’m not sure if it’s good or dangerous.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1635880416": {
+   "kind": "text",
+   "parent": -1023837080,
+   "children": [
+    -1718315303
+   ],
+   "actor": null,
+   "text": "Do you sometimes regret it? Doing Starmaker?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2068563967": {
+   "kind": "text",
+   "parent": -341872072,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Maybe it’s both.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1718315303": {
+   "kind": "text",
+   "parent": -1635880416,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes, sometimes I regret it. But most of the days I don't... And I think that's what matters, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1047769057": {
+   "kind": "text",
+   "parent": -959721663,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You're right...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-833741653": {
+   "kind": "text",
+   "parent": -341872072,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Like most things worth getting close to.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1892441881": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -319911593,
+    -1663531221
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "They’re going to start the countdown soon.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1614319451": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It’s strange… watching a new year start and still carrying everything from the last one.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-319911593": {
+   "kind": "text",
+   "parent": -1892441881,
+   "actor": null,
+   "text": "Yeah, they will.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1663531221": {
+   "kind": "text",
+   "parent": -1892441881,
+   "actor": null,
+   "text": "You should go back inside.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1732395148": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I used to watch fireworks with Josef.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1555745630": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Now I’m out here with you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "119066764": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I can hear them counting down... Any second now...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NewYearsFireworkPool to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NewYearsFireworkPool",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/8_Pool/NewYearsFireworkPool"
+      }
+     }
+    }
+   ]
+  },
+  "2046313864": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1433998276
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "... Mwuah.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NewYearsKiss_Anna to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NewYearsKiss_Anna",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NewYearsKiss_Anna"
+      }
+     }
+    }
+   ]
+  },
+  "-1433998276": {
+   "kind": "choice",
+   "parent": 2046313864,
+   "children": [
+    -1237878581,
+    2058072576,
+    74185413
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Happy New Year...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1237878581": {
+   "kind": "text",
+   "parent": -1433998276,
+   "children": [
+    1881389515
+   ],
+   "actor": null,
+   "text": "Happy new Year, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2058072576": {
+   "kind": "text",
+   "parent": -1433998276,
+   "children": [
+    1090755949,
+    2106701368
+   ],
+   "actor": null,
+   "text": "(Kiss her again. Use your tongue.)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "74185413": {
+   "kind": "text",
+   "parent": -1433998276,
+   "children": [
+    561333067
+   ],
+   "actor": null,
+   "text": "We should get back inside.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "561333067": {
+   "kind": "text",
+   "parent": 74185413,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You're right, we should.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1090755949": {
+   "kind": "text",
+   "parent": 2058072576,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmhmm.... Mwaah.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1881389515": {
+   "kind": "text",
+   "parent": -1237878581,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm glad you're here with me. Let's return to the party now, the others are waiting.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2106701368": {
+   "kind": "text",
+   "parent": 2058072576,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "W-We should get back to the party. This was... nice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1837325156": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "But before we go... Here's a kiss for you too.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1954415732": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mwuaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NewYearsKiss_AnnaCock to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NewYearsKiss_AnnaCock",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NewYearsKiss_AnnaCock"
+      }
+     }
+    }
+   ]
+  },
+  "-793249494": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I can't wait to see what next year brings...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "Holiday_Hallway_Conditions/NewYearsEve_Core/newyearskisscondition",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dialogue_NewYearsKiss_Anna and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_NewyearsDress_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_NewyearsDress_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_NewyearsDress_Bust"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

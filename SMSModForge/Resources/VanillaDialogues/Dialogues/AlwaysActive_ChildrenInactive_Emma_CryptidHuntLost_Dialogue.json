@@ -1,0 +1,181 @@
+{
+ "id": "AlwaysActive_ChildrenInactive/Emma_CryptidHuntLost/Dialogue",
+ "name": "Dialogue",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Emma"
+ ],
+ "roots": [
+  -953669089,
+  -1014823145
+ ],
+ "nodes": {
+  "-953669089": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "So close.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1014823145": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Damn it… we were so close. Let’s try again next week.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "AlwaysActive_ChildrenInactive/Emma_CryptidHuntLost",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dialogue and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Emma_Normal to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Emma_Normal",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Emma_Normal"
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core_NoSave2[2025-shortgo-saveONE] = None",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2025-shortgo-saveONE",
+        "list": "Core_NoSave2",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "none"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[emma-cryptidhuntactive] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-cryptidhuntactive",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

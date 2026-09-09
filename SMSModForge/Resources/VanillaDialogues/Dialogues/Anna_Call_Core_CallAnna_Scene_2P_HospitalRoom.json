@@ -1,0 +1,336 @@
+{
+ "id": "Anna_Call_Core/CallAnna_Scene_2P_HospitalRoom",
+ "name": "CallAnna_Scene_2P_HospitalRoom",
+ "index": 7,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  -1920444640,
+  442301497,
+  104968728,
+  -1592274142,
+  2026577856,
+  -1081353488,
+  1730325802
+ ],
+ "nodes": {
+  "-1920444640": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Are you out of your mind? If a nurse walks in right now, we’re both finished.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Trenchcoat to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Trenchcoat",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Trenchcoat"
+      }
+     }
+    }
+   ]
+  },
+  "442301497": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Trenchcoat to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Trenchcoat",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Trenchcoat"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Nude"
+      }
+     }
+    }
+   ]
+  },
+  "104968728": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You realize people here are... Fuck~... And here I am posing like this…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1592274142": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1124583858,
+    580516791
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Shh… I swear I just heard footsteps in the hall. Hurry, take the shot.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1124583858": {
+   "kind": "text",
+   "parent": -1592274142,
+   "children": [
+    1632979889
+   ],
+   "actor": null,
+   "text": "Let's be quick then. Get on the bed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "580516791": {
+   "kind": "text",
+   "parent": -1592274142,
+   "children": [
+    1997186720
+   ],
+   "actor": null,
+   "text": "Show me some motion, get that body working.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1997186720": {
+   "kind": "text",
+   "parent": 580516791,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "This feels so wrong... Next friday there's no skipping church, young man!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active B13_AnnaHospitalPhoto (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "B13_AnnaHospitalPhoto (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/B13_AnnaHospitalPhoto (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1632979889": {
+   "kind": "text",
+   "parent": 1124583858,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "God, the sheets are cold… Do you really want me sprawled across a hospital bed?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active B12_AnnaHospitalPhoto (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "B12_AnnaHospitalPhoto (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/B12_AnnaHospitalPhoto (1)"
+      }
+     }
+    }
+   ]
+  },
+  "2026577856": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "There’s something about the risk… it makes every click of your camera feel louder.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1081353488": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "And I can’t believe how much I like it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1730325802": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "It feels wrong to leave, but if I stay, I’ll want too much.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "Anna_Call_Core/CallIcon_Condition_Check",
+   "script": "Conditions",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core_NoSave2[call-anna-dialogue] = CallAnna_Scene_2P_HospitalRoom",
+   "as": "GameObject",
+   "when": [
+    {
+     "kind": "gameObjectActive",
+     "type": "ConditionGameObjectActive",
+     "title": "If is Active 87_Patientroom",
+     "fields": {
+      "m_GameObject": {
+       "kind": "object",
+       "name": "87_Patientroom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/87_Patientroom"
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CanCallAnnaIndicator to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CanCallAnnaIndicator",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator/Buttone/CallAnnaButton/CanCallAnnaIndicator"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

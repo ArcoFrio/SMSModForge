@@ -1,0 +1,1225 @@
+{
+ "id": "X_Movies/Scifi_Dialogue",
+ "name": "Scifi_Dialogue",
+ "index": 7,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "M_SpaceAlien",
+  "M_SpaceCaptain"
+ ],
+ "roots": [
+  -1518221233,
+  -923017098,
+  -1844799193,
+  -1330702005,
+  1336706142,
+  2100645406,
+  1216876921,
+  96730130,
+  -1659162455,
+  -1375600656,
+  -1881985281
+ ],
+ "nodes": {
+  "-1330702005": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "M_SpaceAlien",
+   "expressionName": "neutral",
+   "text": "I get that infiltration is important, but why did you decide to recruit Kiara? Why her?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_2[scifi-movie] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "scifi-movie",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Mouth to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Mouth",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/Scifi_Movie/Slide_1/M_scifi01 (1)/Mouth"
+      }
+     }
+    }
+   ]
+  },
+  "1336706142": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "M_SpaceAlien",
+   "expressionName": "neutral",
+   "text": "Don’t Xelasians and Aquarians despise each other? What was your reasoning behind recruiting them?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_2[scifi-movie] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "scifi-movie",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Mouth to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Mouth",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/Scifi_Movie/Slide_1/M_scifi01 (1)/Mouth"
+      }
+     }
+    }
+   ]
+  },
+  "2100645406": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "M_SpaceAlien",
+   "expressionName": "neutral",
+   "text": "I understand that androids possess extreme reflexes, but I’m puzzled by the modifications made to her body.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_2[scifi-movie] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "scifi-movie",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Mouth to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Mouth",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/Scifi_Movie/Slide_1/M_scifi01 (1)/Mouth"
+      }
+     }
+    }
+   ]
+  },
+  "-1518221233": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Scifi_Movie to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Scifi_Movie",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/Scifi_Movie"
+      }
+     }
+    },
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 12_AudioPlayer to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "12_AudioPlayer",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.01 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.01
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Audio Source to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Audio Source",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/Scifi_Movie/Audio Source"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Slide_Title to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Slide_Title",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/Scifi_Movie/Slide_Title"
+      }
+     }
+    },
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 4 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 4
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Slide_Title to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Slide_Title",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/Scifi_Movie/Slide_Title"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Slide_1 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Slide_1",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/Scifi_Movie/Slide_1"
+      }
+     }
+    },
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    }
+   ]
+  },
+  "1216876921": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Slide_2 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Slide_2",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/Scifi_Movie/Slide_2"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Slide_1 to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Slide_1",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/Scifi_Movie/Slide_1"
+      }
+     }
+    },
+    {
+     "type": "InstructionTransformChangeScale",
+     "title": "Scale Slide_2 = (1.00, 1.00, 1.00)",
+     "fields": {
+      "m_Scale": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "raw",
+        "type": "GetScaleVector3",
+        "data": {
+         "m_Scale": {
+          "$type": "Vector3",
+          "x": 1,
+          "y": 1,
+          "z": 1
+         }
+        }
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 0,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": true
+      },
+      "m_Transform": {
+       "kind": "object",
+       "name": "Slide_2",
+       "of": "GetGameObjectTransform",
+       "path": "X_Movies/Scifi_Movie/Slide_2"
+      }
+     }
+    },
+    {
+     "type": "InstructionTransformChangePosition",
+     "title": "Move Slide_2 = (0, 0, 0)",
+     "fields": {
+      "m_Space": "LocalPosition",
+      "m_Position": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "raw",
+        "type": "GetPositionVector3",
+        "data": {
+         "m_Position": {
+          "$type": "Vector3",
+          "x": 0,
+          "y": 0,
+          "z": 0
+         }
+        }
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 0,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": true
+      },
+      "m_Transform": {
+       "kind": "object",
+       "name": "Slide_2",
+       "of": "GetGameObjectTransform",
+       "path": "X_Movies/Scifi_Movie/Slide_2"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    }
+   ]
+  },
+  "96730130": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    323401550,
+    -1656900528
+   ],
+   "actor": "M_SpaceCaptain",
+   "expressionName": "neutral",
+   "text": "Kiara is one of the best, Varrus. Have you forgotten how she managed to steal the Xeth tech without a trace?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_2[scifi-movie] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "scifi-movie",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "type": "InstructionTransformChangeScale",
+     "title": "Scale Slide_2 = (2.00, 2.00, 1.00)",
+     "fields": {
+      "m_Scale": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "raw",
+        "type": "GetScaleVector3",
+        "data": {
+         "m_Scale": {
+          "$type": "Vector3",
+          "x": 2,
+          "y": 2,
+          "z": 1
+         }
+        }
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 3,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": false
+      },
+      "m_Transform": {
+       "kind": "object",
+       "name": "Slide_2",
+       "of": "GetGameObjectTransform",
+       "path": "X_Movies/Scifi_Movie/Slide_2"
+      }
+     }
+    },
+    {
+     "type": "InstructionTransformChangePosition",
+     "title": "Move Slide_2 = (-2, 0, 0)",
+     "fields": {
+      "m_Space": "LocalPosition",
+      "m_Position": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "raw",
+        "type": "GetPositionVector3",
+        "data": {
+         "m_Position": {
+          "$type": "Vector3",
+          "x": -2,
+          "y": 0,
+          "z": 0
+         }
+        }
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 3,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": false
+      },
+      "m_Transform": {
+       "kind": "object",
+       "name": "Slide_2",
+       "of": "GetGameObjectTransform",
+       "path": "X_Movies/Scifi_Movie/Slide_2"
+      }
+     }
+    }
+   ]
+  },
+  "323401550": {
+   "kind": "text",
+   "parent": 96730130,
+   "actor": "M_SpaceAlien",
+   "expressionName": "neutral",
+   "text": "But… doesn’t the sound of her cheeks clapping alert nearby guards? I can hear her coming from a mile away!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1656900528": {
+   "kind": "text",
+   "parent": 96730130,
+   "actor": "M_SpaceCaptain",
+   "expressionName": "neutral",
+   "text": "That’s where you’re mistaken, my friend. It’s a distraction tactic—similar to how bats use their echolocation to obscure their true position.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1659162455": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1211188328,
+    -710981433
+   ],
+   "actor": "M_SpaceCaptain",
+   "expressionName": "neutral",
+   "text": "Mali and Tissia may despise each other now, but with time, they’ll overcome their differences and learn to work together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_2[scifi-movie] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "scifi-movie",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "type": "InstructionTransformChangeScale",
+     "title": "Scale Slide_2 = (3.50, 3.50, 1.00)",
+     "fields": {
+      "m_Scale": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "raw",
+        "type": "GetScaleVector3",
+        "data": {
+         "m_Scale": {
+          "$type": "Vector3",
+          "x": 3.5,
+          "y": 3.5,
+          "z": 1
+         }
+        }
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 3,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": false
+      },
+      "m_Transform": {
+       "kind": "object",
+       "name": "Slide_2",
+       "of": "GetGameObjectTransform",
+       "path": "X_Movies/Scifi_Movie/Slide_2"
+      }
+     }
+    },
+    {
+     "type": "InstructionTransformChangePosition",
+     "title": "Move Slide_2 = (-22, -3, 0)",
+     "fields": {
+      "m_Space": "LocalPosition",
+      "m_Position": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "raw",
+        "type": "GetPositionVector3",
+        "data": {
+         "m_Position": {
+          "$type": "Vector3",
+          "x": -22,
+          "y": -3,
+          "z": 0
+         }
+        }
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 3,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": false
+      },
+      "m_Transform": {
+       "kind": "object",
+       "name": "Slide_2",
+       "of": "GetGameObjectTransform",
+       "path": "X_Movies/Scifi_Movie/Slide_2"
+      }
+     }
+    }
+   ]
+  },
+  "1211188328": {
+   "kind": "text",
+   "parent": -1659162455,
+   "actor": "M_SpaceAlien",
+   "expressionName": "neutral",
+   "text": "And for that you'll need to have a threesome with them?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-710981433": {
+   "kind": "text",
+   "parent": -1659162455,
+   "actor": "M_SpaceCaptain",
+   "expressionName": "neutral",
+   "text": "Exactly.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1375600656": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1837262067,
+    -1575978830
+   ],
+   "actor": "M_SpaceCaptain",
+   "expressionName": "neutral",
+   "text": "Ah, my naive alien friend. Her nano-fabric chest enhancements let her absorb massive impacts without harm.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_2[scifi-movie] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "scifi-movie",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "type": "InstructionTransformChangePosition",
+     "title": "Move Slide_2 = (13,2, -0,36, 0)",
+     "fields": {
+      "m_Space": "LocalPosition",
+      "m_Position": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "raw",
+        "type": "GetPositionVector3",
+        "data": {
+         "m_Position": {
+          "$type": "Vector3",
+          "x": 13.2,
+          "y": -0.36,
+          "z": 0
+         }
+        }
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 3,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": false
+      },
+      "m_Transform": {
+       "kind": "object",
+       "name": "Slide_2",
+       "of": "GetGameObjectTransform",
+       "path": "X_Movies/Scifi_Movie/Slide_2"
+      }
+     }
+    },
+    {
+     "type": "InstructionTransformChangeScale",
+     "title": "Scale Slide_2 = (2.50, 2.50, 1.00)",
+     "fields": {
+      "m_Scale": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "raw",
+        "type": "GetScaleVector3",
+        "data": {
+         "m_Scale": {
+          "$type": "Vector3",
+          "x": 2.5,
+          "y": 2.5,
+          "z": 1
+         }
+        }
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 3,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": false
+      },
+      "m_Transform": {
+       "kind": "object",
+       "name": "Slide_2",
+       "of": "GetGameObjectTransform",
+       "path": "X_Movies/Scifi_Movie/Slide_2"
+      }
+     }
+    }
+   ]
+  },
+  "1837262067": {
+   "kind": "text",
+   "parent": -1375600656,
+   "actor": "M_SpaceAlien",
+   "expressionName": "neutral",
+   "text": "But what does she need an artifical pussy for?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1575978830": {
+   "kind": "text",
+   "parent": -1375600656,
+   "actor": "M_SpaceCaptain",
+   "expressionName": "neutral",
+   "text": "Uh… well… let’s just say it was part of the standard package.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-923017098": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "M_SpaceAlien",
+   "expressionName": "neutral",
+   "text": "Captain, I have a matter to discuss. I need a minute of your time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Mouth to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Mouth",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/Scifi_Movie/Slide_1/M_scifi01 (1)/Mouth"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Mouth to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Mouth",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/Scifi_Movie/Slide_1/M_scifi01 (1)/Mouth"
+      }
+     }
+    }
+   ]
+  },
+  "-1844799193": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "M_SpaceCaptain",
+   "expressionName": "neutral",
+   "text": "What is it, Varrus?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Mouth to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Mouth",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/Scifi_Movie/Slide_1/M_scifi01/Mouth"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Mouth to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Mouth",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/Scifi_Movie/Slide_1/M_scifi01/Mouth"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Mouth to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Mouth",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/Scifi_Movie/Slide_1/M_scifi01 (1)/Mouth"
+      }
+     }
+    }
+   ]
+  },
+  "-1881985281": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "M_SpaceAlien",
+   "expressionName": "neutral",
+   "text": "I see...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Scifi_Movie to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Scifi_Movie",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/Scifi_Movie"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 12_AudioPlayer to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "12_AudioPlayer",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer"
+      }
+     }
+    },
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active X_Movies to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "X_Movies",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "Always_Active/Movie_Condition",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Scifi_Dialogue and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_2[incoming-movie] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "incoming-movie",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active X_Movies to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "X_Movies",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Scifi_Condition and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "Scifi_Condition",
+       "of": "GetGameObjectConditions",
+       "path": "X_Movies/Scifi_Condition"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ]
+  }
+ ]
+}

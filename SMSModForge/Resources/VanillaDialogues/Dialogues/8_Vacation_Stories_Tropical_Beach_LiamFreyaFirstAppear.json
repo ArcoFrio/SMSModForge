@@ -1,0 +1,370 @@
+{
+ "id": "8_Vacation_Stories/Tropical_Beach/LiamFreyaFirstAppear",
+ "name": "LiamFreyaFirstAppear",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "V_Freya",
+  "V_Liam"
+ ],
+ "roots": [
+  797841370
+ ],
+ "nodes": {
+  "797841370": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -248679781,
+    -1878735499,
+    1842546371,
+    1440914642,
+    2144392614,
+    939246494,
+    -1743424552,
+    -843167003,
+    958243008,
+    2037833085,
+    1289939156
+   ],
+   "actor": "V_Freya",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Seriously, {D}? You thought bringing me here would be, like, a good idea? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[freyaliamfirsttalk] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "freyaliamfirsttalk",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_LiamDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_LiamDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_LiamDefault"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_FreyaDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_FreyaDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_FreyaDefault"
+      }
+     }
+    }
+   ]
+  },
+  "-248679781": {
+   "kind": "text",
+   "parent": 797841370,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "This place is just old people and shit. What am I even supposed to do?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1878735499": {
+   "kind": "text",
+   "parent": 797841370,
+   "actor": "V_Liam",
+   "expressionName": "neutral",
+   "text": "Freya, it’s not about the people. Look around—the beach is beautiful, the air is fresh... I thought it’d be good for you to unwind.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1842546371": {
+   "kind": "text",
+   "parent": 797841370,
+   "actor": "V_Freya",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Unwind? At this snoozefest? Dad, I’m 22, not 60! I don’t want to spend my time sipping iced tea and listening to retirees talk about their golf scores.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1440914642": {
+   "kind": "text",
+   "parent": 797841370,
+   "actor": "V_Liam",
+   "expressionName": "neutral",
+   "text": "I just thought... you’ve been so stressed, and maybe this would help you relax.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2144392614": {
+   "kind": "text",
+   "parent": 797841370,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "There you go again, trying to spin this like it’s all for me. You’re totally gaslighting me right now, {D}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "939246494": {
+   "kind": "text",
+   "parent": 797841370,
+   "actor": "V_Liam",
+   "expressionName": "neutral",
+   "text": "Freya, that’s not true. I care about you. I just wanted to do something nice for us, that’s all.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1743424552": {
+   "kind": "text",
+   "parent": 797841370,
+   "actor": "V_Freya",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Ugh, do you even hear yourself? You always do this—you make it sound like you’re doing something for me, but it’s all about what you think I need!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-843167003": {
+   "kind": "text",
+   "parent": 797841370,
+   "actor": "V_Freya",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "And then, when I don’t go along with it, you act all hurt and misunderstood.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "958243008": {
+   "kind": "text",
+   "parent": 797841370,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "I need a drink. On my own.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_FreyaDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "2037833085": {
+   "kind": "text",
+   "parent": 797841370,
+   "actor": "V_Liam",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1289939156": {
+   "kind": "text",
+   "parent": 797841370,
+   "actor": "V_Liam",
+   "expressionName": "neutral",
+   "text": "I'm such a fucking disappointment...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_LiamDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Tropical_Beach",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play LiamFreyaFirstAppear and wait",
+   "as": "Dialogue",
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_WhiteSwimsuitTropical to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_WhiteSwimsuitTropical",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_WhiteSwimsuitTropical"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Default and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Default",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Vacation_Stories/Tropical_Beach/Default"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play AnnaTropBeachPhotoSession and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "AnnaTropBeachPhotoSession",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Vacation_Stories/Tropical_Beach/AnnaTropBeachPhotoSession"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play AnnaTropBeachRelax and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "AnnaTropBeachRelax",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Vacation_Stories/Tropical_Beach/AnnaTropBeachRelax"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[freyaliamfirsttalk] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "freyaliamfirsttalk",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 9_Vacation_Teleport_Tropical to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "9_Vacation_Teleport_Tropical",
+       "of": "GetGameObjectInstance",
+       "path": "9_Vacation_Teleport_Tropical"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

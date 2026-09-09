@@ -1,0 +1,1470 @@
+{
+ "id": "8_Vacation_Stories/Tropical_Hotelroom/FreyaVisit",
+ "name": "FreyaVisit",
+ "index": 5,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "V_Freya"
+ ],
+ "roots": [
+  1385764001,
+  593423266,
+  -1912510055,
+  397753727,
+  1965449950,
+  545585236,
+  740301281,
+  -832459922,
+  -536221931,
+  -574728973,
+  1694877222,
+  -402187658,
+  1289232331,
+  795284900,
+  -1284185616,
+  -1442834405,
+  307071879,
+  -911010027,
+  -65187734,
+  1099380609,
+  1376607003,
+  826971095,
+  825318915,
+  -1352541654,
+  14000297,
+  -1905525973,
+  1901551149,
+  1508879747,
+  576300927,
+  2076891933,
+  -483515148,
+  -1183656269,
+  447800847,
+  -289828736,
+  -2073276034,
+  -934075539,
+  -1065125090,
+  -1793131283,
+  -1747235982,
+  1564983276,
+  -2123742546,
+  -399917151,
+  -421166849
+ ],
+ "nodes": {
+  "1385764001": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ah, here we are... My feet hurt from all the walking, maybe you coud~",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "593423266": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, looks like Freya's at the door.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: door-knock",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "door-knock",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 0.7
+      }
+     }
+    }
+   ]
+  },
+  "-1912510055": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "Hey.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_FreyaDefault/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_FreyaDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_FreyaDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_FreyaDefault"
+      }
+     }
+    }
+   ]
+  },
+  "397753727": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    24011675,
+    -1803677135
+   ],
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "Uhm... What's your {S} doing here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[player-freya-sex-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "player-freya-sex-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "24011675": {
+   "kind": "text",
+   "parent": 397753727,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "We both always... play together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1803677135": {
+   "kind": "text",
+   "parent": 397753727,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "*Gulp*",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1965449950": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I need a minute to freshen up, don't start without me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_TropicalDress/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "545585236": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    888284306,
+    538776720,
+    -1880208316
+   ],
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "You are really lucky, you know that?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "888284306": {
+   "kind": "text",
+   "parent": 545585236,
+   "actor": null,
+   "text": "Oh, I know.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "538776720": {
+   "kind": "text",
+   "parent": 545585236,
+   "actor": null,
+   "text": "To be that good-looking? Yeah, I know.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1880208316": {
+   "kind": "text",
+   "parent": 545585236,
+   "actor": null,
+   "text": "It's all skill, babe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "740301281": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-832459922": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "There we go.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Nude"
+      }
+     }
+    }
+   ]
+  },
+  "-536221931": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "Jesus christ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-574728973": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1002340778,
+    1553809155,
+    -886122768
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Freya? Is this your first time? ... With a woman?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[player-freya-sex-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "player-freya-sex-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1002340778": {
+   "kind": "text",
+   "parent": -574728973,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "Yeah.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1553809155": {
+   "kind": "text",
+   "parent": -574728973,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I can tell... No need to be shy. What do you like about me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-886122768": {
+   "kind": "text",
+   "parent": -574728973,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "Your breasts are... massive...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1694877222": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Well... Why don't you play with my massive titties a bit? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-402187658": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "Fuck... Are they natural? I can't tell...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFreyaFun (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFreyaFun (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFreyaFun (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1289232331": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "We'll never know...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "795284900": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "I'm jealous of them... And horny for them...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1284185616": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "C-Can I suck on them?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1442834405": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Of course! Feel free t~",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "307071879": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh! Haha... Mmmmmm..... Someone's hungry...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFreyaFun (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFreyaFun (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFreyaFun (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-911010027": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "Such perfect boobies... Mmaaah....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-65187734": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Poor girl... You must have been so hungry for a pair of big tits... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1099380609": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "Y-Yes... They are so soft... So soft and warm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1376607003": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmmm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "826971095": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "I could squeeze them and suck on them all day long if I could...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "825318915": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "They are all yours... But you also have to play with {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1352541654": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "I... Sure.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "14000297": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -703606637,
+    -697143065,
+    1333464996
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Show her your big cock, {PC}... She will love it!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1905525973": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "Jesus christ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFreyaFun (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFreyaFun (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFreyaFun (4)"
+      }
+     }
+    }
+   ]
+  },
+  "1901551149": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "I'm here for Anna but this thing... I have to give it a try...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1508879747": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "HngaaaAAAAHHH!!! OH MY.... I... I've never had such a big one inside of me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFreyaFun (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFreyaFun (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFreyaFun (5)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFreyaFun (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFreyaFun (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFreyaFun (1)"
+      }
+     }
+    }
+   ]
+  },
+  "576300927": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Keep going, Freya! You can do it!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2076891933": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1530840019,
+    -470490063,
+    48594346
+   ],
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "I know... I know... Fhnaaacck!!! Hngaaah!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-483515148": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "J-Jesus... I can feel it... All the way in.. I'm... Fuck... Anna, I'm... I'm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1183656269": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -21596147,
+    1199209463,
+    1715398797
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes! Come for us! Make her cum, {PC}!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "447800847": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "Hngaaaahhh!!! AHHHHHH!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFreyaFun (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFreyaFun (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFreyaFun (6)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFreyaFun (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFreyaFun (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFreyaFun (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-289828736": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "I can feel it! He's cumming inside of me! Oh fuck! OH FUCK! Hnggyaaaah!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2073276034": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So that's what it looks like from an outside perspective... God, there's so much seed...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-934075539": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "If... If this is what it takes... I'll gladly do it again and again and again....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFreyaFun (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFreyaFun (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFreyaFun (7)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFreyaFun (4) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFreyaFun (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFreyaFun (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-1065125090": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You're such a polite young lady... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1793131283": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "T-Thanks, I guess... Jesus... What a mess...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1747235982": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let's get you cleaned up... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1564983276": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_FreyaDefault to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_FreyaDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_FreyaDefault"
+      }
+     }
+    }
+   ]
+  },
+  "-2123742546": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    2024924976,
+    376321279,
+    -1869445938,
+    1995220594
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So... did you enjoy having fun with Freya?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[player-freya-sex-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "player-freya-sex-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "2024924976": {
+   "kind": "text",
+   "parent": -2123742546,
+   "children": [
+    -1631703761
+   ],
+   "actor": null,
+   "text": "She lacks your experience, but she's enthusiastic...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "376321279": {
+   "kind": "text",
+   "parent": -2123742546,
+   "children": [
+    -1022184249
+   ],
+   "actor": null,
+   "text": "Yeah, she’s really good. Her pussy is really tight.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1869445938": {
+   "kind": "text",
+   "parent": -2123742546,
+   "children": [
+    99646920
+   ],
+   "actor": null,
+   "text": "It was alright. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1995220594": {
+   "kind": "text",
+   "parent": -2123742546,
+   "children": [
+    -1964250879
+   ],
+   "actor": null,
+   "text": "You know that she's more into you, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1964250879": {
+   "kind": "text",
+   "parent": 1995220594,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Nonsense... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "99646920": {
+   "kind": "text",
+   "parent": -1869445938,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I see... Well, I'm glad you tried her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1022184249": {
+   "kind": "text",
+   "parent": 376321279,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm glad you enjoyed it... I really am.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1631703761": {
+   "kind": "text",
+   "parent": 2024924976,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "She does have a talent for riding dick... She just needs more training.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-399917151": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm... I'm glad I was able to make up for it. For ruining your experience with Leilana.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[player-freya-sex-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "player-freya-sex-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Return_Home_Vacation to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Return_Home_Vacation",
+       "of": "GetGameObjectInstance",
+       "path": "Return_Home_Vacation"
+      }
+     }
+    }
+   ]
+  },
+  "-21596147": {
+   "kind": "text",
+   "parent": -1183656269,
+   "actor": null,
+   "text": "I'm trying.... Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1199209463": {
+   "kind": "text",
+   "parent": -1183656269,
+   "actor": null,
+   "text": "F-Fuck... She's way too tight for me... It almost hurts...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1715398797": {
+   "kind": "text",
+   "parent": -1183656269,
+   "actor": null,
+   "text": "(Push your hips forward, go all the way in)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-703606637": {
+   "kind": "text",
+   "parent": 14000297,
+   "actor": null,
+   "text": "Here we go...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-697143065": {
+   "kind": "text",
+   "parent": 14000297,
+   "actor": null,
+   "text": "Let's see if you can take it..",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1333464996": {
+   "kind": "text",
+   "parent": 14000297,
+   "actor": null,
+   "text": "Freya, this is Cockus Maximus. Cockus, meet Freya.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1530840019": {
+   "kind": "text",
+   "parent": 2076891933,
+   "children": [
+    -1270728363
+   ],
+   "actor": null,
+   "text": "Move those hips, Freya... It feels so good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1270728363": {
+   "kind": "text",
+   "parent": -1530840019,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "I'm trying... Fhaack.... J-Just hold still!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-470490063": {
+   "kind": "text",
+   "parent": 2076891933,
+   "children": [
+    189009046
+   ],
+   "actor": null,
+   "text": "Take it slow, Freya. No need to rush it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "189009046": {
+   "kind": "text",
+   "parent": -470490063,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "I... Hnggahh... T-Thanks...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "48594346": {
+   "kind": "text",
+   "parent": 2076891933,
+   "children": [
+    -2007155651
+   ],
+   "actor": null,
+   "text": "F-Fuck, is this your first time, Freya? You're so clumpsy!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2007155651": {
+   "kind": "text",
+   "parent": 48594346,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "S-Shut up... Hyyaaahhg!!! T-This isn't normal, It's way too large! Hnngghh.....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-421166849": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm... I'm glad I was able to make up for it. For ruining your experience with Leilana.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Vacation_Default_Retrigger to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Vacation_Default_Retrigger",
+       "of": "GetGameObjectInstance",
+       "path": "Vacation_Default_Retrigger"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Tropical_Hotelroom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play FreyaVisit and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[freya-thr-inc] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "freya-thr-inc",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "branches": [
+    "freyavisit"
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_TropicalDress to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_TropicalDress",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_TropicalDress"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[freya-thr-inc] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "freya-thr-inc",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

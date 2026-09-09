@@ -1,0 +1,1708 @@
+{
+ "id": "8_Room_Talk/Kitchen/Mdrunk",
+ "name": "Mdrunk",
+ "index": 6,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  -1677922513,
+  -864481538,
+  -1368927519,
+  -2004760369,
+  232014121
+ ],
+ "nodes": {
+  "-1677922513": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I'm not feeling like talking right now.... Please understand that...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[wine-cooldown] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "wine-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-864481538": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1472969303,
+    -528535173,
+    -1079248962
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Hey, look who's there. My favorite {S} and lover....",
+   "tag": "root",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[wine-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "wine-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1472969303": {
+   "kind": "text",
+   "parent": -864481538,
+   "children": [
+    -958215383
+   ],
+   "actor": null,
+   "text": "Are you drunk?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-528535173": {
+   "kind": "text",
+   "parent": -864481538,
+   "children": [
+    -1763152,
+    1717131210
+   ],
+   "actor": null,
+   "text": "Is everything alright, {M}?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1079248962": {
+   "kind": "text",
+   "parent": -864481538,
+   "children": [
+    819611620
+   ],
+   "actor": null,
+   "text": "Well, have fun, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "819611620": {
+   "kind": "text",
+   "parent": -1079248962,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, I will...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Wine/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-958215383": {
+   "kind": "text",
+   "parent": -1472969303,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Druuunk? Hahahahoho... No... No.. I'm not druaaank....",
+   "jump": {
+    "mode": "Jump",
+    "to": "root"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1763152": {
+   "kind": "text",
+   "parent": -528535173,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes, of course, why shouldn't it be... Although there is one thing you could help me with...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1717131210": {
+   "kind": "choice",
+   "parent": -528535173,
+   "children": [
+    1476254322,
+    806694971,
+    1547860948
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{M} is really horny for a big dick right now... Could you help me find a way to soothe my itch?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Kitchenwine to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Kitchenwine",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Kitchenwine"
+      }
+     }
+    }
+   ]
+  },
+  "1476254322": {
+   "kind": "text",
+   "parent": 1717131210,
+   "children": [
+    -24944926,
+    899456236,
+    -2009772509,
+    864102747,
+    -1854379801,
+    -422179711,
+    746426581,
+    1004989646
+   ],
+   "actor": null,
+   "text": "Of course.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "806694971": {
+   "kind": "text",
+   "parent": 1717131210,
+   "actor": null,
+   "text": "Are you sure everything is alright?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1547860948": {
+   "kind": "text",
+   "parent": 1717131210,
+   "children": [
+    -1672056604
+   ],
+   "actor": null,
+   "text": "Uh, maybe next time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1672056604": {
+   "kind": "text",
+   "parent": 1547860948,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Maybe next time....",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-24944926": {
+   "kind": "text",
+   "parent": 1476254322,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Such a good man, please use my pussy to your heart's content!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "899456236": {
+   "kind": "text",
+   "parent": 1476254322,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Kitchenwine (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Kitchenwine (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Kitchenwine (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-2009772509": {
+   "kind": "text",
+   "parent": 1476254322,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "W-Why are you this big... This is not fair... There is no way I could have ever resisted you....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "864102747": {
+   "kind": "text",
+   "parent": 1476254322,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Pound me... Take me... I'm yours....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1854379801": {
+   "kind": "text",
+   "parent": 1476254322,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Kitchenwine (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Kitchenwine (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Kitchenwine (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-422179711": {
+   "kind": "text",
+   "parent": 1476254322,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes! {M} is cumming! I'm cumming sooOOOo haaardhh!!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "746426581": {
+   "kind": "text",
+   "parent": 1476254322,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "F-F... Fill me up, {PC}. Please, feeeeed my pussy with your cuuAaaAAHM!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1004989646": {
+   "kind": "text",
+   "parent": 1476254322,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{M} needs a break now... I'm getting a bit dizzy...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Wine/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1368927519": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1909617333
+   ],
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "\"Are you sure\"... \"Are you sure\"... Sometimes you're really annoying...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Mainstory[M-cured-max-3] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-cured-max-3",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1909617333": {
+   "kind": "choice",
+   "parent": -1368927519,
+   "children": [
+    -2060038083,
+    621959515,
+    -2136826451
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Why don't you just leave me alone...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2060038083": {
+   "kind": "text",
+   "parent": -1909617333,
+   "children": [
+    1221948165,
+    1298978196
+   ],
+   "actor": null,
+   "text": "What's going on? Have I done anything wrong?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "621959515": {
+   "kind": "text",
+   "parent": -1909617333,
+   "children": [
+    -990897339,
+    1947469448
+   ],
+   "actor": null,
+   "text": "You're drunk and acting like a real bitch.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2136826451": {
+   "kind": "text",
+   "parent": -1909617333,
+   "children": [
+    -1713103216
+   ],
+   "actor": null,
+   "text": "Yeah, I'll leave you to it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1713103216": {
+   "kind": "text",
+   "parent": -2136826451,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Of course. Everyone will leave me eventually...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Wine/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-990897339": {
+   "kind": "text",
+   "parent": 621959515,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Isn't that who I am? Your bitch?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1221948165": {
+   "kind": "text",
+   "parent": -2060038083,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "N-No... You haven't done anything wrong... I'm sorry,... It's just... I need time for myself, {PC}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1947469448": {
+   "kind": "text",
+   "parent": 621959515,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Please, just let me enjoy my wine.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Wine/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1298978196": {
+   "kind": "text",
+   "parent": -2060038083,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Please, I just want to be alone right now.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[M-cured-max-3] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-cured-max-3",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-2004760369": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1716661982,
+    -307772370,
+    -594322980
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "\rNo, it's not all right. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Mainstory[M-cured-max-3] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-cured-max-3",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1716661982": {
+   "kind": "text",
+   "parent": -2004760369,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "We... I cheated on Josef. You know that, I know that... God...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-307772370": {
+   "kind": "text",
+   "parent": -2004760369,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "And yes, we told him and \"everything is fine\" now. But is it really? Is it really fine?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-594322980": {
+   "kind": "choice",
+   "parent": -2004760369,
+   "children": [
+    1106275383,
+    -1882345061,
+    1705523298
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I feel so dirty...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1106275383": {
+   "kind": "text",
+   "parent": -594322980,
+   "children": [
+    -15696211,
+    1049842834
+   ],
+   "actor": null,
+   "text": "This isn't an affair, it's about Starmaker.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-15696211": {
+   "kind": "text",
+   "parent": 1106275383,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Sure... Starmaker...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1882345061": {
+   "kind": "text",
+   "parent": -594322980,
+   "children": [
+    -793870715,
+    -1040126517,
+    -1920122106
+   ],
+   "actor": null,
+   "text": "This was never about {D}. It was about us.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1705523298": {
+   "kind": "text",
+   "parent": -594322980,
+   "children": [
+    -2040887311,
+    18956441
+   ],
+   "actor": null,
+   "text": "But it's fun, isn't it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2040887311": {
+   "kind": "text",
+   "parent": 1705523298,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That's the worst part about it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-793870715": {
+   "kind": "text",
+   "parent": -1882345061,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A-About us? ... I ... I never wanted to hurt Josef ... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "18956441": {
+   "kind": "text",
+   "parent": 1705523298,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I want to be alone now. Just let me enjoy my wine...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Wine/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1049842834": {
+   "kind": "text",
+   "parent": 1106275383,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I want to be alone now. Just let me enjoy my wine...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Wine/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1040126517": {
+   "kind": "text",
+   "parent": -1882345061,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I just wanted us to be closer...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1920122106": {
+   "kind": "text",
+   "parent": -1882345061,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Please give me some time to think about this... My head is spinning...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[M-cured-max-3] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-cured-max-3",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Wine/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "232014121": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1836252390,
+    -444370791,
+    683689828
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Why... Why do you care? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Mainstory[M-cured-max-3] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-cured-max-3",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-1836252390": {
+   "kind": "text",
+   "parent": 232014121,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Josef will leave me for someone better. It's only a matter of time. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "683689828": {
+   "kind": "choice",
+   "parent": 232014121,
+   "children": [
+    -1481394727,
+    217343907,
+    405413166
+   ],
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Why don't you just leave now? I don't know why you're here in the first place.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1481394727": {
+   "kind": "text",
+   "parent": 683689828,
+   "children": [
+    -1521765318,
+    325284253
+   ],
+   "actor": null,
+   "text": "We would lose all the money we make.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "217343907": {
+   "kind": "text",
+   "parent": 683689828,
+   "children": [
+    -1730693353,
+    -1503375467,
+    104065072
+   ],
+   "actor": null,
+   "text": "Because you're my {M} and I love you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "405413166": {
+   "kind": "text",
+   "parent": 683689828,
+   "children": [
+    1649556157,
+    546849837
+   ],
+   "actor": null,
+   "text": "Because we can fix this together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1649556157": {
+   "kind": "text",
+   "parent": 405413166,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Fix it? You think you can just fix it? It’s not that simple!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "546849837": {
+   "kind": "text",
+   "parent": 405413166,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "What we've done cannot be undone... Please, just me leave me alone now. You are ruining the mood...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Wine/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-444370791": {
+   "kind": "text",
+   "parent": 232014121,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Then Adrian is going to go to Japan, and eventually, you will leave me too for someone or something.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1521765318": {
+   "kind": "text",
+   "parent": -1481394727,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "All the money in the world but for what...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "325284253": {
+   "kind": "text",
+   "parent": -1481394727,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Please let me take a break — I just want to enjoy the wine and then go to bed.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Wine/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1730693353": {
+   "kind": "text",
+   "parent": 217343907,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1503375467": {
+   "kind": "text",
+   "parent": 217343907,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "104065072": {
+   "kind": "text",
+   "parent": 217343907,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I'm so sorry... I'm so, so sorry....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[M-cured-max-3] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-cured-max-3",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Mainstory[Inner-Regret] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Inner-Regret",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Wine/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Kitchen",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Mdrunk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_Only_Done_2[m-drunk] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "m-drunk",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[Inner-Regret] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Inner-Regret",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "branches": [
+    "drunk"
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Wine to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Wine",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Wine"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Room_Talk/Kitchen/Kitchen_Conditions_1",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Mdrunk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_Only_Done_2[m-drunk] ≤ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "m-drunk",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[Inner-Regret] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Inner-Regret",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "branches": [
+    "drunk"
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_LoveRoute/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_SlutRoute/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Wine to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Wine",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Wine"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Wine/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

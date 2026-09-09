@@ -1,0 +1,1073 @@
+{
+ "id": "8_Room_Talk/Upstairs/ParentsDoingIt",
+ "name": "ParentsDoingIt",
+ "index": 6,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Josef",
+  "You"
+ ],
+ "roots": [
+  587882457,
+  797136962,
+  1784252041
+ ],
+ "nodes": {
+  "797136962": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    424947395,
+    1342378533,
+    1371773937,
+    926613379
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Yes, Anna... Take my whole length... Your pussy feels so good...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MDBedroom to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MDBedroom",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/MDBedroom"
+      }
+     }
+    }
+   ]
+  },
+  "1784252041": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -735147525,
+    1735222577,
+    -2091274038
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Yes... You need to be punished... You're a dirty, dirty wife, Anna.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Inventory[master-bedroom-key] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "master-bedroom-key",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MDBedroom (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MDBedroom (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/MDBedroom (1)"
+      }
+     }
+    }
+   ]
+  },
+  "424947395": {
+   "kind": "text",
+   "parent": 797136962,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mhm... So good... Yes, yes...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1342378533": {
+   "kind": "text",
+   "parent": 797136962,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "A-Are you reading a book!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1371773937": {
+   "kind": "text",
+   "parent": 797136962,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh... I'm sorry, It's just been a long day... P-Please don't let it stop you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "587882457": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -463519692,
+    -1716882162
+   ],
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Hmm... Moaning? Sounds like {M} and {D} are doing it...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-463519692": {
+   "kind": "text",
+   "parent": 587882457,
+   "children": [
+    295243495
+   ],
+   "actor": null,
+   "text": "[Look through the keyhole]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1716882162": {
+   "kind": "text",
+   "parent": 587882457,
+   "children": [
+    1197747968
+   ],
+   "actor": null,
+   "text": "[Give them their privacy]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1197747968": {
+   "kind": "text",
+   "parent": -1716882162,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "I better leave them be...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "295243495": {
+   "kind": "text",
+   "parent": -463519692,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Let's see...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "926613379": {
+   "kind": "text",
+   "parent": 797136962,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Looks like things aren't going well for them..",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-735147525": {
+   "kind": "text",
+   "parent": 1784252041,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yisss... I'm so sorry, such a bad {M}... Don't stop pounding me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1735222577": {
+   "kind": "text",
+   "parent": 1784252041,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Using your warm, wet holes to seduce our {S}'s fat cock... Such a naughty slut wife...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2091274038": {
+   "kind": "choice",
+   "parent": 1784252041,
+   "children": [
+    937452621,
+    1465567757
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes... T-Teach my pussy a lesson! I deserve it!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "937452621": {
+   "kind": "text",
+   "parent": -2091274038,
+   "children": [
+    443022542,
+    1070053181,
+    -1686572972,
+    -1502743395,
+    -531124923,
+    1731674330,
+    1529442952,
+    1003427491,
+    -511942638,
+    -1418870923,
+    2001962021
+   ],
+   "actor": null,
+   "text": "[Join in]",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "443022542": {
+   "kind": "text",
+   "parent": 937452621,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "P-Perfect timing, {S}. Pull out your fat cock and join in!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_2[join-in-active] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "join-in-active",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 28_Upstairs to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "28_Upstairs",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/28_Upstairs"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 1_Master_Bedrooom to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "1_Master_Bedrooom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/1_Master_Bedrooom"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MDBedroom (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MDBedroom (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/MDBedroom (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1465567757": {
+   "kind": "text",
+   "parent": -2091274038,
+   "children": [
+    544282716
+   ],
+   "actor": null,
+   "text": "[Leave them be]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "544282716": {
+   "kind": "text",
+   "parent": 1465567757,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Looks like they are having fun...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1070053181": {
+   "kind": "text",
+   "parent": 937452621,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yesss... Please, my ass feels awfully empty!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1686572972": {
+   "kind": "choice",
+   "parent": 937452621,
+   "children": [
+    -2023136447,
+    -551518061,
+    931054900
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fhuckkk... It's in... Our {S} is fucking my ass! He's fuckkkking it soooo gooood!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MDBedroom (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MDBedroom (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/MDBedroom (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1502743395": {
+   "kind": "text",
+   "parent": 937452621,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm close... I'm close.. I'm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-531124923": {
+   "kind": "text",
+   "parent": 937452621,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "L-Let's fill her up, {S}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1731674330": {
+   "kind": "text",
+   "parent": 937452621,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hngg... Ahhhh! Fhhuaaack!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MDBedroom (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MDBedroom (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/MDBedroom (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MDBedroom (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MDBedroom (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/MDBedroom (4)"
+      }
+     }
+    }
+   ]
+  },
+  "1529442952": {
+   "kind": "text",
+   "parent": 937452621,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "S-So muaach.... I can feel it... Your cocks are filling me up so good...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2001962021": {
+   "kind": "text",
+   "parent": 937452621,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hihi, yessss... I think a shower is in order! Why don't you two go ahead and change the bedsheets in the meantime....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_2[join-in-active] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "join-in-active",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 1_Master_Bedrooom to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "1_Master_Bedrooom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/1_Master_Bedrooom"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 28_Upstairs to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "28_Upstairs",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/28_Upstairs"
+      }
+     }
+    }
+   ]
+  },
+  "-2023136447": {
+   "kind": "text",
+   "parent": -1686572972,
+   "children": [
+    -973418074
+   ],
+   "actor": null,
+   "text": "Your ass is so warm and tight...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-551518061": {
+   "kind": "text",
+   "parent": -1686572972,
+   "children": [
+    1502290410
+   ],
+   "actor": null,
+   "text": "Take my fat cock, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "931054900": {
+   "kind": "text",
+   "parent": -1686572972,
+   "children": [
+    -852517235
+   ],
+   "actor": null,
+   "text": "Come on, {D}. Let's give {M} a great orgasm.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-973418074": {
+   "kind": "text",
+   "parent": -2023136447,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It's all yours... Please use it as you like!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1502290410": {
+   "kind": "text",
+   "parent": -551518061,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes! I love my {S}'s massive cock!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-852517235": {
+   "kind": "text",
+   "parent": 931054900,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Great minds think alike... Here we go...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1003427491": {
+   "kind": "text",
+   "parent": 937452621,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "If I had known you were this naughty, we could have had a lot more fun before all of this...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MDBedroom (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MDBedroom (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/MDBedroom (2)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MDBedroom (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MDBedroom (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/MDBedroom (5)"
+      }
+     }
+    }
+   ]
+  },
+  "-511942638": {
+   "kind": "text",
+   "parent": 937452621,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I know, sweetheart. But we get to have fun now... and our {S}'s there too!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1418870923": {
+   "kind": "text",
+   "parent": 937452621,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "And I'm glad for it... Damn, your creampied ass looks so good...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Upstairs",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play ParentsDoingIt and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[p-doing-it-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "p-doing-it-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Core_NoSave2[anna-at-flowerwork] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-at-flowerwork",
+        "list": "Core_NoSave2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "branches": [
+    "Pdoingit"
+   ],
+   "before": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[p-doing-it-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "p-doing-it-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

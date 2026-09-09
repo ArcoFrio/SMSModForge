@@ -1,0 +1,106 @@
+{
+ "id": "8_Room_Talk/Villa_Backyard/Badweather",
+ "name": "Badweather",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "You"
+ ],
+ "roots": [
+  -595534750
+ ],
+ "nodes": {
+  "-595534750": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Yeah, no one’s touching that pool today with this weather.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Villa_Backyard",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Badweather and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "type": "ConditionVisualScriptingConditionsOR",
+     "title": "If (If Core_2[rainy-day] = True or If Core_2[snowy-day] = True)",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "compareBool",
+         "type": "ConditionMathCompareBooleans",
+         "title": "If Core_2[rainy-day] = True",
+         "fields": {
+          "m_Value": {
+           "kind": "variable",
+           "variable": {
+            "scope": "global",
+            "name": "rainy-day",
+            "list": "Core_2",
+            "type": "boolean"
+           }
+          },
+          "m_Comparison": "Equals",
+          "m_CompareTo": {
+           "kind": "value",
+           "value": true
+          }
+         }
+        },
+        {
+         "kind": "compareBool",
+         "type": "ConditionMathCompareBooleans",
+         "title": "If Core_2[snowy-day] = True",
+         "fields": {
+          "m_Value": {
+           "kind": "variable",
+           "variable": {
+            "scope": "global",
+            "name": "snowy-day",
+            "list": "Core_2",
+            "type": "boolean"
+           }
+          },
+          "m_Comparison": "Equals",
+          "m_CompareTo": {
+           "kind": "value",
+           "value": true
+          }
+         }
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "branches": [
+    "badweather"
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

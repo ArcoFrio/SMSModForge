@@ -1,0 +1,842 @@
+{
+ "id": "8_Room_Talk/Mall/katarinamall",
+ "name": "katarinamall",
+ "index": 7,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Katarina"
+ ],
+ "roots": [
+  262358743,
+  1406746983,
+  -1825188293
+ ],
+ "nodes": {
+  "262358743": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -329284014,
+    -1060758487,
+    1786363614
+   ],
+   "actor": "Katarina",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh, fancy meeting you here… Didn’t think I’d run into you in public",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[katarina-player-friends] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-player-friends",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-329284014": {
+   "kind": "choice",
+   "parent": 262358743,
+   "children": [
+    889713945,
+    868403143
+   ],
+   "actor": "Katarina",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": " You know I’d follow you anywhere. Even… places like this.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1060758487": {
+   "kind": "text",
+   "parent": 262358743,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "I had to see you. I can’t get you out of my head. It’s… maddening.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarinamall (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarinamall (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Katarinamall (0)"
+      }
+     }
+    }
+   ]
+  },
+  "889713945": {
+   "kind": "text",
+   "parent": -329284014,
+   "actor": null,
+   "text": "What are you doing here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "868403143": {
+   "kind": "text",
+   "parent": -329284014,
+   "actor": null,
+   "text": "Isn't this place below you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1786363614": {
+   "kind": "choice",
+   "parent": 262358743,
+   "children": [
+    -993928924,
+    -1878927391,
+    -904306609
+   ],
+   "actor": "Katarina",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I need more. You know what I mean. Meet me at the restrooms, just down the hall. I— I need you now.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-993928924": {
+   "kind": "text",
+   "parent": 1786363614,
+   "children": [
+    -323812027
+   ],
+   "actor": null,
+   "text": "You’re really that desperate... I'll be there.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1878927391": {
+   "kind": "text",
+   "parent": 1786363614,
+   "children": [
+    330722287
+   ],
+   "actor": null,
+   "text": "Eh, not today.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-904306609": {
+   "kind": "text",
+   "parent": 1786363614,
+   "children": [
+    81526912
+   ],
+   "actor": null,
+   "text": "Here? Really, Katarina?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "81526912": {
+   "kind": "choice",
+   "parent": -904306609,
+   "children": [
+    -2095240601,
+    394845297
+   ],
+   "actor": "Katarina",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yes, here. Anywhere. I don’t care anymore. Just… please.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2095240601": {
+   "kind": "text",
+   "parent": 81526912,
+   "children": [
+    249385735
+   ],
+   "actor": null,
+   "text": "You’re really that desperate... I'll be there.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "249385735": {
+   "kind": "text",
+   "parent": -2095240601,
+   "actor": "Katarina",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "You know I am. I’ll be waiting… don’t keep me long.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[katarinawaitinginrestroom] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarinawaitinginrestroom",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "394845297": {
+   "kind": "text",
+   "parent": 81526912,
+   "children": [
+    2089210524
+   ],
+   "actor": null,
+   "text": "Not today.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2089210524": {
+   "kind": "text",
+   "parent": 394845297,
+   "actor": "Katarina",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "N-No... Please... My pussy is burning with desire for you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-323812027": {
+   "kind": "text",
+   "parent": -993928924,
+   "actor": "Katarina",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You know I am. I’ll be waiting… don’t keep me long.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[katarinawaitinginrestroom] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarinawaitinginrestroom",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "330722287": {
+   "kind": "text",
+   "parent": -1878927391,
+   "actor": "Katarina",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "N-No... Please... My pussy is burning with desire for you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1406746983": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -327385758
+   ],
+   "actor": "Katarina",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "What are you doing here? Browsing the sales racks, I suppose?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[katarina-player-friends] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-player-friends",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-327385758": {
+   "kind": "choice",
+   "parent": 1406746983,
+   "children": [
+    1577563810,
+    836263992,
+    -256204887
+   ],
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Actually, don't tell me. I don't really care.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1577563810": {
+   "kind": "text",
+   "parent": -327385758,
+   "children": [
+    1795271338
+   ],
+   "actor": null,
+   "text": "And yet, here you are, talking to someone so ‘beneath’ you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "836263992": {
+   "kind": "text",
+   "parent": -327385758,
+   "children": [
+    632016848
+   ],
+   "actor": null,
+   "text": "Yeah, yeah. Whatever.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-256204887": {
+   "kind": "text",
+   "parent": -327385758,
+   "children": [
+    315291990,
+    1268499501
+   ],
+   "actor": null,
+   "text": "The question is, what are YOU doing here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1795271338": {
+   "kind": "text",
+   "parent": 1577563810,
+   "actor": "Katarina",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Boredom, maybe. Or curiosity. I suppose it’s amusing to see what the lower class does with their time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "632016848": {
+   "kind": "text",
+   "parent": 836263992,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Pah.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "315291990": {
+   "kind": "text",
+   "parent": -256204887,
+   "actor": "Katarina",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Don’t push me. I’m here for— not that it’s any of your business— some essentials. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1268499501": {
+   "kind": "text",
+   "parent": -256204887,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Unlike you, I actually have a life and things to take care of.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1825188293": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Mall",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play katarinamall and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[mall-random-talk-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mall-random-talk-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[katarina-first-meeting] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-first-meeting",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[katarinamallcooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarinamallcooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "branches": [
+    "4"
+   ],
+   "before": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[DialogueVariation] = Random5[Random]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random5",
+        "pick": "random",
+        "type": "number"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[DialogueVariation-Subchoice] = Random3[Random]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random3",
+        "pick": "random",
+        "type": "number"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina_Normal to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina_Normal",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Katarina_Normal"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Katarina_Normal/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[mall-random-talk-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mall-random-talk-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[katarinamallcooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarinamallcooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

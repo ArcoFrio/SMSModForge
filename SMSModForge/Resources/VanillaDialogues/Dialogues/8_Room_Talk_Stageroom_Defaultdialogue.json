@@ -1,0 +1,799 @@
+{
+ "id": "8_Room_Talk/Stageroom/Defaultdialogue",
+ "name": "Defaultdialogue",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  -797693448,
+  -1807451134,
+  840816143,
+  -968713345,
+  -1510889853,
+  -1464989195,
+  -1043240647,
+  -24225707,
+  1702355159
+ ],
+ "nodes": {
+  "-797693448": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Looks like the stage is ready for me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1807451134": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -224350761,
+    403331409,
+    -1151769782
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "God, there are so many people here... I'm a bit nervous, hun.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-224350761": {
+   "kind": "text",
+   "parent": -1807451134,
+   "children": [
+    -2072374158
+   ],
+   "actor": null,
+   "text": "You're gonna be great, I know it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "403331409": {
+   "kind": "text",
+   "parent": -1807451134,
+   "children": [
+    1249974436
+   ],
+   "actor": null,
+   "text": "Remember, they are here for you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1151769782": {
+   "kind": "text",
+   "parent": -1807451134,
+   "children": [
+    1954382829
+   ],
+   "actor": null,
+   "text": "Pull yourself together, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1954382829": {
+   "kind": "text",
+   "parent": -1151769782,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes, yes... I try...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1249974436": {
+   "kind": "text",
+   "parent": 403331409,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You are right... They are here for me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2072374158": {
+   "kind": "text",
+   "parent": -224350761,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-Thanks... That means a lot...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-968713345": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Okay, here I go....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_Only_Done_2[convention-follower-gain-incoming] + 2500",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-follower-gain-incoming",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 2500
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done_2[stage-event] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stage-event",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1464989195": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1530302244,
+    -1186919810,
+    -87236860
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hi everyone, wow, this still feels unreal. When I started, I just wanted to find myself again, to feel confident and alive. I didn’t think anyone would care about my story.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_Only_Done_2[convention-personality] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-personality",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1043240647": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -279898802,
+    837773199,
+    -1458325930
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I never imagined standing here in front of all these faces and cameras. When I joined Starmaker, I was terrified.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_Only_Done_2[convention-personality] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-personality",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-24225707": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1003314020,
+    149398012,
+    -75553955
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Before I started my Starmaker Page, everyone had an opinion. Don’t wear this. Don’t say that. Don’t act like that. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_Only_Done_2[convention-personality] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-personality",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1702355159": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1686290900,
+    429578267,
+    236124517
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let’s stop pretending. You all know me. You’ve seen my videos, my pictures, the way I move when I’m wet and desperate and loving every second of it. That’s me. I moan, I beg, I tease...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_Only_Done_2[convention-personality] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-personality",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1530302244": {
+   "kind": "text",
+   "parent": -1464989195,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "But I learned that people connect to honesty more than perfection. It’s not about being flawless, it’s about being real.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1186919810": {
+   "kind": "text",
+   "parent": -1464989195,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "If there’s one thing I want to say, it’s this: you’re allowed to start over, you’re allowed to shine again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-87236860": {
+   "kind": "text",
+   "parent": -1464989195,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Believe me, the world always needs more kindness and a little courage.\"",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-279898802": {
+   "kind": "text",
+   "parent": -1043240647,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "But then I learned something: confidence isn’t something you find, it’s something you fake until it sticks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1003314020": {
+   "kind": "text",
+   "parent": -24225707,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I was shrinking into someone else’s idea of who I should be. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1686290900": {
+   "kind": "text",
+   "parent": 1702355159,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Every orgasm, every glare, every filthy thought you’ve had watching me, I own it. People call me a slut like it’s supposed to hurt, but it doesn’t.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "429578267": {
+   "kind": "text",
+   "parent": 1702355159,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I turned lust into a career, pleasure into art, and my body into a brand. I fuck like I mean it, I perform like I breathe, and I’m not ashamed of a single second.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "236124517": {
+   "kind": "text",
+   "parent": 1702355159,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So yeah, I’m a slut, I love cocks, and I worked damn hard to be this good at it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "149398012": {
+   "kind": "text",
+   "parent": -24225707,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So I stopped. I started speaking my mind, taking what I wanted, and walking through every door that used to scare me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-75553955": {
+   "kind": "text",
+   "parent": -24225707,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "If that makes some people uncomfortable, good. I didn’t get here by asking permission. I got here by deciding who I am and refusing to apologize for it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "837773199": {
+   "kind": "text",
+   "parent": -1043240647,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A little smile, a teasing glance, a bit of playful charm, and suddenly you stop caring what anyone thinks. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1458325930": {
+   "kind": "text",
+   "parent": -1043240647,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "And I love every second of it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1510889853": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run AnnaOnStage_Sprite and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "AnnaOnStage_Sprite",
+       "of": "GetGameObjectConditions",
+       "path": "5_Levels/55_Stage/AnnaOnStage_Sprite"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ]
+  },
+  "840816143": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1806413588,
+    -306286632,
+    -1882722825
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Listen to that crowd. You can almost smell the tension.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1806413588": {
+   "kind": "text",
+   "parent": 840816143,
+   "children": [
+    -807350210
+   ],
+   "actor": null,
+   "text": "You ready for them?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-306286632": {
+   "kind": "text",
+   "parent": 840816143,
+   "children": [
+    -575383439
+   ],
+   "actor": null,
+   "text": "They’re all waiting for you. Time to give them a show.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-575383439": {
+   "kind": "text",
+   "parent": -306286632,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I’ve got them wrapped around my finger and I haven’t even started.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-807350210": {
+   "kind": "text",
+   "parent": -1806413588,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh, I’m ready. I just like making them wait a little.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1882722825": {
+   "kind": "text",
+   "parent": 840816143,
+   "children": [
+    -483688526
+   ],
+   "actor": null,
+   "text": "You look like you’re about to fuck the whole convention.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-483688526": {
+   "kind": "text",
+   "parent": -1882722825,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Mmh, maybe not the whole convention… but I could make them think about it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Stageroom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Defaultdialogue and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Events_Only_Done_2[convention-outfit-reference] to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-outfit-reference",
+        "list": "Events_Only_Done_2",
+        "type": "game-object"
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Appls20PeoplePolit PE945202",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Appls20PeoplePolit PE945202",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 0.4
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 3 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 3
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

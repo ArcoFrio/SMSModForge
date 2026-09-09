@@ -1,0 +1,830 @@
+{
+ "id": "8_Room_Talk/Clothstore/CharlottePhoenixDressEvent",
+ "name": "CharlottePhoenixDressEvent",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Charlotte",
+  "Phoenix"
+ ],
+ "roots": [
+  1347651715,
+  974729652,
+  -409156343,
+  714708330,
+  -402057170,
+  867134181,
+  -438526439,
+  920762457
+ ],
+ "nodes": {
+  "1347651715": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "This would suit you. Strong lines, sharp fit. Something worthy of my bodyguard.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "974729652": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "A dress? You dragged me here for this? I fight creeps off you, I don’t strut around in designer fabric. Total waste of time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-409156343": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You are at my side often, Phoenix. Eyes are always on us. Presentation matters.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "714708330": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Phoenix",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Presentation? Please. Nobody cares what I’m wearing when I’ve got my fist aimed at their teeth.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-402057170": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "I will make you a deal. You try on one dress for me… and afterward, I...<size=80%> I will let you pound my ass...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "867134181": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Phoenix",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "HAH. You’re serious, aren’t you? You’re offering me the back door if I play dress-up?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-438526439": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "If that is how you wish to phrase it… yes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "920762457": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -782432384,
+    -1607218356
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Hell yeah! Let's have some fun, princess!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Phoenixbust_Casual/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Charlotte_Dress/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-782432384": {
+   "kind": "text",
+   "parent": 920762457,
+   "children": [
+    -772511184,
+    108710311,
+    -1750191297,
+    55607811,
+    933192597,
+    783408312,
+    -52863230,
+    -1348736220,
+    -1058008247,
+    -2138830672,
+    -1730901934,
+    -1532926327,
+    -913077670,
+    553388549,
+    338349471
+   ],
+   "actor": null,
+   "text": "(Follow them)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1607218356": {
+   "kind": "text",
+   "parent": 920762457,
+   "actor": null,
+   "text": "(Let them be)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-772511184": {
+   "kind": "text",
+   "parent": -782432384,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Oh god, Phoenix... your cock feels incredible back there...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CharlottePhoenix_ClothStore (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CharlottePhoenix_ClothStore (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/CharlottePhoenix_ClothStore (1)"
+      }
+     }
+    }
+   ]
+  },
+  "108710311": {
+   "kind": "text",
+   "parent": -782432384,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Fuck... you take it so good, Char. Knew you'd love this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1750191297": {
+   "kind": "text",
+   "parent": -782432384,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Mmm, you're right... I do. Feels so full... so deep...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "55607811": {
+   "kind": "choice",
+   "parent": -782432384,
+   "children": [
+    698882386,
+    1363755452,
+    -852721658
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Fuck~ {PC}? Hngh... Wanna...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CharlottePhoenix_ClothStore (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CharlottePhoenix_ClothStore (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/CharlottePhoenix_ClothStore (2)"
+      }
+     }
+    }
+   ]
+  },
+  "933192597": {
+   "kind": "choice",
+   "parent": -782432384,
+   "children": [
+    1404421414,
+    -530424286
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Wanna help me out here? Backdoor's open for business.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1404421414": {
+   "kind": "text",
+   "parent": 933192597,
+   "actor": null,
+   "text": "Let's make this happen...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-530424286": {
+   "kind": "text",
+   "parent": 933192597,
+   "children": [
+    -542624649
+   ],
+   "actor": null,
+   "text": "I'm good, you two have fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-542624649": {
+   "kind": "text",
+   "parent": -530424286,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Fuck~ Would have loved your thick cock up my ass...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "783408312": {
+   "kind": "text",
+   "parent": -782432384,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Fuck yeah! now we're talking! FhuUUAAACK!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CharlottePhoenix_ClothStore (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CharlottePhoenix_ClothStore (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/CharlottePhoenix_ClothStore (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-52863230": {
+   "kind": "text",
+   "parent": -782432384,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Fuck... yes, Phoenix! Take that big cock like the greedy slut you are!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1348736220": {
+   "kind": "text",
+   "parent": -782432384,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Shit~ he's got some... ah!... horsepower back there!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1058008247": {
+   "kind": "text",
+   "parent": -782432384,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Mmm, don't pretend you're not loving it~ I can feel your cock throb like crazy inside me... Hngaah...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2138830672": {
+   "kind": "choice",
+   "parent": -782432384,
+   "children": [
+    444604871,
+    2025777924,
+    -1212407468
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Fuck~ Char, quit distracting me before I blow early! I... FUCK! HERE I COME! HGNAAAH!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1730901934": {
+   "kind": "text",
+   "parent": -782432384,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Fuck~ fuck, filling me up so deep!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CharlottePhoenix_ClothStore (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CharlottePhoenix_ClothStore (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/CharlottePhoenix_ClothStore (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CharlottePhoenix_ClothStore (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CharlottePhoenix_ClothStore (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/CharlottePhoenix_ClothStore (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1532926327": {
+   "kind": "text",
+   "parent": -782432384,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Oh god, yes~ Phoenix, I can feel you pulsing inside me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-913077670": {
+   "kind": "text",
+   "parent": -782432384,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Shit! Char, you're squeezing me dry~ ah!~ fucking perfect!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "553388549": {
+   "kind": "text",
+   "parent": -782432384,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Mmm, look at us… all messy and satisfied. Someone get a mop...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "338349471": {
+   "kind": "text",
+   "parent": -782432384,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Fuck… next time we're using a damn tarp.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "444604871": {
+   "kind": "text",
+   "parent": -2138830672,
+   "actor": null,
+   "text": "I'm... Fuck, this is too much! Take it, Phoenix!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2025777924": {
+   "kind": "text",
+   "parent": -2138830672,
+   "actor": null,
+   "text": "Fuck~ A load for a load... Perfectly balanced~ Hngaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1212407468": {
+   "kind": "text",
+   "parent": -2138830672,
+   "actor": null,
+   "text": "(Fill her ass)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "698882386": {
+   "kind": "text",
+   "parent": 55607811,
+   "actor": null,
+   "text": "Got room for one more?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1363755452": {
+   "kind": "text",
+   "parent": 55607811,
+   "actor": null,
+   "text": "You two having fun?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-852721658": {
+   "kind": "text",
+   "parent": 55607811,
+   "actor": null,
+   "text": "Charlotte's ass is great, isn't it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Clothstore",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play CharlottePhoenixDressEvent and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[charlottephoenix-worldevents] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "charlottephoenix-worldevents",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "chance",
+     "type": "ConditionChance",
+     "title": "If 0.4 chance to pass",
+     "fields": {
+      "m_Threshold": {
+       "kind": "value",
+       "value": 0.4
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_9[CharlottePhoenixQuest] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "CharlottePhoenixQuest",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Zuri/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte_Dress to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte_Dress",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Charlotte_Dress"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Phoenixbust_Casual to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Phoenixbust_Casual",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Phoenixbust_Casual"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[charlottephoenix-worldevents] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "charlottephoenix-worldevents",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

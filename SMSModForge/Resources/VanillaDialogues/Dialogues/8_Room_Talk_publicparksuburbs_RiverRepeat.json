@@ -1,0 +1,1684 @@
+{
+ "id": "8_Room_Talk/publicparksuburbs/RiverRepeat",
+ "name": "RiverRepeat",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Phoenix",
+  "River"
+ ],
+ "roots": [
+  883994026,
+  -1670891964,
+  682415090,
+  -1647637287,
+  1175354741,
+  -1191530135,
+  1174430625
+ ],
+ "nodes": {
+  "883994026": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "H-Hey, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1175354741": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "So, uh, would you like to commission a new outfit? Maybe a dress? Or something else?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core_2[river-outfitinwork] = 0",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-outfitinwork",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 0
+      }
+     }
+    }
+   ]
+  },
+  "1174430625": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1414805566,
+    -516873874,
+    -1256960601,
+    -1699035715
+   ],
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "You can do me for free... Uh, I mean, I'll do it for free... I just would just ask of you to cover the material cost...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1414805566": {
+   "kind": "text",
+   "parent": 1174430625,
+   "children": [
+    570426193
+   ],
+   "actor": null,
+   "text": "How about a chainmail bikini? ($2000)",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Inventory[chainmail-bikini] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "chainmail-bikini",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 2000",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2000
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-516873874": {
+   "kind": "text",
+   "parent": 1174430625,
+   "children": [
+    -1293394476
+   ],
+   "actor": null,
+   "text": "Let's do a witch cosplay! ($2000)",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Inventory[witch-dress] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "witch-dress",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 2000",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2000
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1256960601": {
+   "kind": "text",
+   "parent": 1174430625,
+   "children": [
+    1421234737
+   ],
+   "actor": null,
+   "text": "Could you create a superhero suit for her? ($2000)",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Inventory[superhero-outfit] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "superhero-outfit",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 2000",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2000
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1699035715": {
+   "kind": "text",
+   "parent": 1174430625,
+   "children": [
+    -627027173
+   ],
+   "actor": null,
+   "text": "I'm good right now, thanks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-627027173": {
+   "kind": "text",
+   "parent": -1699035715,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "O-Okay! I hope you have a nice day...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1421234737": {
+   "kind": "text",
+   "parent": -1256960601,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I'll have it ready next week... Thank you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core_2[river-outfitinwork] = 3",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-outfitinwork",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 3
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -2000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -2000
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[river-outfitcdweek] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-outfitcdweek",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1293394476": {
+   "kind": "text",
+   "parent": -516873874,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I'll have it ready next week... Thank you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core_2[river-outfitinwork] = 2",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-outfitinwork",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 2
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -2000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -2000
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[river-outfitcdweek] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-outfitcdweek",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "570426193": {
+   "kind": "text",
+   "parent": 1414805566,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I'll have it ready next week... Thank you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core_2[river-outfitinwork] = 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-outfitinwork",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -2000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -2000
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[river-outfitcdweek] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-outfitcdweek",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1670891964": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I've finished the cosplay... I hope the model, and you, will enjoy it... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_2[river-outfitinwork] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-outfitinwork",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Inventory[chainmail-bikini] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "chainmail-bikini",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = Chainmail Bikini",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Chainmail Bikini"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "682415090": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I've finished the cosplay... I hope the model, and you, will enjoy it... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_2[river-outfitinwork] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-outfitinwork",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Inventory[witch-dress] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "witch-dress",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = Witch Dress",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Witch Dress"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1647637287": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I've finished the cosplay... I hope the model, and you, will enjoy it... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_2[river-outfitinwork] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-outfitinwork",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Inventory[superhero-outfit] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "superhero-outfit",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = Superhero Outfit",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Superhero Outfit"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1191530135": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1200237225,
+    440056901,
+    972865666,
+    896447453,
+    516942818,
+    -1555246730,
+    1101720545
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Yo! Who’s the hottie you’re hanging with? Damn, look at that figure!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[Riverphoenix-enabled] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Riverphoenix-enabled",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[Riverphoenix-declined] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Riverphoenix-declined",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If CoreFinalStates[cs-riverfinalstage] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cs-riverfinalstage",
+        "list": "CoreFinalStates",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[phoenix-sex-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "phoenix-sex-done",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PhoenixBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PhoenixBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/PhoenixBust"
+      }
+     }
+    }
+   ]
+  },
+  "1200237225": {
+   "kind": "text",
+   "parent": -1191530135,
+   "actor": "Phoenix",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You didn’t tell me you had a girlfriend, dude.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "440056901": {
+   "kind": "text",
+   "parent": -1191530135,
+   "actor": "River",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "W-wait, no! I-I’m not a girl… I’m… ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "972865666": {
+   "kind": "text",
+   "parent": -1191530135,
+   "actor": "Phoenix",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "What?! No way… seriously? Damn, you’re prettier than half the girls I know.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "896447453": {
+   "kind": "choice",
+   "parent": -1191530135,
+   "children": [
+    1732141559,
+    -1082148604,
+    -322098692
+   ],
+   "actor": "River",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "P-please don’t tease me…",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1732141559": {
+   "kind": "text",
+   "parent": 896447453,
+   "children": [
+    -1854671306,
+    849161357
+   ],
+   "actor": null,
+   "text": "Easy, Phoenix. River gets shy about compliments.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1082148604": {
+   "kind": "text",
+   "parent": 896447453,
+   "children": [
+    1568438123,
+    -193788360
+   ],
+   "actor": null,
+   "text": "Don’t call him my girlfriend. He’s my boyfriend.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-322098692": {
+   "kind": "text",
+   "parent": 896447453,
+   "children": [
+    2033758623,
+    -886428939
+   ],
+   "actor": null,
+   "text": "Maybe I’ll let you try his bubble butt. (Start Sharing Route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2033758623": {
+   "kind": "text",
+   "parent": -322098692,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Holy shit, you’re not serious… are you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1854671306": {
+   "kind": "text",
+   "parent": 1732141559,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Aww, but he’s adorable when he blushes!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1568438123": {
+   "kind": "text",
+   "parent": -1082148604,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Ohhh, protective. Got it. Still, boyfriend or not, he’s hot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-193788360": {
+   "kind": "text",
+   "parent": -1082148604,
+   "actor": "River",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "You two are gonna kill me…",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[Riverphoenix-declined] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Riverphoenix-declined",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-886428939": {
+   "kind": "text",
+   "parent": -322098692,
+   "actor": "River",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "W-what?! N-no! Don’t just say that out loud!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[Riverphoenix-enabled] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Riverphoenix-enabled",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "849161357": {
+   "kind": "text",
+   "parent": 1732141559,
+   "actor": "River",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "S-stop… you’re both embarrassing me…",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[Riverphoenix-declined] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Riverphoenix-declined",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "516942818": {
+   "kind": "text",
+   "parent": -1191530135,
+   "actor": "Phoenix",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Ha! You two are wild… I’ll let you lovebirds be, I need to finish my jog.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[Riverphoenix-declined] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Riverphoenix-declined",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/PhoenixBust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1101720545": {
+   "kind": "text",
+   "parent": -1191530135,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Or… if you’re actually serious, we just need to find a spot where we can fuck without getting caught.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[Riverphoenix-declined] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Riverphoenix-declined",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/PhoenixBust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1555246730": {
+   "kind": "text",
+   "parent": -1191530135,
+   "actor": "Phoenix",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Ha! You two are wild… I’ll let you lovebirds be, I need to finish my jog.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[Riverphoenix-declined] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Riverphoenix-declined",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/publicparksuburbs",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play RiverRepeat and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[river-invited] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-invited",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[river-outfitcdweek] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-outfitcdweek",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/River_Base/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active River_Base to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "River_Base",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/River_Base"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/River_Base/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[river-week-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-week-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Room_Talk/publicparksuburbs",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play RiverRepeat and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[river-outfitcdweek] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-outfitcdweek",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[river-outfitsonly] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-outfitsonly",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/River_Base/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active River_Base to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "River_Base",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/River_Base"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/River_Base/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[river-week-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-week-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

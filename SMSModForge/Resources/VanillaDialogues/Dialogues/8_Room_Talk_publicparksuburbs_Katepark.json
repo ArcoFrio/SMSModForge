@@ -1,0 +1,804 @@
+{
+ "id": "8_Room_Talk/publicparksuburbs/Katepark",
+ "name": "Katepark",
+ "index": 4,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Kate"
+ ],
+ "roots": [
+  1028146230,
+  1576598491,
+  -1847904585,
+  620960158,
+  793313176,
+  1573861158,
+  -1098377728,
+  850356494,
+  1481867795
+ ],
+ "nodes": {
+  "1028146230": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Are...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1576598491": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kate",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Are you following me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1847904585": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2131330888,
+    -1626820043
+   ],
+   "actor": "Kate",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "You can be honest...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2131330888": {
+   "kind": "text",
+   "parent": -1847904585,
+   "children": [
+    1996212577
+   ],
+   "actor": null,
+   "text": "No, I'm not. A friend of mine lives nearby.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1626820043": {
+   "kind": "text",
+   "parent": -1847904585,
+   "children": [
+    -253193263
+   ],
+   "actor": null,
+   "text": "Maybe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1996212577": {
+   "kind": "text",
+   "parent": -2131330888,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Okay... I think I believe you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-253193263": {
+   "kind": "text",
+   "parent": -1626820043,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That's a bit creepy, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "620960158": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1071685686,
+    1213335561,
+    -755297404
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Are you... Are you afraid of the future?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1071685686": {
+   "kind": "text",
+   "parent": 620960158,
+   "children": [
+    -2133329795
+   ],
+   "actor": null,
+   "text": "I'm scared as fuck.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1213335561": {
+   "kind": "text",
+   "parent": 620960158,
+   "children": [
+    -580589358
+   ],
+   "actor": null,
+   "text": "Why do you ask?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-755297404": {
+   "kind": "text",
+   "parent": 620960158,
+   "children": [
+    32063982
+   ],
+   "actor": null,
+   "text": "Not really. I take it one day at a time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1098377728": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    25699509,
+    892128079,
+    137310979
+   ],
+   "actor": "Kate",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Sometimes I dream of not taking the bus back and just traveling on ahead.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "25699509": {
+   "kind": "text",
+   "parent": -1098377728,
+   "children": [
+    -497734217
+   ],
+   "actor": null,
+   "text": "I would miss you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "892128079": {
+   "kind": "text",
+   "parent": -1098377728,
+   "children": [
+    -589961899
+   ],
+   "actor": null,
+   "text": "Are you alright, Kate?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "137310979": {
+   "kind": "text",
+   "parent": -1098377728,
+   "children": [
+    128896872
+   ],
+   "actor": null,
+   "text": "You can't run away from everything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "128896872": {
+   "kind": "text",
+   "parent": 137310979,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "I know... That's why it's just a dream.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-589961899": {
+   "kind": "text",
+   "parent": 892128079,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "I don't think so...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-497734217": {
+   "kind": "text",
+   "parent": 25699509,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "You would miss me? But... Why?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Inside-Dialogue-Variable-Short] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Inside-Dialogue-Variable-Short",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "32063982": {
+   "kind": "text",
+   "parent": -755297404,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "I wish I could do that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-580589358": {
+   "kind": "text",
+   "parent": 1213335561,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "I was just curious...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Inside-Dialogue-Variable-Short] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Inside-Dialogue-Variable-Short",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-2133329795": {
+   "kind": "text",
+   "parent": -1071685686,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Same.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Inside-Dialogue-Variable-Short] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Inside-Dialogue-Variable-Short",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "793313176": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Sometimes I take the bus and just sit there until it gets to its last stop.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1573861158": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Today it brought me here... I like it here... It's calm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1481867795": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    805433500,
+    636014049
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "It was nice, you know, you being here. Almost feels like destiny.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "805433500": {
+   "kind": "choice",
+   "parent": 1481867795,
+   "children": [
+    1374888215,
+    -75495832
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Please visit me at work soon, yes? ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "636014049": {
+   "kind": "text",
+   "parent": 1481867795,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Goodbye.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done_2[kate-park] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-park",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_Only_Done_2[kate-romance-max-3] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-romance-max-3",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "type": "InstructionQuestTaskValue",
+     "title": "Earn Kate’s trust and make her feel safe. + 1",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Gabriel Training",
+        "of": "Quest"
+       },
+       "m_TaskId": -619506573
+      },
+      "m_Value": {
+       "m_Operation": "Add",
+       "m_Value": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1374888215": {
+   "kind": "text",
+   "parent": 805433500,
+   "children": [
+    -1734469315
+   ],
+   "actor": null,
+   "text": "Do you want me to drive you home?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-75495832": {
+   "kind": "text",
+   "parent": 805433500,
+   "actor": null,
+   "text": "See you around, Kate.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "850356494": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I think... I want to go back home now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1734469315": {
+   "kind": "text",
+   "parent": 1374888215,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "All good. I've already purchased a bus ticket for my return trip. Thanks though.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/publicparksuburbs",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Katepark and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[kate-park] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-park",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[kate-free-day-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-free-day-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/KatePullover/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KatePullover to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KatePullover",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/KatePullover"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/KatePullover/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[kate-free-day-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-free-day-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

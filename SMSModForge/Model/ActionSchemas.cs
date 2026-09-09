@@ -89,12 +89,10 @@ public static class ActionSchemas
         {
             new ParamSchema("signal", "Signal", ParamType.SignalRef, "",
                 "GC2 signal name (the same string vanilla Trigger components use)."),
-        },
-        [NodeActionTypes.EmitSignalDelayed] = new[]
-        {
-            new ParamSchema("signal", "Signal", ParamType.SignalRef, "", ""),
-            new ParamSchema("seconds", "Delay (s)", ParamType.Float, "1",
-                "Seconds to wait before emitting the signal (action returns immediately)."),
+            new ParamSchema("seconds", "Delay (s)", ParamType.Float, "0",
+                "Seconds to wait first. 0 sends it straight away, which is what " +
+                "most signals want. Either way the dialogue carries on immediately " +
+                "rather than pausing."),
         },
         [NodeActionTypes.TransitionLevels] = new[]
         {
@@ -147,14 +145,15 @@ public static class ActionSchemas
                 "Ease back to the position the object was at before the first MoveGameObject, " +
                 "then release it (so e.g. parallax resumes). Ignores X / Y / Relative — use " +
                 "this for the pan-back at the end of a scene instead of guessing the home coords."),
+            new ParamSchema("relative", "Relative", ParamType.Bool, "false",
+                "When true, X/Y are added to the current local position; when false they're absolute."),
             new ParamSchema("x", "X", ParamType.Float, "0", "World X (offset if 'Relative')."),
             new ParamSchema("y", "Y", ParamType.Float, "0", "World Y (offset if 'Relative')."),
             new ParamSchema("seconds", "Duration (s)", ParamType.Float, "1",
                 "Eased (ease-in + ease-out) move duration. The target is HELD afterward " +
                 "so a parallax effect can't snap it back. 0 = instant snap. Note: world " +
                 "units (e.g. a level pan is y = -17, not -1700)."),
-            new ParamSchema("relative", "Relative", ParamType.Bool, "false",
-                "When true, X/Y are added to the current local position; when false they're absolute."),
+        
         },
         [NodeActionTypes.SpinGameObject] = new[]
         {

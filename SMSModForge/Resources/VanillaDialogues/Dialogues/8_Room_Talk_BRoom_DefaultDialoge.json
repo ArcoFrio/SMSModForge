@@ -1,0 +1,869 @@
+{
+ "id": "8_Room_Talk/BRoom/DefaultDialoge",
+ "name": "DefaultDialoge",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "You"
+ ],
+ "roots": [
+  -452418409,
+  122367175,
+  -530057673
+ ],
+ "nodes": {
+  "-530057673": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -184231146,
+    -1301467902,
+    -619007502,
+    373231509,
+    841147804,
+    1770619038
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Hey, {B}.",
+   "tag": "start",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-184231146": {
+   "kind": "text",
+   "parent": -530057673,
+   "children": [
+    1681866096
+   ],
+   "actor": null,
+   "text": "How are you doing, {B}?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-619007502": {
+   "kind": "text",
+   "parent": -530057673,
+   "children": [
+    -926914070
+   ],
+   "actor": null,
+   "text": "Anything I can do to help?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1770619038": {
+   "kind": "text",
+   "parent": -530057673,
+   "children": [
+    -1193639139
+   ],
+   "actor": null,
+   "text": "See you around.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1681866096": {
+   "kind": "text",
+   "parent": -184231146,
+   "actor": "Adrian",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I'm not sure about this, man. The new expansion for Planet of Warfare drops next month, and we might be in the middle of moving around that time...",
+   "jump": {
+    "mode": "Jump",
+    "to": "start"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-926914070": {
+   "kind": "text",
+   "parent": -619007502,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I'm good, {PC}... But like, thanks.",
+   "jump": {
+    "mode": "Jump",
+    "to": "start"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1193639139": {
+   "kind": "text",
+   "parent": 1770619038,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Yeah...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "122367175": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    -971579995,
+    -1651062296,
+    1161944380,
+    -1715552637,
+    1611229933,
+    -1190342710
+   ],
+   "actor": null,
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "-971579995": {
+   "kind": "text",
+   "parent": 122367175,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Next time could you knock before coming in?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1651062296": {
+   "kind": "text",
+   "parent": 122367175,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Oh shit, a surprise visit by everyone's favorite.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1161944380": {
+   "kind": "text",
+   "parent": 122367175,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Is it just me or is {M} acting different lately?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1715552637": {
+   "kind": "text",
+   "parent": 122367175,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I wish it was raining, I want to take a cozy nap...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1611229933": {
+   "kind": "text",
+   "parent": 122367175,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "It's an online game, I can't pause it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1190342710": {
+   "kind": "text",
+   "parent": 122367175,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Can't wait for the next episode of The Boys.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "373231509": {
+   "kind": "text",
+   "parent": -530057673,
+   "children": [
+    2094530,
+    -711377222,
+    -258522032
+   ],
+   "actor": null,
+   "text": "Here's the 20k for Japan.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[adrian-japan-money-needed] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-japan-money-needed",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[adrian-japan-money-given] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-japan-money-given",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-B-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-B-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 20000",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 20000
+       }
+      }
+     }
+    }
+   ]
+  },
+  "2094530": {
+   "kind": "text",
+   "parent": 373231509,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Holy fuck! You are literally the best {B} ever!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -20000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -20000
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[adrian-japan-money-given] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-japan-money-given",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-711377222": {
+   "kind": "choice",
+   "parent": 373231509,
+   "children": [
+    -282356870,
+    1509605581
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I gotta tell my friends, soon I'll be eating real fucking ramen! Thank you, {B}.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-282356870": {
+   "kind": "text",
+   "parent": -711377222,
+   "children": [
+    -713345681
+   ],
+   "actor": null,
+   "text": "Of course. You're my {B}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1509605581": {
+   "kind": "text",
+   "parent": -711377222,
+   "children": [
+    -179534690
+   ],
+   "actor": null,
+   "text": "You owe me, don't forget that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-713345681": {
+   "kind": "text",
+   "parent": -282356870,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Wow, that’s the nicest and gayest thing you've ever said to me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-179534690": {
+   "kind": "text",
+   "parent": 1509605581,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Of course, man. Whatever you need.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-258522032": {
+   "kind": "text",
+   "parent": 373231509,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Japan, here I come!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-452418409": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "G-Go away, man. I don't want you here.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[Adrian-is-angry] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Adrian-is-angry",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-B-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-B-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "841147804": {
+   "kind": "text",
+   "parent": -530057673,
+   "children": [
+    1706361308,
+    -1344442049
+   ],
+   "actor": null,
+   "text": "Come swimming with me and Samantha.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_5[b-sam-meets] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "b-sam-meets",
+        "list": "Events_5",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[adrian-swim-invitation-active] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-swim-invitation-active",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1706361308": {
+   "kind": "text",
+   "parent": 841147804,
+   "children": [
+    1895204925,
+    2023544088
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Uh, sure... That sounds fun... Uh... where are you guys even swimming?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[adrian-swim-invitation-active] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-swim-invitation-active",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[sam-gangbang-done] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sam-gangbang-done",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1344442049": {
+   "kind": "text",
+   "parent": 841147804,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hell yeah! Let's go~ I'm already getting hard just thinking about Sam!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[adrian-swim-invitation-active] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-swim-invitation-active",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[sam-gangbang-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sam-gangbang-done",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1301467902": {
+   "kind": "text",
+   "parent": -530057673,
+   "children": [
+    -314754018,
+    147164166
+   ],
+   "actor": null,
+   "text": "Hey. Happy birthday, man.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Holidays[holiday-adrianbd] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "holiday-adrianbd",
+        "list": "Holidays",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Holidays[holiday-event-one-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "holiday-event-one-done",
+        "list": "Holidays",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-314754018": {
+   "kind": "text",
+   "parent": -1301467902,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yo! Thanks! Another year of questionable life choices!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Holidays[holiday-event-one-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "holiday-event-one-done",
+        "list": "Holidays",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "147164166": {
+   "kind": "text",
+   "parent": -1301467902,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I’m not sayin’ I’ve got my shit together, but I think I'm trying...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1895204925": {
+   "kind": "text",
+   "parent": 1706361308,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Public pool out in the suburbs. That one near Ridgeview, behind the old cinema.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2023544088": {
+   "kind": "text",
+   "parent": 1706361308,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh. Uh... that actually sounds kinda cool. yeah, okay. I’ll be there.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/BRoom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DefaultDialoge and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace SMSModForge.Model;
 
@@ -102,4 +102,45 @@ public sealed class SceneDef
     /// </summary>
     [JsonProperty("sound", Order = 6)]
     public SceneSoundMode Sound { get; set; } = SceneSoundMode.Silent;
+
+    /// <summary>
+    /// Whether an animated scene repeats.
+    /// <para/>
+    /// True by default, because a scene stays on screen while the player reads
+    /// past it and an animation that stops is nearly always a mistake. A
+    /// one-shot holds its last frame rather than disappearing.
+    /// <para/>
+    /// Means nothing for a still, and is not written for one.
+    /// </summary>
+    [JsonProperty("loop", Order = 7)]
+    public bool Loop { get; set; } = true;
+
+    public bool ShouldSerializeLoop() => IsAnimated && !Loop;
+
+    /// <summary>
+    /// How loud a video's own sound track plays, from 0 to 1.
+    /// <para/>
+    /// Only meaningful for a video that HAS one — the editor reads that from
+    /// the file and shows the slider accordingly, so this is never a control
+    /// over nothing. Full volume by default: a video with sound was given one
+    /// on purpose.
+    /// </summary>
+    [JsonProperty("volume", Order = 8)]
+    public float Volume { get; set; } = 1f;
+
+    public bool ShouldSerializeVolume()
+        => SMSModForge.Shared.MediaKinds.KindOf(SceneSprite ?? "")
+               == SMSModForge.Shared.MediaKinds.Video
+           && Volume < 1f;
+
+    /// <summary>Whether this scene moves — decided by the extension of the art
+    /// the author picked, which is the thing they control.</summary>
+    [JsonIgnore]
+    public bool IsAnimated => SMSModForge.Shared.MediaKinds.IsAnimated(SceneSprite ?? "");
+
+    /// <summary>Whether it is a video specifically, which is the only kind
+    /// that can carry sound.</summary>
+    [JsonIgnore]
+    public bool IsVideo => SMSModForge.Shared.MediaKinds.KindOf(SceneSprite ?? "")
+                           == SMSModForge.Shared.MediaKinds.Video;
 }

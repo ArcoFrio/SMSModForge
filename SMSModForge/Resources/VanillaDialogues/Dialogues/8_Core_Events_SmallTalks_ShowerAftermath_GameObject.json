@@ -1,0 +1,391 @@
+{
+ "id": "8_Core_Events/SmallTalks/ShowerAftermath/GameObject",
+ "name": "GameObject",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna"
+ ],
+ "roots": [
+  957701803,
+  -2103387996
+ ],
+ "nodes": {
+  "957701803": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Do you realize I check my own Starmaker page? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-2103387996": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1022750889,
+    1360889871
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "How dare you take a photo of me in the shower! You are in serious trouble!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1022750889": {
+   "kind": "text",
+   "parent": -2103387996,
+   "children": [
+    -838208132
+   ],
+   "actor": null,
+   "text": "I'm sorry, {M}. I shouldn't have done that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1360889871": {
+   "kind": "text",
+   "parent": -2103387996,
+   "children": [
+    365875164
+   ],
+   "actor": null,
+   "text": "It boosted the numbers, didn't it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "365875164": {
+   "kind": "choice",
+   "parent": 1360889871,
+   "children": [
+    -1166427391,
+    1283489888
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I guess it did... But that doesn't matter! It was still wrong, and you should have asked!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[MCorruption] + 2",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MCorruption",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 2
+      }
+     }
+    },
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-838208132": {
+   "kind": "text",
+   "parent": -1022750889,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm glad you understand your mistake. Let's forget about this incident; we all make mistakes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[MLove] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MLove",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-1166427391": {
+   "kind": "text",
+   "parent": 365875164,
+   "children": [
+    -1903045675,
+    544539153
+   ],
+   "actor": null,
+   "text": "So, if I had asked, you would have done it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1283489888": {
+   "kind": "text",
+   "parent": 365875164,
+   "children": [
+    1646414087
+   ],
+   "actor": null,
+   "text": "You're right, I had no right to do that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1903045675": {
+   "kind": "text",
+   "parent": -1166427391,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "N-No! I mean... You know what I mean...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Lewd to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Lewd",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Lewd"
+      }
+     }
+    }
+   ]
+  },
+  "1646414087": {
+   "kind": "text",
+   "parent": 1283489888,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I'm glad you understand your mistake. Let's forget about this incident; we all make mistakes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "544539153": {
+   "kind": "text",
+   "parent": -1166427391,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Next time just ask...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/SmallTalks/ShowerAftermath",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play GameObject and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueStart'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueStart"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[shower-photo-aftermath] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "shower-photo-aftermath",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueEnd'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueEnd"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

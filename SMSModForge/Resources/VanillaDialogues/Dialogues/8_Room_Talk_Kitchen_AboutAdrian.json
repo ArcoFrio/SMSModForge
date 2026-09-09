@@ -1,0 +1,770 @@
+{
+ "id": "8_Room_Talk/Kitchen/AboutAdrian",
+ "name": "AboutAdrian",
+ "index": 8,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "You"
+ ],
+ "roots": [
+  -1677922513,
+  -2118908521,
+  -141069907,
+  -571872805,
+  -1125864606,
+  1151990690,
+  1210539282
+ ],
+ "nodes": {
+  "-1677922513": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1461872054,
+    209703002
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Hey, honey. You seem a little puzzled. Is something on your mind?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Speak with Anna about Adrian.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Secrets (Adrian)",
+        "of": "Quest"
+       },
+       "m_TaskId": -968853259
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "1461872054": {
+   "kind": "text",
+   "parent": -1677922513,
+   "children": [
+    -1948247608,
+    1766995311
+   ],
+   "actor": null,
+   "text": "Adrian is subscribed to your Starmaker.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "209703002": {
+   "kind": "text",
+   "parent": -1677922513,
+   "children": [
+    -1675259167
+   ],
+   "actor": null,
+   "text": "It's all good, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1675259167": {
+   "kind": "text",
+   "parent": 209703002,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That's great! And if you ever need to talk, I'm always here for you.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1948247608": {
+   "kind": "text",
+   "parent": 1461872054,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh my god... A-Adrian? My Adrian? No—no way... That can't be true...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2118908521": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Yes, I found some photos from your page on his computer.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-571872805": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    2103677254,
+    2018611953
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "This is... W-What should we do? I... I don't know what to do, {PC}... ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "2103677254": {
+   "kind": "text",
+   "parent": -571872805,
+   "actor": null,
+   "text": "Maybe you should seduce him? (Start sharing route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2018611953": {
+   "kind": "text",
+   "parent": -571872805,
+   "children": [
+    73398531,
+    1192199223
+   ],
+   "actor": null,
+   "text": "Nothing at all. I'm sure he won't snitch.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "73398531": {
+   "kind": "text",
+   "parent": 2018611953,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It's strange, isn't it? Now whenever we have breakfast together... I'll keep remembering he saw me like that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1192199223": {
+   "kind": "text",
+   "parent": 2018611953,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You're right... Adrian would never hurt me.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1125864606": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    456803976,
+    1364167196,
+    -239947464
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "W-What? N-No way... I could never... He's my Adrian... I mean, you're definitely attractive, but he's... he's...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Lewd to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Lewd",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Lewd"
+      }
+     }
+    }
+   ]
+  },
+  "456803976": {
+   "kind": "text",
+   "parent": -1125864606,
+   "children": [
+    -1600756773
+   ],
+   "actor": null,
+   "text": "Having him join us is safer than leaving him jealous.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1364167196": {
+   "kind": "text",
+   "parent": -1125864606,
+   "children": [
+    666173743
+   ],
+   "actor": null,
+   "text": "Poor guy's suffering, watching his {M}'s tits bounce around all day...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-239947464": {
+   "kind": "text",
+   "parent": -1125864606,
+   "children": [
+    812756743
+   ],
+   "actor": null,
+   "text": "Don't you want both your {S}'s stretching you open? Filling every hole of yours...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "812756743": {
+   "kind": "text",
+   "parent": -239947464,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "F-Fuck... If he's even half your size, we could've had so much fun together...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "666173743": {
+   "kind": "text",
+   "parent": 1364167196,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I don't want him to suffer... Oh god, did you go through this too? I just want what's best for you and Adrian. Always...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1600756773": {
+   "kind": "text",
+   "parent": 456803976,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I know how this ends. It's only a matter of time before he realizes it's you behind the camera... not Josef.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1151990690": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "God... Al—alright, fine. I'll do it. But I... I want to do this my way, okay? Let's talk to your brother in his room.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1210539282": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I can't believe this is actually happening... What the hell am I doing...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[anna-will-seduce-adrian] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-will-seduce-adrian",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_9[MilfAdrian-Expansion] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MilfAdrian-Expansion",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "1766995311": {
+   "kind": "text",
+   "parent": 1461872054,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "H-He's really been... watching those posts? All of them?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-141069907": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Fuck... the things I've done on camera... the things I've said... And he...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Kitchen",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AboutAdrian and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[we-need-to-talk-about-adrian] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "we-need-to-talk-about-adrian",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[b-pc-succesfully-hacked] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "b-pc-succesfully-hacked",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Core_NoSave[Anna-Default-Outfit] to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Anna-Default-Outfit",
+        "list": "Core_NoSave",
+        "type": "game-object"
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[we-need-to-talk-about-adrian] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "we-need-to-talk-about-adrian",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Room_Talk/Kitchen/Kitchen_Conditions_1",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AboutAdrian and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[we-need-to-talk-about-adrian] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "we-need-to-talk-about-adrian",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[b-pc-succesfully-hacked] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "b-pc-succesfully-hacked",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Core_NoSave[Anna-Default-Outfit] to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Anna-Default-Outfit",
+        "list": "Core_NoSave",
+        "type": "game-object"
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[we-need-to-talk-about-adrian] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "we-need-to-talk-about-adrian",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

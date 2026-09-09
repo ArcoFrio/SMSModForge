@@ -1,0 +1,1102 @@
+{
+ "id": "8_Room_Talk/Gasstation/SofiaDefault",
+ "name": "SofiaDefault",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Sofia"
+ ],
+ "roots": [
+  262358743,
+  996048403,
+  1409742668
+ ],
+ "nodes": {
+  "262358743": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "{PC}. I'm glad you could make it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1409742668": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -935059366,
+    -612702544,
+    727090835,
+    -685488868,
+    -1404688732,
+    574658026
+   ],
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "So, anything new?",
+   "tag": "anythingnew",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-935059366": {
+   "kind": "text",
+   "parent": 1409742668,
+   "children": [
+    -884354861,
+    1302724899,
+    -2051321099
+   ],
+   "actor": null,
+   "text": "There's a problem. Emma is on Mario's side.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[emma-corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-corrupted",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Emma-Betrays-Mario-Route] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Emma-Betrays-Mario-Route",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-884354861": {
+   "kind": "text",
+   "parent": -935059366,
+   "actor": "Sofia",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Shit! That's... Fuck.. Alright, alright... Let me think...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-685488868": {
+   "kind": "text",
+   "parent": 1409742668,
+   "children": [
+    1067066864,
+    -746632256,
+    594461060
+   ],
+   "actor": null,
+   "text": "How are you doing?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1067066864": {
+   "kind": "text",
+   "parent": -685488868,
+   "actor": "Sofia",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I’m holding up, but this job is no walk in the park. Every day feels like walking a tightrope. But I’m not backing down until we take Mario down.",
+   "jump": {
+    "mode": "Jump",
+    "to": "anythingnew"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Mario-In-Prison] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-In-Prison",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1404688732": {
+   "kind": "text",
+   "parent": 1409742668,
+   "children": [
+    -1908145707
+   ],
+   "actor": null,
+   "text": "Are you single?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1908145707": {
+   "kind": "text",
+   "parent": -1404688732,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "That’s private, {PC}. Let’s keep our focus where it needs to be... on bringing down Mario.",
+   "jump": {
+    "mode": "Jump",
+    "to": "anythingnew"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "574658026": {
+   "kind": "text",
+   "parent": 1409742668,
+   "children": [
+    -1833152976
+   ],
+   "actor": null,
+   "text": "See you around.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1833152976": {
+   "kind": "text",
+   "parent": 574658026,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Stay safe, yeah?",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1302724899": {
+   "kind": "text",
+   "parent": -935059366,
+   "actor": "Sofia",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Yeah... We have no other choice than to get him to talk. Take this recording device.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[Recording-Route-Active] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Recording-Route-Active",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[Emma-Betrays-Mario-Route] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Emma-Betrays-Mario-Route",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = Recording Device",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Recording Device"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-2051321099": {
+   "kind": "text",
+   "parent": -935059366,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "If we can get him talking, that recording could be the nail in his coffin. Just make sure he doesn’t catch on—Mario’s no fool.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-746632256": {
+   "kind": "text",
+   "parent": -685488868,
+   "actor": "Sofia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I’m actually feeling pretty damn good, {PC}. Mario’s finally behind bars, and everything’s pointing to him being locked up for at least 22 years. We did it. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Mario-In-Prison] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-In-Prison",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "594461060": {
+   "kind": "text",
+   "parent": -685488868,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "This city’s got a real shot at cleaning up now, thanks to you",
+   "jump": {
+    "mode": "Jump",
+    "to": "anythingnew"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Mario-In-Prison] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-In-Prison",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-612702544": {
+   "kind": "text",
+   "parent": 1409742668,
+   "children": [
+    -102554126,
+    1643791278
+   ],
+   "actor": null,
+   "text": "I'm ready to get you in.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Sofia-Sharing-Active] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Sofia-Sharing-Active",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[sofia-at-villa] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-at-villa",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Mario-In-Prison] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-In-Prison",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Enough-Evidence-Gathered] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Enough-Evidence-Gathered",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-102554126": {
+   "kind": "text",
+   "parent": -612702544,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Once we’re inside, I’ll be searching for any documents, ledgers, or anything that can tie Mario to his corrupt activities. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1643791278": {
+   "kind": "choice",
+   "parent": -612702544,
+   "children": [
+    -2002676986,
+    -1311506175,
+    -2101388896,
+    -194302608
+   ],
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "He’s smart, but even the smartest leave a trail. I’ll also be listening in for anything incriminating if he starts talking.",
+   "tag": "discusssof",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2002676986": {
+   "kind": "text",
+   "parent": 1643791278,
+   "children": [
+    -1509073388
+   ],
+   "actor": null,
+   "text": "What if things go sideways?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1311506175": {
+   "kind": "text",
+   "parent": 1643791278,
+   "children": [
+    1774676389
+   ],
+   "actor": null,
+   "text": "How far are you willing to go?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2101388896": {
+   "kind": "text",
+   "parent": 1643791278,
+   "children": [
+    251107109
+   ],
+   "actor": null,
+   "text": "Let's do it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-194302608": {
+   "kind": "text",
+   "parent": 1643791278,
+   "children": [
+    1294050105
+   ],
+   "actor": null,
+   "text": "Hmm, let's delay it to next week.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1294050105": {
+   "kind": "text",
+   "parent": -194302608,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Don't rush it, we've only got this one shot. Take your time.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "251107109": {
+   "kind": "text",
+   "parent": -2101388896,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Alright, {PC}, this is it. We can't fuck it up. I'll be waiting at his home.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[sofia-at-villa] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-at-villa",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[sofiapassengersceneinc] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofiapassengersceneinc",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1774676389": {
+   "kind": "text",
+   "parent": -1311506175,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "As far as it takes. I’m ready to play the part, and I’ve been in worse situations. ",
+   "jump": {
+    "mode": "Jump",
+    "to": "discusssof"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1509073388": {
+   "kind": "text",
+   "parent": -2002676986,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "If things start to go wrong, I’ll signal you. We’ll need to get out fast, but let’s hope it doesn’t come to that. Just stay calm, and remember why we’re doing this.",
+   "jump": {
+    "mode": "Jump",
+    "to": "discusssof"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "727090835": {
+   "kind": "text",
+   "parent": 1409742668,
+   "children": [
+    -63153580
+   ],
+   "actor": null,
+   "text": "Let's arrest Mario.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Enough-Evidence-Gathered] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Enough-Evidence-Gathered",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Mario-In-Prison] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-In-Prison",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Mario-About-To-Be-Arrested] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-About-To-Be-Arrested",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-63153580": {
+   "kind": "text",
+   "parent": 727090835,
+   "actor": "Sofia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yes. We've got enough evidence. Let's do it. I'll wait with my team at his place. Today it ends!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[Mario-About-To-Be-Arrested] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-About-To-Be-Arrested",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "996048403": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "But was it really necessary to continue back then? I told you that I got everything. My ass still hurts from having two cocks stretch it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Sofia-Was-That-necessary] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Sofia-Was-That-necessary",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[Sofia-Was-That-necessary] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Sofia-Was-That-necessary",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Gasstation",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play SofiaDefault and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[sofia-gasstation-first-talk] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-gasstation-first-talk",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Sofia-Path-Accepted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Sofia-Path-Accepted",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[sofia-taken-by-mob] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-taken-by-mob",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[sofiahome-unlocked] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofiahome-unlocked",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia_Police to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia_Police",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Sofia_Police"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'ForceEnableUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "ForceEnableUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

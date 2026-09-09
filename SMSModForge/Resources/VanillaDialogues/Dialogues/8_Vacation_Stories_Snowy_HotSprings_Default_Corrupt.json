@@ -1,0 +1,1128 @@
+{
+ "id": "8_Vacation_Stories/Snowy_HotSprings/Default_Corrupt",
+ "name": "Default_Corrupt",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "Stranger"
+ ],
+ "roots": [
+  -1239064048,
+  523324069,
+  2045706435,
+  -1929389152,
+  1268263973,
+  -980519800
+ ],
+ "nodes": {
+  "-1239064048": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Brrr! Let's get into the water quickly, my body needs warmth!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[wnt-hotspring-pro] ≥ 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "wnt-hotspring-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "523324069": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1688155253,
+    301042468,
+    -1291625741
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, wow... everyone’s so relaxed here. It’s so... natural, isn’t it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[wnt-hotspring-pro] ≥ 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "wnt-hotspring-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1929389152": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, fuck. This feels so good. The temperature is just right...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-1688155253": {
+   "kind": "text",
+   "parent": 523324069,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Look at them! Big titties, exposed cocks... people just enjoying themselves.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "301042468": {
+   "kind": "choice",
+   "parent": 523324069,
+   "children": [
+    -421535621,
+    -327875247,
+    -575789195,
+    -40370234
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I love it!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-421535621": {
+   "kind": "text",
+   "parent": 301042468,
+   "children": [
+    -16825577
+   ],
+   "actor": null,
+   "text": "I know, right? We fit right in.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-16825577": {
+   "kind": "text",
+   "parent": -421535621,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It's a shame there's no such place back at home...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-327875247": {
+   "kind": "text",
+   "parent": 301042468,
+   "children": [
+    64701475
+   ],
+   "actor": null,
+   "text": "I'm glad you like it here. Let's get in, I'm freezing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "64701475": {
+   "kind": "text",
+   "parent": -327875247,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-575789195": {
+   "kind": "text",
+   "parent": 301042468,
+   "children": [
+    1267487041,
+    1741006988
+   ],
+   "actor": null,
+   "text": "It's part of their culture. Don't make be weird.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1267487041": {
+   "kind": "text",
+   "parent": -575789195,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Relax, {PC}... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1291625741": {
+   "kind": "text",
+   "parent": 523324069,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let's get wet!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Vacation_Save[wnt-hotspring-pro] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "wnt-hotspring-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "1741006988": {
+   "kind": "text",
+   "parent": -575789195,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "But I can't make any promises.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1268263973": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2025849601,
+    2102796063,
+    -694507165
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So... How about we have some fun? ...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2025849601": {
+   "kind": "text",
+   "parent": 1268263973,
+   "children": [
+    1170906824
+   ],
+   "actor": null,
+   "text": "Let's just relax... We both could take a break.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1170906824": {
+   "kind": "text",
+   "parent": -2025849601,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hmm... Alright, sure. ",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2102796063": {
+   "kind": "text",
+   "parent": 1268263973,
+   "children": [
+    -1709355699
+   ],
+   "actor": null,
+   "text": "Let's give them a good show.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1709355699": {
+   "kind": "text",
+   "parent": 2102796063,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes! Let's show them what we can do!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[DialogueVariation] + 3",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 3
+      }
+     }
+    }
+   ]
+  },
+  "-694507165": {
+   "kind": "text",
+   "parent": 1268263973,
+   "children": [
+    -801281856
+   ],
+   "actor": null,
+   "text": "What do you have in mind?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-801281856": {
+   "kind": "text",
+   "parent": -694507165,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hmm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[DialogueVariation] + 3",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 3
+      }
+     }
+    }
+   ]
+  },
+  "2045706435": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Nude to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Nude"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaAndPlayer to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaAndPlayer",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/104_WinterHotspring/AnnaAndPlayer"
+      }
+     }
+    }
+   ]
+  },
+  "-980519800": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1695116720,
+    -1253126452,
+    916864016,
+    -1115036194,
+    973488572,
+    -519614365,
+    296695727,
+    -64785680,
+    1729946257,
+    2698210,
+    3249565,
+    482950596,
+    -143197063
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh my...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1695116720": {
+   "kind": "text",
+   "parent": -980519800,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Someone's in quite the mood...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaHotSpringSolo (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaHotSpringSolo (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaHotSpringSolo (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1253126452": {
+   "kind": "text",
+   "parent": -980519800,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Even under water, your cock feels large and heavy in my hand...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "916864016": {
+   "kind": "choice",
+   "parent": -980519800,
+   "children": [
+    959197075,
+    2140926615,
+    -139279465
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let's show everyone how massive my {S} is!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "959197075": {
+   "kind": "text",
+   "parent": 916864016,
+   "children": [
+    2127787487
+   ],
+   "actor": null,
+   "text": "What are you doing?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2127787487": {
+   "kind": "text",
+   "parent": 959197075,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{M} will milk you dry in front of everyone...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2140926615": {
+   "kind": "text",
+   "parent": 916864016,
+   "children": [
+    1969918632
+   ],
+   "actor": null,
+   "text": "(Follow her lead)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1969918632": {
+   "kind": "text",
+   "parent": 2140926615,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Just like that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-139279465": {
+   "kind": "text",
+   "parent": 916864016,
+   "children": [
+    1936765580
+   ],
+   "actor": null,
+   "text": "It's better if we stop...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1936765580": {
+   "kind": "text",
+   "parent": -139279465,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, um, alright... Let's... Let's just relax the water then...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1115036194": {
+   "kind": "text",
+   "parent": -980519800,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'll take good care of you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaHotSpringSolo (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaHotSpringSolo (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaHotSpringSolo (2)"
+      }
+     }
+    }
+   ]
+  },
+  "973488572": {
+   "kind": "random",
+   "parent": -980519800,
+   "children": [
+    -735722967,
+    -16772211,
+    -1803073440
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.01,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "-519614365": {
+   "kind": "choice",
+   "parent": -980519800,
+   "children": [
+    -1405029757,
+    196650338,
+    1905135772
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It feels so good... Being able to show my love for your fat cock in a public place... ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "296695727": {
+   "kind": "text",
+   "parent": -980519800,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm stroking my {S}'s huge cock... In front of strangers... And I love it... Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-64785680": {
+   "kind": "random",
+   "parent": -980519800,
+   "children": [
+    -1803768593,
+    -4837841,
+    715146915
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.01,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "1729946257": {
+   "kind": "text",
+   "parent": -980519800,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Time for some real action!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaHotSpringSolo (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaHotSpringSolo (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaHotSpringSolo (4)"
+      }
+     }
+    }
+   ]
+  },
+  "2698210": {
+   "kind": "choice",
+   "parent": -980519800,
+   "children": [
+    -1285152783,
+    -2062490355,
+    -2072922293
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Do you like that, {PC}? My huge, warm boobs milking your massive dick? ....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "3249565": {
+   "kind": "text",
+   "parent": -980519800,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh my! Muaaaah! ... Mmmm.....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaHotSpringSolo (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaHotSpringSolo (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaHotSpringSolo (5)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaHotSpringSolo (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaHotSpringSolo (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaHotSpringSolo (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-735722967": {
+   "kind": "text",
+   "parent": 973488572,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "W-What are they doing? Holy cow...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1803768593": {
+   "kind": "text",
+   "parent": -64785680,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "His cock is so fucking huge... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-4837841": {
+   "kind": "text",
+   "parent": -64785680,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Such a lucky dude...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "715146915": {
+   "kind": "text",
+   "parent": -64785680,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Oh my god... She will make him cum...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-16772211": {
+   "kind": "text",
+   "parent": 973488572,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Is she.. Is she jerking him off!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1803073440": {
+   "kind": "text",
+   "parent": 973488572,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Oh. My. God.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "482950596": {
+   "kind": "text",
+   "parent": -980519800,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "We should make your cum part of my skincare routine...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[hotspring-titfuck-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hotspring-titfuck-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-143197063": {
+   "kind": "text",
+   "parent": -980519800,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let's relax a bit before we head back to our hut...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1285152783": {
+   "kind": "text",
+   "parent": 2698210,
+   "actor": null,
+   "text": "F-Fuck... I'm... I'm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2062490355": {
+   "kind": "text",
+   "parent": 2698210,
+   "actor": null,
+   "text": "Here it comes! A big load for {M}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2072922293": {
+   "kind": "text",
+   "parent": 2698210,
+   "actor": null,
+   "text": "(Cum without warning her)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1405029757": {
+   "kind": "text",
+   "parent": -519614365,
+   "actor": null,
+   "text": "Keep stroking me, {M}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "196650338": {
+   "kind": "text",
+   "parent": -519614365,
+   "actor": null,
+   "text": "Maybe we should move here....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1905135772": {
+   "kind": "text",
+   "parent": -519614365,
+   "actor": null,
+   "text": "(Smile at the other guests watching you)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-40370234": {
+   "kind": "text",
+   "parent": 301042468,
+   "children": [
+    -1215533100
+   ],
+   "actor": null,
+   "text": "(Lewd) I’m sure they love staring at your fat tits.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Lewd] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Lewd",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1215533100": {
+   "kind": "text",
+   "parent": -40370234,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Hey! They’re not fat, they’re just… big, okay?! But yeah, they do... God, they are staring.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Snowy_HotSprings",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Default_Corrupt and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "branches": [
+    "corrupt"
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Nude"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

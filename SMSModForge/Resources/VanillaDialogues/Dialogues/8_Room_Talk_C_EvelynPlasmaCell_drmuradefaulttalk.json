@@ -1,0 +1,623 @@
+{
+ "id": "8_Room_Talk/C_EvelynPlasmaCell/drmuradefaulttalk",
+ "name": "drmuradefaulttalk",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Mura"
+ ],
+ "roots": [
+  -1962772180,
+  -1878236622
+ ],
+ "nodes": {
+  "-1962772180": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    -30162937,
+    -784494870,
+    335086328,
+    -1955835827
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1878236622": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1098924292,
+    -115830023,
+    1952301977
+   ],
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "Hurry up, before Evelyn notices you talking to me.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1098924292": {
+   "kind": "text",
+   "parent": -1878236622,
+   "children": [
+    -246076224
+   ],
+   "actor": null,
+   "text": "I have some questions.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-246076224": {
+   "kind": "choice",
+   "parent": -1098924292,
+   "children": [
+    -1498639019,
+    1666425154,
+    926712237,
+    -1832724729,
+    -1109867403
+   ],
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "Of course, just hurry.",
+   "tag": "muraquestions",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1952301977": {
+   "kind": "text",
+   "parent": -1878236622,
+   "children": [
+    -508710747
+   ],
+   "actor": null,
+   "text": "I’ll be back once I find something.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-508710747": {
+   "kind": "text",
+   "parent": 1952301977,
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "Good. Try not to contaminate anything on your way out.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-30162937": {
+   "kind": "text",
+   "parent": -1962772180,
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "Every second I’m in this tank, she learns more about how to hurt people.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-784494870": {
+   "kind": "text",
+   "parent": -1962772180,
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "Careful. If her sensors pick you up, we’re both dead.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "335086328": {
+   "kind": "text",
+   "parent": -1962772180,
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "Please tell me you’ve got something useful.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1955835827": {
+   "kind": "text",
+   "parent": -1962772180,
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "Good, you came back. I was starting to think you bailed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1498639019": {
+   "kind": "text",
+   "parent": -246076224,
+   "children": [
+    -1147307735,
+    668517938,
+    -1964722279
+   ],
+   "actor": null,
+   "text": "What’s Evelyn really doing down here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1666425154": {
+   "kind": "text",
+   "parent": -246076224,
+   "children": [
+    -1388295414,
+    705867278
+   ],
+   "actor": null,
+   "text": "How can I open your cell?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1388295414": {
+   "kind": "text",
+   "parent": 1666425154,
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "I don’t know. She locked this chamber herself.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1147307735": {
+   "kind": "text",
+   "parent": -1498639019,
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "What hasn’t she done? She said she needed my “samples” for cross-species compatibility.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "926712237": {
+   "kind": "text",
+   "parent": -246076224,
+   "children": [
+    1597417010,
+    -2028674808
+   ],
+   "actor": null,
+   "text": "How long have you been here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1597417010": {
+   "kind": "text",
+   "parent": 926712237,
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "Six months, maybe more. She keeps me sedated half the time so I can’t track the days. Wakes me when she wants data, puts me back under when she’s bored.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "668517938": {
+   "kind": "text",
+   "parent": -1498639019,
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "She meant sperm extraction... daily, mechanical, clinical. She called it “preserving human virility for testing.”",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1832724729": {
+   "kind": "text",
+   "parent": -246076224,
+   "children": [
+    573731487,
+    1652226999,
+    277674852
+   ],
+   "actor": null,
+   "text": "Why shouldn’t I just call the cops?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "573731487": {
+   "kind": "text",
+   "parent": -1832724729,
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "Are you insane? You think the cops would even make it through the front door?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1652226999": {
+   "kind": "text",
+   "parent": -1832724729,
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "And if they did come, she’d wipe this whole place clean before they even parked their car.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1964722279": {
+   "kind": "text",
+   "parent": -1498639019,
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "She talks like a scientist while milking people like cattle. I’d laugh if it didn’t make me sick.",
+   "jump": {
+    "mode": "Jump",
+    "to": "muraquestions"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "705867278": {
+   "kind": "text",
+   "parent": 1666425154,
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "The interface next to me’s just a monitor; I can’t access anything from inside. Try the console over there. Near the cryo units. If anything can crack this cage, it’s that.",
+   "jump": {
+    "mode": "Jump",
+    "to": "muraquestions"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2028674808": {
+   "kind": "text",
+   "parent": 926712237,
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "It’s like being trapped in a fucking nightmare.",
+   "jump": {
+    "mode": "Jump",
+    "to": "muraquestions"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1109867403": {
+   "kind": "text",
+   "parent": -246076224,
+   "children": [
+    1982688197
+   ],
+   "actor": null,
+   "text": "That's all for now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1982688197": {
+   "kind": "text",
+   "parent": -1109867403,
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "Good. Be careful, I count on you.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "277674852": {
+   "kind": "text",
+   "parent": -1832724729,
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "You’d end up arrested for trespassing while she quietly relocates everything to another warehouse. No cops. No headlines.",
+   "jump": {
+    "mode": "Jump",
+    "to": "muraquestions"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-115830023": {
+   "kind": "text",
+   "parent": -1878236622,
+   "children": [
+    1272971970
+   ],
+   "actor": null,
+   "text": "[Check the console]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1272971970": {
+   "kind": "choice",
+   "parent": -115830023,
+   "children": [
+    1702536545,
+    772897835
+   ],
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "Careful now, don't press any buttons unless you know what you're doing.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1702536545": {
+   "kind": "text",
+   "parent": 1272971970,
+   "children": [
+    -673420105
+   ],
+   "actor": null,
+   "text": "[Press random buttons]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "772897835": {
+   "kind": "text",
+   "parent": 1272971970,
+   "children": [
+    1307353787
+   ],
+   "actor": null,
+   "text": "[Step back]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1307353787": {
+   "kind": "text",
+   "parent": 772897835,
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "Good call.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-673420105": {
+   "kind": "text",
+   "parent": 1702536545,
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "Gah~AH! Ah! Fuck! Why did you do that!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Magical Poof",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Magical Poof",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CFXR Electric Explosion + Text to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CFXR Electric Explosion + Text",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/136_HarborScifiPrison/CFXR Electric Explosion + Text"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/C_EvelynPlasmaCell",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play drmuradefaulttalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[drmura-met] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "drmura-met",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "branches": [
+    "muradefault"
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

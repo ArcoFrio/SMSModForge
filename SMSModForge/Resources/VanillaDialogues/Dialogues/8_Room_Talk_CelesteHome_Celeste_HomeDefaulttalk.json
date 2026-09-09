@@ -1,0 +1,2018 @@
+{
+ "id": "8_Room_Talk/CelesteHome/Celeste_HomeDefaulttalk",
+ "name": "Celeste_HomeDefaulttalk",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Celeste"
+ ],
+ "roots": [
+  1864613012,
+  -1799742248,
+  1359499899,
+  2086695964,
+  1512197982
+ ],
+ "nodes": {
+  "1359499899": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1118780096,
+    -418104974,
+    500460739,
+    -1807659324
+   ],
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Welcome.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[celeste-firstvisit] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-firstvisit",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[celeste-partnerstart] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-partnerstart",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[celestefirsttalkhome] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celestefirsttalkhome",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1118780096": {
+   "kind": "text",
+   "parent": 1359499899,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "You and Anna… quite the unusual partnership.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Arrange a meeting with Starmaker’s top model.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Starborn (Celeste)",
+        "of": "Quest"
+       },
+       "m_TaskId": 1813187919
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-418104974": {
+   "kind": "choice",
+   "parent": 1359499899,
+   "children": [
+    1308780248,
+    612368621,
+    -314728638
+   ],
+   "actor": "Celeste",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "A devoted {S}, guiding his own {M} into a world she was never meant to enter. Some would call it unnatural.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1308780248": {
+   "kind": "text",
+   "parent": -418104974,
+   "actor": null,
+   "text": "I’m just helping her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "612368621": {
+   "kind": "text",
+   "parent": -418104974,
+   "actor": null,
+   "text": "Is that a threat?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-314728638": {
+   "kind": "text",
+   "parent": -418104974,
+   "actor": null,
+   "text": "Why, does that bother you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "500460739": {
+   "kind": "text",
+   "parent": 1359499899,
+   "actor": "Celeste",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I wonder… does she know what kind of man she’s raising?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1807659324": {
+   "kind": "text",
+   "parent": 1359499899,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Or does she still believe you're the boy she once knew?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_8[celestefirsttalkhome] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celestefirsttalkhome",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1864613012": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "You have returned.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[celestefirsttalkhome] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celestefirsttalkhome",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_8[celeste-brokenvar] ≠ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-brokenvar",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Different",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1512197982": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    482049571,
+    1096413607,
+    -2114862856,
+    -2125710605,
+    -852900671,
+    -931534172,
+    -1840639897
+   ],
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Let us talk.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "482049571": {
+   "kind": "text",
+   "parent": 1512197982,
+   "children": [
+    2027825657,
+    1534819818
+   ],
+   "actor": null,
+   "text": "Why are you stealing Anna’s followers?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Core_2[celeste-quest-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-quest-done",
+        "list": "Core_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1096413607": {
+   "kind": "text",
+   "parent": 1512197982,
+   "children": [
+    -808974659,
+    613333691,
+    -1919011175,
+    -2001385464
+   ],
+   "actor": null,
+   "text": "Who even are you? There’s no info on you anywhere.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2114862856": {
+   "kind": "text",
+   "parent": 1512197982,
+   "children": [
+    1921739270,
+    -534149916,
+    1761970052,
+    -1412089506
+   ],
+   "actor": null,
+   "text": "What do you want from me and Anna?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Core_2[celeste-quest-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-quest-done",
+        "list": "Core_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1840639897": {
+   "kind": "text",
+   "parent": 1512197982,
+   "children": [
+    -1009814826
+   ],
+   "actor": null,
+   "text": "I want to leave now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2086695964": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Since you are here.",
+   "tag": "rooty",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1009814826": {
+   "kind": "text",
+   "parent": -1840639897,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Of course. ",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-852900671": {
+   "kind": "text",
+   "parent": 1512197982,
+   "children": [
+    -326743416,
+    1313694656,
+    -239990265,
+    343853010,
+    -1486921462,
+    1377952311,
+    -1803726592,
+    525338914
+   ],
+   "actor": null,
+   "text": "Can't we just work together?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[celeste-firstvisit] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-firstvisit",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[celeste-partnerstart] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-partnerstart",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "2027825657": {
+   "kind": "text",
+   "parent": 482049571,
+   "actor": "Celeste",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Stealing? Such an emotional word. I take what gravitates toward me. It’s not theft—it’s inevitability.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1534819818": {
+   "kind": "text",
+   "parent": 482049571,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "People don’t always need a reason to do something. Sometimes, they do it simply because they can. Just like me.",
+   "jump": {
+    "mode": "Jump",
+    "to": "rooty"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-808974659": {
+   "kind": "text",
+   "parent": 1096413607,
+   "actor": "Celeste",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I don’t remember.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "613333691": {
+   "kind": "text",
+   "parent": 1096413607,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "I recall a life before this one… but it was someone else’s. Another girl, another existence. And then, one day…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1919011175": {
+   "kind": "text",
+   "parent": 1096413607,
+   "actor": "Celeste",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "She died.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2001385464": {
+   "kind": "text",
+   "parent": 1096413607,
+   "actor": "Celeste",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "And in her place, I was born. That is all that matters.",
+   "jump": {
+    "mode": "Jump",
+    "to": "rooty"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1921739270": {
+   "kind": "text",
+   "parent": -2114862856,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "To stay where you belong. Beneath me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-534149916": {
+   "kind": "text",
+   "parent": -2114862856,
+   "actor": "Celeste",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "This industry was built on delusion. So many believe they can stand at the top, but only one can truly hold it. And that burden?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1761970052": {
+   "kind": "text",
+   "parent": -2114862856,
+   "actor": "Celeste",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "It isn’t yours. Or hers.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1412089506": {
+   "kind": "text",
+   "parent": -2114862856,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "You can rise, you can fight—but in the end, you’ll remain exactly where you’re meant to be.",
+   "jump": {
+    "mode": "Jump",
+    "to": "rooty"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-326743416": {
+   "kind": "text",
+   "parent": -852900671,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "She still hides in the shadows. If she fears the stage, she is not worthy of the crown.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_7[LIVESTREAMS-ENABLED] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "LIVESTREAMS-ENABLED",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-239990265": {
+   "kind": "text",
+   "parent": -852900671,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Not enough. Influence is measured in devotion, not effort. Come back when they follow without question.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Subscriber] < 30000",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Subscriber",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Less",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 30000
+       }
+      }
+     }
+    }
+   ]
+  },
+  "343853010": {
+   "kind": "text",
+   "parent": -852900671,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "The masses have begun to gather. A small kingdom, but a kingdom nonetheless.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Subscriber] ≥ 30000",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Subscriber",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 30000
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1313694656": {
+   "kind": "text",
+   "parent": -852900671,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "She has stepped into the light. Good. Visibility is the first test… and the first temptation.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_7[LIVESTREAMS-ENABLED] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "LIVESTREAMS-ENABLED",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1486921462": {
+   "kind": "text",
+   "parent": -852900671,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "A fractured foundation cannot support an empire. Fix it. Or it will collapse beneath you.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Achievements[anna-saved] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-saved",
+        "list": "Achievements",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1377952311": {
+   "kind": "text",
+   "parent": -852900671,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "She has made peace with herself. A rare thing. Broken queens never hold their thrones for long.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1803726592": {
+   "kind": "text",
+   "parent": -852900671,
+   "actor": "Celeste",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You’ve done what few can. You’ve shaped her into something almost worthy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "525338914": {
+   "kind": "text",
+   "parent": -852900671,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Very well. We will speak again at StarCon. Perhaps… you will convince me.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_8[celeste-partnerstart] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-partnerstart",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_8[celeste-firstvisit] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-firstvisit",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Try to persuade Celeste to support Anna’s rise.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Starborn (Celeste)",
+        "of": "Quest"
+       },
+       "m_TaskId": 400938478
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-931534172": {
+   "kind": "text",
+   "parent": 1512197982,
+   "children": [
+    -1436527358,
+    -1398770949,
+    361746609,
+    52022382,
+    799726211
+   ],
+   "actor": null,
+   "text": "I feel something has changed between us.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[celeste-starconfirsttime] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-starconfirsttime",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_8[celeste-home] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-home",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1436527358": {
+   "kind": "text",
+   "parent": -931534172,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "It’s strange… Anna was nothing. A woman past her prime, lost in the noise. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1398770949": {
+   "kind": "text",
+   "parent": -931534172,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Yet now, she has you—someone who builds her up, pushes her forward. And look at her now… thriving.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "361746609": {
+   "kind": "text",
+   "parent": -931534172,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "And me? I’ve been alone at the top for so long, I don’t even know what it would be like to have someone beside me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[celeste-sexcd] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-sexcd",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "52022382": {
+   "kind": "text",
+   "parent": -931534172,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "I wonder…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "799726211": {
+   "kind": "choice",
+   "parent": -931534172,
+   "children": [
+    -1404152613,
+    881771538
+   ],
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Perhaps that’s why I’m asking you. Just this once… let me see what it’s like.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1404152613": {
+   "kind": "text",
+   "parent": 799726211,
+   "children": [
+    1092444962,
+    740061920,
+    1632299843,
+    -343291094,
+    656115954,
+    -1090348042,
+    987346385,
+    -630296643,
+    -1888380487,
+    -146761138,
+    -448611488,
+    1025505659,
+    -1696495290,
+    -900571303
+   ],
+   "actor": null,
+   "text": "You sure you can handle it? (Show her your cock)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "881771538": {
+   "kind": "text",
+   "parent": 799726211,
+   "children": [
+    -1441693562
+   ],
+   "actor": null,
+   "text": "No way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1441693562": {
+   "kind": "text",
+   "parent": 881771538,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "One question remains: Is it you who is not ready for me, or can you sense that I am not ready for you?",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1092444962": {
+   "kind": "text",
+   "parent": -1404152613,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "It's.. Massive...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CelesteBJ (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CelesteBJ (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/CelesteBJ (1)"
+      }
+     }
+    }
+   ]
+  },
+  "740061920": {
+   "kind": "text",
+   "parent": -1404152613,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "I've seen it before, on Anna's page... But in person, it's different...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1632299843": {
+   "kind": "choice",
+   "parent": -1404152613,
+   "children": [
+    1095069964,
+    1997376008,
+    1043826575
+   ],
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Can I ... May I touch it?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-343291094": {
+   "kind": "text",
+   "parent": -1404152613,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "I've never seen such a flawless cock before. The shape, the size... it's absolutely breathtaking.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CelesteBJ (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CelesteBJ (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/CelesteBJ (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1095069964": {
+   "kind": "text",
+   "parent": 1632299843,
+   "children": [
+    1263764434
+   ],
+   "actor": null,
+   "text": "Be my guest.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1263764434": {
+   "kind": "text",
+   "parent": 1095069964,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "T-Thank you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1997376008": {
+   "kind": "text",
+   "parent": 1632299843,
+   "children": [
+    540244581
+   ],
+   "actor": null,
+   "text": "If you ask nicely.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "540244581": {
+   "kind": "text",
+   "parent": 1997376008,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "May I... May I please touch it? Yes?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1043826575": {
+   "kind": "text",
+   "parent": 1632299843,
+   "children": [
+    -147373510
+   ],
+   "actor": null,
+   "text": "(Gently clap your dick against her face)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-147373510": {
+   "kind": "text",
+   "parent": 1043826575,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Oh, Oh my... I... I will take this as a yes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "656115954": {
+   "kind": "text",
+   "parent": -1404152613,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "And the scent... intoxicating. Pheromones flooding my senses, making me weak in the knees. I need more.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1090348042": {
+   "kind": "text",
+   "parent": -1404152613,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Mmmph... *slurp*... ohhhh fuck yessss...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CelesteBJ (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CelesteBJ (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/CelesteBJ (3)"
+      }
+     }
+    }
+   ]
+  },
+  "987346385": {
+   "kind": "text",
+   "parent": -1404152613,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Your cock tastes even better than it smells. I can't get enough..",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1888380487": {
+   "kind": "text",
+   "parent": -1404152613,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "I want to worship this magnificent cock until you flood my throat with your hot cum.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-630296643": {
+   "kind": "choice",
+   "parent": -1404152613,
+   "children": [
+    1224851577,
+    -41205282,
+    -695635989
+   ],
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Anna is such a lucky woman. You know, {PC}... Why not leave her, I could give you everything you will ever need.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1224851577": {
+   "kind": "text",
+   "parent": -630296643,
+   "actor": null,
+   "text": "Don't try me, Celeste. You can't compete with her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-41205282": {
+   "kind": "text",
+   "parent": -630296643,
+   "actor": null,
+   "text": "You should show me your worth before making such claims.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-695635989": {
+   "kind": "text",
+   "parent": -630296643,
+   "actor": null,
+   "text": "Perhaps I will.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-146761138": {
+   "kind": "choice",
+   "parent": -1404152613,
+   "children": [
+    2139733239,
+    -1539290189,
+    -1228412567
+   ],
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Would you like that? Would you like me to swallow every last drop?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2139733239": {
+   "kind": "text",
+   "parent": -146761138,
+   "actor": null,
+   "text": "Let's see... If... If you can handle my load... Hnnguaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1539290189": {
+   "kind": "text",
+   "parent": -146761138,
+   "actor": null,
+   "text": "Open wide, Celeste. I'll bless your throat with my seed!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1228412567": {
+   "kind": "text",
+   "parent": -146761138,
+   "actor": null,
+   "text": "(Flood her throat)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-448611488": {
+   "kind": "text",
+   "parent": -1404152613,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "GULP! MMHMMMMMM! MMMAAAH! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CelesteBJ (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CelesteBJ (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/CelesteBJ (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CelesteBJ (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CelesteBJ (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/CelesteBJ (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1025505659": {
+   "kind": "text",
+   "parent": -1404152613,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Thmmoo mucchmm... Gulp! Gulp! Gulp!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1696495290": {
+   "kind": "text",
+   "parent": -1404152613,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "W-What have I done... An essence of my being is leaving me... I can... I can feel it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CelesteBJ (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CelesteBJ (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/CelesteBJ (5)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CelesteBJ (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CelesteBJ (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/CelesteBJ (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-900571303": {
+   "kind": "text",
+   "parent": -1404152613,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "No, this is not right... I'm not like this... I... {PC}... Leave... I... Curse your perfect member...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_8[celeste-home] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-home",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-2125710605": {
+   "kind": "text",
+   "parent": 1512197982,
+   "children": [
+    -586741660
+   ],
+   "actor": null,
+   "text": "In the mood for some fun?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_8[celeste-home] ≥ 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-home",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[celeste-sexcd] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-sexcd",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-586741660": {
+   "kind": "text",
+   "parent": -2125710605,
+   "actor": "Celeste",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Yes... Please...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave2[adaptive-sex-inc] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adaptive-sex-inc",
+        "list": "Core_NoSave2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1799742248": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    746622874,
+    -1326850529,
+    959937501,
+    -1467493447
+   ],
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "You came back.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_8[celeste-brokenvar] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-brokenvar",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "746622874": {
+   "kind": "choice",
+   "parent": -1799742248,
+   "children": [
+    459522696,
+    548669410
+   ],
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "I wonder why. There’s nothing left for you here.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "459522696": {
+   "kind": "text",
+   "parent": 746622874,
+   "children": [
+    94147265,
+    -585023206
+   ],
+   "actor": null,
+   "text": "Thought I’d see what’s left of the ‘untouchable’ Celeste.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "548669410": {
+   "kind": "text",
+   "parent": 746622874,
+   "children": [
+    -1102056175,
+    1533266092,
+    922573144
+   ],
+   "actor": null,
+   "text": "Because I don’t think you deserve to be alone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1102056175": {
+   "kind": "text",
+   "parent": 548669410,
+   "actor": "Celeste",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Alone…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "94147265": {
+   "kind": "text",
+   "parent": 459522696,
+   "actor": "Celeste",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "And? Are you satisfied?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-585023206": {
+   "kind": "text",
+   "parent": 459522696,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "The great Celeste, reduced to this. I imagine it’s quite the sight.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1533266092": {
+   "kind": "text",
+   "parent": 548669410,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Yes. I suppose I am, aren’t I?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "922573144": {
+   "kind": "text",
+   "parent": 548669410,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Mabye I always was.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1326850529": {
+   "kind": "text",
+   "parent": -1799742248,
+   "actor": "Celeste",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Tell me, then…",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_8[celeste-brokenvar] = 3",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-brokenvar",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 3
+      }
+     }
+    }
+   ]
+  },
+  "959937501": {
+   "kind": "choice",
+   "parent": -1799742248,
+   "children": [
+    1378185950,
+    -1969921594,
+    -1847003548,
+    -2101338917
+   ],
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Is Anna happy?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1378185950": {
+   "kind": "text",
+   "parent": 959937501,
+   "actor": null,
+   "text": "Yes, she is.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1969921594": {
+   "kind": "text",
+   "parent": 959937501,
+   "actor": null,
+   "text": "That's for her to decide, but I think so.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1847003548": {
+   "kind": "text",
+   "parent": 959937501,
+   "actor": null,
+   "text": "Not yet, but she will be.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2101338917": {
+   "kind": "text",
+   "parent": 959937501,
+   "actor": null,
+   "text": "I don't think she will ever be happy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1467493447": {
+   "kind": "text",
+   "parent": -1799742248,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "I wonder if deep down, she feels as empty as I do.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/CelesteHome",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Celeste_HomeDefaulttalk and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[temp-stored-very-short-term] = None",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "none"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active XXX_Celeste_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "XXX_Celeste_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/XXX_Celeste_Bust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Celeste_Sex and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Celeste_Sex",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Room_Talk/CelesteHome/Celeste_Sex"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

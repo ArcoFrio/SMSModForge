@@ -1,0 +1,151 @@
+{
+ "id": "8_Room_Talk/Gasstation/DefaultDialoge",
+ "name": "DefaultDialoge",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "You"
+ ],
+ "roots": [
+  974323730
+ ],
+ "nodes": {
+  "974323730": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1701959892,
+    -348187273
+   ],
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Hmm...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1701959892": {
+   "kind": "text",
+   "parent": 974323730,
+   "children": [
+    -153032822
+   ],
+   "actor": null,
+   "text": "[Clean Car] [$20]",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 20",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 20
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-348187273": {
+   "kind": "text",
+   "parent": 974323730,
+   "actor": null,
+   "text": "[Leave]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-153032822": {
+   "kind": "text",
+   "parent": -1701959892,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -20",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -20
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[Car-Dirt] = 0",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Car-Dirt",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 0
+      }
+     }
+    }
+   ]
+  }
+ }
+}

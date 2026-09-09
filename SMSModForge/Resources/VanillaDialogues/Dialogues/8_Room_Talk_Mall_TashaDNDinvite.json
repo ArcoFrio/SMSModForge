@@ -1,0 +1,468 @@
+{
+ "id": "8_Room_Talk/Mall/TashaDNDinvite",
+ "name": "TashaDNDinvite",
+ "index": 10,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Tasha"
+ ],
+ "roots": [
+  -306582105,
+  2101051282,
+  -1392111432,
+  -1727229596,
+  -1897539075
+ ],
+ "nodes": {
+  "-306582105": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    2060450213,
+    -41487240,
+    2122315664
+   ],
+   "actor": "Tasha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Well, well. Didn’t expect to see someone I actually like in this mall.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2101051282": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    2060607208,
+    -1830723487,
+    939958783,
+    1651088059
+   ],
+   "actor": "Tasha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hmmm... Hey {PC}, you ever played Dungeon Master 3E before?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2060450213": {
+   "kind": "text",
+   "parent": -306582105,
+   "children": [
+    -1260507448
+   ],
+   "actor": null,
+   "text": "Didn’t expect to see you here either. You good?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-41487240": {
+   "kind": "text",
+   "parent": -306582105,
+   "children": [
+    1864812590
+   ],
+   "actor": null,
+   "text": "What’s with the flyers? You promoting something?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2122315664": {
+   "kind": "text",
+   "parent": -306582105,
+   "children": [
+    -1260464069
+   ],
+   "actor": null,
+   "text": "Wanna take a break? There’s this spot nearby with killer burgers.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1260464069": {
+   "kind": "text",
+   "parent": 2122315664,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Heh. Appreciate the invite, but I promised myself I’d flyer this whole area first. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1864812590": {
+   "kind": "text",
+   "parent": -41487240,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Yup. Starting up a Dungeon Master 3E campaign at the shop... figured it’s a fun way to pull in new faces.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1260507448": {
+   "kind": "text",
+   "parent": 2060450213,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Alive, caffeinated, and slightly dead inside. So yeah, normal. Just out here trying to get nerds into my store without selling my soul.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1392111432": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "I’m thinking of running some sessions at the store. Y'know, pull in some new foot traffic, get people hanging out again. Nerds, weirdos, couples looking to flirt through their characters... the usual.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2060607208": {
+   "kind": "text",
+   "parent": 2101051282,
+   "actor": null,
+   "text": "Yeah, a little.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1830723487": {
+   "kind": "text",
+   "parent": 2101051282,
+   "children": [
+    69365451
+   ],
+   "actor": null,
+   "text": "Nope, never touched it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "939958783": {
+   "kind": "text",
+   "parent": 2101051282,
+   "children": [
+    -253243422
+   ],
+   "actor": null,
+   "text": "Is that the one with dice and dragons?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1651088059": {
+   "kind": "text",
+   "parent": 2101051282,
+   "children": [
+    -1873720834
+   ],
+   "actor": null,
+   "text": "Why? You trying to recruit me into your cult?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "69365451": {
+   "kind": "text",
+   "parent": -1830723487,
+   "actor": "Tasha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Heh. Figures. Don’t worry, it’s not that complicated.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-253243422": {
+   "kind": "text",
+   "parent": 939958783,
+   "actor": "Tasha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Heh. Figures. Don’t worry, it’s not that complicated.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1873720834": {
+   "kind": "text",
+   "parent": 1651088059,
+   "actor": "Tasha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Please, if I had a cult I wouldn't be handing out these flyers myself.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1727229596": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Tasha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "If you wanna join, you're officially invited. Just make sure to bring a character sheet. You can find all the stuff online.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1897539075": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Well, I have to hand out a few more flyers. See you around, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Mall",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play TashaDNDinvite and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[tabletop-tashaintroductiondone] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tabletop-tashaintroductiondone",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[Tasha-met] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Tasha-met",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Tasha_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Tasha_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Tasha_Default"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Tasha_Default/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[tabletop-tashaintroductiondone] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tabletop-tashaintroductiondone",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

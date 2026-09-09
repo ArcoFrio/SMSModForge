@@ -1,0 +1,1313 @@
+{
+ "id": "8_Core_Events/Trips/Hiking/EndDialogue",
+ "name": "EndDialogue",
+ "index": 6,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Anna",
+  "Continue",
+  "Josef"
+ ],
+ "roots": [
+  -1414366397,
+  -675416978,
+  -1088177090,
+  430467780
+ ],
+ "nodes": {
+  "-675416978": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -248670780,
+    1698758252
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Sure thing, honey.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1414366397": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "That should do. I'll get the fire going, Anna. You take care of the marshmallows.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-248670780": {
+   "kind": "text",
+   "parent": -675416978,
+   "actor": null,
+   "text": "Hey, {M}. Can I take a photo of you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1698758252": {
+   "kind": "text",
+   "parent": -675416978,
+   "children": [
+    145053756
+   ],
+   "actor": null,
+   "text": "[Relax and enjoy some marshmallows]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "145053756": {
+   "kind": "text",
+   "parent": 1698758252,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Everthing's ready. Come around!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "430467780": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -2000517486,
+    -602400950,
+    764930059,
+    -206275077
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "S-Sure, is this spot okay?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2000517486": {
+   "kind": "random",
+   "parent": 430467780,
+   "children": [
+    1684995675,
+    -212717124,
+    -875365265
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "This is a great idea. We should take more photos in general. Time flies bies so fast...",
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "1684995675": {
+   "kind": "text",
+   "parent": -2000517486,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 73_hike1 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "73_hike1",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/73_hike1"
+      }
+     }
+    }
+   ]
+  },
+  "-212717124": {
+   "kind": "text",
+   "parent": -2000517486,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 74_hike2 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "74_hike2",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/74_hike2"
+      }
+     }
+    }
+   ]
+  },
+  "-875365265": {
+   "kind": "text",
+   "parent": -2000517486,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 75_hike3 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "75_hike3",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/75_hike3"
+      }
+     }
+    }
+   ]
+  },
+  "-602400950": {
+   "kind": "text",
+   "parent": 430467780,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Woah, {M}. When did you learn to pose like that?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "764930059": {
+   "kind": "text",
+   "parent": 430467780,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Your {M}'s a natural. Great shot, {PC}. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-206275077": {
+   "kind": "text",
+   "parent": 430467780,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-Thanks everyone, It's really not that special...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1088177090": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    230535604,
+    -1341965341,
+    -1926217999
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Good idea, hun. I've read that outddoor content has grown quite popular on Starmaker!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-B-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-B-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "230535604": {
+   "kind": "text",
+   "parent": -1088177090,
+   "children": [
+    -1728539519,
+    1676984729,
+    2029851349
+   ],
+   "actor": null,
+   "text": "Just smile, be yourself.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1341965341": {
+   "kind": "text",
+   "parent": -1088177090,
+   "children": [
+    568935109,
+    1199596073,
+    -1587466720
+   ],
+   "actor": null,
+   "text": "Kneel down and spread your legs.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1926217999": {
+   "kind": "text",
+   "parent": -1088177090,
+   "children": [
+    2010389667,
+    815694190,
+    23702372
+   ],
+   "actor": null,
+   "text": "Come closer, play with your tits.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "568935109": {
+   "kind": "text",
+   "parent": -1341965341,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 76_hike4spread to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "76_hike4spread",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/76_hike4spread"
+      }
+     }
+    }
+   ]
+  },
+  "2010389667": {
+   "kind": "text",
+   "parent": -1926217999,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 77hike4tits to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "77hike4tits",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/77hike4tits"
+      }
+     }
+    }
+   ]
+  },
+  "-1728539519": {
+   "kind": "text",
+   "parent": 230535604,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 75_hike3 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "75_hike3",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/75_hike3"
+      }
+     }
+    }
+   ]
+  },
+  "815694190": {
+   "kind": "text",
+   "parent": -1926217999,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Fuck, {M}. That's so hot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "23702372": {
+   "kind": "text",
+   "parent": -1926217999,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "You're such a naughty wife, Anna...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1676984729": {
+   "kind": "text",
+   "parent": 230535604,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "As always, you look absolutely beautiful.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2029851349": {
+   "kind": "text",
+   "parent": 230535604,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Yeah, {M}. You're a real catch...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1199596073": {
+   "kind": "text",
+   "parent": -1341965341,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Are you wet, Anna? I can see some glistening down there...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1587466720": {
+   "kind": "text",
+   "parent": -1341965341,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Our {M} is such a milf...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Trips/Hiking",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play EndDialogue and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeInBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeInBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Hiking to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Hiking",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Hiking"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_Sport to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_Sport",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_Sport"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef_sprot to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef_sprot",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef_sprot"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_Maps to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_Maps",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_Maps"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 50_Hikepath to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "50_Hikepath",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/50_Hikepath"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Hiking to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Hiking",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Hiking"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Music to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Music",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Music"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play StartDialogue and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "StartDialogue",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Core_Events/Trips/Hiking/StartDialogue"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeInBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeInBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 50_Hikepath to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "50_Hikepath",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/50_Hikepath"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 51_HikeCamp to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "51_HikeCamp",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/51_HikeCamp"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Self and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Individualtime and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "Individualtime",
+       "of": "GetGameObjectConditions",
+       "path": "8_Core_Events/Trips/Hiking/Individualtime"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Hiking to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Hiking",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Hiking"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef_sprot to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef_sprot",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef_sprot"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_Sport to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_Sport",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_Sport"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Gangbangcondition and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "Gangbangcondition",
+       "of": "GetGameObjectConditions",
+       "path": "8_Core_Events/Trips/Hiking/Gangbangcondition"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 28_Upstairs to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "28_Upstairs",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/28_Upstairs"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Hiking to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Hiking",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Hiking"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 51_HikeCamp to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "51_HikeCamp",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/51_HikeCamp"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Music to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Music",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Music"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

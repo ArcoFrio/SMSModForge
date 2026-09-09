@@ -1,0 +1,587 @@
+{
+ "id": "8_Room_Talk/Mall/CoreRandomTalkMall/SamAndKen",
+ "name": "SamAndKen",
+ "index": 6,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Ken",
+  "Samantha"
+ ],
+ "roots": [
+  975002162,
+  567717673,
+  1733759432,
+  1722671579,
+  -2132850199
+ ],
+ "nodes": {
+  "975002162": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1657589182,
+    -324761003
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "You call that outfit shopping? You look like you just respawned in real life.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1657589182": {
+   "kind": "text",
+   "parent": 975002162,
+   "actor": "Ken",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I didn’t come here to impress mannequins, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-324761003": {
+   "kind": "text",
+   "parent": 975002162,
+   "actor": "Samantha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Then impress me and grab something that doesn’t scream “inventory default.”",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "567717673": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1152986625,
+    -1128234540
+   ],
+   "actor": "Samantha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You’ve been walking behind me for ten minutes, Ken. Are you allergic to being seen in public with me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[ken-samantha-threesome-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-samantha-threesome-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1152986625": {
+   "kind": "text",
+   "parent": 567717673,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Uh, yes. That's the reason... Yeah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1128234540": {
+   "kind": "text",
+   "parent": 567717673,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1733759432": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -779361933,
+    -706703381
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "I swear, every time we come here you vanish into that shoe store.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[ken-samantha-threesome-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-samantha-threesome-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-779361933": {
+   "kind": "text",
+   "parent": 1733759432,
+   "actor": "Ken",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "They have limited editions, {M}. That’s serious business.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-706703381": {
+   "kind": "text",
+   "parent": 1733759432,
+   "actor": "Samantha",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "If you ever chased girls with that kind of dedication, I’d have grandkids by now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1722671579": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1648100736,
+    -1556307370,
+    -1285666190
+   ],
+   "actor": "Ken",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "{M}, can we just go home already? I can’t think straight when your boobs look like that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[ken-samantha-threesome-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-samantha-threesome-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2132850199": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    781922875,
+    793221470,
+    -40049314
+   ],
+   "actor": "Ken",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Every guy in this mall keeps looking at you. It’s driving me crazy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[ken-samantha-threesome-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-samantha-threesome-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "781922875": {
+   "kind": "text",
+   "parent": -2132850199,
+   "actor": "Samantha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Let them look, sweetie. You and {PC} the only one who knows how soft it feels.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1648100736": {
+   "kind": "text",
+   "parent": 1722671579,
+   "actor": "Samantha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Like what? I’m just wearing a top that fits. Maybe a little too well.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1556307370": {
+   "kind": "text",
+   "parent": 1722671579,
+   "actor": "Ken",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "“A little”? You’re killing me here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "793221470": {
+   "kind": "text",
+   "parent": -2132850199,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "That’s exactly why I want to get out of here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1285666190": {
+   "kind": "text",
+   "parent": 1722671579,
+   "actor": "Samantha",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Then maybe you’ll survive the ride home… if you behave.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-40049314": {
+   "kind": "text",
+   "parent": -2132850199,
+   "actor": "Samantha",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Mmh, patience. The teasing’s half the fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Mall/CoreRandomTalkMall",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play SamAndKen and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 7",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 7
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[samantha-first-talk] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-first-talk",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamanthaBust_ComfyCasualOutside to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamanthaBust_ComfyCasualOutside",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/SamanthaBust_ComfyCasualOutside"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Ken to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Ken",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Ken"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/SamanthaBust_ComfyCasualOutside/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Ken/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

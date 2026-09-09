@@ -1,0 +1,1220 @@
+{
+ "id": "8_Core_Events/Trips/ParkVisitM/AnnaSlutEventPark",
+ "name": "AnnaSlutEventPark",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "S_Jeff",
+  "Stranger"
+ ],
+ "roots": [
+  -890655093,
+  -83707939,
+  -1011647418,
+  -56263373,
+  -1924305626,
+  57597932,
+  -42190313,
+  2119472094
+ ],
+ "nodes": {
+  "-890655093": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    492989846,
+    172761597,
+    634688827,
+    1614669800,
+    -1794779348
+   ],
+   "actor": "S_Jeff",
+   "expressionName": "neutral",
+   "text": "Anna? Is that you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-83707939": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -186287507,
+    492139471,
+    -613907031
+   ],
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Damn, these curves are incredible. Jesus.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-56263373": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 11_park to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "11_park",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/11_park"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 89_ParkToilets to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "89_ParkToilets",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/89_ParkToilets"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Trenchcoat to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Trenchcoat",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Trenchcoat"
+      }
+     }
+    }
+   ]
+  },
+  "-42190313": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1528936108,
+    -1052855349,
+    -507781378,
+    -610316374,
+    -1035793342,
+    2013338398,
+    907318279,
+    -759754376,
+    239174702
+   ],
+   "actor": "S_Jeff",
+   "expressionName": "neutral",
+   "text": "O-Oh, w-wow... Anna... Y-You... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "2119472094": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1991213156,
+    1337450430,
+    -751804192,
+    2097283432,
+    957267991,
+    964248033,
+    519448267
+   ],
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Fuck, girl... I gotta try that ass. Why don't we sit down, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "492989846": {
+   "kind": "text",
+   "parent": -890655093,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Jeff? Wow, it’s been forever. How’ve you been?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "172761597": {
+   "kind": "text",
+   "parent": -890655093,
+   "actor": "S_Jeff",
+   "expressionName": "neutral",
+   "text": "Good, good....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "634688827": {
+   "kind": "text",
+   "parent": -890655093,
+   "actor": "S_Jeff",
+   "expressionName": "neutral",
+   "text": "You look… amazing. I mean, really, I barely recognized you! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1794779348": {
+   "kind": "choice",
+   "parent": -890655093,
+   "children": [
+    -2030734839,
+    659118173,
+    -1445712830
+   ],
+   "actor": "S_Jeff",
+   "expressionName": "neutral",
+   "text": "You changed a lot since high school. Even more gorgeous, if I’m being honest.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2030734839": {
+   "kind": "text",
+   "parent": -1794779348,
+   "children": [
+    175292632
+   ],
+   "actor": null,
+   "text": "If you wanna fuck her, it's gonna cost you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "659118173": {
+   "kind": "text",
+   "parent": -1794779348,
+   "children": [
+    -1258800296,
+    250265935
+   ],
+   "actor": null,
+   "text": "Why don't you and Jeff have some fun?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1445712830": {
+   "kind": "text",
+   "parent": -1794779348,
+   "children": [
+    1115694706
+   ],
+   "actor": null,
+   "text": "Go away, dude. We're busy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1614669800": {
+   "kind": "text",
+   "parent": -890655093,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Awww, thank you! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1115694706": {
+   "kind": "text",
+   "parent": -1445712830,
+   "actor": "S_Jeff",
+   "expressionName": "neutral",
+   "text": "S-Sorry! Jeez.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "175292632": {
+   "kind": "choice",
+   "parent": -2030734839,
+   "children": [
+    -1961513026,
+    -1181529820
+   ],
+   "actor": "S_Jeff",
+   "expressionName": "neutral",
+   "text": "W-What... Uh... I... I have $3000 in cash...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1258800296": {
+   "kind": "text",
+   "parent": 659118173,
+   "actor": "S_Jeff",
+   "expressionName": "neutral",
+   "text": "Uh, what!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1961513026": {
+   "kind": "text",
+   "parent": 175292632,
+   "children": [
+    -2020869571
+   ],
+   "actor": null,
+   "text": "That's enough.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1181529820": {
+   "kind": "text",
+   "parent": 175292632,
+   "children": [
+    -1196347298
+   ],
+   "actor": null,
+   "text": "Not enough, buddy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1196347298": {
+   "kind": "text",
+   "parent": -1181529820,
+   "actor": "S_Jeff",
+   "expressionName": "neutral",
+   "text": "I see...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "250265935": {
+   "kind": "text",
+   "parent": 659118173,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "What a lovely idea! It will be fun to... reconnect.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1011647418": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "There's something in the car I wanna grab... Let's meet at the restrooms in ten, alright?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-186287507": {
+   "kind": "text",
+   "parent": -83707939,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "And your tits! Wow! Are they real? I'd love to see them.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "492139471": {
+   "kind": "text",
+   "parent": -83707939,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Maybe. I don't share secrets for free.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-613907031": {
+   "kind": "choice",
+   "parent": -83707939,
+   "children": [
+    1965570266,
+    2097259828,
+    1740367045
+   ],
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "We could have a lot of fun together, lady.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1965570266": {
+   "kind": "text",
+   "parent": -613907031,
+   "children": [
+    -953015392
+   ],
+   "actor": null,
+   "text": "Wanna have fun? How much cash you got?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2097259828": {
+   "kind": "text",
+   "parent": -613907031,
+   "children": [
+    -972527128
+   ],
+   "actor": null,
+   "text": "How about you show her in private?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1740367045": {
+   "kind": "text",
+   "parent": -613907031,
+   "children": [
+    2025545969
+   ],
+   "actor": null,
+   "text": "Fuck off, we're busy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2025545969": {
+   "kind": "text",
+   "parent": 1740367045,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Relax, dude. I'm going.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-972527128": {
+   "kind": "text",
+   "parent": 2097259828,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Damn, hell yeah... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-953015392": {
+   "kind": "choice",
+   "parent": 1965570266,
+   "children": [
+    -1726403212,
+    195842830
+   ],
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Lemme see... I've got $500. Please tell me that's enough....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1726403212": {
+   "kind": "text",
+   "parent": -953015392,
+   "children": [
+    2054403599
+   ],
+   "actor": null,
+   "text": "Deal.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "195842830": {
+   "kind": "text",
+   "parent": -953015392,
+   "children": [
+    180893421
+   ],
+   "actor": null,
+   "text": "Not enough, kid.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "180893421": {
+   "kind": "text",
+   "parent": 195842830,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Ah shit... ",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1924305626": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Here we are...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "57597932": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let's get to it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ParkToilet (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ParkToilet (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/ParkToilet (1)"
+      }
+     }
+    }
+   ]
+  },
+  "2054403599": {
+   "kind": "text",
+   "parent": -1726403212,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Hell yeah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + 500",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 500
+      }
+     }
+    }
+   ]
+  },
+  "-2020869571": {
+   "kind": "text",
+   "parent": -1961513026,
+   "actor": "S_Jeff",
+   "expressionName": "neutral",
+   "text": "Uh, cool...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + 3000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 3000
+      }
+     }
+    }
+   ]
+  },
+  "1528936108": {
+   "kind": "text",
+   "parent": -42190313,
+   "actor": "S_Jeff",
+   "expressionName": "neutral",
+   "text": "Oh, Anna, I've always hoped this would happen! I've had a crush on you forever...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1991213156": {
+   "kind": "text",
+   "parent": 2119472094,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mhmmm... Not bad, you're almost as big as my {S}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ParkToilet (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ParkToilet (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/ParkToilet (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1052855349": {
+   "kind": "text",
+   "parent": -42190313,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmhm... Sure, sure... Now let me see that cock of yours.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-507781378": {
+   "kind": "text",
+   "parent": -42190313,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Aww, It's so cute! My big tits will take good care of it! ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ParkToilet (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ParkToilet (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/ParkToilet (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-610316374": {
+   "kind": "text",
+   "parent": -42190313,
+   "actor": "S_Jeff",
+   "expressionName": "neutral",
+   "text": "C-Cute? Hngga.... Your breasts are so soft....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1035793342": {
+   "kind": "text",
+   "parent": -42190313,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmhmm... Just wait until you get to try my pussy... or my tight ass... You will~",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2013338398": {
+   "kind": "text",
+   "parent": -42190313,
+   "actor": "S_Jeff",
+   "expressionName": "neutral",
+   "text": "Oh, fuck! I'm coming. I... Hngaaahhh!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ParkToilet (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ParkToilet (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/ParkToilet (5)"
+      }
+     }
+    }
+   ]
+  },
+  "1337450430": {
+   "kind": "text",
+   "parent": 2119472094,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Fuck... You're a naughty one, huh? Shit, your ass so tirght....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-751804192": {
+   "kind": "text",
+   "parent": 2119472094,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes... Hngahh... Stretch me... Faster...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2097283432": {
+   "kind": "text",
+   "parent": 2119472094,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Oh fuck... I can feel it... Shit, shit, shit! I'm blowing! Fhaaack!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ParkToilet (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ParkToilet (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/ParkToilet (3)"
+      }
+     }
+    }
+   ]
+  },
+  "957267991": {
+   "kind": "text",
+   "parent": 2119472094,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "O-Oh wow! I... I can feel the rubber growing in size... That feels funny!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "964248033": {
+   "kind": "text",
+   "parent": 2119472094,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Jesus... Such a good fuck... Thanks, babe...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "907318279": {
+   "kind": "text",
+   "parent": -42190313,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh my, that was much faster than I thought it would be!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-759754376": {
+   "kind": "text",
+   "parent": -42190313,
+   "actor": "S_Jeff",
+   "expressionName": "neutral",
+   "text": "I... Give me twenty minutes and I can go another round!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "239174702": {
+   "kind": "text",
+   "parent": -42190313,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, babe. Sorry, but you had your chance. Come on, {PC}. Time to go.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "519448267": {
+   "kind": "text",
+   "parent": 2119472094,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "My pleasure, cutie.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Trips/ParkVisitM/Conditions",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AnnaSlutEventPark and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_4[park-advertisement] ≥ 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "park-advertisement",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "branches": [
+    "1c"
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_FanJeff to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_FanJeff",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_FanJeff"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Core_Events/Trips/ParkVisitM/Conditions",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AnnaSlutEventPark and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_4[park-advertisement] ≥ 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "park-advertisement",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "branches": [
+    "2c"
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_Blackguy to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_Blackguy",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Blackguy"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1351 @@
+{
+ "id": "8_Room_Talk/Office/DefaultDialoge",
+ "name": "DefaultDialoge",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Josef",
+  "You"
+ ],
+ "roots": [
+  -530057673
+ ],
+ "nodes": {
+  "-530057673": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -184231146,
+    -1648523375,
+    -619007502,
+    1150703470,
+    -1552505279,
+    -1697489055,
+    1770619038
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "{PC}. It's good to see you.",
+   "tag": "start",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-184231146": {
+   "kind": "text",
+   "parent": -530057673,
+   "children": [
+    1681866096,
+    1514307339,
+    -408270509
+   ],
+   "actor": null,
+   "text": "How are you doing, {D}?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Holidays[holiday-josefbd] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "holiday-josefbd",
+        "list": "Holidays",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-619007502": {
+   "kind": "text",
+   "parent": -530057673,
+   "children": [
+    -926914070,
+    -1101077570
+   ],
+   "actor": null,
+   "text": "Anything I can do to help?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1150703470": {
+   "kind": "text",
+   "parent": -530057673,
+   "children": [
+    670565746
+   ],
+   "actor": null,
+   "text": "I want to help you with the debt.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[DEBT-PAID-OFF] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DEBT-PAID-OFF",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1770619038": {
+   "kind": "text",
+   "parent": -530057673,
+   "children": [
+    -1193639139
+   ],
+   "actor": null,
+   "text": "See you later, {D}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "670565746": {
+   "kind": "choice",
+   "parent": 1150703470,
+   "children": [
+    1360447001,
+    -1197658405
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "A-Are you sure? It's not in your obligation...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1360447001": {
+   "kind": "text",
+   "parent": 670565746,
+   "actor": null,
+   "text": "You are right...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1681866096": {
+   "kind": "text",
+   "parent": -184231146,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I won't sugarcoat it—this is rough. You and Anna working at the bakery and flower store to help out wasn’t supposed to happen. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[pc-told-d-about-starmaker] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "pc-told-d-about-starmaker",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-926914070": {
+   "kind": "text",
+   "parent": -619007502,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "You're already working at the bakery; you're doing more than I could have ever asked for.",
+   "jump": {
+    "mode": "Jump",
+    "to": "start"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[pc-told-d-about-starmaker] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "pc-told-d-about-starmaker",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1514307339": {
+   "kind": "text",
+   "parent": -184231146,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I should've been smarter about things.",
+   "jump": {
+    "mode": "Jump",
+    "to": "start"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[pc-told-d-about-starmaker] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "pc-told-d-about-starmaker",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1193639139": {
+   "kind": "text",
+   "parent": 1770619038,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Yeah...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1552505279": {
+   "kind": "text",
+   "parent": -530057673,
+   "children": [
+    -254546775
+   ],
+   "actor": null,
+   "text": "I have a few questions, {D}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-254546775": {
+   "kind": "choice",
+   "parent": -1552505279,
+   "children": [
+    1029835639,
+    -745800824,
+    454812426,
+    400879512,
+    1951542077,
+    1267351598
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Sure. Shoot.",
+   "tag": "questions",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1029835639": {
+   "kind": "text",
+   "parent": -254546775,
+   "children": [
+    -756214458,
+    -2126354426,
+    -171891527
+   ],
+   "actor": null,
+   "text": "How did you and {M} meet?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-745800824": {
+   "kind": "text",
+   "parent": -254546775,
+   "children": [
+    1516089871,
+    -1771306320
+   ],
+   "actor": null,
+   "text": "You were a CEO, it must be easy for you to find another job?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "454812426": {
+   "kind": "text",
+   "parent": -254546775,
+   "children": [
+    1638348372
+   ],
+   "actor": null,
+   "text": "What happens if we can't deal with the debt?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "400879512": {
+   "kind": "text",
+   "parent": -254546775,
+   "children": [
+    -120372093
+   ],
+   "actor": null,
+   "text": "Is there anyone you can ask for help? Maybe family or friends?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1267351598": {
+   "kind": "text",
+   "parent": -254546775,
+   "children": [
+    1024573020
+   ],
+   "actor": null,
+   "text": "Thanks for your time, {D}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1024573020": {
+   "kind": "text",
+   "parent": 1267351598,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Always.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-756214458": {
+   "kind": "text",
+   "parent": 1029835639,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Heh, I've shared this story with you many times, but sure, here it goes. I was working as a car repairman when your {M}  thought I had messed up her car.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2126354426": {
+   "kind": "text",
+   "parent": 1029835639,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I assured her I hadn't, but she insisted we take it for a test drive. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-171891527": {
+   "kind": "text",
+   "parent": 1029835639,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "So, we did, and by the end of the day, we were at the beach, enjoying ice cream and talking about our dreams.",
+   "jump": {
+    "mode": "Jump",
+    "to": "questions"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1516089871": {
+   "kind": "text",
+   "parent": -745800824,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "It was my first job as a CEO, and I failed. My reputation took a big hit, and I've already applied for over twenty jobs, all of which have turned me down. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1638348372": {
+   "kind": "text",
+   "parent": 454812426,
+   "actor": "Josef",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I'll be honest with you, things aren't looking good right now. I might have to consider divorcing Anna to protect her from the consequences of my financial mistakes.",
+   "jump": {
+    "mode": "Jump",
+    "to": "questions"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-120372093": {
+   "kind": "text",
+   "parent": 400879512,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "There's no one with the financial means to help us out of this situation. Well, there is one person, but I'd really rather not reach out to her...",
+   "jump": {
+    "mode": "Jump",
+    "to": "questions"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1771306320": {
+   "kind": "text",
+   "parent": -745800824,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "But I'll keep trying. You know how it is – never give up.",
+   "jump": {
+    "mode": "Jump",
+    "to": "questions"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1101077570": {
+   "kind": "text",
+   "parent": -619007502,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "And thanks to the Starmaker page of your {M} we are not in that big trouble anymore...",
+   "jump": {
+    "mode": "Jump",
+    "to": "start"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[pc-told-d-about-starmaker] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "pc-told-d-about-starmaker",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-408270509": {
+   "kind": "text",
+   "parent": -184231146,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Not bad, {S}. I feel like even though things have changed, things are getting better...",
+   "jump": {
+    "mode": "Jump",
+    "to": "start"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[pc-told-d-about-starmaker] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "pc-told-d-about-starmaker",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1197658405": {
+   "kind": "text",
+   "parent": 670565746,
+   "children": [
+    -639580383
+   ],
+   "actor": null,
+   "text": "[Gift $1,000,000] No more debt for us, {D}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 1000000",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1000000
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-639580383": {
+   "kind": "text",
+   "parent": -1197658405,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I.. I'm speechless. This is incredible and it saddens me you won't keep it... Thank you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionArithmeticSubtractNumbers",
+     "title": "Set Core[Cash] = Core[Cash] - 1000000",
+     "fields": {
+      "Title": "Set Core[Cash] = Core[Cash] - 1000000",
+      "BaseType": {
+       "$meta": "GameCreator.Runtime.VisualScripting.Instruction"
+      },
+      "FullType": {
+       "$meta": "GameCreator.Runtime.VisualScripting.InstructionArithmeticSubtractNumbers"
+      },
+      "Breakpoint": false,
+      "IsEnabled": true,
+      "Color": {
+       "r": 0.03529412,
+       "g": 0.03529412,
+       "b": 0.03529412,
+       "a": 1
+      }
+     }
+    },
+    {
+     "type": "InstructionArithmeticSubtractNumbers",
+     "title": "Set Core[Debt] = Core[Debt] - 1000000",
+     "fields": {
+      "Title": "Set Core[Debt] = Core[Debt] - 1000000",
+      "BaseType": {
+       "$meta": "GameCreator.Runtime.VisualScripting.Instruction"
+      },
+      "FullType": {
+       "$meta": "GameCreator.Runtime.VisualScripting.InstructionArithmeticSubtractNumbers"
+      },
+      "Breakpoint": false,
+      "IsEnabled": true,
+      "Color": {
+       "r": 0.03529412,
+       "g": 0.03529412,
+       "b": 0.03529412,
+       "a": 1
+      }
+     }
+    }
+   ]
+  },
+  "-1697489055": {
+   "kind": "text",
+   "parent": -530057673,
+   "children": [
+    302070173,
+    669700053,
+    880718137,
+    1300529363
+   ],
+   "actor": null,
+   "text": "I've slept with Isabella.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[isabella-d-invited] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "isabella-d-invited",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[Iseballe-solo-fuck] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Iseballe-solo-fuck",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[isabella-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "isabella-done",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[isa-d-admitted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "isa-d-admitted",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "302070173": {
+   "kind": "text",
+   "parent": -1697489055,
+   "children": [
+    2028660616,
+    -1073034986
+   ],
+   "actor": "Josef",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Wait, what? You slept with my ex? With Isabella?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[d-told-about-isa] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "d-told-about-isa",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "669700053": {
+   "kind": "text",
+   "parent": -1697489055,
+   "actor": "Josef",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "She was my wife for years! What the hell were you thinking?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2028660616": {
+   "kind": "text",
+   "parent": 302070173,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Yeah, she approached me about it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1073034986": {
+   "kind": "text",
+   "parent": 302070173,
+   "actor": "Josef",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "You should stay away from her... She's a bad influence!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[d-told-about-isa] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "d-told-about-isa",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1300529363": {
+   "kind": "choice",
+   "parent": -1697489055,
+   "children": [
+    1466652974,
+    349075199
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "W-Where is that whore. I'll have to confront her.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[isa-d-admitted] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "isa-d-admitted",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1466652974": {
+   "kind": "text",
+   "parent": 1300529363,
+   "children": [
+    -2056138576,
+    204262351
+   ],
+   "actor": null,
+   "text": "I'm sorry. I don't know.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "349075199": {
+   "kind": "text",
+   "parent": 1300529363,
+   "children": [
+    635040770
+   ],
+   "actor": null,
+   "text": "Downtown. Red Lime Hotel. (Start sharing route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "635040770": {
+   "kind": "text",
+   "parent": 349075199,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "She... I'll have to talk to her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[isabella-d-invited] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "isabella-d-invited",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[isabella-d-invited] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "isabella-d-invited",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2056138576": {
+   "kind": "text",
+   "parent": 1466652974,
+   "actor": "Josef",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I'm.. I'm not blaming you. I know the effect she has on men very well.. First hand...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "880718137": {
+   "kind": "text",
+   "parent": -1697489055,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "That woman is a monster, a total disaster. She destroys everything without a second thought—people, relationships, lives!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "204262351": {
+   "kind": "text",
+   "parent": 1466652974,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "She is manipulative, toxic... I'm glad you told me. Please, stay away from her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1648523375": {
+   "kind": "text",
+   "parent": -530057673,
+   "children": [
+    1163217242,
+    859158798,
+    -200078031
+   ],
+   "actor": null,
+   "text": "Happy birthday, {D}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Holidays[holiday-josefbd] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "holiday-josefbd",
+        "list": "Holidays",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Holidays[holiday-event-one-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "holiday-event-one-done",
+        "list": "Holidays",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1163217242": {
+   "kind": "text",
+   "parent": -1648523375,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "\rHeh. Thanks. Been a while since I let myself care about birthdays, to be honest.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "859158798": {
+   "kind": "text",
+   "parent": -1648523375,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "But I guess there’s something comforting about making it through another year. Still standing, still fighting. That’s worth something.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-200078031": {
+   "kind": "text",
+   "parent": -1648523375,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Feels good to breathe for once. Even if just for a day.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Holidays[holiday-event-one-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "holiday-event-one-done",
+        "list": "Holidays",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1951542077": {
+   "kind": "text",
+   "parent": -254546775,
+   "children": [
+    2037817827,
+    333223801,
+    -669297736
+   ],
+   "actor": null,
+   "text": "Mrs. Kimura offered me a deal but I’m not sure how to handle it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[milking-mainstory] = 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milking-mainstory",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[bafa-mrskimura-howtonegotiate] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-mrskimura-howtonegotiate",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "2037817827": {
+   "kind": "text",
+   "parent": 1951542077,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Hm… business negotiations aren’t easy. They’ll always want more than they’re willing to give.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "333223801": {
+   "kind": "text",
+   "parent": 1951542077,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "My advice? Meet them halfway. Give them what they want, but not everything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-669297736": {
+   "kind": "text",
+   "parent": 1951542077,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "A 50/50 split. That way, they feel like they’ve won… and you still keep control.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Milking Save[bafa-mrskimura-howtonegotiate] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-mrskimura-howtonegotiate",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Office",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DefaultDialoge and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

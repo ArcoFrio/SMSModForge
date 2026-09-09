@@ -1,0 +1,718 @@
+{
+ "id": "8_Room_Talk/Kitchen/AfterCondition/CorruptKitchenSex",
+ "name": "CorruptKitchenSex",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Josef"
+ ],
+ "roots": [
+  150460153,
+  909361392,
+  -535577235,
+  1857588979,
+  -163773430,
+  -1365910018
+ ],
+ "nodes": {
+  "150460153": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmm... I'm not gonna lie... This is exactly what I need right now...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[random-1-of-10] = Random3[Random]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random3",
+        "pick": "random",
+        "type": "number"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCorruptKitchenSex (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCorruptKitchenSex (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCorruptKitchenSex (1)"
+      }
+     }
+    }
+   ]
+  },
+  "909361392": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A... Hngaah... A quick fuck to relax...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[kitchensexcooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kitchensexcooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-535577235": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "R-Right here... On the kitchen table.. Like... Hngaaahhh....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1365910018": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1398806375,
+    -1307459834
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hngaaah! Ahhhahahaa! ... I'm.. I'm... Hnaaaah!!!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1398806375": {
+   "kind": "text",
+   "parent": -1365910018,
+   "children": [
+    1083156541,
+    822488204,
+    238407558
+   ],
+   "actor": null,
+   "text": "Y-Yes, ride my cock... I'm close... Fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1307459834": {
+   "kind": "text",
+   "parent": -1365910018,
+   "children": [
+    -1472582224,
+    -2109056886,
+    1232478514
+   ],
+   "actor": null,
+   "text": "G-Get on the table, I want to fill you from behind.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1472582224": {
+   "kind": "text",
+   "parent": -1307459834,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes, yes, yes! Hngaaah! AHHHH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCorruptKitchenSex (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCorruptKitchenSex (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCorruptKitchenSex (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1083156541": {
+   "kind": "text",
+   "parent": 1398806375,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "There he goes! Hngaaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCorruptKitchenSex (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCorruptKitchenSex (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCorruptKitchenSex (2)"
+      }
+     }
+    }
+   ]
+  },
+  "822488204": {
+   "kind": "text",
+   "parent": 1398806375,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "God, I'll never grow tired of feeling your throbbing dick inside of me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "238407558": {
+   "kind": "text",
+   "parent": 1398806375,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I love you... And your big cock!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2109056886": {
+   "kind": "text",
+   "parent": -1307459834,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I can feel your cum, {PC}... It's all the way in... So warm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1232478514": {
+   "kind": "text",
+   "parent": -1307459834,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I love you... And your big cock!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1857588979": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm... I'm getting close... Fuck me, {PC}... Give me that big cock of yours!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-163773430": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -551369674,
+    1809565635
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Uh... Oh! Um... Sorry, I'll just grab a water and leave....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    }
+   ]
+  },
+  "-551369674": {
+   "kind": "text",
+   "parent": -163773430,
+   "children": [
+    706912403,
+    -899979857,
+    1954511256,
+    1216096275,
+    -1017799122,
+    10031865,
+    402695849,
+    761512623,
+    504683181,
+    1620533831,
+    -894250083
+   ],
+   "actor": null,
+   "text": "You better fill up her ass, {D}. (Spread her cheeks)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1809565635": {
+   "kind": "text",
+   "parent": -163773430,
+   "children": [
+    1689955292,
+    -1741994428
+   ],
+   "actor": null,
+   "text": "G-Go away, {D}! We're busy!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1689955292": {
+   "kind": "text",
+   "parent": 1809565635,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes! Leave! I'm so fucking close!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "706912403": {
+   "kind": "text",
+   "parent": -551369674,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "O-Of course... Um...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCorruptKitchenSex (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCorruptKitchenSex (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCorruptKitchenSex (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-1741994428": {
+   "kind": "text",
+   "parent": 1809565635,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Sorry, sorry...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-899979857": {
+   "kind": "text",
+   "parent": -551369674,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Get over here and stuff my ass, Josef! Now!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1954511256": {
+   "kind": "text",
+   "parent": -551369674,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Y-Yes! ... Hnggh... F-Fuck....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCorruptKitchenSex (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCorruptKitchenSex (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCorruptKitchenSex (5)"
+      }
+     }
+    }
+   ]
+  },
+  "1216096275": {
+   "kind": "text",
+   "parent": -551369674,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yesshh... My favorite kind of breakfast! F-Fuck me, boys... Fuck my holes!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1017799122": {
+   "kind": "text",
+   "parent": -551369674,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "God... Look at that round ass... T-Taking our cocks like a champ... Hnggh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "402695849": {
+   "kind": "text",
+   "parent": -551369674,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "F-Fuck, Anna... I'm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-894250083": {
+   "kind": "text",
+   "parent": -551369674,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "W-Well, that was quite something... Hihi...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "10031865": {
+   "kind": "text",
+   "parent": -551369674,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Pound me harder! I'm so close! I'm SO close! Our {S} is making me cum, Josef!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1620533831": {
+   "kind": "text",
+   "parent": -551369674,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mhmmm... Well done, boys... I'm... Whew...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "504683181": {
+   "kind": "text",
+   "parent": -551369674,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "W-What a mess... I love it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "761512623": {
+   "kind": "text",
+   "parent": -551369674,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yesssshhh! CUM! HngaaaahHH! CCCUUUUMM!!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCorruptKitchenSex (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCorruptKitchenSex (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCorruptKitchenSex (6)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCorruptKitchenSex (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCorruptKitchenSex (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCorruptKitchenSex (1)"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Kitchen/AfterCondition",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play CorruptKitchenSex and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_NoSave[after-condition-number] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "after-condition-number",
+        "list": "Core_NoSave",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

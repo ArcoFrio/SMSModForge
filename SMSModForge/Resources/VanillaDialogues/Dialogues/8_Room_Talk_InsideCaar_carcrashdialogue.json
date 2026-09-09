@@ -1,0 +1,442 @@
+{
+ "id": "8_Room_Talk/InsideCaar/carcrashdialogue",
+ "name": "carcrashdialogue",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "You"
+ ],
+ "roots": [
+  1279898699,
+  1590091506
+ ],
+ "nodes": {
+  "1279898699": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "What the— Why aren’t the brakes working?\r\n",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1590091506": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Shit. Shitshitshit.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/InsideCaar",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play carcrashdialogue and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[hospital-unlocked] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hospital-unlocked",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DaysPassed] ≥ 30",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DaysPassed",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 30
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] ≠ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Different",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ],
+   "branches": [
+    "carcrash"
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active World_Map to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "World_Map",
+       "of": "GetGameObjectInstance",
+       "path": "World_Map"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 0_Drive to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "0_Drive",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator/MapButtons/0_Drive"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 17_Home to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "17_Home",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator/MapButtons/17_Home"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active World_Map to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "World_Map",
+       "of": "GetGameObjectInstance",
+       "path": "World_Map"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active World_Map to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "World_Map",
+       "of": "GetGameObjectInstance",
+       "path": "World_Map"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active World_Map to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "World_Map",
+       "of": "GetGameObjectInstance",
+       "path": "World_Map"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active World_Map to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "World_Map",
+       "of": "GetGameObjectInstance",
+       "path": "World_Map"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active World_Map to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "World_Map",
+       "of": "GetGameObjectInstance",
+       "path": "World_Map"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: CarCrash HI010201",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "CarCrash HI010201",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 0.3
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active To_Hospital to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "To_Hospital",
+       "of": "GetGameObjectInstance",
+       "path": "Unique_Transfers/To_Hospital"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

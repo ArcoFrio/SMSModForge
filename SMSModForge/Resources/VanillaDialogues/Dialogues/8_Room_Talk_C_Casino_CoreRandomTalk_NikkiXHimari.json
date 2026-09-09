@@ -1,0 +1,317 @@
+{
+ "id": "8_Room_Talk/C_Casino/CoreRandomTalk/NikkiXHimari",
+ "name": "NikkiXHimari",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Himari",
+  "Nikki"
+ ],
+ "roots": [
+  975002162,
+  567717673,
+  1733759432
+ ],
+ "nodes": {
+  "975002162": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1238924843,
+    -1553034714
+   ],
+   "actor": "Nikki",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Back again, Himari? Didn’t you hit the limit last night?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "567717673": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1152986625,
+    950488383
+   ],
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "How many spins so far?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1152986625": {
+   "kind": "text",
+   "parent": 567717673,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Not enough to win...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1733759432": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -779361933,
+    -1149727054
+   ],
+   "actor": "Nikki",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You’re betting red again?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-779361933": {
+   "kind": "text",
+   "parent": 1733759432,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "It’s due. Don’t look at me like that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1238924843": {
+   "kind": "text",
+   "parent": 975002162,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "That was yesterday’s money. Today’s money has no trauma.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1553034714": {
+   "kind": "text",
+   "parent": 975002162,
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "You scare me in the most impressive way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "950488383": {
+   "kind": "text",
+   "parent": 567717673,
+   "actor": "Nikki",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Spoken like a true addict. I love it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1149727054": {
+   "kind": "text",
+   "parent": 1733759432,
+   "actor": "Nikki",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "That’s exactly how I look at lost causes with pretty faces.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/C_Casino/CoreRandomTalk",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play NikkiXHimari and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Nikki_Bust_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Nikki_Bust_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Nikki_Bust_Default"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Himari_SexySweaterBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Himari_SexySweaterBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Himari_SexySweaterBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Himari_SexySweaterBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

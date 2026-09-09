@@ -119,4 +119,29 @@ internal static class WindowHarness
             Dispatcher.PushFrame(frame);
         }
     }
+
+    /// <summary>
+    /// Let real time pass with the dispatcher still running.
+    /// <para/>
+    /// <see cref="Pump"/> drains what is already queued and returns, which
+    /// proves nothing about anything on a clock: a DispatcherTimer has not
+    /// posted its tick yet, so there is nothing there to drain. Tests of
+    /// something that animates need the queue to keep turning while the wall
+    /// clock moves, which is what this does.
+    /// </summary>
+    public static void Wait(TimeSpan howLong)
+    {
+        var until = DateTime.UtcNow + howLong;
+        while (DateTime.UtcNow < until)
+        {
+            var frame = new DispatcherFrame();
+            var tick = new DispatcherTimer(TimeSpan.FromMilliseconds(5),
+                                           DispatcherPriority.Background,
+                                           (_, _) => frame.Continue = false,
+                                           Dispatcher.CurrentDispatcher);
+            tick.Start();
+            Dispatcher.PushFrame(frame);
+            tick.Stop();
+        }
+    }
 }

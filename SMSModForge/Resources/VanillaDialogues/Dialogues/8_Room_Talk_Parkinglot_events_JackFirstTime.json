@@ -1,0 +1,689 @@
+{
+ "id": "8_Room_Talk/Parkinglot_events/JackFirstTime",
+ "name": "JackFirstTime",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Jack",
+  "You"
+ ],
+ "roots": [
+  -817842029
+ ],
+ "nodes": {
+  "-817842029": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1287030847,
+    500373138,
+    -74875708,
+    1786527571,
+    110104908,
+    40984848,
+    925411358
+   ],
+   "actor": "Jack",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hah! You’re not one of my regulars. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1287030847": {
+   "kind": "choice",
+   "parent": -817842029,
+   "children": [
+    1362734176,
+    -2014518064,
+    246430421,
+    976055003
+   ],
+   "actor": "Jack",
+   "expressionName": "neutral",
+   "text": "What, you lost or something?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1362734176": {
+   "kind": "text",
+   "parent": -1287030847,
+   "children": [
+    -1222009444,
+    -524168599,
+    -1875724650
+   ],
+   "actor": null,
+   "text": "I’m here to race. I want Toni’s freedom.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2014518064": {
+   "kind": "text",
+   "parent": -1287030847,
+   "children": [
+    653595103,
+    -322634080
+   ],
+   "actor": null,
+   "text": "Nice little empire you got here. You love people kissing your ass.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "246430421": {
+   "kind": "text",
+   "parent": -1287030847,
+   "children": [
+    -237821945
+   ],
+   "actor": null,
+   "text": "I heard you’re the guy to talk to if I want to make a deal.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-237821945": {
+   "kind": "text",
+   "parent": 246430421,
+   "actor": "Jack",
+   "expressionName": "neutral",
+   "text": "Depends on the deal. I don’t work cheap, and I sure as hell don’t do charity. So what is it you’re after?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "653595103": {
+   "kind": "text",
+   "parent": -2014518064,
+   "actor": "Jack",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Heh. You got some balls talkin’ like that in my place.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1222009444": {
+   "kind": "text",
+   "parent": 1362734176,
+   "actor": "Jack",
+   "expressionName": "neutral",
+   "text": "Toni’s freedom?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-524168599": {
+   "kind": "text",
+   "parent": 1362734176,
+   "actor": "Jack",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh, that’s cute. What, she send you to play hero for her?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1875724650": {
+   "kind": "text",
+   "parent": 1362734176,
+   "actor": "Jack",
+   "expressionName": "neutral",
+   "text": "You got any idea what you’re askin’? I don’t just let people walk outta my business for free.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-322634080": {
+   "kind": "text",
+   "parent": -2014518064,
+   "actor": "Jack",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Keep that attitude up and your body will end up in a dumpster.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "500373138": {
+   "kind": "text",
+   "parent": -817842029,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "I want a race. If I win, you let Toni go—no strings, no bullshit.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-74875708": {
+   "kind": "text",
+   "parent": -817842029,
+   "actor": "Jack",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hah. You think I’m gonna put it all on one race? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1786527571": {
+   "kind": "text",
+   "parent": -817842029,
+   "actor": "Jack",
+   "expressionName": "neutral",
+   "text": "What, you expect me to let some random punk come in and call the shots? That ain’t how it works, kid.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "40984848": {
+   "kind": "choice",
+   "parent": -817842029,
+   "children": [
+    750965727,
+    367868157,
+    204039776
+   ],
+   "actor": "Jack",
+   "expressionName": "neutral",
+   "text": "And we'll do Squirt Races.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "110104908": {
+   "kind": "text",
+   "parent": -817842029,
+   "actor": "Jack",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Three races. 20 grand per race. Entry fee. No refunds. You lose, you win, that money's mine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "750965727": {
+   "kind": "text",
+   "parent": 40984848,
+   "children": [
+    -1239113596
+   ],
+   "actor": null,
+   "text": "I'm sorry, did you just said \"Squirt Races\"?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "367868157": {
+   "kind": "text",
+   "parent": 40984848,
+   "children": [
+    -1111865940
+   ],
+   "actor": null,
+   "text": "Uh... What now?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "204039776": {
+   "kind": "text",
+   "parent": 40984848,
+   "actor": null,
+   "text": "(Don't jump to any conclusions, wait for him to explain)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1239113596": {
+   "kind": "text",
+   "parent": 750965727,
+   "actor": "Jack",
+   "expressionName": "neutral",
+   "text": "Obviously, you're clueless. Just another brainwashed city slicker.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1111865940": {
+   "kind": "text",
+   "parent": 367868157,
+   "actor": "Jack",
+   "expressionName": "neutral",
+   "text": "Obviously, you're clueless. Just another brainwashed city slicker.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "925411358": {
+   "kind": "choice",
+   "parent": -817842029,
+   "children": [
+    839888208,
+    -1450170566,
+    -2083190776
+   ],
+   "actor": "Jack",
+   "expressionName": "neutral",
+   "text": "Each of us takes a chick as a passenger, and whoever gets the passenger going first wins the race. Easy as that.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_7[jack-met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "jack-met",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "839888208": {
+   "kind": "text",
+   "parent": 925411358,
+   "children": [
+    1059083529
+   ],
+   "actor": null,
+   "text": "I’ll win them all.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1450170566": {
+   "kind": "text",
+   "parent": 925411358,
+   "children": [
+    -1698068713
+   ],
+   "actor": null,
+   "text": "That’s all? Thought you'd make this hard.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2083190776": {
+   "kind": "text",
+   "parent": 925411358,
+   "children": [
+    229394598
+   ],
+   "actor": null,
+   "text": "Women can't cum from that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "229394598": {
+   "kind": "text",
+   "parent": -2083190776,
+   "actor": "Jack",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Of course you would think that. I mean, just look at you. Come back when you’ve actually got a spine.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1698068713": {
+   "kind": "text",
+   "parent": -1450170566,
+   "actor": "Jack",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Oh, you’re gonna regret sayin’ that. Hope you brought extra clothes, ‘cause you’re about to get soaked.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1059083529": {
+   "kind": "text",
+   "parent": 839888208,
+   "actor": "Jack",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Let’s see if you can actually back it up.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "976055003": {
+   "kind": "text",
+   "parent": -1287030847,
+   "children": [
+    1503641530
+   ],
+   "actor": null,
+   "text": "(Athletic) I’m here to end Toni’s debt, one way or another.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Athletic] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Athletic",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1503641530": {
+   "kind": "text",
+   "parent": 976055003,
+   "actor": "Jack",
+   "expressionName": "neutral",
+   "text": "…Heh. You’ve got guts, I’ll give you that. Let’s see if they’re still intact when we’re done talking.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Parkinglot_events",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play JackFirstTime and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_7[tomboy-met] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tomboy-met",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_7[jack-met] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "jack-met",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Core_NoSave[talkbutton-signal] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talkbutton-signal",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Rockerguy_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Rockerguy_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Rockerguy_Bust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/TomboyToni_BustDefault/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'ForceEnableUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "ForceEnableUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

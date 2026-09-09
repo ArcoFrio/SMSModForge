@@ -1,0 +1,654 @@
+{
+ "id": "8_Room_Talk/Kitchen/Anna_Prisme_2",
+ "name": "Anna_Prisme_2",
+ "index": 21,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna"
+ ],
+ "roots": [
+  970555384,
+  1194676624,
+  357002555,
+  1339236915,
+  1755288934,
+  -1867198079,
+  -1518337476,
+  -1293717728,
+  -1513505246,
+  -374425729
+ ],
+ "nodes": {
+  "970555384": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    95258894,
+    -1642601325,
+    -583767047
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Alright, it’s finally here! The Prisme! I wanted to open it with you. It feels... special, you know?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "95258894": {
+   "kind": "text",
+   "parent": 970555384,
+   "actor": null,
+   "text": "Of course. Let’s see it together!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1642601325": {
+   "kind": "text",
+   "parent": 970555384,
+   "actor": null,
+   "text": "Ready for the big reveal?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-583767047": {
+   "kind": "text",
+   "parent": 970555384,
+   "actor": null,
+   "text": "Hope they didn’t shove you in the corner. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1194676624": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "...Wait. What? No, no, no. This can’t be real.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PrismeMagazine1 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PrismeMagazine1",
+       "of": "GetGameObjectInstance",
+       "path": "15_EventUI/PrismeMagazine1"
+      }
+     }
+    }
+   ]
+  },
+  "357002555": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Look at this! I’m... I’m barely even there! They made me some kind of background decoration!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1339236915": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    383195202,
+    -300494146,
+    2104561931
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "And—ugh—her butt is covering half my face!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1755288934": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "... \"From 40 onward\" ...  \"It's never too late to give your best\" ... Are you kidding me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1867198079": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1928073348,
+    -1423791420,
+    1082237148
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "The article... It’s not even about me. It’s basically asking, ‘Can women over 40 still keep up?’ ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1928073348": {
+   "kind": "text",
+   "parent": -1867198079,
+   "children": [
+    1979844397
+   ],
+   "actor": null,
+   "text": "You deserve so much more than this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1423791420": {
+   "kind": "text",
+   "parent": -1867198079,
+   "children": [
+    -249471094
+   ],
+   "actor": null,
+   "text": "Well, you’ve definitely proven them wrong. You’re thriving.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1082237148": {
+   "kind": "text",
+   "parent": -1867198079,
+   "children": [
+    1339134984
+   ],
+   "actor": null,
+   "text": "So much for tasteful journalism, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-249471094": {
+   "kind": "text",
+   "parent": -1423791420,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I wish I could feel that way right now. But it’s hard when they’ve made me look like some kind of relic.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1339134984": {
+   "kind": "text",
+   "parent": 1082237148,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Seriously. I should’ve known better than to trust these people.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1979844397": {
+   "kind": "text",
+   "parent": 1928073348,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Exactly! I’ve worked so hard, and they reduce me to \"a woman over 40\"? It’s not fair.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "383195202": {
+   "kind": "text",
+   "parent": 1339236915,
+   "children": [
+    521181136
+   ],
+   "actor": null,
+   "text": "I’m so sorry, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-300494146": {
+   "kind": "text",
+   "parent": 1339236915,
+   "children": [
+    -674130046
+   ],
+   "actor": null,
+   "text": "Wow. Did they even tell you Celeste would be the focus?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2104561931": {
+   "kind": "text",
+   "parent": 1339236915,
+   "children": [
+    1514165319
+   ],
+   "actor": null,
+   "text": "Well... at least you’re technically on the cover. That’s something, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1514165319": {
+   "kind": "text",
+   "parent": 2104561931,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Don’t even try to spin this, okay? This is humiliating!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-674130046": {
+   "kind": "text",
+   "parent": -300494146,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "No! They didn’t say a word about it. They made it sound like I was a big part of the article!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "521181136": {
+   "kind": "text",
+   "parent": 383195202,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I can’t believe I let myself get so excited for this. I thought... I thought I mattered.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1518337476": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1703963381,
+    543119832
+   ],
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You know what? I’ve had it! I’m sick of being in the background while people like her get all the attention.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PrismeMagazine1 to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PrismeMagazine1",
+       "of": "GetGameObjectInstance",
+       "path": "15_EventUI/PrismeMagazine1"
+      }
+     }
+    }
+   ]
+  },
+  "1703963381": {
+   "kind": "text",
+   "parent": -1518337476,
+   "children": [
+    633132449
+   ],
+   "actor": null,
+   "text": "You mean Celeste?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "543119832": {
+   "kind": "text",
+   "parent": -1518337476,
+   "children": [
+    1245168839
+   ],
+   "actor": null,
+   "text": "Exactly! You're so much better than her!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "633132449": {
+   "kind": "text",
+   "parent": 1703963381,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Of course, I mean Celeste! She just waltzes into every spotlight, and people fall at her feet like she’s the only one who matters. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1245168839": {
+   "kind": "text",
+   "parent": 543119832,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Celeste just waltzes into every spotlight, and people fall at her feet like she’s the only one who matters. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1293717728": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Well, I’m done being shy about this. If she can do it, so can I.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1513505246": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1046776055,
+    615921659,
+    1817281386
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I’m ready to try livestreaming. I know I’ve always been too nervous before, but... If this is what it takes to keep up with her.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1046776055": {
+   "kind": "text",
+   "parent": -1513505246,
+   "children": [
+    -861435739
+   ],
+   "actor": null,
+   "text": "I think that’s a great idea. You’ll show everyone the real you—and they’ll love it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "615921659": {
+   "kind": "text",
+   "parent": -1513505246,
+   "children": [
+    57357901
+   ],
+   "actor": null,
+   "text": "Are you sure? Livestreaming can be tough.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1817281386": {
+   "kind": "text",
+   "parent": -1513505246,
+   "children": [
+    -121311820
+   ],
+   "actor": null,
+   "text": "If you’re doing this out of anger, it might backfire.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-121311820": {
+   "kind": "text",
+   "parent": 1817281386,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I know it seems impulsive, but this feels right. I need to prove to myself—and everyone else—that I can do this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "57357901": {
+   "kind": "text",
+   "parent": 615921659,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I know it’ll be hard, but I’m ready for it. I can’t let my nerves control me anymore.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-861435739": {
+   "kind": "text",
+   "parent": -1046776055,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thank you. I’ve been holding myself back for too long. It’s time I take control of my own story.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-374425729": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I'll show that stupid bitch...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Kitchen/Kitchen_Conditions_2",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Anna_Prisme_2 and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_7[prisme-story] = 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "prisme-story",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Mainstory[anna-heart-status] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-heart-status",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Core_NoSave[Anna-Default-Outfit] to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Anna-Default-Outfit",
+        "list": "Core_NoSave",
+        "type": "game-object"
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_7[prisme-story] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "prisme-story",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Condition-Split] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Condition-Split",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -118,6 +118,18 @@ namespace SMSModForge.PackPlugin
         {
             if (_animating) return;
             StartCoroutine(ClickAnimation());
+        }
+
+        /// <summary>Put the button back if it is switched off mid-press -
+        /// Unity stops the coroutine, and without this the button would come
+        /// back shrunk and still marked as animating, which reads as dead. See
+        /// UiButtonClick.OnDisable, where this was actually reported.</summary>
+        private void OnDisable()
+        {
+            if (!_animating) return;
+            StopAllCoroutines();
+            transform.localScale = Vector3.one;
+            _animating = false;
         }
 
         private IEnumerator ClickAnimation()

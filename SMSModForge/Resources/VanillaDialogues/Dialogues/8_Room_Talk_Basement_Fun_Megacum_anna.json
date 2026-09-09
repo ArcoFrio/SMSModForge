@@ -1,0 +1,822 @@
+{
+ "id": "8_Room_Talk/Basement/Fun/Megacum_anna",
+ "name": "Megacum_anna",
+ "index": 13,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  952436864,
+  736228237,
+  632757768,
+  758182790,
+  833328335,
+  1714399668,
+  1648620163,
+  -1992278429,
+  1581108561,
+  -1622549538,
+  1542902630,
+  -1729290605
+ ],
+ "nodes": {
+  "952436864": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I have a feeling this is going to get messy. Let me just get this shirt off, I don't want to ruin it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "736228237": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Nude"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    }
+   ]
+  },
+  "632757768": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1633114637,
+    1731130027
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "There we go. Much better. Now, I can see what we're working with and I can—",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaMegaCum (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaMegaCum (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaMegaCum (0)"
+      }
+     }
+    }
+   ]
+  },
+  "758182790": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh! Oh my god! Already?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaMegaCum (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaMegaCum (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaMegaCum (1)"
+      }
+     }
+    }
+   ]
+  },
+  "833328335": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Wow! Okay! It's... it's not stopping! Mmghgmm!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1714399668": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Just... just stay right there. Let me... let me try to catch it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaMegaCum (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaMegaCum (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaMegaCum (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1648620163": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmph! It's so... warm!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1992278429": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I think... I think I'm drowning in you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaMegaCum (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaMegaCum (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaMegaCum (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaMegaCum (0) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaMegaCum (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaMegaCum (0)"
+      }
+     }
+    }
+   ]
+  },
+  "1581108561": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Don't... don't stop.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1622549538": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "My god... I can feel it in my ears. How did you even...? Hahaha!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaMegaCum (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaMegaCum (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaMegaCum (6)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaMegaCum (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaMegaCum (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaMegaCum (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1633114637": {
+   "kind": "text",
+   "parent": 632757768,
+   "actor": null,
+   "text": "(Paint her face) Fuck! Hngaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1731130027": {
+   "kind": "text",
+   "parent": 632757768,
+   "children": [
+    1582067307,
+    360265071,
+    1036524893,
+    -1402379607,
+    1430625606,
+    -1951778848,
+    1779096039,
+    -191086958,
+    -1998010643,
+    -1944257286,
+    520190370
+   ],
+   "actor": null,
+   "text": "Fuck... I'm close... Quick, {M}. Ride me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1582067307": {
+   "kind": "text",
+   "parent": 1731130027,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Okay, okay, just... give me one second to get on top of you. I don't want to waste a single drop.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1542902630": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Next time, I'm wearing a raincoat. And maybe goggles.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1729290605": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fuck... This was so much fun...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "360265071": {
+   "kind": "text",
+   "parent": 1731130027,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "There we go. Just... let me guide you in. Oh fuck, you're so hard.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaMegaCumPussy (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaMegaCumPussy (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaMegaCumPussy (0)"
+      }
+     }
+    }
+   ]
+  },
+  "1036524893": {
+   "kind": "choice",
+   "parent": 1731130027,
+   "children": [
+    -1970113945,
+    -1969185018,
+    -2037430521
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "W-Wait, let me turn around... I want to see your face when you~",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaMegaCumPussy (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaMegaCumPussy (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaMegaCumPussy (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1402379607": {
+   "kind": "text",
+   "parent": 1731130027,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh! Oh my god, you're already—!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaMegaCumPussy (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaMegaCumPussy (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaMegaCumPussy (2)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaMegaCum (0) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaMegaCum (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaMegaCum (0)"
+      }
+     }
+    }
+   ]
+  },
+  "1430625606": {
+   "kind": "text",
+   "parent": 1731130027,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I can feel it! I can actually feel you painting the inside of me! It's so... so warm!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1951778848": {
+   "kind": "text",
+   "parent": 1731130027,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Don't stop! Please, don't stop! Give me every last drop!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1779096039": {
+   "kind": "choice",
+   "parent": 1731130027,
+   "children": [
+    1781171148,
+    1216767304,
+    276076570
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh fuck, it's... it's running down my thighs already! You're overflowing me!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-191086958": {
+   "kind": "text",
+   "parent": 1731130027,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I feel... so full! I've never been this full in my entire life!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1998010643": {
+   "kind": "text",
+   "parent": 1731130027,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm lying in a puddle. A very, very warm puddle. Your puddle.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaMegaCumPussy (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaMegaCumPussy (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaMegaCumPussy (3)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaMegaCumPussy (0) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaMegaCumPussy (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaMegaCumPussy (0)"
+      }
+     }
+    }
+   ]
+  },
+  "-1944257286": {
+   "kind": "text",
+   "parent": 1731130027,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I never knew it was possible to be this... sticky. And happy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "520190370": {
+   "kind": "text",
+   "parent": 1731130027,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{PC}? Stop staring and bring me a towel... Please~",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1970113945": {
+   "kind": "text",
+   "parent": 1036524893,
+   "actor": null,
+   "text": "(Fill her pussy)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1969185018": {
+   "kind": "text",
+   "parent": 1036524893,
+   "actor": null,
+   "text": "Fuck, the pills are... I'm already cumming!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2037430521": {
+   "kind": "text",
+   "parent": 1036524893,
+   "actor": null,
+   "text": "I can't resist it... I want to flood your womb, {M}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1781171148": {
+   "kind": "text",
+   "parent": 1779096039,
+   "actor": null,
+   "text": "Oh fuck, it doesn't stop... It doesn't fucking stop!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1216767304": {
+   "kind": "text",
+   "parent": 1779096039,
+   "actor": null,
+   "text": "I... Your pussy is... You're milking my cock, Anna!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "276076570": {
+   "kind": "text",
+   "parent": 1779096039,
+   "actor": null,
+   "text": "(Keep cumming)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "Studio_Canvas/Porn/UI_Porn (13)",
+   "script": "ButtonInstructions",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core[temp-stored-very-short-term] = Megacum_anna",
+   "as": "GameObject",
+   "before": [
+    {
+     "type": "InstructionCommonDebugText",
+     "title": "Log: Click!",
+     "fields": {
+      "m_Message": {
+       "kind": "value",
+       "value": "Click!"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Button-1",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Button-1",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "type": "InstructionUICanvasGroupInteractable",
+     "title": "Studio_Canvas Interactable = False",
+     "fields": {
+      "m_CanvasGroup": {
+       "kind": "object",
+       "name": "Studio_Canvas",
+       "of": "GetGameObjectInstance",
+       "path": "Studio_Canvas"
+      },
+      "m_Interactable": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "type": "InstructionUICanvasGroupAlpha",
+     "title": "Studio_Canvas alpha = 0",
+     "fields": {
+      "m_CanvasGroup": {
+       "kind": "object",
+       "name": "Studio_Canvas",
+       "of": "GetGameObjectInstance",
+       "path": "Studio_Canvas"
+      },
+      "m_Alpha": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "value",
+        "value": 0
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 1,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Basement to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Basement",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Basement"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Studio_Canvas to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Studio_Canvas",
+       "of": "GetGameObjectInstance",
+       "path": "Studio_Canvas"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

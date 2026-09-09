@@ -1,0 +1,752 @@
+{
+ "id": "8_Room_Talk/Mall/CharlottePhoenixQuestStart",
+ "name": "CharlottePhoenixQuestStart",
+ "index": 11,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Charlotte",
+  "V_Rich CEO"
+ ],
+ "roots": [
+  -1392111432,
+  1823834395,
+  -9769426,
+  2101051282,
+  -1422461351,
+  381342991,
+  -1413676827,
+  -1677551884,
+  1539438379
+ ],
+ "nodes": {
+  "2101051282": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1830723487,
+    939958783,
+    1651088059
+   ],
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Step back. Now.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1392111432": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Rich CEO",
+   "expressionName": "my-expression",
+   "text": "Come on, darling. With your looks, you could be more than just some shop girl. I could have you on billboards, commercials, private parties. You would make a fortune.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1830723487": {
+   "kind": "text",
+   "parent": 2101051282,
+   "children": [
+    69365451
+   ],
+   "actor": null,
+   "text": "Is this man bothering you, Charlotte?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "939958783": {
+   "kind": "text",
+   "parent": 2101051282,
+   "children": [
+    -253243422
+   ],
+   "actor": null,
+   "text": "Hey fuckhead, she said back off.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1651088059": {
+   "kind": "text",
+   "parent": 2101051282,
+   "children": [
+    -1873720834
+   ],
+   "actor": null,
+   "text": "Charlotte is gorgeous. But she is already taken by me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "69365451": {
+   "kind": "text",
+   "parent": -1830723487,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "…{PC}! Yes, actually, he is.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-253243422": {
+   "kind": "text",
+   "parent": 939958783,
+   "actor": "V_Rich CEO",
+   "expression": 1,
+   "text": "Who are you supposed to be?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1873720834": {
+   "kind": "text",
+   "parent": 1651088059,
+   "actor": "Charlotte",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "W-what?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1823834395": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Hmph. I am not interested in being your plaything. I told you. I only work on my terms.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-9769426": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Rich CEO",
+   "expressionName": "my-expression",
+   "text": "Ohhh, don't be like that. You have the body, the face… the kind of assets you should not waste. Why not put them to use?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1422461351": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Rich CEO",
+   "expressionName": "my-expression",
+   "text": "Tch. You think you can just swoop in and steal the spotlight? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "381342991": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    407171288,
+    -343871531,
+    178338377,
+    1733308206
+   ],
+   "actor": "V_Rich CEO",
+   "expressionName": "my-expression",
+   "text": "I don't know who you are, but you're making a powerful enemy, boy.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "407171288": {
+   "kind": "text",
+   "parent": 381342991,
+   "children": [
+    664307239
+   ],
+   "actor": null,
+   "text": "The only enemy you are making is yourself. Embarrassing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-343871531": {
+   "kind": "text",
+   "parent": 381342991,
+   "children": [
+    -2077008821
+   ],
+   "actor": null,
+   "text": "Don’t you have to visit the Titanic in a submarine or something?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "178338377": {
+   "kind": "text",
+   "parent": 381342991,
+   "children": [
+    1417045876
+   ],
+   "actor": null,
+   "text": "Charlotte deserves real class, not some sweaty weirdo.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1417045876": {
+   "kind": "text",
+   "parent": 178338377,
+   "actor": "V_Rich CEO",
+   "expressionName": "my-expression",
+   "text": "Insolent brat… you are nothing compared to me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2077008821": {
+   "kind": "text",
+   "parent": -343871531,
+   "actor": "V_Rich CEO",
+   "expressionName": "my-expression",
+   "text": "W-what?! How dare you! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "664307239": {
+   "kind": "text",
+   "parent": 407171288,
+   "actor": "V_Rich CEO",
+   "expressionName": "my-expression",
+   "text": "Hah. Empty words. You will regret crossing me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1413676827": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "…Thank you. That was… awful. He was supposed to be a potential customer for a yacht, but it turns out he was just another creep.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_RichCEOBust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1677551884": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "This is not the first time I have had to deal with men like him...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1539438379": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1483659548,
+    -1851692307,
+    -1926880002
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "I hate to admit it, but I think I need someone to watch my back. A bodyguard.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1483659548": {
+   "kind": "text",
+   "parent": 1539438379,
+   "children": [
+    -706964895
+   ],
+   "actor": null,
+   "text": "I can help you find one. You shouldn't have to deal with this alone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1851692307": {
+   "kind": "text",
+   "parent": 1539438379,
+   "children": [
+    -555487404,
+    31253024
+   ],
+   "actor": null,
+   "text": "Why waste money on a bodyguard when you have me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1926880002": {
+   "kind": "text",
+   "parent": 1539438379,
+   "children": [
+    584825552
+   ],
+   "actor": null,
+   "text": "Well, good luck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "584825552": {
+   "kind": "text",
+   "parent": -1926880002,
+   "actor": "Charlotte",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Yeah. Thanks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_9[CharlottePhoenixQuest] = -5",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "CharlottePhoenixQuest",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": -5
+      }
+     }
+    }
+   ]
+  },
+  "-555487404": {
+   "kind": "text",
+   "parent": -1851692307,
+   "actor": "Charlotte",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "You? No way. You are already far too busy, and… if I had you at my side all the time, I would be way too distracted by… thoughts.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-706964895": {
+   "kind": "text",
+   "parent": -1483659548,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That means a lot. Thank you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_9[CharlottePhoenixQuest] = 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "CharlottePhoenixQuest",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "31253024": {
+   "kind": "text",
+   "parent": -1851692307,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "It wouldn't work. Please, just help me find someone else reliable.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_9[CharlottePhoenixQuest] = 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "CharlottePhoenixQuest",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "1733308206": {
+   "kind": "text",
+   "parent": 381342991,
+   "children": [
+    -435014644
+   ],
+   "actor": null,
+   "text": "(Urban Linguist) Keep talking and I’ll fuck your legacy outta existence.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[Urban-Linguist-5] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Urban-Linguist-5",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-435014644": {
+   "kind": "text",
+   "parent": 1733308206,
+   "actor": "V_Rich CEO",
+   "expressionName": "my-expression",
+   "text": "You insolent little~! You think threats make you bold? You’ll regret this. You’ll regret everything!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Mall",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play CharlottePhoenixQuestStart and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[phoenix-sex-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "phoenix-sex-done",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If CoreFinalStates[CharlotteFinalStage] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "CharlotteFinalStage",
+        "list": "CoreFinalStates",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_9[CharlottePhoenixQuest] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "CharlottePhoenixQuest",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CharlotteBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CharlotteBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/CharlotteBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_RichCEOBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_RichCEOBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_RichCEOBust"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/CharlotteBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

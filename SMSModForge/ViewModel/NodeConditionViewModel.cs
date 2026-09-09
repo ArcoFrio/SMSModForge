@@ -271,31 +271,40 @@ public sealed class NodeConditionViewModel : ObservableObject
 
     private static readonly HashSet<string> _variableTypes = new()
     {
+        NodeConditionTypes.VariableCompare, NodeConditionTypes.VariableExists,
+
+        // The ten this replaced. Still recognised, because a row is built from
+        // whatever the pack says before the migration has had a chance to
+        // rewrite it - and a condition that fell out of the family here would
+        // lose its Source and Comparison pickers.
         NodeConditionTypes.VariableEquals, NodeConditionTypes.VariableGreaterThan,
         NodeConditionTypes.VariableGreaterOrEqual, NodeConditionTypes.VariableLessThan,
-        NodeConditionTypes.VariableLessOrEqual, NodeConditionTypes.VariableExists,
+        NodeConditionTypes.VariableLessOrEqual,
+        NodeConditionTypes.GameVariableEquals,
+        NodeConditionTypes.GameVariableNumberGreaterThan,
+        NodeConditionTypes.GameVariableNumberGreaterOrEqual,
+        NodeConditionTypes.GameVariableNumberLessThan,
+        NodeConditionTypes.GameVariableNumberLessOrEqual,
     };
 
     /// <summary>True for any of the six Variable* comparison types.</summary>
     public bool IsVariableFamily => _variableTypes.Contains(Model.Type);
 
-    /// <summary>Rewrite a legacy GameVariable* condition to Variable* + source=vanilla. Idempotent.</summary>
+    /// <summary>
+    /// Rewrite any of the ten superseded variable types to VariableCompare.
+    /// Idempotent.
+    /// <para/>
+    /// The same rewrite <see cref="Model.PackMigration"/> does on load - here as
+    /// well because a row can be built from a condition the migration has not
+    /// seen: one pasted from another pack, or one a translator produced.
+    /// </summary>
     private void NormalizeVariable()
     {
-        string mapped = Model.Type switch
-        {
-            NodeConditionTypes.GameVariableEquals                 => NodeConditionTypes.VariableEquals,
-            NodeConditionTypes.GameVariableNumberGreaterThan      => NodeConditionTypes.VariableGreaterThan,
-            NodeConditionTypes.GameVariableNumberGreaterOrEqual   => NodeConditionTypes.VariableGreaterOrEqual,
-            NodeConditionTypes.GameVariableNumberLessThan         => NodeConditionTypes.VariableLessThan,
-            NodeConditionTypes.GameVariableNumberLessOrEqual      => NodeConditionTypes.VariableLessOrEqual,
-            _ => null,
-        };
-        if (mapped != null)
-        {
-            Model.Type = mapped;
-            Model.Params["source"] = "vanilla";
-        }
+        if (!VariableMerge.Rewrite(Model)) return;
+
+        OnPropertyChanged(nameof(VarSource));
+        OnPropertyChanged(nameof(VarComparison));
+        OnPropertyChanged(nameof(IsVanillaSource));
     }
 
     /// <summary>Type shown in the row's combo: one "Variable" entry for the family, else the real type.</summary>
@@ -326,32 +335,61 @@ public sealed class NodeConditionViewModel : ObservableObject
     /// <summary>True when the Vanilla source is selected (drives the name picker's list).</summary>
     public bool IsVanillaSource => string.Equals(GetParam("source"), "vanilla", StringComparison.OrdinalIgnoreCase);
 
+    /// <summary>
+    /// Which store a <c>$name</c> in the VALUE reads from, stored in the
+    /// 'valueSource' param — the mirror of <see cref="VarSource"/>.
+    /// <para/>
+    /// A value is usually a literal, and then this changes nothing. It matters
+    /// when the value names another variable: "is this equal to that one" can
+    /// only be asked if the two can come from different stores, which is what
+    /// the game's own conditions do — <c>Mainstory[MLove] &gt; Mainstory[MCorruption]</c>
+    /// compares two vanilla globals, and before this there was no way to write
+    /// that here at all.
+    /// </summary>
+    public string VarValueSource
+    {
+        get => string.Equals(GetParam("valueSource"), "vanilla", StringComparison.OrdinalIgnoreCase)
+            ? "Vanilla" : "Pack";
+        set
+        {
+            if (string.Equals(value, "Vanilla", StringComparison.OrdinalIgnoreCase))
+                Model.Params["valueSource"] = "vanilla";
+            else Model.Params.Remove("valueSource");
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(IsVanillaValueSource));
+            OnPropertyChanged(nameof(Display));
+        }
+    }
+
+    /// <summary>True when the value reads a vanilla global (drives its picker).</summary>
+    public bool IsVanillaValueSource
+        => string.Equals(GetParam("valueSource"), "vanilla", StringComparison.OrdinalIgnoreCase);
+
     /// <summary>Comparison label, mapped to/from the underlying Variable* type.</summary>
     public string VarComparison
     {
-        get => Model.Type switch
-        {
-            NodeConditionTypes.VariableGreaterThan    => "greater than",
-            NodeConditionTypes.VariableGreaterOrEqual => "greater or equal",
-            NodeConditionTypes.VariableLessThan       => "less than",
-            NodeConditionTypes.VariableLessOrEqual    => "less or equal",
-            NodeConditionTypes.VariableExists         => "exists",
-            _                                          => "equals",
-        };
+        get => Model.Type == NodeConditionTypes.VariableExists
+            ? "exists"
+            : VariableMerge.ComparisonOf(Model);
         set
         {
-            string t = value switch
+            if (value == VarComparison) return;
+
+            // "exists" is still its own type: it asks whether the variable is
+            // set at all, takes no value, and reads from a different place.
+            if (value == "exists")
             {
-                "greater than"     => NodeConditionTypes.VariableGreaterThan,
-                "greater or equal" => NodeConditionTypes.VariableGreaterOrEqual,
-                "less than"        => NodeConditionTypes.VariableLessThan,
-                "less or equal"    => NodeConditionTypes.VariableLessOrEqual,
-                "exists"           => NodeConditionTypes.VariableExists,
-                _                  => NodeConditionTypes.VariableEquals,
-            };
-            if (t == Model.Type) return;
-            Type = t;   // keeps params (name/value/source); RebuildParamRows is harmless (rows hidden for the family)
+                Type = NodeConditionTypes.VariableExists;
+            }
+            else
+            {
+                if (Model.Type != NodeConditionTypes.VariableCompare)
+                    Type = NodeConditionTypes.VariableCompare;
+                Model.Params["comparison"] = value;
+            }
+
             OnPropertyChanged();
+            OnPropertyChanged(nameof(Display));
             OnPropertyChanged(nameof(ShowVariableValue));
         }
     }

@@ -1,0 +1,1044 @@
+{
+ "id": "8_Core_Events/Trips/ChurchVisit/DefaultDialogue",
+ "name": "DefaultDialogue",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Alice",
+  "Anna",
+  "Continue",
+  "Josef",
+  "You"
+ ],
+ "roots": [
+  480063561,
+  1691892041,
+  130705520
+ ],
+ "nodes": {
+  "480063561": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -584495631,
+    -629994871,
+    -574895753,
+    99028207,
+    334462573,
+    -23774068
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Ugh, that was boring as hell..",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-584495631": {
+   "kind": "text",
+   "parent": 480063561,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Language!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-629994871": {
+   "kind": "text",
+   "parent": 480063561,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It's not really about God or the church; it's about doing something together every once in a while. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-574895753": {
+   "kind": "text",
+   "parent": 480063561,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Plus, I do enjoy the atmosphere here—it feels so serene.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "99028207": {
+   "kind": "text",
+   "parent": 480063561,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Your {M}'s right, so you'd better listen to her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "334462573": {
+   "kind": "text",
+   "parent": 480063561,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Yeah, yeah... Can we go home now?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-23774068": {
+   "kind": "text",
+   "parent": 480063561,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes, we can go now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "130705520": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1569377395,
+    1547856436,
+    -2027251587,
+    -1551398731
+   ],
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Unless...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events[church-events] ≥ 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "church-events",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave3[2026bool-veryshort] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2026bool-veryshort",
+        "list": "Core_NoSave3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1569377395": {
+   "kind": "text",
+   "parent": 130705520,
+   "children": [
+    1313391520,
+    -4808453,
+    -1291442353,
+    1698177034,
+    -1432808752,
+    -1987451286,
+    351550895,
+    -2055837166,
+    -62593090,
+    456523816,
+    -666742648
+   ],
+   "actor": null,
+   "text": "Let's meet with Alice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[alice-shared-with-adrian] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-shared-with-adrian",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1551398731": {
+   "kind": "text",
+   "parent": 130705520,
+   "actor": null,
+   "text": "Eh, I'll go home.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1313391520": {
+   "kind": "text",
+   "parent": -1569377395,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Your {M} and I will be waiting in the car.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-4808453": {
+   "kind": "choice",
+   "parent": -1569377395,
+   "children": [
+    1706183863,
+    -1184686375
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Oh, look who we got here...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Red_Pullover/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceDress to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceDress",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AliceDress"
+      }
+     }
+    }
+   ]
+  },
+  "1706183863": {
+   "kind": "text",
+   "parent": -4808453,
+   "children": [
+    -1826933477
+   ],
+   "actor": null,
+   "text": "My cock's in the mood for a hole.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1184686375": {
+   "kind": "text",
+   "parent": -4808453,
+   "children": [
+    1708062814
+   ],
+   "actor": null,
+   "text": "Wanna have some fun?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1826933477": {
+   "kind": "text",
+   "parent": 1706183863,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Mhmm... You want to do it here? Fuck, that's so naughty...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1708062814": {
+   "kind": "text",
+   "parent": -1184686375,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Mhmm... You want to do it here? Fuck, that's so naughty...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1291442353": {
+   "kind": "text",
+   "parent": -1569377395,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Come on, Adrian. It's time for your fat cock to try my pussy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1698177034": {
+   "kind": "text",
+   "parent": -1569377395,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Don't worry, {PC}. My mouth is all yours...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1432808752": {
+   "kind": "text",
+   "parent": -1569377395,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Oh fuck, you're so tight....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active GothChurch to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "GothChurch",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/GothChurch"
+      }
+     }
+    }
+   ]
+  },
+  "-1987451286": {
+   "kind": "text",
+   "parent": -1569377395,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Mmphhmmm... Mmmmhm.....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "351550895": {
+   "kind": "text",
+   "parent": -1569377395,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I'm getting close! Can I just come inside? Fuck, It's too late!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2055837166": {
+   "kind": "text",
+   "parent": -1569377395,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Phew, you two really roughed me up... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-62593090": {
+   "kind": "text",
+   "parent": -1569377395,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "And thanks for the tasty snack, {PC}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "456523816": {
+   "kind": "text",
+   "parent": -1569377395,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "I should go now, before my parents start looking for me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-666742648": {
+   "kind": "text",
+   "parent": -1569377395,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "She's so cool...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1691892041": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1987863537,
+    449202957,
+    -195716398
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm glad that you two decided to stay at my side...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1987863537": {
+   "kind": "text",
+   "parent": 1691892041,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I know that this is terrible boring for you, but it means a lot to me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "449202957": {
+   "kind": "text",
+   "parent": 1691892041,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "It's fine, {M}. I'm glad to see you smile...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-195716398": {
+   "kind": "text",
+   "parent": 1691892041,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thank you, hun. Let's go back home then.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1547856436": {
+   "kind": "text",
+   "parent": 130705520,
+   "children": [
+    608745225,
+    2125730718
+   ],
+   "actor": null,
+   "text": "{M}, can I talk to you for a second?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "608745225": {
+   "kind": "text",
+   "parent": 1547856436,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Sure... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2125730718": {
+   "kind": "choice",
+   "parent": 1547856436,
+   "children": [
+    1221125128,
+    651364936
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I want it too... But we have to be careful...  Please... Can you... Can you fuck my ass?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_Suit to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_Suit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_Suit"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    }
+   ]
+  },
+  "1221125128": {
+   "kind": "text",
+   "parent": 2125730718,
+   "children": [
+    -1225428219,
+    487454597,
+    -694522675,
+    -1000756382,
+    -2039361430,
+    618879653,
+    362738322,
+    -280200669
+   ],
+   "actor": null,
+   "text": "Hell yeah.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "651364936": {
+   "kind": "text",
+   "parent": 2125730718,
+   "children": [
+    21555436
+   ],
+   "actor": null,
+   "text": "Uh... Sorry, but no.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "21555436": {
+   "kind": "text",
+   "parent": 651364936,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh... Um, okay...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1225428219": {
+   "kind": "text",
+   "parent": 1221125128,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "L-Lets find a quiet corner...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "487454597": {
+   "kind": "text",
+   "parent": 1221125128,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hurry, before anyone see's us...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-694522675": {
+   "kind": "text",
+   "parent": 1221125128,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god... That's it.. Fuck my ass... Please... Give it to my ass...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MChurch to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MChurch",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/MChurch"
+      }
+     }
+    }
+   ]
+  },
+  "-2039361430": {
+   "kind": "text",
+   "parent": 1221125128,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god... I'm milking my {S} with my ass... In such a place... I'm such a bad wife...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "618879653": {
+   "kind": "text",
+   "parent": 1221125128,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "... And it's the best...  I'm... {S}, I'm... You are making me cum... I'm... Hngg......",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MChurch (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MChurch (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/MChurch (1)"
+      }
+     }
+    }
+   ]
+  },
+  "362738322": {
+   "kind": "text",
+   "parent": 1221125128,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "F-Fuck... We have no time to clean up... Guess I'll have to keep your load inside of me until we are back home...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-280200669": {
+   "kind": "text",
+   "parent": 1221125128,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let's leave... Quickly...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1000756382": {
+   "kind": "text",
+   "parent": 1221125128,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fuck... Hnggg... Oh god... What are we doing... Don't stop....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2027251587": {
+   "kind": "text",
+   "parent": 130705520,
+   "children": [
+    -1041271066
+   ],
+   "actor": null,
+   "text": "(Look for Vanessa)",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[vanessa-flirtmode] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vanessa-flirtmode",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1041271066": {
+   "kind": "text",
+   "parent": -2027251587,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave3[2026bool-veryshort] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2026bool-veryshort",
+        "list": "Core_NoSave3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Trips/ChurchVisit",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DefaultDialogue and wait",
+   "as": "Dialogue"
+  }
+ ]
+}

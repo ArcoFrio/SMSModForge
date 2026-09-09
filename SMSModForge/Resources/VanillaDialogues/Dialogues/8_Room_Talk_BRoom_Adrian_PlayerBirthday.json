@@ -1,0 +1,598 @@
+{
+ "id": "8_Room_Talk/BRoom/Adrian_PlayerBirthday",
+ "name": "Adrian_PlayerBirthday",
+ "index": 10,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian"
+ ],
+ "roots": [
+  -1417529705,
+  1886042319,
+  742954873,
+  -313230765,
+  -637564529
+ ],
+ "nodes": {
+  "1886042319": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1170173350
+   ],
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Happy birthday, bro! You’re one year closer to being old as fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If MinisUnlock[adrian-minisgifted] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-minisgifted",
+        "list": "MinisUnlock",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "742954873": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1584880225
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Okay so... I may have gone a little overboard this year. But it’s birthday number three. And you’re not ready for this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If MinisUnlock[adrian-minisgifted] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-minisgifted",
+        "list": "MinisUnlock",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-313230765": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    572113736
+   ],
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Second annual birthday figurine', incoming! This one’s... way cooler than last year. No offense to Skeletor.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If MinisUnlock[adrian-minisgifted] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-minisgifted",
+        "list": "MinisUnlock",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-637564529": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -729537865,
+    219406579
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Happy birthday, bro!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If MinisUnlock[adrian-minisgifted] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-minisgifted",
+        "list": "MinisUnlock",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-729537865": {
+   "kind": "choice",
+   "parent": -637564529,
+   "children": [
+    -593874293,
+    427702496,
+    1010220699
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Alright, alright, I know you said 'no gifts'... but come on. Like I’d not get you something cool?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "219406579": {
+   "kind": "text",
+   "parent": -637564529,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "It's a necromancer! Custom painted. Bone staff, skull armor, little book of forbidden spells. Look at his stupid smug face.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set MinisUnlock[necromancer] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "necromancer",
+        "list": "MinisUnlock",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = Necromancer Mini",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Necromancer Mini"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1170173350": {
+   "kind": "text",
+   "parent": 1886042319,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Birthday protocol complete, I guess!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "572113736": {
+   "kind": "text",
+   "parent": -313230765,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Lancer knight. Shiny as hell. Lance is detachable. Also? Her name is Lady Penetrath, so... yeah. You’re welcome.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set MinisUnlock[lancer] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "lancer",
+        "list": "MinisUnlock",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = Lancer Mini",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Lancer Mini"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1584880225": {
+   "kind": "text",
+   "parent": 742954873,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Plant monstergirl. Fully posable. Vines, thorns, and, uh... assets. I saw it and thought, ‘Yeah, that’s a {PC} gift.’ No regrets.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set MinisUnlock[plantgirl] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "plantgirl",
+        "list": "MinisUnlock",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = Vinessa Mini",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Vinessa Mini"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-593874293": {
+   "kind": "text",
+   "parent": -729537865,
+   "actor": null,
+   "text": "You’re too sweet, dude. What is it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "427702496": {
+   "kind": "text",
+   "parent": -729537865,
+   "actor": null,
+   "text": "Wow, ignoring my wishes already. Classic.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1010220699": {
+   "kind": "text",
+   "parent": -729537865,
+   "actor": null,
+   "text": "You really didn’t have to.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1417529705": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Yo, hey... I know things have been kinda weird between us, but—it's your birthday, so... yeah. That still matters to me. So...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[Adrian-is-angry] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Adrian-is-angry",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/BRoom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Adrian_PlayerBirthday and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Holidays[holiday-event-one-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "holiday-event-one-done",
+        "list": "Holidays",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Holidays[holiday-playerbd] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "holiday-playerbd",
+        "list": "Holidays",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment MinisUnlock[adrian-minisgifted] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-minisgifted",
+        "list": "MinisUnlock",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Holidays[holiday-event-one-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "holiday-event-one-done",
+        "list": "Holidays",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

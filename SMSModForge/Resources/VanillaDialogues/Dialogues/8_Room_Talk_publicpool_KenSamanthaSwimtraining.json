@@ -1,0 +1,1770 @@
+{
+ "id": "8_Room_Talk/publicpool/KenSamanthaSwimtraining",
+ "name": "KenSamanthaSwimtraining",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Ken",
+  "Samantha"
+ ],
+ "roots": [
+  1295834278,
+  -1040933530,
+  -1712829542
+ ],
+ "nodes": {
+  "1295834278": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    86961440,
+    1804727389,
+    -150702809,
+    -21784832,
+    -1015917761,
+    646147453,
+    372255707,
+    -1452437818,
+    1227517695,
+    1233657797,
+    -356532237,
+    1509569261,
+    861073278
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Come on, Ken! It’s just water. You’re not going to melt.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[ken-swim-stage-one] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-swim-stage-one",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "86961440": {
+   "kind": "text",
+   "parent": 1295834278,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Easy for you to say! What if I sink like a rock?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1804727389": {
+   "kind": "text",
+   "parent": 1295834278,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Don't you want your reward, Ken?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-150702809": {
+   "kind": "text",
+   "parent": 1295834278,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Y-Yes...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-21784832": {
+   "kind": "text",
+   "parent": 1295834278,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "You’ve just got to get in and try.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1015917761": {
+   "kind": "text",
+   "parent": 1295834278,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Y-Yes! H-Here goes nothing!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Ken_Swimsuit/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "646147453": {
+   "kind": "text",
+   "parent": 1295834278,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "F-FUCK! I'M DROWNING! I'M DYING! HELP! PLEASE! HELP ME!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenDrowns to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenDrowns",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenDrowns"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (2)"
+      }
+     }
+    }
+   ]
+  },
+  "372255707": {
+   "kind": "choice",
+   "parent": 1295834278,
+   "children": [
+    -1506416153,
+    -567831914,
+    -1064086337
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "R-Relax! You can do it... Just stay calm! Calm down!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1452437818": {
+   "kind": "text",
+   "parent": 1295834278,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "AH GOD NO! I DON'T WANT TO DIE! I DON'T WANT TO DIE!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1227517695": {
+   "kind": "text",
+   "parent": 1295834278,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "L-Look... Just focus on my ass and slowly paddle over here!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1233657797": {
+   "kind": "text",
+   "parent": 1295834278,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Y-Yes... I... I can do it... Haaah! HAAAH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-356532237": {
+   "kind": "text",
+   "parent": 1295834278,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "T-Thanks {M}... You saved my life...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Ken_Swimsuit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Ken_Swimsuit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Ken_Swimsuit"
+      }
+     }
+    }
+   ]
+  },
+  "1509569261": {
+   "kind": "text",
+   "parent": 1295834278,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Don't worry... L-Let's try it another day, okay?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "861073278": {
+   "kind": "text",
+   "parent": 1295834278,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "O-Okay...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[ken-swim-stage-one] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-swim-stage-one",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1506416153": {
+   "kind": "text",
+   "parent": 372255707,
+   "actor": null,
+   "text": "Move your arms, Ken! You gotta swim!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-567831914": {
+   "kind": "text",
+   "parent": 372255707,
+   "actor": null,
+   "text": "Just calm down. You can't drown.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1064086337": {
+   "kind": "text",
+   "parent": 372255707,
+   "actor": null,
+   "text": "The water is not that deep....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1040933530": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -160628890,
+    -539452781,
+    574927790,
+    996794579,
+    -17330619,
+    503999280,
+    1423338949,
+    -1779447344,
+    900833883,
+    -413574372,
+    -2020826394,
+    398230864
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Alright… no more messing around. I’m gonna do this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[ken-swim-stage-one] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-swim-stage-one",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[ken-swim-stage-two] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-swim-stage-two",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-160628890": {
+   "kind": "text",
+   "parent": -1040933530,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "That’s the spirit, baby! Show that water who’s boss!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-539452781": {
+   "kind": "text",
+   "parent": -1040933530,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "A-Alright... Breath... Just breath...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Ken_Swimsuit/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenDrowns to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenDrowns",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenDrowns"
+      }
+     }
+    }
+   ]
+  },
+  "574927790": {
+   "kind": "choice",
+   "parent": -1040933530,
+   "children": [
+    983614130,
+    -870852133
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I... I'm okay... I think....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "983614130": {
+   "kind": "text",
+   "parent": 574927790,
+   "actor": null,
+   "text": "Now lower your body and try to swi.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-870852133": {
+   "kind": "text",
+   "parent": 574927790,
+   "actor": null,
+   "text": "You’ve got this, Ken. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "996794579": {
+   "kind": "text",
+   "parent": -1040933530,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I... I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-17330619": {
+   "kind": "text",
+   "parent": -1040933530,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Hey... Maybe this will help...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (3)"
+      }
+     }
+    }
+   ]
+  },
+  "503999280": {
+   "kind": "text",
+   "parent": -1040933530,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Look at me, baby...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1423338949": {
+   "kind": "text",
+   "parent": -1040933530,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Look how {M} is playing with herself in public...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-1779447344": {
+   "kind": "text",
+   "parent": -1040933530,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "F-Fuck... I... I gotta try....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "900833883": {
+   "kind": "text",
+   "parent": -1040933530,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "No.. N-No... I ... I can't do it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-413574372": {
+   "kind": "text",
+   "parent": -1040933530,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "C-Calm down... Just paddle over here. That's enough for today!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-2020826394": {
+   "kind": "text",
+   "parent": -1040933530,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I'm sorry, {M}... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Ken_Swimsuit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Ken_Swimsuit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Ken_Swimsuit"
+      }
+     }
+    }
+   ]
+  },
+  "398230864": {
+   "kind": "text",
+   "parent": -1040933530,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Hey... You are trying your best. I'm proud. Next time it will work out... I will make sure of it....",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[ken-swim-stage-two] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-swim-stage-two",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1712829542": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    875663162,
+    1092603029,
+    -7850307,
+    -2099575585,
+    -247049215,
+    1335670515,
+    1255606677,
+    395091393,
+    -159953438,
+    327938991,
+    482044744,
+    304610552,
+    -1157639479,
+    -1795600647,
+    -843018148,
+    -1397652280,
+    -319240828,
+    1188209895,
+    1951575490
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I... We are wasting {PC}'s time... I will never learn how to swim...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[ken-swim-stage-two] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-swim-stage-two",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[ken-can-swim] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-can-swim",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "875663162": {
+   "kind": "text",
+   "parent": -1712829542,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "No! Today you will... I promise you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1092603029": {
+   "kind": "text",
+   "parent": -1712829542,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Alright, one more try...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Ken_Swimsuit/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-7850307": {
+   "kind": "text",
+   "parent": -1712829542,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "T-This doesn't feel right....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenDrowns to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenDrowns",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenDrowns"
+      }
+     }
+    }
+   ]
+  },
+  "-2099575585": {
+   "kind": "text",
+   "parent": -1712829542,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "I... I know you can do it! If you.. If you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-247049215": {
+   "kind": "choice",
+   "parent": -1712829542,
+   "children": [
+    1563228483,
+    -1907316272,
+    -426675643
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "If you can swim over here I will let you and {PC} knock me up!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1335670515": {
+   "kind": "text",
+   "parent": -1712829542,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "... !",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenDrowns (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenDrowns (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenDrowns (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1563228483": {
+   "kind": "text",
+   "parent": -247049215,
+   "actor": null,
+   "text": "I'm sorry, what?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1907316272": {
+   "kind": "text",
+   "parent": -247049215,
+   "actor": null,
+   "text": "GO KEN! SWIM! DO IT!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-426675643": {
+   "kind": "text",
+   "parent": -247049215,
+   "actor": null,
+   "text": "I never asked for this...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "395091393": {
+   "kind": "choice",
+   "parent": -1712829542,
+   "children": [
+    -623397970,
+    296172610,
+    -1147465699
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I did it! I actually did it!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Ken_Swimsuit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Ken_Swimsuit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Ken_Swimsuit"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[achivement-unlocked] = Trainer",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Trainer"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "achivement-unlocked",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Achievements[ken-swimming] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-swimming",
+        "list": "Achievements",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1255606677": {
+   "kind": "text",
+   "parent": -1712829542,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "H-He's actually doing it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-159953438": {
+   "kind": "text",
+   "parent": -1712829542,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "We... We need to celebrate! ... Pull out your cocks, boys!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "327938991": {
+   "kind": "choice",
+   "parent": -1712829542,
+   "children": [
+    1878285415,
+    1401029315,
+    -1229494355
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "I've almost forgotton how massive you are, {PC}... Muaaah! MwaahH",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (5)"
+      }
+     }
+    }
+   ]
+  },
+  "482044744": {
+   "kind": "text",
+   "parent": -1712829542,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Mhmmm... Mpphffhh! Mppffhh! Mpfhhh!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "304610552": {
+   "kind": "text",
+   "parent": -1712829542,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Me too, {M}! Please... It's so hard it hurts!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (6)"
+      }
+     }
+    }
+   ]
+  },
+  "-1157639479": {
+   "kind": "text",
+   "parent": -1712829542,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Then... Then let's not waste any time... {PC}... Lie down... I want you in my ass...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1795600647": {
+   "kind": "text",
+   "parent": -1712829542,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "F-Fuck... Y-Yes... Pound my holes, boys... Fuck me... Fuck {M}'s holes!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (7)"
+      }
+     }
+    }
+   ]
+  },
+  "-623397970": {
+   "kind": "text",
+   "parent": 395091393,
+   "actor": null,
+   "text": "That was incredible, Ken. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "296172610": {
+   "kind": "text",
+   "parent": 395091393,
+   "actor": null,
+   "text": "I... All the training and all it took was... Oh god.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1147465699": {
+   "kind": "text",
+   "parent": 395091393,
+   "actor": null,
+   "text": "We should have some fun now, Samantha?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1878285415": {
+   "kind": "text",
+   "parent": 327938991,
+   "actor": null,
+   "text": "You're very eager today, Samantha...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1401029315": {
+   "kind": "text",
+   "parent": 327938991,
+   "actor": null,
+   "text": "Yes... Just like that... Suck it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1229494355": {
+   "kind": "text",
+   "parent": 327938991,
+   "actor": null,
+   "text": "(Enjoy the blowjob)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-843018148": {
+   "kind": "text",
+   "parent": -1712829542,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "T-Take it, {M}! I... I want to make babies with you! ... T-Take my cum! Hngghhh!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1397652280": {
+   "kind": "text",
+   "parent": -1712829542,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Y_Yes! Fill me up! Pump your cum into {M}'s pussy, Ken! P-Pleaaaaaahhhh! AAAHH!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-319240828": {
+   "kind": "text",
+   "parent": -1712829542,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "H-Here it comes, {M}! Haaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (8) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (8)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (8)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (5) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (5)"
+      }
+     }
+    }
+   ]
+  },
+  "1188209895": {
+   "kind": "text",
+   "parent": -1712829542,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Y-Yes, yes, yes! ... Oh god! I'm getting knocked up by my own {S}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1951575490": {
+   "kind": "choice",
+   "parent": -1712829542,
+   "children": [
+    843210402,
+    -1498178579
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "F-Fuck... I'm still hard...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[ken-can-swim] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-can-swim",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "843210402": {
+   "kind": "text",
+   "parent": 1951575490,
+   "children": [
+    -448775379,
+    -74065628,
+    553669506,
+    -1987332061,
+    810233208,
+    372824702,
+    764740794,
+    -1299363219,
+    890507266
+   ],
+   "actor": null,
+   "text": "Let's switch. I want to knock her up too!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1498178579": {
+   "kind": "text",
+   "parent": 1951575490,
+   "children": [
+    -1606448485,
+    317372402
+   ],
+   "actor": null,
+   "text": "Let's take a break for now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1606448485": {
+   "kind": "text",
+   "parent": -1498178579,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Y-Yes... I'm... I'm a bit dizzy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "317372402": {
+   "kind": "text",
+   "parent": -1498178579,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Oh! Alright! Let me find you something to drink!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-448775379": {
+   "kind": "text",
+   "parent": 843210402,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Um... I'm sorry, what?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[player-samantha-impreg] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "player-samantha-impreg",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-74065628": {
+   "kind": "text",
+   "parent": 843210402,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Hell yeah, let's go! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "553669506": {
+   "kind": "text",
+   "parent": 843210402,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Oh god! God, god, god... You two are breaking me! Hngaaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (6) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (6)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (14) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (14)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (14)"
+      }
+     }
+    }
+   ]
+  },
+  "-1987332061": {
+   "kind": "text",
+   "parent": 843210402,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Jesus, {M}'s asshole is all warm and sticky from your cum, {PC}... It feels great!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "810233208": {
+   "kind": "text",
+   "parent": 843210402,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Fhuaaack! I'm... I'm coming again! I'm... HAAAAHGGGHH!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "372824702": {
+   "kind": "choice",
+   "parent": 843210402,
+   "children": [
+    -266612474,
+    -763330630,
+    -298144807
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Take our loads, {M}.... Take... Hnggg....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-266612474": {
+   "kind": "text",
+   "parent": 372824702,
+   "actor": null,
+   "text": "I'm... I'm coming... Hnaangg!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-763330630": {
+   "kind": "text",
+   "parent": 372824702,
+   "actor": null,
+   "text": "A-Another load for your womb, Samantha!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-298144807": {
+   "kind": "text",
+   "parent": 372824702,
+   "actor": null,
+   "text": "(Fill up her pussy)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "764740794": {
+   "kind": "text",
+   "parent": 843210402,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Oh god! Yes... Let it out! .... This is... This is what my pussy was made for!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1299363219": {
+   "kind": "text",
+   "parent": 843210402,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "F-Fuck...That was... That was amazing... {M} is getting dizzy....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "890507266": {
+   "kind": "text",
+   "parent": 843210402,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "L-Let me find you something to drink! ... T-Thank you, {M}!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/publicpool/Conditions",
+   "script": "Conditions",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core[temp-stored-very-short-term] = KenSamanthaSwimtraining",
+   "as": "GameObject",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Samantha_SwimsuitSlutty to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Samantha_SwimsuitSlutty",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Samantha_SwimsuitSlutty"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Ken_Swimsuit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Ken_Swimsuit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Ken_Swimsuit"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

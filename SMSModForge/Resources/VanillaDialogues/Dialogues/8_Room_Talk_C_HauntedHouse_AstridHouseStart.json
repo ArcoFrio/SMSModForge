@@ -1,0 +1,587 @@
+{
+ "id": "8_Room_Talk/C_HauntedHouse/AstridHouseStart",
+ "name": "AstridHouseStart",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Astrid"
+ ],
+ "roots": [
+  -2035339051,
+  1989367750,
+  -2024026680
+ ],
+ "nodes": {
+  "-2035339051": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Alright. It’s go time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionStatsChangeAttribute",
+     "title": "Ghost_Data[Racing_Cum] = 0",
+     "fields": {
+      "m_Target": {
+       "kind": "object",
+       "name": "Ghost_Data",
+       "of": "GetGameObjectInstance",
+       "path": "Ghost_Minigame/Ghost_Data"
+      },
+      "m_Attribute": {
+       "kind": "object",
+       "name": "Racing_Cum",
+       "of": "GetAttributeInstance"
+      },
+      "m_Change": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Noire_Jumpscare to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Noire_Jumpscare",
+       "of": "GetGameObjectInstance",
+       "path": "Ghost_Minigame/Ghost_Map_Core/Noire_Jumpscare"
+      }
+     }
+    },
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disabled_Ghost_Loss to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disabled_Ghost_Loss",
+       "of": "GetGameObjectInstance",
+       "path": "Ghost_Minigame/Disabled_Ghost_Loss"
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Meet with Astrid.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Astrid Quest",
+        "of": "Quest"
+       },
+       "m_TaskId": 276722473
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "1989367750": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Keep the flashlight on me~ not the floor, not the walls. That place’ll fuck with your head if you let it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2024026680": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    366153613,
+    -445088849
+   ],
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "If she shows up... you hide. No hero shit, no speeches. Just vanish.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "366153613": {
+   "kind": "text",
+   "parent": -2024026680,
+   "children": [
+    1430082682
+   ],
+   "actor": null,
+   "text": "Got it. I’ll watch your back.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1430082682": {
+   "kind": "text",
+   "parent": 366153613,
+   "actor": "Astrid",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Good. And watch your feet. That floor eats people.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Minigame[enableafter-wonminigame] = Astrid_GhostHouseWon",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "enableafter-wonminigame",
+        "list": "Minigame",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "Astrid_GhostHouseWon",
+       "of": "GetGameObjectInstance",
+       "path": "AlwaysActive_ChildrenInactive/Astrid_GhostHouseWon"
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Minigame[enableafter-lostminigame] = Astrid_GhostHouseLost",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "enableafter-lostminigame",
+        "list": "Minigame",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "Astrid_GhostHouseLost",
+       "of": "GetGameObjectInstance",
+       "path": "AlwaysActive_ChildrenInactive/Astrid_GhostHouseLost"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "type": "InstructionStatsChangeAttribute",
+     "title": "Ghost_Data[Racing_Cum] = 0",
+     "fields": {
+      "m_Target": {
+       "kind": "object",
+       "name": "Ghost_Data",
+       "of": "GetGameObjectInstance",
+       "path": "Ghost_Minigame/Ghost_Data"
+      },
+      "m_Attribute": {
+       "kind": "object",
+       "name": "Racing_Cum",
+       "of": "GetAttributeInstance"
+      },
+      "m_Change": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Ghost_Minigame to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Ghost_Minigame",
+       "of": "GetGameObjectInstance",
+       "path": "Ghost_Minigame"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 137_HarborHauntedHouse to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "137_HarborHauntedHouse",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/137_HarborHauntedHouse"
+      }
+     }
+    }
+   ]
+  },
+  "-445088849": {
+   "kind": "text",
+   "parent": -2024026680,
+   "children": [
+    -1334364384
+   ],
+   "actor": null,
+   "text": "I need another week to prepare.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1334364384": {
+   "kind": "text",
+   "parent": -445088849,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Fine, it's not met who grows older. Take your time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/C_HauntedHouse",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AstridHouseStart and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[Astrid-photoqueststart] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Astrid-photoqueststart",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[astrid-hauntedhousecooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "astrid-hauntedhousecooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Astrid_CasualRed_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Astrid_CasualRed_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Astrid_CasualRed_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[astrid-hauntedhousecooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "astrid-hauntedhousecooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "checkConditions",
+     "type": "InstructionLogicCheckConditions",
+     "title": "Check If Core[After-Talk-Transition] = False",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "compareBool",
+         "type": "ConditionMathCompareBooleans",
+         "title": "If Core[After-Talk-Transition] = False",
+         "fields": {
+          "m_Value": {
+           "kind": "variable",
+           "variable": {
+            "scope": "global",
+            "name": "After-Talk-Transition",
+            "list": "Core",
+            "type": "boolean"
+           }
+          },
+          "m_Comparison": "Equals",
+          "m_CompareTo": {
+           "kind": "value",
+           "value": false
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

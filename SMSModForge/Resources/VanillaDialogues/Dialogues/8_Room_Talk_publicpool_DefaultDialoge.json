@@ -1,0 +1,1672 @@
+{
+ "id": "8_Room_Talk/publicpool/DefaultDialoge",
+ "name": "DefaultDialoge",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "S_Nadia"
+ ],
+ "roots": [
+  1104399401
+ ],
+ "nodes": {
+  "1104399401": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -823575397,
+    721347804,
+    -737337407,
+    1101943589,
+    1763458226,
+    1511290062
+   ],
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "Huh? We're about to close, what do you want?",
+   "tag": "rootnadia",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave3[2026bool-veryshort] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2026bool-veryshort",
+        "list": "Core_NoSave3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-823575397": {
+   "kind": "text",
+   "parent": 1104399401,
+   "children": [
+    851881853,
+    -194137876
+   ],
+   "actor": null,
+   "text": "I'd like to swim a bit. [$20]",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 20",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 20
+       }
+      }
+     }
+    }
+   ]
+  },
+  "721347804": {
+   "kind": "text",
+   "parent": 1104399401,
+   "children": [
+    1695830363
+   ],
+   "actor": null,
+   "text": "Who are you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1511290062": {
+   "kind": "text",
+   "parent": 1104399401,
+   "children": [
+    1641273929
+   ],
+   "actor": null,
+   "text": "I should go.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1101943589": {
+   "kind": "text",
+   "parent": 1104399401,
+   "children": [
+    -1748727193,
+    -1808903306,
+    -370443989,
+    -762578908,
+    2032862181
+   ],
+   "actor": null,
+   "text": "I would like a milkshake.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1641273929": {
+   "kind": "text",
+   "parent": 1511290062,
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "Yeah.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1748727193": {
+   "kind": "text",
+   "parent": 1101943589,
+   "children": [
+    2073452616,
+    1350712112,
+    -71229219,
+    -125872096,
+    484313369,
+    -2048341796,
+    36032755,
+    1385650997,
+    -1019191880,
+    1439252057,
+    557630672
+   ],
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "Okay... Okay...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_NoSave2[veryshortterm-numbervar] = 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "veryshortterm-numbervar",
+        "list": "Core_NoSave2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1695830363": {
+   "kind": "text",
+   "parent": 721347804,
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "Name's Nadia... I'm the lifeguard here. So you better follow the rules!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "851881853": {
+   "kind": "text",
+   "parent": -823575397,
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "Aight, but remember, we're closing in roughly one hour.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-194137876": {
+   "kind": "text",
+   "parent": -823575397,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: SplashWater SS016901",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "SplashWater SS016901",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1.2,
+        "y": 1.2
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 0.7
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -20",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -20
+      }
+     }
+    }
+   ]
+  },
+  "-737337407": {
+   "kind": "text",
+   "parent": 1104399401,
+   "children": [
+    -2053682057,
+    1032319664,
+    866466503
+   ],
+   "actor": null,
+   "text": "I would like to rent the whole pool. [$3000]",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[ken-swim-agreed-to-train] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-swim-agreed-to-train",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 1500",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1500
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-2053682057": {
+   "kind": "text",
+   "parent": -737337407,
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "Well, if you’re talking a few grand, I think we can work something out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -3000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -3000
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[public-pool-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "public-pool-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "866466503": {
+   "kind": "text",
+   "parent": -737337407,
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "You need to be out by eleven sharp. That's when they start cleaning the water with chlorine. Have fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Nadia_RedSwimsuitBust/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1032319664": {
+   "kind": "text",
+   "parent": -737337407,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NPCs to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NPCs",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/57_Publicpool/NPCs"
+      }
+     }
+    }
+   ]
+  },
+  "-1808903306": {
+   "kind": "text",
+   "parent": 1101943589,
+   "children": [
+    -1819404396
+   ],
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "ARE YOU STUPID!? DID YOUR {M} DROP YOU ON YOUR HEAD!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_NoSave2[veryshortterm-numbervar] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "veryshortterm-numbervar",
+        "list": "Core_NoSave2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core_NoSave2[veryshortterm-numbervar] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "veryshortterm-numbervar",
+        "list": "Core_NoSave2",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-370443989": {
+   "kind": "text",
+   "parent": 1101943589,
+   "children": [
+    831257422
+   ],
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "You got a death wish or just a kink for getting yelled at?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_NoSave2[veryshortterm-numbervar] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "veryshortterm-numbervar",
+        "list": "Core_NoSave2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core_NoSave2[veryshortterm-numbervar] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "veryshortterm-numbervar",
+        "list": "Core_NoSave2",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-762578908": {
+   "kind": "text",
+   "parent": 1101943589,
+   "children": [
+    960518649
+   ],
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "Do I got a name tag that says “Nadia’s Dairy Delights”?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_NoSave2[veryshortterm-numbervar] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "veryshortterm-numbervar",
+        "list": "Core_NoSave2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core_NoSave2[veryshortterm-numbervar] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "veryshortterm-numbervar",
+        "list": "Core_NoSave2",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "2032862181": {
+   "kind": "text",
+   "parent": 1101943589,
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "…What part of “lifeguard” sounds like “milkshake vendor” to you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_NoSave2[veryshortterm-numbervar] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "veryshortterm-numbervar",
+        "list": "Core_NoSave2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core_NoSave2[veryshortterm-numbervar] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "veryshortterm-numbervar",
+        "list": "Core_NoSave2",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "2073452616": {
+   "kind": "choice",
+   "parent": -1748727193,
+   "children": [
+    321171273,
+    1467836440,
+    -1895645775
+   ],
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "Fuck you! FUCK YOU! FUCK YOU!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core_NoSave2[veryshortterm-numbervar] = 0",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "veryshortterm-numbervar",
+        "list": "Core_NoSave2",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 0
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NadiaMilkshake (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NadiaMilkshake (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/NadiaMilkshake (0)"
+      }
+     }
+    }
+   ]
+  },
+  "960518649": {
+   "kind": "text",
+   "parent": -762578908,
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "No. So unless your dumbass is about to slip on poolside tile, take that shake craving somewhere else.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "831257422": {
+   "kind": "text",
+   "parent": -370443989,
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "'Cause I'm about three seconds away from dragging your thirsty ass into the deep end.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1819404396": {
+   "kind": "text",
+   "parent": -1808903306,
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "You want something cold? Keep talkin'. See what happens.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-71229219": {
+   "kind": "text",
+   "parent": -1748727193,
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "You want a fucking milkshake!? I'll give you a fucking milkshake...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-125872096": {
+   "kind": "text",
+   "parent": -1748727193,
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "Mwwuaah! MPGHHHWMMM!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NadiaMilkshake (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NadiaMilkshake (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/NadiaMilkshake (1)"
+      }
+     }
+    }
+   ]
+  },
+  "484313369": {
+   "kind": "text",
+   "parent": -1748727193,
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "Mwuaah! ... I'll milk your pathetic cock so fucking hard... Fucking bich...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "36032755": {
+   "kind": "choice",
+   "parent": -1748727193,
+   "children": [
+    -2029650353,
+    -1132242413,
+    886574017
+   ],
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "Mwwhaam! MWUAAH! GULP! GULP! GULP!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1385650997": {
+   "kind": "text",
+   "parent": -1748727193,
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "Well, here's your milkshake, baby. Hope you choke on it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NadiaMilkshake (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NadiaMilkshake (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/NadiaMilkshake (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1439252057": {
+   "kind": "text",
+   "parent": -1748727193,
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "Look at you. Can't even keep your legs straight. Pathetic little thing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "321171273": {
+   "kind": "text",
+   "parent": 2073452616,
+   "actor": null,
+   "text": "W-What are you doing!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1467836440": {
+   "kind": "text",
+   "parent": 2073452616,
+   "actor": null,
+   "text": "Fuck yes! Here we go!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1895645775": {
+   "kind": "text",
+   "parent": 2073452616,
+   "children": [
+    1049443059
+   ],
+   "actor": null,
+   "text": "HELP! PLEASE! SOMEBODY HELP ME!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1049443059": {
+   "kind": "text",
+   "parent": -1895645775,
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "Welcome to Peak City, bitch. No one fucking cares!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "557630672": {
+   "kind": "text",
+   "parent": -1748727193,
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "You're gonna remember this every time you see a milkshake.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[nadia-handjobdone] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nadia-handjobdone",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-2029650353": {
+   "kind": "text",
+   "parent": 36032755,
+   "actor": null,
+   "text": "(Blow your load)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1132242413": {
+   "kind": "text",
+   "parent": 36032755,
+   "actor": null,
+   "text": "S-Slow down, you're being too rough... I'll...I'll...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "886574017": {
+   "kind": "text",
+   "parent": 36032755,
+   "actor": null,
+   "text": "I'm close, Nadia... Stroke me harder, my cock can take it!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1350712112": {
+   "kind": "text",
+   "parent": -1748727193,
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "Why do you keep doing this... I hate you, I hate you so fucking much.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[nadia-handjobdone] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nadia-handjobdone",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2048341796": {
+   "kind": "text",
+   "parent": -1748727193,
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "You're close again, huh? I can feel... Just like last time, your weak bitch cock is gonna blow~",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[nadia-handjobdone] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nadia-handjobdone",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1019191880": {
+   "kind": "text",
+   "parent": -1748727193,
+   "actor": "S_Nadia",
+   "expressionName": "neutral",
+   "text": "Fuck, that's quite the load... Maybe~ No, fuck no.. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[nadia-handjobdone] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nadia-handjobdone",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Lewd to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Lewd",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Lewd"
+      }
+     }
+    }
+   ]
+  },
+  "1763458226": {
+   "kind": "text",
+   "parent": 1104399401,
+   "children": [
+    -1484005089
+   ],
+   "actor": null,
+   "text": "(Look for Norah)",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[norah-poolmet] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "norah-poolmet",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown3[lookfornorah-cd] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "lookfornorah-cd",
+        "list": "Cooldown3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1484005089": {
+   "kind": "text",
+   "parent": 1763458226,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave3[2026bool-veryshort] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2026bool-veryshort",
+        "list": "Core_NoSave3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown3[lookfornorah-cd] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "lookfornorah-cd",
+        "list": "Cooldown3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Nadia_RedSwimsuitBust/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/publicpool",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DefaultDialoge and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[public-pool-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "public-pool-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Nadia_RedSwimsuitBust/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Nadia_RedSwimsuitBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Nadia_RedSwimsuitBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Nadia_RedSwimsuitBust"
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[random-1-of-10] = 0",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 0
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[temp-stored-very-short-term] = (none)",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": null,
+       "of": "GetGameObjectInstance"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Conditions and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "Conditions",
+       "of": "GetGameObjectConditions",
+       "path": "8_Room_Talk/publicpool/Conditions"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Core[temp-stored-very-short-term] and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run LookForNorah and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "LookForNorah",
+       "of": "GetGameObjectConditions",
+       "path": "8_Room_Talk/publicpool/LookForNorah"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Nadia_RedSwimsuitBust/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

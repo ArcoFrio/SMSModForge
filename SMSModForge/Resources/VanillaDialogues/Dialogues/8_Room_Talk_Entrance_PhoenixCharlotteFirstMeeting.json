@@ -1,0 +1,474 @@
+{
+ "id": "8_Room_Talk/Entrance/PhoenixCharlotteFirstMeeting",
+ "name": "PhoenixCharlotteFirstMeeting",
+ "index": 9,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Charlotte",
+  "Phoenix"
+ ],
+ "roots": [
+  -810109038,
+  837959570,
+  -1269383137,
+  -1828003833,
+  -1695512943,
+  1646194076,
+  -2052541948,
+  -1523616711,
+  -598634502,
+  -1757101928,
+  -2111416615,
+  -1545473635
+ ],
+ "nodes": {
+  "-810109038": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "So… this is your choice for a bodyguard? She looks more like a street brawler than a professional.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "837959570": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Phoenix",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "And you must be the fashion queen. Figures. You look like money wrapped in perfume.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1269383137": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Hmph. At least I know how to dress for the occasion.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1828003833": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Yeah? Well, I fight better than I dress. That’s what matters.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PhoenixCharlotteEntrancePeek (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PhoenixCharlotteEntrancePeek (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/PhoenixCharlotteEntrancePeek (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1695512943": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "…Well. Appearances are not everything, I suppose. Strength is what counts in this line of work.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PhoenixCharlotteEntrancePeek (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PhoenixCharlotteEntrancePeek (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/PhoenixCharlotteEntrancePeek (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1646194076": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Heh. Thought so.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2052541948": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "…Very well. I will give you a chance. Do not make me regret this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1523616711": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Good. I was getting bored anyway.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-598634502": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Hmph. Just remember, this is a job, not a game.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1757101928": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Sure. But trust me, anyone who tries something on you won’t try it twice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2111416615": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Well....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1545473635": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1336660535,
+    1539460100,
+    1683681761
+   ],
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thank you… {PC}. For finding me someone. I feel... safer already.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1336660535": {
+   "kind": "text",
+   "parent": -1545473635,
+   "children": [
+    1444607055
+   ],
+   "actor": null,
+   "text": "You're welcome. Phoenix is great.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1539460100": {
+   "kind": "text",
+   "parent": -1545473635,
+   "children": [
+    215018983
+   ],
+   "actor": null,
+   "text": "Be nice to Charlotte, Phoenix.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1683681761": {
+   "kind": "text",
+   "parent": -1545473635,
+   "actor": null,
+   "text": "(Nod)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "215018983": {
+   "kind": "text",
+   "parent": 1539460100,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Oh you know me! I love pushing people to their limits...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1444607055": {
+   "kind": "text",
+   "parent": -1336660535,
+   "actor": "Charlotte",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Yeah, I can see that... It's hard to miss.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Entrance",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play PhoenixCharlotteFirstMeeting and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_9[CharlottePhoenixQuest] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "CharlottePhoenixQuest",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CharlotteBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CharlotteBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/CharlotteBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PhoenixBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PhoenixBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/PhoenixBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_9[CharlottePhoenixQuest] = 3",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "CharlottePhoenixQuest",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 3
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/PhoenixBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/CharlotteBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

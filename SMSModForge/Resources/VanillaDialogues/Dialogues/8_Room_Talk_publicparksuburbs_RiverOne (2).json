@@ -1,0 +1,771 @@
+{
+ "id": "8_Room_Talk/publicparksuburbs/RiverOne (2)",
+ "name": "RiverOne (2)",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "River"
+ ],
+ "roots": [
+  -463103729,
+  -911811785,
+  -2101742715,
+  23077915,
+  1786768072,
+  -1126907205
+ ],
+ "nodes": {
+  "-463103729": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1952940351,
+    -1542926323
+   ],
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "O-Oh... {PC}... Could I ask you a question?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1952940351": {
+   "kind": "text",
+   "parent": -463103729,
+   "actor": null,
+   "text": "Sure, what's up?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1542926323": {
+   "kind": "text",
+   "parent": -463103729,
+   "children": [
+    1327199838
+   ],
+   "actor": null,
+   "text": "Keep it short.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-911811785": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -540339016,
+    -1068421792,
+    -1043916327,
+    449753936
+   ],
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Um... W-Why are you spending time with me? I'm... I'm like a stranger....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_4[river-park-talk] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-park-talk",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "1327199838": {
+   "kind": "text",
+   "parent": -1542926323,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I-I will...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_4[mean-to-river] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mean-to-river",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-540339016": {
+   "kind": "text",
+   "parent": -911811785,
+   "children": [
+    1051763891
+   ],
+   "actor": null,
+   "text": "We're not total strangers anymore.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1068421792": {
+   "kind": "text",
+   "parent": -911811785,
+   "children": [
+    1009473099,
+    -1499150809
+   ],
+   "actor": null,
+   "text": "I thought you are cute.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1051763891": {
+   "kind": "text",
+   "parent": -540339016,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "T-That's true...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1009473099": {
+   "kind": "text",
+   "parent": -1068421792,
+   "actor": "River",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2101742715": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I... I barely know anything about you besides your name... And that you're a photographer?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "23077915": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1166629025,
+    1370582882,
+    -2061818885
+   ],
+   "actor": "River",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Like, uh... What's your favorite color?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1166629025": {
+   "kind": "text",
+   "parent": 23077915,
+   "children": [
+    1857529574
+   ],
+   "actor": null,
+   "text": "(Tell River your favorite color)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1370582882": {
+   "kind": "text",
+   "parent": 23077915,
+   "children": [
+    -420073460
+   ],
+   "actor": null,
+   "text": "Being this akward makes you even cuter.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2061818885": {
+   "kind": "text",
+   "parent": 23077915,
+   "children": [
+    2138815891
+   ],
+   "actor": null,
+   "text": "That's a boring question...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1786768072": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1857529574": {
+   "kind": "text",
+   "parent": -1166629025,
+   "actor": "River",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That's nice... I... I like learning more about you....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-420073460": {
+   "kind": "text",
+   "parent": 1370582882,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "N-No... I... Hihi....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2138815891": {
+   "kind": "text",
+   "parent": -2061818885,
+   "actor": "River",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I'm sorry... I know... I'm just not good with words...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1499150809": {
+   "kind": "text",
+   "parent": -1068421792,
+   "actor": "River",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "T-Thanks....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1126907205": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1898303110,
+    668266102,
+    343757607
+   ],
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I would like to spend more time with you...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1898303110": {
+   "kind": "text",
+   "parent": -1126907205,
+   "children": [
+    -1561890871
+   ],
+   "actor": null,
+   "text": "You could visit me at home. (Start River Route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "343757607": {
+   "kind": "text",
+   "parent": -1126907205,
+   "children": [
+    -2109215882
+   ],
+   "actor": null,
+   "text": "Well, I don't. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2109215882": {
+   "kind": "text",
+   "parent": 343757607,
+   "actor": "River",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Oh.. O-Okay... Sorry...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1561890871": {
+   "kind": "text",
+   "parent": 1898303110,
+   "actor": "River",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I... I would like that... Thank you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[river-invited] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-invited",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Make time for a weekly visit to the park.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Another Time (River",
+        "of": "Quest"
+       },
+       "m_TaskId": -989935106
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-1043916327": {
+   "kind": "text",
+   "parent": -911811785,
+   "children": [
+    356332661
+   ],
+   "actor": null,
+   "text": "I was hoping I could commission more outfits from you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "356332661": {
+   "kind": "text",
+   "parent": -1043916327,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Oh... Uh, yes... Of course... That makes sense...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "668266102": {
+   "kind": "text",
+   "parent": -1126907205,
+   "children": [
+    2008824874
+   ],
+   "actor": null,
+   "text": "You're cool, River. But I'm really just here for the cosplays.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2008824874": {
+   "kind": "text",
+   "parent": 668266102,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I'm cool? Um, thank you... And yes, I hope I can craft more outfits for you and your model soon... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_8[river-outfitsonly] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-outfitsonly",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "449753936": {
+   "kind": "text",
+   "parent": -911811785,
+   "children": [
+    1128128067
+   ],
+   "actor": null,
+   "text": "(Lewd) You know why, River.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Lewd] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Lewd",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1128128067": {
+   "kind": "text",
+   "parent": 449753936,
+   "actor": "River",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "W-What? No, I don't... Unless... Uh, no, no, no...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/publicparksuburbs",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play RiverOne (2) and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[river-week-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-week-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_4[river-park-talk] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-park-talk",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active River_Base to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "River_Base",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/River_Base"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/River_Base/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[river-week-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-week-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,832 @@
+{
+ "id": "8_Room_Talk/C_Casino/NikkiBeforeLicense",
+ "name": "NikkiBeforeLicense",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Nikki"
+ ],
+ "roots": [
+  -1687001323,
+  -1778744762
+ ],
+ "nodes": {
+  "-1687001323": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1485759646,
+    171494621
+   ],
+   "actor": "Nikki",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Look who’s back. Didn’t get your fix out there, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[nikki-met] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nikki-met",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1778744762": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1577223079,
+    -1949256991
+   ],
+   "actor": "Nikki",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Well, well... you're not one of our usual regulars.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[nikki-met] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nikki-met",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1577223079": {
+   "kind": "choice",
+   "parent": -1778744762,
+   "children": [
+    385597097,
+    1551237643,
+    -1003617171
+   ],
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "Looking to get lucky?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_11[nikki-met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nikki-met",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "385597097": {
+   "kind": "text",
+   "parent": 1577223079,
+   "children": [
+    73043669,
+    -757371967,
+    2068708350,
+    -637644926
+   ],
+   "actor": null,
+   "text": "Just checking the place out. Looks... expensive.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "73043669": {
+   "kind": "text",
+   "parent": 385597097,
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "Mmm, good eye. This isn’t your average tourist trap.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1551237643": {
+   "kind": "text",
+   "parent": 1577223079,
+   "children": [
+    498027485,
+    -221035261
+   ],
+   "actor": null,
+   "text": "That depends... are you part of the prize pool?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "498027485": {
+   "kind": "text",
+   "parent": 1551237643,
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "This isn’t a brothel, sweetheart.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1003617171": {
+   "kind": "text",
+   "parent": 1577223079,
+   "children": [
+    784571013,
+    1484566666,
+    1766813306
+   ],
+   "actor": null,
+   "text": "Cut the small talk. I want to play.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "784571013": {
+   "kind": "text",
+   "parent": -1003617171,
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "Someone's in a rush to lose their money.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-757371967": {
+   "kind": "text",
+   "parent": 385597097,
+   "actor": "Nikki",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "We keep it exclusive, clean, and...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2068708350": {
+   "kind": "text",
+   "parent": 385597097,
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "But before you get to touch anything, sugar... there's the matter of membership.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-221035261": {
+   "kind": "text",
+   "parent": 1551237643,
+   "actor": "Nikki",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You want to play with me, you gotta earn it... Starting with a little membership fee. 5K.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1484566666": {
+   "kind": "text",
+   "parent": -1003617171,
+   "actor": "Nikki",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "But rules are rules.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1766813306": {
+   "kind": "text",
+   "parent": -1003617171,
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "5K membership, up front. No exceptions, even for grumpy high-rollers.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-637644926": {
+   "kind": "text",
+   "parent": 385597097,
+   "actor": "Nikki",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Membership’s mandatory. 5K buy-in. House rules.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1949256991": {
+   "kind": "choice",
+   "parent": -1778744762,
+   "children": [
+    1605748986,
+    -1980318766,
+    -81621661
+   ],
+   "actor": "Nikki",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "So what's it gonna be, mystery man?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1605748986": {
+   "kind": "text",
+   "parent": -1949256991,
+   "children": [
+    318302213,
+    30865566
+   ],
+   "actor": null,
+   "text": "Alright. Here’s 5K. Let’s see what this place is really about.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 5000",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5000
+       }
+      }
+     }
+    }
+   ]
+  },
+  "318302213": {
+   "kind": "text",
+   "parent": 1605748986,
+   "actor": "Nikki",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Now that’s what I like to see. Welcome to the real game.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -5000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -5000
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_11[casino-license] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "casino-license",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1980318766": {
+   "kind": "text",
+   "parent": -1949256991,
+   "children": [
+    1955227966,
+    412134686
+   ],
+   "actor": null,
+   "text": "Nah. I’ll pass for now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1955227966": {
+   "kind": "text",
+   "parent": -1980318766,
+   "actor": "Nikki",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Mm. Shame. You looked like you might’ve been fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "30865566": {
+   "kind": "text",
+   "parent": 1605748986,
+   "actor": "Nikki",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "You’ve got full access to the floor now. Tables, machines, private lounges... even the VIP suite, if you know how to win.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "412134686": {
+   "kind": "text",
+   "parent": -1980318766,
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "But hey, doors stay closed to the broke and unsure. Come back when you're ready to play.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1485759646": {
+   "kind": "text",
+   "parent": -1687001323,
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "You still need a membership to play here. 5K, same deal.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "171494621": {
+   "kind": "choice",
+   "parent": -1687001323,
+   "children": [
+    656490424,
+    -1462043216
+   ],
+   "actor": "Nikki",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Unless you’ve come to beg me for a discount...?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "656490424": {
+   "kind": "text",
+   "parent": 171494621,
+   "children": [
+    -405262244,
+    -1799489405
+   ],
+   "actor": null,
+   "text": "Fine. I’ll pay the 5K.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 5000",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5000
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-405262244": {
+   "kind": "text",
+   "parent": 656490424,
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "That’s better.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -5000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -5000
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_11[casino-license] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "casino-license",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1462043216": {
+   "kind": "text",
+   "parent": 171494621,
+   "children": [
+    -14925814
+   ],
+   "actor": null,
+   "text": "Still not worth it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-14925814": {
+   "kind": "text",
+   "parent": -1462043216,
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "Your call. But you’re gonna regret wasting all that charm on the sidewalk.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1799489405": {
+   "kind": "text",
+   "parent": 656490424,
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "Welcome to the real game.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-81621661": {
+   "kind": "text",
+   "parent": -1949256991,
+   "children": [
+    -626236344,
+    -1098500171,
+    2054647410
+   ],
+   "actor": null,
+   "text": "(Charming) Come on... a face like this doesn’t need a membership, does it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Charming] ≥ 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Charming",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-626236344": {
+   "kind": "text",
+   "parent": -81621661,
+   "actor": "Nikki",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Mmm... cocky. I usually charge extra for that kind of confidence.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1098500171": {
+   "kind": "text",
+   "parent": -81621661,
+   "actor": "Nikki",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Tch...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2054647410": {
+   "kind": "choice",
+   "parent": -81621661,
+   "children": [
+    126118749,
+    1837328698,
+    1179831009
+   ],
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "Look, rules are rules. I don’t make ‘em, I just look good enforcing them.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "126118749": {
+   "kind": "text",
+   "parent": 2054647410,
+   "children": [
+    1407921661,
+    1311671711
+   ],
+   "actor": null,
+   "text": "And I bet you look even better breaking one..",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1837328698": {
+   "kind": "text",
+   "parent": 2054647410,
+   "children": [
+    -1038000354,
+    1923801694
+   ],
+   "actor": null,
+   "text": "Then stop talking and take my money like a good girl.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1179831009": {
+   "kind": "text",
+   "parent": 2054647410,
+   "children": [
+    -862751068,
+    -1984196098,
+    -15359502
+   ],
+   "actor": null,
+   "text": "Please Nikki. I want to try you loophole.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-862751068": {
+   "kind": "text",
+   "parent": 1179831009,
+   "actor": "Nikki",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Damn. That’s slick. Real slick.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_11[casino-license] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "casino-license",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1038000354": {
+   "kind": "text",
+   "parent": 1837328698,
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "Oof.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1407921661": {
+   "kind": "text",
+   "parent": 126118749,
+   "actor": "Nikki",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Cute. But that line probably works better on drunk tourists.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1311671711": {
+   "kind": "text",
+   "parent": 126118749,
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "5K, baby. Try again with better material.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1923801694": {
+   "kind": "text",
+   "parent": 1837328698,
+   "actor": "Nikki",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Bad move. I bite, but only when I want to. You want in, you pay.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1984196098": {
+   "kind": "text",
+   "parent": 1179831009,
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "Ugh, fine. One-time pass. But only because I like how your brain’s wired... and how your mouth moves.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-15359502": {
+   "kind": "text",
+   "parent": 1179831009,
+   "actor": "Nikki",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Don’t make me regret it, loophole boy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/C_Casino/WhatNikkiDialogue",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play NikkiBeforeLicense and wait",
+   "as": "Dialogue"
+  }
+ ]
+}

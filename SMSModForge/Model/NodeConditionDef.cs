@@ -47,6 +47,17 @@ public sealed class NodeConditionDef
 /// <summary>
 /// Stable identifiers for condition types. Each is documented with the
 /// <see cref="NodeConditionDef.Params"/> keys it expects.
+/// <para/>
+/// Two keys are common to every variable comparison rather than belonging to
+/// one type. <c>source</c> = <c>"vanilla"</c> reads the NAME from the game's own
+/// global variables instead of the pack's; <c>valueSource</c> = <c>"vanilla"</c>
+/// does the same for any <c>${name}</c> written in the VALUE, which the runtime
+/// resolves before comparing. Absent, both mean the pack's own store.
+/// <para/>
+/// The value one is what makes "is this variable equal to that one" expressible
+/// across stores — the game's own conditions do it
+/// (<c>Mainstory[MLove] &gt; Mainstory[MCorruption]</c>), and a comparison that
+/// could only ever hold a literal had no way to say it.
 /// </summary>
 public static class NodeConditionTypes
 {
@@ -72,6 +83,22 @@ public static class NodeConditionTypes
 
     /// <summary>Pack variable has been set at all (any value). Params: <c>name</c>.</summary>
     public const string VariableExists = "VariableExists";
+
+    /// <summary>
+    /// One variable check, with the comparison as a field.
+    /// <para/>
+    /// Replaces ten types that differed only by operator - five for a pack's
+    /// variables and five more for the game's, which differed only by which
+    /// store they read. The editor already showed them as ONE row with Source
+    /// and Comparison pickers, so the split lived nowhere but the model, and it
+    /// meant a new operator was a new type, a new schema entry, a new runtime
+    /// case and a new line in every list that names them.
+    /// <para/>
+    /// Params: <c>source</c> (pack | vanilla), <c>name</c>,
+    /// <c>comparison</c> (equals | greater than | greater or equal | less than
+    /// | less or equal), <c>value</c>.
+    /// </summary>
+    public const string VariableCompare = "VariableCompare";
 
     /// <summary>GC2 GlobalNameVariable equals a value. Params: <c>name</c>, <c>value</c>. Reads through GlobalNameVariablesManager.</summary>
     public const string GameVariableEquals = "GameVariableEquals";
@@ -236,11 +263,10 @@ public static class NodeConditionTypes
     /// <see cref="AllRecognized"/> for what the validator accepts.</summary>
     public static readonly string[] All =
     {
-        VariableEquals, VariableGreaterThan, VariableGreaterOrEqual,
-        VariableLessThan, VariableLessOrEqual, VariableExists,
-        GameVariableEquals,
-        GameVariableNumberGreaterThan, GameVariableNumberGreaterOrEqual,
-        GameVariableNumberLessThan, GameVariableNumberLessOrEqual,
+        // One entry for what used to be ten. VariableExists stays beside it:
+        // "is this set at all" is a different question from "what is it", and
+        // it takes no value to compare against.
+        VariableCompare, VariableExists,
         LevelActive, GameObjectActive, DailyChance, AlwaysTrue, Weather,
         VariableStartsWith, ListContains, ListCount, InputKey,
     };

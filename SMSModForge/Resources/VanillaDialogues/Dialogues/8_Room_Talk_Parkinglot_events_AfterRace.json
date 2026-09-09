@@ -1,0 +1,1843 @@
+{
+ "id": "8_Room_Talk/Parkinglot_events/AfterRace",
+ "name": "AfterRace",
+ "index": 4,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Alice",
+  "Anna",
+  "Continue",
+  "Himari",
+  "Jack",
+  "Toni",
+  "You"
+ ],
+ "roots": [
+  -1789018773,
+  -2117666879,
+  1861435273,
+  -1329991036,
+  -2083705126,
+  -14193346,
+  942004325,
+  -1194082572,
+  383811974,
+  -87089748,
+  -1792406201,
+  1424881769,
+  326966895
+ ],
+ "nodes": {
+  "-1789018773": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Phew... I'm good... I'm good... Alright, let’s win the rest. No turning back now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Eve_NoSave1[annaonbike] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "annaonbike",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_7[anna-firstrace] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-firstrace",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2117666879": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -978161716,
+    -507750413,
+    -1268136040
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Okay… okay… my heart is still somewhere back on that last turn…",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Eve_NoSave1[annaonbike] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "annaonbike",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_7[anna-firstrace] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-firstrace",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-14193346": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/TomboyToni_BustDefault/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Rockerguy_Bust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Rockerguy_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Rockerguy_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Rockerguy_Bust"
+      }
+     }
+    }
+   ]
+  },
+  "-978161716": {
+   "kind": "text",
+   "parent": -2117666879,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I think… I think I need a second. And maybe a drink. And possibly a new pair of panties.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-507750413": {
+   "kind": "choice",
+   "parent": -2117666879,
+   "children": [
+    1265181455,
+    -1361947397,
+    868631533
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I can’t believe I actually did that… and I definitely can’t believe I kinda…liked it?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1265181455": {
+   "kind": "text",
+   "parent": -507750413,
+   "children": [
+    172957408
+   ],
+   "actor": null,
+   "text": "Liked it? You were screaming the whole time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1361947397": {
+   "kind": "text",
+   "parent": -507750413,
+   "children": [
+    1730925393
+   ],
+   "actor": null,
+   "text": "See? Told you it’d be fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "868631533": {
+   "kind": "text",
+   "parent": -507750413,
+   "children": [
+    124096987
+   ],
+   "actor": null,
+   "text": "Told you to hold on tight. Didn’t mind that part, did you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "172957408": {
+   "kind": "text",
+   "parent": 1265181455,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I—okay, yes, maybe I screamed a little. But can you blame me?! That was insane!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1730925393": {
+   "kind": "text",
+   "parent": -1361947397,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yeah… you were right. It was terrifying, but in the best way. I hate that I kinda wanna do it again…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "124096987": {
+   "kind": "text",
+   "parent": 868631533,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh, shut up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1268136040": {
+   "kind": "text",
+   "parent": -2117666879,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Alright. Let’s win the rest of these. If I’m doing this, we’re going all the way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_7[anna-firstrace] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-firstrace",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "383811974": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Jack",
+   "expressionName": "neutral",
+   "text": "Alright, you got lucky this time. Try not to let it go to your head, rookie.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If RacingMinigame[race-won] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "race-won",
+        "list": "RacingMinigame",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-87089748": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Jack",
+   "expressionName": "neutral",
+   "text": "You ride like that again, and I won’t even have to beat you—you’ll take yourself out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If RacingMinigame[race-lost] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "race-lost",
+        "list": "RacingMinigame",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "326966895": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Rockerguy_Bust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1861435273": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -2120169393,
+    1079635794,
+    -1947360289
+   ],
+   "actor": "Alice",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That was pure, reckless insanity, and I loved it!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If RacingMinigame[racing-girl] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "racing-girl",
+        "list": "RacingMinigame",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AliceBust"
+      }
+     }
+    }
+   ]
+  },
+  "-2120169393": {
+   "kind": "text",
+   "parent": 1861435273,
+   "actor": "Alice",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "And fuck! I came so fucking hard! That felt so good!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If RacingMinigame[race-won] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "race-won",
+        "list": "RacingMinigame",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1079635794": {
+   "kind": "text",
+   "parent": 1861435273,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "It's a shame we've lost, but hey, I still had hella fun!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If RacingMinigame[race-won] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "race-won",
+        "list": "RacingMinigame",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1947360289": {
+   "kind": "text",
+   "parent": 1861435273,
+   "actor": "Alice",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Okay, but next time, let’s go even faster—I wanna feel like we’re actually about to die!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1329991036": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1933398568,
+    -815947211,
+    -1847535432,
+    -1710672122
+   ],
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "…That was sloppy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If RacingMinigame[racing-girl] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "racing-girl",
+        "list": "RacingMinigame",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariBust"
+      }
+     }
+    }
+   ]
+  },
+  "-1933398568": {
+   "kind": "text",
+   "parent": -1329991036,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Pathethic. Next time, focus. I refuse to lose.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If RacingMinigame[race-won] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "race-won",
+        "list": "RacingMinigame",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1847535432": {
+   "kind": "text",
+   "parent": -1329991036,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Barely. You hesitated on turn four, and your acceleration out of the last jump was weak.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If RacingMinigame[race-won] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "race-won",
+        "list": "RacingMinigame",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1710672122": {
+   "kind": "text",
+   "parent": -1329991036,
+   "actor": "Himari",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "…Not that it was all bad.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-815947211": {
+   "kind": "text",
+   "parent": -1329991036,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Uh… we just won.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If RacingMinigame[race-won] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "race-won",
+        "list": "RacingMinigame",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2083705126": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    420549685,
+    -1116679015
+   ],
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If RacingMinigame[racing-girl] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "racing-girl",
+        "list": "RacingMinigame",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active TomboyToni_BustDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "TomboyToni_BustDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/TomboyToni_BustDefault"
+      }
+     }
+    }
+   ]
+  },
+  "420549685": {
+   "kind": "text",
+   "parent": -2083705126,
+   "children": [
+    917417569
+   ],
+   "actor": "Toni",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Welp… that was rough.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If RacingMinigame[race-won] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "race-won",
+        "list": "RacingMinigame",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1116679015": {
+   "kind": "text",
+   "parent": -2083705126,
+   "children": [
+    1452664147
+   ],
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hah! Hell yeah, that’s what I’m talkin’ about! You actually pulled it off! I'm... Fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If RacingMinigame[race-won] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "race-won",
+        "list": "RacingMinigame",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1452664147": {
+   "kind": "text",
+   "parent": -1116679015,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Alright, let’s keep this streak going. No backing down now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "917417569": {
+   "kind": "text",
+   "parent": 420549685,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Ah, don’t beat yourself up. Just means we gotta come back and wreck ’em next time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1792406201": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    162074432,
+    -1162791817
+   ],
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Hey, {PC}, got a minute? We need to talk.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If RacingMinigame[race-won] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "race-won",
+        "list": "RacingMinigame",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_7[cumraces-won] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cumraces-won",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active TomboyToni_BustDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "TomboyToni_BustDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/TomboyToni_BustDefault"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Ahtletic to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Ahtletic",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Ahtletic"
+      }
+     }
+    }
+   ]
+  },
+  "162074432": {
+   "kind": "text",
+   "parent": -1792406201,
+   "actor": "Jack",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Plot all you want, Toni. You’re not slipping out of my grip that easily.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1162791817": {
+   "kind": "text",
+   "parent": -1792406201,
+   "actor": "Toni",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Yeah? We’ll see about that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/TomboyToni_BustDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1424881769": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1074938621,
+    578471671,
+    808348058
+   ],
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "What’s wrong, Jack? Starting to sweat? {PC} just bagged his second win.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If RacingMinigame[race-won] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "race-won",
+        "list": "RacingMinigame",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_7[cumraces-won] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cumraces-won",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active TomboyToni_BustDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "TomboyToni_BustDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/TomboyToni_BustDefault"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Ahtletic to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Ahtletic",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Ahtletic"
+      }
+     }
+    }
+   ]
+  },
+  "-1074938621": {
+   "kind": "text",
+   "parent": 1424881769,
+   "actor": "Jack",
+   "expressionName": "neutral",
+   "text": "Tch. That was their last lucky break. Time to get serious.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "808348058": {
+   "kind": "text",
+   "parent": 1424881769,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hey, {PC}, come here. We need to talk.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/TomboyToni_BustDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "578471671": {
+   "kind": "text",
+   "parent": 1424881769,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Oh, sure. Now you’re serious. Right.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1194082572": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1087629631,
+    1104676423,
+    564715461
+   ],
+   "actor": "Jack",
+   "expressionName": "neutral",
+   "text": "Damn… I really lost. Three times. To you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_7[toni-romance] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "toni-romance",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_7[toni-freed] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "toni-freed",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Ahtletic to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Ahtletic",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Ahtletic"
+      }
+     }
+    }
+   ]
+  },
+  "-1087629631": {
+   "kind": "choice",
+   "parent": -1194082572,
+   "children": [
+    1144649645,
+    859031267,
+    -1501312944
+   ],
+   "actor": "Jack",
+   "expressionName": "neutral",
+   "text": "Man, this sucks.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1144649645": {
+   "kind": "text",
+   "parent": -1087629631,
+   "children": [
+    -1278122128,
+    -1144260581
+   ],
+   "actor": null,
+   "text": "Maybe racing just isn’t your thing, big guy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "859031267": {
+   "kind": "text",
+   "parent": -1087629631,
+   "children": [
+    1943552069,
+    -106775410
+   ],
+   "actor": null,
+   "text": "You’ll bounce back, Jack. Probably. Maybe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1501312944": {
+   "kind": "text",
+   "parent": -1087629631,
+   "children": [
+    798694056,
+    206153602
+   ],
+   "actor": null,
+   "text": "Hey, you put up a good fight. Could’ve gone either way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "798694056": {
+   "kind": "text",
+   "parent": -1501312944,
+   "actor": "Jack",
+   "expressionName": "neutral",
+   "text": "Yeah, yeah. Could’ve gone either way. Except it didn’t.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1943552069": {
+   "kind": "text",
+   "parent": 859031267,
+   "actor": "Jack",
+   "expressionName": "neutral",
+   "text": "Tch. Yeah, yeah. I’ll bounce back... eventually. Gimme, like, a week to mope first.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1278122128": {
+   "kind": "text",
+   "parent": 1144649645,
+   "actor": "Jack",
+   "expressionName": "neutral",
+   "text": "Bruh, don’t do this to me right now. My ego’s already in critical condition.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1144260581": {
+   "kind": "text",
+   "parent": 1144649645,
+   "actor": "Jack",
+   "expressionName": "neutral",
+   "text": "You better enjoy this, ‘cause I swear I’m coming back with a vengeance. Next time, I’m unbeatable.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-106775410": {
+   "kind": "text",
+   "parent": 859031267,
+   "actor": "Jack",
+   "expressionName": "neutral",
+   "text": "You ever get tired of being a smug little shit, or is that just your natural state?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "206153602": {
+   "kind": "text",
+   "parent": -1501312944,
+   "actor": "Jack",
+   "expressionName": "neutral",
+   "text": "Fine. You win this one. But don’t get comfy—next time, I’m destroying you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1104676423": {
+   "kind": "text",
+   "parent": -1194082572,
+   "actor": "Jack",
+   "expressionName": "neutral",
+   "text": "Alright, get outta here before I start feeling respect for you or some shit. That’d be weird.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "564715461": {
+   "kind": "text",
+   "parent": -1194082572,
+   "actor": "Jack",
+   "expressionName": "neutral",
+   "text": "And tell Toni that the debt's been settled...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Rockerguy_Bust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "942004325": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.5,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If RacingMinigame[race-won] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "race-won",
+        "list": "RacingMinigame",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_7[cumraces-won] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cumraces-won",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "type": "InstructionQuestTaskValue",
+     "title": "Find a way to get Toni out. + 1",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Going Live (Anna)",
+        "of": "Quest"
+       },
+       "m_TaskId": 1734583375
+      },
+      "m_Value": {
+       "m_Operation": "Add",
+       "m_Value": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Trigger_MinigameDone to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Trigger_MinigameDone",
+       "of": "GetGameObjectInstance",
+       "path": "XP_System/Trigger_MinigameDone"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Parkinglot_events",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AfterRace and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Eve_NoSave1[race-aftertalk] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "race-aftertalk",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'ForceEnableUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "ForceEnableUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[race-aftertalk] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "race-aftertalk",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

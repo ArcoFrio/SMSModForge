@@ -1,0 +1,331 @@
+{
+ "id": "8_Room_Talk/C_HarborDistrict/CoreRandomTalk/CharlotteXCustomer",
+ "name": "CharlotteXCustomer",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Charlotte",
+  "S_RichCustomer"
+ ],
+ "roots": [
+  975002162,
+  567717673,
+  1733759432
+ ],
+ "nodes": {
+  "975002162": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1657589182,
+    -324761003
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "You strike me as someone who doesn’t settle for second best.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1657589182": {
+   "kind": "text",
+   "parent": 975002162,
+   "actor": "S_RichCustomer",
+   "expression": 2,
+   "text": "Of course not. I didn’t come here to buy what everyone else has.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-324761003": {
+   "kind": "text",
+   "parent": 975002162,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Good, because I don’t sell ordinary. I sell envy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "567717673": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1152986625,
+    -1128234540
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Careful standing that close, darling. I charge extra for private tours.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1152986625": {
+   "kind": "text",
+   "parent": 567717673,
+   "actor": "S_RichCustomer",
+   "expression": 1,
+   "text": "Is that so? Maybe I can afford the full experience.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1128234540": {
+   "kind": "text",
+   "parent": 567717673,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I don’t doubt it. But you might have trouble affording my attention.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1733759432": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -779361933,
+    -706703381
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "You’d be surprised how many people buy yachts just to take selfies on them.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-779361933": {
+   "kind": "text",
+   "parent": 1733759432,
+   "actor": "S_RichCustomer",
+   "expressionName": "neutral",
+   "text": "Guilty. But at least I’d look incredible doing it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-706703381": {
+   "kind": "text",
+   "parent": 1733759432,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Then we’ll get you one that matches your energy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/C_HarborDistrict/CoreRandomTalk",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play CharlotteXCustomer and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CharlotteBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CharlotteBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/CharlotteBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_Minitalk_NPC_RichCustomerFemale to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_Minitalk_NPC_RichCustomerFemale",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Minitalk_NPC_RichCustomerFemale"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/CharlotteBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Minitalk_NPC_RichCustomerFemale/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -17,6 +17,18 @@ public static class ConditionSchemas
     public static readonly Dictionary<string, ParamSchema[]> ByType = new()
     {
         // ── Pack-variable comparisons ─────────────────────────────────
+        [NodeConditionTypes.VariableCompare] = new[]
+        {
+            new ParamSchema("source", "Source", ParamType.Choice, "pack",
+                "Which store to read: this pack's own variables, or the game's."),
+            new ParamSchema("name", "Variable", ParamType.PackVarRef, "",
+                "Variable to read."),
+            new ParamSchema("comparison", "Comparison", ParamType.Choice, "equals",
+                "How the variable is measured against the value."),
+            new ParamSchema("value", "Value", ParamType.String, "",
+                "Compared as a string for 'equals' (booleans use 'true' / 'false') " +
+                "and as a number for the rest."),
+        },
         [NodeConditionTypes.VariableEquals] = new[]
         {
             new ParamSchema("name", "Variable", ParamType.PackVarRef, "",
@@ -154,15 +166,16 @@ public static class ConditionSchemas
         {
             new ParamSchema("name", "Variable", ParamType.PackVarRef, "",
                 "Variable whose string value is tested."),
-            new ParamSchema("value", "Starts with", ParamType.String, "",
-                "Prefix to test for. Check Negate for \"doesn't start with\". An empty " +
-                "prefix never passes — it would otherwise match everything."),
             new ParamSchema("source", "Source", ParamType.Choice, "pack",
                 "Which store to read: this pack's variables, or the vanilla GC2 globals.",
                 new[] { "pack", "vanilla" }),
+            new ParamSchema("value", "Starts with", ParamType.String, "",
+                "Prefix to test for. Check Negate for \"doesn't start with\". An empty " +
+                "prefix never passes — it would otherwise match everything."),
             new ParamSchema("ignoreCase", "Ignore case", ParamType.Bool, "false",
                 "Compare case-insensitively. Off by default, matching every other " +
                 "variable comparison."),
+        
         },
 
         // ── Lists ─────────────────────────────────────────────────────
@@ -189,15 +202,15 @@ public static class ConditionSchemas
 
         [NodeConditionTypes.Timer] = new[]
         {
+            new ParamSchema("randomize", "Randomize", ParamType.Bool, "false",
+                "Roll a fresh wait in the Min..Max range after every fire, instead of " +
+                "using the fixed 'Wait' value. Use this for wandering / roaming so " +
+                "characters don't move in lockstep."),
             new ParamSchema("seconds", "Wait (s)", ParamType.Float, "30",
                 "Real seconds the rule waits between fires. Ignored when 'Randomize' " +
                 "is checked. The gate starts elapsed, so the rule fires once right " +
                 "away and then every interval after.",
                 enabledWhen: "randomize", enabledWhenValue: "false"),
-            new ParamSchema("randomize", "Randomize", ParamType.Bool, "false",
-                "Roll a fresh wait in the Min..Max range after every fire, instead of " +
-                "using the fixed 'Wait' value. Use this for wandering / roaming so " +
-                "characters don't move in lockstep."),
             new ParamSchema("minSeconds", "Min (s)", ParamType.Float, "15",
                 "Shortest wait, in real seconds. Only used when 'Randomize' is checked.",
                 enabledWhen: "randomize"),
@@ -210,6 +223,7 @@ public static class ConditionSchemas
                 "Use it when several rules would otherwise start together — one per " +
                 "character, say — so they don't all act on the same frame. Later waits are " +
                 "unaffected: each rule already re-rolls its own interval independently."),
+        
         },
         [NodeConditionTypes.AlwaysTrue] = Empty,
         [NodeConditionTypes.Weather] = new[]

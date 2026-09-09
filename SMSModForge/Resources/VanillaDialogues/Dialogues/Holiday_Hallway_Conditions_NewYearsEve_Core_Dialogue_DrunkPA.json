@@ -1,0 +1,1799 @@
+{
+ "id": "Holiday_Hallway_Conditions/NewYearsEve_Core/Dialogue_DrunkPA",
+ "name": "Dialogue_DrunkPA",
+ "index": 11,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "Josef"
+ ],
+ "roots": [
+  1640528651,
+  -1345500066,
+  -238217047,
+  863430636,
+  1970816934,
+  -1066231501,
+  -1561159713,
+  1330292758,
+  512674966,
+  -683769782,
+  -833549435,
+  -294975896,
+  -1281124791,
+  -1929271389
+ ],
+ "nodes": {
+  "1640528651": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh my god, there he is!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    }
+   ]
+  },
+  "-1345500066": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "We were just looking for you, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-238217047": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "He disappeared right before the countdown. Classic move. Probably kissing someone, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "863430636": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1475698016,
+    -1405897712,
+    -1359420983
+   ],
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Come on, tell me I was right.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1475698016": {
+   "kind": "text",
+   "parent": 863430636,
+   "children": [
+    -412475686
+   ],
+   "actor": null,
+   "text": "You're both drunk.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1405897712": {
+   "kind": "text",
+   "parent": 863430636,
+   "children": [
+    -1475592401,
+    -863814032
+   ],
+   "actor": null,
+   "text": "You know it, {D}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1359420983": {
+   "kind": "text",
+   "parent": 863430636,
+   "children": [
+    -1581479005
+   ],
+   "actor": null,
+   "text": "And that's my cue to leave. Goodnight!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1581479005": {
+   "kind": "text",
+   "parent": -1359420983,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Nooo! That's not fun, why~ Hmpfh!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    }
+   ]
+  },
+  "-412475686": {
+   "kind": "text",
+   "parent": 1475698016,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Absolutely. And loving it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1475592401": {
+   "kind": "text",
+   "parent": -1405897712,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Hah! Called it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-863814032": {
+   "kind": "text",
+   "parent": -1405897712,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Pah! As if any of those sluts could compete with me... Right? Right!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1970816934": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Now... We were just heading upstairs for a little... celebration. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1066231501": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1076306397,
+    1140357030,
+    225708856
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Care to join us? ...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1076306397": {
+   "kind": "text",
+   "parent": -1066231501,
+   "actor": null,
+   "text": "Of course, I was just looking for you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1140357030": {
+   "kind": "text",
+   "parent": -1066231501,
+   "children": [
+    1632737328
+   ],
+   "actor": null,
+   "text": "I could never say no to my sexy {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "225708856": {
+   "kind": "text",
+   "parent": -1066231501,
+   "children": [
+    -1025288126,
+    18021226
+   ],
+   "actor": null,
+   "text": "I'm good, have fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1025288126": {
+   "kind": "text",
+   "parent": 225708856,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "But~ But~ ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "18021226": {
+   "kind": "text",
+   "parent": 225708856,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Don't cry, dear. We have to respect his decision.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 9_Hallway to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "9_Hallway",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/9_Hallway"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 1_Master_Bedrooom to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "1_Master_Bedrooom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/1_Master_Bedrooom"
+      }
+     }
+    }
+   ]
+  },
+  "1632737328": {
+   "kind": "text",
+   "parent": 1140357030,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Mmmmmm... Good boy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1561159713": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeInBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeInBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 1_Master_Bedrooom to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "1_Master_Bedrooom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/1_Master_Bedrooom"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 9_Hallway to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "9_Hallway",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/9_Hallway"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    }
+   ]
+  },
+  "1330292758": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "First, we'll need to get you out of these boring clothes. Can't have you overdressed for our little party, can we?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1929271389": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeInBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeInBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 9_Hallway to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "9_Hallway",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/9_Hallway"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 1_Master_Bedrooom to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "1_Master_Bedrooom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/1_Master_Bedrooom"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "512674966": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Should I go grab the lube, baby? You also want a cock in that tight little ass tonight?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-683769782": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    117332603,
+    60185998,
+    2127731920
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Mmm, yes please, {M} wants to feel both her men stretching her out.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NewYearsTHRS (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NewYearsTHRS (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NewYearsTHRS (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-833549435": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    128440891,
+    710133886
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Tell me, love... Do you want my wet, hot pussy... or maybe... maybe {M}'s hungry asshole?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "128440891": {
+   "kind": "text",
+   "parent": -833549435,
+   "children": [
+    1624257941,
+    715918955,
+    -1021259067,
+    1838063035,
+    2144223609,
+    -1945434662,
+    -1629230944,
+    -1297902251,
+    2052682357,
+    -1580556481,
+    -1680105376,
+    -787722761,
+    -1823566287,
+    -1827538550,
+    -525780411,
+    -2103380287,
+    -616826158
+   ],
+   "actor": null,
+   "text": "Let me try that wet pussy of yours.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "710133886": {
+   "kind": "text",
+   "parent": -833549435,
+   "children": [
+    -1537656534,
+    941858255,
+    -1323634503,
+    -123519414,
+    1015855584,
+    -593218243,
+    801773338,
+    900589634,
+    -247173535,
+    1479946682,
+    -1482094416,
+    -871161186,
+    -632290569,
+    1249210570,
+    -878454394,
+    -1526236926,
+    -587478403,
+    330516109
+   ],
+   "actor": null,
+   "text": "I want to stretch your ass, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1537656534": {
+   "kind": "text",
+   "parent": 710133886,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You heard our {S}, hun. Get on the bed so I can saddle up!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1624257941": {
+   "kind": "text",
+   "parent": 128440891,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh fuck... It's so big... Let's... Fuck me, {PC}. Take me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NewYearsTHRS (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NewYearsTHRS (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NewYearsTHRS (2)"
+      }
+     }
+    }
+   ]
+  },
+  "715918955": {
+   "kind": "text",
+   "parent": 128440891,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "That's it, Anna. Milk our {S} with that tight fuckhole of yours...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1021259067": {
+   "kind": "text",
+   "parent": 128440891,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "S-Stop staring and join in... I need you inside me. I need both my men fucking me at once.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1838063035": {
+   "kind": "text",
+   "parent": 128440891,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "That's right, baby. Take both our cocks. Show us how much you love being our little slut.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NewYearsTHRS (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NewYearsTHRS (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NewYearsTHRS (4)"
+      }
+     }
+    }
+   ]
+  },
+  "2144223609": {
+   "kind": "text",
+   "parent": 128440891,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm, yes! Fuck me harder! I want to feel you both cumming inside me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1945434662": {
+   "kind": "text",
+   "parent": 128440891,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "You hear that, {S}? {M} wants us to fill her up. Let's make her our dirty little cum dump.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1629230944": {
+   "kind": "choice",
+   "parent": 128440891,
+   "children": [
+    1855508836,
+    1517000638,
+    469886389
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That's it, baby. Fuck {M}'s pussy while {D} pounds my ass.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2052682357": {
+   "kind": "text",
+   "parent": 128440891,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "You're such a greedy little wife, aren't you? Always wanting more cock.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "941858255": {
+   "kind": "text",
+   "parent": 710133886,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Hngnghh~",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NewYearsTHRS (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NewYearsTHRS (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NewYearsTHRS (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1323634503": {
+   "kind": "text",
+   "parent": 710133886,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes~ Fuck... That feels nice... Yes... Spread my cheeks for our {S}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-123519414": {
+   "kind": "choice",
+   "parent": 710133886,
+   "children": [
+    -1075334576,
+    -644900789,
+    -1512581413
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Come on, boy. Stuff {M}'s dirty hole while I fuck her slit. Let's make this New Year one we'll never forget.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-593218243": {
+   "kind": "text",
+   "parent": 710133886,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm, yes! Fuck me harder! I want to feel you both cumming inside me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NewYearsTHRS (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NewYearsTHRS (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NewYearsTHRS (5)"
+      }
+     }
+    }
+   ]
+  },
+  "801773338": {
+   "kind": "text",
+   "parent": 710133886,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That's it, baby. Fuck {M} ass while {D} pounds my pussy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "900589634": {
+   "kind": "text",
+   "parent": 710133886,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "You're such a greedy little wife, aren't you? Always wanting more cock.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-247173535": {
+   "kind": "text",
+   "parent": 710133886,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm, yes! I'm your {F} slut. Use me! Fuck... FUCK!~",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1479946682": {
+   "kind": "text",
+   "parent": 710133886,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{PC}'s cock is stretching my ass so good! I feel so full~ So... So... Hngaaaaahh....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1482094416": {
+   "kind": "text",
+   "parent": 710133886,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "That's it, baby. Cum for us. Fuck, she feels so good... I'm... Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-871161186": {
+   "kind": "text",
+   "parent": 710133886,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes! Yes! I'm cumming! Fuck, fuck, fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-632290569": {
+   "kind": "choice",
+   "parent": 710133886,
+   "children": [
+    750756216,
+    -377659223,
+    -438844537
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Here it comes, son. Let's fill her up together. Let's... Hngaaah!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1580556481": {
+   "kind": "text",
+   "parent": 128440891,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm, yes! I'm your {F} slut. Use me however you want, boys!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1680105376": {
+   "kind": "text",
+   "parent": 128440891,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god, oh god! I'm so close! Don't stop, boys! Make me cum with both your cocks inside me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-787722761": {
+   "kind": "choice",
+   "parent": 128440891,
+   "children": [
+    1283434367,
+    -1498834663,
+    101927734
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Here it comes, {S}. Let's fill her up together. ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1823566287": {
+   "kind": "text",
+   "parent": 128440891,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh fuck! I feel it! Both of you cumming inside me! Yes, yes, YES",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NewYearsTHRS (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NewYearsTHRS (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NewYearsTHRS (6)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NewYearsTHRS (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NewYearsTHRS (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NewYearsTHRS (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1827538550": {
+   "kind": "text",
+   "parent": 128440891,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Hngahh~ Take it, Anna. Fuck... Hngghh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-525780411": {
+   "kind": "text",
+   "parent": 128440891,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Jesus, look at this mess. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NewYearsTHRS (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NewYearsTHRS (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NewYearsTHRS (7)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NewYearsTHRS (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NewYearsTHRS (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NewYearsTHRS (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-2103380287": {
+   "kind": "text",
+   "parent": 128440891,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Honey, I'm way too drunk and horny to care the slightest bit.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-616826158": {
+   "kind": "text",
+   "parent": 128440891,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "You're right, babe. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1297902251": {
+   "kind": "text",
+   "parent": 128440891,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "F-Fuck... Our {S}'s big cock is making my pussy feel so good... He is making me... Hngaaa....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1015855584": {
+   "kind": "text",
+   "parent": 710133886,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Don't leave {M} hanging. I need both my men inside me. Fill me up, baby. Make me your dirty little slut.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1249210570": {
+   "kind": "text",
+   "parent": 710133886,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh fuck! I feel it! Both of you cumming inside me! Yes, yes, YES",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NewYearsTHRS (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NewYearsTHRS (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NewYearsTHRS (6)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NewYearsTHRS (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NewYearsTHRS (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NewYearsTHRS (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-878454394": {
+   "kind": "text",
+   "parent": 710133886,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Hngahh~ Take it, Anna. Fuck... Hngghh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1526236926": {
+   "kind": "text",
+   "parent": 710133886,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Jesus, look at this mess. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NewYearsTHRS (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NewYearsTHRS (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NewYearsTHRS (7)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NewYearsTHRS (3) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NewYearsTHRS (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NewYearsTHRS (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-587478403": {
+   "kind": "text",
+   "parent": 710133886,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Honey, I'm way too drunk and horny to care the slightest bit.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "330516109": {
+   "kind": "text",
+   "parent": 710133886,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "You're right, babe. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1075334576": {
+   "kind": "text",
+   "parent": -123519414,
+   "children": [
+    1503008237
+   ],
+   "actor": null,
+   "text": "You want me inside you, {M}? My big cock stretching your ass?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-644900789": {
+   "kind": "text",
+   "parent": -123519414,
+   "children": [
+    1917970243
+   ],
+   "actor": null,
+   "text": "Open her up wide, {D}. Show me her tight little ass.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1512581413": {
+   "kind": "text",
+   "parent": -123519414,
+   "actor": null,
+   "text": "(Fuck her ass)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1917970243": {
+   "kind": "text",
+   "parent": -644900789,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Here you go, {S}. {M}'s perfect, sweaty ass is waiting and ready for your cock. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1503008237": {
+   "kind": "text",
+   "parent": -1075334576,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes! Oh god, yes! I love your cock. Josef, I love his cock so much!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "750756216": {
+   "kind": "text",
+   "parent": -632290569,
+   "actor": null,
+   "text": "F-Fuck! Take my cum, {M}! I'm gonna fill up your ass!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-377659223": {
+   "kind": "text",
+   "parent": -632290569,
+   "actor": null,
+   "text": "H-Happy New Year, {M}! Hngaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-438844537": {
+   "kind": "text",
+   "parent": -632290569,
+   "actor": null,
+   "text": "(Fill her up)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1283434367": {
+   "kind": "text",
+   "parent": -787722761,
+   "actor": null,
+   "text": "F-Fuck! Take my cum, {M}! I'm gonna breed this little perfect pussy!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1498834663": {
+   "kind": "text",
+   "parent": -787722761,
+   "actor": null,
+   "text": "H-Happy New Year, {M}! Hngaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "101927734": {
+   "kind": "text",
+   "parent": -787722761,
+   "actor": null,
+   "text": "(Fill her up)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1855508836": {
+   "kind": "text",
+   "parent": -1629230944,
+   "children": [
+    424834287
+   ],
+   "actor": null,
+   "text": "You like that, {M}? My big cock... Inside you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1517000638": {
+   "kind": "text",
+   "parent": -1629230944,
+   "actor": null,
+   "text": "Our perfect, little {F} slut... Hnggh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "469886389": {
+   "kind": "text",
+   "parent": -1629230944,
+   "children": [
+    432450359
+   ],
+   "actor": null,
+   "text": "(Pinch her nipples)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "424834287": {
+   "kind": "text",
+   "parent": 1855508836,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I love it... I love it so much, I don't want to ever miss your perfect cock in my life!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "432450359": {
+   "kind": "text",
+   "parent": 469886389,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hah~ Y-Yes! D-Don't hold back... Oh god, our {S} is such a good... FHAAAAACK!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-294975896": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "G-Give {M} a little break... I need to catch my breath... But then, I want more...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1281124791": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "That sounds good... Yes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "117332603": {
+   "kind": "text",
+   "parent": -683769782,
+   "children": [
+    377178162
+   ],
+   "actor": null,
+   "text": "No matter way to start the new year, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "60185998": {
+   "kind": "text",
+   "parent": -683769782,
+   "children": [
+    -1593426666
+   ],
+   "actor": null,
+   "text": "You need help getting ready, {M}",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2127731920": {
+   "kind": "text",
+   "parent": -683769782,
+   "children": [
+    -796845404,
+    1788993966,
+    -1197670959
+   ],
+   "actor": null,
+   "text": "You two are quite the couple when you're tipsy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1593426666": {
+   "kind": "text",
+   "parent": 60185998,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "T-Thank you, hun. I don't want this nice fabric to tear when things get rough...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-796845404": {
+   "kind": "text",
+   "parent": 2127731920,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "There's just been so much holding us back in this {F}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "377178162": {
+   "kind": "text",
+   "parent": 117332603,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I can't wait... I'm so happy and I'm... God, I can't wait.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1788993966": {
+   "kind": "text",
+   "parent": 2127731920,
+   "actor": "Josef",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Not anymore, Anna. Our {S} and I are gonna flood every hole in your perfect hot body tonight.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1197670959": {
+   "kind": "text",
+   "parent": 2127731920,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Yes!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "Holiday_Hallway_Conditions/NewYearsEve_Core/drunkpa_cond",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dialogue_DrunkPA and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Eve_NoSave1[newyearseveguest] ≠ 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newyearseveguest",
+        "list": "Eve_NoSave1",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Different",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Newyearslingerie_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Newyearslingerie_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Newyearslingerie_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active JosefDout to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "JosefDout",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/JosefDout"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

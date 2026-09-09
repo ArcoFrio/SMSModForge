@@ -1,0 +1,1039 @@
+{
+ "id": "8_Room_Talk/publicparksuburbs/GabrielHaniyaParkEvent",
+ "name": "GabrielHaniyaParkEvent",
+ "index": 5,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Gabriel",
+  "Haniya"
+ ],
+ "roots": [
+  -1897775850,
+  -802135493,
+  645415977,
+  315157938,
+  786399266,
+  1236140153,
+  -1188886183,
+  -2063820551,
+  -1583420375,
+  -814088338,
+  -1677345678,
+  1341953625,
+  -1412115439,
+  -1571678241,
+  -1840984148,
+  -1889572429,
+  -1402266940,
+  -1642120748,
+  1438493200,
+  -1506306619,
+  834778829,
+  1398334918,
+  -1182766070,
+  286905844,
+  1453350398,
+  -991364410
+ ],
+ "nodes": {
+  "-1897775850": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "645415977": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    2103903045,
+    1354016523
+   ],
+   "actor": "Gabriel",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "We’re doing a shoot. Park lighting’s good today and it’s less crowded than usual.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2103903045": {
+   "kind": "text",
+   "parent": 645415977,
+   "actor": null,
+   "text": "Great idea, want my assistance?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1354016523": {
+   "kind": "text",
+   "parent": 645415977,
+   "children": [
+    -685341541
+   ],
+   "actor": null,
+   "text": "Well, have fun you two. See you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-685341541": {
+   "kind": "text",
+   "parent": 1354016523,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Don't be a stranger!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "315157938": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "See, now that’s the kind of energy I need around me more often.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "786399266": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That’s kind of you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1188886183": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "I'll guide you. {PC}, you focus on the shot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2063820551": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "It's a good one, I can feel it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Haniya_AssPark (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Haniya_AssPark (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Haniya_AssPark (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1583420375": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1365974199,
+    -1665417042
+   ],
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "You know it, my love. It's a fantastic shot of a fantastic behind!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1365974199": {
+   "kind": "text",
+   "parent": -1583420375,
+   "actor": null,
+   "text": "Hmmm, it might look better with a bit of... glaze.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1665417042": {
+   "kind": "text",
+   "parent": -1583420375,
+   "children": [
+    -646871170,
+    -1336883602
+   ],
+   "actor": null,
+   "text": "Well, that was fun. See you two around.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-646871170": {
+   "kind": "text",
+   "parent": -1665417042,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Would you like a copy?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1336883602": {
+   "kind": "text",
+   "parent": -1665417042,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "I'll send him one later today. ",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1412115439": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Patience, my dear. Good art takes time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1571678241": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Mmm, looks like we've got quite the palette to work with here...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Haniya_AssPark (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Haniya_AssPark (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Haniya_AssPark (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1840984148": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Don't be shy now, boys. I want to feel every drop of that creativity.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1889572429": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "I say we go slow at first, build up to a crescendo...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1402266940": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Oh, that's... that's quite a beginning... You two certainly know how to make an entrance.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "834778829": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1087581163,
+    1847392703,
+    -1815268327
+   ],
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Mmm... Please, I want to feel your warmth on me... Let's make the perfect photo together....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1398334918": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "That's it, paint me white! Cover my butt in your hot cum!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Haniya_AssPark (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Haniya_AssPark (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Haniya_AssPark (5)"
+      }
+     }
+    }
+   ]
+  },
+  "-1182766070": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Look how beautiful I am, all covered in your cum.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "286905844": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Damn, babe, you look absolutely edible. {PC} and I did good work on that canvas of yours.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1453350398": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "I feel like a goddess, all marked and claimed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-991364410": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "And {PC}... thanks for joining us today. You always know how to make things interesting.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1087581163": {
+   "kind": "text",
+   "parent": 834778829,
+   "actor": null,
+   "text": "Hngah... H-Here it comes... Fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1847392703": {
+   "kind": "text",
+   "parent": 834778829,
+   "actor": null,
+   "text": "(Cum on her ass)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1815268327": {
+   "kind": "text",
+   "parent": 834778829,
+   "children": [
+    1755307547,
+    562780569,
+    -1290463732,
+    2077809332,
+    -1807855315,
+    -634769099,
+    798318126,
+    -456674005,
+    928295948,
+    -559678123,
+    -1138626605,
+    144715555
+   ],
+   "actor": null,
+   "text": "Let's focus our creativity... Into her ass, Gabriel... Hngaah..",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1755307547": {
+   "kind": "text",
+   "parent": -1815268327,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Y-Yeah! Let's be quick, I'm so fucking close....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-802135493": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "{PC}! Didn’t expect to run into you out here in the wild.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1236140153": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "So... How are we going to make my backside the star of the show?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1677345678": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Looks like my favorite photographer and his apprentice are feeling creative today.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-814088338": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Now that's an interesting idea. What do you think, my dear? Fancy being our canvas for the afternoon?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1341953625": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "I suppose I could accommodate such an artistic request. Well, don't keep a girl waiting.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "562780569": {
+   "kind": "text",
+   "parent": -1815268327,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Boys, what are you up to now?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2077809332": {
+   "kind": "text",
+   "parent": -1815268327,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Fuck, you two... That's... that's quite the technique... Hngahh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Haniya_AssPark (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Haniya_AssPark (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Haniya_AssPark (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1807855315": {
+   "kind": "text",
+   "parent": -1815268327,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "You... You feel incredible, baby. So tight, so perfect. F-Fuck, this feels so... Hnnggh.....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-634769099": {
+   "kind": "text",
+   "parent": -1815268327,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Oh fuck, yes! Give it to me, boys. Fill up my tight little hole with your hot cum.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "928295948": {
+   "kind": "text",
+   "parent": -1815268327,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "It seems our little artistic endeavor turned out quite nicely.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Haniya_AssPark (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Haniya_AssPark (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Haniya_AssPark (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Haniya_AssPark (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Haniya_AssPark (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Haniya_AssPark (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-559678123": {
+   "kind": "choice",
+   "parent": -1815268327,
+   "children": [
+    -146382461,
+    -597182162
+   ],
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "I'd say it's our best work yet. What do you think, {PC}?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1642120748": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "That's it, my love. Jiggle it a bit for us, show {PC} how much you want this...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1438493200": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "My husband and his former apprentice doing such naughty things to me… in public…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1290463732": {
+   "kind": "text",
+   "parent": -1815268327,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Consider this... experimental technique. A little extra flourish for our masterpiece.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1138626605": {
+   "kind": "text",
+   "parent": -1815268327,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Honey, wouldn't you be a dear and clean up your messy masterpiece? There's some paper towels in my bag.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "144715555": {
+   "kind": "text",
+   "parent": -1815268327,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Of course, my dear. We'll see you, {PC}. Oh, great work by the way!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1506306619": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "I'm... Almost there, I'm.. I can't... Hngahh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-146382461": {
+   "kind": "text",
+   "parent": -559678123,
+   "children": [
+    1364931829
+   ],
+   "actor": null,
+   "text": "For sure, it's perfect.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-597182162": {
+   "kind": "text",
+   "parent": -559678123,
+   "children": [
+    -1976321347
+   ],
+   "actor": null,
+   "text": "There's room for improvement.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1364931829": {
+   "kind": "text",
+   "parent": -146382461,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "A true collaboration between artist and model.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1976321347": {
+   "kind": "text",
+   "parent": -597182162,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Is that so? Perhaps we need to further explore this in the future then.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "798318126": {
+   "kind": "text",
+   "parent": -1815268327,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "K-Keep going, {PC}... As artists we have to pump, hngaahh... every single drop into her.... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-456674005": {
+   "kind": "text",
+   "parent": -1815268327,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Oh god, you two are filling me up... I feel so full... Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/publicparksuburbs",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play GabrielHaniyaParkEvent and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[gabrielhaniyaworldevents] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabrielhaniyaworldevents",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[gabriel-threesome-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabriel-threesome-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Gabriel_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Gabriel_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Gabriel_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Haniya_CasualBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Haniya_CasualBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Haniya_CasualBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[gabrielhaniyaworldevents] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabrielhaniyaworldevents",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

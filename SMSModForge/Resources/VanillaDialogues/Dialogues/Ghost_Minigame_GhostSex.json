@@ -1,0 +1,798 @@
+{
+ "id": "Ghost_Minigame/GhostSex",
+ "name": "GhostSex",
+ "index": 7,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Noire"
+ ],
+ "roots": [
+  -334925899,
+  1769541397,
+  1595933039,
+  -1532864369,
+  1490618165,
+  570877818,
+  -1130923860,
+  -1774535894,
+  -1227845097,
+  -1165695119,
+  1709173411,
+  889384012,
+  847954958,
+  -2121735755,
+  749865526
+ ],
+ "nodes": {
+  "-334925899": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Lost, little lightbearer?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1769541397": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Mmm… I thought I smelled something warm.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1595933039": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Astrid brought you with her?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1532864369": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    834522150,
+    522779678,
+    360963416,
+    163544572
+   ],
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "How deliciously irresponsible.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1490618165": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Let’s see what you're good for.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LadyNoireFacesit (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LadyNoireFacesit (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/LadyNoireFacesit (0)"
+      }
+     }
+    }
+   ]
+  },
+  "570877818": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "If you bite, I will~ You know what... Why spoil the surprise?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1130923860": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Don't squirm. It's rude. I'm just getting comfortable.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1774535894": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "That's better. Just lie there and breathe. Or don't. I don't really care.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LadyNoireFacesit (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LadyNoireFacesit (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/LadyNoireFacesit (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1227845097": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Mmm, that's it… just a little cushion for my throne. You should feel honored, human. Most don't get this close.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1165695119": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Oh? Trying to turn your head? Tsk tsk. Stay still, or I'll make you still.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1709173411": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    2142946827,
+    -181491943,
+    1585256518
+   ],
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "You can lick, you know. It's what you're here for. Clean me up. Show some gratitude.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "889384012": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Oh, fuck… There it is. That's your reward, little pet. Drink it up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LadyNoireFacesit (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LadyNoireFacesit (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/LadyNoireFacesit (2)"
+      }
+     }
+    }
+   ]
+  },
+  "847954958": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Don't you dare wipe it off. Let it dry on your skin. A reminder of who owns you now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2142946827": {
+   "kind": "text",
+   "parent": 1709173411,
+   "children": [
+    806855641,
+    207303621
+   ],
+   "actor": null,
+   "text": "(Lick her pussy)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-181491943": {
+   "kind": "text",
+   "parent": 1709173411,
+   "children": [
+    -1282162885,
+    1206587370
+   ],
+   "actor": null,
+   "text": "(Lick her asshole)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1585256518": {
+   "kind": "text",
+   "parent": 1709173411,
+   "children": [
+    1952637898,
+    -2108822854,
+    -2001425430
+   ],
+   "actor": null,
+   "text": "(Don't lick her)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1952637898": {
+   "kind": "text",
+   "parent": 1585256518,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Refusing? How quaint. Your little act of defiance just makes my pussy wetter, darling.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1282162885": {
+   "kind": "text",
+   "parent": -181491943,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Hah… eager little pet, aren't you? That's not where I told you to start, but I'll allow it. For now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "806855641": {
+   "kind": "text",
+   "parent": 2142946827,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "A little higher. Yes, right there. Use your tongue, not just your lips.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2108822854": {
+   "kind": "text",
+   "parent": 1585256518,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "You think your silence matters? I can feel your heartbeat through your cheeks. It's racing. You're terrified... and aroused.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1206587370": {
+   "kind": "text",
+   "parent": -181491943,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Get your tongue deeper. Show me you know how to serve.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "207303621": {
+   "kind": "text",
+   "parent": 2142946827,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "You're not bad for a human. Maybe I won't drain you dry tonight.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2001425430": {
+   "kind": "text",
+   "parent": 1585256518,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Go on, keep your mouth shut. My thighs will do all the talking. And they say you're going to drown.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2121735755": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Pathetic. Absolutely pathetic. And yet… you're still hard, aren't you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "749865526": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Go on. Crawl back to wherever you came from. And remember this face… you'll be seeing it again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "834522150": {
+   "kind": "text",
+   "parent": -1532864369,
+   "children": [
+    1261774267
+   ],
+   "actor": null,
+   "text": "I’m just here for her. I didn’t mean to...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1261774267": {
+   "kind": "text",
+   "parent": 834522150,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Oh, I know. That’s what makes it cute.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "522779678": {
+   "kind": "text",
+   "parent": -1532864369,
+   "children": [
+    922718873
+   ],
+   "actor": null,
+   "text": "Okay, yeah, definitely lost. This isn't the bathroom.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "922718873": {
+   "kind": "text",
+   "parent": 522779678,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "No, but you’ll be pissing yourself soon.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "360963416": {
+   "kind": "text",
+   "parent": -1532864369,
+   "children": [
+    -326970977
+   ],
+   "actor": null,
+   "text": "You caught me. Gonna punish me now?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-326970977": {
+   "kind": "text",
+   "parent": 360963416,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Oh darling... I'm going to sit on you until you forget your own name.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "163544572": {
+   "kind": "text",
+   "parent": -1532864369,
+   "children": [
+    414302864
+   ],
+   "actor": null,
+   "text": "You knew we were coming, didn’t you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "414302864": {
+   "kind": "text",
+   "parent": 163544572,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Of course. This house breathes for me.\nAnd now it’s breathing you in.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "Ghost_Minigame/Disabled_Ghost_Loss",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play GhostSex and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Noire_Jumpscare to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Noire_Jumpscare",
+       "of": "GetGameObjectInstance",
+       "path": "Ghost_Minigame/Ghost_Map_Core/Noire_Jumpscare"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ghost_Monsters to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ghost_Monsters",
+       "of": "GetGameObjectInstance",
+       "path": "Ghost_Minigame/Ghost_Map_Core/ghost_Monsters"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AstridLooking to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AstridLooking",
+       "of": "GetGameObjectInstance",
+       "path": "Ghost_Minigame/Ghost_Map_Core/AstridLooking"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Ghost_Flashlight to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Ghost_Flashlight",
+       "of": "GetGameObjectInstance",
+       "path": "Ghost_Minigame/Ghost_Map_Core/Ghost_Flashlight"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Ghost_Minigame_Active to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Ghost_Minigame_Active",
+       "of": "GetGameObjectInstance",
+       "path": "Ghost_Minigame/Ghost_Minigame_Active"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active VacationBlackscreen to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "VacationBlackscreen",
+       "of": "GetGameObjectInstance",
+       "path": "6_Effects/Effect_Canvas/VacationBlackscreen"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "type": "InstructionCursorTexture",
+     "title": "Set Cursor Texture to CoreCursor",
+     "fields": {
+      "m_Texture": {
+       "kind": "raw",
+       "type": "GetTextureInstance",
+       "data": {
+        "m_Texture": {
+         "$unity": "CoreCursor",
+         "$type": "Texture2D"
+        }
+       }
+      },
+      "m_Tip": {
+       "x": 0,
+       "y": 0
+      },
+      "m_Mode": "Auto"
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Minigame[enableafter-lostminigame] to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "enableafter-lostminigame",
+        "list": "Minigame",
+        "type": "game-object"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Dis_Ghost_Global_Light to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Dis_Ghost_Global_Light",
+       "of": "GetGameObjectInstance",
+       "path": "Ghost_Minigame/Ghost_Map_Core/Dis_Ghost_Global_Light"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Main Global Light 2D to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Main Global Light 2D",
+       "of": "GetGameObjectInstance",
+       "path": "Main Global Light 2D"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Weather_System_Outside to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Weather_System_Outside",
+       "of": "GetGameObjectInstance",
+       "path": "Weather_System_Outside"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Weather_System_Inside to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Weather_System_Inside",
+       "of": "GetGameObjectInstance",
+       "path": "Weather_System_Inside"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 137_HarborHauntedHouse to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "137_HarborHauntedHouse",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/137_HarborHauntedHouse"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Ghost_Minigame to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Ghost_Minigame",
+       "of": "GetGameObjectInstance",
+       "path": "Ghost_Minigame"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

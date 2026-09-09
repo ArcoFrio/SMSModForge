@@ -1,0 +1,1714 @@
+{
+ "id": "8_Room_Talk/Garage/TonyTalkGarage",
+ "name": "TonyTalkGarage",
+ "index": 9,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Anna",
+  "Continue",
+  "Josef",
+  "Toni"
+ ],
+ "roots": [
+  524004018,
+  -1861967165,
+  -1718345395,
+  1390094480,
+  -816048698
+ ],
+ "nodes": {
+  "524004018": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -707601557,
+    -567636992,
+    510672079,
+    -1421022217,
+    712863245,
+    665912339
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "So… do you still have connections in the Badlands?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_8[toni-garage-events] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "toni-garage-events",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    }
+   ]
+  },
+  "-1718345395": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1211623696,
+    -976809156,
+    113848798,
+    310138760
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Never thought I’d see you here, Antonia. Working for him, no less.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_8[toni-garage-events] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "toni-garage-events",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    }
+   ]
+  },
+  "1390094480": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1178928942,
+    -1731202288,
+    853841915,
+    559992890,
+    -1652617218
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "…No way. No. Way. Antonia?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_8[toni-garage-events] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "toni-garage-events",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    }
+   ]
+  },
+  "1178928942": {
+   "kind": "text",
+   "parent": 1390094480,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "The hell you yelling for? Yeah, it’s me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1731202288": {
+   "kind": "text",
+   "parent": 1390094480,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "But—you—you used to... watch over me! You were, like… normal! What happened?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "853841915": {
+   "kind": "text",
+   "parent": 1390094480,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "What happened? Life. College kicked my ass, the Badlands toughened me up, and now I fix cars for a living. Got a problem with that, kid?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Tony_ShowerFun (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Tony_ShowerFun (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Tony_ShowerFun (0)"
+      }
+     }
+    }
+   ]
+  },
+  "559992890": {
+   "kind": "text",
+   "parent": 1390094480,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I just… damn. This is so weird. It’s like finding out your kindergarten teacher is a cage fighter now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1652617218": {
+   "kind": "text",
+   "parent": 1390094480,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You wanna see me punch something? Keep talking.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1211623696": {
+   "kind": "text",
+   "parent": -1718345395,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Yeah, well, your son made me a damn good offer. Plus, I get to work in this place? Way better than fixing up rust buckets in the Badlands.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-976809156": {
+   "kind": "text",
+   "parent": -1718345395,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I have to say, it’s nice seeing a familiar face from the past. I always liked you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "113848798": {
+   "kind": "text",
+   "parent": -1718345395,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yeah? Guess I must’ve made a good impression back then.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "310138760": {
+   "kind": "text",
+   "parent": -1718345395,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "You did a hell of a job raising him, y’know? He’s not half bad.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-707601557": {
+   "kind": "text",
+   "parent": 524004018,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Depends. Why? You looking to buy some stolen car parts or get an unregistered bike?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-567636992": {
+   "kind": "text",
+   "parent": 524004018,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I was thinking… work. Something to keep me busy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "510672079": {
+   "kind": "text",
+   "parent": 524004018,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Oh my god. You—you?! In the Badlands?! Haha... Hahaha.... HAHAHAHA!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1421022217": {
+   "kind": "text",
+   "parent": 524004018,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I take it that’s a no?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "712863245": {
+   "kind": "text",
+   "parent": 524004018,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "It’s a hell no! You’d get eaten alive, dude! You wouldn’t last ten minutes before someone tried to scam you, rob you, or sell you a ‘magic’ carburetor that’s actually just a spray-painted rock!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "665912339": {
+   "kind": "text",
+   "parent": 524004018,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I-I get it... Jeez.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1861967165": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1218545234,
+    1459674324
+   ],
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Damn, this thing’s barely holding together. You been driving it like this for long?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_8[toni-garage-events] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "toni-garage-events",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1218545234": {
+   "kind": "text",
+   "parent": -1861967165,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Don’t worry though, I’ve fixed worse junk than this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1459674324": {
+   "kind": "text",
+   "parent": -1861967165,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Give me some time in the garage and I’ll make it run smooth again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-816048698": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1704252513,
+    -1749668088,
+    1630247970,
+    -830997366
+   ],
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": {
+    "kind": "variable",
+    "variable": {
+     "scope": "localList",
+     "on": {
+      "kind": "object",
+      "name": "TonyTalkGarage",
+      "of": "GetGameObjectInstance",
+      "path": "8_Room_Talk/Garage/TonyTalkGarage"
+     },
+     "pick": "random",
+     "type": "string"
+    }
+   },
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_8[toni-garage-events] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "toni-garage-events",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1704252513": {
+   "kind": "text",
+   "parent": -816048698,
+   "children": [
+    1524191738,
+    -1093765712,
+    -762528985,
+    306699979,
+    -2039666132,
+    1574464441,
+    1959676841,
+    -609160782,
+    190066958,
+    1547071117,
+    319239105,
+    1498382193,
+    2013625690,
+    1523042756,
+    -951463342,
+    1666680870,
+    -774732054,
+    -1019267266,
+    -72911014,
+    674312856,
+    -481052285,
+    -1228090563,
+    1541725823,
+    76508836
+   ],
+   "actor": null,
+   "text": "There's a shower. Wanna cool off together for a minute?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1749668088": {
+   "kind": "text",
+   "parent": -816048698,
+   "children": [
+    -1571414993,
+    -1246924696
+   ],
+   "actor": null,
+   "text": "You’re gonna overheat if you keep going like this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1630247970": {
+   "kind": "text",
+   "parent": -816048698,
+   "children": [
+    -403753450
+   ],
+   "actor": null,
+   "text": "Come on, tough mechanic. You’ve got this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-403753450": {
+   "kind": "text",
+   "parent": 1630247970,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Damn right I do. Little heat’s not gonna beat me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-830997366": {
+   "kind": "text",
+   "parent": -816048698,
+   "children": [
+    779577735,
+    -1504944866
+   ],
+   "actor": null,
+   "text": "Want me to grab you something cold to drink?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "779577735": {
+   "kind": "text",
+   "parent": -830997366,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "That’s sweet, but I’m good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1571414993": {
+   "kind": "text",
+   "parent": -1749668088,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "appreciate it, but this is normal garage weather for me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1524191738": {
+   "kind": "text",
+   "parent": -1704252513,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Ha. You really know how to mess with my brain.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1504944866": {
+   "kind": "text",
+   "parent": -830997366,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Got a cold bottle stashed right over there. Gotta think ahead in this heat.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1246924696": {
+   "kind": "text",
+   "parent": -1749668088,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Sweat just means progress.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1093765712": {
+   "kind": "text",
+   "parent": -1704252513,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Standing here all overheated and gross, and you’re talking about showers… that’s dangerous.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-762528985": {
+   "kind": "text",
+   "parent": -1704252513,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "I might actually drag you under the shower with me. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "306699979": {
+   "kind": "text",
+   "parent": -1704252513,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Ah, fuck it. Let's go.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Gallery-Active] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gallery-Active",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2039666132": {
+   "kind": "text",
+   "parent": -1704252513,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 4_Bath to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "4_Bath",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/4_Bath"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 17_CarPark to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "17_CarPark",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/17_CarPark"
+      }
+     }
+    }
+   ]
+  },
+  "1541725823": {
+   "kind": "text",
+   "parent": -1704252513,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 17_CarPark to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "17_CarPark",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/17_CarPark"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 4_Bath to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "4_Bath",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/4_Bath"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active TomboyToni_BustDefaultCLEAN to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "TomboyToni_BustDefaultCLEAN",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/TomboyToni_BustDefaultCLEAN"
+      }
+     }
+    }
+   ]
+  },
+  "1574464441": {
+   "kind": "text",
+   "parent": -1704252513,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Alright, get in already...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "76508836": {
+   "kind": "text",
+   "parent": -1704252513,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "You gonna keep this between us...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Gallery-Active] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gallery-Active",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1959676841": {
+   "kind": "choice",
+   "parent": -1704252513,
+   "children": [
+    1136806265,
+    -132705803,
+    428528249,
+    -1571291215
+   ],
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Don't just stand there staring. You've seen naked tits before, right?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Tony_ShowerFun (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Tony_ShowerFun (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Tony_ShowerFun (0)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/TomboyToni_BustDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-609160782": {
+   "kind": "text",
+   "parent": -1704252513,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Fuck, this is just what I needed. My butt is so fucking sweaty...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Tony_ShowerFun (1A) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Tony_ShowerFun (1A)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Tony_ShowerFun (1A)"
+      }
+     }
+    }
+   ]
+  },
+  "190066958": {
+   "kind": "text",
+   "parent": -1704252513,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "What? It's easier to clean that way. Don't act like you've never done it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1547071117": {
+   "kind": "text",
+   "parent": -1704252513,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Here, take the soap.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "319239105": {
+   "kind": "text",
+   "parent": -1704252513,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Yeah, like that. Not too rough, but... firm is good. Feels nice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Tony_ShowerFun (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Tony_ShowerFun (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Tony_ShowerFun (2)"
+      }
+     }
+    }
+   ]
+  },
+  "674312856": {
+   "kind": "choice",
+   "parent": -1704252513,
+   "children": [
+    -946458706,
+    -845538699,
+    1790591814
+   ],
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "You're... filling me up... damn...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-481052285": {
+   "kind": "text",
+   "parent": -1704252513,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "That was... intense. You're not half bad, you know that?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1228090563": {
+   "kind": "text",
+   "parent": -1704252513,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Alright, let's rinse off. The water's getting cold.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-946458706": {
+   "kind": "text",
+   "parent": 674312856,
+   "actor": null,
+   "text": "T-Take it all, Toni. This load is all yours~",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-845538699": {
+   "kind": "text",
+   "parent": 674312856,
+   "actor": null,
+   "text": "Your pussy is just too damn tight, fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1790591814": {
+   "kind": "text",
+   "parent": 674312856,
+   "actor": null,
+   "text": "(Fill her up)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1136806265": {
+   "kind": "text",
+   "parent": 1959676841,
+   "children": [
+    1619573420
+   ],
+   "actor": null,
+   "text": "I'm trying to memorize this view.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1619573420": {
+   "kind": "text",
+   "parent": 1136806265,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Jesus Christ, you can't just say stuff like that. My face is on fire. Get over here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-132705803": {
+   "kind": "text",
+   "parent": 1959676841,
+   "children": [
+    1352609265
+   ],
+   "actor": null,
+   "text": "I wasn't staring. Just... appreciating the view.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1352609265": {
+   "kind": "text",
+   "parent": -132705803,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Appreciating, huh? Appreciate my ass, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "428528249": {
+   "kind": "text",
+   "parent": 1959676841,
+   "children": [
+    -1053034169
+   ],
+   "actor": null,
+   "text": "It's the grease. I'm figuring out where to start.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1053034169": {
+   "kind": "text",
+   "parent": 428528249,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Start with the shoulders and work your way down. Common sense, dude.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1498382193": {
+   "kind": "text",
+   "parent": -1704252513,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Higher. Yeah, right there. God, that feels good after a day under the hood.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2013625690": {
+   "kind": "text",
+   "parent": -1704252513,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Whoa, hey. That's... uh... that's not the gear shift, big guy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1523042756": {
+   "kind": "text",
+   "parent": -1704252513,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "You know, I can feel that right through my ass cheeks. You trying to start something?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-951463342": {
+   "kind": "text",
+   "parent": -1704252513,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Or are you just really into soapy tits? Can't blame you, I guess.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1666680870": {
+   "kind": "text",
+   "parent": -1704252513,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Fuck... Just put it in already. Please, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-774732054": {
+   "kind": "text",
+   "parent": -1704252513,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 5,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AFewMinutesLater to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AFewMinutesLater",
+       "of": "GetGameObjectInstance",
+       "path": "6_Effects/Effect_Canvas/AFewMinutesLater"
+      }
+     }
+    }
+   ]
+  },
+  "-1019267266": {
+   "kind": "text",
+   "parent": -1704252513,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Fuck... fuck... I'm gonna... yeah, right there, don't stop...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Tony_ShowerFun (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Tony_ShowerFun (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Tony_ShowerFun (3)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Tony_ShowerFun (1A) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Tony_ShowerFun (1A)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Tony_ShowerFun (1A)"
+      }
+     }
+    }
+   ]
+  },
+  "-72911014": {
+   "kind": "text",
+   "parent": -1704252513,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Oh god... oh shit... I'm coming...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1571291215": {
+   "kind": "text",
+   "parent": 1959676841,
+   "children": [
+    -811284030
+   ],
+   "actor": null,
+   "text": "Every time feels like the first time with you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-811284030": {
+   "kind": "text",
+   "parent": -1571291215,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "God damn it. That's... really sweet, actually. You're gonna make me drop the soap. Come on.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Garage",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play TonyTalkGarage and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[toniworksforplayer] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "toniworksforplayer",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "chance",
+     "type": "ConditionChance",
+     "title": "If 0.5 chance to pass",
+     "fields": {
+      "m_Threshold": {
+       "kind": "value",
+       "value": 0.5
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown3[tonygarage-cd] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tonygarage-cd",
+        "list": "Cooldown3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ToniWorking1 to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ToniWorking1",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/17_CarPark/ToniWorking1"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active TomboyToni_BustDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "TomboyToni_BustDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/TomboyToni_BustDefault"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ToniWorking1 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ToniWorking1",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/17_CarPark/ToniWorking1"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown3[tonygarage-cd] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tonygarage-cd",
+        "list": "Cooldown3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_8[toni-garage-events] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "toni-garage-events",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

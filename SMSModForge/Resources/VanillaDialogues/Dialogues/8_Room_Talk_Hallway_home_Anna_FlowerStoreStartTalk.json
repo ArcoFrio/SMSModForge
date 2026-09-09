@@ -1,0 +1,612 @@
+{
+ "id": "8_Room_Talk/Hallway_home/Anna_FlowerStoreStartTalk",
+ "name": "Anna_FlowerStoreStartTalk",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna"
+ ],
+ "roots": [
+  -83234042,
+  1620515335,
+  -263427849
+ ],
+ "nodes": {
+  "-83234042": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    11044746,
+    -1801665040,
+    1084995985
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hey, sweetheart. Got a moment?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "11044746": {
+   "kind": "text",
+   "parent": -83234042,
+   "actor": null,
+   "text": "Sure, {M}. What's up?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1801665040": {
+   "kind": "text",
+   "parent": -83234042,
+   "actor": null,
+   "text": "Yeah?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1084995985": {
+   "kind": "text",
+   "parent": -83234042,
+   "children": [
+    -393627728
+   ],
+   "actor": null,
+   "text": "If this is about money, I’m broke.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1620515335": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I was wondering if you could do me a little favor. You’ve got the car keys now, right?",
+   "tag": "rooty",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-263427849": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1204785335,
+    -347236550,
+    1783845731
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "On Tuesdays, I work late at the flower shop, and getting home by bus takes forever… Would you mind picking me up? Just a quick drive, nothing too much.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1204785335": {
+   "kind": "text",
+   "parent": -263427849,
+   "children": [
+    -953381439
+   ],
+   "actor": null,
+   "text": "Of course, I don’t mind.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-347236550": {
+   "kind": "text",
+   "parent": -263427849,
+   "children": [
+    797816696
+   ],
+   "actor": null,
+   "text": "Can’t {D} or Adrian do it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1783845731": {
+   "kind": "text",
+   "parent": -263427849,
+   "children": [
+    1605878821
+   ],
+   "actor": null,
+   "text": "What’s in it for me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1605878821": {
+   "kind": "choice",
+   "parent": 1783845731,
+   "children": [
+    -33981765,
+    1377512357,
+    1700734448
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, come on! I’ll even make your favorite dinner sometime. Deal?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "797816696": {
+   "kind": "text",
+   "parent": -347236550,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I’d ask your father, but you know he's in a rough spot. Adrian? Hah, You know how he is. I wouldn’t trust him not to forget.",
+   "jump": {
+    "mode": "Jump",
+    "to": "rooty"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-953381439": {
+   "kind": "text",
+   "parent": 1204785335,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thank you, sweetheart. That means a lot. I’ll text you when I’m off, okay?",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[MLove] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MLove",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-33981765": {
+   "kind": "text",
+   "parent": 1605878821,
+   "children": [
+    1877537113
+   ],
+   "actor": null,
+   "text": "Now we’re talking!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1377512357": {
+   "kind": "text",
+   "parent": 1605878821,
+   "children": [
+    1905442419
+   ],
+   "actor": null,
+   "text": "You don’t need to bribe me, {M}. I’ll do it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1700734448": {
+   "kind": "text",
+   "parent": 1605878821,
+   "children": [
+    1185510425
+   ],
+   "actor": null,
+   "text": "You'll let me eat your ass? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1185510425": {
+   "kind": "text",
+   "parent": 1700734448,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "W-What!? N-No... Oh god, oh god, oh god... W-What is wrong with my {S}...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[MCorruption] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MCorruption",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "1905442419": {
+   "kind": "text",
+   "parent": 1377512357,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thank you, sweetheart. That means a lot. I’ll text you when I’m off, okay?",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[MLove] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MLove",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "1877537113": {
+   "kind": "text",
+   "parent": -33981765,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thank you, sweetheart. That means a lot. I’ll text you when I’m off, okay?",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-393627728": {
+   "kind": "text",
+   "parent": 1084995985,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "No, no, not this time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Hallway_home",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Anna_FlowerStoreStartTalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] ≠ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Different",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DaysPassed] ≥ 6",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DaysPassed",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 6
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[anna-flowerstoreintroduction] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-flowerstoreintroduction",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "branches": [
+    "e"
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_8[anna-flowerstoreintroduction] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-flowerstoreintroduction",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

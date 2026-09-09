@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -27,6 +27,24 @@ public abstract class UnitTreeItem : ObservableObject, IFilterableTreeNode
     {
         get => _isExpanded;
         set { if (_isExpanded == value) return; _isExpanded = value; OnPropertyChanged(); }
+    }
+
+    private bool _isSelected;
+    /// <summary>
+    /// The TreeView's own single selection, as a property the view model can
+    /// SET as well as read.
+    /// <para/>
+    /// Without this, selection only ever travelled one way - the control told
+    /// the view model, and nothing could tell the control. That is what made a
+    /// sidebar with two lists possible to get stuck in: picking a row in the
+    /// other list cleared this tree's selection in the view model but left the
+    /// row highlighted here, so clicking it again was not a CHANGE and raised
+    /// no event. With one item in each list there was then no way back.
+    /// </summary>
+    public bool IsSelected
+    {
+        get => _isSelected;
+        set { if (_isSelected == value) return; _isSelected = value; OnPropertyChanged(); }
     }
 
     private bool _isMultiSelected;
@@ -146,10 +164,35 @@ public sealed class UnitTreeController : ObservableObject
         get => _selected;
         set
         {
+            // The highlight follows, in both directions. Setting this from the
+            // view model - to let go when another list takes over - has to
+            // clear the row in the control too, or the next click on that row
+            // is not a change and nothing happens.
+            if (_selected != null && !ReferenceEquals(_selected, value))
+                _selected.IsSelected = false;
+
             _selected = value;
+            if (value != null) value.IsSelected = true;
+
             OnPropertyChanged();
             if (value is UnitLeafNode leaf) _onLeafSelected(leaf.Item);
         }
+    }
+
+    /// <summary>
+    /// Let go of the selection without touching the detail pane.
+    /// <para/>
+    /// Used when a sibling list in the same sidebar takes over: the tree stops
+    /// showing a selected row, and whatever the other list picked is what the
+    /// pane follows. Deliberately not <c>Selected = null</c>, which would be
+    /// the same thing plus a needless notification for a leaf nobody chose.
+    /// </summary>
+    public void Deselect()
+    {
+        if (_selected == null) return;
+        _selected.IsSelected = false;
+        _selected = null;
+        OnPropertyChanged(nameof(Selected));
     }
 
     // ── Build / persist ───────────────────────────────────────────────────

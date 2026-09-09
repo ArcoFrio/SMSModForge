@@ -1,0 +1,925 @@
+{
+ "id": "8_Room_Talk/Beach/Richguy",
+ "name": "Richguy",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "S_Ashley",
+  "S_Ashley2",
+  "S_Tristan"
+ ],
+ "roots": [
+  -1846530336,
+  -802714591,
+  -1546249582,
+  -494966375,
+  -1661498704,
+  -142166565,
+  523844799
+ ],
+ "nodes": {
+  "-1846530336": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "{PC}... So we meet again...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-802714591": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Ashley",
+   "expressionName": "neutral",
+   "text": "Oh my, it looks like things are about to get serious.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1546249582": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -847561702,
+    137116240,
+    2042145428,
+    -84860412
+   ],
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "Why do we always catch you alone? Do you have no friends?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-847561702": {
+   "kind": "text",
+   "parent": -1546249582,
+   "children": [
+    -1639947752,
+    -1052533791,
+    -896062330
+   ],
+   "actor": null,
+   "text": "I'm grown up enough that I don't need constant reassurance.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "137116240": {
+   "kind": "text",
+   "parent": -1546249582,
+   "children": [
+    -823722033,
+    -1986874986
+   ],
+   "actor": null,
+   "text": "I have friends, they're just not here at the moment.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2042145428": {
+   "kind": "text",
+   "parent": -1546249582,
+   "children": [
+    1076741811,
+    -2117548156
+   ],
+   "actor": null,
+   "text": "I don't need any friends, I'm a lone wolf.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-84860412": {
+   "kind": "text",
+   "parent": -1546249582,
+   "children": [
+    -314400861
+   ],
+   "actor": null,
+   "text": "I don't have time for this. [Leave]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-314400861": {
+   "kind": "text",
+   "parent": -84860412,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "Yeah, run away, little man.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1076741811": {
+   "kind": "text",
+   "parent": 2042145428,
+   "actor": "S_Ashley2",
+   "expressionName": "neutral",
+   "text": "Not gonna lie, that's kinda cringe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-823722033": {
+   "kind": "text",
+   "parent": 137116240,
+   "actor": "S_Ashley",
+   "expressionName": "neutral",
+   "text": "Haha, I almost feel bad for him.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1639947752": {
+   "kind": "text",
+   "parent": -847561702,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "That's not true... Right, babes?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events[rich-guy-minigame] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "rich-guy-minigame",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-1986874986": {
+   "kind": "text",
+   "parent": 137116240,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "Yeah, are your friends in a different school or something?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2117548156": {
+   "kind": "text",
+   "parent": 2042145428,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "Yeah, every real man needs his bitches.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1052533791": {
+   "kind": "text",
+   "parent": -847561702,
+   "actor": "S_Ashley",
+   "expressionName": "neutral",
+   "text": "I mean... You are just asking us right now...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-896062330": {
+   "kind": "text",
+   "parent": -847561702,
+   "actor": "S_Ashley2",
+   "expressionName": "neutral",
+   "text": "Yeah babe, that was really beta of you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-494966375": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -146860745,
+    -854710018,
+    1765834471
+   ],
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "Was your role model a clown? Every strong man needs a good role model.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-146860745": {
+   "kind": "text",
+   "parent": -494966375,
+   "children": [
+    1797180514,
+    -826272307
+   ],
+   "actor": null,
+   "text": "I don't need a role model. I'm my own.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-854710018": {
+   "kind": "text",
+   "parent": -494966375,
+   "children": [
+    -1550894301,
+    2032796939,
+    -62700464
+   ],
+   "actor": null,
+   "text": "My role model is my {D}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1765834471": {
+   "kind": "text",
+   "parent": -494966375,
+   "children": [
+    21494022,
+    18644266
+   ],
+   "actor": null,
+   "text": "Hey, Clowns are pretty funny.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1797180514": {
+   "kind": "text",
+   "parent": -146860745,
+   "actor": "S_Ashley",
+   "expressionName": "neutral",
+   "text": "Woah, he believes that he knows everything, that's so soy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1550894301": {
+   "kind": "text",
+   "parent": -854710018,
+   "actor": "S_Ashley",
+   "expressionName": "neutral",
+   "text": "You never talk about your {D}, Tristan.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events[rich-guy-minigame] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "rich-guy-minigame",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "21494022": {
+   "kind": "text",
+   "parent": 1765834471,
+   "actor": "S_Ashley2",
+   "expressionName": "neutral",
+   "text": "Nah, not really. Clowns are pretty cringe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2032796939": {
+   "kind": "text",
+   "parent": -854710018,
+   "actor": "S_Ashley2",
+   "expressionName": "neutral",
+   "text": "Yeah, where he is?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-62700464": {
+   "kind": "text",
+   "parent": -854710018,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "Do not mention him.. He is... You won this round, {PC}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-826272307": {
+   "kind": "text",
+   "parent": -146860745,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "Hah, yeah. Another point for me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "18644266": {
+   "kind": "text",
+   "parent": 1765834471,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "Hah, yeah. Another point for me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1661498704": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1797559307
+   ],
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "I think you are trying to cancel me. Up yours, woke moralists. We'll see who cancels who.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1797559307": {
+   "kind": "text",
+   "parent": -1661498704,
+   "children": [
+    -967320341,
+    -659656244,
+    -2021331160
+   ],
+   "actor": null,
+   "text": "Jesus, man. Get a grip.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-142166565": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -268766086,
+    -258858650,
+    -1831470135
+   ],
+   "actor": "S_Ashley",
+   "expressionName": "neutral",
+   "text": "Listen up, babe. You lost again! Why are you such a beta!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events[rich-guy-minigame] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "rich-guy-minigame",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "523844799": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -836956498,
+    -1156684749
+   ],
+   "actor": "S_Ashley2",
+   "expressionName": "neutral",
+   "text": "You showed him, babe. No question.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events[rich-guy-minigame] ≤ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "rich-guy-minigame",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-268766086": {
+   "kind": "text",
+   "parent": -142166565,
+   "actor": "S_Ashley2",
+   "expressionName": "neutral",
+   "text": "Yeah... Common Tristan L.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events[rich-guy-defeated] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "rich-guy-defeated",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done_2[rich-guy-beach-won] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "rich-guy-beach-won",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-258858650": {
+   "kind": "text",
+   "parent": -142166565,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "Fuck! You won't get away next time! I swear!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1831470135": {
+   "kind": "text",
+   "parent": -142166565,
+   "actor": "S_Ashley",
+   "expressionName": "neutral",
+   "text": "I really hope so babe....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-836956498": {
+   "kind": "text",
+   "parent": 523844799,
+   "actor": "S_Ashley",
+   "expressionName": "neutral",
+   "text": "You're the alpha king, babe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1156684749": {
+   "kind": "text",
+   "parent": 523844799,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "Hah! Easy Tristan W. Let's go, he's not worth our time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-967320341": {
+   "kind": "text",
+   "parent": -1797559307,
+   "actor": "S_Ashley",
+   "expressionName": "neutral",
+   "text": "{PC} is the man. He makes you look like a manchild, Tristan.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events[rich-guy-minigame] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "rich-guy-minigame",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-659656244": {
+   "kind": "text",
+   "parent": -1797559307,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "N-No.. I am the Man! I am!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2021331160": {
+   "kind": "text",
+   "parent": -1797559307,
+   "actor": "S_Ashley2",
+   "expressionName": "neutral",
+   "text": "Cringe much....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Beach",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Richguy and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[rich-guy] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "rich-guy",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[rich-guy-mall-won] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "rich-guy-mall-won",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[rich-guy-beach-won] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "rich-guy-beach-won",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events[rich-guy-minigame] = 0",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "rich-guy-minigame",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 0
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Richwomanblonde to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Richwomanblonde",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Richwomanblonde"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Richwomanpink to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Richwomanpink",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Richwomanpink"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Richguy to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Richguy",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Richguy"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Richwomanblonde/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Richwomanpink/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Richguy/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[rich-guy] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "rich-guy",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

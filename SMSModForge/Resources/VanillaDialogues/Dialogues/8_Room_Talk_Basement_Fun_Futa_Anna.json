@@ -1,0 +1,1061 @@
+{
+ "id": "8_Room_Talk/Basement/Fun/Futa_Anna",
+ "name": "Futa_Anna",
+ "index": 11,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  952436864,
+  -1426712917,
+  1178227362,
+  -1258518110,
+  234294980,
+  736228237,
+  632757768,
+  1976097047,
+  1640000554,
+  339959541,
+  -827940607,
+  672840367,
+  2012596869,
+  -547221687,
+  1397825198,
+  1461130265,
+  -958003706,
+  -950696340,
+  538344419,
+  758182790
+ ],
+ "nodes": {
+  "952436864": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    474261106,
+    445480537
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "So... let me get this straight. I take one of these... and I'll grow a... a penis?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[annafuta-firsttime] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "annafuta-firsttime",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "736228237": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_FutaBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_FutaBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_FutaBust"
+      }
+     }
+    }
+   ]
+  },
+  "632757768": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh god. Oh my god, it's... it's stopped growing. It's just... there. It's so heavy. I can feel the weight of it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFutaStudio (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFutaStudio (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaFutaStudio (0)"
+      }
+     }
+    }
+   ]
+  },
+  "758182790": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A-Alright... Let's go back upstairs...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1426712917": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A-Again... I... It was so intense the last time... And yet, I want it... I want to feel it again... Okay, okay....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[annafuta-firsttime] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "annafuta-firsttime",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "474261106": {
+   "kind": "text",
+   "parent": 952436864,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "It's only temporary, right? Okay... Okay. I'll try it. For you. For... us, I guess.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "445480537": {
+   "kind": "text",
+   "parent": 952436864,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Alright... Here goes nothing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1178227362": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Whoa! Oh my god... it's... it's happening right now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1258518110": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I can feel it... a strange warmth, a pressure... it's not painful, just... intense. Really, really intense.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "234294980": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "{PC}... I... I think I need to take these pants off. Now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1976097047": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "This is... this is what you feel? All the time? This... this pressure, this heat... it's overwhelming. It's too much. I can't...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFutaStudio (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFutaStudio (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaFutaStudio (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1640000554": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1095245876,
+    1412351685,
+    -6830259
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{PC}, I... I think something's wrong. I feel... tight. So incredibly tight. Oh! Oh my god, it's... it's pulsing. I can't control it.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "339959541": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm... I'm gonna... I'm gonna cum! Oh fuck, I'm cumming! I'm cumming and I can't stop!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFutaStudio (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFutaStudio (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaFutaStudio (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-827940607": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ah! {PC}... it's not stopping! Oh god, it's still... coming out! It's so much!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "672840367": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I can't... I can't breathe! My legs... they're shaking! I've never... I've never felt anything like this!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFutaStudio (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFutaStudio (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaFutaStudio (3)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFutaStudio (0) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFutaStudio (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaFutaStudio (0)"
+      }
+     }
+    }
+   ]
+  },
+  "2012596869": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It's so hot... it's all over my thighs... it won't stop pulsing! What did you... what did you do to me?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-547221687": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh! Oh fuck, another one! It's... it's shooting out! I'm making such a mess... I can't... I can't control it at all!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFutaStudio (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFutaStudio (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaFutaStudio (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFutaStudio (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFutaStudio (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaFutaStudio (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1397825198": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    2064086181,
+    555717998,
+    1387265670,
+    757964064
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{PC}... help me! Please! It feels... it feels so good but it's too much!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1461130265": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I think... I think it's over. Oh my god.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-958003706": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I've never... I didn't know... it could be like that. I feel... completely drained.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-950696340": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "And sticky. So, so sticky. This is... this is a lot. This is a lot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "538344419": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I need a minute. Or a year. I need to sit down before I fall down.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_11[annafuta-firsttime] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "annafuta-firsttime",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "2064086181": {
+   "kind": "text",
+   "parent": 1397825198,
+   "actor": null,
+   "text": "Breath, {M}. Everything is gonna be alright. Just breath.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "555717998": {
+   "kind": "text",
+   "parent": 1397825198,
+   "actor": null,
+   "text": "Fuck, {M}. Look at the mess you made. So much cum.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1387265670": {
+   "kind": "text",
+   "parent": 1397825198,
+   "actor": null,
+   "text": "Relax, the effect only lasts for a hour. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "757964064": {
+   "kind": "text",
+   "parent": 1397825198,
+   "children": [
+    -1693547224,
+    1888003573,
+    1217856385,
+    1430758314,
+    -313817501,
+    -1993705771,
+    -179139271,
+    578960923,
+    1442207395,
+    1462889137
+   ],
+   "actor": null,
+   "text": "Do you want me to fill you, {M}?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[annafuta-firsttime] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "annafuta-firsttime",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1693547224": {
+   "kind": "text",
+   "parent": 757964064,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes! Please! Right here. In my... in my ass. Please, I want it. I need it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFutaStudio (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFutaStudio (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaFutaStudio (6)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFutaStudio (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFutaStudio (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaFutaStudio (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1888003573": {
+   "kind": "text",
+   "parent": 757964064,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I feel so... so empty back there. I bet it'll feel... so full. It'll make me cum so much harder, won't it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1217856385": {
+   "kind": "text",
+   "parent": 757964064,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh! Oh god, yes! Right there!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFutaStudio (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFutaStudio (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaFutaStudio (7)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFreyaFun (3) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFreyaFun (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFreyaFun (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1430758314": {
+   "kind": "text",
+   "parent": 757964064,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I can feel you... so deep inside me. It's... it's everything I wanted.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-313817501": {
+   "kind": "text",
+   "parent": 757964064,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh fuck, I'm... I'm gonna cum again! I'm cumming with you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFutaStudio (8) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFutaStudio (8)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaFutaStudio (8)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFreyaFun (4) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFreyaFun (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFreyaFun (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-1993705771": {
+   "kind": "text",
+   "parent": 757964064,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{PC}! Yes! Fill me up! Oh god, I can feel it! It's so warm!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-179139271": {
+   "kind": "text",
+   "parent": 757964064,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I can't... I can't move. I feel like... like I'm melting into the floor.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFutaStudio (9) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFutaStudio (9)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaFutaStudio (9)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFutaStudio (6) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFutaStudio (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaFutaStudio (6)"
+      }
+     }
+    }
+   ]
+  },
+  "578960923": {
+   "kind": "text",
+   "parent": 757964064,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Is this... is this what it's like for you? After?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1442207395": {
+   "kind": "text",
+   "parent": 757964064,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Just... give me a second. My heart is beating so fast I think it might fly out of my chest.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1462889137": {
+   "kind": "text",
+   "parent": 757964064,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thank you. For... for convincing me. For... everything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1095245876": {
+   "kind": "text",
+   "parent": 1640000554,
+   "actor": null,
+   "text": "How does it feel, {M}? Does it feel good?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1412351685": {
+   "kind": "text",
+   "parent": 1640000554,
+   "actor": null,
+   "text": "Just relax, it's like a muscle. A big throbbing muscle.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-6830259": {
+   "kind": "text",
+   "parent": 1640000554,
+   "actor": null,
+   "text": "You're producing precum. You're close already, aren't you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "Studio_Canvas/Porn/UI_Porn (11)",
+   "script": "ButtonInstructions",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core[temp-stored-very-short-term] = Futa_Anna",
+   "as": "GameObject",
+   "before": [
+    {
+     "type": "InstructionCommonDebugText",
+     "title": "Log: Click!",
+     "fields": {
+      "m_Message": {
+       "kind": "value",
+       "value": "Click!"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Button-1",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Button-1",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "type": "InstructionUICanvasGroupInteractable",
+     "title": "Studio_Canvas Interactable = False",
+     "fields": {
+      "m_CanvasGroup": {
+       "kind": "object",
+       "name": "Studio_Canvas",
+       "of": "GetGameObjectInstance",
+       "path": "Studio_Canvas"
+      },
+      "m_Interactable": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "type": "InstructionUICanvasGroupAlpha",
+     "title": "Studio_Canvas alpha = 0",
+     "fields": {
+      "m_CanvasGroup": {
+       "kind": "object",
+       "name": "Studio_Canvas",
+       "of": "GetGameObjectInstance",
+       "path": "Studio_Canvas"
+      },
+      "m_Alpha": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "value",
+        "value": 0
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 1,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Basement to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Basement",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Basement"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Studio_Canvas to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Studio_Canvas",
+       "of": "GetGameObjectInstance",
+       "path": "Studio_Canvas"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

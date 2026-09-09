@@ -1,0 +1,893 @@
+{
+ "id": "8_Room_Talk/Downtown/Richguyfinal",
+ "name": "Richguyfinal",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "S_Tristan",
+  "You"
+ ],
+ "roots": [
+  -1317363884,
+  136921879,
+  2093742512,
+  -359148434,
+  1854608225,
+  1738119478,
+  -1335956562,
+  298285092
+ ],
+ "nodes": {
+  "-1317363884": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2110616028,
+    -1856511246,
+    -1608339747
+   ],
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "{PC}...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Check out different places in Peak City each Wednesday.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Rival (Tristan)",
+        "of": "Quest"
+       },
+       "m_TaskId": -989935106
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-2110616028": {
+   "kind": "text",
+   "parent": -1317363884,
+   "children": [
+    1311527730
+   ],
+   "actor": null,
+   "text": "Where are your bitches?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1856511246": {
+   "kind": "text",
+   "parent": -1317363884,
+   "actor": null,
+   "text": "Is everything alright?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1608339747": {
+   "kind": "text",
+   "parent": -1317363884,
+   "actor": null,
+   "text": "Looks like you are defeated.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1311527730": {
+   "kind": "text",
+   "parent": -2110616028,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "Gone... They left me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "136921879": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "I was convinced I was the top dog, until I lost one battle against you... and now everyone’s gone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done_2[rich-guy-downtown-won] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "rich-guy-downtown-won",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "2093742512": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2147200040,
+    347759914,
+    -1591904858
+   ],
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "Not even my own mother answers my calls anymore...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2147200040": {
+   "kind": "text",
+   "parent": 2093742512,
+   "actor": null,
+   "text": "It's not too late to change.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "347759914": {
+   "kind": "text",
+   "parent": 2093742512,
+   "children": [
+    -1382277683
+   ],
+   "actor": null,
+   "text": "They were never your real friends then.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1591904858": {
+   "kind": "text",
+   "parent": 2093742512,
+   "children": [
+    -1690505465,
+    1602875717,
+    1714814935,
+    -2093863660,
+    118292532
+   ],
+   "actor": null,
+   "text": "Maybe you should just end it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1690505465": {
+   "kind": "text",
+   "parent": -1591904858,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "What do you mean?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1602875717": {
+   "kind": "text",
+   "parent": -1591904858,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Drive to the beach and walk into the sea.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1714814935": {
+   "kind": "text",
+   "parent": -1591904858,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "Yeah... I mean you won against me in several battles of Conversation...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2093863660": {
+   "kind": "text",
+   "parent": -1591904858,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "So it makes sense that I should listen to you... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "118292532": {
+   "kind": "text",
+   "parent": -1591904858,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "Common Tristan L.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1382277683": {
+   "kind": "text",
+   "parent": 347759914,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "But they did everything I told them to do... Isn't that what real friends do?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-359148434": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "Fuck, I'm such a failure. I should have just choked you to death when I had the chance...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1854608225": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1782488622,
+    1589306222,
+    -1727170374
+   ],
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "What am I supposed to do with my life now... There's only so many manly podcasts I can listen to...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1782488622": {
+   "kind": "text",
+   "parent": 1854608225,
+   "children": [
+    -1497612867,
+    -598119195,
+    -1491622616,
+    -1927114625
+   ],
+   "actor": null,
+   "text": "What do YOU want to do?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1589306222": {
+   "kind": "text",
+   "parent": 1854608225,
+   "children": [
+    1601698916,
+    1597986324,
+    1438220062
+   ],
+   "actor": null,
+   "text": "You could become a clown.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1727170374": {
+   "kind": "text",
+   "parent": 1854608225,
+   "children": [
+    -1782611315,
+    1489565015,
+    389311530,
+    1437245532,
+    176783352
+   ],
+   "actor": null,
+   "text": "Go out and talk to people. Talk to real people.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1601698916": {
+   "kind": "text",
+   "parent": 1589306222,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "A clown?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1597986324": {
+   "kind": "text",
+   "parent": 1589306222,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Yes, a clown makes people happy and gets a lot of attention. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1438220062": {
+   "kind": "text",
+   "parent": 1589306222,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "T-That is true... I shall become a clown then... Thank you for your advice...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1782611315": {
+   "kind": "text",
+   "parent": -1727170374,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "Real people?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1489565015": {
+   "kind": "text",
+   "parent": -1727170374,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "The newsstand owner, the woman who shelves the books in the library, the farmer on his land.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "389311530": {
+   "kind": "text",
+   "parent": -1727170374,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "But what makes them more real than other?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1497612867": {
+   "kind": "text",
+   "parent": -1782488622,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "I always wanted to drive expensive cars and fuck hot sluts.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-598119195": {
+   "kind": "text",
+   "parent": -1782488622,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "I mean before that, what did the young tristan want to become.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1491622616": {
+   "kind": "text",
+   "parent": -1782488622,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "I... I always wanted to be an actor, but my father said it was for pussies.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1738119478": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "Yes, that feels right... I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1437245532": {
+   "kind": "text",
+   "parent": -1727170374,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Because they have their own lives, their whole existence doesn't revolve around you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1927114625": {
+   "kind": "text",
+   "parent": -1782488622,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "And now he's... And I could... I could...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "176783352": {
+   "kind": "text",
+   "parent": -1727170374,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "Around me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1335956562": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "I'm sorry for being such a beta to you, you are a real one for still helping me after all the shit I said to you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Traits[heavenly-husband-5] = 5",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "heavenly-husband-5",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 5
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[new-trait] = Heavenly Husband",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Heavenly Husband"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "new-trait",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "298285092": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "Thanks, man. I've got to go now before I get emotional like a pussy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done_2[tristan-helped] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tristan-helped",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[achivement-unlocked] = Friend",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Friend"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "achivement-unlocked",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Achievements[save-tristan] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "save-tristan",
+        "list": "Achievements",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Downtown",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Richguyfinal and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[rich-guy-beach-won] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "rich-guy-beach-won",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[rich-guy-downtown-won] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "rich-guy-downtown-won",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[rich-guy] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "rich-guy",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events[rich-guy-minigame] = 0",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "rich-guy-minigame",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 0
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Richguy to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Richguy",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Richguy"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Richguy/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[rich-guy] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "rich-guy",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

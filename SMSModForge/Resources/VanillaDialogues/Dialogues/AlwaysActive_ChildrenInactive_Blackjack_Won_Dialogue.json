@@ -1,0 +1,411 @@
+{
+ "id": "AlwaysActive_ChildrenInactive/Blackjack_Won/Dialogue",
+ "name": "Dialogue",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Nikki"
+ ],
+ "roots": [
+  483192072,
+  2127013282,
+  -968931463
+ ],
+ "nodes": {
+  "483192072": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Nikki",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hey, look at that. You’re walking away with three hundred. Not bad for the kiddie table.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Minigame[blackjack-win] = 300",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "blackjack-win",
+        "list": "Minigame",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 300
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + 300",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 300
+      }
+     }
+    }
+   ]
+  },
+  "2127013282": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Nikki",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Okay… damn. Three grand payout. Someone’s having a good night.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Minigame[blackjack-win] = 3000",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "blackjack-win",
+        "list": "Minigame",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3000
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + 3000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 3000
+      }
+     }
+    }
+   ]
+  },
+  "-968931463": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1437981462
+   ],
+   "actor": "Nikki",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "You just tripled ten grand.\nPeople get ideas when they see wins like that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Minigame[blackjack-win] = 30000",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "blackjack-win",
+        "list": "Minigame",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 30000
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + 30000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 30000
+      }
+     }
+    }
+   ]
+  },
+  "-1437981462": {
+   "kind": "text",
+   "parent": -968931463,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Nikki_Bust_Topless/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Nikki_Bust_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Nikki_Bust_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Nikki_Bust_Default"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "AlwaysActive_ChildrenInactive/Blackjack_Won",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dialogue and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "type": "InstructionUICanvasGroupAlpha",
+     "title": "Blackjack_Minigame alpha = 0",
+     "fields": {
+      "m_CanvasGroup": {
+       "kind": "object",
+       "name": "Blackjack_Minigame",
+       "of": "GetGameObjectInstance",
+       "path": "Blackjack_Minigame"
+      },
+      "m_Alpha": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "value",
+        "value": 0
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 1,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Blackjack_Minigame to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Blackjack_Minigame",
+       "of": "GetGameObjectInstance",
+       "path": "Blackjack_Minigame"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active C_Casino to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "C_Casino",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/C_Casino"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_11[blackjack-nikki-won] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "blackjack-nikki-won",
+        "list": "Events_11",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

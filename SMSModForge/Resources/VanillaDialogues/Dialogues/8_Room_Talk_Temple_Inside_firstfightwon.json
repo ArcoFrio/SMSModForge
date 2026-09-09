@@ -1,0 +1,238 @@
+{
+ "id": "8_Room_Talk/Temple_Inside/firstfightwon",
+ "name": "firstfightwon",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Master Zhen"
+ ],
+ "roots": [
+  -1938415780,
+  1244344430,
+  -922723394
+ ],
+ "nodes": {
+  "-1938415780": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Hmph. You made it back in one piece. Not bad for your first time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1244344430": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "I suppose you’re not completely useless after all. But don’t get cocky. This was just a taste—the real challenges are yet to come.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-922723394": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Still… well done. Now rest up. You’ll need your strength for what’s next.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Temple_Inside",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play firstfightwon and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[masterzhen-accepted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "masterzhen-accepted",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_6[masterzhen-story] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "masterzhen-story",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_2[ghost-warrior-progress] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ghost-warrior-progress",
+        "list": "Events_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Master_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Master_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Master_Default"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_6[masterzhen-story] = 3",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "masterzhen-story",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 3
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

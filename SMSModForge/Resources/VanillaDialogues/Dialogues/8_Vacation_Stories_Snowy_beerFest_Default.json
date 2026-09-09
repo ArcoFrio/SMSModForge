@@ -1,0 +1,1341 @@
+{
+ "id": "8_Vacation_Stories/Snowy_beerFest/Default",
+ "name": "Default",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "V_Michelle"
+ ],
+ "roots": [
+  -2139259402,
+  771994120,
+  -1605878438,
+  -996989215,
+  -1110386702,
+  1010930160,
+  -2003371995,
+  1739470120,
+  98442819,
+  793596216,
+  -619587552,
+  -1886659734,
+  1710985359,
+  -209142191,
+  777268467
+ ],
+ "nodes": {
+  "-2139259402": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1805849550,
+    528000151
+   ],
+   "actor": "V_Michelle",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Ah, back for more, are you? I knew you couldn’t resist!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[beerfest-firsttime] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "beerfest-firsttime",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "771994120": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -985370397,
+    1391478477,
+    1657824841
+   ],
+   "actor": "V_Michelle",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Welcome, welcome! I’m Michelle, and if you’re here for beer, food, or a good time, you’ve come to the right place!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[beerfest-firsttime] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "beerfest-firsttime",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-985370397": {
+   "kind": "choice",
+   "parent": 771994120,
+   "children": [
+    693850538,
+    1659045708,
+    -302657509
+   ],
+   "actor": "V_Michelle",
+   "expressionName": "neutral",
+   "text": "So, first time, or do you two already know how to handle yourselves around a stein?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "693850538": {
+   "kind": "text",
+   "parent": -985370397,
+   "children": [
+    690657275
+   ],
+   "actor": null,
+   "text": "It’s our first time. Any tips for newbies?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1659045708": {
+   "kind": "text",
+   "parent": -985370397,
+   "children": [
+    282607963
+   ],
+   "actor": null,
+   "text": "What’s the most popular drink here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-302657509": {
+   "kind": "text",
+   "parent": -985370397,
+   "children": [
+    -1224794379
+   ],
+   "actor": null,
+   "text": "I think we’ll be fine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "690657275": {
+   "kind": "text",
+   "parent": 693850538,
+   "actor": "V_Michelle",
+   "expressionName": "neutral",
+   "text": "Oh, you’re in for a treat! Start light—don’t go for the heavy stuff right away. And don’t forget the pretzels. They’re a lifesaver!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "282607963": {
+   "kind": "text",
+   "parent": 1659045708,
+   "actor": "V_Michelle",
+   "expressionName": "neutral",
+   "text": "That’d be the Dunkel—we brew it right here in the village. Dark, rich, and full of flavor. You won’t regret it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1224794379": {
+   "kind": "text",
+   "parent": -302657509,
+   "actor": "V_Michelle",
+   "expressionName": "neutral",
+   "text": "Oh, big talker, huh? Let’s see if you’re still standing after the first round!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1391478477": {
+   "kind": "text",
+   "parent": 771994120,
+   "actor": "V_Michelle",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "First round’s on me. Consider it a proper welcome to the beerfest! Now, drink up and enjoy yourselves—I’ll be around if you need anything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_MichelleDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1657824841": {
+   "kind": "text",
+   "parent": 771994120,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "She’s... quite the personality, isn’t she?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[beerfest-firsttime] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "beerfest-firsttime",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1805849550": {
+   "kind": "text",
+   "parent": -2139259402,
+   "actor": "V_Michelle",
+   "expressionName": "neutral",
+   "text": "Same rules as last time... drink, eat, and have fun! And don’t let anyone out-toast you, got it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_MichelleDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "528000151": {
+   "kind": "text",
+   "parent": -2139259402,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "She really makes this place unforgettable, doesn’t she?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1605878438": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -632179405,
+    365874418
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "So, what do you think? Should we keep it light, or are we going all in tonight?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[DialogueVariation] = Random3[First]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random3",
+        "pick": "first",
+        "type": "number"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-632179405": {
+   "kind": "text",
+   "parent": -1605878438,
+   "children": [
+    -1508272048
+   ],
+   "actor": null,
+   "text": "Let’s keep it light. No need to overdo it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "365874418": {
+   "kind": "text",
+   "parent": -1605878438,
+   "children": [
+    -726773716
+   ],
+   "actor": null,
+   "text": "Let’s go all in. When in Rome, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1508272048": {
+   "kind": "text",
+   "parent": -632179405,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Probably a good idea. I’d rather remember the night than regret it tomorrow.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[lets-drink-alot] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "lets-drink-alot",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-726773716": {
+   "kind": "text",
+   "parent": 365874418,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Alright, but don’t blame me if you have to carry me back later!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[lets-drink-alot] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "lets-drink-alot",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1110386702": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -192659643,
+    354780553
+   ],
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "... and then I caught Adrian playing that weird cartoon game again. He looked like he wanted to sink into the floor!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1010930160": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -267589163,
+    722226788
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "... So, Charlotte and I once fought over a guy in college. Both of us thought he was such a piece of cake.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-2003371995": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    186285750,
+    1666434114,
+    658418517
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "...your {D} was such a nerd back in college. All he cared about was numbers and grades... he barely even noticed me at first!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-192659643": {
+   "kind": "text",
+   "parent": -1110386702,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I didn’t even say anything, and he was stammering about how “The game has a good story.”",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-267589163": {
+   "kind": "text",
+   "parent": 1010930160,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Then we found out he was gay. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "186285750": {
+   "kind": "text",
+   "parent": -2003371995,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I had to practically wave a flag to get his attention. I bought this very tight top to really give him a good peak of my tits...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1666434114": {
+   "kind": "text",
+   "parent": -2003371995,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "But I guess it worked out in the end, didn’t it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "722226788": {
+   "kind": "text",
+   "parent": 1010930160,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "We were so embarrassed, but he ended up being one of our best friends.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "354780553": {
+   "kind": "text",
+   "parent": -1110386702,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "But all I could see was busty women wearing skimpy outfits, hahaha!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-996989215": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "658418517": {
+   "kind": "text",
+   "parent": -2003371995,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "... And now he's gone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1739470120": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "98442819": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1579087049,
+    1660211682,
+    -815891533,
+    325161527,
+    150282667
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So... what do you do when we’re not... you know, doing something together? I’ve always wondered.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1579087049": {
+   "kind": "text",
+   "parent": 98442819,
+   "children": [
+    -658171951
+   ],
+   "actor": null,
+   "text": "I manage the Starmaker page. It's a lot of work.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-658171951": {
+   "kind": "text",
+   "parent": 1579087049,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thank you for handling it. It means so much to me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1660211682": {
+   "kind": "text",
+   "parent": 98442819,
+   "children": [
+    -75649379
+   ],
+   "actor": null,
+   "text": "I’ve been practicing photography. I want to keep improving.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-75649379": {
+   "kind": "text",
+   "parent": 1660211682,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You’ve already come so far—I’m lucky to have you capturing my best moments.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-815891533": {
+   "kind": "text",
+   "parent": 98442819,
+   "children": [
+    -980315570
+   ],
+   "actor": null,
+   "text": " I try to help people wherever I can. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-980315570": {
+   "kind": "text",
+   "parent": -815891533,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That’s... really thoughtful of you. It makes me proud to know you’re making such a difference.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "325161527": {
+   "kind": "text",
+   "parent": 98442819,
+   "children": [
+    1165756687
+   ],
+   "actor": null,
+   "text": "Honestly? I just do whatever I feel like.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1165756687": {
+   "kind": "text",
+   "parent": 325161527,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That’s fair... Just promise me it’s nothing too wild, alright?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "150282667": {
+   "kind": "text",
+   "parent": 98442819,
+   "children": [
+    -1547296731
+   ],
+   "actor": null,
+   "text": "I look forward to the next time we’re together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1547296731": {
+   "kind": "text",
+   "parent": 150282667,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh... that’s... sweet. I feel the same way, you know.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-619587552": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -2105331054,
+    1587172347
+   ],
+   "actor": "V_Michelle",
+   "expressionName": "neutral",
+   "text": "Taking it easy, are you? Well, there’s no shame in savoring the moment. Want another round, or are you sticking with the slow lane?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[lets-drink-alot] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "lets-drink-alot",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1886659734": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -473305202,
+    2087317367
+   ],
+   "actor": "V_Michelle",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Looks like you two are in the spirit of things! What do you say? Another round to keep the good times rolling?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[lets-drink-alot] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "lets-drink-alot",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2105331054": {
+   "kind": "text",
+   "parent": -619587552,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I think we’ll take one more... but just one.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-473305202": {
+   "kind": "text",
+   "parent": -1886659734,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Y-yes! Let’s keep it going!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2087317367": {
+   "kind": "text",
+   "parent": -1886659734,
+   "actor": "V_Michelle",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "That’s what I like to hear. Coming right up—brace yourselves!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_MichelleDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1587172347": {
+   "kind": "text",
+   "parent": -619587552,
+   "actor": "V_Michelle",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Alright, coming right up!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_MichelleDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "793596216": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_MichelleDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_MichelleDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_MichelleDefault"
+      }
+     }
+    }
+   ]
+  },
+  "1710985359": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "-209142191": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    74162522
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "M-maybe... maybe I had a li’l... too much?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[lets-drink-alot] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "lets-drink-alot",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "777268467": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1070384397
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I think we should head back. I, uh... I have a little something for you back at the hut.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[lets-drink-alot] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "lets-drink-alot",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1070384397": {
+   "kind": "text",
+   "parent": 777268467,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I’ve been waiting for the right moment to give it to you, and now feels perfect.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[anna-charmed] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-charmed",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "74162522": {
+   "kind": "text",
+   "parent": -209142191,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "O-okay... okay, I think it’s time... time to go. I c-can’t feel my legs...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[anna-wasted] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-wasted",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Snowy_beerFest",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Default and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_MichelleDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_MichelleDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_MichelleDefault"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_WinterOutfit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_WinterOutfit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_WinterOutfit"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

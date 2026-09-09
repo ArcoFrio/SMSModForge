@@ -1,0 +1,386 @@
+{
+ "id": "Holiday_Hallway_Conditions/NewYearsEve_Core/Dialogue_NewYearsKiss_Himari",
+ "name": "Dialogue_NewYearsKiss_Himari",
+ "index": 8,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Himari"
+ ],
+ "roots": [
+  -1760076591,
+  2054775052,
+  -308038700,
+  322794373,
+  386989560,
+  -730676542,
+  -1078909158,
+  1348267885,
+  -64985783,
+  42196710
+ ],
+ "nodes": {
+  "-1760076591": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "...Your {M} stared at me like I was an investment scam.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-308038700": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1623998776,
+    -1522264619,
+    -1402350841
+   ],
+   "actor": "Himari",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "And maybe I will. If you let me.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1623998776": {
+   "kind": "text",
+   "parent": -308038700,
+   "children": [
+    -1685133961
+   ],
+   "actor": null,
+   "text": "You're pretty good at swallowing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1522264619": {
+   "kind": "text",
+   "parent": -308038700,
+   "children": [
+    -1408382820
+   ],
+   "actor": null,
+   "text": "You want me scared?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1402350841": {
+   "kind": "text",
+   "parent": -308038700,
+   "children": [
+    -2040500860
+   ],
+   "actor": null,
+   "text": "Who are you and what have you done to Himari?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2054775052": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "I saw the way she watched you. Like she’s worried I’ll swallow you whole.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2040500860": {
+   "kind": "text",
+   "parent": -1402350841,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Let me try to have fun for once...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1685133961": {
+   "kind": "text",
+   "parent": 1623998776,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Don't try me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "322794373": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "People like me don’t do soft. We don’t get comfort. We build comfort—for others. Then we sit outside it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1408382820": {
+   "kind": "text",
+   "parent": -1522264619,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "No. I want you aware.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "386989560": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    790582071,
+    1078150743,
+    -436390948
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "If you’re hoping I’ll fall into your arms and become someone gentler... don’t.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "790582071": {
+   "kind": "text",
+   "parent": 386989560,
+   "children": [
+    -2014467687
+   ],
+   "actor": null,
+   "text": "You're already more gentle than the Himari from when we first met.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1078150743": {
+   "kind": "text",
+   "parent": 386989560,
+   "children": [
+    2145562682
+   ],
+   "actor": null,
+   "text": "I’m not asking you to change.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-730676542": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Gah...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2145562682": {
+   "kind": "text",
+   "parent": 1078150743,
+   "actor": "Himari",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-436390948": {
+   "kind": "text",
+   "parent": 386989560,
+   "children": [
+    1060922380
+   ],
+   "actor": null,
+   "text": "You know, you can leave if you don't want to be here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1060922380": {
+   "kind": "text",
+   "parent": -436390948,
+   "actor": "Himari",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I... I want to be here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2014467687": {
+   "kind": "text",
+   "parent": 790582071,
+   "actor": "Himari",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "But it was my choice and... It felt right.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1078909158": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1348267885": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Maybe you’re exactly the kind of idiot I need.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "42196710": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "...Happy New Year.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-64985783": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Muaaah....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NewYearsFireworkPool to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NewYearsFireworkPool",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/8_Pool/NewYearsFireworkPool"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NewYearsKiss_Himari to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NewYearsKiss_Himari",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NewYearsKiss_Himari"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "Holiday_Hallway_Conditions/NewYearsEve_Core/newyearskisscondition",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dialogue_NewYearsKiss_Himari and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Eve_NoSave1[newyearseveguest] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newyearseveguest",
+        "list": "Eve_NoSave1",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariBust"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

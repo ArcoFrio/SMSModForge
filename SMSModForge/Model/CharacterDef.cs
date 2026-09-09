@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
@@ -121,6 +121,28 @@ public sealed class CharacterDef
     /// </summary>
     [JsonProperty("outfits", Order = 10)]
     public List<OutfitDef> Outfits { get; set; } = new();
+
+    /// <summary>
+    /// Which of the game's own characters this one IS, when it is one of them.
+    /// <para/>
+    /// A pack no longer describes a vanilla character — the game's cast is
+    /// simply available, and this names which of them a pack entry stands for.
+    /// The key stays the pack's own, so everything already pointing at it keeps
+    /// working; what changes is that the outfits come from the game rather than
+    /// being copied into the manifest a few at a time.
+    /// <para/>
+    /// Empty for a character the pack drew itself, and for a voice with no
+    /// bust at all.
+    /// </summary>
+    [JsonProperty("vanillaCharacter", Order = 13, NullValueHandling = NullValueHandling.Ignore)]
+    public string VanillaCharacter { get; set; } = "";
+
+    public bool ShouldSerializeVanillaCharacter() => !string.IsNullOrEmpty(VanillaCharacter);
+
+    /// <summary>True when this entry stands for one of the game's own
+    /// characters.</summary>
+    [JsonIgnore]
+    public bool IsVanillaCharacter => !string.IsNullOrEmpty(VanillaCharacter);
 
     /// <summary>Named expressions a dialogue node can select.</summary>
     [JsonProperty("expressions", Order = 11)]

@@ -1,0 +1,145 @@
+{
+ "id": "Holiday_Hallway_Conditions/Christmas_Party/Dialogue_Default",
+ "name": "Dialogue_Default",
+ "index": 4,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Anna",
+  "Charlotte"
+ ],
+ "roots": [
+  -1695829391,
+  -535622543,
+  -1213853190,
+  669297192
+ ],
+ "nodes": {
+  "-1695829391": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -687710548,
+    90308276,
+    2067001202
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Alright. Who let {D} have three glasses of whatever that was?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-687710548": {
+   "kind": "text",
+   "parent": -1695829391,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "It’s not eggnog. It’s eggpunch. That stuff had bite.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "90308276": {
+   "kind": "text",
+   "parent": -1695829391,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "He earned the nap. And the hangover.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2067001202": {
+   "kind": "text",
+   "parent": -1695829391,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Every year.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-535622543": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Dinner wasn’t bad. {F} drama level: mild. No crying, no plates thrown. Kind of disappointing, actually.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1213853190": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "There’s always next year.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "669297192": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thanks for being here. I know things aren’t perfect, but... tonight meant something.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "Holiday_Hallway_Conditions/Christmas_Party/DialogueCondition",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dialogue_Default and wait",
+   "as": "Dialogue"
+  }
+ ]
+}

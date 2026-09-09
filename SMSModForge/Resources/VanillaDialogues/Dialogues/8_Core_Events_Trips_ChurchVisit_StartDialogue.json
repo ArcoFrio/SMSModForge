@@ -1,0 +1,765 @@
+{
+ "id": "8_Core_Events/Trips/ChurchVisit/StartDialogue",
+ "name": "StartDialogue",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna"
+ ],
+ "roots": [
+  480063561
+ ],
+ "nodes": {
+  "480063561": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1066792235,
+    52640635,
+    -217918945
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "We've been waiting for you. It's time for church, {PC}.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1066792235": {
+   "kind": "text",
+   "parent": 480063561,
+   "children": [
+    -313228089
+   ],
+   "actor": null,
+   "text": "Of course, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "52640635": {
+   "kind": "text",
+   "parent": 480063561,
+   "children": [
+    -1979288733
+   ],
+   "actor": null,
+   "text": "I don't really have a choice, do I?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-313228089": {
+   "kind": "text",
+   "parent": -1066792235,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Good boy, now get dressed. We'll be waiting in the car.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1979288733": {
+   "kind": "text",
+   "parent": 52640635,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You don't, now get dressed. We'll be waiting in the car.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-217918945": {
+   "kind": "text",
+   "parent": 480063561,
+   "children": [
+    797645247
+   ],
+   "actor": null,
+   "text": "I'm not feeling it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DaysPassed] ≥ 30",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DaysPassed",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 30
+       }
+      }
+     }
+    }
+   ]
+  },
+  "797645247": {
+   "kind": "text",
+   "parent": -217918945,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Aw, well... Then it's better if you stay home today and rest up!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NoChurch to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NoChurch",
+       "of": "GetGameObjectInstance",
+       "path": "8_Core_Events/Trips/ChurchVisit/NoChurch"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Trips/ChurchVisit",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play StartDialogue and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events[church-visits] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "church-visits",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core_NoSave2[veryshortterm-numbervar] = Random3[Random]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "veryshortterm-numbervar",
+        "list": "Core_NoSave2",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random3",
+        "pick": "random",
+        "type": "number"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Red_Pullover to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Red_Pullover",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Red_Pullover"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_Suit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_Suit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_Suit"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NoChurch to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NoChurch",
+       "of": "GetGameObjectInstance",
+       "path": "8_Core_Events/Trips/ChurchVisit/NoChurch"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run D_therecheck and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "D_therecheck",
+       "of": "GetGameObjectConditions",
+       "path": "8_Core_Events/Trips/ChurchVisit/D_therecheck"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run No_Church_Cond and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "No_Church_Cond",
+       "of": "GetGameObjectConditions",
+       "path": "8_Core_Events/Trips/ChurchVisit/No_Church_Cond"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "checkConditions",
+     "type": "InstructionLogicCheckConditions",
+     "title": "Check Not is Active NoChurch",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "gameObjectActive",
+         "type": "ConditionGameObjectActive",
+         "title": "Not is Active NoChurch",
+         "fields": {
+          "m_GameObject": {
+           "kind": "object",
+           "name": "NoChurch",
+           "of": "GetGameObjectInstance",
+           "path": "8_Core_Events/Trips/ChurchVisit/NoChurch"
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeInBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeInBlack"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_Maps to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_Maps",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_Maps"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 23_Church to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "23_Church",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/23_Church"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Red_Pullover to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Red_Pullover",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Red_Pullover"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_Suit to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_Suit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_Suit"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ChurchMusic to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ChurchMusic",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/ChurchMusic"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Music to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Music",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Music"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.5 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.5
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Church_BeforeFappearsCon and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "Church_BeforeFappearsCon",
+       "of": "GetGameObjectConditions",
+       "path": "8_Core_Events/Trips/ChurchVisit/Church_BeforeFappearsCon"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play NorahChurchAppears and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "NorahChurchAppears",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Core_Events/Trips/ChurchVisit/NorahChurchAppears"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_Suit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_Suit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_Suit"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Self and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.3 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.3
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run LookForVanessaCond and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "LookForVanessaCond",
+       "of": "GetGameObjectConditions",
+       "path": "8_Core_Events/Trips/ChurchVisit/LookForVanessaCond"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.3 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.3
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Return_Home to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Return_Home",
+       "of": "GetGameObjectInstance",
+       "path": "Return_Home"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Music to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Music",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Music"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ChurchMusic to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ChurchMusic",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/ChurchMusic"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

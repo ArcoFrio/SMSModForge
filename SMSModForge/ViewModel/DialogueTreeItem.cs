@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
 namespace SMSModForge.ViewModel;
 
@@ -15,6 +15,24 @@ public abstract class DialogueTreeItem : ObservableObject, IFilterableTreeNode
     {
         get => _isExpanded;
         set { if (_isExpanded == value) return; _isExpanded = value; OnPropertyChanged(); }
+    }
+
+    private bool _isSelected;
+    /// <summary>
+    /// The TreeView's own single selection, as a property the view model can
+    /// SET as well as read.
+    /// <para/>
+    /// Without this, selection only ever travelled one way - the control told
+    /// the view model, and nothing could tell the control. That is what made a
+    /// sidebar with two lists possible to get stuck in: picking a row in the
+    /// other list cleared this tree's selection in the view model but left the
+    /// row highlighted here, so clicking it again was not a CHANGE and raised
+    /// no event. With one item in each list there was then no way back.
+    /// </summary>
+    public bool IsSelected
+    {
+        get => _isSelected;
+        set { if (_isSelected == value) return; _isSelected = value; OnPropertyChanged(); }
     }
 
     private bool _isMultiSelected;

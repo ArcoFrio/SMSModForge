@@ -1,0 +1,282 @@
+{
+ "id": "8_Room_Talk/Bakery_Aftermath/Bvisit",
+ "name": "Bvisit",
+ "index": 5,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Amelia"
+ ],
+ "roots": [
+  963801009,
+  -785644101,
+  -1960700795,
+  -1180389235,
+  -1523404276,
+  -827796318,
+  376544255
+ ],
+ "nodes": {
+  "963801009": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1870250986,
+    -1427136018
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Yo, {PC}! Nice place you’ve got here. How’s it going?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1870250986": {
+   "kind": "text",
+   "parent": 963801009,
+   "actor": null,
+   "text": "Hey, {B}! It’s going well. You want a coffee?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1427136018": {
+   "kind": "text",
+   "parent": 963801009,
+   "actor": null,
+   "text": "Just getting the hang of everything. What can I get you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-785644101": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1174695962,
+    -2122124801,
+    628640087
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "How about a mocha? I could use a little pick-me-up.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1174695962": {
+   "kind": "text",
+   "parent": -785644101,
+   "actor": null,
+   "text": "You got it. So, what brings you here today?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2122124801": {
+   "kind": "text",
+   "parent": -785644101,
+   "children": [
+    -1026825013
+   ],
+   "actor": null,
+   "text": "You're just here for the free drinks, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "628640087": {
+   "kind": "text",
+   "parent": -785644101,
+   "children": [
+    149061131
+   ],
+   "actor": null,
+   "text": "Always good to see you, {B}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1960700795": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "And you must be Amelia. {PC}'s big evil boss?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1180389235": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yep! And if you ask for too many free drinks, you will be banned.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1523404276": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Y-You're joking right? She's joking, {PC}?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "376544255": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "N-No, I'm good! The mocha is awesome by the way. Thanks!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1026825013": {
+   "kind": "text",
+   "parent": -2122124801,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "You know me damn well, haha!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "149061131": {
+   "kind": "text",
+   "parent": 628640087,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Yeah, I know. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-827796318": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Do you wanna find out?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Bakery_Aftermath/VisitConditions",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Bvisit and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

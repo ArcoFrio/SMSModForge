@@ -1,0 +1,1772 @@
+{
+ "id": "Always_Active/Villa_Sharedtalks/Emma_Defaulttalk",
+ "name": "Emma_Defaulttalk",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Emma"
+ ],
+ "roots": [
+  1555090644,
+  -2067734750,
+  1352142644,
+  -2094726502
+ ],
+ "nodes": {
+  "1352142644": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -2020754842,
+    -421141952,
+    -1057859338,
+    940867763,
+    -1743640354,
+    330270317
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "You must be my {D}’s latest... recruit. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[emma-first-meeting] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-first-meeting",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-2020754842": {
+   "kind": "choice",
+   "parent": 1352142644,
+   "children": [
+    256675514,
+    1345868455
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Here to do his dirty work, I assume?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "256675514": {
+   "kind": "text",
+   "parent": -2020754842,
+   "children": [
+    1931238933
+   ],
+   "actor": null,
+   "text": "I’m not really a ‘recruit.’ Just helping out with a few things.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1345868455": {
+   "kind": "text",
+   "parent": -2020754842,
+   "children": [
+    211941882
+   ],
+   "actor": null,
+   "text": "Yeah, got a problem with that?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1931238933": {
+   "kind": "text",
+   "parent": 256675514,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Helping out? That’s what they all say. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "211941882": {
+   "kind": "text",
+   "parent": 1345868455,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Pah. Do what you want.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-421141952": {
+   "kind": "choice",
+   "parent": 1352142644,
+   "children": [
+    1963976863,
+    1081287779
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "You’re just another one of his goons, aren’t you?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1963976863": {
+   "kind": "text",
+   "parent": -421141952,
+   "actor": null,
+   "text": "I’m just trying to get my {D} out of a tough situation.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1081287779": {
+   "kind": "text",
+   "parent": -421141952,
+   "actor": null,
+   "text": "I'm trying to help my {D}, you rich brat.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1057859338": {
+   "kind": "choice",
+   "parent": 1352142644,
+   "children": [
+    -1108263988,
+    250520605,
+    796414362
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Your {D}? That’s why you’re here?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1108263988": {
+   "kind": "text",
+   "parent": -1057859338,
+   "actor": null,
+   "text": "Yeah. He’s in debt, and I’m just trying to clear it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "250520605": {
+   "kind": "text",
+   "parent": -1057859338,
+   "actor": null,
+   "text": "Your {D} can help him....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "940867763": {
+   "kind": "text",
+   "parent": 1352142644,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I see. My {D} has a way of pulling people into his web. And my {M}... well, let’s just say she’s not exactly a nurturing influence. I don’t envy you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1743640354": {
+   "kind": "choice",
+   "parent": 1352142644,
+   "children": [
+    520238820,
+    -896403341,
+    -2101136303
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I can’t stand the corruption, the lies. My {D}’s power comes at the cost of his soul, and my {M}… she’s a whole other story.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "330270317": {
+   "kind": "choice",
+   "parent": 1352142644,
+   "children": [
+    -1571649297,
+    -849742362,
+    861673945
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "It’s complicated. Family ties, I suppose. But I’m not blind to what’s going on around here. I just wish there was a way out.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1571649297": {
+   "kind": "text",
+   "parent": 330270317,
+   "children": [
+    -1041869192
+   ],
+   "actor": null,
+   "text": "Maybe we’re both looking for a way out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-849742362": {
+   "kind": "text",
+   "parent": 330270317,
+   "children": [
+    1713417959
+   ],
+   "actor": null,
+   "text": "Grow up. You're set for life and you're bitching about it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "861673945": {
+   "kind": "text",
+   "parent": 330270317,
+   "children": [
+    1664384428
+   ],
+   "actor": null,
+   "text": "Care to elaborate?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1664384428": {
+   "kind": "text",
+   "parent": 861673945,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "No. It's not my business.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1713417959": {
+   "kind": "text",
+   "parent": -849742362,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Yeah, well. Fuck you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1041869192": {
+   "kind": "text",
+   "parent": -1571649297,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Maybe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "520238820": {
+   "kind": "text",
+   "parent": -1743640354,
+   "actor": null,
+   "text": "Why do you stay?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-896403341": {
+   "kind": "text",
+   "parent": -1743640354,
+   "actor": null,
+   "text": "Why not act out against him?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2094726502": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1987720978,
+    -1054591431,
+    -1702864565,
+    478926322,
+    -463510646,
+    -754675494
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Anything else?",
+   "tag": "questions",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1987720978": {
+   "kind": "text",
+   "parent": -2094726502,
+   "children": [
+    147327443
+   ],
+   "actor": null,
+   "text": "What’s it like living in this house?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1054591431": {
+   "kind": "text",
+   "parent": -2094726502,
+   "children": [
+    -1536881246
+   ],
+   "actor": null,
+   "text": "Do you ever confront your {D} about his actions?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1702864565": {
+   "kind": "text",
+   "parent": -2094726502,
+   "children": [
+    -1755163530
+   ],
+   "actor": null,
+   "text": "What about your {M}? How do you deal with her?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-754675494": {
+   "kind": "text",
+   "parent": -2094726502,
+   "children": [
+    398065324
+   ],
+   "actor": null,
+   "text": "See you around.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "398065324": {
+   "kind": "text",
+   "parent": -754675494,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Sure.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1755163530": {
+   "kind": "text",
+   "parent": -1702864565,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "She’s manipulative, controlling, and cares about no one but herself. I avoid her as much as I can. It’s easier that way.",
+   "jump": {
+    "mode": "Jump",
+    "to": "questions"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1536881246": {
+   "kind": "text",
+   "parent": -1054591431,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I’ve tried, but it’s like talking to a brick wall. He’s too deep in his ways, too convinced that what he’s doing is justified. Sometimes I think he’s forgotten what it means to be human.",
+   "jump": {
+    "mode": "Jump",
+    "to": "questions"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "147327443": {
+   "kind": "text",
+   "parent": 1987720978,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Living here is like being in a gilded cage. It’s beautiful on the outside, but inside, it’s full of secrets and shadows. It’s exhausting pretending everything is fine.",
+   "jump": {
+    "mode": "Jump",
+    "to": "questions"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1555090644": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Go away! I hate you! WHY DID YOU DO THAT!?",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[emma-corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-corrupted",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Mario-In-Prison] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-In-Prison",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "478926322": {
+   "kind": "text",
+   "parent": -2094726502,
+   "children": [
+    -62816500,
+    -546486797,
+    1868553043
+   ],
+   "actor": null,
+   "text": "Emma, I need your help to fight Mario.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Emma-Betrays-Mario-Route] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Emma-Betrays-Mario-Route",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Mario-In-Prison] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-In-Prison",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-62816500": {
+   "kind": "text",
+   "parent": 478926322,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "N-No... Don't ask me to do that... I know what he does is wrong, but... He's still my {D}.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[emma-player-friends] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-player-friends",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-546486797": {
+   "kind": "choice",
+   "parent": 478926322,
+   "children": [
+    1512847905,
+    1448926685,
+    623499975
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I knew this day would come... Y-Yes... I will help you.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1868553043": {
+   "kind": "text",
+   "parent": 478926322,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I will be ready. I promise.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[Enough-Evidence-Gathered] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Enough-Evidence-Gathered",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1512847905": {
+   "kind": "text",
+   "parent": -546486797,
+   "actor": null,
+   "text": "Thank you, Emma. I knew I could trust you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1448926685": {
+   "kind": "text",
+   "parent": -546486797,
+   "actor": null,
+   "text": "Sofia, a policewomen, will approach you soon.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "623499975": {
+   "kind": "text",
+   "parent": -546486797,
+   "actor": null,
+   "text": "Just be ready for when the time comes, yeah?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-463510646": {
+   "kind": "text",
+   "parent": -2094726502,
+   "children": [
+    -1070284746,
+    -2048044824
+   ],
+   "actor": null,
+   "text": "Emma, I want to ask you about joining the milk farm.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Mario-In-Prison] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-In-Prison",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[milk-searchforcandidates] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milk-searchforcandidates",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[bafa-emmaaccepted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-emmaaccepted",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1070284746": {
+   "kind": "text",
+   "parent": -463510646,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "…What? You can’t be serious",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2048044824": {
+   "kind": "choice",
+   "parent": -463510646,
+   "children": [
+    1703087325,
+    -825456836,
+    1472836860,
+    -228826521
+   ],
+   "actor": "Emma",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "That’s... that’s humiliating. You expect me to just sit there and be… milked?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1703087325": {
+   "kind": "text",
+   "parent": -2048044824,
+   "children": [
+    443276700
+   ],
+   "actor": null,
+   "text": "Please, Emma. We really need you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-825456836": {
+   "kind": "text",
+   "parent": -2048044824,
+   "children": [
+    1159744546
+   ],
+   "actor": null,
+   "text": "Stop being dramatic. It’s just milk.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1472836860": {
+   "kind": "text",
+   "parent": -2048044824,
+   "children": [
+    -1838344933,
+    -560165007,
+    1804756339
+   ],
+   "actor": null,
+   "text": "This is for the animals, Emma. No cow has to suffer.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1838344933": {
+   "kind": "text",
+   "parent": 1472836860,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1159744546": {
+   "kind": "text",
+   "parent": -825456836,
+   "actor": "Emma",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Just milk?! You have no idea how insulting that sounds. Absolutely not.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "443276700": {
+   "kind": "text",
+   "parent": 1703087325,
+   "actor": "Emma",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I’m sorry… but that’s not enough. I can’t.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-228826521": {
+   "kind": "text",
+   "parent": -2048044824,
+   "children": [
+    -1865095527
+   ],
+   "actor": null,
+   "text": "Think of it as community service, with udders.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1865095527": {
+   "kind": "text",
+   "parent": -228826521,
+   "actor": "Emma",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "…You can’t be serious. No.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-560165007": {
+   "kind": "text",
+   "parent": 1472836860,
+   "actor": "Emma",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "You really think this could change things? That it could actually protect them?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1804756339": {
+   "kind": "text",
+   "parent": 1472836860,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "…Then… fine. I’ll do it. For the animals. But don’t you dare make me regret this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Milking Save[bafa-emmaaccepted] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-emmaaccepted",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "796414362": {
+   "kind": "text",
+   "parent": -1057859338,
+   "children": [
+    -2130051523
+   ],
+   "actor": null,
+   "text": "(Charming) Yeah. Just fixing what my dad couldn’t.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Charming] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Charming",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-2130051523": {
+   "kind": "text",
+   "parent": 796414362,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "My father doesn’t take kindly to people acting on their own terms.... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2101136303": {
+   "kind": "text",
+   "parent": -1743640354,
+   "children": [
+    1590335844
+   ],
+   "actor": null,
+   "text": "(Smart) Power without restraint always eats its own.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Smart] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Smart",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1590335844": {
+   "kind": "text",
+   "parent": -2101136303,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Hm. Cold truth, but I can’t even argue with it. But there's more to it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2067734750": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    987239714,
+    -1735292847,
+    -852907888,
+    781896817,
+    64286501
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I didn’t think it would ever happen. Part of me still doesn’t believe it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Mario-In-Prison] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-In-Prison",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[emma-marioarrested-aftertalk25] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-marioarrested-aftertalk25",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "987239714": {
+   "kind": "text",
+   "parent": -2067734750,
+   "actor": "Emma",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "My... Mario always seemed… untouchable. Like the world would bend before him.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "781896817": {
+   "kind": "choice",
+   "parent": -2067734750,
+   "children": [
+    1399668314,
+    1343463775,
+    -1947658463,
+    1220120709
+   ],
+   "actor": "Emma",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You proved me wrong in the best way. If you’re open to it… I’d really like to be friends.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[emma-marioarrested-aftertalk25] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-marioarrested-aftertalk25",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1399668314": {
+   "kind": "text",
+   "parent": 781896817,
+   "children": [
+    265247138
+   ],
+   "actor": null,
+   "text": "Yeah. I’d like that too, Emma.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "265247138": {
+   "kind": "text",
+   "parent": 1399668314,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Good. I think we could both use more people we can trust.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[emma-player-friends] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-player-friends",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1343463775": {
+   "kind": "text",
+   "parent": 781896817,
+   "children": [
+    -79957157
+   ],
+   "actor": null,
+   "text": "Just friends? Damn. There goes my plan to flirt all day.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-79957157": {
+   "kind": "text",
+   "parent": 1343463775,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "You can flirt. Just don’t expect me to fall for it too easily.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[emma-player-friends] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-player-friends",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1220120709": {
+   "kind": "text",
+   "parent": 781896817,
+   "children": [
+    988460460
+   ],
+   "actor": null,
+   "text": "(Charming) Sure… though I should warn you, I’m dangerously charming.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Charming] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Charming",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "988460460": {
+   "kind": "text",
+   "parent": 1220120709,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Hmm. I survived my Mario'’s empire... I think I can handle your ego.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[emma-player-friends] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-player-friends",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1947658463": {
+   "kind": "text",
+   "parent": 781896817,
+   "children": [
+    -723825948
+   ],
+   "actor": null,
+   "text": "I’m not here to make friends, Emma.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-723825948": {
+   "kind": "text",
+   "parent": -1947658463,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Right… I guess I should’ve expected that. Still, thank you... for what you did. Even if this is where it ends.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[emma-player-friends] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-player-friends",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "64286501": {
+   "kind": "text",
+   "parent": -2067734750,
+   "actor": "Emma",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I'll be here... Mario is gone, but he left a whole mess for me to fix...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1735292847": {
+   "kind": "text",
+   "parent": -2067734750,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "And I’ll admit... when we first met, I didn’t think you were the kind of person who could change that.\n",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-852907888": {
+   "kind": "text",
+   "parent": -2067734750,
+   "actor": "Emma",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "But I was wrong.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Villa_Library",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Emma_Defaulttalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_4[emma-katarina-locations] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-katarina-locations",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[emma-corrupted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-corrupted",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Emma_Normal to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Emma_Normal",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Emma_Normal"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[emma-first-meeting] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-first-meeting",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Room_Talk/Villa_Backyard",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Emma_Defaulttalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_4[emma-katarina-locations] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-katarina-locations",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[emma-corrupted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-corrupted",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Emma_Swimwear to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Emma_Swimwear",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Emma_Swimwear"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[emma-first-meeting] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-first-meeting",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

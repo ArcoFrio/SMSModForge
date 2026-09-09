@@ -1,0 +1,767 @@
+{
+ "id": "8_Room_Talk/Livingroom/CharlotteAndAnnaFight",
+ "name": "CharlotteAndAnnaFight",
+ "index": 11,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Charlotte"
+ ],
+ "roots": [
+  1780800763,
+  1101654601,
+  -686333575,
+  198358867,
+  1437858911,
+  -616647460,
+  1869940896,
+  -2055696562,
+  1802019380,
+  2083810105
+ ],
+ "nodes": {
+  "-686333575": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "It's about you and {PC}. I know what you’ve been doing—seducing him. He’s my {S}, Charlotte!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1101654601": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Of course, Anna. What’s on your mind?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[Charlotte-Met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Charlotte-Met",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "2083810105": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -861728587,
+    -731538889,
+    -25972501
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "O-Oh, Hey {PC}... How long have you been standing there? ...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-861728587": {
+   "kind": "text",
+   "parent": 2083810105,
+   "children": [
+    905653564,
+    -934080880,
+    -431067301,
+    698825637,
+    -14635645,
+    555454726
+   ],
+   "actor": null,
+   "text": "Can't we just all be together?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-731538889": {
+   "kind": "text",
+   "parent": 2083810105,
+   "children": [
+    1185128485,
+    -1174125690,
+    972602821
+   ],
+   "actor": null,
+   "text": "I'm not ready to make a decision yet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-25972501": {
+   "kind": "text",
+   "parent": 2083810105,
+   "children": [
+    -1416072013
+   ],
+   "actor": null,
+   "text": "Huh? I haven't heard anything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "905653564": {
+   "kind": "text",
+   "parent": -861728587,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "W-What? ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-934080880": {
+   "kind": "choice",
+   "parent": -861728587,
+   "children": [
+    74312450,
+    -901819922
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Uh, excuse me?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1416072013": {
+   "kind": "text",
+   "parent": -25972501,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "O-Oh... Okay...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1185128485": {
+   "kind": "text",
+   "parent": -731538889,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Decision?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1174125690": {
+   "kind": "text",
+   "parent": -731538889,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "D-Did you hear us talking?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "972602821": {
+   "kind": "text",
+   "parent": -731538889,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Oh boy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1780800763": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Charlotte, we need to talk. Now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "198358867": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Anna, I never meant to hurt you. But {PC} is an adult, capable of making his own decisions.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1437858911": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "He may be an adult, but he’s still my {S}. And you’re supposed to be my best friend. How could you do this?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-616647460": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Please, Anna. You just want to have his massive cock all for yourself, don't be such a greedy bitch!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1869940896": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That's not it! I... I don't want him to leave me. He's the best thing that has ever happened to me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-2055696562": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I'm not going to steal him from you, Anna. We're best friends. You can't think so little of me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1802019380": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "74312450": {
+   "kind": "text",
+   "parent": -934080880,
+   "children": [
+    1999260625,
+    1887114652
+   ],
+   "actor": null,
+   "text": "I love both of you, please don't make me choose.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1999260625": {
+   "kind": "text",
+   "parent": 74312450,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I.. I don't want to make you choose, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-901819922": {
+   "kind": "text",
+   "parent": -934080880,
+   "children": [
+    -1643971793,
+    -748947728,
+    -1531205620,
+    -1842982916
+   ],
+   "actor": null,
+   "text": "There's quite some sexual tension between you two.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1643971793": {
+   "kind": "text",
+   "parent": -901819922,
+   "actor": "Charlotte",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Of course. If it weren't for Josef, I would have pursued you, Anna...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1887114652": {
+   "kind": "text",
+   "parent": 74312450,
+   "actor": "Charlotte",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Neither do I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1842982916": {
+   "kind": "text",
+   "parent": -901819922,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I... I was different back then, Charlotte. I was... prude and insecure...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-431067301": {
+   "kind": "text",
+   "parent": -861728587,
+   "actor": "Charlotte",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I want to be with you. I want to be with both of you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-748947728": {
+   "kind": "text",
+   "parent": -901819922,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Y-You... What? ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1531205620": {
+   "kind": "text",
+   "parent": -901819922,
+   "actor": "Charlotte",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "We had so much fun back then... And then you changed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "698825637": {
+   "kind": "text",
+   "parent": -861728587,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I... I would love that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-14635645": {
+   "kind": "text",
+   "parent": -861728587,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Then it's settled... Well, {PC}. I hope you realize what you've just gotten yourself into.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "555454726": {
+   "kind": "text",
+   "parent": -861728587,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "He won't last a year with the two of us...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Livingroom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play CharlotteAndAnnaFight and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[park-visit] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "park-visit",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[Inner-Regret] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Inner-Regret",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[charlotte-threesome] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "charlotte-threesome",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CharlotteBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CharlotteBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/CharlotteBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "checkConditions",
+     "type": "InstructionLogicCheckConditions",
+     "title": "Check Not is Active 17_ending",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "gameObjectActive",
+         "type": "ConditionGameObjectActive",
+         "title": "Not is Active 17_ending",
+         "fields": {
+          "m_GameObject": {
+           "kind": "object",
+           "name": "17_ending",
+           "of": "GetGameObjectInstance",
+           "path": "17_ending"
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[park-visit] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "park-visit",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

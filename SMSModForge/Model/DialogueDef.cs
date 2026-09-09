@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 
@@ -13,6 +13,41 @@ public sealed class DialogueDef
     /// <summary>Pack-local key. Unique within the pack.</summary>
     [JsonProperty("key", Order = 1)]
     public string Key { get; set; } = "newdialogue";
+
+    /// <summary>
+    /// The vanilla conversation this one extends, as
+    /// <c>"vanilladialogue:&lt;path&gt;"</c> — empty for a dialogue the pack
+    /// wrote itself.
+    /// <para/>
+    /// Its presence is what makes this an extension rather than a new
+    /// dialogue, the same way <c>UiDef.Source</c> does for a screen. It changes
+    /// what saving means: an extension is seeded from the game's own
+    /// conversation and pruned back to the difference (see
+    /// <see cref="VanillaDialogueDelta"/>), so the pack stores what the author
+    /// changed rather than a copy of what the game already has.
+    /// </summary>
+    [JsonProperty("source", Order = 13, NullValueHandling = NullValueHandling.Ignore)]
+    public string Source { get; set; } = "";
+
+    /// <summary>
+    /// Vanilla lines this extension takes out, by Game Creator's own node id.
+    /// <para/>
+    /// Its own list because a pruned manifest holds only changes, so a deleted
+    /// line and an unchanged one are otherwise both simply absent. Filled from
+    /// the comparison at save time by <see cref="VanillaDialogueDelta"/>, never
+    /// by hand.
+    /// </summary>
+    [JsonProperty("removedNodes", Order = 14)]
+    public List<int> RemovedNodes { get; set; } = new();
+    public bool ShouldSerializeRemovedNodes() => RemovedNodes != null && RemovedNodes.Count > 0;
+
+    /// <summary>True when this dialogue extends one the game already has.</summary>
+    [JsonIgnore]
+    public bool IsVanillaBased => !string.IsNullOrEmpty(Source);
+
+    /// <summary>Only written when there is one — most dialogues are the pack's
+    /// own.</summary>
+    public bool ShouldSerializeSource() => IsVanillaBased;
 
     /// <summary>Human-readable name shown in the editor's dialogue list.</summary>
     [JsonProperty("displayName", Order = 2)]

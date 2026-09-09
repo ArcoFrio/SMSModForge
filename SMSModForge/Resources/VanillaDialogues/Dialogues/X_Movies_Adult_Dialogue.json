@@ -1,0 +1,682 @@
+{
+ "id": "X_Movies/Adult_Dialogue ",
+ "name": "Adult_Dialogue ",
+ "index": 9,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "M_CameraMan",
+  "M_PornActress"
+ ],
+ "roots": [
+  -1518221233,
+  1951666021,
+  -1457761122,
+  -315800404,
+  1216876921,
+  -1783100370,
+  -2108512739,
+  -454267239,
+  1770249113,
+  -1589980373,
+  832811280,
+  848748896,
+  -1881985281
+ ],
+ "nodes": {
+  "-1518221233": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adult_Movie to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adult_Movie",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/Adult_Movie"
+      }
+     }
+    },
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 12_AudioPlayer to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "12_AudioPlayer",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.01 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.01
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Audio Source to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Audio Source",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/Adult_Movie/Audio Source"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Slide1 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Slide1",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/Adult_Movie/Slide1"
+      }
+     }
+    },
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    }
+   ]
+  },
+  "1216876921": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Slide2 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Slide2",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/Adult_Movie/Slide2"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Slide1 to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Slide1",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/Adult_Movie/Slide1"
+      }
+     }
+    },
+    {
+     "type": "InstructionTransformChangeScale",
+     "title": "Scale Slide_2 = (1.00, 1.00, 1.00)",
+     "fields": {
+      "m_Scale": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "raw",
+        "type": "GetScaleVector3",
+        "data": {
+         "m_Scale": {
+          "$type": "Vector3",
+          "x": 1,
+          "y": 1,
+          "z": 1
+         }
+        }
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 0,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": true
+      },
+      "m_Transform": {
+       "kind": "object",
+       "name": "Slide_2",
+       "of": "GetGameObjectTransform",
+       "path": "X_Movies/Scifi_Movie/Slide_2"
+      }
+     }
+    },
+    {
+     "type": "InstructionTransformChangePosition",
+     "title": "Move Slide_2 = (0, 0, 0)",
+     "fields": {
+      "m_Space": "LocalPosition",
+      "m_Position": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "raw",
+        "type": "GetPositionVector3",
+        "data": {
+         "m_Position": {
+          "$type": "Vector3",
+          "x": 0,
+          "y": 0,
+          "z": 0
+         }
+        }
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 0,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": true
+      },
+      "m_Transform": {
+       "kind": "object",
+       "name": "Slide_2",
+       "of": "GetGameObjectTransform",
+       "path": "X_Movies/Scifi_Movie/Slide_2"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    }
+   ]
+  },
+  "-1881985281": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "M_PornActress",
+   "expressionName": "neutral",
+   "text": "T-Thanks everyone for watching!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adult_Movie to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adult_Movie",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/Adult_Movie"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 12_AudioPlayer to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "12_AudioPlayer",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer"
+      }
+     }
+    },
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active X_Movies to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "X_Movies",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies"
+      }
+     }
+    }
+   ]
+  },
+  "1770249113": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Slide3 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Slide3",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/Adult_Movie/Slide3"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Slide2 to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Slide2",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/Adult_Movie/Slide2"
+      }
+     }
+    },
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    }
+   ]
+  },
+  "1951666021": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "M_PornActress",
+   "expressionName": "neutral",
+   "text": "Hey everyone! Name's Lisa and today I'll be having my first anal scene!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-315800404": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "M_CameraMan",
+   "expressionName": "neutral",
+   "text": "Why don't you show them, Lisa?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1783100370": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "M_PornActress",
+   "expressionName": "neutral",
+   "text": "Of course! Please! Take a good look! As you can see I've made sure to stretch my ass before the shooting!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-454267239": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "M_PornActress",
+   "expressionName": "neutral",
+   "text": "Yes! Hihi! Alright! Why don't we get this show started!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1589980373": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "M_PornActress",
+   "expressionName": "neutral",
+   "text": "Oh ffffuuuucckkk... This big, fat cock is stretching my ass! It feels sooOOooOOo good!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "832811280": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "M_PornActress",
+   "expressionName": "neutral",
+   "text": "Y-Yes! It's my first time but I can already tell: I love anal! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "848748896": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "M_CameraMan",
+   "expressionName": "neutral",
+   "text": "That's it, babe. Ride that cock, you little slut...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2108512739": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "M_CameraMan",
+   "expressionName": "neutral",
+   "text": "Very nice, Lisa. Show us that tight hole of yours...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1457761122": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "M_PornActress",
+   "expressionName": "neutral",
+   "text": "I've been preparing ALL week longs for this! Let's make it happen, guys. Hihi!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "Always_Active/Movie_Condition",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Adult_Dialogue  and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_2[incoming-movie] = 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "incoming-movie",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active X_Movies to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "X_Movies",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Adult_Condition and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "Adult_Condition",
+       "of": "GetGameObjectConditions",
+       "path": "X_Movies/Adult_Condition"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,2388 @@
+{
+ "id": "8_Room_Talk/ConventionFans/SamKen_Starcon",
+ "name": "SamKen_Starcon",
+ "index": 11,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "Ken",
+  "Samantha"
+ ],
+ "roots": [
+  -953065986,
+  1972332305
+ ],
+ "nodes": {
+  "-953065986": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.2,
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1972332305": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1429471297,
+    -64331097,
+    -56472356,
+    -258342572,
+    -1653094993,
+    2137446758,
+    790951480,
+    221580574,
+    882639092,
+    1927737706,
+    2067841934,
+    -1971628642,
+    -80094995,
+    149141093,
+    1953372953,
+    1520846368,
+    945711136,
+    -72513405,
+    -1224150174
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Miss Anna?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "chance",
+     "type": "ConditionChance",
+     "title": "If 0.5 chance to pass",
+     "fields": {
+      "m_Threshold": {
+       "kind": "value",
+       "value": 0.5
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[ken-samantha-threesome-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-samantha-threesome-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamanthaBust_ComfyCasualOutside to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamanthaBust_ComfyCasualOutside",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/SamanthaBust_ComfyCasualOutside"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Ken to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Ken",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Ken"
+      }
+     }
+    }
+   ]
+  },
+  "1429471297": {
+   "kind": "text",
+   "parent": 1972332305,
+   "children": [
+    -1181811220,
+    -1384583487,
+    -1653357082,
+    1033226550
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ken. I didn’t expect to see you here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[SamKen-StarConSex-Done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "SamKen-StarConSex-Done",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1181811220": {
+   "kind": "text",
+   "parent": 1429471297,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Y-You’re headlining the creator stage. Of course I’m here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1384583487": {
+   "kind": "text",
+   "parent": 1429471297,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Headlining?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1653357082": {
+   "kind": "text",
+   "parent": 1429471297,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "It’s just a panel.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1033226550": {
+   "kind": "text",
+   "parent": 1429471297,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "It’s not “just” a panel. You’re trending every week.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-64331097": {
+   "kind": "text",
+   "parent": 1972332305,
+   "children": [
+    596746711,
+    -12807705
+   ],
+   "actor": "Samantha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "There’s the celebrity again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[SamKen-StarConSex-Done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "SamKen-StarConSex-Done",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "596746711": {
+   "kind": "text",
+   "parent": -64331097,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Please don’t call me that in public.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-12807705": {
+   "kind": "text",
+   "parent": -64331097,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "I mean… you kind of are.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-56472356": {
+   "kind": "text",
+   "parent": 1972332305,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I still can’t believe I’m standing this close to you, Miss Anna. You look exactly like you do on Starmaker… maybe even better.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-258342572": {
+   "kind": "text",
+   "parent": 1972332305,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Careful, Ken. If you compliment me like that in public, people will think I’m paying you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1653094993": {
+   "kind": "text",
+   "parent": 1972332305,
+   "actor": "Samantha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "He’d do it for free. Trust me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2137446758": {
+   "kind": "text",
+   "parent": 1972332305,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "{M}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "790951480": {
+   "kind": "text",
+   "parent": 1972332305,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "So you’re the creator he keeps spending his paycheck on.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[SamKen-StarConSex-Done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "SamKen-StarConSex-Done",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "221580574": {
+   "kind": "text",
+   "parent": 1972332305,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I prefer the word “supporting.”",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[SamKen-StarConSex-Done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "SamKen-StarConSex-Done",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "882639092": {
+   "kind": "text",
+   "parent": 1972332305,
+   "actor": "Samantha",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I raised him too polite to say no to a pretty woman.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[SamKen-StarConSex-Done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "SamKen-StarConSex-Done",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1927737706": {
+   "kind": "text",
+   "parent": 1972332305,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That’s not the worst outcome.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[SamKen-StarConSex-Done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "SamKen-StarConSex-Done",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "2067841934": {
+   "kind": "text",
+   "parent": 1972332305,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "You’re a {M} too, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[SamKen-StarConSex-Done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "SamKen-StarConSex-Done",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1971628642": {
+   "kind": "choice",
+   "parent": 1972332305,
+   "children": [
+    -817219535,
+    284669018,
+    -2039068488
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Two {S}'s. One of them is standing right here pretending he isn’t listening.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[SamKen-StarConSex-Done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "SamKen-StarConSex-Done",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-817219535": {
+   "kind": "text",
+   "parent": -1971628642,
+   "children": [
+    1571264652,
+    1280073784,
+    -1255026118
+   ],
+   "actor": null,
+   "text": "I’m emotionally distancing myself from this conversation.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1571264652": {
+   "kind": "text",
+   "parent": -817219535,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You don’t get to emotionally distance yourself from your own {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "284669018": {
+   "kind": "text",
+   "parent": -1971628642,
+   "children": [
+    -1207806933,
+    1081157958,
+    -1549071996,
+    765196767
+   ],
+   "actor": null,
+   "text": "She worries more than she admits.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1207806933": {
+   "kind": "text",
+   "parent": 284669018,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Of course I worry. That part never goes away, no matter what I’m doing online.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2039068488": {
+   "kind": "text",
+   "parent": -1971628642,
+   "children": [
+    1297533380,
+    -111244181,
+    1995543403
+   ],
+   "actor": null,
+   "text": "She’s different online. Way more dangerous.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1297533380": {
+   "kind": "text",
+   "parent": -2039068488,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh? Is that how you see me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1280073784": {
+   "kind": "text",
+   "parent": -817219535,
+   "actor": "Samantha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That’s my life in a sentence right there.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1255026118": {
+   "kind": "text",
+   "parent": -817219535,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "This is humiliating on multiple levels.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1081157958": {
+   "kind": "text",
+   "parent": 284669018,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Same here. You spend yearsand years  keeping them alive, then suddenly they’re adults making weird decisions in public places.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1549071996": {
+   "kind": "text",
+   "parent": 284669018,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I’m right here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "765196767": {
+   "kind": "text",
+   "parent": 284669018,
+   "actor": "Samantha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Exactly, hun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-111244181": {
+   "kind": "text",
+   "parent": -2039068488,
+   "actor": "Samantha",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Now I’m curious what “dangerous” means.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1995543403": {
+   "kind": "text",
+   "parent": -2039068488,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I'm gonna faint...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-80094995": {
+   "kind": "text",
+   "parent": 1972332305,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Your panel’s starting soon, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "149141093": {
+   "kind": "text",
+   "parent": 1972332305,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yeah. I should probably start heading toward the prep area soon. They like to brief us early.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1953372953": {
+   "kind": "text",
+   "parent": 1972332305,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "“Brief.” That’s a funny word for what you do online.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1520846368": {
+   "kind": "text",
+   "parent": 1972332305,
+   "actor": "Samantha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Relax. I’m just saying, you handle attention well. And I'm a bit jealous.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "945711136": {
+   "kind": "text",
+   "parent": 1972332305,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I know that feeling to well... We should get coffee sometime. A friendly {M} on {M} meet up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1224150174": {
+   "kind": "choice",
+   "parent": 1972332305,
+   "children": [
+    -1174261045,
+    1493497104,
+    302932617,
+    1961636306,
+    -1759491774
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "We'll, that was nice. Let's go, Ken. I'm starving.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1174261045": {
+   "kind": "text",
+   "parent": -1224150174,
+   "children": [
+    -1125518686,
+    1726643521,
+    -271379759,
+    -2002875749,
+    900542555,
+    -639795595,
+    228364264,
+    1014094118,
+    505976621,
+    -1698701053,
+    1458688728,
+    209415045,
+    917139639,
+    -1296000324,
+    471227493,
+    37808651,
+    -210907422,
+    1642441936,
+    553062694,
+    652813329,
+    1927155854,
+    733191904,
+    -1906275389,
+    -885369567,
+    493737426,
+    -555117612,
+    -1432271355,
+    1761397436,
+    2143817748,
+    -1913156704,
+    363912103,
+    1800052443,
+    1181115884,
+    656051241,
+    1834455073
+   ],
+   "actor": null,
+   "text": "(Lewd) How about we swap {M}'s, Ken?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "302932617": {
+   "kind": "text",
+   "parent": -1224150174,
+   "children": [
+    1132993513,
+    1374509087
+   ],
+   "actor": null,
+   "text": "So, Sam, how’s the convention treating you so far?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1961636306": {
+   "kind": "text",
+   "parent": -1224150174,
+   "children": [
+    666763770,
+    -42414725,
+    1671803623
+   ],
+   "actor": null,
+   "text": "Ken, spot any other “interesting creators” today?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1759491774": {
+   "kind": "text",
+   "parent": -1224150174,
+   "children": [
+    566175130,
+    -1046245957,
+    1996438405
+   ],
+   "actor": null,
+   "text": "Alright, I’ll see you all later.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-72513405": {
+   "kind": "text",
+   "parent": 1972332305,
+   "actor": "Samantha",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I’d like that. Two {M}s comparing battle scars.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1493497104": {
+   "kind": "text",
+   "parent": -1224150174,
+   "children": [
+    -639434081,
+    -547291202,
+    1529231647
+   ],
+   "actor": null,
+   "text": "Where are you two heading next?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "566175130": {
+   "kind": "text",
+   "parent": -1759491774,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Don’t disappear before the panel.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "666763770": {
+   "kind": "text",
+   "parent": 1961636306,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I… may have looked around. But I stayed loyal.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1132993513": {
+   "kind": "text",
+   "parent": 302932617,
+   "actor": "Samantha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Honestly? Louder than I expected, but kind of fascinating. People here really commit to what they enjoy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-639434081": {
+   "kind": "text",
+   "parent": 1493497104,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Food. My stomach needs something to work on.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1125518686": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Wha~ swap...? I... uh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Gallery-Active] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gallery-Active",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1046245957": {
+   "kind": "text",
+   "parent": -1759491774,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Front row.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-42414725": {
+   "kind": "text",
+   "parent": 1961636306,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Good answer.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1671803623": {
+   "kind": "text",
+   "parent": 1961636306,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "He rehearsed that. Haha.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1374509087": {
+   "kind": "text",
+   "parent": 302932617,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That passion is what keeps events like this alive.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-547291202": {
+   "kind": "text",
+   "parent": 1493497104,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "And then to seating area near the stage. I wanna make sure {M} and I get seats.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1529231647": {
+   "kind": "text",
+   "parent": 1493497104,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Always thinking of me, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1726643521": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Samantha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh my god. I love that idea.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-271379759": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh my.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1996438405": {
+   "kind": "text",
+   "parent": -1759491774,
+   "actor": "Samantha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "We’ll be around.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2002875749": {
+   "kind": "text",
+   "parent": -1174261045,
+   "children": [
+    2098505352,
+    -408739837,
+    -826988982,
+    1343274222
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "S-Samantha... you and Ken... do this too?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[SamKen-StarConSex-Done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "SamKen-StarConSex-Done",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "2098505352": {
+   "kind": "text",
+   "parent": -2002875749,
+   "actor": "Samantha",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "You look so shocked, Anna. Don't tell me you've never met another {M}-{S} team before.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-408739837": {
+   "kind": "text",
+   "parent": -2002875749,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I... I really haven't. It's just... us.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-826988982": {
+   "kind": "text",
+   "parent": -2002875749,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Well, now you have. Our {S}'s are quite something, am I right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1343274222": {
+   "kind": "text",
+   "parent": -2002875749,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "{PC} means the world to me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "900542555": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I... I guess... if Anna is okay with it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-639795595": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Actually… maybe we shouldn't. Anna is here for work... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "228364264": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yeah, I am...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1296000324": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Don't be gentle, Ken! Fuck her like you mean it!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "471227493": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Samantha! Hngaah~",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "37808651": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I... okay! Okay!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-210907422": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ah! Oh... that's... better. Yes! Fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaSam_StarConCG (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaSam_StarConCG (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaSam_StarConCG (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1642441936": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Oh fuck, {PC}! You're stretching me so good! Don't stop! I'm close, so close!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "553062694": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ken... yes! Right there! Harder!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "652813329": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "I'm gonna cum all over your cock! Fill me up!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "733191904": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Come on, {PC}, give it to me. All over my face.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1834455073": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_11[SamKen-StarConSex-Done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "SamKen-StarConSex-Done",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Gallery-Active] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gallery-Active",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Hotelroom_Convention",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "Hotelroom_Convention",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Hotelroom_Convention"
+      }
+     }
+    }
+   ]
+  },
+  "1458688728": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AFewMinutesLater to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AFewMinutesLater",
+       "of": "GetGameObjectInstance",
+       "path": "6_Effects/Effect_Canvas/AFewMinutesLater"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1.5 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1.5
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 54_Convention to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "54_Convention",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/54_Convention"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 53_Hotelroom to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "53_Hotelroom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/53_Hotelroom"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Nude"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Samantha_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Samantha_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Samantha_Nude"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Ken_D_Out to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Ken_D_Out",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Ken_D_Out"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaSam_StarConCG (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaSam_StarConCG (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaSam_StarConCG (0)"
+      }
+     }
+    }
+   ]
+  },
+  "209415045": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "{PC}, don't hold back... fuck me harder... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "917139639": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Anna... you feel amazing... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1906275389": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ken, sweetie, don't be shy. Show me how much you enjoyed that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-885369567": {
+   "kind": "choice",
+   "parent": -1174261045,
+   "children": [
+    2132250126,
+    574753230,
+    -756852208
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I... I can't believe we're doing this...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "493737426": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Oh yeah, {PC}! Cover me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaSam_StarConCG (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaSam_StarConCG (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaSam_StarConCG (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-555117612": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Good boy, Ken. Good boy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1432271355": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Fuck, yes! More!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1761397436": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "We're such good {M}'s, aren't we, Samantha?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2143817748": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Mmm, look at us. Covered in their cum.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1913156704": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It's... so much... And so warm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "363912103": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "We're... a mess.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1181115884": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "We should probably clean up. The convention isn't over yet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "656051241": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "In a minute. Let me just... taste this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1927155854": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Me too! Don't stop! I'm so close!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1800052443": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I... I love my life. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1014094118": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "I mean, look at them. They're grown men. Big… strong… men. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "505976621": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "It'd be a little intense, all four of us in one room. You'd get nothing done today...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1698701053": {
+   "kind": "text",
+   "parent": -1174261045,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh. Yes... They would claim us, take us and... Stretch us... We can't have this happen here...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2132250126": {
+   "kind": "text",
+   "parent": -885369567,
+   "actor": null,
+   "text": "You better believe it, bro. Time to cover them in our cum!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "574753230": {
+   "kind": "text",
+   "parent": -885369567,
+   "actor": null,
+   "text": "Fuck, let's mark our sluts! Here it comes!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-756852208": {
+   "kind": "text",
+   "parent": -885369567,
+   "actor": null,
+   "text": "(Pull out and glaze them)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/ConventionFans",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play SamKen_Starcon and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_Only_Done_2[fan-encounter] = Random3[Random]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "fan-encounter",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random3",
+        "pick": "random",
+        "type": "number"
+       }
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[temp-stored-very-short-term] = (none)",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": null,
+       "of": "GetGameObjectInstance"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run CelesteMoments and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "CelesteMoments",
+       "of": "GetGameObjectConditions",
+       "path": "8_Room_Talk/ConventionFans/CelesteMoments"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_Only_Done_2[fan-encounter] = Random10[Random]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "fan-encounter",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random10",
+        "pick": "random",
+        "type": "number"
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Self and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_FanBlueShirt to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_FanBlueShirt",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_FanBlueShirt"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_FanAsian to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_FanAsian",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_FanAsian"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_FanGirl to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_FanGirl",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_FanGirl"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_FanOldMan to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_FanOldMan",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_FanOldMan"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_FanFemboy to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_FanFemboy",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_FanFemboy"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_FanMuscle to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_FanMuscle",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_FanMuscle"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_FanJeff to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_FanJeff",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_FanJeff"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.5 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.5
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.5 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.5
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "checkConditions",
+     "type": "InstructionLogicCheckConditions",
+     "title": "Check If Core[After-Talk-Transition] = False",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "compareBool",
+         "type": "ConditionMathCompareBooleans",
+         "title": "If Core[After-Talk-Transition] = False",
+         "fields": {
+          "m_Value": {
+           "kind": "variable",
+           "variable": {
+            "scope": "global",
+            "name": "After-Talk-Transition",
+            "list": "Core",
+            "type": "boolean"
+           }
+          },
+          "m_Comparison": "Equals",
+          "m_CompareTo": {
+           "kind": "value",
+           "value": false
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Room_Talk/ConventionFans",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Self/Events_Only_Done_2[fan-encounter] and wait",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Events_Only_Done_2[convention-outfit-reference] to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-outfit-reference",
+        "list": "Events_Only_Done_2",
+        "type": "game-object"
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "chosenBy": {
+    "kind": "variable",
+    "variable": {
+     "scope": "global",
+     "name": "fan-encounter",
+     "list": "Events_Only_Done_2",
+     "type": "number"
+    }
+   },
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_Only_Done_2[fan-encounter] = 11 (this is the 12th child of ConventionFans)",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "fan-encounter",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 11
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

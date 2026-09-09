@@ -1,0 +1,29 @@
+<Window x:Class="SMSModForge.View.ExportSizeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Export pack" Width="560" SizeToContent="Height"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+    <DockPanel Margin="12">
+
+        <!-- The opt-out sits on the left, away from the commit button, so it
+             cannot be clicked by muscle memory while aiming for Export. Same
+             arrangement as the save confirmation, for the same reason. -->
+        <DockPanel DockPanel.Dock="Bottom" Margin="0,12,0,0">
+            <CheckBox x:Name="DontAskAgain" VerticalAlignment="Center"
+                      Content="Don't warn again for this pack"
+                      ToolTip="A pack that is legitimately this big is this big every time. Other packs still get the warning. Turn it back on under Options → Warn about large exports."/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Export" Width="90" IsDefault="True" Click="Export_Click" Margin="0,0,8,0"/>
+                <Button Content="Cancel" Width="90" IsCancel="True"/>
+            </StackPanel>
+        </DockPanel>
+
+        <StackPanel>
+            <TextBlock x:Name="HeadlineText" FontWeight="Bold" TextWrapping="Wrap"/>
+            <TextBlock x:Name="FolderText" Foreground="Gray" TextWrapping="Wrap" Margin="0,4,0,0"/>
+            <TextBlock Margin="0,10,0,0" TextWrapping="Wrap"
+                       Text="Everything in the folder goes into the .smspack, including anything that is not part of the pack."/>
+        </StackPanel>
+    </DockPanel>
+</Window>

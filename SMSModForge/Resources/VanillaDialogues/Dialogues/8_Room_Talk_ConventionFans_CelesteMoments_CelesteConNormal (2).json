@@ -1,0 +1,178 @@
+{
+ "id": "8_Room_Talk/ConventionFans/CelesteMoments/CelesteConNormal (2)",
+ "name": "CelesteConNormal (2)",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Celeste"
+ ],
+ "roots": [
+  -1880583636,
+  1707282865,
+  446611443,
+  717026669,
+  -292285133,
+  -302420845,
+  1756881340,
+  -1740693765
+ ],
+ "nodes": {
+  "-1880583636": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "A word of advice, Anna?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1707282865": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, this should be good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "446611443": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "You have a striking presence. But presence alone is not enough. True models don’t just exist in front of a lens—they command it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-292285133": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "So what, you think I’m just winging it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-302420845": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Aren’t you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1756881340": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Celeste",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Just a thought. If you ever wish to elevate yourself beyond simply being seen... learn to be remembered.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "717026669": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Celeste",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You need more than confidence. You need control.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1740693765": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "<size=50%>What a bitch...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/ConventionFans/CelesteMoments",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play CelesteConNormal (2) and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active XXX_Celeste_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "XXX_Celeste_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/XXX_Celeste_Bust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/XXX_Celeste_Bust/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

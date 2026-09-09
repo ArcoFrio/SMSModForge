@@ -1,0 +1,751 @@
+{
+ "id": "8_Room_Talk/Temple_Inside/Firsttalktemple",
+ "name": "Firsttalktemple",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Master Zhen"
+ ],
+ "roots": [
+  1103884513,
+  -1938415780,
+  -1263780118,
+  887408704,
+  -1842173644,
+  -1176799522,
+  -4558413,
+  1244344430,
+  651153064,
+  1125613612,
+  -434540229
+ ],
+ "nodes": {
+  "-1938415780": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Now that you’re here, I suppose introductions are in order. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1263780118": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "I am Xun Zhen, once a warrior in the old world… now, just a guardian of this temple.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "887408704": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1368123788,
+    1747271038
+   ],
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "And what is your name, meiguo ren? I should know the name of the fool fated to die under my training.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1368123788": {
+   "kind": "text",
+   "parent": 887408704,
+   "actor": null,
+   "text": "My name is {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1747271038": {
+   "kind": "text",
+   "parent": 887408704,
+   "children": [
+    -258964510
+   ],
+   "actor": null,
+   "text": "Milfslayer {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-258964510": {
+   "kind": "text",
+   "parent": 1747271038,
+   "actor": "Master Zhen",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "This world is lost...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1842173644": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Hmph. Remember it well. When you train here, you are no longer just a person—you are a weapon. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1176799522": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "And you, weapon, have been brought to a place where the boundary between our world and the spirit world is like a thin sheet of ice… ready to shatter at any moment.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-4558413": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Corruption has seeped through that barrier, like poison in a wound. Spirits grow restless, and darkness spreads.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1125613612": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    217438794,
+    1551151687,
+    -1477995304
+   ],
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "The prophecy says you are the one meant to cut away this corruption, to restore the balance.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "217438794": {
+   "kind": "text",
+   "parent": 1125613612,
+   "children": [
+    810304392,
+    351403540
+   ],
+   "actor": null,
+   "text": "Wait, so… magic is real?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "810304392": {
+   "kind": "text",
+   "parent": 217438794,
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Magic? Is that what you call it? It’s not some parlor trick, fool. This is the essence of life and death, of balance and chaos. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1551151687": {
+   "kind": "text",
+   "parent": 1125613612,
+   "children": [
+    -1192710562,
+    -1114254608
+   ],
+   "actor": null,
+   "text": "Are you… on drugs or something?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1192710562": {
+   "kind": "text",
+   "parent": 1551151687,
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Drugs? I need no poisons to see what’s happening here. But I wonder… are you on drugs, to question a man standing in a temple filled with ancient spirits?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1477995304": {
+   "kind": "text",
+   "parent": 1125613612,
+   "children": [
+    566345364,
+    -853837148
+   ],
+   "actor": null,
+   "text": "Can I use this to make money?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "566345364": {
+   "kind": "text",
+   "parent": -1477995304,
+   "actor": "Master Zhen",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hah! The prophecy-chosen fool wants to make money off a spirit blade? Try swinging it at a bank teller and see how far you get.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "351403540": {
+   "kind": "text",
+   "parent": 217438794,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Call it ‘magic’ again, and I’ll make sure you learn respect the hard way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1114254608": {
+   "kind": "text",
+   "parent": 1551151687,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Hmph, maybe I should knock some sense into you first.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-853837148": {
+   "kind": "text",
+   "parent": -1477995304,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "This is not a toy. Its value lies in what it protects… not in what it can buy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1244344430": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "It’s been happening for years, and I have kept it at bay… until now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "651153064": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "This blade was mine. It has seen countless battles and ended the lives of many spirits. But now… it’s yours.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-434540229": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    336068178,
+    59394482
+   ],
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Take it. If you accept this, your life will no longer be your own. Your path will be set, and your fate tied to this temple. So, what will it be?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "336068178": {
+   "kind": "text",
+   "parent": -434540229,
+   "children": [
+    1696315383
+   ],
+   "actor": null,
+   "text": "I’ll do it. I won’t back down.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "59394482": {
+   "kind": "text",
+   "parent": -434540229,
+   "children": [
+    1798735951,
+    -688477343
+   ],
+   "actor": null,
+   "text": "No, I can’t. This is too much for me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1798735951": {
+   "kind": "text",
+   "parent": 59394482,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Hmph. So be it. Leave now, and the corruption will continue to spread. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[masterzhen-declined] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "masterzhen-declined",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1696315383": {
+   "kind": "text",
+   "parent": 336068178,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Good. Then prepare yourself. This blade will test you in ways you cannot imagine… but if you survive, you may yet fulfill your destiny.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[masterzhen-accepted] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "masterzhen-accepted",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_6[masterzhen-story] = 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "masterzhen-story",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = Old Katana",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Old Katana"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 80_Shrine to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "80_Shrine",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator/MapButtons/80_Shrine"
+      }
+     }
+    }
+   ]
+  },
+  "-688477343": {
+   "kind": "text",
+   "parent": 59394482,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "I’ll fight alone until my last breath… but know this—when this world falls, you will have had the chance to prevent it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1103884513": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -556277936,
+    -662806810
+   ],
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "We have nothing else to discuss, meiguo ren.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[masterzhen-declined] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "masterzhen-declined",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-556277936": {
+   "kind": "text",
+   "parent": 1103884513,
+   "children": [
+    1835672224
+   ],
+   "actor": null,
+   "text": "I've changed my mind. I want to help.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-662806810": {
+   "kind": "text",
+   "parent": 1103884513,
+   "children": [
+    -1866081846
+   ],
+   "actor": null,
+   "text": "Whatever, dude.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1866081846": {
+   "kind": "text",
+   "parent": -662806810,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Hmpf.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1835672224": {
+   "kind": "text",
+   "parent": -556277936,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Good. Then prepare yourself. This blade will test you in ways you cannot imagine… but if you survive, you may yet fulfill your destiny.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[masterzhen-accepted] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "masterzhen-accepted",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_6[masterzhen-story] = 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "masterzhen-story",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = Old Katana",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Old Katana"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 80_Shrine to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "80_Shrine",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator/MapButtons/80_Shrine"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Temple_Inside",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Firsttalktemple and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Master_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Master_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Master_Default"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

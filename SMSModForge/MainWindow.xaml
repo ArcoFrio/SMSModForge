@@ -46,6 +46,26 @@
                 </DataTemplate>
             </GroupStyle.HeaderTemplate>
         </GroupStyle>
+
+        <!--
+            How every categorised dropdown scrolls.
+
+            WPF's ScrollUnit defaults to Item, so a virtualizing list moves a
+            whole row per notch. On a grouped list, where rows sit under
+            headers of a different height, that reads as snapping - and the
+            snap has nothing to do with how much is actually in each group,
+            which is what made it feel arbitrary.
+
+            Pixel scrolling fixes that; virtualizing-when-grouping keeps a long
+            list cheap, which matters because the longest of them is about to
+            be the game's 1,924 variables rather than a handful of tracks.
+        -->
+        <Style x:Key="GroupedComboBox" TargetType="ComboBox"
+               BasedOn="{StaticResource {x:Type ComboBox}}">
+            <Setter Property="IsSynchronizedWithCurrentItem" Value="False"/>
+            <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel"/>
+            <Setter Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="True"/>
+        </Style>
         <!--
             Visibility converters for the Integration tab's picker /
             code mode toggle. BoolToVisibility shows when bound flag
@@ -127,6 +147,11 @@
         </DataTemplate>
         <Style x:Key="UnitTreeItemStyle" TargetType="TreeViewItem" BasedOn="{StaticResource {x:Type TreeViewItem}}">
             <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+            <!-- Two-way, so the view model can RELEASE the tree's selection.
+                 Picking a row in the sidebar's other list used to clear the
+                 selection in the view model and leave the row highlighted
+                 here, and clicking it again then raised no event at all. -->
+            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsMultiSelected}" Value="True">
                     <Setter Property="Background" Value="#5578A8E0"/>
@@ -193,6 +218,125 @@
                  no dependency report IsEnabled = true and are unaffected. -->
             <Setter Property="IsEnabled" Value="{Binding IsEnabled}"/>
         </Style>
+
+        <!-- A toolbar button that says which key does the same thing. The
+             hint is dimmed and small: it should be readable when looked for and
+             invisible when not. Tag carries the gesture. -->
+        <Style x:Key="ToolbarButtonWithKey" TargetType="Button">
+            <Setter Property="Padding" Value="6,1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <StackPanel Orientation="Horizontal">
+                                <ContentPresenter VerticalAlignment="Center"/>
+                                <TextBlock Text="{TemplateBinding Tag}" Margin="6,0,0,0"
+                                           VerticalAlignment="Center" Opacity="0.45"
+                                           FontSize="10"/>
+                            </StackPanel>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.45"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- How something arrives when it is switched on. Bound to a
+             UiOpenViewModel, which a screen and an object each own one of. -->
+        <DataTemplate x:Key="UiOpenTemplate" DataType="{x:Type vm:UiOpenViewModel}">
+            <StackPanel>
+                <CheckBox IsChecked="{Binding Animates, Mode=TwoWay}" Margin="0,0,0,4"
+                          ToolTip="Off, it appears or vanishes at once. On, it starts from the game's own shop, which you can then change.">
+                    <TextBlock TextWrapping="Wrap">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Text" Value="Animate when it opens"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Closing}" Value="True">
+                                        <Setter Property="Text" Value="Animate when it closes"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </CheckBox>
+
+                <StackPanel Margin="14,0,0,0" IsEnabled="{Binding Animates}"
+                            Visibility="{Binding Animates, Converter={StaticResource BoolToVisibility}}">
+                    <CheckBox IsChecked="{Binding Fade, Mode=TwoWay}" Margin="0,0,0,3"
+                              ToolTip="Fade between invisible and solid. Needs a CanvasGroup, which is added for you.">
+                        <TextBlock TextWrapping="Wrap">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="Fade in"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Closing}" Value="True">
+                                            <Setter Property="Text" Value="Fade out"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </CheckBox>
+
+                    <CheckBox IsChecked="{Binding Grows, Mode=TwoWay}" Margin="0,0,0,3"
+                              ToolTip="Move between its own size and the one below. The game uses all of it: (1,0,1) is a flat line - the shop unfolds from one on the way in and folds back to one on the way out - while (0.5,0.5,0.5) is small and (2,2,1) is oversized.">
+                        <TextBlock TextWrapping="Wrap">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="Grow from"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Closing}" Value="True">
+                                            <Setter Property="Text" Value="Shrink to"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </CheckBox>
+
+                    <DockPanel Margin="14,0,0,4"
+                               Visibility="{Binding Grows, Converter={StaticResource BoolToVisibility}}">
+                        <TextBlock Text="X" Width="14" VerticalAlignment="Center"/>
+                        <TextBox Width="46" Margin="0,0,6,0"
+                                 Text="{Binding ScaleFromX, UpdateSourceTrigger=LostFocus, StringFormat=0.###}"/>
+                        <TextBlock Text="Y" Width="14" VerticalAlignment="Center"/>
+                        <TextBox Width="46" Margin="0,0,6,0"
+                                 Text="{Binding ScaleFromY, UpdateSourceTrigger=LostFocus, StringFormat=0.###}"/>
+                        <TextBlock Text="Z" Width="14" VerticalAlignment="Center"/>
+                        <TextBox Width="46"
+                                 Text="{Binding ScaleFromZ, UpdateSourceTrigger=LostFocus, StringFormat=0.###}"/>
+                        <TextBlock/>
+                    </DockPanel>
+
+                    <DockPanel Margin="0,0,0,3">
+                        <TextBlock Text="Over" Width="42" VerticalAlignment="Center"/>
+                        <TextBlock Text="seconds" DockPanel.Dock="Right" Margin="6,0,0,0"
+                                   VerticalAlignment="Center" Opacity="0.7"/>
+                        <TextBox Text="{Binding Duration, UpdateSourceTrigger=LostFocus, StringFormat=0.###}"
+                                 ToolTip="0.3 is what the shop uses and the commonest in the game."/>
+                    </DockPanel>
+
+                    <DockPanel Margin="0,0,0,4">
+                        <TextBlock Text="Curve" Width="42" VerticalAlignment="Center"/>
+                        <ComboBox Style="{StaticResource GroupedComboBox}" ItemsSource="{Binding Easings}"
+                                  SelectedItem="{Binding Easing, Mode=TwoWay}"
+                                  ToolTip="The curves the game itself uses. QuadInOut is the shop's; the game also uses BounceOut and ElasticOut elsewhere."/>
+                    </DockPanel>
+
+                    <Button Content="Play it" Padding="10,2" HorizontalAlignment="Left"
+                            Click="PlayUiOpenAnimation_Click"
+                            ToolTip="Play the animation once in the preview. It is drawn, not applied - the screen is left exactly as it was, and nothing is written to the pack."/>
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
 
         <DataTemplate x:Key="StringParamTemplate" DataType="{x:Type vm:ParamRowViewModel}">
             <Grid Style="{StaticResource ParamRowGrid}">
@@ -290,12 +434,17 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="{Binding Label}" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                <ComboBox  Grid.Column="1"
-                           ItemsSource="{Binding DataContext.VariableNameOptions,
+                <ComboBox Style="{StaticResource GroupedComboBox}"  Grid.Column="1"
+                           ItemsSource="{Binding DataContext.VariableNameOptionsGrouped,
                                          RelativeSource={RelativeSource AncestorType=Window}}"
                            IsEditable="True"
                            Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
-                           ToolTip="{Binding Tooltip}"/>
+                           ToolTip="{Binding Tooltip}">
+
+                            <ComboBox.GroupStyle>
+                                <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                            </ComboBox.GroupStyle>
+                        </ComboBox>
             </Grid>
         </DataTemplate>
 
@@ -337,13 +486,18 @@
                                  ToolTip="Set variable to false"/>
                 </StackPanel>
                 <!-- Fallback: variable dropdown when the variable is not boolean -->
-                <ComboBox Grid.Column="1"
-                          ItemsSource="{Binding DataContext.VariableNameOptions,
+                <ComboBox Style="{StaticResource GroupedComboBox}" Grid.Column="1"
+                          ItemsSource="{Binding DataContext.VariableNameOptionsGrouped,
                                         RelativeSource={RelativeSource AncestorType=Window}}"
                           IsEditable="True"
                           Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
                           ToolTip="{Binding Tooltip}"
-                          Visibility="{Binding IsBooleanVariable, Converter={StaticResource InverseBoolToVisibility}}"/>
+                          Visibility="{Binding IsBooleanVariable, Converter={StaticResource InverseBoolToVisibility}}">
+
+                            <ComboBox.GroupStyle>
+                                <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                            </ComboBox.GroupStyle>
+                        </ComboBox>
             </Grid>
         </DataTemplate>
 
@@ -369,14 +523,19 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="{Binding Label}" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                <ComboBox  Grid.Column="1"
-                           ItemsSource="{Binding DataContext.LevelOptions,
+                <ComboBox Style="{StaticResource GroupedComboBox}"  Grid.Column="1"
+                           ItemsSource="{Binding DataContext.LevelOptionsGrouped,
                                          RelativeSource={RelativeSource AncestorType=Window}}"
                            SelectedValuePath="Token"
                            SelectedValue="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
                            IsEditable="True"
                            Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
-                           ToolTip="{Binding Tooltip}"/>
+                           ToolTip="{Binding Tooltip}">
+
+                            <ComboBox.GroupStyle>
+                                <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                            </ComboBox.GroupStyle>
+                        </ComboBox>
             </Grid>
         </DataTemplate>
 
@@ -469,6 +628,7 @@
                 <ctl:PathPickerBox Grid.Column="1"
                                    PathText="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
                                    PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
+                                   Filter="{Binding PickerFilter}"
                                    ToolTip="{Binding Tooltip}"/>
             </Grid>
         </DataTemplate>
@@ -503,10 +663,11 @@
                            IsEditable="True"
                            Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
                            ToolTip="{Binding Tooltip}">
-                    <ComboBox.GroupStyle>
-                        <StaticResource ResourceKey="MusicOriginGroupStyle"/>
-                    </ComboBox.GroupStyle>
-                </ComboBox>
+
+                            <ComboBox.GroupStyle>
+                                <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                            </ComboBox.GroupStyle>
+                        </ComboBox>
             </Grid>
         </DataTemplate>
 
@@ -517,7 +678,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="{Binding Label}" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                <ComboBox  Grid.Column="1"
+                <ComboBox Style="{StaticResource GroupedComboBox}"  Grid.Column="1"
                            ItemsSource="{Binding DataContext.SfxKeyOptions,
                                          RelativeSource={RelativeSource AncestorType=Window}}"
                            IsEditable="True"
@@ -672,6 +833,13 @@
                             <Style TargetType="CheckBox">
                                 <Setter Property="Visibility" Value="Visible"/>
                                 <Style.Triggers>
+                                    <!-- Hidden on a boolean comparison: True/False already
+                                         says both cases, and Negate on top of it is a second
+                                         way to say the same thing. "Negate: is false" is a
+                                         double negative nobody should have to unpick. -->
+                                    <DataTrigger Binding="{Binding VarValueIsBool}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
                                     <DataTrigger Binding="{Binding IsLocked}" Value="True">
                                         <Setter Property="Visibility" Value="Collapsed"/>
                                     </DataTrigger>
@@ -753,11 +921,6 @@
                                     </GroupStyle.HeaderTemplate>
                                 </GroupStyle>
                             </ComboBox.GroupStyle>
-                            <ComboBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <VirtualizingStackPanel/>
-                                </ItemsPanelTemplate>
-                            </ComboBox.ItemsPanel>
                         </ComboBox>
 
                         <TextBlock Text="When" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2"/>
@@ -827,8 +990,11 @@
                                   IsEditable="True"
                                   Text="{Binding GoOverlayLevel, UpdateSourceTrigger=PropertyChanged}"
                                   ToolTip="Which level the object lives in — only levels with authored GameObjects are listed. The Target dropdown follows this choice and stays disabled until one is chosen.">
+                            <ComboBox.GroupStyle>
+                                <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                            </ComboBox.GroupStyle>
                             <ComboBox.Style>
-                                <Style TargetType="ComboBox">
+                                <Style TargetType="ComboBox" BasedOn="{StaticResource GroupedComboBox}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsGoOverlayCategory}" Value="True">
@@ -845,8 +1011,11 @@
                                   IsEnabled="{Binding IsGoTargetEnabled}"
                                   Text="{Binding GoTarget, UpdateSourceTrigger=PropertyChanged}"
                                   ToolTip="Autocompletes from the selected Category; stays editable so any GO name/path works. An object that cannot be found reads as switched off.">
+                            <ComboBox.GroupStyle>
+                                <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                            </ComboBox.GroupStyle>
                             <ComboBox.Style>
-                                <Style TargetType="ComboBox">
+                                <Style TargetType="ComboBox" BasedOn="{StaticResource GroupedComboBox}">
                                     <!-- default: Direct Path → all pack-named GOs -->
                                     <Setter Property="ItemsSource"
                                             Value="{Binding DataContext.GameObjectNameOptions, RelativeSource={RelativeSource AncestorType=Window}}"/>
@@ -891,6 +1060,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="Source" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2"/>
@@ -899,28 +1069,38 @@
                                   SelectedItem="{Binding VarSource, UpdateSourceTrigger=PropertyChanged}"
                                   ToolTip="Pack = this pack's own variable; Vanilla = an existing 1.8E game variable."/>
 
-                        <TextBlock Text="Comparison" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2"/>
+                        <!-- Name before Comparison, so the rows read the way the
+                             condition does: "Pack > flag > is > true". Asking for
+                             the operator before naming what it operates on is a
+                             sentence out of order. -->
+                        <TextBlock Text="Name" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2"/>
                         <ComboBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,2"
-                                  ItemsSource="{x:Static vm:NodeConditionViewModel.VariableComparisons}"
-                                  SelectedItem="{Binding VarComparison, UpdateSourceTrigger=PropertyChanged}"/>
-
-                        <TextBlock Text="Name" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2"/>
-                        <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,2"
                                   IsEditable="True"
                                   Text="{Binding VarName, UpdateSourceTrigger=PropertyChanged}">
+                            <ComboBox.GroupStyle>
+                                <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                            </ComboBox.GroupStyle>
                             <ComboBox.Style>
-                                <Style TargetType="ComboBox">
+                                <!-- Based on the shared grouped style so this picker
+                                     scrolls like the rest; the trigger only swaps WHICH
+                                     grouped list it shows. -->
+                                <Style TargetType="ComboBox" BasedOn="{StaticResource GroupedComboBox}">
                                     <Setter Property="ItemsSource"
-                                            Value="{Binding DataContext.VariableNameOptions, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                            Value="{Binding DataContext.VariableNameOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsVanillaSource}" Value="True">
                                             <Setter Property="ItemsSource"
-                                                    Value="{Binding DataContext.VanillaGameVariableOptions, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                                    Value="{Binding DataContext.VanillaGameVariableOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </ComboBox.Style>
                         </ComboBox>
+
+                        <TextBlock Text="Comparison" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2"/>
+                        <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,2"
+                                  ItemsSource="{x:Static vm:NodeConditionViewModel.VariableComparisons}"
+                                  SelectedItem="{Binding VarComparison, UpdateSourceTrigger=PropertyChanged}"/>
 
                         <TextBlock Text="Value" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2">
                             <TextBlock.Style>
@@ -947,12 +1127,16 @@
                         </TextBox>
                         <!-- A Bool has exactly two values, and typing them is
                              where this goes wrong: True / TRUE / 1 / yes all
-                             look right and none of them match. -->
-                        <CheckBox Grid.Row="3" Grid.Column="1" Margin="0,0,0,2"
-                                  VerticalAlignment="Center" Content="is true"
-                                  IsChecked="{Binding VarValueBool}">
-                            <CheckBox.Style>
-                                <Style TargetType="CheckBox">
+                             look right and none of them match.
+                             Two buttons rather than one tick, because a tick
+                             says "is true" and says nothing at all about the
+                             other case - an unticked box reads as "not set"
+                             just as easily as "is false". Matches the radios
+                             the Set-variable action already uses. -->
+                        <StackPanel Grid.Row="3" Grid.Column="1" Margin="0,0,0,2"
+                                    Orientation="Horizontal" VerticalAlignment="Center">
+                            <StackPanel.Style>
+                                <Style TargetType="StackPanel">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding VarValueIsBool}" Value="True">
@@ -960,8 +1144,50 @@
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
-                            </CheckBox.Style>
-                        </CheckBox>
+                            </StackPanel.Style>
+                            <RadioButton Content="True" Margin="0,0,12,0" VerticalAlignment="Center"
+                                         IsChecked="{Binding VarValueBool, Mode=TwoWay}"
+                                         ToolTip="Passes while the variable is true."/>
+                            <RadioButton Content="False" VerticalAlignment="Center"
+                                         IsChecked="{Binding VarValueBool, Mode=TwoWay,
+                                                     Converter={StaticResource InverseBoolConverter}}"
+                                         ToolTip="Passes while the variable is false."/>
+                        </StackPanel>
+
+                        <!-- Which store a $name in the value reads from.
+                             Only meaningful when the value is text, because
+                             that is the only form a $name can be written in. -->
+                        <TextBlock Text="Compare to" Grid.Row="4" Grid.Column="0"
+                                   VerticalAlignment="Center" Margin="0,0,4,2">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding VarValueIsText}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <ComboBox Grid.Row="4" Grid.Column="1" Margin="0,0,0,2"
+                                  ItemsSource="{x:Static vm:NodeConditionViewModel.VariableSources}"
+                                  SelectedItem="{Binding VarValueSource, UpdateSourceTrigger=PropertyChanged}"
+                                  ToolTip="Which variables a $name in the value refers to. Pack = this pack's own; Vanilla = an existing 1.8E game variable. A plain value ignores this.">
+                            <ComboBox.GroupStyle>
+                                <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                            </ComboBox.GroupStyle>
+                            <ComboBox.Style>
+                                <Style TargetType="ComboBox" BasedOn="{StaticResource GroupedComboBox}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding VarValueIsText}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ComboBox.Style>
+                        </ComboBox>
                     </Grid>
                 </StackPanel>
             </Border>
@@ -1058,7 +1284,36 @@
                         <ComboBox Grid.Column="1"
                                   ItemsSource="{Binding DataContext.ActionTypes,
                                                 RelativeSource={RelativeSource AncestorType=Window}}"
-                                  SelectedItem="{Binding DisplayType, UpdateSourceTrigger=PropertyChanged}"/>
+                                  SelectedItem="{Binding DisplayType, UpdateSourceTrigger=PropertyChanged}">
+                            <!-- A vanilla step has no type to choose: it is the
+                                 game's own step, and offering the picker would
+                                 let one click turn it into something else. -->
+                            <ComboBox.GroupStyle>
+                                <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                            </ComboBox.GroupStyle>
+                            <ComboBox.Style>
+                                <Style TargetType="ComboBox" BasedOn="{StaticResource GroupedComboBox}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsVanillaStep}" Value="True">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ComboBox.Style>
+                        </ComboBox>
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" FontWeight="SemiBold"
+                                   Text="{Binding VanillaTypeName}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsVanillaStep}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
                         <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="4,0,0,0">
                             <Button Content="⧉" Width="22" Height="22" Padding="0"
                                     Command="{Binding CopyCommand}"
@@ -1068,6 +1323,48 @@
                                     ToolTip="Remove this action"/>
                         </StackPanel>
                     </Grid>
+                    <!-- A step the game does that this editor cannot express.
+                         Shown rather than hidden: an author who cannot see it
+                         cannot know it is there, and one who deletes the row
+                         above would be deleting something never shown to them.
+                         Read-only, because the parameters are Game Creator's
+                         and nothing here would honour a change to them. -->
+                    <Border Margin="0,3,0,0" Padding="6,4" CornerRadius="3"
+                            Background="#FFFFF7E8" BorderBrush="#FFE3B961" BorderThickness="1">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsVanillaStep}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <StackPanel>
+                            <TextBlock TextWrapping="Wrap" FontWeight="SemiBold"
+                                       Text="{Binding VanillaTitle}"/>
+                            <TextBlock TextWrapping="Wrap" Margin="0,2,0,0" Foreground="#FF7A5A12"
+                                       Text="Not available in ModForge — this step is the game's own and keeps working in game. It cannot be edited here, only left alone or removed."/>
+                            <ItemsControl ItemsSource="{Binding VanillaDetails}" Margin="0,4,0,0">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,0,0,1">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="120"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Foreground="#FF7A5A12"
+                                                       Text="{Binding Name}"/>
+                                            <TextBlock Grid.Column="1" TextWrapping="Wrap"
+                                                       Text="{Binding Value}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+
                     <!-- Category + Target for GameObject-targeting actions (Fade / Move / Spin).
                          Additive — the action's own params (alpha, x/y, speed…) still show in
                          ParamRows below. The Target list follows the Category, and Level Overlay
@@ -1127,8 +1424,11 @@
                                   IsEditable="True"
                                   Text="{Binding GoOverlayLevel, UpdateSourceTrigger=PropertyChanged}"
                                   ToolTip="Which level the GameObject lives in — only levels with authored GameObjects are listed. The Target dropdown stays disabled until one is chosen.">
+                            <ComboBox.GroupStyle>
+                                <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                            </ComboBox.GroupStyle>
                             <ComboBox.Style>
-                                <Style TargetType="ComboBox">
+                                <Style TargetType="ComboBox" BasedOn="{StaticResource GroupedComboBox}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsGoOverlayCategory}" Value="True">
@@ -1147,8 +1447,11 @@
                                   IsEditable="True"
                                   IsEnabled="{Binding IsGoOverlayTargetEnabled}"
                                   Text="{Binding GoTarget, UpdateSourceTrigger=PropertyChanged}">
+                            <ComboBox.GroupStyle>
+                                <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                            </ComboBox.GroupStyle>
                             <ComboBox.Style>
-                                <Style TargetType="ComboBox">
+                                <Style TargetType="ComboBox" BasedOn="{StaticResource GroupedComboBox}">
                                     <Setter Property="ItemsSource"
                                             Value="{Binding DataContext.GameObjectNameOptions, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                     <Style.Triggers>
@@ -1161,7 +1464,7 @@
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding GoCategory}" Value="Places">
                                             <Setter Property="ItemsSource"
-                                                    Value="{Binding DataContext.LevelOptions, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                                    Value="{Binding DataContext.LevelOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                             <Setter Property="DisplayMemberPath" Value="Token"/>
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -1218,6 +1521,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
                         <!-- Source (Pack/Vanilla) — not used by Random-from-list. -->
@@ -1249,14 +1553,17 @@
                         <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,2"
                                   IsEditable="True"
                                   Text="{Binding VarName, UpdateSourceTrigger=PropertyChanged}">
+                            <ComboBox.GroupStyle>
+                                <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                            </ComboBox.GroupStyle>
                             <ComboBox.Style>
-                                <Style TargetType="ComboBox">
+                                <Style TargetType="ComboBox" BasedOn="{StaticResource GroupedComboBox}">
                                     <Setter Property="ItemsSource"
-                                            Value="{Binding DataContext.VariableNameOptions, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                            Value="{Binding DataContext.VariableNameOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsVanillaSource}" Value="True">
                                             <Setter Property="ItemsSource"
-                                                    Value="{Binding DataContext.VanillaGameVariableOptions, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                                    Value="{Binding DataContext.VanillaGameVariableOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -1354,6 +1661,19 @@
                                  Text="{Binding VarFallback, UpdateSourceTrigger=PropertyChanged}"
                                  Visibility="{Binding IsPickRandomOnly, Converter={StaticResource BoolToVisibility}}"
                                  ToolTip="Value written to Target when 'From list' is empty or everything was excluded — an overflow destination with unlimited capacity. '$name' reads a variable. Blank clears Target."/>
+
+                        <!-- Where a $name in the value is READ from, as against
+                             Source above, which says where it is WRITTEN. The
+                             two are independent: the game's own steps read one
+                             vanilla global and write another. -->
+                        <TextBlock Text="Read from" Grid.Row="7" Grid.Column="0"
+                                   VerticalAlignment="Center" Margin="0,0,4,2"
+                                   Visibility="{Binding IsRandomFromList, Converter={StaticResource InverseBoolToVisibility}}"/>
+                        <ComboBox Grid.Row="7" Grid.Column="1" Margin="0,0,0,2"
+                                  ItemsSource="{x:Static vm:NodeActionViewModel.VariableSources}"
+                                  SelectedItem="{Binding VarValueSource, UpdateSourceTrigger=PropertyChanged}"
+                                  Visibility="{Binding IsRandomFromList, Converter={StaticResource InverseBoolToVisibility}}"
+                                  ToolTip="Which variables a $name in the value refers to. Pack = this pack's own; Vanilla = an existing 1.8E game variable. A plain value ignores this."/>
                     </Grid>
                     <!-- Unified Set-Active editor (SetGameObjectActive + ActivateScene folded
                          into one row). A Category dropdown swaps the Target autocomplete:
@@ -1424,8 +1744,11 @@
                                   IsEditable="True"
                                   Text="{Binding OverlayLevel, UpdateSourceTrigger=PropertyChanged}"
                                   ToolTip="Which level the GameObject lives in — only levels with authored GameObjects are listed. Set it to the level you're transitioning INTO; the Target dropdown below follows this choice and stays disabled until one is chosen.">
+                            <ComboBox.GroupStyle>
+                                <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                            </ComboBox.GroupStyle>
                             <ComboBox.Style>
-                                <Style TargetType="ComboBox">
+                                <Style TargetType="ComboBox" BasedOn="{StaticResource GroupedComboBox}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Category}" Value="GameObjects">
@@ -1445,8 +1768,11 @@
                                   IsEnabled="{Binding IsOverlayTargetEnabled}"
                                   Text="{Binding Target, UpdateSourceTrigger=PropertyChanged}"
                                   ToolTip="Autocompletes from the selected Category; stays editable so any GO name/path works.">
+                            <ComboBox.GroupStyle>
+                                <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                            </ComboBox.GroupStyle>
                             <ComboBox.Style>
-                                <Style TargetType="ComboBox">
+                                <Style TargetType="ComboBox" BasedOn="{StaticResource GroupedComboBox}">
                                     <!-- default: Direct Path → all pack-named GOs -->
                                     <Setter Property="ItemsSource"
                                             Value="{Binding DataContext.GameObjectNameOptions, RelativeSource={RelativeSource AncestorType=Window}}"/>
@@ -1463,6 +1789,18 @@
                                             <Setter Property="ItemsSource"
                                                     Value="{Binding DataContext.SceneKeyOptions, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                         </DataTrigger>
+                                        <!-- A screen of the pack's own, by id -
+                                             which is what makes one screen open
+                                             another. No DisplayMemberPath, so the
+                                             list reads "Name (id)" while the id
+                                             itself is what lands in the box; the
+                                             box stays editable because a target
+                                             can also be a path INSIDE a screen,
+                                             "shop/Panel/Close". -->
+                                        <DataTrigger Binding="{Binding Category}" Value="UI">
+                                            <Setter Property="ItemsSource"
+                                                    Value="{Binding DataContext.UiIdOptions, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                        </DataTrigger>
                                         <!-- A whole level, by place token. The level's own
                                              GameObject holds the Base sprite's SpriteRenderer,
                                              so this is what repaints a place; the Layer picker
@@ -1471,7 +1809,7 @@
                                              what lands in the param. -->
                                         <DataTrigger Binding="{Binding Category}" Value="Places">
                                             <Setter Property="ItemsSource"
-                                                    Value="{Binding DataContext.LevelOptions, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                                    Value="{Binding DataContext.LevelOptionsGrouped, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                             <Setter Property="DisplayMemberPath" Value="Token"/>
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -1486,7 +1824,7 @@
                              NodeActionViewModel.PlaceLayerShown for the translation. -->
                         <TextBlock Text="Layer" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2"
                                    Visibility="{Binding ShowsPlaceLayer, Converter={StaticResource BoolToVisibility}}"/>
-                        <ComboBox Grid.Row="3" Grid.Column="1" Margin="0,0,0,2"
+                        <ComboBox Style="{StaticResource GroupedComboBox}" Grid.Row="3" Grid.Column="1" Margin="0,0,0,2"
                                   ItemsSource="{x:Static vm:NodeActionViewModel.PlaceLayerDisplays}"
                                   SelectedItem="{Binding PlaceLayerShown, UpdateSourceTrigger=PropertyChanged}"
                                   Visibility="{Binding ShowsPlaceLayer, Converter={StaticResource BoolToVisibility}}"
@@ -1925,7 +2263,7 @@
                                                 <DockPanel>
                                                     <Button DockPanel.Dock="Right" Content="−" Width="22" Padding="0"
                                                             Command="{Binding RemoveCommand}" ToolTip="Remove this component"/>
-                                                    <ComboBox ItemsSource="{Binding ComponentTypes}"
+                                                    <ComboBox Style="{StaticResource GroupedComboBox}" ItemsSource="{Binding ComponentTypes}"
                                                               SelectedItem="{Binding Type}"/>
                                                 </DockPanel>
 
@@ -2232,6 +2570,15 @@
                 <MenuItem Header="Export pack _as…" Command="{Binding ExportPackAsCommand}" InputGestureText="Ctrl+Shift+E"
                           ToolTip="Save and export to a chosen .smspack file; that path becomes the one-click Export target."/>
                 <Separator/>
+                <!-- Publish is not a bigger Export. Export makes a pack file to
+                     test with and touches nothing else; Publish makes the
+                     release - it validates, moves the version, and packages the
+                     Mods folder so a player extracts it into the game and is
+                     finished. Separated so the two are not reached for
+                     interchangeably. -->
+                <MenuItem Header="_Publish for players…" Command="{Binding PublishPackCommand}"
+                          ToolTip="Package this pack as a release: validates it, moves the version, and writes a zip a player extracts straight into the game folder."/>
+                <Separator/>
                 <MenuItem Header="_Validate"      Command="{Binding ValidateCommand}"   InputGestureText="F5"/>
             </MenuItem>
             <MenuItem Header="_Edit">
@@ -2270,6 +2617,17 @@
                 <MenuItem Header="_Spell-check node text" IsCheckable="True"
                           IsChecked="{Binding SpellCheckNodeText, Mode=TwoWay}"
                           ToolTip="Underline misspellings using Windows' own US-English spell checker — both in a node's Text field and down the node list, so mistakes are visible while scanning. Right-click a squiggle in the Text field for suggestions, to ignore it for this session, or to add the word to your Windows dictionary (the same list Edge and Office use). Turning this off also makes the node list lighter to scroll on very long dialogues. Your choice is remembered between sessions."/>
+                <Separator/>
+                <MenuItem Header="_Version the pack automatically" IsCheckable="True"
+                          IsChecked="{Binding AutoVersion, Mode=TwoWay}"
+                          ToolTip="Move the pack's version on every save: up a minor when the pack gains something, up a patch when something it already had changes. The major number is never moved for you — that one says &quot;this is a new version of the pack&quot;, which is yours to decide. Off means the version only ever changes when you type it."/>
+                <MenuItem Header="Warn when the version goes _backwards" IsCheckable="True"
+                          IsChecked="{Binding WarnOnLowerVersion, Mode=TwoWay}"
+                          ToolTip="Ask before saving a version lower than the one already on disk. Going backwards is nearly always a typo, and it makes a new release read as older than the copy a player already has."/>
+                <MenuItem Header="Warn about _large exports" IsCheckable="True"
+                          IsChecked="{Binding WarnOnLargeExport, Mode=TwoWay}"
+                          ToolTip="Ask before exporting a pack folder over 150 MB or 1600 files, in case it has swept up something that is not part of the pack. Unticking clears the per-pack &quot;don't warn again&quot; you may have set from the prompt itself."/>
+                <Separator/>
                 <MenuItem Header="Add pack _names to Windows dictionary…"
                           Click="AddPackNamesToDictionary_Click"
                           ToolTip="Put every character, actor, place and NPC name this pack invents into your Windows dictionary in one go, so they stop being flagged as misspellings. Shows you the list first."/>
@@ -2310,8 +2668,8 @@
                  what pins it to the far edge rather than trailing the count. -->
             <StatusBarItem DockPanel.Dock="Right">
                 <TextBlock FontWeight="SemiBold" Margin="0,0,4,0"
-                           Text="ModForge is free — get it from the Starmaker Story Discord. If you paid for it, you were scammed."
-                           ToolTip="ModForge is free software and is only ever distributed through the Starmaker Story Discord server. Nobody is authorised to sell it, and there is no paid version, no premium build and no early access. If you paid anyone for this program, you were scammed — the same copy, and every update, is free on the Discord."/>
+                           Text="ModForge is free — get it from the Arvus Games Discord. If you paid for it, you were scammed."
+                           ToolTip="ModForge is free software and is only ever distributed through the Arvus Games Discord server. Nobody is authorised to sell it, and there is no paid version, no premium build and no early access. If you paid anyone for this program, you were scammed — the same copy, and every update, is free on the Discord."/>
             </StatusBarItem>
             <TextBlock>
                 <Run Text="{Binding Issues.Count, Mode=OneWay}"/>
@@ -2339,6 +2697,30 @@
 
                     <!-- RIGHT: validation issues (moved from the Busts tab) -->
                     <DockPanel Grid.Column="2">
+                        <!-- The pack's own version: what a player sees beside its
+                             name in the main menu. Only shown when there is a pack
+                             to number - an empty editor has nothing to version. -->
+                        <GroupBox DockPanel.Dock="Top" Header="Pack version" Margin="0,0,0,6"
+                                  Visibility="{Binding HasPack, Converter={StaticResource BoolToVisibility}}">
+                            <StackPanel>
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Left" Text="Version:" Width="60"
+                                               VerticalAlignment="Center"/>
+                                    <TextBox Text="{Binding PackVersionText, UpdateSourceTrigger=PropertyChanged}"
+                                             VerticalAlignment="Center"
+                                             ToolTip="Three numbers: major.minor.patch. Major is yours to move — it says &quot;this is a new version of the pack&quot;. Minor goes up when the pack gains something, patch when something it already had changes."/>
+                                </DockPanel>
+                                <TextBlock Foreground="{DynamicResource Theme.Danger}" FontSize="10"
+                                           Margin="60,2,0,0" TextWrapping="Wrap"
+                                           Text="Not a version — three numbers separated by dots, like 1.2.0."
+                                           Visibility="{Binding PackVersionIsValid, Converter={StaticResource InverseBoolToVisibility}}"/>
+                                <TextBlock Foreground="Gray" FontSize="10" Margin="60,2,0,0"
+                                           TextWrapping="Wrap"
+                                           Text="{Binding AutoVersionNote}"
+                                           Visibility="{Binding AutoVersionOn, Converter={StaticResource BoolToVisibility}}"/>
+                            </StackPanel>
+                        </GroupBox>
+
                         <DockPanel DockPanel.Dock="Top" Margin="0,0,0,6">
                             <Button view:TutorialAnchor.Id="btn:validate" DockPanel.Dock="Right" Content="Validate (F5)" Padding="10,3"
                                     Command="{Binding ValidateCommand}"
@@ -2729,8 +3111,6 @@
                                  Loaded="CharacterToolBar_Loaded">
                             <Button view:TutorialAnchor.Id="btn:addCharacter" Content="+ Character" Command="{Binding AddCharacterCommand}"
                                     ToolTip="A character this pack draws the bust for."/>
-                            <Button Content="+ Vanilla" Command="{Binding AddVanillaCharacterCommand}"
-                                    ToolTip="A character that borrows one of the game's own busts — pick which below. No art needed."/>
                             <Button Content="+ Voice" Command="{Binding AddVoiceCharacterCommand}"
                                     ToolTip="A speaking part with no bust at all, like John Dick."/>
                             <Button Content="+ Outfit"    Command="{Binding AddOutfitCommand}"
@@ -2749,12 +3129,59 @@
                                   SelectedItemChanged="TreeView_SelectedItemChanged">
                             <TreeView.GroupStyle>
                                 <GroupStyle>
-                                    <GroupStyle.HeaderTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Margin="2,8,0,2" FontWeight="Bold" Foreground="Gray"
-                                                       Text="{Binding Name, Converter={x:Static conv:BustSourceHeaderConverter.Instance}}"/>
-                                        </DataTemplate>
-                                    </GroupStyle.HeaderTemplate>
+                                    <!--
+                                        The expander lives in the CONTAINER style, not the
+                                        header one. A header template draws only the heading;
+                                        the group's rows are presented by the GroupItem
+                                        itself, so an ItemsPresenter put in the header had
+                                        nothing to present and the arrow did nothing when
+                                        clicked. Retemplating the GroupItem is what puts the
+                                        heading and its rows inside one expander.
+                                    -->
+                                    <GroupStyle.ContainerStyle>
+                                        <Style TargetType="GroupItem">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="GroupItem">
+                                                        <!-- Through Tag, because a GroupItem has
+                                                             no IsExpanded of its own to bind to.
+                                                             TwoWay so a heading the author opens
+                                                             stays open: the binding writes a local
+                                                             value, which outranks the style below
+                                                             until the pack is loaded afresh. -->
+                                                        <Expander IsExpanded="{Binding Tag,
+                                                                      RelativeSource={RelativeSource TemplatedParent},
+                                                                      Mode=TwoWay}"
+                                                                  Margin="0,6,0,0">
+                                                            <Expander.Header>
+                                                                <TextBlock FontWeight="Bold" Foreground="Gray">
+                                                                    <Run Text="{Binding Name, Mode=OneWay,
+                                                                         Converter={x:Static conv:BustSourceHeaderConverter.Instance}}"/>
+                                                                    <Run Text="{Binding ItemCount, Mode=OneWay, StringFormat=({0})}"
+                                                                         FontWeight="Normal"/>
+                                                                </TextBlock>
+                                                            </Expander.Header>
+                                                            <ItemsPresenter/>
+                                                        </Expander>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+
+                                            <!--
+                                                Open by default, except the game's own cast.
+                                                That one heading holds 119 characters an
+                                                author did not write and mostly is not
+                                                looking for, so a pack opens showing the
+                                                dozen that are theirs.
+                                            -->
+                                            <Setter Property="Tag" Value="True"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Name}" Value="Vanilla">
+                                                    <Setter Property="Tag" Value="False"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </GroupStyle.ContainerStyle>
                                 </GroupStyle>
                             </TreeView.GroupStyle>
                             <TreeView.ItemContainerStyle>
@@ -2790,7 +3217,8 @@
 
                     <!-- MIDDLE: outfit editor -->
                     <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto"
-                                  DataContext="{Binding SelectedOutfit}">
+                                  DataContext="{Binding SelectedOutfit}"
+                                  Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
                         <StackPanel Margin="8">
                             <!-- The character owning this outfit. Bound through the
                                  window because this pane's DataContext is the outfit;
@@ -3234,6 +3662,13 @@
                                             ToolTip="Preview-only: how far the bust bobs, in preview pixels. Match it to the game by eye."/>
                                     <TextBlock Text="{Binding ElementName=BreathingDepth, Path=Value, StringFormat=F1}"
                                                Foreground="Gray" FontSize="10" Margin="4,0,0,0" VerticalAlignment="Center"/>
+                                    <!-- Back to 4. A calibration slider is one an author
+                                         moves to see what it does, and getting a fiddly
+                                         value back by dragging is guesswork. -->
+                                    <Button Content="↺" Click="ResetBreathingDepth_Click"
+                                            Width="18" Height="18" Padding="0" Margin="4,0,0,0"
+                                            FontSize="10" VerticalAlignment="Center"
+                                            ToolTip="Put the depth back to its default (4)."/>
                                 </StackPanel>
                             </StackPanel>
                             <StackPanel Grid.Column="1">
@@ -3302,7 +3737,8 @@
                     <GridSplitter Grid.Column="1" Width="4" Background="LightGray" HorizontalAlignment="Stretch"/>
 
                     <ScrollViewer view:TutorialAnchor.Id="panel:npcDetail" Grid.Column="2" VerticalScrollBarVisibility="Auto"
-                                  DataContext="{Binding SelectedNpc}">
+                                  DataContext="{Binding SelectedNpc}"
+                                  Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
                         <StackPanel Margin="8">
                             <GroupBox Header="Identity">
                                 <Grid>
@@ -3521,7 +3957,8 @@
 
                     <!-- RIGHT: live preview. Fixed column (no splitter), same as
                          the Busts tab — sized to the 600px NpcPreview. -->
-                    <DockPanel Grid.Column="3" Margin="8" DataContext="{Binding SelectedNpc}">
+                    <DockPanel Grid.Column="3" Margin="8" DataContext="{Binding SelectedNpc}"
+                    Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
                         <TextBlock DockPanel.Dock="Top" Text="Preview (live jiggle + shadow + blink)"
                                    FontWeight="Bold" Margin="0,0,0,4"/>
                         <Border DockPanel.Dock="Top" Background="#222" Padding="4" ClipToBounds="True"
@@ -4077,7 +4514,7 @@
 
                                             <!-- Target -->
                                             <TextBlock Text="Target place:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-                                            <ComboBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                            <ComboBox Style="{StaticResource GroupedComboBox}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
                                                       ItemsSource="{Binding DataContext.AllTargetOptions,
                                                                     RelativeSource={RelativeSource AncestorType=Window}}"
                                                       SelectedValuePath="Token"
@@ -4154,7 +4591,13 @@
                     </Grid.ColumnDefinitions>
 
                     <!-- LEFT: dialogues folder tree (cosmetic grouping; drag to organize). -->
-                    <DockPanel view:TutorialAnchor.Id="panel:dialogueList" Grid.Column="0">
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="3*" MinHeight="120"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="2*" MinHeight="90"/>
+                        </Grid.RowDefinitions>
+                        <DockPanel view:TutorialAnchor.Id="panel:dialogueList" Grid.Row="0">
                         <TextBlock DockPanel.Dock="Top" Text="Dialogues"
                                    FontWeight="Bold" Margin="6,4,0,2"/>
                         <ToolBar DockPanel.Dock="Top">
@@ -4225,6 +4668,9 @@
                             <TreeView.ItemContainerStyle>
                                 <Style TargetType="TreeViewItem" BasedOn="{StaticResource {x:Type TreeViewItem}}">
                                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                                    <!-- Two-way for the same reason as the other trees: so
+                                         choosing a vanilla conversation can let this tree go. -->
+                                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
                                     <Style.Triggers>
                                         <!-- Ctrl/Shift multi-selection ride-alongs. Semi-transparent
                                              so it reads on light and dark themes alike. -->
@@ -4251,7 +4697,43 @@
                                 </DataTemplate>
                             </TreeView.Resources>
                         </TreeView>
-                    </DockPanel>
+                        </DockPanel>
+
+                        <GridSplitter Grid.Row="1" Height="4" Background="LightGray"
+                                      HorizontalAlignment="Stretch"/>
+
+                        <!-- Changes to conversations the game already has.
+                             Listed apart from the pack's own because they are a
+                             different kind of thing: these are the game's, found
+                             by where they sit in the scene, and folders and
+                             renaming mean nothing to them. -->
+                        <DockPanel Grid.Row="2">
+                            <TextBlock DockPanel.Dock="Top" Text="Vanilla dialogues"
+                                       FontWeight="Bold" Margin="6,4,0,2"
+                                       ToolTip="Changes to conversations the game already has. Edit the lines that are there; only your differences are saved."/>
+                            <ToolBar DockPanel.Dock="Top">
+                                <Button Content="+ Vanilla" Command="{Binding AddVanillaDialogueCommand}"
+                                        ToolTip="Pick one of the game's conversations to change."/>
+                                <Button Content="− Remove" Command="{Binding RemoveVanillaDialogueCommand}"
+                                        ToolTip="Drop this change. The game's conversation itself is untouched."/>
+                            </ToolBar>
+                            <ListBox ItemsSource="{Binding VanillaDialogues}"
+                                     SelectedItem="{Binding SelectedVanillaDialogue, Mode=TwoWay}"
+                                     HorizontalContentAlignment="Stretch">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type vm:DialogueViewModel}">
+                                        <DockPanel ToolTip="{Binding ChangeSummary}">
+                                            <TextBlock DockPanel.Dock="Right" Text="{Binding ChangeSummary}"
+                                                       Foreground="Gray" FontSize="10"
+                                                       VerticalAlignment="Center" Margin="4,0,0,0"/>
+                                            <TextBlock Text="{Binding DisplayName}"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </DockPanel>
+                    </Grid>
                     <GridSplitter Grid.Column="1" Width="4" Background="LightGray" HorizontalAlignment="Stretch"/>
 
                     <!-- MIDDLE: selected dialogue (properties + node list) -->
@@ -4262,8 +4744,62 @@
                          ellipsis at the real column edge (and they ignore the column widening). -->
                     <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto"
                                   HorizontalScrollBarVisibility="Disabled"
-                                  DataContext="{Binding SelectedDialogue}">
+                                  DataContext="{Binding SelectedDialogue}"
+                                  Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
                         <StackPanel Margin="8">
+                            <!-- Only for a change to one of the game's own
+                                 conversations. Collapsed entirely otherwise, so
+                                 a dialogue of the pack's own is never asked a
+                                 question that has no answer. -->
+                            <GroupBox Header="Vanilla conversation">
+                                <GroupBox.Style>
+                                    <Style TargetType="GroupBox">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ShowsSourcePicker}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </GroupBox.Style>
+                                <StackPanel>
+                                    <DockPanel Margin="0,0,0,4">
+                                        <TextBlock Text="Conversation:" Width="120" VerticalAlignment="Center"/>
+                                        <ComboBox ItemsSource="{Binding DataContext.AvailableVanillaDialogues,
+                                                                RelativeSource={RelativeSource AncestorType=Window}}"
+                                                  SelectedItem="{Binding VanillaSource, UpdateSourceTrigger=PropertyChanged}"
+                                                  ToolTip="Which of the game's conversations to change. Picking one fills every line in so you can read it; only what you change is saved.">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel>
+                                                        <TextBlock Text="{Binding Id}"/>
+                                                        <TextBlock Text="{Binding Summary}" Foreground="Gray" FontSize="11"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </DockPanel>
+
+                                    <DockPanel Margin="0,0,0,4">
+                                        <TextBlock Text="Changes:" Width="120" VerticalAlignment="Center"/>
+                                        <Button DockPanel.Dock="Right" Content="Reset all" Padding="8,1"
+                                                Click="ResetVanillaDialogue_Click"
+                                                ToolTip="Put the whole conversation back the way the game has it, including any lines you removed."/>
+                                        <TextBlock Text="{Binding ChangeSummary}" VerticalAlignment="Center"
+                                                   Foreground="Gray"/>
+                                    </DockPanel>
+
+                                    <!-- The room's gate, read-only. It decides whether this
+                                         conversation happens at all, and it belongs to the room
+                                         rather than to the conversation - so it is worth reading
+                                         beside the lines, and is not the pack's to change. -->
+                                    <TextBlock Text="The game plays this when:" Margin="0,4,0,2"
+                                               Foreground="Gray"/>
+                                    <ItemsControl ItemsSource="{Binding VanillaGates}" Margin="12,0,0,0"
+                                                  ItemTemplateSelector="{StaticResource ConditionTemplateSelector}"
+                                                  IsEnabled="False"/>
+                                </StackPanel>
+                            </GroupBox>
                             <GroupBox Header="Identity">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -4282,7 +4818,31 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Display name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox ToolTip="What this dialogue is called in the editor&apos;s own lists. The only name you need to write — the runtime name beside it follows along until you set one yourself."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
+                                    <!-- Read-only for a change to one of the game's own
+                                         conversations: the name is how it is found in the
+                                         scene, so it is the game's rather than the pack's.
+                                         Greyed and unbordered when so, matching the runtime
+                                         name below - a box that looks typeable and silently
+                                         is not reads as broken. -->
+                                    <TextBox Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}"
+                                             Grid.Row="0" Grid.Column="1"
+                                             IsReadOnly="{Binding NameIsReadOnly}"
+                                             IsReadOnlyCaretVisible="False"
+                                             ToolTip="What this dialogue is called in the editor&apos;s own lists. The only name you need to write — the runtime name beside it follows along until you set one yourself.">
+                                        <TextBox.Style>
+                                            <Style TargetType="TextBox">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding NameIsReadOnly}" Value="True">
+                                                        <Setter Property="BorderThickness" Value="0"/>
+                                                        <Setter Property="Background" Value="Transparent"/>
+                                                        <Setter Property="Foreground" Value="Gray"/>
+                                                        <Setter Property="Cursor" Value="Arrow"/>
+                                                        <Setter Property="ToolTip" Value="This conversation is the game's, and so is its name — it is how the game finds it in the scene."/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBox.Style>
+                                    </TextBox>
                                     <TextBlock Text="Runtime name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
                                                ToolTip="Stable identifier — what jumps, logs and other packs reference this dialogue by. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established dialogue is never renamed underneath whatever already points at it."/>
                                     <!-- Read-only: the runtime name is written from the display name, so
@@ -4438,6 +4998,70 @@
                                                      remaining width and rescales with the column, rather than
                                                      being laid out at its natural width and overrunning. -->
                                                 <DockPanel Margin="{Binding IndentMargin}">
+                                                    <!-- Changed-from-the-game marker, and the way back.
+                                                         Only on a change to one of the game's own
+                                                         conversations, and only on the lines that differ:
+                                                         an author looking at 118 lines needs to see the
+                                                         three they touched. -->
+                                                    <!-- One field at a time, listed because only the
+                                                         changed ones are offered: thirteen buttons,
+                                                         twelve of them greyed, answers "what did I
+                                                         change here" worse than a short list of what
+                                                         did. -->
+                                                    <ItemsControl DockPanel.Dock="Right"
+                                                                  ItemsSource="{Binding ResettableFields}"
+                                                                  Margin="2,0,0,0">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <StackPanel Orientation="Horizontal"/>
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Button Content="{Binding Label}" FontSize="9"
+                                                                        Padding="4,0" Margin="2,0,0,0"
+                                                                        Command="{Binding Reset}"
+                                                                        ToolTip="{Binding Label, StringFormat='Put this line''s {0} back the way the game has it'}"/>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                    <Button DockPanel.Dock="Right" Content="↺" Width="18" Padding="0"
+                                                            Margin="2,0,0,0" FontSize="11"
+                                                            Command="{Binding ResetToVanillaCommand}"
+                                                            ToolTip="{Binding ResetTooltip}">
+                                                        <Button.Style>
+                                                            <Style TargetType="Button">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsChangedFromVanilla}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Button.Style>
+                                                    </Button>
+                                                    <TextBlock DockPanel.Dock="Left" Text="●" Width="10"
+                                                               FontSize="10" VerticalAlignment="Center"
+                                                               Foreground="{DynamicResource Theme.Accent}"
+                                                               ToolTip="{Binding ChangedFieldsText}">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="Visibility" Value="Hidden"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsChangedFromVanilla}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                                    </DataTrigger>
+                                                                    <!-- Hidden rather than collapsed above, so
+                                                                         the lines stay aligned whether or not
+                                                                         any of them is marked; gone entirely
+                                                                         for a conversation of the pack's own. -->
+                                                                    <DataTrigger Binding="{Binding IsVanillaLine}" Value="False">
+                                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
                                                     <!-- Kind glyph: ▸ Text, ⇄ Choice, ? Random, ◆ answer (child of a Choice). -->
                                                     <TextBlock DockPanel.Dock="Left" Text="{Binding KindGlyph}" Width="14"
                                                                FontWeight="Bold" TextAlignment="Center"/>
@@ -4501,7 +5125,8 @@
 
                     <!-- RIGHT: selected node editor -->
                     <ScrollViewer Grid.Column="4" VerticalScrollBarVisibility="Auto"
-                                  DataContext="{Binding SelectedNode}">
+                                  DataContext="{Binding SelectedNode}"
+                                  Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
                         <StackPanel Margin="8">
                             <!-- Live preview of what the player will see during this node:
                                  derives the bust from the selected actor's default key
@@ -4540,8 +5165,17 @@
                                     <ComboBox ToolTip="Text plays a line. Choice offers this node&apos;s children and lets the player pick one. Random picks one of them itself." view:TutorialAnchor.Id="field:nodeKind" Grid.Row="1" Grid.Column="1"
                                               ItemsSource="{Binding DataContext.NodeKinds,
                                                             RelativeSource={RelativeSource AncestorType=Window}}"
+                                              Visibility="{Binding IsChoiceChild, Converter={StaticResource InverseBoolToVisibility}}"
                                               SelectedItem="{Binding Kind, UpdateSourceTrigger=PropertyChanged}"/>
-                                    <TextBlock Text="Actor:"       Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
+                                    <!-- What an option IS, rather than a kind to pick. Its role comes
+                                         from its parent being a Choice, so a dropdown here would offer
+                                         changes that do not apply. -->
+                                    <TextBlock Text="Choice Option" Grid.Row="1" Grid.Column="1"
+                                               VerticalAlignment="Center" Foreground="Gray" FontStyle="Italic"
+                                               ToolTip="This node is one of a Choice's options — the button a player picks. Its kind is decided by its parent."
+                                               Visibility="{Binding IsChoiceChild, Converter={StaticResource BoolToVisibility}}"/>
+                                    <TextBlock Text="Actor:"       Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"
+                                               Visibility="{Binding DataContext.SelectedNodeShowsSpeaker, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"/>
                                     <!-- Editable autocomplete: bind ONLY Text (not SelectedItem). Binding
                                          both to the same property makes SelectedItem null-out and flush an
                                          empty value back to the node being navigated away from when its
@@ -4550,28 +5184,30 @@
                                               ItemsSource="{Binding DataContext.ActorOptions,
                                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                               IsEditable="True"
+                                              Visibility="{Binding DataContext.SelectedNodeShowsSpeaker, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"
                                               Text="{Binding Actor, UpdateSourceTrigger=PropertyChanged}"/>
-                                    <!-- Expression and Outfit are hidden while the player is speaking: the
-                                         player's bust belongs to the game, so a pack has no expressions or
-                                         outfits to offer and both pickers would stand there empty. -->
+                                    <!-- Speaker, expression and outfit are hidden for the two nodes
+                                         that have no speaker worth asking about: the player, whose bust
+                                         belongs to the game, and an option on a Choice, which is a button
+                                         rather than a line. See SelectedNodeShowsSpeaker. -->
                                     <TextBlock Text="Expression:"  Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"
-                                               Visibility="{Binding DataContext.SelectedNodeActorIsPlayer, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource InverseBoolToVisibility}}"/>
+                                               Visibility="{Binding DataContext.SelectedNodeShowsSpeaker, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"/>
                                     <ComboBox ToolTip="Which expression the speaker wears from this node onward." view:IssueTarget.Field="expression" Grid.Row="3" Grid.Column="1"
                                               ItemsSource="{Binding DataContext.SelectedNodeExpressionOptions,
                                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                               IsEditable="True"
-                                              Visibility="{Binding DataContext.SelectedNodeActorIsPlayer, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource InverseBoolToVisibility}}"
+                                              Visibility="{Binding DataContext.SelectedNodeShowsSpeaker, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"
                                               Text="{Binding Expression, UpdateSourceTrigger=PropertyChanged}"/>
                                     <!-- Outfit: optional per-node bust switch. The picker lists the
                                          speaking actor's authored outfits; empty keeps the current bust.
                                          A $varName picks the outfit dynamically from a pack variable. -->
                                     <TextBlock Text="Outfit:"      Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"
-                                               Visibility="{Binding DataContext.SelectedNodeActorIsPlayer, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource InverseBoolToVisibility}}"/>
+                                               Visibility="{Binding DataContext.SelectedNodeShowsSpeaker, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"/>
                                     <ComboBox Grid.Row="4" Grid.Column="1"
                                               ItemsSource="{Binding DataContext.SelectedNodeOutfitOptions,
                                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                               IsEditable="True"
-                                              Visibility="{Binding DataContext.SelectedNodeActorIsPlayer, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource InverseBoolToVisibility}}"
+                                              Visibility="{Binding DataContext.SelectedNodeShowsSpeaker, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"
                                               Text="{Binding Outfit, UpdateSourceTrigger=PropertyChanged}"
                                               ToolTip="Switch the actor to one of their outfits for this node onward. Pick an outfit, or type $variableName to use the outfit named by a pack variable's current value (so this node chooses the outfit dynamically). Leave blank to keep the actor's current bust."/>
                                     <TextBlock Text="Text:"        Grid.Row="5" Grid.Column="0" VerticalAlignment="Top" Margin="0,4,0,0"/>
@@ -4782,7 +5418,8 @@
                     <GridSplitter Grid.Column="1" Width="4" Background="LightGray" HorizontalAlignment="Stretch"/>
 
                     <ScrollViewer view:TutorialAnchor.Id="panel:sceneDetail" Grid.Column="2" VerticalScrollBarVisibility="Auto"
-                                  DataContext="{Binding SelectedScene}">
+                                  DataContext="{Binding SelectedScene}"
+                                  Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
                         <StackPanel Margin="8">
                             <!-- ── Preview ── composites scene image + frame, same z-order as runtime -->
                             <GroupBox Header="Preview">
@@ -4820,17 +5457,64 @@
                             </GroupBox>
 
                             <GroupBox Header="Scene image (relative to pack root)">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="140"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="Sprite path:" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <ctl:PathPickerBox PathText="{Binding SceneSprite, UpdateSourceTrigger=PropertyChanged}"
-                                                       PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                       Grid.Column="1"
-                                                       ToolTip="PNG path relative to the pack root — mapped onto the cloned scene's Core/Art SpriteRenderer."/>
-                                </Grid>
+                                <StackPanel>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="140"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Sprite path:" Grid.Column="0" VerticalAlignment="Center"/>
+                                        <ctl:PathPickerBox PathText="{Binding SceneSprite, UpdateSourceTrigger=PropertyChanged}"
+                                                           PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                           Grid.Column="1"
+                                                           Filter="{x:Static view:PickerFilters.SceneArt}"
+                                                           ToolTip="Path relative to the pack root, mapped onto the cloned scene's Core/Art SpriteRenderer. A PNG or JPG is a still; a GIF or a video (.mp4, .m4v, .mov, .webm) animates."/>
+                                    </Grid>
+
+                                    <!-- What the picked file turned out to be. Read from the
+                                         file rather than asked of the author, so it appears as
+                                         soon as a path is typed. -->
+                                    <TextBlock Text="{Binding MediaSummary}" Foreground="Gray"
+                                               FontSize="10" Margin="144,2,0,0" TextWrapping="Wrap">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding MediaSummary}" Value="">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+
+                                    <!-- Only for something that moves. A loop checkbox on a PNG
+                                         is a control over nothing. -->
+                                    <CheckBox Content="Loop" IsChecked="{Binding Loop}"
+                                              Margin="144,6,0,0"
+                                              Visibility="{Binding IsAnimated, Converter={StaticResource BoolToVisibility}}"
+                                              ToolTip="Repeat the animation while the scene is shown. Unticked, it plays once and holds its last frame."/>
+
+                                    <!-- And only for a video that actually carries sound, which
+                                         is read from the file's own header. -->
+                                    <Grid Margin="0,6,0,0"
+                                          Visibility="{Binding HasAudioTrack, Converter={StaticResource BoolToVisibility}}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="140"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Volume:" Grid.Column="0" VerticalAlignment="Center"/>
+                                        <Slider Grid.Column="1" Minimum="0" Maximum="1"
+                                                Value="{Binding Volume, UpdateSourceTrigger=PropertyChanged}"
+                                                TickFrequency="0.05" IsSnapToTickEnabled="True"
+                                                VerticalAlignment="Center"
+                                                ToolTip="How loud this video's own sound track plays. All the way down is silent."/>
+                                        <TextBlock Grid.Column="2" VerticalAlignment="Center" Margin="6,0,0,0"
+                                                   MinWidth="34" Foreground="Gray" FontSize="10"
+                                                   Text="{Binding Volume, StringFormat={}{0:P0}}"/>
+                                    </Grid>
+                                </StackPanel>
                             </GroupBox>
 
                             <GroupBox Header="Frame (Core SpriteRenderer)">
@@ -4922,7 +5606,8 @@
                     <GridSplitter Grid.Column="1" Width="4" Background="LightGray" HorizontalAlignment="Stretch"/>
 
                     <ScrollViewer view:TutorialAnchor.Id="panel:musicDetail" Grid.Column="2" VerticalScrollBarVisibility="Auto"
-                                  DataContext="{Binding SelectedMusic}">
+                                  DataContext="{Binding SelectedMusic}"
+                                  Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
                         <StackPanel Margin="8">
                             <GroupBox Header="Identity">
                                 <Grid>
@@ -5035,7 +5720,8 @@
                     <GridSplitter Grid.Column="1" Width="4" Background="LightGray" HorizontalAlignment="Stretch"/>
 
                     <ScrollViewer view:TutorialAnchor.Id="panel:sfxDetail" Grid.Column="2" VerticalScrollBarVisibility="Auto"
-                                  DataContext="{Binding SelectedSfx}">
+                                  DataContext="{Binding SelectedSfx}"
+                                  Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
                         <StackPanel Margin="8">
                             <GroupBox Header="Identity">
                                 <Grid>
@@ -5152,7 +5838,8 @@
                     <GridSplitter Grid.Column="1" Width="4" Background="LightGray" HorizontalAlignment="Stretch"/>
 
                     <ScrollViewer view:TutorialAnchor.Id="panel:wallpaperDetail" Grid.Column="2" VerticalScrollBarVisibility="Auto"
-                                  DataContext="{Binding SelectedWallpaper}">
+                                  DataContext="{Binding SelectedWallpaper}"
+                                  Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
                         <StackPanel Margin="8">
                             <!-- ── Preview ── the wallpaper as the game frames it (16:9, fitted).
                                  Large by design: sizing up a wallpaper is the point of looking. -->
@@ -5311,7 +5998,8 @@
                     <GridSplitter Grid.Column="1" Width="4" Background="LightGray" HorizontalAlignment="Stretch"/>
 
                     <ScrollViewer view:TutorialAnchor.Id="panel:variableDetail" Grid.Column="2" VerticalScrollBarVisibility="Auto"
-                                  DataContext="{Binding SelectedVariable}">
+                                  DataContext="{Binding SelectedVariable}"
+                                  Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
                         <StackPanel Margin="8">
                                 <StackPanel.Style>
                                     <!-- Nothing selected means nothing to edit. Without this the
@@ -5422,14 +6110,18 @@
                                          empty. The vanilla-source picker has always
                                          been a plain SelectedValue combo for this
                                          reason. -->
-                                    <ComboBox Grid.Row="5" Grid.Column="1" Margin="0,4,0,0"
-                                              ItemsSource="{Binding DataContext.LevelOptions,
+                                    <ComboBox Style="{StaticResource GroupedComboBox}" Grid.Row="5" Grid.Column="1" Margin="0,4,0,0"
+                                              ItemsSource="{Binding DataContext.LevelOptionsGrouped,
                                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                               DisplayMemberPath="DisplayLabel"
                                               SelectedValuePath="Token"
                                               SelectedValue="{Binding RefreshScope, UpdateSourceTrigger=PropertyChanged}"
                                               IsEnabled="{Binding IsLevelScoped}"
-                                              ToolTip="The level whose activation re-rolls this variable. Used only by LevelRandom. Format: vanilla:&lt;goName&gt; or place:&lt;key&gt; — same as a LevelActive condition."/>
+                                              ToolTip="The level whose activation re-rolls this variable. Used only by LevelRandom. Format: vanilla:&lt;goName&gt; or place:&lt;key&gt; — same as a LevelActive condition.">
+                                        <ComboBox.GroupStyle>
+                                            <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                                        </ComboBox.GroupStyle>
+                                    </ComboBox>
                                     <TextBlock Text="Min value:"     Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Margin="0,4,0,0"/>
                                     <TextBox  Text="{Binding MinValue, UpdateSourceTrigger=PropertyChanged}"
                                               Grid.Row="6" Grid.Column="1" Margin="0,4,0,0"
@@ -5524,7 +6216,8 @@
                     <GridSplitter Grid.Column="1" Width="4" Background="LightGray" HorizontalAlignment="Stretch"/>
 
                     <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto"
-                                  DataContext="{Binding SelectedIntegrationRule}">
+                                  DataContext="{Binding SelectedIntegrationRule}"
+                                  Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
                         <StackPanel Margin="8">
                             <GroupBox Header="Identity">
                                 <Grid>
@@ -5754,9 +6447,17 @@
                         <TextBlock DockPanel.Dock="Top" Text="UI"
                                    FontWeight="Bold" Margin="6,4,0,2"/>
                         <ToolBar DockPanel.Dock="Top">
+                            <!-- A button and a menu beside it. The button is
+                                 the plain panel in one click; the menu is for
+                                 choosing a shape, and the shapes are the
+                                 game's own. Keeping the button a Button also
+                                 keeps it a keyboard-focus target, which a Menu
+                                 is not. -->
                             <Button view:TutorialAnchor.Id="btn:addUiExtension"
                                     Content="+ UI" Command="{Binding AddOwnUiCommand}"
                                     ToolTip="A screen of your own: a window, a panel, a HUD element."/>
+                            <Menu Background="Transparent">
+                            </Menu>
                             <Button Content="+ Vanilla" Command="{Binding AddVanillaUiCommand}"
                                     ToolTip="Start from a screen the game already has. Change what is there, add to it, and only the differences are saved."/>
                             <Button Content="Remove" Command="{Binding RemoveUiCommand}"/>
@@ -5791,8 +6492,13 @@
 
                     <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
 
-                    <!-- The screen's objects -->
-                    <DockPanel Grid.Column="2" DataContext="{Binding SelectedUi}">
+                    <!-- The screen's objects. The whole column is hidden
+                         until a screen is picked: a name box, a tree toolbar and
+                         a property panel with nothing behind them are furniture,
+                         and they invite clicks that do nothing. -->
+                    <DockPanel Grid.Column="2" DataContext="{Binding SelectedUi}"
+                               view:TutorialAnchor.Id="panel:uiDetail"
+                               Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
                         <StackPanel DockPanel.Dock="Top" Margin="6,4">
                             <!-- A name and a parenting choice belong to a UI of the
                                  pack's own. One built on a vanilla screen is named
@@ -5814,12 +6520,83 @@
                                 <TextBlock Text="Name" FontWeight="Bold"/>
                                 <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                                          Margin="0,2,0,6"/>
+                                <!-- What this actually chooses is WHERE the screen
+                                     lives: inside the game's own canvas, or on one
+                                     of its own with a sorting order. It was labelled
+                                     as fading with the game's interface, which it
+                                     does not do - fading is a FadeUI signal that an
+                                     object has to listen for, not something that
+                                     happens by sharing a canvas. -->
                                 <CheckBox IsChecked="{Binding HidesWithGameplayUi, Mode=TwoWay}"
                                           Margin="0,0,0,6"
-                                          ToolTip="Cutscenes and transitions dim the game's interface. Tick this to be dimmed with it, which is right for anything belonging to normal play. Leave it clear for something that must stay up during a cutscene.">
-                                    <TextBlock Text="Hide this with the rest of the game's UI"
+                                          ToolTip="Ticked, the screen is one object among the game's own and follows that canvas - which is right for anything belonging to normal play. Clear it to put the screen on a layer of its own, which is what makes the draw order below mean anything.">
+                                    <TextBlock Text="Sit inside the game's own interface"
                                                TextWrapping="Wrap"/>
                                 </CheckBox>
+
+                                <CheckBox IsChecked="{Binding StartsOpen, Mode=TwoWay}"
+                                          Margin="0,0,0,6"
+                                          ToolTip="Most UI is not on screen at the start - the game keeps 34 of its 49 canvases switched off and turns one on when its moment arrives.">
+                                    <TextBlock Text="On screen from the start" TextWrapping="Wrap"/>
+                                </CheckBox>
+
+                                <!-- One decision for the whole screen. Setting a
+                                     sound on thirty buttons one at a time is not
+                                     authoring, it is data entry. -->
+                                <CheckBox IsChecked="{Binding ButtonsMakeSound, Mode=TwoWay}"
+                                          Margin="0,0,0,4"
+                                          ToolTip="Buttons on this screen click when pressed, using the game's own button sound unless you name a different one below. Untick for a screen that should be silent.">
+                                    <TextBlock Text="Buttons make a sound" TextWrapping="Wrap"/>
+                                </CheckBox>
+
+                                <ContentControl Content="{Binding Open}"
+                                                ContentTemplate="{StaticResource UiOpenTemplate}"
+                                                Margin="0,0,0,6"/>
+
+                                <!-- Played by an ACTION switching the screen off.
+                                     A screen hidden by an activation condition
+                                     goes at once: nothing asked first, and a
+                                     deactivated object cannot animate itself. -->
+                                <ContentControl Content="{Binding Close}"
+                                                ContentTemplate="{StaticResource UiOpenTemplate}"
+                                                Margin="0,0,0,6"/>
+
+                                <!-- Blank is not nothing: it is the game's own
+                                     click. The line below says so, because a
+                                     field that looks empty reads as silent. -->
+                                <DockPanel Margin="0,0,0,2"
+                                           IsEnabled="{Binding ButtonsMakeSound}">
+                                    <TextBlock Text="Button sound" Width="96" VerticalAlignment="Center"/>
+                                    <ComboBox IsEditable="True"
+                                              Text="{Binding ButtonSound, UpdateSourceTrigger=PropertyChanged}"
+                                              ItemsSource="{Binding DataContext.ButtonSoundOptions, RelativeSource={RelativeSource AncestorType=Window}}"
+                                              ToolTip="Leave blank for the game's own button click, which is what buttons do by default. Otherwise one of the pack's own sounds by its key, or one of the game's by its name - a pack's own wins where both exist, so you can replace a game sound with your own. A single button can still say something different."/>
+                                </DockPanel>
+
+                                <TextBlock Margin="96,0,0,6" FontSize="10" Opacity="0.6"
+                                           TextWrapping="Wrap"
+                                           Visibility="{Binding ShowsDefaultButtonSound, Converter={StaticResource BoolToVisibility}}"
+                                           Text="{Binding ButtonSoundInEffect}"/>
+
+                                <!-- Only where it does something. Inside the
+                                     gameplay canvas this UI is one object among
+                                     the game's, and order there is the object
+                                     tree below, not a number. -->
+                                <DockPanel Margin="0,0,0,6">
+                                    <DockPanel.Style>
+                                        <Style TargetType="DockPanel">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ShowsSortingOrder}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DockPanel.Style>
+                                    <TextBlock Text="Sorting order" Width="90" VerticalAlignment="Center"/>
+                                    <TextBox Text="{Binding SortingOrder, UpdateSourceTrigger=LostFocus}"
+                                             ToolTip="Draw order against other UI that is not hidden with the game's interface. Higher is nearer the front."/>
+                                </DockPanel>
                             </StackPanel>
 
                             <TextBlock Text="Which screen" FontWeight="Bold">
@@ -5834,7 +6611,8 @@
                                     </Style>
                                 </TextBlock.Style>
                             </TextBlock>
-                            <ComboBox ItemsSource="{Binding Source={x:Static model:VanillaUiCatalog.UsableBases}}"
+                            <ComboBox ItemsSource="{Binding DataContext.AvailableUiScreens,
+                                              RelativeSource={RelativeSource AncestorType=Window}}"
                                       SelectedValue="{Binding Source, Mode=TwoWay}"
                                       SelectedValuePath="Token" DisplayMemberPath="Id"
                                       IsEditable="False" Margin="0,2,0,0"
@@ -5855,14 +6633,110 @@
                         </StackPanel>
 
                         <ToolBar DockPanel.Dock="Top" Margin="0,4,0,0">
-                            <Button Content="+ Object" Command="{Binding AddChildCommand}"
-                                    ToolTip="Add an object of your own, inside whatever is selected."/>
+                            <Button view:TutorialAnchor.Id="btn:addUiObject"
+                                    Content="+ Object" Command="{Binding AddChildCommand}"
+                                    Style="{StaticResource ToolbarButtonWithKey}" Tag="Ins"
+                                    ToolTip="Add an empty object of your own, inside whatever is selected. (Insert)"/>
+                            <Menu Background="Transparent">
+                                <!-- A piece of one of the game's screens, brought
+                                     in as a child. Its own screens are assembled
+                                     this way - the gift window is two lists and a
+                                     close button - so a pack building something
+                                     similar needs the same pieces. -->
+                                <MenuItem x:Name="AddCopyChildMenu" Header="+ From game"
+                                          ToolTip="Copy one of the game's screens in as a child of whatever is selected. It becomes yours to change, and the original is untouched."
+                                          ItemsSource="{Binding DataContext.CopyableUiScreens,
+                                                        RelativeSource={RelativeSource AncestorType=Window}}">
+                                    <MenuItem.ItemContainerStyle>
+                                        <Style TargetType="MenuItem">
+                                            <Setter Property="Header" Value="{Binding Id}"/>
+                                            <Setter Property="Command"
+                                                    Value="{Binding DataContext.SelectedUi.AddCopyChildCommand,
+                                                            RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                            <Setter Property="CommandParameter" Value="{Binding}"/>
+                                        </Style>
+                                    </MenuItem.ItemContainerStyle>
+                                </MenuItem>
+                                <!-- Whole shapes belong here too. They used to
+                                     sit on the list beside "+ UI", which put
+                                     "make a new screen" and "put a window in
+                                     this one" in different places for no reason
+                                     an author can see. Everything that adds an
+                                     object is on the tree; the list only makes
+                                     and removes screens. -->
+                                <MenuItem x:Name="AddShapeMenu" Header="+ Shape"
+                                          ToolTip="Add a whole shape - a window, a dialog, a list - inside whatever is selected."
+                                          ItemsSource="{Binding Source={x:Static model:UiTemplate.Screens}}">
+                                    <MenuItem.ItemContainerStyle>
+                                        <Style TargetType="MenuItem">
+                                            <Setter Property="Header" Value="{Binding Name}"/>
+                                            <Setter Property="ToolTip" Value="{Binding Summary}"/>
+                                            <Setter Property="Command"
+                                                    Value="{Binding DataContext.SelectedUi.AddChildTemplateCommand,
+                                                            RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                            <Setter Property="CommandParameter" Value="{Binding}"/>
+                                        </Style>
+                                    </MenuItem.ItemContainerStyle>
+                                </MenuItem>
+                                <MenuItem x:Name="AddPieceMenu" Header="+ Piece"
+                                          ToolTip="Add a ready-made piece - a button, a row, a label - inside whatever is selected."
+                                          ItemsSource="{Binding Source={x:Static model:UiTemplate.Pieces}}">
+                                    <MenuItem.ItemContainerStyle>
+                                        <Style TargetType="MenuItem">
+                                            <Setter Property="Header" Value="{Binding Name}"/>
+                                            <Setter Property="ToolTip" Value="{Binding Summary}"/>
+                                            <Setter Property="Command"
+                                                    Value="{Binding DataContext.SelectedUi.AddChildTemplateCommand,
+                                                            RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                            <Setter Property="CommandParameter" Value="{Binding}"/>
+                                        </Style>
+                                    </MenuItem.ItemContainerStyle>
+                                </MenuItem>
+                            </Menu>
                             <Button Content="Remove" Command="{Binding RemoveNodeCommand}"
-                                    ToolTip="Remove an object you added. Objects the game owns cannot be removed - a pack can change them, but not delete them out of the game's screen."/>
+                                    Style="{StaticResource ToolbarButtonWithKey}" Tag="Del"
+                                    ToolTip="Remove an object you added. Objects the game owns cannot be removed - a pack can change them, but not delete them out of the game's screen. (Delete)"/>
+                            <Separator/>
+                            <Button Content="Copy" Command="{Binding CopyNodeCommand}"
+                                    Style="{StaticResource ToolbarButtonWithKey}" Tag="Ctrl+C"
+                                    ToolTip="Copy this object and everything inside it."/>
+                            <Button Content="Paste" Command="{Binding PasteNodeCommand}"
+                                    Style="{StaticResource ToolbarButtonWithKey}" Tag="Ctrl+V"
+                                    ToolTip="Paste the copied object inside whatever is selected. Every paste is its own copy, so one Copy can be pasted as many times as you like."/>
+                            <Button Content="Duplicate" Command="{Binding DuplicateNodeCommand}"
+                                    Style="{StaticResource ToolbarButtonWithKey}" Tag="Ctrl+D"
+                                    ToolTip="Another one of these, beside it."/>
+                            <Separator/>
+                            <!-- A canvas has no depth: an object is in front of
+                                 another because it comes after it. So these are
+                                 not a tidying-up tool, they decide what covers
+                                 what. -->
+                            <Button Content="&#x25B2;" Command="{Binding SelectedNode.MoveUpCommand}"
+                                    Style="{StaticResource ToolbarButtonWithKey}"
+                                    ToolTip="Move up - behind its siblings. On a canvas there is no depth, so the order of these rows IS what covers what."/>
+                            <Button Content="&#x25BC;" Command="{Binding SelectedNode.MoveDownCommand}"
+                                    Style="{StaticResource ToolbarButtonWithKey}"
+                                    ToolTip="Move down - in front of its siblings. The last row of a group is the one drawn on top."/>
                         </ToolBar>
 
-                        <TreeView x:Name="UiTree" ItemsSource="{Binding Nodes}" Margin="0,4,0,0"
-                                  SelectedItemChanged="UiTree_SelectedItemChanged">
+                        <TreeView x:Name="UiTree" view:TutorialAnchor.Id="tree:uiObjects"
+                                  ItemsSource="{Binding Nodes}" Margin="0,4,0,0"
+                                  SelectedItemChanged="UiTree_SelectedItemChanged"
+                                  AllowDrop="True"
+                                  PreviewMouseLeftButtonDown="UiTree_MouseDown"
+                                  MouseMove="UiTree_MouseMove"
+                                  DragOver="UiTree_DragOver"
+                                  Drop="UiTree_Drop">
+                            <!-- Selection and expansion live on the row, because
+                                 a click in the preview has to be able to push a
+                                 selection INTO the tree, and TreeView.SelectedItem
+                                 is read-only. -->
+                            <TreeView.ItemContainerStyle>
+                                <Style TargetType="TreeViewItem">
+                                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                                </Style>
+                            </TreeView.ItemContainerStyle>
                             <TreeView.ItemTemplate>
                                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                                     <StackPanel Orientation="Horizontal" Margin="0,1">
@@ -5922,8 +6796,9 @@
 
                     <!-- What it looks like -->
                     <DockPanel Grid.Column="4">
-                        <TextBlock DockPanel.Dock="Top" Text="Preview"
-                                   FontWeight="Bold" Margin="6,4,0,2"/>
+                        <DockPanel DockPanel.Dock="Top" Margin="6,4,6,2">
+                            <TextBlock Text="Preview" FontWeight="Bold"/>
+                        </DockPanel>
 
                         <!-- Under the picture rather than beside it, so the
                              preview keeps the width. Every box here writes
@@ -5931,10 +6806,12 @@
                              redraws, which is the whole point of having them
                              next to each other. -->
                         <Border DockPanel.Dock="Bottom" BorderThickness="0,1,0,0"
+                                view:TutorialAnchor.Id="panel:uiObjectDetail"
                                 BorderBrush="{DynamicResource Theme.Accent}"
                                 Padding="8,6" DataContext="{Binding SelectedUi}">
                             <Grid>
-                                <TextBlock Text="Select an object in the tree to change it."
+                                <TextBlock x:Name="UiNoSelectionHint"
+                                           Text="Select an object in the tree to change it."
                                            Opacity="0.6" Margin="0,8">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
@@ -5952,10 +6829,13 @@
                                      testing SelectedNode against null, which needs a
                                      converter that does not exist and would be the
                                      same fact spelled twice. -->
-                                <StackPanel DataContext="{Binding SelectedNode}"
+                                <StackPanel x:Name="UiNodeFields"
+                                            DataContext="{Binding SelectedNode}"
                                             Visibility="{Binding DataContext.HasSelection,
                                                 RelativeSource={RelativeSource AncestorType=Border},
-                                                Converter={StaticResource BoolToVisibility}}">
+                                                Converter={StaticResource BoolToVisibility},
+                                                FallbackValue=Collapsed,
+                                                TargetNullValue=Collapsed}">
 
                                     <!-- Name. Read-only on an object the game
                                          owns: the name is what its binding is
@@ -5963,6 +6843,14 @@
                                          unhook the change from the object. -->
                                     <DockPanel Margin="0,0,0,4">
                                         <TextBlock Text="Name" Width="66" VerticalAlignment="Center"/>
+                                        <!-- Only enabled on a vanilla object that
+                                             currently differs: on the pack's own
+                                             there is no default to go back to, and
+                                             on an untouched one it would do
+                                             nothing. -->
+                                        <Button Content="Reset" DockPanel.Dock="Right" Padding="8,0"
+                                                Margin="6,0,0,0" Command="{Binding ResetCommand}"
+                                                ToolTip="Put this object back exactly as the game has it. It then stops being a change and drops out of the pack."/>
                                         <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                                                  IsReadOnly="{Binding IsVanilla}"
                                                  ToolTip="Objects the game owns keep their own names - that is how a change stays attached to the right object."/>
@@ -5991,13 +6879,27 @@
 
                                     <DockPanel Margin="0,0,0,4">
                                         <TextBlock Text="Sprite" Width="66" VerticalAlignment="Center"/>
+                                        <Button Content="..." DockPanel.Dock="Right" Padding="6,0"
+                                                Margin="4,0,0,0" Click="PickUiTint_Click"
+                                                ToolTip="Choose the colour on a wheel instead of typing hex."/>
                                         <TextBox Text="{Binding Tint, UpdateSourceTrigger=LostFocus}"
-                                                 Width="90" DockPanel.Dock="Right" Margin="4,0,0,0"
+                                                 Width="86" DockPanel.Dock="Right" Margin="4,0,0,0"
                                                  ToolTip="Tint as #RRGGBB or #RRGGBBAA. Most of this game's UI is a white shape recoloured here."/>
-                                        <ComboBox IsEditable="True"
-                                                  Text="{Binding Sprite, UpdateSourceTrigger=LostFocus}"
-                                                  ItemsSource="{Binding Source={x:Static rend:VanillaUiLibrary.SpriteNames}}"
-                                                  ToolTip="Any sprite the game has. Clearing this removes the picture entirely rather than leaving an empty one behind."/>
+                                        <Border Width="20" Height="16" DockPanel.Dock="Right"
+                                                BorderBrush="#888" BorderThickness="1" Margin="4,0,0,0"
+                                                Background="{Binding TintBrush}"
+                                                VerticalAlignment="Center"/>
+                                        <!-- A box and a picker, not a dropdown.
+                                             A dropdown bound to the value writes
+                                             as you move through it, so merely
+                                             looking put sprites nobody chose onto
+                                             the undo stack - and 840 entries is
+                                             not a list anyone scrolls anyway. -->
+                                        <Button Content="..." DockPanel.Dock="Right" Padding="6,0"
+                                                Margin="4,0,0,0" Click="PickUiSprite_Click"
+                                                ToolTip="Choose a picture: any sprite the game has, or a PNG the pack ships."/>
+                                        <TextBox Text="{Binding Sprite, UpdateSourceTrigger=LostFocus}"
+                                                 ToolTip="A sprite the game has, or a pack-relative path to a PNG of your own. Clearing this removes the picture entirely rather than leaving an empty one behind."/>
                                     </DockPanel>
 
                                     <DockPanel Margin="0,0,0,4">
@@ -6009,11 +6911,201 @@
                                                  ToolTip="What this object says. Clearing it removes the text rather than leaving an empty label."/>
                                     </DockPanel>
 
+                                    <DockPanel Margin="0,0,0,4"
+                                               Visibility="{Binding HasText, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="Colour" Width="66" VerticalAlignment="Center"/>
+                                        <Button Content="..." DockPanel.Dock="Right" Padding="6,0"
+                                                Margin="4,0,0,0" Click="PickUiTextColor_Click"
+                                                ToolTip="Choose the colour on a wheel instead of typing hex."/>
+                                        <Border Width="20" Height="16" BorderBrush="#888" BorderThickness="1"
+                                                Margin="0,0,4,0" Background="{Binding TextColorBrush}"
+                                                VerticalAlignment="Center"/>
+                                        <TextBox Text="{Binding TextColor, UpdateSourceTrigger=LostFocus}"
+                                                 ToolTip="Text colour as #RRGGBB or #RRGGBBAA."/>
+                                    </DockPanel>
+
+                                    <!-- When this object is on screen. Checked
+                                         every frame in the game, so a shelf
+                                         drops what has already been bought
+                                         without a rule per item saying so - the
+                                         object carries its own condition, which
+                                         is where an author looks for it. -->
+                                    <Expander Header="Shown when" Margin="0,6,0,0"
+                                              IsExpanded="{Binding IsGated, Mode=OneWay}">
+                                        <StackPanel Margin="0,4,0,0">
+                                            <Button Content="+ Condition" Padding="8,2"
+                                                    HorizontalAlignment="Left" Margin="0,0,0,4"
+                                                    Command="{Binding AddActiveConditionCommand}"
+                                                    ToolTip="With none, the object is simply shown. With any, they decide - and they are re-checked every frame, so it appears and disappears as they change."/>
+                                            <ItemsControl ItemsSource="{Binding ActiveConditions}"
+                                                          ItemTemplateSelector="{StaticResource ConditionTemplateSelector}"/>
+                                        </StackPanel>
+                                    </Expander>
+
+                                    <Expander Header="When it opens" Margin="0,6,0,0"
+                                              IsExpanded="{Binding Open.Animates, Mode=OneWay}">
+                                        <ContentControl Content="{Binding Open}"
+                                                        ContentTemplate="{StaticResource UiOpenTemplate}"
+                                                        Margin="0,4,0,0"/>
+                                    </Expander>
+
+                                    <Expander Header="When it closes" Margin="0,6,0,0"
+                                              IsExpanded="{Binding Close.Animates, Mode=OneWay}">
+                                        <ContentControl Content="{Binding Close}"
+                                                        ContentTemplate="{StaticResource UiOpenTemplate}"
+                                                        Margin="0,4,0,0"/>
+                                    </Expander>
+
+                                    <!-- What it does with the things inside it.
+                                         The reason to reach for one is a list
+                                         that changes: hide an item from fixed
+                                         positions and it leaves a hole, while a
+                                         row that arranges itself closes ranks. -->
+                                    <Expander Header="Arrange children" Margin="0,6,0,0"
+                                              IsExpanded="{Binding Arranges, Mode=OneWay}">
+                                        <StackPanel Margin="0,4,0,0">
+                                            <DockPanel Margin="0,0,0,4">
+                                                <TextBlock Text="Arrange" Width="66" VerticalAlignment="Center"/>
+                                                <ComboBox SelectedValue="{Binding Arrange, Mode=TwoWay}"
+                                                          ItemsSource="{Binding Source={x:Static vm:UiNodeViewModel.ArrangeOptions}}"
+                                                          ToolTip="None leaves every child where you put it. A row, a column or a grid positions them for you, and closes the gap when one is hidden."/>
+                                            </DockPanel>
+
+                                            <StackPanel Visibility="{Binding Arranges, Converter={StaticResource BoolToVisibility}}">
+                                                <DockPanel Margin="0,0,0,4">
+                                                    <TextBlock Text="Spacing" Width="66" VerticalAlignment="Center"/>
+                                                    <TextBox Text="{Binding SpacingX, UpdateSourceTrigger=LostFocus}"
+                                                             Width="60" Margin="0,0,4,0"
+                                                             ToolTip="Gap between children. A grid also uses the second number."/>
+                                                    <TextBox Text="{Binding SpacingY, UpdateSourceTrigger=LostFocus}"
+                                                             Width="60" Margin="0,0,4,0"
+                                                             Visibility="{Binding ArrangesAsGrid, Converter={StaticResource BoolToVisibility}}"/>
+                                                    <ComboBox SelectedValue="{Binding ArrangeAlign, Mode=TwoWay}"
+                                                              ItemsSource="{Binding Source={x:Static vm:UiNodeViewModel.AlignOptions}}"
+                                                              ToolTip="Where the arranged block sits when it does not fill the space."/>
+                                                </DockPanel>
+
+                                                <DockPanel Margin="0,0,0,4">
+                                                    <TextBlock Text="Padding" Width="66" VerticalAlignment="Center"
+                                                               ToolTip="Inset from the edges: left, right, top, bottom."/>
+                                                    <TextBox Text="{Binding PadLeft, UpdateSourceTrigger=LostFocus}" Width="44" Margin="0,0,3,0"/>
+                                                    <TextBox Text="{Binding PadRight, UpdateSourceTrigger=LostFocus}" Width="44" Margin="0,0,3,0"/>
+                                                    <TextBox Text="{Binding PadTop, UpdateSourceTrigger=LostFocus}" Width="44" Margin="0,0,3,0"/>
+                                                    <TextBox Text="{Binding PadBottom, UpdateSourceTrigger=LostFocus}" Width="44"/>
+                                                </DockPanel>
+
+                                                <!-- Rows and columns only. -->
+                                                <WrapPanel Margin="0,0,0,4"
+                                                           Visibility="{Binding ArrangesInLine, Converter={StaticResource BoolToVisibility}}">
+                                                    <CheckBox IsChecked="{Binding SetsChildWidth}" Content="Set width" Margin="0,0,10,0"
+                                                              ToolTip="Take over each child's width instead of leaving it as authored. With nothing else declaring a size, tick 'Share width' as well or they collapse - that is Unity's own behaviour, not a quirk here."/>
+                                                    <CheckBox IsChecked="{Binding SetsChildHeight}" Content="Set height" Margin="0,0,10,0"/>
+                                                    <CheckBox IsChecked="{Binding SharesWidth}" Content="Share width" Margin="0,0,10,0"
+                                                              ToolTip="Divide the leftover space between the children. This is what makes a row of items fill it evenly."/>
+                                                    <CheckBox IsChecked="{Binding SharesHeight}" Content="Share height" Margin="0,0,10,0"/>
+                                                    <CheckBox IsChecked="{Binding ArrangeReversed}" Content="Reverse"
+                                                              ToolTip="Fill from the far end - right to left, or bottom to top."/>
+                                                </WrapPanel>
+
+                                                <!-- Grid only. -->
+                                                <DockPanel Margin="0,0,0,4"
+                                                           Visibility="{Binding ArrangesAsGrid, Converter={StaticResource BoolToVisibility}}">
+                                                    <TextBlock Text="Cell" Width="66" VerticalAlignment="Center"/>
+                                                    <TextBox Text="{Binding ArrangeConstraintCount, UpdateSourceTrigger=LostFocus}"
+                                                             Width="44" DockPanel.Dock="Right"
+                                                             ToolTip="How many columns, or how many rows - whichever the setting beside it fixes."/>
+                                                    <TextBox Text="{Binding CellWidth, UpdateSourceTrigger=LostFocus}" Width="60" Margin="0,0,4,0"/>
+                                                    <TextBox Text="{Binding CellHeight, UpdateSourceTrigger=LostFocus}" Width="60" Margin="0,0,4,0"/>
+                                                    <ComboBox SelectedValue="{Binding ArrangeConstraint, Mode=TwoWay}"
+                                                              ItemsSource="{Binding Source={x:Static vm:UiNodeViewModel.ConstraintOptions}}"
+                                                              Margin="0,0,4,0"
+                                                              ToolTip="Flexible fits as many across as the width allows; the other two fix the count."/>
+                                                </DockPanel>
+
+                                                <CheckBox IsChecked="{Binding CentersLastLine}"
+                                                          Margin="0,0,0,4"
+                                                          Visibility="{Binding ArrangesAsGrid, Converter={StaticResource BoolToVisibility}}"
+                                                          ToolTip="Nineteen things in rows of seven leave a last row of five, and it is normally packed against the start corner - so a grid that is even everywhere else ends lopsided. This centres that row, and only that row. Unity has no such setting, so the preview and the game both do it here.">
+                                                    <TextBlock Text="Centre a last row that is not full"
+                                                               TextWrapping="Wrap"/>
+                                                </CheckBox>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Expander>
+
+                                    <!-- What clicking it does. Empty means the
+                                         object is decoration and the pointer
+                                         passes straight through it, which is
+                                         what most of a screen should do. -->
+                                    <Expander Header="When clicked" Margin="0,6,0,0"
+                                              IsExpanded="{Binding IsClickable, Mode=OneWay}">
+                                        <StackPanel Margin="0,4,0,0">
+                                            <DockPanel Margin="0,0,0,4">
+                                                <TextBlock Text="Hover" Width="66" VerticalAlignment="Center"/>
+                                                <Button Content="..." DockPanel.Dock="Right" Padding="6,0"
+                                                        Margin="4,0,0,0" Click="PickUiHoverTint_Click"
+                                                        ToolTip="Choose the colour on a wheel instead of typing hex."/>
+                                                <Border Width="20" Height="16" DockPanel.Dock="Right"
+                                                        BorderBrush="#888" BorderThickness="1" Margin="4,0,0,0"
+                                                        Background="{Binding HoverTintBrush}"
+                                                        VerticalAlignment="Center"/>
+                                                <TextBox Text="{Binding HoverTint, UpdateSourceTrigger=LostFocus}"
+                                                         ToolTip="Tint while the pointer is over this object, as #RRGGBB or #RRGGBBAA. Leave blank for no hover feedback. The game's own hover is per-button artwork rather than a rule, so there is nothing general to copy - this is the part a pack can state."/>
+                                            </DockPanel>
+
+                                            <DockPanel Margin="0,0,0,4">
+                                                <TextBlock Text="Sound" Width="66" VerticalAlignment="Center"/>
+                                                <ComboBox IsEditable="True"
+                                                          Text="{Binding ClickSound, UpdateSourceTrigger=PropertyChanged}"
+                                                          ItemsSource="{Binding DataContext.ButtonSoundOptions, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                          ToolTip="What THIS object sounds like when clicked. Blank follows the screen, which is usually what you want - set this only where one button should differ. A sound named here plays even on a screen whose buttons are otherwise silent."/>
+                                            </DockPanel>
+
+                                            <!-- The question the button asks before
+                                                 it acts: "is there enough money".
+                                                 Without it, anything conditional
+                                                 had to be pushed out into a rule
+                                                 per item, with the click reduced
+                                                 to writing down what was asked. -->
+                                            <Button Content="+ Only if…" Padding="8,2"
+                                                    HorizontalAlignment="Left" Margin="0,0,0,4"
+                                                    Command="{Binding AddClickConditionCommand}"
+                                                    ToolTip="What has to be true for this click to do anything. Failing it runs none of the actions - the button still presses, it just does nothing."/>
+                                            <ItemsControl ItemsSource="{Binding ClickConditions}"
+                                                          ItemTemplateSelector="{StaticResource ConditionTemplateSelector}"
+                                                          Margin="0,0,0,4"/>
+
+                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                                <Button Content="+ Action" Padding="8,2" Margin="0,0,4,0"
+                                                        Command="{Binding AddActionCommand}"
+                                                        ToolTip="Run one of the pack's actions when this is clicked - the same actions dialogues and rules use."/>
+                                                <Button Content="Copy all" Padding="8,2" Margin="0,0,4,0"
+                                                        Command="{Binding CopyActionsCommand}"/>
+                                                <Button Content="Paste" Padding="8,2" Margin="0,0,4,0"
+                                                        Command="{Binding PasteActionsCommand}"/>
+                                                <Button Content="Overwrite" Padding="8,2"
+                                                        Command="{Binding OverwriteActionsCommand}"/>
+                                            </StackPanel>
+
+                                            <ItemsControl ItemsSource="{Binding Actions}"
+                                                          ItemTemplate="{StaticResource ActionRowTemplate}"/>
+                                        </StackPanel>
+                                    </Expander>
+
                                     <DockPanel Margin="0,0,0,2"
                                                Visibility="{Binding HasText, Converter={StaticResource BoolToVisibility}}">
                                         <TextBlock Text="Font" Width="66" VerticalAlignment="Center"/>
+                                        <!-- PropertyChanged, not LostFocus. An undo
+                                             step is marked when focus leaves, so
+                                             committing on focus loss TOO means the
+                                             open/close of the dropdown lands
+                                             mid-browse and each visit leaves steps
+                                             for values nobody chose. Tracking the
+                                             highlight live and checkpointing once
+                                             on the way out gives one step holding
+                                             what was actually picked. -->
                                         <ComboBox IsEditable="True"
-                                                  Text="{Binding Font, UpdateSourceTrigger=LostFocus}"
+                                                  Text="{Binding Font, UpdateSourceTrigger=PropertyChanged}"
                                                   ItemsSource="{Binding Source={x:Static rend:VanillaUiLibrary.FontNames}}"
                                                   ToolTip="A TextMeshPro font asset, not a font file. The same typeface appears more than once with different outlines and shadows, and they are not interchangeable."/>
                                     </DockPanel>
@@ -6021,8 +7113,10 @@
                             </Grid>
                         </Border>
                         <ctl:UiPreview x:Name="UiScreenPreview"
+                                       view:TutorialAnchor.Id="preview:ui"
                                        BaseToken="{Binding SelectedUiPreviewToken}"
                                        AuthoredRoot="{Binding SelectedUi.RootNode}"
+                                       Revision="{Binding SelectedUi.Revision}"
                                        Highlight="{Binding SelectedUi.SelectedModel}"
                                        CanvasWidth="{Binding SelectedUi.CanvasWidth}"
                                        CanvasHeight="{Binding SelectedUi.CanvasHeight}"
@@ -6069,6 +7163,11 @@
                 <TextBlock Text="💾" VerticalAlignment="Center" Margin="0,0,6,0"/>
                 <TextBlock Text="Saved" Foreground="White" FontWeight="SemiBold"
                            VerticalAlignment="Center"/>
+                <!-- The version it was saved AS. With auto-versioning on, this
+                     is the moment the number moves, so it is the moment worth
+                     showing it. -->
+                <TextBlock x:Name="SaveToastVersion" Foreground="#DDFFFFFF"
+                           VerticalAlignment="Center" Margin="6,0,0,0"/>
             </StackPanel>
         </Border>
     </Grid>

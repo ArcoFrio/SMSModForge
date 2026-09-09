@@ -1,0 +1,461 @@
+{
+ "id": "8_Room_Talk/InsideCaar/SofiaChangesOutfitScene",
+ "name": "SofiaChangesOutfitScene",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Sofia"
+ ],
+ "roots": [
+  1186666640,
+  1553385453,
+  607791606,
+  -1901628471,
+  -1422152832,
+  806160901,
+  577334737,
+  -1231937982,
+  -434641958,
+  1236945689,
+  1580375600
+ ],
+ "nodes": {
+  "1186666640": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Here we go.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1553385453": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1476278013,
+    -1550784974,
+    1090406676
+   ],
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Hold this for a minute...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SofiaCarDress (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SofiaCarDress (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/SofiaCarDress (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1476278013": {
+   "kind": "text",
+   "parent": 1553385453,
+   "actor": null,
+   "text": "Whoa—what are you doing!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1550784974": {
+   "kind": "text",
+   "parent": 1553385453,
+   "actor": null,
+   "text": "Nice tits.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1090406676": {
+   "kind": "text",
+   "parent": 1553385453,
+   "actor": null,
+   "text": "(Keep driving)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "607791606": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "I need to change. You think I’m walking into Mario’s den dressed like a cop?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1901628471": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Eyes on the road, hero. I don't want to die half-naked.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SofiaCarDress (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SofiaCarDress (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/SofiaCarDress (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1422152832": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Now hand me the lipstick.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "806160901": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Mario’s mansion isn’t just some corrupt rich guy’s playpen. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SofiaCarDress (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SofiaCarDress (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/SofiaCarDress (3)"
+      }
+     }
+    }
+   ]
+  },
+  "577334737": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "It’s a fortress. Cameras, guards, loyalists, and probably a few psychopaths on his payroll.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1231937982": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1587198770,
+    1549319254,
+    -958985969
+   ],
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "If we screw this up? Best case, we vanish. Worst case, someone ends up buried under his wine cellar.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1587198770": {
+   "kind": "text",
+   "parent": -1231937982,
+   "actor": null,
+   "text": " I’m with you. No screw-ups tonight.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1549319254": {
+   "kind": "text",
+   "parent": -1231937982,
+   "actor": null,
+   "text": "I’ve got your back, no matter what.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-958985969": {
+   "kind": "text",
+   "parent": -1231937982,
+   "actor": null,
+   "text": "(Stare at her tits)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-434641958": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Once we’re in, there’s no turning back.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1236945689": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "We get the intel. We get out. And if anyone even suspects we’re cops?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1580375600": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "We die.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/InsideCaar",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play SofiaChangesOutfitScene and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Eve_NoSave1[sofiapassengersceneinc] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofiapassengersceneinc",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[sofiapassengersceneinc] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofiapassengersceneinc",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

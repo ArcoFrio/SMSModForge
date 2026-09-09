@@ -1,0 +1,709 @@
+{
+ "id": "8_Room_Talk/C_Farmmap_Road/kirbyfirsttalk",
+ "name": "kirbyfirsttalk",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Kirby"
+ ],
+ "roots": [
+  779332055,
+  -220693664,
+  464744457,
+  2004731013,
+  1115734552,
+  -1124556723,
+  134227955,
+  962753100,
+  -127577688,
+  1986134825,
+  -397466810
+ ],
+ "nodes": {
+  "779332055": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    40014845,
+    -834546806,
+    -197812391
+   ],
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hey! You made it! I wasn’t sure you’d really come all the way out here.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-220693664": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "This is our farm. Well… technically it’s my {B} Clay’s farm. He’s the real owner. He’s always kinda gloomy though, so I do most of the talking.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "134227955": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1705737056,
+    -1641877623,
+    -144871043,
+    1016060132
+   ],
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Not, like, make milk yourself... unless you wanna~ but maybe you can find other women who’d be willing.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1705737056": {
+   "kind": "text",
+   "parent": 134227955,
+   "children": [
+    469164122
+   ],
+   "actor": null,
+   "text": "I’ll do my best to help you, Kirby. You can count on me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1641877623": {
+   "kind": "text",
+   "parent": 134227955,
+   "children": [
+    -1015210008
+   ],
+   "actor": null,
+   "text": "You’re seriously asking me to go around recruiting women to lactate?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1016060132": {
+   "kind": "text",
+   "parent": 134227955,
+   "children": [
+    710138770
+   ],
+   "actor": null,
+   "text": "You sure you don’t just want me to help you personally, Kirby?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-144871043": {
+   "kind": "text",
+   "parent": 134227955,
+   "children": [
+    -652449171
+   ],
+   "actor": null,
+   "text": "You’re telling me Clay owns the farm, but you’re the one running a breast milk empire?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-652449171": {
+   "kind": "text",
+   "parent": -144871043,
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Haha! Exactly! He just mopes around while I get stuff done. Moo power!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "710138770": {
+   "kind": "text",
+   "parent": 1016060132,
+   "actor": "Kirby",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Heehee… well… I wouldn’t mind that either. But we’d still need more than just me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1015210008": {
+   "kind": "text",
+   "parent": -1641877623,
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Well… yeah! What’s weird about that? People recruit for sports teams, right? This is just milk instead of soccer.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "469164122": {
+   "kind": "text",
+   "parent": -1705737056,
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yay! I knew I could trust you. This’ll be fun! Like a milk team!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "962753100": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Heehee… it’s the best idea ever! Except… um… there’s this teeny problem.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Milking Save[bafarm-unlocked] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafarm-unlocked",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "464744457": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -976363870,
+    1037710567,
+    -1213350515
+   ],
+   "actor": "Kirby",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "So… uh… since the whole cow milk thing got banned, I’ve been trying something new.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2004731013": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Human milk! It’s super trendy now. Way healthier, and no cows get sad. Win-win, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1115734552": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Problem is… I can’t make enough by myself. The city’s got a quota system and everything. And no matter how hard I try, I can’t fill all the bottles.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1124556723": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "So I thought… maybe you could help?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-127577688": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1518870873,
+    -1069571263,
+    1467727145
+   ],
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "I just remembered… women don’t usually make milk unless they’re pregnant.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-976363870": {
+   "kind": "text",
+   "parent": 464744457,
+   "children": [
+    1672818018
+   ],
+   "actor": null,
+   "text": "Wait, banned? They actually outlawed animal milk?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1037710567": {
+   "kind": "text",
+   "parent": 464744457,
+   "children": [
+    306393699
+   ],
+   "actor": null,
+   "text": "You’re joking. There’s no way they banned milk.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1213350515": {
+   "kind": "text",
+   "parent": 464744457,
+   "children": [
+    932481528
+   ],
+   "actor": null,
+   "text": "Sounds insane… but I’ve got a bad feeling I know where this is going.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1672818018": {
+   "kind": "text",
+   "parent": -976363870,
+   "actor": "Kirby",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Yup! Totally gone. Cows, goats, everything. Crazy, right? That’s why I had to get creative.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "932481528": {
+   "kind": "text",
+   "parent": -1213350515,
+   "actor": "Kirby",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Heehee… you probably do. Let’s just say the new milk comes from… people.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "306393699": {
+   "kind": "text",
+   "parent": 1037710567,
+   "actor": "Kirby",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I ain’t joking! It’s the law now. Clay’s been sulking ever since. But me? I’ve got a plan.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "40014845": {
+   "kind": "text",
+   "parent": 779332055,
+   "actor": null,
+   "text": "Hey Kirby, good to see you again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-834546806": {
+   "kind": "text",
+   "parent": 779332055,
+   "actor": null,
+   "text": "So this is the farm you wanted to show me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-197812391": {
+   "kind": "text",
+   "parent": 779332055,
+   "actor": null,
+   "text": "You look like you're selling vegetables from the back of a truck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1986134825": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "You should totally find someone who knows about this stuff. A doctor… or a scientist… or both!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Introduce yourself to Kirby.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Moo! (Kirby)",
+        "of": "Quest"
+       },
+       "m_TaskId": 1813187919
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-397466810": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Once we’ve got that figured out, I can be the number one human cow in Peak City!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1518870873": {
+   "kind": "text",
+   "parent": -127577688,
+   "children": [
+    906413725
+   ],
+   "actor": null,
+   "text": "That does sound like a problem.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1069571263": {
+   "kind": "text",
+   "parent": -127577688,
+   "children": [
+    1692723761
+   ],
+   "actor": null,
+   "text": "I guess you can’t just squeeze really hard until milk comes out?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1467727145": {
+   "kind": "text",
+   "parent": -127577688,
+   "children": [
+    -1193620118
+   ],
+   "actor": null,
+   "text": "You sure you don’t just want me to… stimulate you until it happens?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1193620118": {
+   "kind": "text",
+   "parent": 1467727145,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "That sounds fun, but no… I think we need something more science-y.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1692723761": {
+   "kind": "text",
+   "parent": -1069571263,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Haha! I tried! It didn’t work. Just made me dizzy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "906413725": {
+   "kind": "text",
+   "parent": 1518870873,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Exactly! That’s why I need you. You’re smarter than me… I’m sure you’ll figure it out!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/C_Farmmap_Road",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play kirbyfirsttalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[milking-mainstory] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milking-mainstory",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KirbyBustDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KirbyBustDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/KirbyBustDefault"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/KirbyBustCasualOutfit/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Milking Save[milking-mainstory] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milking-mainstory",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

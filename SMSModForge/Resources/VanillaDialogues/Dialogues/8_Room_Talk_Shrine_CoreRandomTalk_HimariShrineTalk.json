@@ -1,0 +1,1066 @@
+{
+ "id": "8_Room_Talk/Shrine/CoreRandomTalk/HimariShrineTalk",
+ "name": "HimariShrineTalk",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Himari"
+ ],
+ "roots": [
+  1133527950,
+  975002162,
+  567717673,
+  1733759432,
+  -541090459
+ ],
+ "nodes": {
+  "975002162": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1657589182,
+    -324761003
+   ],
+   "actor": "Himari",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You cut cleaner this time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1657589182": {
+   "kind": "text",
+   "parent": 975002162,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Tighter stance, less wasted movement.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-324761003": {
+   "kind": "text",
+   "parent": 975002162,
+   "actor": "Himari",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Tch… try not to make it look too good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "567717673": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1152986625,
+    -1128234540
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "That last spirit was fast.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1152986625": {
+   "kind": "text",
+   "parent": 567717673,
+   "actor": "Himari",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You were faster.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1128234540": {
+   "kind": "text",
+   "parent": 567717673,
+   "actor": "Himari",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Don’t get cocky—just… keep doing that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1733759432": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -779361933,
+    -706703381
+   ],
+   "actor": "Himari",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That one almost hit you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-779361933": {
+   "kind": "text",
+   "parent": 1733759432,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I don’t like that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-706703381": {
+   "kind": "text",
+   "parent": 1733759432,
+   "actor": "Himari",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Next time, I’m standing closer.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1133527950": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    165234659,
+    1663916724
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "\nSo that’s what you’ve been doing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[himari-fight-firsttime] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "himari-fight-firsttime",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "165234659": {
+   "kind": "choice",
+   "parent": 1133527950,
+   "children": [
+    -1952853952,
+    1585483433,
+    1137225021,
+    -1548097664
+   ],
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You didn’t just fight... you moved like a sword.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_11[himari-fight-firsttime] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "himari-fight-firsttime",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1952853952": {
+   "kind": "text",
+   "parent": 165234659,
+   "children": [
+    374755942
+   ],
+   "actor": null,
+   "text": "Zhen’s training finally paid off.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "374755942": {
+   "kind": "text",
+   "parent": -1952853952,
+   "actor": "Himari",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "It did. I’m... kinda proud of you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1585483433": {
+   "kind": "text",
+   "parent": 165234659,
+   "children": [
+    1363488400
+   ],
+   "actor": null,
+   "text": "Admit it... You were a little turned on.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1363488400": {
+   "kind": "text",
+   "parent": 1585483433,
+   "actor": "Himari",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Tch. Don’t push it.\n<size=70%>...A little.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1137225021": {
+   "kind": "text",
+   "parent": 165234659,
+   "children": [
+    1166339313
+   ],
+   "actor": null,
+   "text": "You’ve seen spirits before, haven’t you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1166339313": {
+   "kind": "text",
+   "parent": 1137225021,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Yeah. Small ones. Nothing like this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1663916724": {
+   "kind": "text",
+   "parent": 1133527950,
+   "actor": "Himari",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You're sharper than I thought.... Keep surprising me.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1548097664": {
+   "kind": "text",
+   "parent": 165234659,
+   "children": [
+    -293791872
+   ],
+   "actor": null,
+   "text": "Glad you enjoyed me swinging something big.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-293791872": {
+   "kind": "text",
+   "parent": -1548097664,
+   "actor": "Himari",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I-I was admiring your form! Not your... ugh, perv.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-541090459": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1484929561
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Don't get any ideas. We're still in the open. And I'm filthy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "chance",
+     "type": "ConditionChance",
+     "title": "If 0.6 chance to pass",
+     "fields": {
+      "m_Threshold": {
+       "kind": "value",
+       "value": 0.6
+      }
+     }
+    }
+   ]
+  },
+  "1484929561": {
+   "kind": "choice",
+   "parent": -541090459,
+   "children": [
+    725510476,
+    -916862801,
+    -1374094764
+   ],
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You're not seriously thinking about it now.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "725510476": {
+   "kind": "text",
+   "parent": 1484929561,
+   "children": [
+    107696177,
+    -1307039333,
+    1706229081,
+    1644617486,
+    -973691599,
+    -95535667,
+    -1178793990,
+    613862665,
+    1900217885,
+    598994818,
+    1025914787,
+    556104726,
+    371991492,
+    -1565413965
+   ],
+   "actor": null,
+   "text": "Guess you had the same idea, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-916862801": {
+   "kind": "text",
+   "parent": 1484929561,
+   "children": [
+    -1358892285,
+    178538650
+   ],
+   "actor": null,
+   "text": "Do not worry, I will not be a pain in your ass today.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1374094764": {
+   "kind": "text",
+   "parent": 1484929561,
+   "children": [
+    -1264141849
+   ],
+   "actor": null,
+   "text": "Huh? What?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "107696177": {
+   "kind": "text",
+   "parent": 725510476,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "You are. Unbelievable.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1307039333": {
+   "kind": "text",
+   "parent": 725510476,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Fine. But not here. Behind the shrine. And don't even think about taking your time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1706229081": {
+   "kind": "text",
+   "parent": 725510476,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Use my ass. It's quicker. Less mess.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1644617486": {
+   "kind": "choice",
+   "parent": 725510476,
+   "children": [
+    -1922334150,
+    533424449,
+    -1701047664
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "And be quiet. If you make a sound, I'll leave you here for the next spirit.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-973691599": {
+   "kind": "text",
+   "parent": 725510476,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Yes, there. Push it in already.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Himari_AfterSpirits (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Himari_AfterSpirits (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Himari_AfterSpirits (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1922334150": {
+   "kind": "text",
+   "parent": 1644617486,
+   "actor": null,
+   "text": "I'll be extra quiet... Hold still.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "533424449": {
+   "kind": "text",
+   "parent": 1644617486,
+   "actor": null,
+   "text": "Yeah, I'm so hard for you... Himari.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1701047664": {
+   "kind": "text",
+   "parent": 1644617486,
+   "children": [
+    -790915082,
+    -1480736723,
+    -639685135,
+    -217927574
+   ],
+   "actor": null,
+   "text": "(Fuck her thighs)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-790915082": {
+   "kind": "text",
+   "parent": -1701047664,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Hey... What are you doing? I said my ass.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Himari_AfterSpirits (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Himari_AfterSpirits (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Himari_AfterSpirits (0)"
+      }
+     }
+    }
+   ]
+  },
+  "-1480736723": {
+   "kind": "text",
+   "parent": -1701047664,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "That's... not what I meant.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-639685135": {
+   "kind": "text",
+   "parent": -1701047664,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Fuck. Okay. Enough of this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-217927574": {
+   "kind": "text",
+   "parent": -1701047664,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Do it properly. Now. You know where. I'm not saying it again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-95535667": {
+   "kind": "text",
+   "parent": 725510476,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "...God. Finally.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1178793990": {
+   "kind": "text",
+   "parent": 725510476,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "...Just move. Stop holding back.... Hngaanh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "613862665": {
+   "kind": "text",
+   "parent": 725510476,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "...Faster. I didn't say you could go slow.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1900217885": {
+   "kind": "text",
+   "parent": 725510476,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Don't stop... don't you dare stop now. I can feel it building",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "598994818": {
+   "kind": "choice",
+   "parent": 725510476,
+   "children": [
+    1359992287,
+    -826197500,
+    -1284154964
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Just... there. Right there. Stretch it, {PC}, I want to feel it tomorrow. Hngah~ Haaah...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1025914787": {
+   "kind": "text",
+   "parent": 725510476,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "I'm... I'm going to... fuck... HAAAAAAAAH! HGNAAA~",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Himari_AfterSpirits (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Himari_AfterSpirits (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Himari_AfterSpirits (2)"
+      }
+     }
+    }
+   ]
+  },
+  "556104726": {
+   "kind": "text",
+   "parent": 725510476,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "You're going to make me walk back with your mess dripping out of me, aren't you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "371991492": {
+   "kind": "choice",
+   "parent": 725510476,
+   "children": [
+    -287893083,
+    -822375640,
+    -1210159585
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Next time, bring a towel. Or don't expect there to be a next time.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1565413965": {
+   "kind": "text",
+   "parent": 725510476,
+   "actor": "Himari",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Let's go. And if you tell anyone about this, I'll make sure the next spirit you fight is the least of your problems.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1359992287": {
+   "kind": "text",
+   "parent": 598994818,
+   "actor": null,
+   "text": "I'll stretch that pale perfect ass of yours so good, Himari... Fuck~",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-826197500": {
+   "kind": "text",
+   "parent": 598994818,
+   "actor": null,
+   "text": "I'm close... Stop clenching, I'll... Hngaaa~",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1284154964": {
+   "kind": "text",
+   "parent": 598994818,
+   "actor": null,
+   "text": "(Fill her ass)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-287893083": {
+   "kind": "text",
+   "parent": 371991492,
+   "children": [
+    -910297078
+   ],
+   "actor": null,
+   "text": "So there will be a next time?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-910297078": {
+   "kind": "text",
+   "parent": -287893083,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "{PC}... Are you even listening? A towel. I said bring a towel.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-822375640": {
+   "kind": "text",
+   "parent": 371991492,
+   "children": [
+    -1217779146
+   ],
+   "actor": null,
+   "text": "We both know you're lying.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1217779146": {
+   "kind": "text",
+   "parent": -822375640,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Just... Shut up. Tch.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1210159585": {
+   "kind": "text",
+   "parent": 371991492,
+   "children": [
+    312331238
+   ],
+   "actor": null,
+   "text": "(Just smile at her)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "312331238": {
+   "kind": "text",
+   "parent": -1210159585,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "...Don't smirk. It's not funny.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1264141849": {
+   "kind": "text",
+   "parent": -1374094764,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Forget it... Let's go.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1358892285": {
+   "kind": "text",
+   "parent": -916862801,
+   "actor": "Himari",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Good... <size=60%>Though sometimes I kinda enjoy you being a pain in my ass…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "178538650": {
+   "kind": "text",
+   "parent": -916862801,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Let's head inside. The old man is waiting.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Shrine/CoreRandomTalk",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play HimariShrineTalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_11[spirit-activecomp] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "spirit-activecomp",
+        "list": "Events_11",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

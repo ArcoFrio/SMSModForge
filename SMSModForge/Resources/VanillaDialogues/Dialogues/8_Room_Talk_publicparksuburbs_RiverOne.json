@@ -1,0 +1,1163 @@
+{
+ "id": "8_Room_Talk/publicparksuburbs/RiverOne",
+ "name": "RiverOne",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "River",
+  "You"
+ ],
+ "roots": [
+  -463103729,
+  -911811785,
+  -1060969611,
+  -2101742715,
+  23077915,
+  -652973054,
+  -789387048,
+  1633122974,
+  1452489872,
+  -374989146,
+  1347016232,
+  1786768072
+ ],
+ "nodes": {
+  "-463103729": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1952940351,
+    -1542926323
+   ],
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Uh... Hi?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionQuestsActivate",
+     "title": "Activate Another Time (River",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Another Time (River",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "1952940351": {
+   "kind": "text",
+   "parent": -463103729,
+   "actor": null,
+   "text": "Hey there, mind if I sit here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1542926323": {
+   "kind": "text",
+   "parent": -463103729,
+   "children": [
+    1327199838
+   ],
+   "actor": null,
+   "text": "Have a nice day. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-911811785": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -540339016,
+    -1068421792
+   ],
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Oh, um, sure. Go ahead.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_4[river-park-talk] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-park-talk",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "1327199838": {
+   "kind": "text",
+   "parent": -1542926323,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "You too...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-540339016": {
+   "kind": "text",
+   "parent": -911811785,
+   "children": [
+    1051763891
+   ],
+   "actor": null,
+   "text": "I'm {PC}. What's your name?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1068421792": {
+   "kind": "text",
+   "parent": -911811785,
+   "children": [
+    1009473099
+   ],
+   "actor": null,
+   "text": "I'm {PC}. Are you a boy?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1051763891": {
+   "kind": "text",
+   "parent": -540339016,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I-I'm River.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1009473099": {
+   "kind": "text",
+   "parent": -1068421792,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Uh... Y-Yes? I'm River...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2101742715": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "S-sorry I didn't notice earlier. I was so caught up in the book...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "23077915": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1166629025,
+    1370582882,
+    -2061818885,
+    -1702121533
+   ],
+   "actor": "River",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "It's a fantasy novel. I really enjoy getting lost in different worlds...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1166629025": {
+   "kind": "text",
+   "parent": 23077915,
+   "children": [
+    1857529574
+   ],
+   "actor": null,
+   "text": "Maybe you could tell me about it sometime.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1370582882": {
+   "kind": "text",
+   "parent": 23077915,
+   "children": [
+    -420073460
+   ],
+   "actor": null,
+   "text": "What's your favorite world?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2061818885": {
+   "kind": "text",
+   "parent": 23077915,
+   "children": [
+    2138815891
+   ],
+   "actor": null,
+   "text": "That's some boring nerd trash.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1786768072": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Well, um, I'll keep reading...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1857529574": {
+   "kind": "text",
+   "parent": -1166629025,
+   "actor": "River",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I'd like that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-420073460": {
+   "kind": "text",
+   "parent": 1370582882,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I... I really like the lands between... Malenia is so cool...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2138815891": {
+   "kind": "text",
+   "parent": -2061818885,
+   "actor": "River",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "O-Okay...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_4[mean-to-river] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mean-to-river",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-1060969611": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "O-Oh, wait... {PC}. Tasha just told me to meet someone here, but she didn't say who.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-652973054": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -200678994,
+    1983161197
+   ],
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Tasha told me you needed something special? For, uh… a model?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-200678994": {
+   "kind": "text",
+   "parent": -652973054,
+   "actor": null,
+   "text": "Yeah, something eye-catching. You up for it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1983161197": {
+   "kind": "text",
+   "parent": -652973054,
+   "actor": null,
+   "text": "I need top quality. You can deliver, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-789387048": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1302246294,
+    2140205787,
+    386128662
+   ],
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I can! I-I mean, I’d love to. I just need to know what kind of outfit you’re thinking about.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1302246294": {
+   "kind": "text",
+   "parent": -789387048,
+   "children": [
+    -1273762957
+   ],
+   "actor": null,
+   "text": "How about something classic? A chainmail bikini. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2140205787": {
+   "kind": "text",
+   "parent": -789387048,
+   "children": [
+    -1749461471
+   ],
+   "actor": null,
+   "text": "A witch outfit. The anime kind.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "386128662": {
+   "kind": "text",
+   "parent": -789387048,
+   "children": [
+    2146723088
+   ],
+   "actor": null,
+   "text": "A superhero look. Tight, flashy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1633122974": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    26152238,
+    -1924317329,
+    537706758
+   ],
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I… um, I won’t charge for the work. I just love making these! But… the materials will cost about two thousand. If that’s okay?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "537706758": {
+   "kind": "text",
+   "parent": 1633122974,
+   "children": [
+    196946163
+   ],
+   "actor": null,
+   "text": "Two grand? Hope this costume’s made of actual gold.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "26152238": {
+   "kind": "text",
+   "parent": 1633122974,
+   "children": [
+    1575978926
+   ],
+   "actor": null,
+   "text": "That’s really generous of you, River. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1924317329": {
+   "kind": "text",
+   "parent": 1633122974,
+   "children": [
+    -759164662
+   ],
+   "actor": null,
+   "text": "No charge for labor? You sure? Maybe I should repay you in other ways.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-759164662": {
+   "kind": "text",
+   "parent": -1924317329,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Oh! Um... Uh... I... <size=50%>Ahh... What does he mean by that!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1575978926": {
+   "kind": "text",
+   "parent": 26152238,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Really?! Oh, I promise it’ll be perfect! Just give me a little time—I’ll send updates!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "196946163": {
+   "kind": "text",
+   "parent": 537706758,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "N-No, nothing crazy! Just the best fabrics, metal, and details. I want it to be perfect…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1452489872": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "I don't have the money right now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-374989146": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "D-Don't worry, you can pay me next week...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1347016232": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I... I'll have the outfit ready next week! We, uh, we can meet here again then... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set (none) = True",
+     "fields": {
+      "m_Set": {
+       "kind": "none"
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "2146723088": {
+   "kind": "text",
+   "parent": 386128662,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "That's so cool...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core_2[river-outfitinwork] = 3",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-outfitinwork",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 3
+      }
+     }
+    }
+   ]
+  },
+  "-1749461471": {
+   "kind": "text",
+   "parent": 2140205787,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Yes! I mean... yes... I've always wanted to create that type of outfit!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core_2[river-outfitinwork] = 2",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-outfitinwork",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 2
+      }
+     }
+    }
+   ]
+  },
+  "-1273762957": {
+   "kind": "text",
+   "parent": 1302246294,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I’d love to work on this!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core_2[river-outfitinwork] = 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-outfitinwork",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-1702121533": {
+   "kind": "text",
+   "parent": 23077915,
+   "children": [
+    -925384862
+   ],
+   "actor": null,
+   "text": "(Creative) Nice. High fantasy, dark fantasy or...?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Creative] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Creative",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-925384862": {
+   "kind": "text",
+   "parent": -1702121533,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "D-Dark fantasy, definitely. I like when the world feels dangerous but still… beautiful.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/publicparksuburbs",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play RiverOne and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[river-week-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-week-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_4[river-park-talk] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-park-talk",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[tasha-meetriver] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tasha-meetriver",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/River_Base/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active River_Base to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "River_Base",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/River_Base"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/River_Base/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[river-week-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-week-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Room_Talk/publicparksuburbs",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play RiverOne and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[ken-met] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-met",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Ken to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Ken",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Ken"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[ken-met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-met",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,525 @@
+{
+ "id": "8_Room_Talk/FlowerStoreCore/AnnaQuitsStore",
+ "name": "AnnaQuitsStore",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Katarina"
+ ],
+ "roots": [
+  -1029323204,
+  148997694,
+  -1058120905,
+  -2048700419,
+  727261191,
+  -669984424,
+  -443498676,
+  -989970283,
+  -466413289,
+  981670011,
+  1623219787,
+  -334983562,
+  1743594088,
+  -207148296,
+  1759770040
+ ],
+ "nodes": {
+  "-1029323204": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Ugh. This place smells overwhelming. Do people actually enjoy this?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Katarina_Normal/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina_Normal to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina_Normal",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Katarina_Normal"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave2[anna-car-reflection] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-car-reflection",
+        "list": "Core_NoSave2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "148997694": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Well, it is a flower shop…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1058120905": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yes, yes, whatever. I need an arrangement. Something expensive-looking. But not tacky. And don’t you dare include any of those cheap flowers people buy at gas stations.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2048700419": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Alright… any specific colors or types you prefer?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "727261191": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Are you really making me do the work? You’re the florist, figure it out. Just make it look rich. I swear, hiring competent help is impossible these days.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-669984424": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You know what? No. I am so done with this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-443498676": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Excuse me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-989970283": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I put up with grumpy old ladies, clueless boyfriends, and models with two brain cells, but you—you take the cake.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-466413289": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Watch your tone, girl.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "981670011": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Oh, I’m done watching my tone. In fact—",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-334983562": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Wha—!? You absolute lunatic! What kind of establishment is this!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1743594088": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Not my problem anymore—I quit. Have fun finding your ‘rich’ flowers elsewhere, bitch.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Katarina_Normal/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-207148296": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1000992012,
+    -1338219702,
+    2062459261
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ah, {PC}. Perfect timing. Let's go home, I'm DONE with this place. Fuck it... Starmaker makes so much more money anyway!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1623219787": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fuck you, and fuck your fake tits!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlashesFlower (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlashesFlower (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlashesFlower (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1759770040": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let's leave, I'm so done with this place and its rude customers!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1000992012": {
+   "kind": "text",
+   "parent": -207148296,
+   "children": [
+    -2000319717
+   ],
+   "actor": null,
+   "text": "Are you sure? I thought you always liked working with flowers?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1338219702": {
+   "kind": "text",
+   "parent": -207148296,
+   "children": [
+    -54280378
+   ],
+   "actor": null,
+   "text": "Yeah, let's focus on Starmaker.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2062459261": {
+   "kind": "text",
+   "parent": -207148296,
+   "children": [
+    1229591492
+   ],
+   "actor": null,
+   "text": "I'm proud of you, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1229591492": {
+   "kind": "text",
+   "parent": 2062459261,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thanks, hun. I'm glad for having such a supportive {S}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-54280378": {
+   "kind": "text",
+   "parent": -1338219702,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Yes! We both know it's just way more fun... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2000319717": {
+   "kind": "text",
+   "parent": 1000992012,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I am sure. I do love working with flowers, but I HATE the people here. I'm better than them and they all... Gah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/FlowerStoreCore",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AnnaQuitsStore and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_8[anna-flowerstorevar] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-flowerstorevar",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_8[anna-quitflowerstore] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-quitflowerstore",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

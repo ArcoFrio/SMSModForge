@@ -1,4 +1,4 @@
-using BepInEx.Logging;
+﻿using BepInEx.Logging;
 using GameCreator.Runtime.Common;
 using GameCreator.Runtime.Dialogue;
 using GameCreator.Runtime.VisualScripting;
@@ -133,10 +133,8 @@ namespace SMSModForge.PackPlugin
         // GC2 evaluates that list on a clone the binding can't survive.
         private static readonly FieldInfo _fldTag        = typeof(Node).GetField("m_Tag",        BindingFlags.NonPublic | BindingFlags.Instance);
         private static readonly FieldInfo _fldJump       = typeof(Node).GetField("m_Jump",       BindingFlags.NonPublic | BindingFlags.Instance);
-        private static readonly FieldInfo _fldActing     = typeof(Node).GetField("m_Acting",     BindingFlags.NonPublic | BindingFlags.Instance);
         private static readonly FieldInfo _fldDuration   = typeof(Node).GetField("m_Duration",   BindingFlags.NonPublic | BindingFlags.Instance);
         private static readonly FieldInfo _fldTimeout    = typeof(Node).GetField("m_Timeout",    BindingFlags.NonPublic | BindingFlags.Instance);
-        private static readonly FieldInfo _fldActingActor = typeof(GameCreator.Runtime.Dialogue.Acting).GetField("m_Actor", BindingFlags.NonPublic | BindingFlags.Instance);
 
         /// <summary>
         /// Build one dialogue. Returns null on irrecoverable errors
@@ -328,18 +326,9 @@ namespace SMSModForge.PackPlugin
             // ctx.ActorFactory) and stuff it into the slot directly via
             // reflection — both the Acting class and its m_Actor field
             // are now typed (no field-name probing).
-            string actorKey = (string)nj["actor"];
-            if (!string.IsNullOrEmpty(actorKey) && _fldActing != null && _fldActingActor != null && ctx.ActorFactory != null)
-            {
-                var actorEntry = ctx.Actors?.GetOrNull(actorKey);
-                string displayName = actorEntry?.DisplayName;
-                if (string.IsNullOrEmpty(displayName)) displayName = actorKey;
-
-                var runtimeActor = ctx.ActorFactory.GetOrCreate(actorKey, displayName);
-                var acting = _fldActing.GetValue(node);
-                if (acting != null && runtimeActor != null)
-                    _fldActingActor.SetValue(acting, runtimeActor);
-            }
+            // Shared with the injector, which gives a line added to one of the
+            // game's conversations the same speaker treatment.
+            DialogueNodeWriter.SetActor(node, (string)nj["actor"], ctx);
 
             // Tag
             string tag = (string)nj["tag"];
@@ -352,52 +341,11 @@ namespace SMSModForge.PackPlugin
                 if (ctor != null) _fldTag.SetValue(node, ctor.Invoke(new object[] { tag }));
             }
 
-            // Jump
+            // Jump: shared with the injector, which writes the same field
+            // onto a line the game already had. Two copies of Game Creator's
+            // NodeJump probing would drift the first time it moved.
             var jump = nj["jump"] as JObject;
-            if (jump != null && _fldJump != null)
-            {
-                string mode = (string)jump["mode"] ?? "Continue";
-                var jumpType = _fldJump.FieldType;   // GC2 NodeJump struct
-                System.Reflection.MethodInfo make = null;
-                switch (mode)
-                {
-                    case "Exit":  make = jumpType.GetMethod("Exit",     BindingFlags.Public | BindingFlags.Static); break;
-                    // GC2's tag-jump factory is NodeJump.To(IdString). The older
-                    // probes are kept as fallbacks for other GC2 versions.
-                    case "Jump":  make = jumpType.GetMethod("To",       BindingFlags.Public | BindingFlags.Static)
-                                      ?? jumpType.GetMethod("Jump",    BindingFlags.Public | BindingFlags.Static)
-                                      ?? jumpType.GetMethod("JumpTo",  BindingFlags.Public | BindingFlags.Static); break;
-                    default:      make = jumpType.GetMethod("Continue", BindingFlags.Public | BindingFlags.Static); break;
-                }
-                try
-                {
-                    if (mode == "Jump" && make != null && make.GetParameters().Length == 1)
-                    {
-                        // Method expects an IdString tag.
-                        var idStringType = make.GetParameters()[0].ParameterType;
-                        var ctor = idStringType.GetConstructor(new[] { typeof(string) });
-                        if (ctor != null)
-                            _fldJump.SetValue(node, make.Invoke(null, new[] { ctor.Invoke(new object[] { (string)jump["targetTag"] ?? "" }) }));
-                        else
-                            ctx.Log.LogWarning("[SMSModForge.PackPlugin] Jump: IdString(string) ctor not found — tag jump not applied.");
-                    }
-                    else if (make != null && make.GetParameters().Length == 0)
-                    {
-                        _fldJump.SetValue(node, make.Invoke(null, null));
-                    }
-                    else
-                    {
-                        // Loud, not silent: a probe miss here is exactly how a
-                        // "jump quietly behaves like Continue" bug looks.
-                        ctx.Log.LogWarning("[SMSModForge.PackPlugin] Jump: no matching NodeJump factory for mode '" +
-                                           mode + "' — node keeps default Continue flow.");
-                    }
-                }
-                catch (System.Exception ex)
-                {
-                    ctx.Log.LogWarning("[SMSModForge.PackPlugin] Jump finalisation failed: " + ex.Message);
-                }
-            }
+            if (jump != null) DialogueNodeWriter.SetJump(node, jump, ctx.Log);
 
             // Duration: how a Text line advances. Default / "UntilInteraction"
             // leaves GC2's default (wait for input) — and a fresh `new Node()`

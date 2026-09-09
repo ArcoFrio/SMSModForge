@@ -1,0 +1,568 @@
+{
+ "id": "8_Room_Talk/Comapreafterwtalk/MarioMinigameResult",
+ "name": "MarioMinigameResult",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Mario"
+ ],
+ "roots": [
+  -634949939,
+  -1219246370,
+  1480897153
+ ],
+ "nodes": {
+  "-634949939": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -985360145
+   ],
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Well, well, well... Looks like you’ve got a sharp eye, {PC}. You did a good job. This is exactly what I needed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Minigame[success] ≥ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "success",
+        "list": "Minigame",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = $2000",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "$2000"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + 2000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 2000
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Trigger_MinigameDone to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Trigger_MinigameDone",
+       "of": "GetGameObjectInstance",
+       "path": "XP_System/Trigger_MinigameDone"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Smart to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Smart",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Smart"
+      }
+     }
+    }
+   ]
+  },
+  "-985360145": {
+   "kind": "text",
+   "parent": -634949939,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Come back next week, I've got more work for you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_4[detective-minigame-stage] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "detective-minigame-stage",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-1219246370": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -419883611
+   ],
+   "actor": "Mario",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Hmm... this isn’t what I was expecting, {PC}. You missed a few things, and that’s a problem.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Minigame[success] ≤ 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "success",
+        "list": "Minigame",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-419883611": {
+   "kind": "text",
+   "parent": -1219246370,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "I’m disappointed, but everyone makes mistakes. Just don’t let it happen again. Next week, I expect you to be more thorough. Understand?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1480897153": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1684910426,
+    -1941583232,
+    -1481664277
+   ],
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Ah, {PC}, you’ve outdone yourself! You’ve handled everything I’ve thrown your way like a pro. But… there’s one last task before I wipe that debt clean.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_4[detective-minigame-stage] ≥ 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "detective-minigame-stage",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[detective-minigame-complete] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "detective-minigame-complete",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1684910426": {
+   "kind": "text",
+   "parent": 1480897153,
+   "actor": "Mario",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "It’s about my wife, Katarina. She’s been even more tense and... well, let’s say ‘difficult’ than usual. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Visit Mario once a week.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Bishop (Mario)",
+        "of": "Quest"
+       },
+       "m_TaskId": -989935106
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-1941583232": {
+   "kind": "choice",
+   "parent": 1480897153,
+   "children": [
+    54038959,
+    -232646496,
+    1084872666
+   ],
+   "actor": "Mario",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I want you to help her relax a bit.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "54038959": {
+   "kind": "text",
+   "parent": -1941583232,
+   "children": [
+    505167826
+   ],
+   "actor": null,
+   "text": "You want me to fuck your wife?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-232646496": {
+   "kind": "text",
+   "parent": -1941583232,
+   "children": [
+    -319927868
+   ],
+   "actor": null,
+   "text": "Easy enough, but will she be up for it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1084872666": {
+   "kind": "text",
+   "parent": -1941583232,
+   "children": [
+    1044774125
+   ],
+   "actor": null,
+   "text": "No way, your wife's a bitch.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "505167826": {
+   "kind": "text",
+   "parent": 54038959,
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Exactly. The wheels are starting to turn, and this is just the first move. But that's all you need to know for now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-319927868": {
+   "kind": "text",
+   "parent": -232646496,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "She's addicted to the lifestyle I'm providing. She will obey.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1044774125": {
+   "kind": "text",
+   "parent": 1084872666,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Hah! That she is! But... It's the only way to help your {D}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1481664277": {
+   "kind": "choice",
+   "parent": 1480897153,
+   "children": [
+    -1118337420,
+    -1421739722
+   ],
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "So, what do you say?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1118337420": {
+   "kind": "text",
+   "parent": -1481664277,
+   "children": [
+    -777306973
+   ],
+   "actor": null,
+   "text": "I'll do it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1421739722": {
+   "kind": "text",
+   "parent": -1481664277,
+   "children": [
+    808145857
+   ],
+   "actor": null,
+   "text": "No way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "808145857": {
+   "kind": "text",
+   "parent": -1421739722,
+   "actor": "Mario",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Then we have nothing else to discuss. You are on your own.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionQuestsDeactivate",
+     "title": "Deactivate Bishop (Mario)",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Bishop (Mario)",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-777306973": {
+   "kind": "text",
+   "parent": -1118337420,
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Fantastic. Take your time to prepare yourself and then return to me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[agreed-to-bang-katarina] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "agreed-to-bang-katarina",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Comapreafterwtalk",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play MarioMinigameResult and wait",
+   "as": "Dialogue",
+   "branches": [
+    "minigamedone"
+   ],
+   "before": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Minigame[total-clicks] = 0",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "total-clicks",
+        "list": "Minigame",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 0
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

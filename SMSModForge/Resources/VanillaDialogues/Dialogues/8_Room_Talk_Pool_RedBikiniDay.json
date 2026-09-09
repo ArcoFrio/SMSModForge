@@ -1,0 +1,655 @@
+{
+ "id": "8_Room_Talk/Pool/RedBikiniDay",
+ "name": "RedBikiniDay",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  1750731834,
+  -301016914,
+  -1072410783
+ ],
+ "nodes": {
+  "1750731834": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Red bikini day again. Try not to drop your phone this time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_9[anna-redbikiniprogress] ≥ 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-redbikiniprogress",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-301016914": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1148396171,
+    1990395207
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "God… I haven’t worn this one in years.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_9[anna-redbikiniprogress] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-redbikiniprogress",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1148396171": {
+   "kind": "text",
+   "parent": -301016914,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I bought it when I was twenty-two. Didn’t think it’d still fit.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1990395207": {
+   "kind": "choice",
+   "parent": -301016914,
+   "children": [
+    1763126496,
+    1204391381,
+    -1439045705
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "You’re staring. Is it... too much?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_9[anna-redbikiniprogress] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-redbikiniprogress",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-1072410783": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    798548466,
+    -1047490310,
+    548469881
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Pool's warm. So am I. You coming in, or just here to gawk?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "798548466": {
+   "kind": "text",
+   "parent": -1072410783,
+   "children": [
+    -1070826524,
+    1775303715,
+    213415490,
+    2124090657
+   ],
+   "actor": null,
+   "text": "How about a photo?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[pool-photo-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "pool-photo-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1047490310": {
+   "kind": "text",
+   "parent": -1072410783,
+   "children": [
+    -775769638,
+    1346245557,
+    -1285381213
+   ],
+   "actor": null,
+   "text": "Of course, let's swim.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "548469881": {
+   "kind": "text",
+   "parent": -1072410783,
+   "children": [
+    401312950
+   ],
+   "actor": null,
+   "text": "I'm good, thanks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "401312950": {
+   "kind": "text",
+   "parent": 548469881,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Okay, hun. I'll be here if you need something.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-775769638": {
+   "kind": "text",
+   "parent": -1047490310,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let's have some fun!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1346245557": {
+   "kind": "text",
+   "parent": -1047490310,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 5,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AFewMinutesLater to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AFewMinutesLater",
+       "of": "GetGameObjectInstance",
+       "path": "6_Effects/Effect_Canvas/AFewMinutesLater"
+      }
+     }
+    }
+   ]
+  },
+  "-1285381213": {
+   "kind": "text",
+   "parent": -1047490310,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I needed that. I wanted a break from lenses on me.\nJust you and me and the water.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1070826524": {
+   "kind": "text",
+   "parent": 798548466,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Tell me what kind of shots we’re going for.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[pool-photo-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "pool-photo-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1775303715": {
+   "kind": "random",
+   "parent": 798548466,
+   "children": [
+    1712842721,
+    -667879168
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Soft and sunny, or slutty and soaked?",
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "1712842721": {
+   "kind": "text",
+   "parent": 1775303715,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "And now for the money-maker.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active B20_AnnaRedBikini (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "B20_AnnaRedBikini (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/B20_AnnaRedBikini (0)"
+      }
+     }
+    }
+   ]
+  },
+  "-667879168": {
+   "kind": "text",
+   "parent": 1775303715,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Red bikini’s doing overtime back here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active B21_AnnaRedBikini (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "B21_AnnaRedBikini (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/B21_AnnaRedBikini (1)"
+      }
+     }
+    }
+   ]
+  },
+  "213415490": {
+   "kind": "text",
+   "parent": 798548466,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You better get the angle right.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2124090657": {
+   "kind": "text",
+   "parent": 798548466,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Think they'll be too distracted to notice how wet I am? From the pool, of course...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1763126496": {
+   "kind": "text",
+   "parent": 1990395207,
+   "children": [
+    -847918918
+   ],
+   "actor": null,
+   "text": "You look incredible in that, Anna.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-847918918": {
+   "kind": "text",
+   "parent": 1763126496,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Thanks… It’s kind of empowering, honestly. I feel... bold.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1204391381": {
+   "kind": "text",
+   "parent": 1990395207,
+   "children": [
+    -1330530440
+   ],
+   "actor": null,
+   "text": "That top’s working overtime. You sure it can handle you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1330530440": {
+   "kind": "text",
+   "parent": 1204391381,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "If it breaks, it breaks. That’d get clicks, wouldn’t it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1439045705": {
+   "kind": "text",
+   "parent": 1990395207,
+   "children": [
+    874122194
+   ],
+   "actor": null,
+   "text": "Vintage swimsuit? Huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "874122194": {
+   "kind": "text",
+   "parent": -1439045705,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Honestly, I do feel like a damn time capsule. A hot one, though.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Pool",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play RedBikiniDay and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Core_NoSave3[anna-redswimsuitdayactive] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-redswimsuitdayactive",
+        "list": "Core_NoSave3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Mainstory[anna-heart-status] ≥ 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-heart-status",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ],
+   "branches": [
+    "redbikini"
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_LoveRouteRedSwimsuitBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_LoveRouteRedSwimsuitBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_LoveRouteRedSwimsuitBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

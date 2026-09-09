@@ -1,0 +1,335 @@
+{
+ "id": "8_Room_Talk/Mall/CoreRandomTalkMall/KateHimari",
+ "name": "KateHimari",
+ "index": 4,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Himari",
+  "Kate"
+ ],
+ "roots": [
+  975002162,
+  567717673,
+  1733759432
+ ],
+ "nodes": {
+  "975002162": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1657589182,
+    -324761003
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "And then my sis drank all my beer, even tho  I specifically bought it for the party.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1657589182": {
+   "kind": "text",
+   "parent": 975002162,
+   "actor": "Kate",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "But the worst thing is, she didn't even say sorry! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-324761003": {
+   "kind": "text",
+   "parent": 975002162,
+   "actor": "Himari",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Please... Stop... Talking...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "567717673": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1152986625,
+    -1128234540
+   ],
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Himari! Would you like to~",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1152986625": {
+   "kind": "text",
+   "parent": 567717673,
+   "actor": "Himari",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "No.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1128234540": {
+   "kind": "text",
+   "parent": 567717673,
+   "actor": "Kate",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "O-Okay...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1733759432": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -779361933,
+    -706703381
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Kate, I'm begging you, stop talking to me. We will never be friends.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-779361933": {
+   "kind": "text",
+   "parent": 1733759432,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Because we'll be besties!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-706703381": {
+   "kind": "text",
+   "parent": 1733759432,
+   "actor": "Himari",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "You are killing me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Mall/CoreRandomTalkMall",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play KateHimari and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Kate to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Kate",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Kate"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Kate/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1090 @@
+{
+ "id": "8_Room_Talk/PatientRoom/NurseInjurytalk",
+ "name": "NurseInjurytalk",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "NurseNina"
+ ],
+ "roots": [
+  1667439346,
+  -130512821
+ ],
+ "nodes": {
+  "1667439346": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -766820303,
+    -1838831489,
+    -1336792293,
+    -1888538350,
+    49888261,
+    -679129356
+   ],
+   "actor": "NurseNina",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You REALLY gotta stop hitting your head, troublemaker... Because of your mistake I'm forced to take a big hefty load of sperm for the lab...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[hospital-unlocked] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hospital-unlocked",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NurseMilking (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NurseMilking (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/NurseMilking (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-130512821": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    326791333,
+    -365300930,
+    1956680425,
+    1887411308,
+    -625691128,
+    1043888826,
+    -507811267
+   ],
+   "actor": "NurseNina",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Ah, you’re awake! Welcome back to the land of the living, sleepyhead!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[hospital-unlocked] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hospital-unlocked",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "326791333": {
+   "kind": "text",
+   "parent": -130512821,
+   "actor": "NurseNina",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "You really gave us a scare there! I thought you were going to nap forever.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-365300930": {
+   "kind": "text",
+   "parent": -130512821,
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "But you’re okay now, thanks to me! I’m Nurse Nina, by the way. And you… you’re quite the troublemaker, aren’t you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1956680425": {
+   "kind": "text",
+   "parent": -130512821,
+   "actor": "NurseNina",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Anyway, I’ve patched you up, so now it’s time to talk about your stay here! You know, these kinds of services aren’t free.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1887411308": {
+   "kind": "choice",
+   "parent": -130512821,
+   "children": [
+    1040892211,
+    -1095218600,
+    1515655965
+   ],
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "I’ll have to bill you for 20% of your total balance. Hospital fees and all that fun stuff, right?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1040892211": {
+   "kind": "text",
+   "parent": 1887411308,
+   "children": [
+    -1900263109,
+    1394901630
+   ],
+   "actor": null,
+   "text": "Alright, I get it. Thanks for patching me up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1095218600": {
+   "kind": "text",
+   "parent": 1887411308,
+   "children": [
+    358751615,
+    -456443950,
+    -969554288
+   ],
+   "actor": null,
+   "text": "20%?! That’s insane! You’re robbing me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1515655965": {
+   "kind": "text",
+   "parent": 1887411308,
+   "children": [
+    1048647532,
+    673927431,
+    1058091012
+   ],
+   "actor": null,
+   "text": "I’m not paying that much. Find another way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1900263109": {
+   "kind": "text",
+   "parent": 1040892211,
+   "actor": "NurseNina",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Aw, no need to thank me! Just doing my job. You’re lucky you’re so easygoing—I like patients like you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "358751615": {
+   "kind": "text",
+   "parent": -1095218600,
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1048647532": {
+   "kind": "text",
+   "parent": 1515655965,
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "673927431": {
+   "kind": "text",
+   "parent": 1515655965,
+   "actor": "NurseNina",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Oh, so you think you can just skip out on your bill? After I spent hours making sure you didn’t kick the bucket?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1058091012": {
+   "kind": "text",
+   "parent": 1515655965,
+   "actor": "NurseNina",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You’re going to pay every last cent. Or else I’ll make sure your next visit is a lot less pleasant. Got it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-456443950": {
+   "kind": "text",
+   "parent": -1095218600,
+   "actor": "NurseNina",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Robbing you? Robbing you?! I saved your sorry butt, and now you’re whining about a little fee?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-969554288": {
+   "kind": "text",
+   "parent": -1095218600,
+   "actor": "NurseNina",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Shut up and pay up, you little ass! You think hospitals run on air and sunshine?! Next time, try not to pass out in the middle of nowhere.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1394901630": {
+   "kind": "text",
+   "parent": 1040892211,
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "But don’t go pushing yourself like that again, or we’ll have to meet like this way too often.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-625691128": {
+   "kind": "text",
+   "parent": -130512821,
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1043888826": {
+   "kind": "text",
+   "parent": -130512821,
+   "actor": "NurseNina",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Alrighty then, looks like you’re good to go! Just take it easy, okay? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-507811267": {
+   "kind": "text",
+   "parent": -130512821,
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "And remember, if you need anything—anything at all—don’t be afraid to come see me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[hospital-unlocked] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hospital-unlocked",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-766820303": {
+   "kind": "choice",
+   "parent": 1667439346,
+   "children": [
+    1002152401,
+    -16376471
+   ],
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "Now, are you going to be a good patient and hold out your arm… or do I have to convince you?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1838831489": {
+   "kind": "text",
+   "parent": 1667439346,
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "Mmm... That's better... You know, your penis created quite the tent while you were passed out...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1336792293": {
+   "kind": "text",
+   "parent": 1667439346,
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "It's quite... large... So we have to do some research... To make sure you are all healthy....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NurseMilking (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NurseMilking (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/NurseMilking (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1002152401": {
+   "kind": "text",
+   "parent": -766820303,
+   "children": [
+    -2017334792
+   ],
+   "actor": null,
+   "text": "Fine, go ahead.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2017334792": {
+   "kind": "text",
+   "parent": 1002152401,
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "Good boy. See? That wasn’t so hard, was it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-16376471": {
+   "kind": "text",
+   "parent": -766820303,
+   "children": [
+    149044580,
+    -1026183062
+   ],
+   "actor": null,
+   "text": "No way. You're crazy!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "149044580": {
+   "kind": "text",
+   "parent": -16376471,
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "Oh, don’t be a baby! Just a few strokes. You’d better stop squirming, or I’ll make sure this is a lot less pleasant.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1026183062": {
+   "kind": "text",
+   "parent": -16376471,
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "Now, hold still. Unless you want to see what happens when I really lose my patience.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1888538350": {
+   "kind": "choice",
+   "parent": 1667439346,
+   "children": [
+    1812068776,
+    1415335314,
+    -1511634289
+   ],
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Let it out.. I need a BIG sample... ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "49888261": {
+   "kind": "text",
+   "parent": 1667439346,
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "Hah! Perfect... Yes... Fill it all up... The whole vial....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NurseMilking (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NurseMilking (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/NurseMilking (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-679129356": {
+   "kind": "text",
+   "parent": 1667439346,
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "Good boy... You can leave now and in future, be more careful or I'll have to take more samples....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_6[nurse-progression] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nurse-progression",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "1812068776": {
+   "kind": "text",
+   "parent": -1888538350,
+   "actor": null,
+   "text": "F-Fuck... I'm coming...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1415335314": {
+   "kind": "text",
+   "parent": -1888538350,
+   "actor": null,
+   "text": "H-Here's my cum, you crazy whore!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1511634289": {
+   "kind": "text",
+   "parent": -1888538350,
+   "children": [
+    -56112352,
+    -1510484959,
+    -1950535545,
+    -720777525,
+    -592022000,
+    -1873295674,
+    -1054534348,
+    1084144554
+   ],
+   "actor": null,
+   "text": "I... I don't think just stroking it is enough...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_6[nurse-progression] ≥ 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nurse-progression",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-56112352": {
+   "kind": "text",
+   "parent": -1511634289,
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "I... I guess you are right...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1510484959": {
+   "kind": "text",
+   "parent": -1511634289,
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "I am the best nurse around, and I always have emergency rubbers on me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1950535545": {
+   "kind": "text",
+   "parent": -1511634289,
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "S-Shit... I've never had to extract semen from such a massive penis... Fffhhuu....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NurseMilking (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NurseMilking (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/NurseMilking (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-720777525": {
+   "kind": "text",
+   "parent": -1511634289,
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "I-I'm sure you'll remember that this is just a routine process. I-I can assure you that there is nothing sexual about this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-592022000": {
+   "kind": "text",
+   "parent": -1511634289,
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "Fhuuucckk!!! ... Hngaaaaahh!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1873295674": {
+   "kind": "text",
+   "parent": -1511634289,
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "I... Y-Yes... Fill it up... I can feel it swell inside of me... Hngggh....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1054534348": {
+   "kind": "text",
+   "parent": -1511634289,
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "All done! Thanks for cooperating. Maybe next time, I’ll give you a lollipop… if you behave",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NurseMilking (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NurseMilking (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/NurseMilking (5)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NurseMilking (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NurseMilking (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/NurseMilking (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1084144554": {
+   "kind": "text",
+   "parent": -1511634289,
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "Now, if you'll excuse me, we're going to thoroughly examine your sperm example.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/PatientRoom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play NurseInjurytalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Core_NoSave[hospital-injury] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hospital-injury",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core_NoSave[hospital-fee] = (20% of Core[Cash])",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hospital-fee",
+        "list": "Core_NoSave",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetDecimalMathPercent",
+       "data": {
+        "m_Number": {
+         "$type": "PropertyGetDecimal",
+         "m_Property": {
+          "$type": "GetDecimalGlobalName",
+          "m_Variable": {
+           "$type": "FieldGetGlobalName",
+           "m_Variable": {
+            "$unity": "Core",
+            "$type": "GlobalNameVariables"
+           },
+           "m_Name": {
+            "$type": "IdPathString",
+            "m_String": "Cash",
+            "m_ID": -1500820857
+           },
+           "m_TypeID": {
+            "$type": "IdString",
+            "m_String": "number"
+           }
+          }
+         }
+        },
+        "m_Ratio": 0.2
+       }
+      }
+     }
+    },
+    {
+     "type": "InstructionRoundNumber",
+     "title": "Gamecreator.Runtime.Visualscripting.Instructionroundnumber",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hospital-fee",
+        "list": "Core_NoSave",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hospital-fee",
+        "list": "Core_NoSave",
+        "type": "number"
+       }
+      },
+      "m_Method": "Round"
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "type": "InstructionArithmeticSubtractNumbers",
+     "title": "Set Core[Cash] = Core[Cash] - Core_NoSave[hospital-fee]",
+     "fields": {
+      "Title": "Set Core[Cash] = Core[Cash] - Core_NoSave[hospital-fee]",
+      "BaseType": {
+       "$meta": "GameCreator.Runtime.VisualScripting.Instruction"
+      },
+      "FullType": {
+       "$meta": "GameCreator.Runtime.VisualScripting.InstructionArithmeticSubtractNumbers"
+      },
+      "Breakpoint": false,
+      "IsEnabled": true,
+      "Color": {
+       "r": 0.03529412,
+       "g": 0.03529412,
+       "b": 0.03529412,
+       "a": 1
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NurseNina_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NurseNina_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/NurseNina_Default"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[hospital-fee-paid] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hospital-fee-paid",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Master_Default/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[hospital-injury] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hospital-injury",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'ForceEnableUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "ForceEnableUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

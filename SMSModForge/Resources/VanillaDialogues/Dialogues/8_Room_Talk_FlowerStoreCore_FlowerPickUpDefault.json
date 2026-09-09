@@ -1,0 +1,2454 @@
+{
+ "id": "8_Room_Talk/FlowerStoreCore/FlowerPickUpDefault",
+ "name": "FlowerPickUpDefault",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "Josef",
+  "S_Customer"
+ ],
+ "roots": [
+  -930679443
+ ],
+ "nodes": {
+  "-930679443": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    96653399,
+    1671931246,
+    -1088148193,
+    170015514
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": {
+    "kind": "variable",
+    "variable": {
+     "scope": "localList",
+     "on": {
+      "kind": "object",
+      "name": "FlowerPickUpDefault",
+      "of": "GetGameObjectInstance",
+      "path": "8_Room_Talk/FlowerStoreCore/FlowerPickUpDefault"
+     },
+     "pick": "random",
+     "type": "string"
+    }
+   },
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave2[anna-car-reflection] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-car-reflection",
+        "list": "Core_NoSave2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "96653399": {
+   "kind": "text",
+   "parent": -930679443,
+   "children": [
+    -126990236,
+    -1770235556
+   ],
+   "actor": null,
+   "text": "How was work today?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1671931246": {
+   "kind": "text",
+   "parent": -930679443,
+   "children": [
+    -1815226456,
+    -1454675722,
+    -803602538,
+    1230605906,
+    1841913316
+   ],
+   "actor": null,
+   "text": "Mind if I take a quick picture for Starmaker?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "170015514": {
+   "kind": "text",
+   "parent": -930679443,
+   "children": [
+    1554580448
+   ],
+   "actor": null,
+   "text": "Let’s get going. I’m kind of short on time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1554580448": {
+   "kind": "text",
+   "parent": 170015514,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Alright, let’s go before I pass out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1815226456": {
+   "kind": "text",
+   "parent": 1671931246,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, sweetheart. Go ahead—make sure I look good for them.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Romanced] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Romanced",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1454675722": {
+   "kind": "text",
+   "parent": 1671931246,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Here? Now? Oh… well, if you think it’ll look good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Romanced] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Romanced",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-803602538": {
+   "kind": "random",
+   "parent": 1671931246,
+   "children": [
+    -2074437050,
+    1417503482,
+    -1793348199,
+    -1289759471
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2074437050": {
+   "kind": "text",
+   "parent": -803602538,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A72_FlowerStore (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A72_FlowerStore (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A72_FlowerStore (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1417503482": {
+   "kind": "text",
+   "parent": -803602538,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A72_FlowerStore (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A72_FlowerStore (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A72_FlowerStore (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1793348199": {
+   "kind": "text",
+   "parent": -803602538,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A72_FlowerStore (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A72_FlowerStore (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A72_FlowerStore (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1289759471": {
+   "kind": "text",
+   "parent": -803602538,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-2-nude] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-2-nude",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A75_FlowerStore (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A75_FlowerStore (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A75_FlowerStore (4)"
+      }
+     }
+    }
+   ]
+  },
+  "1230605906": {
+   "kind": "text",
+   "parent": 1671931246,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Think they’ll like the ‘hardworking florist’ look? Or should I start posing with roses?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1841913316": {
+   "kind": "text",
+   "parent": 1671931246,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Let's go home, shall we?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-126990236": {
+   "kind": "text",
+   "parent": 96653399,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": {
+    "kind": "variable",
+    "variable": {
+     "scope": "localList",
+     "on": {
+      "kind": "object",
+      "name": "GameObject",
+      "of": "GetGameObjectInstance",
+      "path": "8_Room_Talk/FlowerStoreCore/FlowerPickUpDefault/GameObject"
+     },
+     "pick": "random",
+     "type": "string"
+    }
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1770235556": {
+   "kind": "text",
+   "parent": 96653399,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Alright, enough work talk. Let’s go home.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1088148193": {
+   "kind": "text",
+   "parent": -930679443,
+   "children": [
+    -470462418,
+    738419145
+   ],
+   "actor": null,
+   "text": "You know… since it’s just us here, we could have a little fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-470462418": {
+   "kind": "text",
+   "parent": -1088148193,
+   "children": [
+    -125195831,
+    1014954796
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "H-Here? In the shop? I… but why would you even suggest that…?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "738419145": {
+   "kind": "text",
+   "parent": -1088148193,
+   "children": [
+    -1589002688,
+    1861677057,
+    -802250761,
+    1705251129,
+    -1059436157,
+    1906191443,
+    1253312733
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I was hoping you’d ask...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-125195831": {
+   "kind": "text",
+   "parent": -470462418,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A-Alright, but let’s be quick… someone might see us through the windows.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerPresent (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerPresent (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerPresent (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1589002688": {
+   "kind": "text",
+   "parent": 738419145,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Just us, surrounded by flowers... it’s almost too romantic...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerPresent (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerPresent (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerPresent (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1861677057": {
+   "kind": "text",
+   "parent": 738419145,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "D-Don't make me wait, {PC}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1014954796": {
+   "kind": "choice",
+   "parent": -470462418,
+   "children": [
+    -1158284255,
+    -1819532496
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god, what am I doing... This is so wrong...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1158284255": {
+   "kind": "text",
+   "parent": 1014954796,
+   "children": [
+    -1011960605,
+    707658071,
+    -1917713553,
+    -631019140,
+    -1322817649,
+    1007650054
+   ],
+   "actor": null,
+   "text": "(Go down on her pussy)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1819532496": {
+   "kind": "text",
+   "parent": 1014954796,
+   "children": [
+    -1449810168,
+    989028952,
+    1907171867,
+    798041391,
+    -949301283,
+    822675635
+   ],
+   "actor": null,
+   "text": "(Eat out her ass)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1449810168": {
+   "kind": "text",
+   "parent": -1819532496,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "W-Wait... That's not my... That's...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerButt (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerButt (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerButt (1)"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[really-horny-m] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "really-horny-m",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-1011960605": {
+   "kind": "text",
+   "parent": -1158284255,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I can feel your breath... Oh god...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerButt (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerButt (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerButt (1)"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[really-horny-m] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "really-horny-m",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "707658071": {
+   "kind": "text",
+   "parent": -1158284255,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes... W-Work your tongue... On my... My... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1917713553": {
+   "kind": "text",
+   "parent": -1158284255,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh fuckknngghh! Hngaah... Y-Yes... Don't stop... Almost... Almost there...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerButt (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerButt (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerButt (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-631019140": {
+   "kind": "text",
+   "parent": -1158284255,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm... Hngahhh~ HNGAAAH! HAAAAAAA!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "989028952": {
+   "kind": "text",
+   "parent": -1819532496,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{PC}... Don't... That's not... You shouldn't....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1907171867": {
+   "kind": "text",
+   "parent": -1819532496,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god, oh god, oh god... This is... It's too much... I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerButt (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerButt (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerButt (2)"
+      }
+     }
+    }
+   ]
+  },
+  "798041391": {
+   "kind": "text",
+   "parent": -1819532496,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{PC}... If you... Hngaah... I will... I.... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-949301283": {
+   "kind": "text",
+   "parent": -1819532496,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hnaahhh...  HnaaAAAAAH! .... Haahh... Oh god! Oh my... Hnggaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1322817649": {
+   "kind": "text",
+   "parent": -1158284255,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god... My legs are shaking, I... H-Hold me... Hngaahh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "822675635": {
+   "kind": "text",
+   "parent": -1819532496,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I can't believe we just... Oh god... I...  Let's go home now, y-yes?",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1007650054": {
+   "kind": "text",
+   "parent": -1158284255,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I can't believe we just... Oh god... I...  Let's go home now, y-yes?",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-802250761": {
+   "kind": "text",
+   "parent": 738419145,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god, my own {S} is staring at my... At my holes... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerButt (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerButt (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerButt (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1705251129": {
+   "kind": "choice",
+   "parent": 738419145,
+   "children": [
+    1618110796,
+    1858164444,
+    437028457
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "D-Do you like them? ... ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1059436157": {
+   "kind": "text",
+   "parent": 738419145,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hngaah! Fuck... I... I guess that's a yes, huh? Hngahaha... Mmmmmm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerButt (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerButt (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerButt (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1906191443": {
+   "kind": "text",
+   "parent": 738419145,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "D-Don't stop... I... I want more.. I... {PC}....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1253312733": {
+   "kind": "choice",
+   "parent": 738419145,
+   "children": [
+    -483481345,
+    -1727121730,
+    -309228175
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Can I... Do you want your {M} to sit down on your big, strong... cock?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-483481345": {
+   "kind": "text",
+   "parent": 1253312733,
+   "children": [
+    620397566,
+    440688997,
+    -545279795,
+    -1669422321,
+    -1566667339,
+    2019190648,
+    -253677049,
+    517978047,
+    854218584,
+    443873913,
+    -461753171
+   ],
+   "actor": null,
+   "text": "Be my guest, I'm all ready for you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-309228175": {
+   "kind": "text",
+   "parent": 1253312733,
+   "children": [
+    -769821201
+   ],
+   "actor": null,
+   "text": "Not feeling it right now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-769821201": {
+   "kind": "text",
+   "parent": -309228175,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Aw, you're no fun... Let's drive home then, I think I'll finish the job myself during a warm, hot shower...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "620397566": {
+   "kind": "text",
+   "parent": -483481345,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let's... Let's just sit down together... A-And... And... Hngaahhh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[random-1-of-10] = Random2[Random]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random2",
+        "pick": "random",
+        "type": "number"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "440688997": {
+   "kind": "text",
+   "parent": -483481345,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That's it... I... You're stretching my pussy so good... Mmm, let's... Let's take it slow... I want to enjoy this feeling...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerLove (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerLove (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerLove (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerPresent (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerPresent (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerPresent (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Flowercustomer/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Flowercustomer (2)/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-545279795": {
+   "kind": "text",
+   "parent": -483481345,
+   "children": [
+    -702329766,
+    817540492,
+    -1947280582,
+    -873328496,
+    -1629058785
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh crap, someone’s coming in! Slow down!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1669422321": {
+   "kind": "text",
+   "parent": -483481345,
+   "children": [
+    1963797340,
+    -904723290,
+    -848475518
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh crap, someone’s coming in! Slow down!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1566667339": {
+   "kind": "text",
+   "parent": -483481345,
+   "children": [
+    1528465194,
+    -1757578801,
+    -1510211321
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh crap, someone’s coming in! Slow down!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "2019190648": {
+   "kind": "text",
+   "parent": -483481345,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Finally, just the two of us… Now, fuck my pussy. Pound your {M}'s slit with your big, perfect dick!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-253677049": {
+   "kind": "choice",
+   "parent": -483481345,
+   "children": [
+    -1478486349,
+    1345476020,
+    1808109320
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That's it... That's... I'm... Keep at it, I'm.. I'M... HNGAAAAH! CUMMING! HnGaaaH!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "517978047": {
+   "kind": "text",
+   "parent": -483481345,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-YES! ... F-Fill me... I want to feel it inside of me... A-All of it! Hngaaahh!!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerLove (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerLove (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerLove (3)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerButt (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerButt (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerButt (2)"
+      }
+     }
+    }
+   ]
+  },
+  "854218584": {
+   "kind": "text",
+   "parent": -483481345,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I can’t believe how much you get under my skin… how easily you make me feel this way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "443873913": {
+   "kind": "text",
+   "parent": -483481345,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "L-Let’s… um, there’s a bathroom in the back. We should freshen up before heading home together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-461753171": {
+   "kind": "text",
+   "parent": -483481345,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "You know… I really loved every moment of this.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-702329766": {
+   "kind": "text",
+   "parent": -545279795,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Hey, darling. I came to pick you up—oh… looks like our {S} beat me to it. Should’ve called ahead, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerLove (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerLove (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerLove (2)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerButt (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerButt (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerButt (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1963797340": {
+   "kind": "text",
+   "parent": -1669422321,
+   "actor": "S_Customer",
+   "expressionName": "neutral",
+   "text": "Hello there! Uhm, do you sell any...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_Flowercustomer to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_Flowercustomer",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Flowercustomer"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerLove (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerLove (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerLove (2)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerButt (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerButt (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerButt (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1528465194": {
+   "kind": "text",
+   "parent": -1566667339,
+   "actor": "S_Customer",
+   "expressionName": "neutral",
+   "text": "H-Hello, I'm looking to buy~ Oh my god...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_Flowercustomer (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_Flowercustomer (2)",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Flowercustomer (2)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerLove (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerLove (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerLove (2)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerButt (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerButt (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerButt (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1757578801": {
+   "kind": "text",
+   "parent": -1566667339,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "P-Please come back tomorrow... I... Oh fuck... Harder, {PC}! I'm getting close!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1510211321": {
+   "kind": "text",
+   "parent": -1566667339,
+   "actor": "S_Customer",
+   "expressionName": "neutral",
+   "text": "I'll be leaving now... Oh my god, oh my god...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Flowercustomer (2)/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-904723290": {
+   "kind": "text",
+   "parent": -1669422321,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Um... Hngaah~ S-Sorry, mister.... Shop's closed. C-Could you come back tomorrow? Please?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-848475518": {
+   "kind": "text",
+   "parent": -1669422321,
+   "actor": "S_Customer",
+   "expressionName": "neutral",
+   "text": "Uh, sure... I'll be back tomorrow...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Flowercustomer/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "817540492": {
+   "kind": "text",
+   "parent": -545279795,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "O-Oh! H-Hey, honey… Y-Yeah, I’m riding with {PC}. W-We, uh… ah—just need to grab a few things before heading home, s-so…!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1629058785": {
+   "kind": "text",
+   "parent": -545279795,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Alright, I’ll get out of your way. See you at home—drive safe, alright?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1947280582": {
+   "kind": "text",
+   "parent": -545279795,
+   "children": [
+    -191756971,
+    501578570
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Oh, I see… wait—honey, why exactly are you sitting on his lap?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-191756971": {
+   "kind": "text",
+   "parent": -1947280582,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "W-Well! There’s only one chair, and, uh… we both wanted a seat!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "501578570": {
+   "kind": "text",
+   "parent": -1947280582,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Oh… right. Of course. That makes perfect sense.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-873328496": {
+   "kind": "text",
+   "parent": -545279795,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Well, um... I can see that you two are having fun so... Uh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1478486349": {
+   "kind": "text",
+   "parent": -253677049,
+   "actor": null,
+   "text": "F-Fuck, {M}... I'll fill this tight little pussy... I'm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1345476020": {
+   "kind": "text",
+   "parent": -253677049,
+   "actor": null,
+   "text": "T-Take my cock, Anna... I'll pump you full of my... of my...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1808109320": {
+   "kind": "text",
+   "parent": -253677049,
+   "actor": null,
+   "text": "(Fill her up)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1618110796": {
+   "kind": "text",
+   "parent": 1705251129,
+   "actor": null,
+   "text": "You have no idea, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1858164444": {
+   "kind": "text",
+   "parent": 1705251129,
+   "actor": null,
+   "text": "They're perfect, Anna. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "437028457": {
+   "kind": "text",
+   "parent": 1705251129,
+   "actor": null,
+   "text": "(Eat her out)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1727121730": {
+   "kind": "text",
+   "parent": 1253312733,
+   "children": [
+    -622065938,
+    271551818,
+    -7275562,
+    928046739,
+    -1067749812,
+    1064961858,
+    -30931615,
+    -639631144,
+    504709348
+   ],
+   "actor": null,
+   "text": "You look thirsty, {M}. Why don't you have a drink?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Romanced] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Romanced",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-622065938": {
+   "kind": "text",
+   "parent": -1727121730,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mgaah! PFLH! PFLH! PFLH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerDeepthroat (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerDeepthroat (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerDeepthroat (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerPresent (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerPresent (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerPresent (1)"
+      }
+     }
+    }
+   ]
+  },
+  "271551818": {
+   "kind": "text",
+   "parent": -1727121730,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I Lvvvmmoovvee yyurr ccocckmmmaah!!! Mwuaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-7275562": {
+   "kind": "text",
+   "parent": -1727121730,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mwuaah! Mmaah! ... Hngaah! Glph! GLPH! GLPH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "928046739": {
+   "kind": "text",
+   "parent": -1727121730,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "MMMMMHHH! ... Gulp, gulp, gulp... Mmwuaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerDeepthroat (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerDeepthroat (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerDeepthroat (2)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerButt (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerButt (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerButt (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1067749812": {
+   "kind": "text",
+   "parent": -1727121730,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "H-Hah, hah... hah... You... You almost made... Just from fucking my mouth...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerDeepthroat (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerDeepthroat (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerDeepthroat (3)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerButt (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerButt (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerButt (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1064961858": {
+   "kind": "text",
+   "parent": -1727121730,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I love this cock, I love it so, so, so, so much!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-30931615": {
+   "kind": "choice",
+   "parent": -1727121730,
+   "children": [
+    935590100,
+    559804167,
+    97478976
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I want it to be mine forever... Please, {PC}. Promise me. ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerDeepthroat (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerDeepthroat (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerDeepthroat (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaFlowerDeepthroat (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaFlowerDeepthroat (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaFlowerDeepthroat (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-639631144": {
+   "kind": "text",
+   "parent": -1727121730,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-There should be some towels in the back... Could you grab them for me? I... I can't go out like this...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "504709348": {
+   "kind": "text",
+   "parent": -1727121730,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-Thank you, {PC}... So much...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "935590100": {
+   "kind": "text",
+   "parent": -30931615,
+   "children": [
+    -1283859043
+   ],
+   "actor": null,
+   "text": "I'll always be yours, I promise.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "559804167": {
+   "kind": "text",
+   "parent": -30931615,
+   "children": [
+    678906846
+   ],
+   "actor": null,
+   "text": "My cock will always be there for you, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "97478976": {
+   "kind": "text",
+   "parent": -30931615,
+   "children": [
+    1743484493
+   ],
+   "actor": null,
+   "text": "Well, as long you can keep up with it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1283859043": {
+   "kind": "text",
+   "parent": 935590100,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-Thank you....  I... I'm so happy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "678906846": {
+   "kind": "text",
+   "parent": 559804167,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-Thank you.... I wouldn't know how to survive without it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1743484493": {
+   "kind": "text",
+   "parent": 97478976,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I'll try my best... But you have to help me, please train my holes whenever you want...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/FlowerStoreCore",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play FlowerPickUpDefault and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

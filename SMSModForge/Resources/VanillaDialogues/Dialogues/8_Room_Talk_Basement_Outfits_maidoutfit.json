@@ -1,0 +1,448 @@
+{
+ "id": "8_Room_Talk/Basement/Outfits/maidoutfit",
+ "name": "maidoutfit",
+ "index": 7,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "Josef"
+ ],
+ "roots": [
+  -1474559603,
+  -1257660639,
+  1191593343,
+  654361324,
+  1002797693,
+  1214532385
+ ],
+ "nodes": {
+  "-1474559603": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Maid to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Maid",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Maid"
+      }
+     }
+    }
+   ]
+  },
+  "-1257660639": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Um... I feel like wearing this brings out a new side of me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1191593343": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    856901765,
+    -1932847650,
+    96964876
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So... What should I do... Master...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "856901765": {
+   "kind": "text",
+   "parent": 1191593343,
+   "children": [
+    1947299727
+   ],
+   "actor": null,
+   "text": "Get down, spread your legs.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1932847650": {
+   "kind": "text",
+   "parent": 1191593343,
+   "children": [
+    226608874
+   ],
+   "actor": null,
+   "text": "Be direct, play with your tits.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "96964876": {
+   "kind": "text",
+   "parent": 1191593343,
+   "children": [
+    -818515441
+   ],
+   "actor": null,
+   "text": "Be cute, show us your innocent side.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-818515441": {
+   "kind": "text",
+   "parent": 96964876,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 50_Maid (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "50_Maid (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/50_Maid (2)"
+      }
+     }
+    }
+   ]
+  },
+  "226608874": {
+   "kind": "text",
+   "parent": -1932847650,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 49_Maid (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "49_Maid (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/49_Maid (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1947299727": {
+   "kind": "text",
+   "parent": 856901765,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 48_Maid to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "48_Maid",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/48_Maid"
+      }
+     }
+    }
+   ]
+  },
+  "654361324": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I wonder how many people would pay for having me as a maid...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1214532385": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That was quite something, hun. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1002797693": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I... I can tell why so many people are willing to pay for these photos...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Core_NoSave[D-there] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-there",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "Studio_Canvas/Outfits/UI_CoolOutfit (4)",
+   "script": "ButtonInstructions",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core[temp-stored-very-short-term] = maidoutfit",
+   "as": "GameObject",
+   "before": [
+    {
+     "type": "InstructionCommonDebugText",
+     "title": "Log: Click!",
+     "fields": {
+      "m_Message": {
+       "kind": "value",
+       "value": "Click!"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Button-1",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Button-1",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "type": "InstructionUICanvasGroupInteractable",
+     "title": "Studio_Canvas Interactable = False",
+     "fields": {
+      "m_CanvasGroup": {
+       "kind": "object",
+       "name": "Studio_Canvas",
+       "of": "GetGameObjectInstance",
+       "path": "Studio_Canvas"
+      },
+      "m_Interactable": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "type": "InstructionUICanvasGroupAlpha",
+     "title": "Studio_Canvas alpha = 0",
+     "fields": {
+      "m_CanvasGroup": {
+       "kind": "object",
+       "name": "Studio_Canvas",
+       "of": "GetGameObjectInstance",
+       "path": "Studio_Canvas"
+      },
+      "m_Alpha": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "value",
+        "value": 0
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 1,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Basement to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Basement",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Basement"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Studio_Canvas to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Studio_Canvas",
+       "of": "GetGameObjectInstance",
+       "path": "Studio_Canvas"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

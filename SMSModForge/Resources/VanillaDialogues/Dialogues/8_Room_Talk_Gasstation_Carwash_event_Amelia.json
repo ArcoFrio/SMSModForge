@@ -1,0 +1,701 @@
+{
+ "id": "8_Room_Talk/Gasstation/Carwash_event_Amelia",
+ "name": "Carwash_event_Amelia",
+ "index": 8,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Amelia"
+ ],
+ "roots": [
+  554331436,
+  -1611601022,
+  -1046164162,
+  967898611,
+  -1083755656,
+  -173816781,
+  -1506482489,
+  -1954928736,
+  1489584,
+  -2141715566,
+  -694605726,
+  365146111,
+  1137392387
+ ],
+ "nodes": {
+  "554331436": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -816717688,
+    -1206384681,
+    203892632
+   ],
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Now this is how you boost donations! A little water, some soap, and a crowd that suddenly cares way too much about clean cars.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[Car-Dirt] = 0",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Car-Dirt",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 0
+      }
+     }
+    }
+   ]
+  },
+  "-816717688": {
+   "kind": "text",
+   "parent": 554331436,
+   "children": [
+    1568475335
+   ],
+   "actor": null,
+   "text": "Glad you’re having fun. It’s good to see you like this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1206384681": {
+   "kind": "text",
+   "parent": 554331436,
+   "children": [
+    -354532747
+   ],
+   "actor": null,
+   "text": "You seem… really into this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "203892632": {
+   "kind": "text",
+   "parent": 554331436,
+   "children": [
+    140850600
+   ],
+   "actor": null,
+   "text": "Careful, Amelia, you’re going to cause traffic accidents.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1568475335": {
+   "kind": "text",
+   "parent": -816717688,
+   "actor": "Amelia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Of course I’m having fun! It’s not every day I get to work in a bikini. You should be thanking me for boosting the charity fund.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "140850600": {
+   "kind": "text",
+   "parent": 203892632,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "If they crash while looking at me, that’s their fault. I take no responsibility for being this distracting.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-354532747": {
+   "kind": "text",
+   "parent": -1206384681,
+   "actor": "Amelia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "What can I say? I commit to a job. Besides, if I’m going to be stared at, I might as well make it worth their time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1611601022": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Okay, I’ll admit it… this is kinda fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ImgCarwashAmelia (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ImgCarwashAmelia (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/ImgCarwashAmelia (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1046164162": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Way more fun than standing at a donation booth all day.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "967898611": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Oh, come on. What is this? Concrete? Did you drive through a construction site or something?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active gasstation bubbles to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "gasstation bubbles",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/59_Gasstation/gasstation bubbles"
+      }
+     }
+    }
+   ]
+  },
+  "-1083755656": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "I swear, if I don't get this off, I'm just gonna tell people it's part of the design.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-173816781": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Mmmhmm. Definitely here for the cars. Totally not watching me struggle to reach the top of this windshield.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ImgCarwashAmelia (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ImgCarwashAmelia (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/ImgCarwashAmelia (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-694605726": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Sooo, how much do you think that wash was worth? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "type": "InstructionParticleSystemStopParticleSystem",
+     "title": "Stop gasstation bubbles Particle System",
+     "fields": {
+      "m_GameObject": {
+       "kind": "object",
+       "name": "gasstation bubbles",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/59_Gasstation/gasstation bubbles"
+      }
+     }
+    }
+   ]
+  },
+  "365146111": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Because I’m pretty sure I just doubled the charity’s fundraising goals.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1137392387": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "See you soon, cowboy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_8[carwashtotals] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "carwashtotals",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active gasstation bubbles to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "gasstation bubbles",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/59_Gasstation/gasstation bubbles"
+      }
+     }
+    }
+   ]
+  },
+  "-1506482489": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Almost there. I swear, if I don’t get a free lemonade or something after this, I’m filing a complaint.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1954928736": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "And… done! Not bad for someone who usually only cleans spreadsheets.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1489584": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Aaaand, I’m officially drenched. Awesome. Just what I needed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ImgCarwashAmelia (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ImgCarwashAmelia (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/ImgCarwashAmelia (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-2141715566": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Oh well. At least the car looks good!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Gasstation",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Carwash_event_Amelia and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[specialcarwashunlocked] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "specialcarwashunlocked",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[special-carwashcd] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "special-carwashcd",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "branches": [
+    "Carwash"
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Amelia_Carwash to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Amelia_Carwash",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Amelia_Carwash"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Amelia_Carwash/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'ForceEnableUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "ForceEnableUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[special-carwashcd] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "special-carwashcd",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

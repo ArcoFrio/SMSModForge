@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace SMSModForge.Model;
@@ -1955,6 +1955,27 @@ public static class VanillaGameVariables
            .Distinct(System.StringComparer.OrdinalIgnoreCase)
            .OrderBy(n => n, System.StringComparer.OrdinalIgnoreCase)
            .ToList();
+
+    /// <summary>
+    /// Which Global Name List a variable belongs to, for grouping a picker.
+    /// <para/>
+    /// The FIRST list holding it, because a name can appear in several and the
+    /// address is name-only - so the first is the one anything resolving it
+    /// will find. Empty for a name the game does not have.
+    /// </summary>
+    public static string ListOf(string? name)
+        => string.IsNullOrEmpty(name) ? ""
+           : _lists.TryGetValue(name!, out string? list) ? list : "";
+
+    private static readonly Dictionary<string, string> _lists = BuildLists();
+
+    private static Dictionary<string, string> BuildLists()
+    {
+        var made = new Dictionary<string, string>(System.StringComparer.OrdinalIgnoreCase);
+        foreach (var v in All)
+            if (!made.ContainsKey(v.Name)) made[v.Name] = v.List;
+        return made;
+    }
 
     private static readonly HashSet<string> _names =
         new(AllNames, System.StringComparer.OrdinalIgnoreCase);

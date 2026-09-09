@@ -1,0 +1,921 @@
+{
+ "id": "AlwaysActive_ChildrenInactive/Emma_LizardWon/DialogueRepitition",
+ "name": "DialogueRepitition",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Emma",
+  "V_LizardMan"
+ ],
+ "roots": [
+  -953669089,
+  -873470753
+ ],
+ "nodes": {
+  "-953669089": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "…It’s close.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_LizardGuyBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_LizardGuyBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_LizardGuyBust"
+      }
+     }
+    }
+   ]
+  },
+  "-873470753": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1302221866,
+    -658125547,
+    -1289751712,
+    646367011,
+    46687891,
+    1505228833,
+    113295327,
+    254265017,
+    1922729395,
+    473208206,
+    -580276767,
+    -1777282127,
+    1840757894,
+    -728312711,
+    64252912,
+    957536768,
+    647440241,
+    434258258,
+    -2092254746,
+    -231407785,
+    1183271829,
+    2024148218,
+    -768686875,
+    -2034131426,
+    786084394,
+    2079312147,
+    -1472133937,
+    -627715615,
+    292468565,
+    834895668,
+    -281133387,
+    378200671,
+    1297898948,
+    -1511256328
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Hey, uhm... How have you been? Do you remember us?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "113295327": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "V_LizardMan",
+   "expressionName": "my-expression",
+   "text": "Ssssoft... sssso full... you are like ssssunlight...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "254265017": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Don't hold back, I... Use me... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "473208206": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Mwuaahmm... Mmhmmm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaXLizardguy (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaXLizardguy (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/EmmaXLizardguy (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-580276767": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Yes... Use my tits... That's what I'm here for... To help you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaXLizardguy (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaXLizardguy (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/EmmaXLizardguy (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1777282127": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "V_LizardMan",
+   "expressionName": "my-expression",
+   "text": "Ssssoo big... Sssoo sssoft... I want to fill. Fill your heat.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "378200671": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Fuck, that was insane... Two men... one of them not even human. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[emma-lizagscenedone] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-lizagscenedone",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1922729395": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "V_LizardMan",
+   "expressionName": "my-expression",
+   "text": "I feel heat... Your heat... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1511256328": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I... I'll go home. I need a shower...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-658125547": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Sofia will help you soon... Are there any others like you? Maybe a female to...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1302221866": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "V_LizardMan",
+   "expressionName": "my-expression",
+   "text": "I do... Warm woman... Soft flesh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1289751712": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "V_LizardMan",
+   "expressionName": "my-expression",
+   "text": "No one like me.... Ssso alone... ssso long... jussst want to touch...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "646367011": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I'm... I'm sorry... Would you like me to... help you? For you to feel less alone?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "46687891": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "V_LizardMan",
+   "expressionName": "my-expression",
+   "text": "Pleassse... your warmth... your kindnesss...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1505228833": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "That's it... I'm here for you, please... Touch me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaXLizardguy (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaXLizardguy (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/EmmaXLizardguy (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1840757894": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I want it too... {PC}, please. I want both of you to... Please. Don't make me say it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaXLizardguy (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaXLizardguy (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/EmmaXLizardguy (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaXLizardguy (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaXLizardguy (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/EmmaXLizardguy (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-728312711": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "V_LizardMan",
+   "expressionName": "my-expression",
+   "text": "Sssoft woman wants me inside her heat?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2092254746": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "H-Holy shit... how are you both so deep at the same time? Hngaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaXLizardguy (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaXLizardguy (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/EmmaXLizardguy (5)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaXLizardguy (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaXLizardguy (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/EmmaXLizardguy (2)"
+      }
+     }
+    }
+   ]
+  },
+  "64252912": {
+   "kind": "choice",
+   "parent": -873470753,
+   "children": [
+    962159054,
+    1775121907,
+    -100989658
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I want that big cock in my ass instead of my cunt.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "957536768": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I... I don't know if your seed is safe for my womb... But my ass can take it... Please...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "647440241": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "V_LizardMan",
+   "expressionName": "my-expression",
+   "text": "Your ass will accept my full length?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "434258258": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "It will... Let me show you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-231407785": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "V_LizardMan",
+   "expressionName": "my-expression",
+   "text": "Sssssyour human friend know proper rhythm. Now Emma ssssscream.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1183271829": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "God, I think I'm gonna come just from the pressure alone. Your cocks are... Jesus, this is insane.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2024148218": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I can't... I've never felt anything like this before. Both of you, please, harder.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-768686875": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "V_LizardMan",
+   "expressionName": "my-expression",
+   "text": "Sssssyour body shake like pipe  in storm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2034131426": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "God... god... the way you're both moving... inside me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "786084394": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I'm... I'm... Hngaagh~ HYAANGGH!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2079312147": {
+   "kind": "choice",
+   "parent": -873470753,
+   "children": [
+    -695282092,
+    698896208,
+    26164635
+   ],
+   "actor": "V_LizardMan",
+   "expressionName": "my-expression",
+   "text": "Ssssssso much sssssspill over. Now lizard want to see human female marked.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1472133937": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I've never been this... used before.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaXLizardguy (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaXLizardguy (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/EmmaXLizardguy (6)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaXLizardguy (3) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaXLizardguy (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/EmmaXLizardguy (3)"
+      }
+     }
+    }
+   ]
+  },
+  "292468565": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I can feel it dripping down... this is so dirty.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "834895668": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Jesus, how much are you guys producing? I'm literally coated now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-627715615": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "V_LizardMan",
+   "expressionName": "my-expression",
+   "text": "More to come. Much more ssssspouring from lizard.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-281133387": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "V_LizardMan",
+   "expressionName": "my-expression",
+   "text": "Sssooft human good for my length... Made me feel very good... I go now, but I return... Always return...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "962159054": {
+   "kind": "text",
+   "parent": 64252912,
+   "children": [
+    1153723744
+   ],
+   "actor": null,
+   "text": "Ready for your first interspecies sandwich, Emma?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1775121907": {
+   "kind": "text",
+   "parent": 64252912,
+   "children": [
+    -907092410
+   ],
+   "actor": null,
+   "text": "But I want to fuck your ass...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-907092410": {
+   "kind": "text",
+   "parent": 1775121907,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I... I'm sorry, {PC}... We don't know how his biology works... It's safest if he uses my ass...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1153723744": {
+   "kind": "text",
+   "parent": 962159054,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Yes~ Oh fuck, yes.... My holes want it so much....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-100989658": {
+   "kind": "text",
+   "parent": 64252912,
+   "actor": null,
+   "text": "(Free your hard cock)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-695282092": {
+   "kind": "text",
+   "parent": 2079312147,
+   "actor": null,
+   "text": "(Pull out and glaze her face)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "698896208": {
+   "kind": "text",
+   "parent": 2079312147,
+   "actor": null,
+   "text": "F-Fuck... Here comes mine.... Hngaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "26164635": {
+   "kind": "text",
+   "parent": 2079312147,
+   "actor": null,
+   "text": "Open your mouth, Emma... Two fat loads just for you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1297898948": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I should feel disgusted... What we did in a place like this... But you know what? My pussy is so soaked, {PC}....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "AlwaysActive_ChildrenInactive/Emma_LizardWon",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DialogueRepitition and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[emma-sexpositiveslutmode] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-sexpositiveslutmode",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Emma_Normal to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Emma_Normal",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Emma_Normal"
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core_NoSave2[2025-shortgo-saveONE] = None",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2025-shortgo-saveONE",
+        "list": "Core_NoSave2",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "none"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[emma-cryptidhuntactive] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-cryptidhuntactive",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+<Window x:Class="SMSModForge.View.SpritePickerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Choose a picture" Width="560" Height="520"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+    <DockPanel Margin="12">
+
+        <!-- Two sources, because a UI image is one of two things: a sprite the
+             game already ships, or a PNG the pack ships. Both are just a name
+             in the end, so both live behind one button. -->
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"
+                    HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button Content="Browse for a file…" Padding="10,3" Margin="0,0,8,0"
+                    Click="Browse_Click"
+                    ToolTip="Pick a PNG the pack ships. Stored as a pack-relative path."/>
+            <Button Content="Choose" Width="84" IsDefault="True" Click="Ok_Click" Margin="0,0,8,0"/>
+            <Button Content="Cancel" Width="84" IsCancel="True"/>
+        </StackPanel>
+
+        <TextBlock DockPanel.Dock="Top" Margin="0,0,0,6" TextWrapping="Wrap" Opacity="0.7"
+                   Text="Every sprite the game has. Type to narrow the list, or browse for a picture of your own."/>
+
+        <TextBox x:Name="SearchBox" DockPanel.Dock="Top" Margin="0,0,0,8"
+                 TextChanged="Search_Changed"/>
+
+        <!-- The selected one, drawn. Picking by name alone from 840 of them is
+             guesswork, and most of these names describe nothing. -->
+        <Border DockPanel.Dock="Bottom" Height="120" Margin="0,8,0,0"
+                BorderBrush="#888" BorderThickness="1" Background="#222">
+            <Image x:Name="Preview" Stretch="Uniform" Margin="6"/>
+        </Border>
+
+        <ListBox x:Name="List" SelectionChanged="List_Changed"
+                 MouseDoubleClick="Ok_Click"/>
+    </DockPanel>
+</Window>

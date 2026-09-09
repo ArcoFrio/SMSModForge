@@ -1,0 +1,637 @@
+{
+ "id": "8_Room_Talk/Hotelroom24/Defaultdialogue",
+ "name": "Defaultdialogue",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Isabella"
+ ],
+ "roots": [
+  712661510,
+  -1389964177
+ ],
+ "nodes": {
+  "712661510": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Isabella",
+   "expressionName": "neutral",
+   "text": "There you are. You can place your clothes on the chair over there. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1389964177": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1371999467,
+    738138587,
+    -546110817,
+    476187717
+   ],
+   "actor": "Isabella",
+   "expressionName": "neutral",
+   "text": "Let me know when you are ready.",
+   "tag": "root",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1371999467": {
+   "kind": "text",
+   "parent": -1389964177,
+   "children": [
+    447409788,
+    -1938575387
+   ],
+   "actor": null,
+   "text": "Let's fuck.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[isabella-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "isabella-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "738138587": {
+   "kind": "text",
+   "parent": -1389964177,
+   "children": [
+    -846025097
+   ],
+   "actor": null,
+   "text": "Why me? Why not just hook up with someone?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-546110817": {
+   "kind": "text",
+   "parent": -1389964177,
+   "children": [
+    -147587815
+   ],
+   "actor": null,
+   "text": "What is this place?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "476187717": {
+   "kind": "text",
+   "parent": -1389964177,
+   "children": [
+    -883106718
+   ],
+   "actor": null,
+   "text": "I, uh, forgot something outside.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-883106718": {
+   "kind": "text",
+   "parent": 476187717,
+   "actor": "Isabella",
+   "expressionName": "neutral",
+   "text": "Mhm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-147587815": {
+   "kind": "text",
+   "parent": -546110817,
+   "actor": "Isabella",
+   "expressionName": "neutral",
+   "text": "This is a hotel room. Are you retarded?",
+   "jump": {
+    "mode": "Jump",
+    "to": "root"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-846025097": {
+   "kind": "text",
+   "parent": 738138587,
+   "actor": "Isabella",
+   "expressionName": "neutral",
+   "text": "Because I want it this way, duh.",
+   "jump": {
+    "mode": "Jump",
+    "to": "root"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "447409788": {
+   "kind": "text",
+   "parent": -1371999467,
+   "children": [
+    -1900682764,
+    1522799100
+   ],
+   "actor": "Isabella",
+   "expressionName": "neutral",
+   "text": "Time to get started.... and don't you dare put on any latex.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[isabella-no-rubbers-talk] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "isabella-no-rubbers-talk",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1900682764": {
+   "kind": "text",
+   "parent": 447409788,
+   "actor": "Isabella",
+   "expressionName": "neutral",
+   "text": "What? You thought I just wanted to have sex? Pahahaha!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1522799100": {
+   "kind": "choice",
+   "parent": 447409788,
+   "children": [
+    -683704422,
+    -448115649,
+    1935313631,
+    1539564144
+   ],
+   "actor": "Isabella",
+   "expressionName": "neutral",
+   "text": "Oh, no no. I'm here to get knocked up, dummy.",
+   "tag": "rootpreggo",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-683704422": {
+   "kind": "text",
+   "parent": 1522799100,
+   "children": [
+    449880060
+   ],
+   "actor": null,
+   "text": "Sounds fun, I can do that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-448115649": {
+   "kind": "text",
+   "parent": 1522799100,
+   "children": [
+    -438213254,
+    1058973361
+   ],
+   "actor": null,
+   "text": "Why do you want me to knock you up?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1935313631": {
+   "kind": "text",
+   "parent": 1522799100,
+   "children": [
+    -2045136474
+   ],
+   "actor": null,
+   "text": "What happens afterwards?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1539564144": {
+   "kind": "text",
+   "parent": 1522799100,
+   "children": [
+    -1027622408
+   ],
+   "actor": null,
+   "text": "We never agreed to that, I'm out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1027622408": {
+   "kind": "text",
+   "parent": 1539564144,
+   "actor": "Isabella",
+   "expressionName": "neutral",
+   "text": "Pussy.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionQuestsTaskFail",
+     "title": "Fail Show up at the hotel to meet Isabella on Thursday.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Virile (Isabella)",
+        "of": "Quest"
+       },
+       "m_TaskId": -989935106
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "449880060": {
+   "kind": "text",
+   "parent": -683704422,
+   "actor": "Isabella",
+   "expressionName": "neutral",
+   "text": "We'll see about that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done_2[isabella-no-rubbers-talk] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "isabella-no-rubbers-talk",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Show up at the hotel to meet Isabella on Thursday.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Virile (Isabella)",
+        "of": "Quest"
+       },
+       "m_TaskId": -989935106
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-438213254": {
+   "kind": "text",
+   "parent": -448115649,
+   "actor": "Isabella",
+   "expressionName": "neutral",
+   "text": "Because I want to be a mother, dumbass. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2045136474": {
+   "kind": "text",
+   "parent": 1935313631,
+   "actor": "Isabella",
+   "expressionName": "neutral",
+   "text": "I'll be gone once I'm pregnant, so you won't ever have to see my face again.",
+   "jump": {
+    "mode": "Jump",
+    "to": "rootpreggo"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1058973361": {
+   "kind": "text",
+   "parent": -448115649,
+   "actor": "Isabella",
+   "expressionName": "neutral",
+   "text": "I may dislike you and your {D}, but you've got it made. You're good-looking, strong, and healthy.",
+   "jump": {
+    "mode": "Jump",
+    "to": "rootpreggo"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1938575387": {
+   "kind": "text",
+   "parent": -1371999467,
+   "actor": "Isabella",
+   "expressionName": "neutral",
+   "text": "Come on, pants down.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[temp-stored-very-short-term] = SoloSexPre",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "SoloSexPre",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Hotelroom24/SoloSexPre"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[isabella-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "isabella-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Hotelroom24",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Defaultdialogue and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[isabella-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "isabella-done",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Isabella_Lingerie to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Isabella_Lingerie",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Isabella_Lingerie"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Core[temp-stored-very-short-term] and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ]
+  }
+ ]
+}

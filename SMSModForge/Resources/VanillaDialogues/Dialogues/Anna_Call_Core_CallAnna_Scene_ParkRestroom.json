@@ -1,0 +1,378 @@
+{
+ "id": "Anna_Call_Core/CallAnna_Scene_ParkRestroom",
+ "name": "CallAnna_Scene_ParkRestroom",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  -1920444640,
+  442301497,
+  104968728,
+  -1592274142,
+  2026577856,
+  -1081353488,
+  1730325802
+ ],
+ "nodes": {
+  "-1920444640": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ugh… this place looks awful. You really want me to pose in here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Trenchcoat to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Trenchcoat",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Trenchcoat"
+      }
+     }
+    }
+   ]
+  },
+  "442301497": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Trenchcoat to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Trenchcoat",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Trenchcoat"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Nude"
+      }
+     }
+    }
+   ]
+  },
+  "104968728": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "If anyone walks in right now, I think I’d die…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1592274142": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1124583858,
+    580516791,
+    476801372
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Just don’t ask me to touch anything in here...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1124583858": {
+   "kind": "text",
+   "parent": -1592274142,
+   "children": [
+    1632979889
+   ],
+   "actor": null,
+   "text": "Just play with your tits for a bit, it won't take long.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "580516791": {
+   "kind": "text",
+   "parent": -1592274142,
+   "children": [
+    1997186720
+   ],
+   "actor": null,
+   "text": "Let's get a nice full body shot of you....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "476801372": {
+   "kind": "text",
+   "parent": -1592274142,
+   "children": [
+    1763088913
+   ],
+   "actor": null,
+   "text": "Lean against that wall and push your ass up...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1763088913": {
+   "kind": "text",
+   "parent": 476801372,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ugh... Yikes... O-Okay, okay... I can do this... Just take the photo already...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active B9_AnnaRestroomPhot (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "B9_AnnaRestroomPhot (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/B9_AnnaRestroomPhot (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1997186720": {
+   "kind": "text",
+   "parent": 580516791,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I hope our fans won't ask for pee stuff in the future...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active B8_AnnaRestroomPhot (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "B8_AnnaRestroomPhot (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/B8_AnnaRestroomPhot (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1632979889": {
+   "kind": "text",
+   "parent": 1124583858,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-That's easy... Y-Yes, I can do that... Here~",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active B7_AnnaRestroomPhot (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "B7_AnnaRestroomPhot (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/B7_AnnaRestroomPhot (1)"
+      }
+     }
+    }
+   ]
+  },
+  "2026577856": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "God, I’d never come in here normally. But maybe that’s the point, isn’t it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1081353488": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I can’t decide if this is disgusting or the sexiest thing I’ve ever done.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1730325802": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You always leave me wanting more… damn you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "Anna_Call_Core/CallIcon_Condition_Check",
+   "script": "Conditions",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core_NoSave2[call-anna-dialogue] = CallAnna_Scene_ParkRestroom",
+   "as": "GameObject",
+   "when": [
+    {
+     "kind": "gameObjectActive",
+     "type": "ConditionGameObjectActive",
+     "title": "If is Active 129_SubParkRestroom",
+     "fields": {
+      "m_GameObject": {
+       "kind": "object",
+       "name": "129_SubParkRestroom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/129_SubParkRestroom"
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CanCallAnnaIndicator to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CanCallAnnaIndicator",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator/Buttone/CallAnnaButton/CanCallAnnaIndicator"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

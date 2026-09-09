@@ -1,0 +1,1199 @@
+{
+ "id": "Anna_Call_Core/CallAnna_GabrielMansion",
+ "name": "CallAnna_GabrielMansion",
+ "index": 5,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "Gabriel",
+  "Haniya"
+ ],
+ "roots": [
+  -1920444640,
+  864183091,
+  1807192605,
+  -1075525985,
+  -34012779,
+  -462500219,
+  442301497,
+  104968728,
+  -1643704888,
+  640876438,
+  2026577856,
+  1531198002,
+  -1081353488,
+  -1327742701,
+  1074491588,
+  -778202564,
+  72942202,
+  -1997248279,
+  -438069004,
+  579782764,
+  404757116,
+  -1922322819,
+  -1762380955,
+  -843928789,
+  -997722733,
+  -1244234605,
+  -981306092,
+  -840404759,
+  -2133827724,
+  754427558,
+  -136380603
+ ],
+ "nodes": {
+  "-1920444640": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hello there...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Trenchcoat to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Trenchcoat",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Trenchcoat"
+      }
+     }
+    }
+   ]
+  },
+  "442301497": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Trenchcoat to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Trenchcoat",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Trenchcoat"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaBust_OilUp_BlackBikini to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaBust_OilUp_BlackBikini",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AnnaBust_OilUp_BlackBikini"
+      }
+     }
+    }
+   ]
+  },
+  "104968728": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "...Jesus. Okay. That’s insane. Don’t move.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2026577856": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Holy shit. That bikini is barely legal. You look amazing, Anna.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaGabShoot (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaGabShoot (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaGabShoot (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1081353488": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I didn’t put on this bikini to be looked at.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "864183091": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    365979582,
+    39653960,
+    182601510,
+    1242078730
+   ],
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "And this must be the famous Anna.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[gabrielannashoot-firsttime] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabrielannashoot-firsttime",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "365979582": {
+   "kind": "text",
+   "parent": 864183091,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "\nHi... yes. It’s nice to finally meet you. I’ve heard a lot about you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "39653960": {
+   "kind": "text",
+   "parent": 864183091,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "All good things, I hope. {PC} got a good eye. Pretty sure he stole half my techniques already.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "182601510": {
+   "kind": "text",
+   "parent": 864183091,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "He mentioned you taught him... and that you’re very hands-on.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1242078730": {
+   "kind": "text",
+   "parent": 864183091,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Mm. That’s... definitely true.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1075525985": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "So... you ready to have some fun in front of the camera?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-34012779": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I-I think so. I’ve never done anything like this before... Well, not in a place like this...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-462500219": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1701826530
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It’s only polite to show up wrapped. I’m not a total slut. ...yet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1701826530": {
+   "kind": "text",
+   "parent": -462500219,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "You’ve been holding out on me, {PC}... She's amazing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1807192605": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "I’ll leave you three to it. I’ve got an appointment downtown. Try not to break the bed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Haniya/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1643704888": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "You’ve got this glow... like someone who’s been hiding too long...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaGabShoot (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaGabShoot (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaGabShoot (0)"
+      }
+     }
+    }
+   ]
+  },
+  "640876438": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Or maybe I’m just tired of hiding...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaGabShoot (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaGabShoot (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaGabShoot (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1531198002": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    379741271,
+    1681794680,
+    1087323703
+   ],
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Thank you, man... honestly. Letting me shoot her? That’s not just a favor. That’s an honor.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "379741271": {
+   "kind": "text",
+   "parent": 1531198002,
+   "children": [
+    2126800956
+   ],
+   "actor": null,
+   "text": "She’s not just a model. She’s my addiction.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1681794680": {
+   "kind": "text",
+   "parent": 1531198002,
+   "children": [
+    1521775096
+   ],
+   "actor": null,
+   "text": "Careful, man. Staring too long gets addictive.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1521775096": {
+   "kind": "text",
+   "parent": 1681794680,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "He’s already hard, baby. I can see the outline. Adorable.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2126800956": {
+   "kind": "text",
+   "parent": 379741271,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm... You always say the dirtiest things when I’m half-naked. Keep going.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1087323703": {
+   "kind": "text",
+   "parent": 1531198002,
+   "children": [
+    -191663677
+   ],
+   "actor": null,
+   "text": "Feeling lucky, Gabriel?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-191663677": {
+   "kind": "text",
+   "parent": 1087323703,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, he’s lucky. You both are. I’m wet just thinking about what I want next.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1327742701": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1670801945,
+    -1416893123,
+    -580009088,
+    531807174
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I wore it because I want to be used. By both of you.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1670801945": {
+   "kind": "text",
+   "parent": -1327742701,
+   "children": [
+    1779629451
+   ],
+   "actor": null,
+   "text": "You want us to ruin you right here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "531807174": {
+   "kind": "text",
+   "parent": -1327742701,
+   "children": [
+    1402174619,
+    648349493
+   ],
+   "actor": null,
+   "text": "I don't think that's a good idea, Anna.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1402174619": {
+   "kind": "text",
+   "parent": 531807174,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Y-Yeah, he's right. It's best if we keep it at... a friendly level.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1779629451": {
+   "kind": "text",
+   "parent": -1670801945,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "God, yes. Ruin me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "648349493": {
+   "kind": "text",
+   "parent": 531807174,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Alright... Well. Gabriel, could you call a cab for me then? I'd like to go home.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1416893123": {
+   "kind": "text",
+   "parent": -1327742701,
+   "children": [
+    -1797029935
+   ],
+   "actor": null,
+   "text": "You have two men dying to worship you. Say the word.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-580009088": {
+   "kind": "text",
+   "parent": -1327742701,
+   "children": [
+    179908474,
+    -135513602,
+    -1929295265
+   ],
+   "actor": null,
+   "text": "Then what do you want, slut?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "179908474": {
+   "kind": "text",
+   "parent": -580009088,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I want a threesome. Right here. Right now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1797029935": {
+   "kind": "text",
+   "parent": -1416893123,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Please... Make me feel good. I want to feel good, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-135513602": {
+   "kind": "text",
+   "parent": -580009088,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I want both of you inside me, on me, over me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1929295265": {
+   "kind": "text",
+   "parent": -580009088,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I want to be used like I’m your personal cumrag... and smile for the camera while I do it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1074491588": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "... Fuck.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaGabShoot (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaGabShoot (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaGabShoot (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-778202564": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm... two hard cocks already?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "72942202": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Looks like I’m the luckiest slut in the city.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1997248279": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Fuck, your hand’s soft...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-438069004": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "You want this backdoor stretched, Anna?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaGabShoot (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaGabShoot (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaGabShoot (4)"
+      }
+     }
+    }
+   ]
+  },
+  "579782764": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I want it all. Your cock, his cock, my holes full... my brain empty.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "404757116": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    398365499,
+    666851931,
+    -1339885337
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "God... yes... I’m so fucking ready. Push it right there. Let me feel it.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1922322819": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Jesus… I’m in. Your ass is tight as hell, Anna.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaGabShoot (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaGabShoot (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaGabShoot (5)"
+      }
+     }
+    }
+   ]
+  },
+  "-1762380955": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh fuck… yes. Stretch me. Use me. Don’t be gentle. {PC}... Get over here... I want to suck that fat cock of yours...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-843928789": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmh… I know… I was made for this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-997722733": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -250276135,
+    -919334344,
+    -1098843562
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "God~ yes~ I’m so close… Use my mouth. Use my ass. I want to feel everything.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1244234605": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Fuck… Anna… I’m not gonna last.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-981306092": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Don’t. Cum for me. Both of you. I want it all. Mwuaaah! Mggahh!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-840404759": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fuck… That’s going straight into my top ten.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaGabShoot (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaGabShoot (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaGabShoot (6)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaGabShoot (3) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaGabShoot (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaGabShoot (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-2133827724": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Yeah… I’m never looking at my living room the same way again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "754427558": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1484555420,
+    1428225988,
+    404360052
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Worth it?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1484555420": {
+   "kind": "text",
+   "parent": 754427558,
+   "actor": null,
+   "text": "Best shoot you’ve ever done.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1428225988": {
+   "kind": "text",
+   "parent": 754427558,
+   "actor": null,
+   "text": "I love you when you’re like this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "404360052": {
+   "kind": "text",
+   "parent": 754427558,
+   "actor": null,
+   "text": "Guess Gabriel just leveled up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-136380603": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hihi... Now, how about you two call me a cab while I take a shower? I'm rather... sticky.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-250276135": {
+   "kind": "text",
+   "parent": -997722733,
+   "actor": null,
+   "text": "Take it deeper. Don’t you dare breathe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-919334344": {
+   "kind": "text",
+   "parent": -997722733,
+   "actor": null,
+   "text": "Hold still. I’m close.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1098843562": {
+   "kind": "text",
+   "parent": -997722733,
+   "actor": null,
+   "text": "Look at you. Getting fucked and loving it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "398365499": {
+   "kind": "text",
+   "parent": 404757116,
+   "actor": null,
+   "text": "You can take it, Anna. Show me how far you’ve come.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "666851931": {
+   "kind": "text",
+   "parent": 404757116,
+   "actor": null,
+   "text": "Don't you cum until I say. He can stretch you. I own your orgasm.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1339885337": {
+   "kind": "text",
+   "parent": 404757116,
+   "actor": null,
+   "text": "Let him open you. I want to watch you shake.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "Anna_Call_Core/CallIcon_Condition_Check",
+   "script": "Conditions",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core_NoSave2[call-anna-dialogue] = CallAnna_GabrielMansion",
+   "as": "GameObject",
+   "when": [
+    {
+     "kind": "gameObjectActive",
+     "type": "ConditionGameObjectActive",
+     "title": "If is Active 36_MansionInside",
+     "fields": {
+      "m_GameObject": {
+       "kind": "object",
+       "name": "36_MansionInside",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/36_MansionInside"
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[gabriel-threesome-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabriel-threesome-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CanCallAnnaIndicator to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CanCallAnnaIndicator",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator/Buttone/CallAnnaButton/CanCallAnnaIndicator"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

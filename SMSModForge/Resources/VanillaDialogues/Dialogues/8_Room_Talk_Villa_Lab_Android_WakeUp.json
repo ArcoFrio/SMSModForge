@@ -1,0 +1,706 @@
+{
+ "id": "8_Room_Talk/Villa_Lab/Android_WakeUp",
+ "name": "Android_WakeUp",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Cerise",
+  "Continue",
+  "You"
+ ],
+ "roots": [
+  1555090644
+ ],
+ "nodes": {
+  "1555090644": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2033588275,
+    13169265
+   ],
+   "actor": "You",
+   "expression": 2,
+   "text": "W-What is this place? ...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[achivement-unlocked] = Future",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Future"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "achivement-unlocked",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Achievements[android] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "android",
+        "list": "Achievements",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set MinisUnlock[cerise] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cerise",
+        "list": "MinisUnlock",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2033588275": {
+   "kind": "text",
+   "parent": 1555090644,
+   "children": [
+    607003403,
+    604633556,
+    855871786,
+    -1318247213,
+    455716120,
+    787607459,
+    1866473487
+   ],
+   "actor": null,
+   "text": "[Use Terminal]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "13169265": {
+   "kind": "text",
+   "parent": 1555090644,
+   "actor": null,
+   "text": "[Leave]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "607003403": {
+   "kind": "text",
+   "parent": -2033588275,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: ComputerLaptop 6103_78_1",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "ComputerLaptop 6103_78_1",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1.5,
+        "y": 1.5
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 0.6
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 4 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 4
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Futuristic Gate Opens",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Futuristic Gate Opens",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 0.7
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Androidfloat to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Androidfloat",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/76_Villa_Lab/Androidfloat"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Android_normaloutfit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Android_normaloutfit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Android_normaloutfit"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[android-awoken] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "android-awoken",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "604633556": {
+   "kind": "text",
+   "parent": -2033588275,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "Where… am I? Who… are you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "855871786": {
+   "kind": "text",
+   "parent": -2033588275,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "You’re in a lab… beneath Mario’s mansion. I’m {PC}. I guess I just woke you up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1318247213": {
+   "kind": "choice",
+   "parent": -2033588275,
+   "children": [
+    746618368,
+    -806507636,
+    6409402
+   ],
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "Woke me up? Am I… alive?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "746618368": {
+   "kind": "text",
+   "parent": -1318247213,
+   "actor": null,
+   "text": "You’re not human, but… you seem alive to me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-806507636": {
+   "kind": "text",
+   "parent": -1318247213,
+   "actor": null,
+   "text": "Good question. What are you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "455716120": {
+   "kind": "text",
+   "parent": -2033588275,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "I feel… different. This is my first time… being awake. Everything is so… new.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "787607459": {
+   "kind": "choice",
+   "parent": -2033588275,
+   "children": [
+    -1676943925,
+    1192237872,
+    -910527361
+   ],
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "So many questions… so much to learn. Who created me? And why am I here?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1676943925": {
+   "kind": "text",
+   "parent": 787607459,
+   "children": [
+    -1565249696
+   ],
+   "actor": null,
+   "text": "We can figure it out together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1192237872": {
+   "kind": "text",
+   "parent": 787607459,
+   "children": [
+    193495002
+   ],
+   "actor": null,
+   "text": "Just shut up. I need to think...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-910527361": {
+   "kind": "text",
+   "parent": 787607459,
+   "children": [
+    -722247086
+   ],
+   "actor": null,
+   "text": "(Lewd) I see two very good reasons for why you were created...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Lewd] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Lewd",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-722247086": {
+   "kind": "text",
+   "parent": -910527361,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "Breasts… What are they for? Why do I have them?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "193495002": {
+   "kind": "text",
+   "parent": 1192237872,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "I.. I apologize... All of this is new to me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1565249696": {
+   "kind": "text",
+   "parent": -1676943925,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "Thank you, {PC}. I’m… grateful.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1866473487": {
+   "kind": "choice",
+   "parent": -2033588275,
+   "children": [
+    854592378,
+    1234332507
+   ],
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "I want to understand… everything. Will you help me?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "854592378": {
+   "kind": "text",
+   "parent": 1866473487,
+   "children": [
+    1449249281
+   ],
+   "actor": null,
+   "text": "Of course. I will help you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1234332507": {
+   "kind": "text",
+   "parent": 1866473487,
+   "children": [
+    -2014940302
+   ],
+   "actor": null,
+   "text": "Maybe. We'll see.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1449249281": {
+   "kind": "text",
+   "parent": 854592378,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "Thank you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2014940302": {
+   "kind": "text",
+   "parent": 1234332507,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "O-Okay...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "6409402": {
+   "kind": "text",
+   "parent": -1318247213,
+   "children": [
+    -1637160260
+   ],
+   "actor": null,
+   "text": "(Smart) Alive enough to ask the question.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Smart] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Smart",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1637160260": {
+   "kind": "text",
+   "parent": 6409402,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "I… see. Then I suppose I owe you for bringing me back to awareness.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Villa_Lab",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Android_WakeUp and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[android-awoken] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "android-awoken",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

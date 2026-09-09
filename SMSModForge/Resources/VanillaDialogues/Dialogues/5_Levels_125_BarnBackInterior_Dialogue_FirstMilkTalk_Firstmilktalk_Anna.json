@@ -1,0 +1,168 @@
+{
+ "id": "5_Levels/125_BarnBackInterior/Dialogue_FirstMilkTalk/Firstmilktalk_Anna",
+ "name": "Firstmilktalk_Anna",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  313716706,
+  11219743,
+  -480372496,
+  654363692,
+  2072081639,
+  -1663469229
+ ],
+ "nodes": {
+  "313716706": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.2,
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[milk-anna] > 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milk-anna",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Greater",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "11219743": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Um… okay. So… I’ve been taking those supplements you got me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Milking Save[milk-anna] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milk-anna",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-480372496": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "The ones for… production.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "654363692": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "And… they’re working. I mean really working.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2072081639": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I woke up this morning and I could already feel it. Full, tight, heavy. Like my whole chest was aching for attention.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1663469229": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I had to change bras twice. I’m a little embarrassed to say this, but… I kind of liked it. Is that… wrong?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "5_Levels/125_BarnBackInterior/Dialogue_WhoToMilk",
+   "script": "Dialogue",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core_NoSave2[2025-shortgo-saveONE] = Firstmilktalk_Anna",
+   "as": "GameObject",
+   "after": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core_NoSave2[2025-shortgo-saveTWO] = Defaultmilktalk_Anna",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2025-shortgo-saveTWO",
+        "list": "Core_NoSave2",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "Defaultmilktalk_Anna",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/125_BarnBackInterior/Dialogue_MilkDefaulttalk/Defaultmilktalk_Anna"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

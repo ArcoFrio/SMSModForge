@@ -1,0 +1,345 @@
+{
+ "id": "8_Room_Talk/Temple_Inside/SenTalk1",
+ "name": "SenTalk1",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Master Zhen"
+ ],
+ "roots": [
+  -1938415780,
+  1244344430,
+  -922723394,
+  108607056,
+  1255931922
+ ],
+ "nodes": {
+  "-1938415780": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You’re still here. Hmph… most would’ve quit by now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1244344430": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Maybe… there’s more to you than I thought.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-922723394": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "When I was young, I thought I’d be a warrior forever. That I’d protect my people, my home… but life doesn’t care about our plans.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "108607056": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I lost everything because I couldn’t stop one spirit. It’s why I’m here. Why I’ve dedicated my life to guarding this gate. The spirits took my family, my friends… everything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1255931922": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2062718308,
+    883992187,
+    -834202004
+   ],
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Don’t make the same mistake I did. Be stronger than I was.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2062718308": {
+   "kind": "text",
+   "parent": 1255931922,
+   "children": [
+    -1194657389,
+    786533713
+   ],
+   "actor": null,
+   "text": "I’m sorry, Master Zhen. That must have been hard.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "883992187": {
+   "kind": "text",
+   "parent": 1255931922,
+   "children": [
+    714321708
+   ],
+   "actor": null,
+   "text": "I won’t let that happen to me. I’ll be ready.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-834202004": {
+   "kind": "text",
+   "parent": 1255931922,
+   "children": [
+    1975664777,
+    -454926246
+   ],
+   "actor": null,
+   "text": "Which spirit was it? What happened?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1194657389": {
+   "kind": "text",
+   "parent": -2062718308,
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "It was. But regret is a useless emotion. It’s better to focus on the battle ahead.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "714321708": {
+   "kind": "text",
+   "parent": 883992187,
+   "actor": "Master Zhen",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Good. Keep that fire. You’ll need it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1975664777": {
+   "kind": "text",
+   "parent": -834202004,
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "A spirit, unlike any other—a massive, blue beast. It tore through everything… ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "786533713": {
+   "kind": "text",
+   "parent": -2062718308,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Get some rest. Tomorrow, we fight again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-454926246": {
+   "kind": "text",
+   "parent": -834202004,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "But focus on what’s in front of you, not what’s behind me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Temple_Inside",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play SenTalk1 and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[masterzhen-accepted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "masterzhen-accepted",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_2[ghost-warrior-progress] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ghost-warrior-progress",
+        "list": "Events_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Master_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Master_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Master_Default"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_2[ghost-warrior-progress] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ghost-warrior-progress",
+        "list": "Events_2",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

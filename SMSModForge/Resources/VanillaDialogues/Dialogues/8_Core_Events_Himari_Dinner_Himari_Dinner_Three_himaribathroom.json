@@ -1,0 +1,1247 @@
+{
+ "id": "8_Core_Events/Himari_Dinner/Himari_Dinner_Three/himaribathroom",
+ "name": "himaribathroom",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Himari",
+  "HimariMom"
+ ],
+ "roots": [
+  -1062269151,
+  274264546,
+  1035488826,
+  1747496310,
+  2067471745,
+  -1609626793,
+  974365434,
+  695107908,
+  -1227914057,
+  -17686224,
+  -570015494,
+  1649934146,
+  -1303580876,
+  -137849120,
+  640425657,
+  -1899202023,
+  208617376,
+  -2134462997,
+  -1315120278,
+  -1676336981
+ ],
+ "nodes": {
+  "-1062269151": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Alright, listen...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1747496310": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "You have got to be kidding me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2067471745": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1955521643,
+    -441696240,
+    962664527
+   ],
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "<size=80%>That damn woman…",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1035488826": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "<size=60%>Ara~ Ara~ Another secret meeting? What could my darling daughter and her wonderful boyfriend be up to~?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1609626793": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "<size=80%>No.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "974365434": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "If she wants proof, we’ll give her proof.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "695107908": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1372744107,
+    1312171159
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "<size=60%>Put it... Put it in my behind...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariAnal (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariAnal (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/HimariAnal (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1372744107": {
+   "kind": "text",
+   "parent": 695107908,
+   "children": [
+    -1605996141
+   ],
+   "actor": null,
+   "text": "A-Are you sure?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1312171159": {
+   "kind": "text",
+   "parent": 695107908,
+   "children": [
+    -172201861
+   ],
+   "actor": null,
+   "text": "Why!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-172201861": {
+   "kind": "text",
+   "parent": 1312171159,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "<size=60%>Otherwise they will never stop bothering me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1605996141": {
+   "kind": "text",
+   "parent": -1372744107,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "<size=60%>Yes, stop acting like a little girl and put it in!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1227914057": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "P-Please, my warrior... I... I need to feel you inside of me... All of you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-17686224": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -678848432,
+    -1155472355,
+    1321475644
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "<size=60%>Just, like, take it slow... And don't you dare go for my pussy. I don't want a fucking brat.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-678848432": {
+   "kind": "text",
+   "parent": -17686224,
+   "actor": null,
+   "text": "I'll take what is mine, Himari. We belong to each other.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1155472355": {
+   "kind": "text",
+   "parent": -17686224,
+   "actor": null,
+   "text": "You're so wet, my love. I'll enter your depths now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1321475644": {
+   "kind": "text",
+   "parent": -17686224,
+   "actor": null,
+   "text": "(Fuck her ass)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-570015494": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Ghhaahh! Hnggaahh... It's too... Fuck....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariAnal (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariAnal (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/HimariAnal (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1649934146": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "<size=60%>Ffu~ My daughter is such a lucky woman... I can tell he must be massive just from the sounds!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1303580876": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Gahh! Fuck... Oh god, oh god, oh god!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-137849120": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    961120238,
+    -1959872295,
+    -1507652075
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "<size=60%>T-Take it slow, you're... Fuck... Oh god... <size=100%> I'm... I'm... I'M!!!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "961120238": {
+   "kind": "text",
+   "parent": -137849120,
+   "actor": null,
+   "text": "Y-Yes, let it happen. Cum for me, my love!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1959872295": {
+   "kind": "text",
+   "parent": -137849120,
+   "actor": null,
+   "text": "That's it... Fuck... Your \"pussy\" is so fucking tight!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1507652075": {
+   "kind": "text",
+   "parent": -137849120,
+   "actor": null,
+   "text": "(Fill her ass)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "640425657": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "YES! My body is... Hngaah! HAAAAAAAH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariAnal (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariAnal (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/HimariAnal (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-1899202023": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Oh fuck... Don't stop! Pump me harder, {PC}! Fuhhaaack!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "208617376": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "<size=60%>Hngaaah... Hah... Fucking, fuck, fuck... You made me cum from... Oh fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2134462997": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "<size=60%>You've done well, my dear Himari. I'm so proud of you.... I better go now before they notice me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1315120278": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "S-She's gone... Oh god... What a mess, hand me some tissues, you dork! I gotta clean my ass...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariAnal (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariAnal (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/HimariAnal (5)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariAnal (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariAnal (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/HimariAnal (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1955521643": {
+   "kind": "text",
+   "parent": 2067471745,
+   "actor": null,
+   "text": "So, what’s the move? Another \"fake\" blowjob?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-441696240": {
+   "kind": "text",
+   "parent": 2067471745,
+   "actor": null,
+   "text": "Maybe we should just tell them the truth.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "962664527": {
+   "kind": "text",
+   "parent": 2067471745,
+   "actor": null,
+   "text": "We're fucked.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1676336981": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Y-You're unbelievable...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "274264546": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    593823229
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "What the hell was that?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_8[himari-homequest] = 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "himari-homequest",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ]
+  },
+  "593823229": {
+   "kind": "choice",
+   "parent": 274264546,
+   "children": [
+    -2110631799,
+    1117237464,
+    -1950158973
+   ],
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "That whole \"radiant winter\" nonsense! Do you just say things like that without thinking?!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2110631799": {
+   "kind": "text",
+   "parent": 593823229,
+   "children": [
+    1944306838
+   ],
+   "actor": null,
+   "text": "Didn’t seem like you hated it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1117237464": {
+   "kind": "text",
+   "parent": 593823229,
+   "children": [
+    2064364625
+   ],
+   "actor": null,
+   "text": "Sorry, I'll stop if that's what you want.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1950158973": {
+   "kind": "text",
+   "parent": 593823229,
+   "children": [
+    1432245320
+   ],
+   "actor": null,
+   "text": "I'm a good actor, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1432245320": {
+   "kind": "text",
+   "parent": -1950158973,
+   "actor": "Himari",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Y-You were just acting... I... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2064364625": {
+   "kind": "text",
+   "parent": 1117237464,
+   "actor": "Himari",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "N-No... I... Gah! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1944306838": {
+   "kind": "text",
+   "parent": -2110631799,
+   "actor": "Himari",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Tch…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Himari_Dinner/Himari_Dinner_Three",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play himaribathroom and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueStart'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueStart"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Gallery-Active] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gallery-Active",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariFatherBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariFatherBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariFatherBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariMotherBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariMotherBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariMotherBust"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play GameObject and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "GameObject",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Core_Events/Himari_Dinner/Himari_Dinner_Three/GameObject"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariMotherBust to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariMotherBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariMotherBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariFatherBust to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariFatherBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariFatherBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 114_HimariDiningRoom to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "114_HimariDiningRoom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/114_HimariDiningRoom"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 115_HimariBathRoom to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "115_HimariBathRoom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/115_HimariBathRoom"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariFatherBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariFatherBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariFatherBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariMotherBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariMotherBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariMotherBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 114_HimariDiningRoom to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "114_HimariDiningRoom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/114_HimariDiningRoom"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 115_HimariBathRoom to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "115_HimariBathRoom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/115_HimariBathRoom"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Himari_AFTER_bathroom and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Himari_AFTER_bathroom",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Core_Events/Himari_Dinner/Himari_Dinner_Three/Himari_AFTER_bathroom"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariMotherBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariFatherBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play GameObject (1) and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "GameObject (1)",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Core_Events/Himari_Dinner/Himari_Dinner_Three/GameObject (1)"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Gallery-Active] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gallery-Active",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 117_ElevatorInside to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "117_ElevatorInside",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/117_ElevatorInside"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 114_HimariDiningRoom to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "114_HimariDiningRoom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/114_HimariDiningRoom"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[himaridinner-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "himaridinner-cooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueEnd'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueEnd"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 17_CarPark to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "17_CarPark",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator/MapButtons/17_CarPark"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

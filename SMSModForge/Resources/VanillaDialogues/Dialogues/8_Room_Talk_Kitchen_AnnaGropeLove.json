@@ -1,0 +1,376 @@
+{
+ "id": "8_Room_Talk/Kitchen/AnnaGropeLove",
+ "name": "AnnaGropeLove",
+ "index": 12,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna"
+ ],
+ "roots": [
+  1151990690,
+  -1930213985,
+  1621785375
+ ],
+ "nodes": {
+  "1151990690": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    1526695493,
+    -401505229,
+    1779894944
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Y-Yes... Please...",
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[horny-m] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "horny-m",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[random-1-of-10] = Random3[Random]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random3",
+        "pick": "random",
+        "type": "number"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1526695493": {
+   "kind": "text",
+   "parent": 1151990690,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You look so cute when you play with my tits... It reminds me of back then...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaLoveGrope (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaLoveGrope (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaLoveGrope (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-401505229": {
+   "kind": "text",
+   "parent": 1151990690,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes... My butt only belongs to you... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaLoveGrope (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaLoveGrope (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaLoveGrope (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1779894944": {
+   "kind": "text",
+   "parent": 1151990690,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmm.... G-Give it a good squeeze....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaLoveGrope (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaLoveGrope (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaLoveGrope (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1930213985": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-You really know how to get me going... I... Phew...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1621785375": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    228362801,
+    -378333926,
+    1550987397
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Can {M} get a kiss ... ?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaLoveKiss to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaLoveKiss",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaLoveKiss"
+      }
+     }
+    }
+   ]
+  },
+  "228362801": {
+   "kind": "text",
+   "parent": 1621785375,
+   "children": [
+    -1847998769,
+    -624261922,
+    485136585
+   ],
+   "actor": null,
+   "text": "[Deeply make out with Anna]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-378333926": {
+   "kind": "text",
+   "parent": 1621785375,
+   "children": [
+    -1831575103
+   ],
+   "actor": null,
+   "text": "[Give Anna a quick kiss]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1550987397": {
+   "kind": "text",
+   "parent": 1621785375,
+   "children": [
+    -1215123634
+   ],
+   "actor": null,
+   "text": "Maybe next time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1215123634": {
+   "kind": "text",
+   "parent": 1550987397,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "D-Does my breath smell bad? ... I-I'm sorry...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1831575103": {
+   "kind": "text",
+   "parent": -378333926,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-Thank you, hun...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'kiss'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "kiss"
+      }
+     }
+    }
+   ]
+  },
+  "-1847998769": {
+   "kind": "text",
+   "parent": 228362801,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mwaah.... Maahh....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaLoveKiss (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaLoveKiss (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaLoveKiss (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-624261922": {
+   "kind": "text",
+   "parent": 228362801,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmmhm... Mm.... Maaah....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "485136585": {
+   "kind": "text",
+   "parent": 228362801,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-You're such a good kisser, {PC}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Kitchen/DefaultDialoge",
+   "script": "Dialogue",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core[temp-stored-very-short-term] = AnnaGropeLove",
+   "as": "GameObject"
+  }
+ ]
+}

@@ -1,0 +1,330 @@
+{
+ "id": "8_Vacation_Stories/Tropical_Pool/Leilani_Aftertalk_Won",
+ "name": "Leilani_Aftertalk_Won",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "V_Leilani"
+ ],
+ "roots": [
+  1874665458
+ ],
+ "nodes": {
+  "1874665458": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1598197220,
+    1069405866,
+    645784018,
+    2084245159,
+    -1371983745,
+    976654386,
+    1748654834,
+    1463075295,
+    -2039629920
+   ],
+   "actor": "V_Leilani",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "What the hell was that?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1598197220": {
+   "kind": "text",
+   "parent": 1874665458,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "What was what, Leilani?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1069405866": {
+   "kind": "text",
+   "parent": 1874665458,
+   "actor": "V_Leilani",
+   "expressionName": "neutral",
+   "text": "Don’t play innocent with me! You know exactly what I’m talking about.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "645784018": {
+   "kind": "text",
+   "parent": 1874665458,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I entered the contest, just like everyone else. The judges made their choice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2084245159": {
+   "kind": "text",
+   "parent": 1874665458,
+   "actor": "V_Leilani",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Oh, please. You think they actually picked you because you were better than me? We both know you sucked cock for that win!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1371983745": {
+   "kind": "text",
+   "parent": 1874665458,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Someone's projecting. Oh my, don't tell me you sucked one of their dicks and still lost? Hahaha!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "976654386": {
+   "kind": "text",
+   "parent": 1874665458,
+   "actor": "V_Leilani",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Enjoy your little victory, Anna. It won’t last.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_LeilaniBikiniBust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1748654834": {
+   "kind": "text",
+   "parent": 1874665458,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1463075295": {
+   "kind": "text",
+   "parent": 1874665458,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "First place. We did it! Thank you for believing in me. This was incredible.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2039629920": {
+   "kind": "text",
+   "parent": 1874665458,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I need to thank Zuri for this amazing swimsuit.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Tropical_Pool",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Leilani_Aftertalk_Won and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Inventory[divine-swimsuit] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "divine-swimsuit",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "branches": [
+    "wincontest"
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_S_JudgeBenjamin to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_S_JudgeBenjamin",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_JudgeBenjamin"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Win_Contest and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Win_Contest",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Vacation_Stories/Tropical_Pool/Win_Contest"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_LeilaniBikiniBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_LeilaniBikiniBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_LeilaniBikiniBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_GoddessBikini to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_GoddessBikini",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_GoddessBikini"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[beauty-contest-won] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "beauty-contest-won",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,374 @@
+{
+ "id": "8_Core_Events/SmallTalks/JosefAdrianFight/GameObject",
+ "name": "GameObject",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Josef"
+ ],
+ "roots": [
+  957701803,
+  -1314910441,
+  1429916141,
+  -1858333667,
+  1005048383,
+  234949959,
+  786479556,
+  1024359149,
+  -634485382,
+  -160491027,
+  246298470,
+  734086640,
+  2036472473
+ ],
+ "nodes": {
+  "957701803": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Adrian, I had no choice. We can't afford it right now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1314910441": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "No choice? You promised! This trip was the one thing I was looking forward to all year!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1429916141": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I know, but things have changed. We have to prioritize necessities.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1858333667": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Prioritize? You knew how much this meant to me! You've been failing at everything lately, and now you're ruining my plans too!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1005048383": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Watch your tone, Adrian! Do you think I wanted this? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "234949959": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I'm trying my best to fix things, but it's not easy. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "786479556": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "So, what? I'm just supposed to sit here and watch everything fall apart?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1024359149": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "No, you're supposed to understand that sometimes life doesn't go as planned. We have to stick together and get through this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-634485382": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "You don’t get it. You’re ruining everything for me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-160491027": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "246298470": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1620962691,
+    -410913729
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Oh, {PC}.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1620962691": {
+   "kind": "text",
+   "parent": 246298470,
+   "actor": null,
+   "text": "What happened?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-410913729": {
+   "kind": "text",
+   "parent": 246298470,
+   "children": [
+    -627798515
+   ],
+   "actor": null,
+   "text": "Yikes, that was rough to watch.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-627798515": {
+   "kind": "text",
+   "parent": -410913729,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I can imagine...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "734086640": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "We had to cancel Adrian's trip to Japan because... Well, you know why.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[incoming-japan-talk-adrian] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "incoming-japan-talk-adrian",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "2036472473": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "If you excuse me, I, uh... need to make  call.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/SmallTalks/JosefAdrianFight",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play GameObject and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueStart'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueStart"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[adrian-josef-fight] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-josef-fight",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueEnd'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueEnd"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

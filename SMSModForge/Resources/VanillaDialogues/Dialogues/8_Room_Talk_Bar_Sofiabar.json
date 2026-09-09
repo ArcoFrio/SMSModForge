@@ -1,0 +1,572 @@
+{
+ "id": "8_Room_Talk/Bar/Sofiabar",
+ "name": "Sofiabar",
+ "index": 6,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Sofia"
+ ],
+ "roots": [
+  1573861158,
+  1165844837,
+  -1340561613,
+  -1715862258,
+  -2723595,
+  1688902229
+ ],
+ "nodes": {
+  "1573861158": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    866760554,
+    133765117
+   ],
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "{PC}, hey. Small world, huh? I was just… taking a break from it all.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "866760554": {
+   "kind": "text",
+   "parent": 1573861158,
+   "actor": null,
+   "text": "Mind if I join you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "133765117": {
+   "kind": "text",
+   "parent": 1573861158,
+   "children": [
+    1618086768
+   ],
+   "actor": null,
+   "text": "Well, have fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1618086768": {
+   "kind": "text",
+   "parent": 133765117,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Thanks.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1165844837": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Sure, why not? Could use some company.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1340561613": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    2112696455,
+    -1054122303,
+    -1556252026
+   ],
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Ugh...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2112696455": {
+   "kind": "text",
+   "parent": -1340561613,
+   "children": [
+    315810732
+   ],
+   "actor": null,
+   "text": "Rough day?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "315810732": {
+   "kind": "text",
+   "parent": 2112696455,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "You could say that. Being a cop, trying to take down someone like Mario… it’s exhausting. But sometimes, it’s more than that. It’s…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1054122303": {
+   "kind": "text",
+   "parent": -1340561613,
+   "children": [
+    -383698244,
+    -131156359
+   ],
+   "actor": null,
+   "text": "You look a bit lost.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-383698244": {
+   "kind": "text",
+   "parent": -1054122303,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "You ever feel like you’re stuck between two worlds? For me, it’s like I’m constantly balancing between being a cop and just… being a woman. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1556252026": {
+   "kind": "text",
+   "parent": -1340561613,
+   "children": [
+    -530477414,
+    80524407
+   ],
+   "actor": null,
+   "text": "Why did you become a cop in the first place?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-530477414": {
+   "kind": "text",
+   "parent": -1556252026,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "I became a cop because I wanted to make a difference. Growing up, I saw so much injustice—things that shouldn’t happen to anyone. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1715862258": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -241826059,
+    -477121127,
+    -895969909
+   ],
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Well... At least the drinks here are pretty good.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-241826059": {
+   "kind": "text",
+   "parent": -1715862258,
+   "children": [
+    258938347,
+    -448293431
+   ],
+   "actor": null,
+   "text": "What do you hope for, after all of this is over?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "258938347": {
+   "kind": "text",
+   "parent": -241826059,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "I hope for peace, I guess. Maybe a chance to just… be me, without all the battles.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-477121127": {
+   "kind": "text",
+   "parent": -1715862258,
+   "children": [
+    -1769468933
+   ],
+   "actor": null,
+   "text": "Do you ever wish you could leave it all behind?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1769468933": {
+   "kind": "text",
+   "parent": -477121127,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Sometimes. But I’m not sure who I’d be without it. It’s hard to imagine a life where I’m not fighting for something. But maybe… maybe one day, I’ll find out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-895969909": {
+   "kind": "text",
+   "parent": -1715862258,
+   "children": [
+    -1108624455
+   ],
+   "actor": null,
+   "text": "What’s the hardest part of your job?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1108624455": {
+   "kind": "text",
+   "parent": -895969909,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "t’s the loneliness, I think. The constant pressure to be strong, to never show weakness. You lose touch with people, with yourself. It wears on you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2723595": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "I didn’t expect to get so deep tonight, but… it’s nice to talk about this with someone who gets it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1688902229": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Thanks, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-448293431": {
+   "kind": "text",
+   "parent": -241826059,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "A life where I’m not constantly fighting, where I can finally let my guard down.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "80524407": {
+   "kind": "text",
+   "parent": -1556252026,
+   "actor": "Sofia",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I thought if I could change even a little part of the world, it would be worth it. But now… sometimes it feels like the job is changing me instead.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-131156359": {
+   "kind": "text",
+   "parent": -1054122303,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "I’ve had to be tough, to be relentless, but sometimes I wonder if I’ve lost touch with who I am outside the badge.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Bar",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Sofiabar and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Sofia-Path-Accepted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Sofia-Path-Accepted",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[sofia-pub-talk-cooldown-week] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-pub-talk-cooldown-week",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[sofia-taken-by-mob] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-taken-by-mob",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Sofia_Undercover/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia_Undercover to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia_Undercover",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Sofia_Undercover"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Sofia_Undercover/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[sofia-pub-talk-cooldown-week] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-pub-talk-cooldown-week",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

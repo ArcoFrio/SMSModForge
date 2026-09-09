@@ -1,0 +1,401 @@
+{
+ "id": "Anna_Call_Core/CallAnna_Scene_Club",
+ "name": "CallAnna_Scene_Club",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "Roxy"
+ ],
+ "roots": [
+  -1920444640,
+  442301497,
+  104968728,
+  -1592274142,
+  2026577856,
+  -1081353488,
+  1730325802
+ ],
+ "nodes": {
+  "-1920444640": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You said you wanted daring. Well, I might shock even you this time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Trenchcoat to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Trenchcoat",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Trenchcoat"
+      }
+     }
+    }
+   ]
+  },
+  "442301497": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Trenchcoat to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Trenchcoat",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Trenchcoat"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_SexWorker to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_SexWorker",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_SexWorker"
+      }
+     }
+    }
+   ]
+  },
+  "104968728": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I actually bought this for your {D} ages ago… but I never had the courage to wear it. Guess tonight’s the exception. Do you like it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1592274142": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1124583858,
+    580516791,
+    476801372
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "What’s the angle you’re looking for? I don’t want to mess up your shot.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1124583858": {
+   "kind": "text",
+   "parent": -1592274142,
+   "children": [
+    1632979889
+   ],
+   "actor": null,
+   "text": "Dance a little, show us how much fun you're having...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "580516791": {
+   "kind": "text",
+   "parent": -1592274142,
+   "children": [
+    1997186720,
+    -423643056,
+    -913604171
+   ],
+   "actor": null,
+   "text": "Turn around, show us that thick ass of yours...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "476801372": {
+   "kind": "text",
+   "parent": -1592274142,
+   "children": [
+    1763088913
+   ],
+   "actor": null,
+   "text": "Panties down, {M}. I want everyone to see those tight holes of yours...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1763088913": {
+   "kind": "text",
+   "parent": 476801372,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-Take a close look, {PC}... Oh god, I'm exposing myself in a place like this... I can feel their stares...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active B6_AnnaClubPhoto (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "B6_AnnaClubPhoto (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/B6_AnnaClubPhoto (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1997186720": {
+   "kind": "text",
+   "parent": 580516791,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Like this? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active B5_AnnaClubPhoto (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "B5_AnnaClubPhoto (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/B5_AnnaClubPhoto (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1632979889": {
+   "kind": "text",
+   "parent": 1124583858,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yeah... The music's not too bad... Hihi...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active B4_AnnaClubPhoto (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "B4_AnnaClubPhoto (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/B4_AnnaClubPhoto (1)"
+      }
+     }
+    }
+   ]
+  },
+  "2026577856": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I wonder if the people around here think I'm some kind of stripper or escort...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1081353488": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "One day, these shoots might catch up to me… but tonight, they were worth it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1730325802": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Send me the best shots later, alright? I’ll be waiting.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-423643056": {
+   "kind": "text",
+   "parent": 580516791,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Jeez! That's a huge fucking ass, ma'am!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-913604171": {
+   "kind": "text",
+   "parent": 580516791,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "U-Uh... Thanks...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "Anna_Call_Core/CallIcon_Condition_Check",
+   "script": "Conditions",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core_NoSave2[call-anna-dialogue] = CallAnna_Scene_Club",
+   "as": "GameObject",
+   "when": [
+    {
+     "kind": "gameObjectActive",
+     "type": "ConditionGameObjectActive",
+     "title": "If is Active 33_Club",
+     "fields": {
+      "m_GameObject": {
+       "kind": "object",
+       "name": "33_Club",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/33_Club"
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CanCallAnnaIndicator to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CanCallAnnaIndicator",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator/Buttone/CallAnnaButton/CanCallAnnaIndicator"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

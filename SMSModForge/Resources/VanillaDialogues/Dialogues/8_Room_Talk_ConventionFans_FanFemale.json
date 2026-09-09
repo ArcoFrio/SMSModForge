@@ -1,0 +1,361 @@
+{
+ "id": "8_Room_Talk/ConventionFans/FanFemale",
+ "name": "FanFemale",
+ "index": 4,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "S_Fan"
+ ],
+ "roots": [
+  124271648,
+  439885471,
+  815068446,
+  -2000985098,
+  -996730265
+ ],
+ "nodes": {
+  "124271648": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Fan",
+   "expressionName": "neutral",
+   "text": "Anna, you’re such an inspiration! I want to be just like you when I start my own Starmaker page.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_FanGirl to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_FanGirl",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_FanGirl"
+      }
+     }
+    }
+   ]
+  },
+  "439885471": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -948739438
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That’s so sweet! Just be yourself, and you’ll shine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_Only_Done_2[convention-personality] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-personality",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "815068446": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1658266558
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, darling, you’re already halfway there with that lovely smile.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_Only_Done_2[convention-personality] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-personality",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-2000985098": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -79395399
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hmph, just don’t think it’s going to be easy. It takes a lot of work.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_Only_Done_2[convention-personality] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-personality",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-996730265": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1159975889
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Make sure to train your holes then, you'll need to take big cocks to make it to the top!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_Only_Done_2[convention-personality] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-personality",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-948739438": {
+   "kind": "text",
+   "parent": 439885471,
+   "actor": "S_Fan",
+   "expressionName": "neutral",
+   "text": "Thank you, Anna! I hope I can make you proud.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1658266558": {
+   "kind": "text",
+   "parent": 815068446,
+   "actor": "S_Fan",
+   "expressionName": "neutral",
+   "text": "You’re too kind, Anna. I’ll work hard to be like you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-79395399": {
+   "kind": "text",
+   "parent": -2000985098,
+   "actor": "S_Fan",
+   "expressionName": "neutral",
+   "text": "I understand, Anna. I’m ready to work hard.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1159975889": {
+   "kind": "text",
+   "parent": -996730265,
+   "actor": "S_Fan",
+   "expressionName": "neutral",
+   "text": "Y-Yes, of course! I'll order some new toys today!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/ConventionFans",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Self/Events_Only_Done_2[fan-encounter] and wait",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Events_Only_Done_2[convention-outfit-reference] to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-outfit-reference",
+        "list": "Events_Only_Done_2",
+        "type": "game-object"
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "chosenBy": {
+    "kind": "variable",
+    "variable": {
+     "scope": "global",
+     "name": "fan-encounter",
+     "list": "Events_Only_Done_2",
+     "type": "number"
+    }
+   },
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_Only_Done_2[fan-encounter] = 4 (this is the 5th child of ConventionFans)",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "fan-encounter",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

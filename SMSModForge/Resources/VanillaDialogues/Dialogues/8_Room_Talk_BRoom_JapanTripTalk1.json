@@ -1,0 +1,369 @@
+{
+ "id": "8_Room_Talk/BRoom/JapanTripTalk1",
+ "name": "JapanTripTalk1",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "You"
+ ],
+ "roots": [
+  841511247,
+  1029495839,
+  803236639
+ ],
+ "nodes": {
+  "841511247": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    998731031,
+    -2051625576
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I'm not really in the mood to talk right now, {PC}.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "998731031": {
+   "kind": "text",
+   "parent": 841511247,
+   "children": [
+    -798472578
+   ],
+   "actor": null,
+   "text": "{D} is trying his best, cut him some slack.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2051625576": {
+   "kind": "text",
+   "parent": 841511247,
+   "children": [
+    807896511
+   ],
+   "actor": null,
+   "text": "{D} is such a loser, am I right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "807896511": {
+   "kind": "text",
+   "parent": -2051625576,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "You tell me! We’re stuck in this fancy apartment, but we can’t even scrape together enough for a freaking vacation.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-798472578": {
+   "kind": "text",
+   "parent": 998731031,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "He could’ve saved some cash, but no, he had to blow it all on cars and luxury stuff.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1029495839": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    891338163,
+    90537318
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Fuck...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "891338163": {
+   "kind": "text",
+   "parent": 1029495839,
+   "children": [
+    721343816,
+    341694961,
+    1619574059
+   ],
+   "actor": null,
+   "text": "How much money do you need? (Adrian leaves route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "90537318": {
+   "kind": "text",
+   "parent": 1029495839,
+   "children": [
+    -1758594698
+   ],
+   "actor": null,
+   "text": "{M} and I need you here. (Adrian stays route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "721343816": {
+   "kind": "text",
+   "parent": 891338163,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Around twenty grand. The whole trip was planned out – three months immersed in Japanese culture.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[adrian-japan-money-needed] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-japan-money-needed",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1758594698": {
+   "kind": "text",
+   "parent": 90537318,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I know, I know. You can count on me, {B}. I was just so fucking hyped for japan.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[adrian-will-stay-start] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-will-stay-start",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "803236639": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Hey, um. Thanks for listening to me , I guess.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "341694961": {
+   "kind": "text",
+   "parent": 891338163,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "I'll see what I can do.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1619574059": {
+   "kind": "text",
+   "parent": 891338163,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Shit, really? I would owe you big time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/BRoom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play JapanTripTalk1 and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[incoming-japan-talk-adrian] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "incoming-japan-talk-adrian",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[incoming-japan-talk-adrian] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "incoming-japan-talk-adrian",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

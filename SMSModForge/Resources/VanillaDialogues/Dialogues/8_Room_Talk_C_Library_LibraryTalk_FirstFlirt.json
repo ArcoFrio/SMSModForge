@@ -1,0 +1,674 @@
+{
+ "id": "8_Room_Talk/C_Library/LibraryTalk_FirstFlirt",
+ "name": "LibraryTalk_FirstFlirt",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Vanessa"
+ ],
+ "roots": [
+  2146697389,
+  -183882145
+ ],
+ "nodes": {
+  "2146697389": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Vanessa",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You know… you really shouldn’t look at me like that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-183882145": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1111170754,
+    472434729
+   ],
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "I’m trying to live a life of discipline, not daydreams. And you’re not helping.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1111170754": {
+   "kind": "text",
+   "parent": -183882145,
+   "children": [
+    32577245,
+    -1621348628,
+    689113152
+   ],
+   "actor": null,
+   "text": "Maybe I like making it hard for you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "472434729": {
+   "kind": "text",
+   "parent": -183882145,
+   "children": [
+    -710106217
+   ],
+   "actor": null,
+   "text": "You're right, I will stop.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-710106217": {
+   "kind": "text",
+   "parent": 472434729,
+   "actor": "Vanessa",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Good. Thank you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[vanessa-declined] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vanessa-declined",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionQuestsDeactivate",
+     "title": "Deactivate Vanessa Quest",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Vanessa Quest",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "32577245": {
+   "kind": "text",
+   "parent": -1111170754,
+   "actor": "Vanessa",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "That’s not fair… I’m already barely holding it together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1621348628": {
+   "kind": "text",
+   "parent": -1111170754,
+   "actor": "Vanessa",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "You don’t know what it’s like. To want someone, really want them, and know you're not supposed to.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LibrarianJerksIt (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LibrarianJerksIt (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/LibrarianJerksIt (0)"
+      }
+     }
+    }
+   ]
+  },
+  "689113152": {
+   "kind": "choice",
+   "parent": -1111170754,
+   "children": [
+    1404423568,
+    -2109004469,
+    1761728438
+   ],
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "I shouldn’t be feeling this. I can’t be feeling this.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1404423568": {
+   "kind": "text",
+   "parent": 689113152,
+   "children": [
+    -282420604,
+    -1857415180,
+    -336429486,
+    -96469496,
+    -87392866
+   ],
+   "actor": null,
+   "text": "I’m not walking anywhere. I want all of you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-282420604": {
+   "kind": "text",
+   "parent": 1404423568,
+   "actor": "Vanessa",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "You’re going to ruin me…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2109004469": {
+   "kind": "text",
+   "parent": 689113152,
+   "children": [
+    164332815,
+    -669616204,
+    512589968,
+    -1548011711,
+    -1592048419
+   ],
+   "actor": null,
+   "text": "You’re beautiful, complicated, and honest. That’s exactly what I want.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "164332815": {
+   "kind": "text",
+   "parent": -2109004469,
+   "actor": "Vanessa",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "You have no idea how dangerous that sounds to someone like me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1761728438": {
+   "kind": "text",
+   "parent": 689113152,
+   "children": [
+    -712930189,
+    1804497226
+   ],
+   "actor": null,
+   "text": "I respect your vow. We can stop here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-712930189": {
+   "kind": "text",
+   "parent": 1761728438,
+   "actor": "Vanessa",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Thank you… really.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "type": "InstructionQuestsDeactivate",
+     "title": "Deactivate Vanessa Quest",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Vanessa Quest",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-1857415180": {
+   "kind": "text",
+   "parent": 1404423568,
+   "actor": "Vanessa",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "And I think I want you to.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1804497226": {
+   "kind": "text",
+   "parent": 1761728438,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "I’ll never forget that kindness. Even if part of me hates how good it felt to hear it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[vanessa-declined] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vanessa-declined",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-336429486": {
+   "kind": "text",
+   "parent": 1404423568,
+   "actor": "Vanessa",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "No. No, I can’t. I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-96469496": {
+   "kind": "text",
+   "parent": 1404423568,
+   "actor": "Vanessa",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "What am I doing? What did I just let happen?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-87392866": {
+   "kind": "text",
+   "parent": 1404423568,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "I need to go. I need to pray. I need to… breathe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[vanessa-flirtmode] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vanessa-flirtmode",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Spend time with Vanessa.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Vanessa Quest",
+        "of": "Quest"
+       },
+       "m_TaskId": 2105965574
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-669616204": {
+   "kind": "text",
+   "parent": -2109004469,
+   "actor": "Vanessa",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "But if you’re serious… maybe I don’t have to carry this guilt alone anymore.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "512589968": {
+   "kind": "text",
+   "parent": -2109004469,
+   "actor": "Vanessa",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "No. No, I can’t. I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1548011711": {
+   "kind": "text",
+   "parent": -2109004469,
+   "actor": "Vanessa",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "What am I doing? What did I just let happen?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1592048419": {
+   "kind": "text",
+   "parent": -2109004469,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "I need to go. I need to pray. I need to… breathe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[vanessa-flirtmode] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vanessa-flirtmode",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Spend time with Vanessa.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Vanessa Quest",
+        "of": "Quest"
+       },
+       "m_TaskId": 2105965574
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/C_Library",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play LibraryTalk_FirstFlirt and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_10[vanessavisited] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vanessavisited",
+        "list": "Events_10",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_10[vanessa-story] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vanessa-story",
+        "list": "Events_10",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[vanessa-flirtmode] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vanessa-flirtmode",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[vanessa-declined] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vanessa-declined",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Vanessa_Bust_LibraryOutfit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Vanessa_Bust_LibraryOutfit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Vanessa_Bust_LibraryOutfit"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

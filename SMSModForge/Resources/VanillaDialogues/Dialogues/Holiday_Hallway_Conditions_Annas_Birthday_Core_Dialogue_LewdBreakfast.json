@@ -1,0 +1,1128 @@
+{
+ "id": "Holiday_Hallway_Conditions/Annas_Birthday_Core/Dialogue_LewdBreakfast",
+ "name": "Dialogue_LewdBreakfast",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Anna",
+  "Josef"
+ ],
+ "roots": [
+  1832510395,
+  1107765107,
+  -242015556,
+  1258648324,
+  -2105547236,
+  1834556476,
+  965604107,
+  369671307,
+  228404888,
+  -1737948211,
+  1710050779,
+  939723225,
+  971400530,
+  561111184,
+  -415775635,
+  -815875862,
+  1120191269,
+  -305529161,
+  -1102651089,
+  1618258052,
+  -1691578891,
+  -1884568866,
+  -1210694180,
+  1379245844,
+  1458918680,
+  380536447,
+  -1507317412,
+  -943281469,
+  -610918893,
+  943117019,
+  -1160471182,
+  698137621,
+  968789058,
+  2019178502,
+  -1239968360,
+  1030663906,
+  -744642698,
+  -895274312,
+  355481957
+ ],
+ "nodes": {
+  "1832510395": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Happy birthday, {M}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1107765107": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    472859189,
+    1246577974,
+    2021146149
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thank you, sweetheart. This is wonderful.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "472859189": {
+   "kind": "text",
+   "parent": 1107765107,
+   "children": [
+    103452997
+   ],
+   "actor": null,
+   "text": "Happy Birthday, {M}. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1246577974": {
+   "kind": "text",
+   "parent": 1107765107,
+   "children": [
+    -86494882
+   ],
+   "actor": null,
+   "text": "Can I get you anything else?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2021146149": {
+   "kind": "text",
+   "parent": 1107765107,
+   "children": [
+    581818532,
+    1196902121,
+    -638166494,
+    438414088
+   ],
+   "actor": null,
+   "text": "Nice tits, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-242015556": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Adrian... you made breakfast?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-86494882": {
+   "kind": "text",
+   "parent": 1246577974,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thanks, hun but let's sit down and eat together, yes?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "103452997": {
+   "kind": "text",
+   "parent": 472859189,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thanks, hun. I'm glad you're here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "581818532": {
+   "kind": "text",
+   "parent": 2021146149,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Well, it's my special day and I felt like it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1258648324": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Looks... edible.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2105547236": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Hey, rude. I was trying to do something nice here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1834556476": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It’s sweet. Really.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "965604107": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Both of you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1196902121": {
+   "kind": "text",
+   "parent": 2021146149,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I could get used to this. Haha.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-638166494": {
+   "kind": "text",
+   "parent": 2021146149,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "We like seeing you comfortable, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "438414088": {
+   "kind": "text",
+   "parent": 2021146149,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I couldn't agree more.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "369671307": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "So, um... what are we doing to celebrate your big day?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "228404888": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, I can think of a few ways to make this birthday extra special.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1737948211": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Now that sounds like a plan.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1710050779": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I was thinking we could try something a little different for breakfast today. Something special, just for me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "939723225": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    2124720415,
+    1912551078
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "What do you say, boys? Want to give your birthday girl what she really wants?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2124720415": {
+   "kind": "text",
+   "parent": 939723225,
+   "children": [
+    -813652612,
+    1485657376
+   ],
+   "actor": null,
+   "text": "Anything for you, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1912551078": {
+   "kind": "text",
+   "parent": 939723225,
+   "children": [
+    -1607930910,
+    -762714124
+   ],
+   "actor": null,
+   "text": "Let's just eat breakfast for now, yeah?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-813652612": {
+   "kind": "text",
+   "parent": 2124720415,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm, come closer boys. I want to feel all of you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1607930910": {
+   "kind": "text",
+   "parent": 1912551078,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hmm, sure. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-762714124": {
+   "kind": "text",
+   "parent": 1912551078,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Don't worry, hun. Next time, huh.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "971400530": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "That's it, {M}. Stroke me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Birthday_GB (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Birthday_GB (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Anna_Birthday_GB (1)"
+      }
+     }
+    }
+   ]
+  },
+  "561111184": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "God, you're so sexy... Happy birthday, my love.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-415775635": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm, thank you..",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-815875862": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    701745965,
+    1698995296,
+    1793722536
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Why don't you give me a taste of your cock, sweetheart?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "701745965": {
+   "kind": "text",
+   "parent": -815875862,
+   "actor": null,
+   "text": "It's all yours...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1698995296": {
+   "kind": "text",
+   "parent": -815875862,
+   "actor": null,
+   "text": "Come and get it, Anna.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1793722536": {
+   "kind": "text",
+   "parent": -815875862,
+   "actor": null,
+   "text": "(Move your cock next to her mouth)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1120191269": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "That's it, love... suck our {S}' cock while you please us with those perfect fingers.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Birthday_GB (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Birthday_GB (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Anna_Birthday_GB (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-305529161": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmmhmm... Gllpuurphh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1102651089": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Fuck, {M}... you're going to make me cum so hard...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1618258052": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1799439189,
+    -196012193,
+    955361768
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mhmmm! Mhmmm! Mhmmm!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1884568866": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Open wide, sweetheart. We're going to give you a special birthday treat. Hnga...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1799439189": {
+   "kind": "text",
+   "parent": 1618258052,
+   "actor": null,
+   "text": "Y-Yeah, me too... I'm getting close too!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-196012193": {
+   "kind": "text",
+   "parent": 1618258052,
+   "actor": null,
+   "text": "T-That's it... Milk our fat cocks, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "955361768": {
+   "kind": "text",
+   "parent": 1618258052,
+   "actor": null,
+   "text": "Fuck, Anna... Y-You're so eager today...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1210694180": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Come on, boys. Aim for my mouth. I want to taste all of you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1379245844": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That's it, boys, cover me in your hot cum!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Birthday_GB (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Birthday_GB (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Anna_Birthday_GB (3)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Dining_AnnaSitSprite_Nude to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Dining_AnnaSitSprite_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/121_DiningRoomHome/Dining_Sprites/Dining_AnnaSitSprite_Nude"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Dining_AnnaSitSprite_NudeWithCum to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Dining_AnnaSitSprite_NudeWithCum",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/121_DiningRoomHome/Dining_Sprites/Dining_AnnaSitSprite_NudeWithCum"
+      }
+     }
+    }
+   ]
+  },
+  "1458918680": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Fuck yes... happy birthday, my love...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1507317412": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Oh god, {M}... here it comes...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-943281469": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmm, so good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-610918893": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Don't stop, boys... I want to feel your hot cum all over me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "943117019": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm... delicious.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Birthday_GB (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Birthday_GB (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Anna_Birthday_GB (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Birthday_GB (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Birthday_GB (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Anna_Birthday_GB (1)"
+      }
+     }
+    }
+   ]
+  },
+  "968789058": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You boys really know how to make a girl feel special.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2019178502": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    780734800,
+    1275996528,
+    -1551115623
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Happy birthday, {M}. That was incredible.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "780734800": {
+   "kind": "text",
+   "parent": 2019178502,
+   "actor": null,
+   "text": "Happy birthday, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1275996528": {
+   "kind": "text",
+   "parent": 2019178502,
+   "actor": null,
+   "text": "Glad you liked our present, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1551115623": {
+   "kind": "text",
+   "parent": 2019178502,
+   "actor": null,
+   "text": "Fuck, I'm spent.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1239968360": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Well, I certainly got what I wished for today. Thank you all so much.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1030663906": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I love you guys more than anything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-744642698": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "We love you too, Anna. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-895274312": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "You deserve it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "355481957": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Now let's finish breakfast, can't have the food get cold. Adrian put so much effort into it!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1691578891": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    703796297
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mwuaaaah! That's it sweetheart, shove your fat cock down my eager throat! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "703796297": {
+   "kind": "text",
+   "parent": -1691578891,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Oh god, look at you go... You love choking on {PC}'s dick, don't you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "380536447": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yeah, fucking paint my slutty face! Cover me in your seed!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1160471182": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Can't believe how much jizz we pumped out... That was intense!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "698137621": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1973277241
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "What a hot little cum dumpster we have.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1973277241": {
+   "kind": "text",
+   "parent": 698137621,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You know it, hun. Your filthy little cum dumpster loves swallowing your hot loads. I can't get enough of this {F} spunk!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1485657376": {
+   "kind": "text",
+   "parent": 2124720415,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Get those cocks over here... {M} needs to taste every drop of your combined jizz.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "Holiday_Hallway_Conditions/Annas_Birthday_Core/Anna_FamilyGB_Breakfast_DialogueStart",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dialogue_LewdBreakfast and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[WHOLE-F-INVOLVED] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "WHOLE-F-INVOLVED",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

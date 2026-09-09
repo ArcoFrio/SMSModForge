@@ -1,0 +1,327 @@
+{
+ "id": "8_Room_Talk/PatientRoom/NurseDefault",
+ "name": "NurseDefault",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "NurseNina"
+ ],
+ "roots": [
+  1230974153
+ ],
+ "nodes": {
+  "1230974153": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1721477154,
+    -1303747724,
+    -2064996421,
+    -700796357
+   ],
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "Hey there, troublemaker! Feeling okay today, or are you planning to keep me busy again?",
+   "tag": "nurseroot",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1721477154": {
+   "kind": "text",
+   "parent": 1230974153,
+   "children": [
+    1288741576,
+    -829999189
+   ],
+   "actor": null,
+   "text": "So, how’d you end up working here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1303747724": {
+   "kind": "text",
+   "parent": 1230974153,
+   "children": [
+    958001817,
+    1799022807
+   ],
+   "actor": null,
+   "text": "You're kinda scary.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2064996421": {
+   "kind": "text",
+   "parent": 1230974153,
+   "children": [
+    -713287314,
+    -1868127483
+   ],
+   "actor": null,
+   "text": "Do you have a life outside the hospital?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-700796357": {
+   "kind": "text",
+   "parent": 1230974153,
+   "children": [
+    -1720583830
+   ],
+   "actor": null,
+   "text": "I'll be going.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1720583830": {
+   "kind": "text",
+   "parent": -700796357,
+   "actor": "NurseNina",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Leaving already? Don’t forget—if you end up back here, it’s on you. Now, shoo!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-713287314": {
+   "kind": "text",
+   "parent": -2064996421,
+   "actor": "NurseNina",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh, I’m just chained to this place 24/7, didn’t you know?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "958001817": {
+   "kind": "text",
+   "parent": -1303747724,
+   "actor": "NurseNina",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Well, some people respond to sugar, and some to spice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1288741576": {
+   "kind": "text",
+   "parent": 1721477154,
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "Oh, you know, just saving lives, patching up stubborn patients like you. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1868127483": {
+   "kind": "text",
+   "parent": -2064996421,
+   "actor": "NurseNina",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "But yeah, I do a little yoga. Nothing like stretching some parts that never get any attention.... ",
+   "jump": {
+    "mode": "Jump",
+    "to": "nurseroot"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1799022807": {
+   "kind": "text",
+   "parent": -1303747724,
+   "actor": "NurseNina",
+   "expressionName": "neutral",
+   "text": "Just depends on what you need to stay in line. Annoy me, and you’ll see the spicy side, got it?",
+   "jump": {
+    "mode": "Jump",
+    "to": "nurseroot"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-829999189": {
+   "kind": "text",
+   "parent": 1721477154,
+   "actor": "NurseNina",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I guess I have a soft spot for people who don’t know how to stay out of trouble.",
+   "jump": {
+    "mode": "Jump",
+    "to": "nurseroot"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/PatientRoom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play NurseDefault and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Core_NoSave[hospital-injury] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hospital-injury",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NurseNina_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NurseNina_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/NurseNina_Default"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'ForceEnableUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "ForceEnableUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

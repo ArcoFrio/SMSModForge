@@ -1,0 +1,1206 @@
+{
+ "id": "Always_Active/Villa_Sharedtalks/Katarina_Sex",
+ "name": "Katarina_Sex",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Katarina"
+ ],
+ "roots": [
+  -1322112204,
+  -1190377960,
+  -634630896,
+  -1603877013,
+  265135255
+ ],
+ "nodes": {
+  "-1190377960": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -2094257781
+   ],
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Ah, {PC}... I... I want to make use of you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_5[Katarina-L-progress] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Katarina-L-progress",
+        "list": "Events_5",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-634630896": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1491898297,
+    1724118696
+   ],
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "I... I need your cock, {PC}... P-Please...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_5[Katarina-L-progress] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Katarina-L-progress",
+        "list": "Events_5",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1603877013": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -416769474,
+    -1315775973,
+    409343263,
+    2002861625,
+    1650360877,
+    937424445,
+    331804796
+   ],
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "God... Why are you SO big... This is unfair... No one could resist that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_5[Katarina-L-progress] ≤ 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Katarina-L-progress",
+        "list": "Events_5",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Katarina (7)"
+      }
+     }
+    }
+   ]
+  },
+  "265135255": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    650157283,
+    2099296171,
+    -1461993447,
+    541643921,
+    167752706,
+    -47879363,
+    1807197640,
+    -95266101,
+    2035152961
+   ],
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "{PC}... Please... I want you... I love your cock... I love it! I want it!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_5[Katarina-L-progress] ≥ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Katarina-L-progress",
+        "list": "Events_5",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-2094257781": {
+   "kind": "choice",
+   "parent": -1190377960,
+   "children": [
+    375355278,
+    50826719,
+    340460312
+   ],
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "So, um... Drop your pants. Or I'll have you escorted out!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "375355278": {
+   "kind": "text",
+   "parent": -2094257781,
+   "children": [
+    227269423
+   ],
+   "actor": null,
+   "text": "Relax. Feel free to use my cock.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "50826719": {
+   "kind": "text",
+   "parent": -2094257781,
+   "children": [
+    -150421840
+   ],
+   "actor": null,
+   "text": "Looks like my cock got you addicted, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "340460312": {
+   "kind": "text",
+   "parent": -2094257781,
+   "children": [
+    1402862711
+   ],
+   "actor": null,
+   "text": "Fuck off! No!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1402862711": {
+   "kind": "text",
+   "parent": 340460312,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Grrr.... You little brat!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-150421840": {
+   "kind": "text",
+   "parent": 50826719,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "S-Shut up... Just drop them already.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "227269423": {
+   "kind": "text",
+   "parent": 375355278,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "G-Good! What a fine pet you are....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1491898297": {
+   "kind": "text",
+   "parent": -634630896,
+   "children": [
+    -661396846
+   ],
+   "actor": null,
+   "text": "It's all yours.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-661396846": {
+   "kind": "text",
+   "parent": -1491898297,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "T-Thank you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1724118696": {
+   "kind": "text",
+   "parent": -634630896,
+   "children": [
+    703938345
+   ],
+   "actor": null,
+   "text": "Eh, I don't think so.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "703938345": {
+   "kind": "text",
+   "parent": 1724118696,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "N-No... Please, I need it... I....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-416769474": {
+   "kind": "text",
+   "parent": -1603877013,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Not a word... Let me.. Just let me enjoy it....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1315775973": {
+   "kind": "text",
+   "parent": -1603877013,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Mwuaaah! Mmmghaaah! Mhaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina (9) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina (9)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Katarina (9)"
+      }
+     }
+    }
+   ]
+  },
+  "409343263": {
+   "kind": "text",
+   "parent": -1603877013,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Mhaa.... T-That should do... Now... Hold still and be quiet... We dont want Mario to catch us, don't we?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2002861625": {
+   "kind": "choice",
+   "parent": -1603877013,
+   "children": [
+    -1980477701,
+    443071391,
+    -977256292
+   ],
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Hngggh... Y-Yes... S-Shit... I... I missed that feeling...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina (11) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina (11)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Katarina (11)"
+      }
+     }
+    }
+   ]
+  },
+  "1650360877": {
+   "kind": "text",
+   "parent": -1603877013,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "I'm... Yes.. I'm.. I'm... Hnggg.... I'm .... HNGGG!!!! Haaaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "937424445": {
+   "kind": "text",
+   "parent": -1603877013,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Hnggggg.... !!! MMHAAAANGGGG!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "331804796": {
+   "kind": "text",
+   "parent": -1603877013,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "G-Good job, boy... K-Keep it up and I might make you my personal pet...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_5[Katarina-L-progress] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Katarina-L-progress",
+        "list": "Events_5",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-1980477701": {
+   "kind": "text",
+   "parent": 2002861625,
+   "children": [
+    137337081
+   ],
+   "actor": null,
+   "text": "Y-Yes... Ride my cock...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "443071391": {
+   "kind": "text",
+   "parent": 2002861625,
+   "children": [
+    -676979535
+   ],
+   "actor": null,
+   "text": "(Slap her ass)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-676979535": {
+   "kind": "text",
+   "parent": 443071391,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "H-Hey! S-Stop that!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "137337081": {
+   "kind": "text",
+   "parent": -1980477701,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "F-Fhuck..... J-Just be quiet and let me use you... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-977256292": {
+   "kind": "text",
+   "parent": 2002861625,
+   "actor": null,
+   "text": "(Be quiet and let her use you)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "650157283": {
+   "kind": "choice",
+   "parent": 265135255,
+   "children": [
+    -1580078159,
+    755671719,
+    202743896
+   ],
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Please, {PC}... ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1580078159": {
+   "kind": "text",
+   "parent": 650157283,
+   "children": [
+    -1572943767,
+    183938488,
+    591348255
+   ],
+   "actor": null,
+   "text": "Come here, love.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "755671719": {
+   "kind": "text",
+   "parent": 650157283,
+   "children": [
+    -2103549904,
+    607482083,
+    287851569
+   ],
+   "actor": null,
+   "text": "I don't see you begging.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "202743896": {
+   "kind": "text",
+   "parent": 650157283,
+   "children": [
+    -1237121789
+   ],
+   "actor": null,
+   "text": "Not today, Katarina.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2103549904": {
+   "kind": "text",
+   "parent": 755671719,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "P-Please! I beg you! Give me your cock! I need it!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina (8) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina (8)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Katarina (8)"
+      }
+     }
+    }
+   ]
+  },
+  "607482083": {
+   "kind": "text",
+   "parent": 755671719,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "L-Look how I'm drooling for you! ...  My pussy itches so bad for it... I beg you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1572943767": {
+   "kind": "text",
+   "parent": -1580078159,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Your cock is so perfect... I... Look at the size... The smel...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina (10) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina (10)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Katarina (10)"
+      }
+     }
+    }
+   ]
+  },
+  "183938488": {
+   "kind": "text",
+   "parent": -1580078159,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "My pussy craves it so bad... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "591348255": {
+   "kind": "text",
+   "parent": -1580078159,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "I... I can't wait one minute longer.....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "287851569": {
+   "kind": "text",
+   "parent": 755671719,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "D-Don't make me wait any more... Please!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1237121789": {
+   "kind": "text",
+   "parent": 202743896,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "N-No... Don't do that to me... Please, I beg you... ",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2099296171": {
+   "kind": "text",
+   "parent": 265135255,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Y-Yessshhhh! Yes, yes, yes... Pound my pussy! Fill me! Fill meeuaaaahh!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina (12) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina (12)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Katarina (12)"
+      }
+     }
+    }
+   ]
+  },
+  "-1461993447": {
+   "kind": "text",
+   "parent": 265135255,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Fuck! Fhuccck.... I... I don't care if Mario see's us... I want this to be my life from now on..... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Mario-In-Prison] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-In-Prison",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "167752706": {
+   "kind": "text",
+   "parent": 265135255,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "S-So please fill me up... Try to knock me up... M-Maybe it will work... For your cock my womb will give its best!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-47879363": {
+   "kind": "text",
+   "parent": 265135255,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Hngaaahhhh!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina (13) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina (13)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Katarina (13)"
+      }
+     }
+    }
+   ]
+  },
+  "1807197640": {
+   "kind": "text",
+   "parent": 265135255,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Yes! So much! Don't stop! Keep pumping your baby butter into me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-95266101": {
+   "kind": "text",
+   "parent": 265135255,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "S-Shit... I... I can't handle it... You broke me, {PC}... I'm sorry that I was so rude before... I'm so sorry...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[katarina-player-friends] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-player-friends",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "2035152961": {
+   "kind": "text",
+   "parent": 265135255,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "I... I will be yours from now on... Please.. Let me be yours...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1322112204": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I... I don't want to see your face here! You ruined my life! LEAVE!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Mario-In-Prison] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-In-Prison",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[katarina-player-friends] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-player-friends",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "541643921": {
+   "kind": "text",
+   "parent": 265135255,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Fuck! Fhuccck... I... I'm so glad that Mario's gone... He's pathetic compared to you... Y-Yes... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Mario-In-Prison] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-In-Prison",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Villa_Backyard",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Katarina_Sex and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_4[emma-katarina-locations] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-katarina-locations",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Katarina-Left] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Katarina-Left",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[katarina-banged] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-banged",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina_Swimwear to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina_Swimwear",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Katarina_Swimwear"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[katarina-first-meeting] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-first-meeting",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

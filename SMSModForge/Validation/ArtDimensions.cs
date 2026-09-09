@@ -34,6 +34,8 @@ internal static class ArtDimensions
     public const string CodeBustAspect  = "art.bustAspect";
     public const string CodeLevelSize   = "art.levelSize";
     public const string CodeLevelAspect = "art.levelAspect";
+    public const string CodeSceneSize   = "art.sceneSize";
+    public const string CodeSceneAspect = "art.sceneAspect";
     public const string CodeUnreadable  = "art.unreadable";
 
     // The frames themselves live with the fitting rule, so a check and a
@@ -41,6 +43,7 @@ internal static class ArtDimensions
     public const int BustPixels = Rendering.ArtFit.BustPixels;
     public const int LevelWidth = Rendering.ArtFit.LevelWidth;
     public const int LevelHeight = Rendering.ArtFit.LevelHeight;
+    public const int ScenePixels = Rendering.ArtFit.ScenePixels;
 
     /// <summary>
     /// Read a PNG's dimensions without decoding the pixels.
@@ -159,6 +162,24 @@ internal static class ArtDimensions
                   LevelWidth, LevelHeight, CodeLevelSize, CodeLevelAspect, "The front layer");
             Check(issues, packRoot, p.SecondarySprite, $"{w}.secondarySprite",
                   LevelWidth, LevelHeight, CodeLevelSize, CodeLevelAspect, "The back layer");
+        }
+
+        foreach (var sc in pack.Scenes)
+        {
+            // Stills only. This reads a PNG header to get dimensions, so a
+            // GIF or a video fails that read and gets reported as "not a PNG" -
+            // which is true, useless, and wrong about the file being a problem.
+            // Both are fitted at runtime exactly as a still is, so there is
+            // nothing here they could get wrong.
+            if (SMSModForge.Shared.MediaKinds.IsAnimated(sc.SceneSprite ?? "")) continue;
+
+            // The art only. A scene's FRAME is checked against nothing on
+            // purpose: it is a piece of design at whatever size it was drawn,
+            // it is not fitted at runtime, and the two the tool ships are
+            // 297x310 and 388x405 - so a 256 rule would call both of them
+            // wrong.
+            Check(issues, packRoot, sc.SceneSprite, $"scenes[{sc.Key}].sceneSprite",
+                  ScenePixels, ScenePixels, CodeSceneSize, CodeSceneAspect, "The scene art");
         }
     }
 }

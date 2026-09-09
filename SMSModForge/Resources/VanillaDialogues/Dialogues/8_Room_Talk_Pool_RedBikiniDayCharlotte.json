@@ -1,0 +1,924 @@
+{
+ "id": "8_Room_Talk/Pool/RedBikiniDayCharlotte",
+ "name": "RedBikiniDayCharlotte",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Charlotte",
+  "Continue"
+ ],
+ "roots": [
+  1750731834,
+  -301016914,
+  -684056278,
+  -1072410783
+ ],
+ "nodes": {
+  "1750731834": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Look who finally showed up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_9[anna-redbikiniprogress] ≥ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-redbikiniprogress",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-301016914": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1148396171,
+    -284327493,
+    388107293,
+    -163880725
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Still fits?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_9[anna-redbikiniprogress] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-redbikiniprogress",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1148396171": {
+   "kind": "text",
+   "parent": -301016914,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Barely. Don’t act like you weren’t hoping I’d pop out of it again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1072410783": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    798548466,
+    -1047490310,
+    548469881
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Threesome energy is strong today.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "798548466": {
+   "kind": "text",
+   "parent": -1072410783,
+   "children": [
+    -1070826524,
+    -876556076,
+    1597654437,
+    1775303715,
+    213415490,
+    189808340,
+    2124090657,
+    -922466791
+   ],
+   "actor": null,
+   "text": "How about a photo?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[pool-photo-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "pool-photo-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1047490310": {
+   "kind": "text",
+   "parent": -1072410783,
+   "children": [
+    -775769638,
+    2031684291,
+    -600141753,
+    1346245557,
+    -1285381213,
+    -1141319308,
+    78446882
+   ],
+   "actor": null,
+   "text": "Let's go for a swim. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "548469881": {
+   "kind": "text",
+   "parent": -1072410783,
+   "children": [
+    401312950
+   ],
+   "actor": null,
+   "text": "I'm good, thanks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "401312950": {
+   "kind": "text",
+   "parent": 548469881,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Well, we'll be here. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-775769638": {
+   "kind": "text",
+   "parent": -1047490310,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let's have some fun!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1346245557": {
+   "kind": "text",
+   "parent": -1047490310,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 5,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AFewMinutesLater to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AFewMinutesLater",
+       "of": "GetGameObjectInstance",
+       "path": "6_Effects/Effect_Canvas/AFewMinutesLater"
+      }
+     }
+    }
+   ]
+  },
+  "-1285381213": {
+   "kind": "text",
+   "parent": -1047490310,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I needed that. I wanted a break from lenses on me. Just you and me and the water.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1070826524": {
+   "kind": "text",
+   "parent": 798548466,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Fine, but you better make us look good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[pool-photo-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "pool-photo-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1775303715": {
+   "kind": "random",
+   "parent": 798548466,
+   "children": [
+    1712842721,
+    -667879168,
+    -999429761
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Hmm... How about this?",
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "1712842721": {
+   "kind": "text",
+   "parent": 1775303715,
+   "children": [
+    -1003468530,
+    955370545,
+    1761994858,
+    -672747431,
+    -1924012687,
+    1393701455
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "You’re not actually going to—",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active B25_RedDouble_AnnaChar (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "B25_RedDouble_AnnaChar (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/B25_RedDouble_AnnaChar (0)"
+      }
+     }
+    }
+   ]
+  },
+  "-667879168": {
+   "kind": "text",
+   "parent": 1775303715,
+   "children": [
+    107999522,
+    -680594020,
+    -335133392,
+    -639427986
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "God, our tits are smothering each other.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active B26_RedDouble_AnnaChar (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "B26_RedDouble_AnnaChar (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/B26_RedDouble_AnnaChar (1)"
+      }
+     }
+    }
+   ]
+  },
+  "213415490": {
+   "kind": "text",
+   "parent": 798548466,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That slutty enough for Starmaker?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2124090657": {
+   "kind": "text",
+   "parent": 798548466,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm, tempting... but if we give him everything now, his ego's gonna explode.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-284327493": {
+   "kind": "text",
+   "parent": -301016914,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hey, you were the one skinny dipping by the end of that night. I just kept you company.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "388107293": {
+   "kind": "text",
+   "parent": -301016914,
+   "actor": "Charlotte",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh, I remember.\nYou definitely kept me warm.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-163880725": {
+   "kind": "text",
+   "parent": -301016914,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh, {PC}. \nTook you long enough.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-684056278": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So, cocktails and music? Or?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1141319308": {
+   "kind": "text",
+   "parent": -1047490310,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "And Charlotte!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "78446882": {
+   "kind": "text",
+   "parent": -1047490310,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "... And Charlotte. Haha~",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2031684291": {
+   "kind": "text",
+   "parent": -1047490310,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Last one in the pool has to eat me out!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-600141753": {
+   "kind": "text",
+   "parent": -1047490310,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Wait, what!? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-876556076": {
+   "kind": "text",
+   "parent": 798548466,
+   "actor": "Charlotte",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I look good from every angle. Especially on top of her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1597654437": {
+   "kind": "text",
+   "parent": 798548466,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Behave. For the first few shots, at least.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-999429761": {
+   "kind": "text",
+   "parent": 1775303715,
+   "children": [
+    640777887,
+    -527990148,
+    1010412603,
+    614531121
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "You gonna stop me if I use tongue?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active B27_RedDouble_AnnaChar (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "B27_RedDouble_AnnaChar (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/B27_RedDouble_AnnaChar (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1003468530": {
+   "kind": "text",
+   "parent": 1712842721,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Relax. It’s just the camera.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "107999522": {
+   "kind": "text",
+   "parent": -667879168,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Feel how soft my nipples are?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "640777887": {
+   "kind": "text",
+   "parent": -999429761,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You’d be in trouble if you didn’t.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-527990148": {
+   "kind": "text",
+   "parent": -999429761,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mwuaah.. Mhmm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1010412603": {
+   "kind": "text",
+   "parent": -999429761,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Fuck… that’s hot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "614531121": {
+   "kind": "text",
+   "parent": -999429761,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You’re soaked already, aren’t you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-680594020": {
+   "kind": "text",
+   "parent": -667879168,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You get turned on way too fast, slut.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-335133392": {
+   "kind": "text",
+   "parent": -667879168,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "He’s watching. You know that, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-639427986": {
+   "kind": "text",
+   "parent": -667879168,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Good. Let him see what we taste like together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "955370545": {
+   "kind": "text",
+   "parent": 1712842721,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You wanted bold, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1761994858": {
+   "kind": "text",
+   "parent": 1712842721,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Oh my god… Anna.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-672747431": {
+   "kind": "text",
+   "parent": 1712842721,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "This pretty little hole’s going viral.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1924012687": {
+   "kind": "text",
+   "parent": 1712842721,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Fuck… this is so filthy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1393701455": {
+   "kind": "text",
+   "parent": 1712842721,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "And you love it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "189808340": {
+   "kind": "text",
+   "parent": 798548466,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Or… turn off the camera, and we’ll make a scene that doesn’t get posted.\n",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-922466791": {
+   "kind": "text",
+   "parent": 798548466,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Fair enough...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Pool",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play RedBikiniDayCharlotte and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Core_NoSave3[anna-redswimsuitdayactive] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-redswimsuitdayactive",
+        "list": "Core_NoSave3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[charlotte-threesome] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "charlotte-threesome",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Mainstory[anna-heart-status] ≥ 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-heart-status",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_9[anna-redbikiniprogress] ≥ 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-redbikiniprogress",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "branches": [
+    "redbikinicharlotte"
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_LoveRouteRedSwimsuitBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_LoveRouteRedSwimsuitBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_LoveRouteRedSwimsuitBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte_RedBikini to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte_RedBikini",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Charlotte_RedBikini"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

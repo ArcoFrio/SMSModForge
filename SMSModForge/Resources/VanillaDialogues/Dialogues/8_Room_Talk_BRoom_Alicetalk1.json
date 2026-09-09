@@ -1,0 +1,568 @@
+{
+ "id": "8_Room_Talk/BRoom/Alicetalk1",
+ "name": "Alicetalk1",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Alice"
+ ],
+ "roots": [
+  1391436963,
+  803236639,
+  1825089490,
+  1877116793,
+  462737755,
+  -1400117384
+ ],
+ "nodes": {
+  "803236639": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "For real? People be wildin' out here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1391436963": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "...and I was like, \"No way, that’s total cap.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1877116793": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -113339471,
+    -119021638
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Yeah, the energy was unreal. You into concerts?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1825089490": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Oh hey, {PC}, we were just talking about this insane concert Alice was at last night.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-113339471": {
+   "kind": "text",
+   "parent": 1877116793,
+   "children": [
+    -724626251
+   ],
+   "actor": null,
+   "text": "Yeah, for sure.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-119021638": {
+   "kind": "text",
+   "parent": 1877116793,
+   "children": [
+    1001305559
+   ],
+   "actor": null,
+   "text": "Not really.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1001305559": {
+   "kind": "text",
+   "parent": -119021638,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "I get it, took me a few times to get into them too.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-724626251": {
+   "kind": "text",
+   "parent": -113339471,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Neat!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "462737755": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "{PC} is your {B}, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1400117384": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    816353464,
+    1993302993,
+    -878784568
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Yeah, oh, that's Alice from church by the way. We decided to hang.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "816353464": {
+   "kind": "text",
+   "parent": -1400117384,
+   "children": [
+    1763783760,
+    810179019,
+    -830763677
+   ],
+   "actor": null,
+   "text": "Would be fun if you could show me a concert, Alice. (Stealing Alice Route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1993302993": {
+   "kind": "text",
+   "parent": -1400117384,
+   "children": [
+    800874342,
+    -534779087
+   ],
+   "actor": null,
+   "text": "Maybe the three of us should go to a concert sometime. (Alice Sharing Route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-878784568": {
+   "kind": "text",
+   "parent": -1400117384,
+   "children": [
+    -1929784581
+   ],
+   "actor": null,
+   "text": "II'll leave you two to it. Have fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "800874342": {
+   "kind": "text",
+   "parent": 1993302993,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "There's this sick underground gig every Friday night. You two down to check it out? Here’s the address.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[alice-sharing-start] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-sharing-start",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[club-enabled] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "club-enabled",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionQuestsActivate",
+     "title": "Activate Behind The Looking Glass (Alice)",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Behind The Looking Glass (Alice)",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "1763783760": {
+   "kind": "text",
+   "parent": 816353464,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "There's this sick underground gig every Friday night. Here’s the address.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[alice-stealing-start] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-stealing-start",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[club-enabled] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "club-enabled",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionQuestsActivate",
+     "title": "Activate Behind The Looking Glass (Alice)",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Behind The Looking Glass (Alice)",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-1929784581": {
+   "kind": "text",
+   "parent": -878784568,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "See you around, {B}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "810179019": {
+   "kind": "text",
+   "parent": 816353464,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "That sounds really cool...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-534779087": {
+   "kind": "text",
+   "parent": 1993302993,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Sounds cool!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-830763677": {
+   "kind": "text",
+   "parent": 816353464,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Yeah! People there are wild!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/BRoom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Alicetalk1 and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events[alice-talks] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-talks",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events[church-visits] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "church-visits",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AliceBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events[alice-talks] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-talks",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,525 @@
+{
+ "id": "5_Levels/125_BarnBackInterior/Dialogue_MilkDefaulttalk/Defaultmilktalk_Emma",
+ "name": "Defaultmilktalk_Emma",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Emma"
+ ],
+ "roots": [
+  -950481376
+ ],
+ "nodes": {
+  "-950481376": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1403347158,
+    -449070350,
+    -1150346485,
+    -970989531
+   ],
+   "actor": "Emma",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "It’s back again. That pressure. I suppose we should… take care of it before it becomes distracting.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Milking Save[bafa-milkingcharacter] = 5",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-milkingcharacter",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 5
+      }
+     }
+    }
+   ]
+  },
+  "1403347158": {
+   "kind": "text",
+   "parent": -950481376,
+   "children": [
+    157159423,
+    -394560926,
+    -558835683
+   ],
+   "actor": null,
+   "text": "Let’s do it by hand today.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-449070350": {
+   "kind": "text",
+   "parent": -950481376,
+   "children": [
+    -1314413451
+   ],
+   "actor": null,
+   "text": "I’ll hook you up to the milking machine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[milkmachine-bought] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milkmachine-bought",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1150346485": {
+   "kind": "text",
+   "parent": -950481376,
+   "children": [
+    1585669675
+   ],
+   "actor": null,
+   "text": "Put on the cowprint outfit. We’re doing a shoot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[bafa-cowprintoutfit-emma] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-cowprintoutfit-emma",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-970989531": {
+   "kind": "text",
+   "parent": -950481376,
+   "children": [
+    149976864
+   ],
+   "actor": null,
+   "text": "Not today, Emma. Just checking in.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "149976864": {
+   "kind": "text",
+   "parent": -970989531,
+   "actor": "Emma",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Understood. Though for the record… this won’t resolve on its own. The longer you wait, the worse it builds.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1585669675": {
+   "kind": "text",
+   "parent": -1150346485,
+   "actor": "Emma",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You’re not serious. You are serious!? ... Fine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core_NoSave2[2025-shortgo-saveTHREE] = CowPhotoShootTalk_Emma",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2025-shortgo-saveTHREE",
+        "list": "Core_NoSave2",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "CowPhotoShootTalk_Emma",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/125_BarnBackInterior/Dialogue_CowPhotoshootTalk/CowPhotoShootTalk_Emma"
+      }
+     }
+    }
+   ]
+  },
+  "-1314413451": {
+   "kind": "text",
+   "parent": -449070350,
+   "actor": "Emma",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That... That would be more efficient. Go ahead.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Milking Save[bafa-milkingactive] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-milkingactive",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 5_Bafa_Emma1 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "5_Bafa_Emma1",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/125_BarnBackInterior/Bafa_Sprites/5_Bafa_Emma1"
+      }
+     }
+    }
+   ]
+  },
+  "-558835683": {
+   "kind": "text",
+   "parent": 1403347158,
+   "actor": "Emma",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Alright. Just remember—this isn’t about intimacy. It’s a physical function. A release. That’s all. Please don’t… linger too much.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Minigame[cd-milked-emma] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cd-milked-emma",
+        "list": "Minigame",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run 5_Emma and wait",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "5_Emma",
+       "of": "GetGameObjectActions",
+       "path": "MilkingMinigame/List/5_Emma"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MilkingMinigame to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MilkingMinigame",
+       "of": "GetGameObjectInstance",
+       "path": "MilkingMinigame"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 9_MainCanvas to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "9_MainCanvas",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas"
+      }
+     }
+    }
+   ]
+  },
+  "157159423": {
+   "kind": "text",
+   "parent": 1403347158,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "The container’s already at capacity...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[bafa-milkprogress] > 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-milkprogress",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Greater",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-394560926": {
+   "kind": "text",
+   "parent": 1403347158,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "You already handled me earlier...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Minigame[cd-milked-emma] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cd-milked-emma",
+        "list": "Minigame",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "5_Levels/125_BarnBackInterior/Dialogue_WhoToMilk",
+   "script": "Dialogue",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core_NoSave2[2025-shortgo-saveTWO] = Defaultmilktalk_Emma",
+   "as": "GameObject",
+   "before": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core_NoSave2[2025-shortgo-saveONE] = Firstmilktalk_Emma",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2025-shortgo-saveONE",
+        "list": "Core_NoSave2",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "Firstmilktalk_Emma",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/125_BarnBackInterior/Dialogue_FirstMilkTalk/Firstmilktalk_Emma"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

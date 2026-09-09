@@ -1,0 +1,932 @@
+{
+ "id": "8_Vacation_Stories/Snowy_CozyHut/AnnaWrappingScene1",
+ "name": "AnnaWrappingScene1",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  -2010782525
+ ],
+ "nodes": {
+  "-2010782525": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -990267542,
+    -1427978182,
+    -1050915111,
+    410191226,
+    -1835406058,
+    2037517193,
+    -1022568558,
+    677999573,
+    1602452562,
+    1886709642,
+    1103461755,
+    740085941,
+    -1217773241,
+    1454735485,
+    -786375384
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Hey, uhm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-990267542": {
+   "kind": "text",
+   "parent": -2010782525,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Wait here for a second, okay?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_GreenPullover/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1427978182": {
+   "kind": "text",
+   "parent": -2010782525,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Christmaswrapping to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Christmaswrapping",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Christmaswrapping"
+      }
+     }
+    }
+   ]
+  },
+  "-1050915111": {
+   "kind": "text",
+   "parent": -2010782525,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "It’s not Christmas yet, I know, but with the snow and everything... it just felt like the perfect time to...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "410191226": {
+   "kind": "choice",
+   "parent": -2010782525,
+   "children": [
+    -869383825,
+    -580553594
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Go ahead, open it.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-869383825": {
+   "kind": "text",
+   "parent": 410191226,
+   "actor": null,
+   "text": "(Open your present)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-580553594": {
+   "kind": "text",
+   "parent": 410191226,
+   "children": [
+    1314792891,
+    -1295541356,
+    1299618329
+   ],
+   "actor": null,
+   "text": "I'm not feeling it, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1314792891": {
+   "kind": "text",
+   "parent": -580553594,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I’ll be honest, I do feel a little silly now... Wrapping myself up like that was way more complicated than you may think...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1295541356": {
+   "kind": "text",
+   "parent": -580553594,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let’s just call it a night... I want today to be over...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Vacation_Default_Retrigger to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Vacation_Default_Retrigger",
+       "of": "GetGameObjectInstance",
+       "path": "Vacation_Default_Retrigger"
+      }
+     }
+    }
+   ]
+  },
+  "-1835406058": {
+   "kind": "choice",
+   "parent": -2010782525,
+   "children": [
+    -1374846629,
+    -703985115,
+    1132991748
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Well? What do you think?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaWrappingScene (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaWrappingScene (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaWrappingScene (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1374846629": {
+   "kind": "text",
+   "parent": -1835406058,
+   "children": [
+    1161388548
+   ],
+   "actor": null,
+   "text": "I love it. It's the best christmas present I ever got...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1161388548": {
+   "kind": "text",
+   "parent": -1374846629,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Good... That means everything to me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-703985115": {
+   "kind": "text",
+   "parent": -1835406058,
+   "children": [
+    -1947075447
+   ],
+   "actor": null,
+   "text": "I’ll need to take a closer look to really appreciate it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1947075447": {
+   "kind": "text",
+   "parent": -703985115,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Of course... Don’t hold back. They are yours to enjoy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1132991748": {
+   "kind": "text",
+   "parent": -1835406058,
+   "children": [
+    -1678276569,
+    1084542549
+   ],
+   "actor": null,
+   "text": "Why are you doing this for me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1678276569": {
+   "kind": "text",
+   "parent": 1132991748,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Because I care about you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1084542549": {
+   "kind": "text",
+   "parent": 1132991748,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Knowing I can make you happy... that’s all I want.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2037517193": {
+   "kind": "choice",
+   "parent": -2010782525,
+   "children": [
+    -899175844,
+    -481002854,
+    -408405298
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{PC}... Take me... Make me yours... Make me your woman...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-899175844": {
+   "kind": "text",
+   "parent": 2037517193,
+   "actor": null,
+   "text": "Turn around, {M}. I'll take good care of you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-481002854": {
+   "kind": "text",
+   "parent": 2037517193,
+   "actor": null,
+   "text": "I'll claim your pussy, Anna. You are mine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-408405298": {
+   "kind": "text",
+   "parent": 2037517193,
+   "actor": null,
+   "text": "Guess It's time to really try out my present...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1022568558": {
+   "kind": "text",
+   "parent": -2010782525,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god... Yes... That's it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaWrappingScene (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaWrappingScene (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaWrappingScene (2)"
+      }
+     }
+    }
+   ]
+  },
+  "677999573": {
+   "kind": "text",
+   "parent": -2010782525,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Take me, {PC}...  Ah~ All those painful memories.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1602452562": {
+   "kind": "choice",
+   "parent": -2010782525,
+   "children": [
+    1709990107,
+    -1961270450,
+    -868049583
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "With every thrust, I ... Mmmm... I remember all the pleasure I had forgotten... Hnnaaah!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1886709642": {
+   "kind": "text",
+   "parent": -2010782525,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Do it inside.. Hngghhh... Let... Let it all out inside me!  ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaWrappingScene (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaWrappingScene (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaWrappingScene (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1103461755": {
+   "kind": "choice",
+   "parent": -2010782525,
+   "children": [
+    -1760379269,
+    1435187911,
+    1591181502
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Do it! Do it! Do it! Inside me!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1217773241": {
+   "kind": "text",
+   "parent": -2010782525,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm.. I'm so happy that your balls are producing a lot of semen for me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "1454735485": {
+   "kind": "text",
+   "parent": -2010782525,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let's... Let's spend the whole weekend here having sex, yes?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Vacation_Default_Retrigger to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Vacation_Default_Retrigger",
+       "of": "GetGameObjectInstance",
+       "path": "Vacation_Default_Retrigger"
+      }
+     }
+    }
+   ]
+  },
+  "-1760379269": {
+   "kind": "text",
+   "parent": 1103461755,
+   "actor": null,
+   "text": "I'm coming, {M}! I'm... Hnnaaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1435187911": {
+   "kind": "text",
+   "parent": 1103461755,
+   "actor": null,
+   "text": "I'll fill you up, Anna. I'll feed your womb my creamy load!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1591181502": {
+   "kind": "text",
+   "parent": 1103461755,
+   "actor": null,
+   "text": "(Fill her up)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1709990107": {
+   "kind": "text",
+   "parent": 1602452562,
+   "children": [
+    -1269761864
+   ],
+   "actor": null,
+   "text": "Forget it all... It's just you and me... Here... Together...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1961270450": {
+   "kind": "text",
+   "parent": 1602452562,
+   "children": [
+    -1551372607
+   ],
+   "actor": null,
+   "text": "I'll fuck the happiness right back into you, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-868049583": {
+   "kind": "text",
+   "parent": 1602452562,
+   "children": [
+    -1317014834
+   ],
+   "actor": null,
+   "text": "I'm glad you've matured so well, {M}....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1317014834": {
+   "kind": "text",
+   "parent": -868049583,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... My body is all yours. Please claim my mature, curvy body!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1551372607": {
+   "kind": "text",
+   "parent": -1961270450,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes, harder... Please... Your cock makes me so happy, my whole being  can't think of anything else!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1269761864": {
+   "kind": "text",
+   "parent": 1709990107,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes! I... Take me... Fuck my warm slit, {M}... Can you feel how wet I am for you? Hngaaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "740085941": {
+   "kind": "text",
+   "parent": -2010782525,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes! I can feel it! I can feel the warmth love flooding my hot tunnel! Mmmmaah! Nggaaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaWrappingScene (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaWrappingScene (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaWrappingScene (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaWrappingScene (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaWrappingScene (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaWrappingScene (1)"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[wrappingpaper-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "wrappingpaper-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-786375384": {
+   "kind": "text",
+   "parent": -2010782525,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I wish we wouldn't have to return home tomorrow... Time flies by way too fast...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Return_Home_Vacation to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Return_Home_Vacation",
+       "of": "GetGameObjectInstance",
+       "path": "Return_Home_Vacation"
+      }
+     }
+    }
+   ]
+  },
+  "1299618329": {
+   "kind": "text",
+   "parent": -580553594,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let’s just call it a night... I want today to be over...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Return_Home_Vacation to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Return_Home_Vacation",
+       "of": "GetGameObjectInstance",
+       "path": "Return_Home_Vacation"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Snowy_CozyHut",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AnnaWrappingScene1 and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[anna-charmed] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-charmed",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "branches": [
+    "charmed"
+   ]
+  }
+ ]
+}

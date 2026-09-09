@@ -1,0 +1,2309 @@
+{
+ "id": "8_Core_Events/Trips/ParkVisitM/DefaultDialogue",
+ "name": "DefaultDialogue",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "Stranger",
+  "You"
+ ],
+ "roots": [
+  480063561,
+  1411390124,
+  572276426
+ ],
+ "nodes": {
+  "480063561": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Sometimes it’s nice to get out of the house, right? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1411390124": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -32070573,
+    -568750887,
+    986435398,
+    675398363,
+    1433795518,
+    -101066537
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": {
+    "kind": "variable",
+    "variable": {
+     "scope": "localList",
+     "on": {
+      "kind": "object",
+      "name": "DefaultDialogue",
+      "of": "GetGameObjectInstance",
+      "path": "8_Core_Events/Trips/ParkVisitM/DefaultDialogue"
+     },
+     "pick": "random",
+     "type": "string"
+    }
+   },
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-32070573": {
+   "kind": "text",
+   "parent": 1411390124,
+   "children": [
+    -805056989,
+    843125577
+   ],
+   "actor": null,
+   "text": "The perfect spot for a Photo.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-568750887": {
+   "kind": "text",
+   "parent": 1411390124,
+   "children": [
+    1021024086,
+    -1491504431,
+    -598028612,
+    -1124813502
+   ],
+   "actor": null,
+   "text": "Let's enjoy a walk, it's really calm out here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "675398363": {
+   "kind": "text",
+   "parent": 1411390124,
+   "children": [
+    270620930,
+    1738316409,
+    1400217378,
+    -1052459316,
+    -1665791160,
+    129710334
+   ],
+   "actor": null,
+   "text": "Come on, I'll treat you to ice cream.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "270620930": {
+   "kind": "text",
+   "parent": 675398363,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yes! That's really sweet of you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1021024086": {
+   "kind": "text",
+   "parent": -568750887,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Sure, come on!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-805056989": {
+   "kind": "random",
+   "parent": -32070573,
+   "children": [
+    1537377445,
+    2072928123,
+    -692657153
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I agree!",
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "1537377445": {
+   "kind": "text",
+   "parent": -805056989,
+   "actor": null,
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 08_MPark to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "08_MPark",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/08_MPark"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'flash'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "flash"
+      }
+     }
+    }
+   ]
+  },
+  "843125577": {
+   "kind": "text",
+   "parent": -32070573,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "The light is really nice right now. It almost makes me look like I'm 30 again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "572276426": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let's go back home, I should start making Dinner soon.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2072928123": {
+   "kind": "text",
+   "parent": -805056989,
+   "actor": null,
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-touching] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-touching",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 54_Park2 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "54_Park2",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/54_Park2"
+      }
+     }
+    }
+   ]
+  },
+  "-692657153": {
+   "kind": "text",
+   "parent": -805056989,
+   "actor": null,
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-touching] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-touching",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 55_Park3 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "55_Park3",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/55_Park3"
+      }
+     }
+    }
+   ]
+  },
+  "-101066537": {
+   "kind": "text",
+   "parent": 1411390124,
+   "children": [
+    156941413,
+    -571562232,
+    1474342034,
+    1702946836
+   ],
+   "actor": null,
+   "text": "[Squeeze her ass]",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[only-cock-photo-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "only-cock-photo-done",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "156941413": {
+   "kind": "text",
+   "parent": -101066537,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "S-Stop! We're in public! ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active gropepark to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "gropepark",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/gropepark"
+      }
+     }
+    },
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood and wait",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ]
+  },
+  "1474342034": {
+   "kind": "text",
+   "parent": -101066537,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "God... {PC}... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[horny-m] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "horny-m",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "1702946836": {
+   "kind": "text",
+   "parent": -101066537,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mhmm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1433795518": {
+   "kind": "text",
+   "parent": 1411390124,
+   "children": [
+    1324365402,
+    805882594,
+    88246590
+   ],
+   "actor": null,
+   "text": "Maybe you should make some new fans?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[park-advert-declined] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "park-advert-declined",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1324365402": {
+   "kind": "text",
+   "parent": 1433795518,
+   "children": [
+    -622888250,
+    -2003129794
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "W-What do you mean?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[first-time-park] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "first-time-park",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-622888250": {
+   "kind": "text",
+   "parent": 1324365402,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Well, there a lot of men around here who likely aren't aware of your Starmaker page....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2003129794": {
+   "kind": "choice",
+   "parent": 1324365402,
+   "children": [
+    1088798551,
+    1519779104
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "B-But what if they are getting handsy? ... What if they try to touch me?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1088798551": {
+   "kind": "text",
+   "parent": -2003129794,
+   "children": [
+    1214023498
+   ],
+   "actor": null,
+   "text": "Well, It's just some touching, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1519779104": {
+   "kind": "text",
+   "parent": -2003129794,
+   "children": [
+    1015891826
+   ],
+   "actor": null,
+   "text": "You are right. Don't do it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1015891826": {
+   "kind": "text",
+   "parent": 1519779104,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "O-Okay!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[park-advert-declined] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "park-advert-declined",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1214023498": {
+   "kind": "text",
+   "parent": 1088798551,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-You are right... O-Okay!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[first-time-park] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "first-time-park",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "88246590": {
+   "kind": "random",
+   "parent": 1433795518,
+   "children": [
+    160111490,
+    1106867091,
+    -574081587
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "W-Wish me luck... And please stay near me!",
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_4[park-advertisement] ≤ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "park-advertisement",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "805882594": {
+   "kind": "random",
+   "parent": 1433795518,
+   "children": [
+    698744959,
+    -1330580657,
+    1719200516
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "This will be fun...",
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_4[park-advertisement] ≥ 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "park-advertisement",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ]
+  },
+  "698744959": {
+   "kind": "text",
+   "parent": 805882594,
+   "children": [
+    -1338438103,
+    1580492416,
+    611941844,
+    244821841
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That guy over there is cute... Let me approach him.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1330580657": {
+   "kind": "text",
+   "parent": 805882594,
+   "children": [
+    -1229448038,
+    -716454517,
+    -900821798,
+    -156298194,
+    112992697,
+    1856457788
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Look, {PC}! A whole group of guys! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "160111490": {
+   "kind": "text",
+   "parent": 88246590,
+   "children": [
+    -1115121039,
+    925976169,
+    1578048357,
+    106816225,
+    1012130673
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-There's an older gentleman... Let me try him...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1106867091": {
+   "kind": "text",
+   "parent": 88246590,
+   "children": [
+    -919683187,
+    -1442984111,
+    1121035434,
+    1154018804,
+    -509983352
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I think that guy over there is looking at me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-919683187": {
+   "kind": "text",
+   "parent": 1106867091,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "H-Hello, would you be interested in following me on Starmaker?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1115121039": {
+   "kind": "text",
+   "parent": 160111490,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "H-Hello, Sir! My name is Anna and I'm a Starmaker model... Would you be interested in checking out my page?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1338438103": {
+   "kind": "text",
+   "parent": 698744959,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hey, cutie! Would you be interested in following me on Starmaker? In return, we can make out!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-716454517": {
+   "kind": "text",
+   "parent": -1330580657,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Woah! Her tits are so soft!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ParkAdvert (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ParkAdvert (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/ParkAdvert (5)"
+      }
+     }
+    }
+   ]
+  },
+  "-156298194": {
+   "kind": "text",
+   "parent": -1330580657,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-Thank you! Give them a good squeeze and don't forget to follow! My name is Anna!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "112992697": {
+   "kind": "text",
+   "parent": -1330580657,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Y-Yes! We will follow! Promised!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1856457788": {
+   "kind": "text",
+   "parent": -1330580657,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Good boys!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1580492416": {
+   "kind": "text",
+   "parent": 698744959,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "W-What? R-Really!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "611941844": {
+   "kind": "text",
+   "parent": 698744959,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes! Come here, give me your tongue!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ParkAdvert (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ParkAdvert (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/ParkAdvert (2)"
+      }
+     }
+    }
+   ]
+  },
+  "244821841": {
+   "kind": "text",
+   "parent": 698744959,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Oh fuck... Is this really happening... Y-Yes! I will subscribe!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "925976169": {
+   "kind": "text",
+   "parent": 160111490,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Uh... I'm not interested, young lady.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_4[park-advertisement] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "park-advertisement",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "1578048357": {
+   "kind": "text",
+   "parent": 160111490,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A-Are you sure? You could give me a try... Here, please touch my breasts and see for yourself!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "106816225": {
+   "kind": "text",
+   "parent": 160111490,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Hmm.. Well... In that case... Yes, yes... Very nice... They are quite firm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ParkAdvert (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ParkAdvert (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/ParkAdvert (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1012130673": {
+   "kind": "text",
+   "parent": 160111490,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-Thank you... P-Please don't forget to subscribe!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1442984111": {
+   "kind": "text",
+   "parent": 1106867091,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Hmm, depends. Are you single?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1121035434": {
+   "kind": "text",
+   "parent": 1106867091,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "N-No! But you could give my boobs a squeeze in return....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1154018804": {
+   "kind": "text",
+   "parent": 1106867091,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "I won't say no to that! ... Wow! They are really soft, damn... Y-Yeah! I'll give you a follow!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_4[park-advertisement] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "park-advertisement",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ParkAdvert (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ParkAdvert (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/ParkAdvert (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-509983352": {
+   "kind": "text",
+   "parent": 1106867091,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-Thank you, kind sir!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1719200516": {
+   "kind": "text",
+   "parent": 805882594,
+   "children": [
+    149109635,
+    1989968241,
+    -176407960,
+    -1839276891,
+    567315298,
+    -245416760
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Those two guys there look fun! Come on, {PC}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "149109635": {
+   "kind": "text",
+   "parent": 1719200516,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Heya! I'm looking for new followers on my Starmaker page. Interested?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1989968241": {
+   "kind": "text",
+   "parent": 1719200516,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "I'm sorry, miss. But I'm here to spend time with my {S}. Please excuse us.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-176407960": {
+   "kind": "text",
+   "parent": 1719200516,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Well, you both could be spending some quality time with my boobs!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1839276891": {
+   "kind": "text",
+   "parent": 1719200516,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Muaaah! Don't tell your {M} about this or she will be mad!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ParkAdvert (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ParkAdvert (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/ParkAdvert (6)"
+      }
+     }
+    }
+   ]
+  },
+  "-245416760": {
+   "kind": "text",
+   "parent": 1719200516,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "And don't forget to follow!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-574081587": {
+   "kind": "text",
+   "parent": 88246590,
+   "children": [
+    971947196,
+    -1868131501,
+    345132126,
+    -1718207544,
+    -1557616300,
+    -660620210
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-That guy over there is staring at my boobs like crazy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "971947196": {
+   "kind": "text",
+   "parent": -574081587,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "H-Hey! My name is Anna and I'm on Starmaker, would you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1868131501": {
+   "kind": "text",
+   "parent": -574081587,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "I'm already subscribed... I love your content!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_4[park-advertisement] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "park-advertisement",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "345132126": {
+   "kind": "text",
+   "parent": -574081587,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, you're too kind! Please, don't hesitate to give my boobs a squeeze! I'd love to show my appreciation!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1718207544": {
+   "kind": "text",
+   "parent": -574081587,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "T-Thank you, Anna! Holy moly! Your skin is so soft!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ParkAdvert (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ParkAdvert (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/ParkAdvert (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-1557616300": {
+   "kind": "text",
+   "parent": -574081587,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-Thank you for being gentle...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-660620210": {
+   "kind": "text",
+   "parent": -574081587,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "O-Of course, thank you for letting me do this! I'll upgrade my subscription!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1229448038": {
+   "kind": "text",
+   "parent": -1330580657,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hello everyone! Please feel free to grope my tits! In return, just follow me on Starmaker!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-900821798": {
+   "kind": "text",
+   "parent": -1330580657,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "They look fake, but they actually natural! Holy fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "567315298": {
+   "kind": "text",
+   "parent": 1719200516,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "I won't promised!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-571562232": {
+   "kind": "text",
+   "parent": -101066537,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Show everyone that I'm yours...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active gropepark to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "gropepark",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/gropepark"
+      }
+     }
+    }
+   ]
+  },
+  "986435398": {
+   "kind": "text",
+   "parent": 1411390124,
+   "children": [
+    155769348,
+    1173817531,
+    -1169714138,
+    -2109228367,
+    -1758842221,
+    1238085276,
+    -2082092973,
+    -1322612361,
+    231157282
+   ],
+   "actor": null,
+   "text": "Wanna do something risky?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "155769348": {
+   "kind": "text",
+   "parent": 986435398,
+   "children": [
+    -1620405293,
+    325716411
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "W-Where are we going?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[anna-parkbehindtree] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-parkbehindtree",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1620405293": {
+   "kind": "choice",
+   "parent": 155769348,
+   "children": [
+    1014896463,
+    -2085749980,
+    173942762
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Wha—here?! In the park?! What if someone sees us?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1173817531": {
+   "kind": "text",
+   "parent": 986435398,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... Yes... Please, I loved the feeling of you taking me here last time... I felt so... alive.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[anna-parkbehindtree] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-parkbehindtree",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1169714138": {
+   "kind": "text",
+   "parent": 986435398,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "P-Put it in, {PC}... Let's hurry...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaParkHidden (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaParkHidden (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaParkHidden (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-2109228367": {
+   "kind": "text",
+   "parent": 986435398,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "OH... Hnggg... L-Let's try to keep quiet... F-Fuck... There's people here...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaParkHidden (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaParkHidden (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaParkHidden (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1758842221": {
+   "kind": "choice",
+   "parent": 986435398,
+   "children": [
+    -112868929,
+    -1027292741,
+    632941887
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hurry, {PC}... It's... It's fine if we stop once you came... I would be too loud... I...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1238085276": {
+   "kind": "text",
+   "parent": 986435398,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "S-Stop.. You're making me... People will notice... I... Hngaah... Fuck... Oh, god... Oh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2082092973": {
+   "kind": "text",
+   "parent": 986435398,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hngaaaaah! HNGAAAH!.... Hnghhhhh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaParkHidden (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaParkHidden (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaParkHidden (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1322612361": {
+   "kind": "text",
+   "parent": 986435398,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hngah.... Oh god... W-Why does it feel so good... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1014896463": {
+   "kind": "text",
+   "parent": -1620405293,
+   "actor": null,
+   "text": "Trust me, Anna. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2085749980": {
+   "kind": "text",
+   "parent": -1620405293,
+   "actor": null,
+   "text": "Relax, there's a tree and some bushes covering us...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "173942762": {
+   "kind": "text",
+   "parent": -1620405293,
+   "actor": null,
+   "text": "Just pull down your pants, {M}. I'll make it quick.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "325716411": {
+   "kind": "text",
+   "parent": 155769348,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god, I can already see the headline... ‘Local Woman Caught having sex in Public’.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "231157282": {
+   "kind": "text",
+   "parent": 986435398,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I didn't bring my tissues — now I have to walk all the way back to my car like this...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-112868929": {
+   "kind": "text",
+   "parent": -1758842221,
+   "actor": null,
+   "text": "But I want my {M} to cum... I want to make you cum in public...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1027292741": {
+   "kind": "text",
+   "parent": -1758842221,
+   "actor": null,
+   "text": "You're so fucking wet, Anna. I can tell you're getting close...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "632941887": {
+   "kind": "text",
+   "parent": -1758842221,
+   "actor": null,
+   "text": "(Fuck her harder)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1738316409": {
+   "kind": "text",
+   "parent": 675398363,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaDefaultIceCreamBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaDefaultIceCreamBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AnnaDefaultIceCreamBust"
+      }
+     }
+    }
+   ]
+  },
+  "1400217378": {
+   "kind": "text",
+   "parent": 675398363,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh wow, this is so good. I forgot how much I love ice cream on a warm day.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1052459316": {
+   "kind": "text",
+   "parent": 675398363,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Mmm~ This is perfect. Ice cream, a sunny day, and you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1665791160": {
+   "kind": "text",
+   "parent": 675398363,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "We should do little dates like this more often.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "129710334": {
+   "kind": "text",
+   "parent": 675398363,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Okay, next time… I’m getting two scoops.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1491504431": {
+   "kind": "text",
+   "parent": -568750887,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[random-1-of-10] = Random2[Random]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random2",
+        "pick": "random",
+        "type": "number"
+       }
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "-598028612": {
+   "kind": "text",
+   "parent": -568750887,
+   "children": [
+    -543584855,
+    385156087,
+    1453826383
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I love days like this. Just walking, no stress, no worries. Just… breathing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaPark2025 (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaPark2025 (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaPark2025 (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1124813502": {
+   "kind": "text",
+   "parent": -568750887,
+   "children": [
+    1110905208,
+    1439650853,
+    -956665749,
+    -1378087155
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I wonder how many more times we’ll get to do this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1110905208": {
+   "kind": "text",
+   "parent": -1124813502,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Not to be dramatic… but life moves so fast. One day you’re taking a simple walk, and then before you know it… it’s the last time you ever do it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaPark2025 (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaPark2025 (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaPark2025 (7)"
+      }
+     }
+    }
+   ]
+  },
+  "-543584855": {
+   "kind": "text",
+   "parent": -598028612,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It’s nice, isn’t it? I feel like I don’t get to do this enough.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "385156087": {
+   "kind": "choice",
+   "parent": -598028612,
+   "children": [
+    858496887,
+    -1546377619,
+    -1671411655
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "How about daily park walks! I bet it’d be good for my soul. And I’d make you come with me, of course.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaPark2025 (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaPark2025 (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaPark2025 (2)"
+      }
+     }
+    }
+   ]
+  },
+  "858496887": {
+   "kind": "text",
+   "parent": 385156087,
+   "children": [
+    894433718
+   ],
+   "actor": null,
+   "text": "I’d be happy to.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1546377619": {
+   "kind": "text",
+   "parent": 385156087,
+   "children": [
+    1995953043
+   ],
+   "actor": null,
+   "text": "You just want an excuse to spend time with me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1671411655": {
+   "kind": "text",
+   "parent": 385156087,
+   "children": [
+    379668624
+   ],
+   "actor": null,
+   "text": "So what, park lady era now?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1995953043": {
+   "kind": "text",
+   "parent": -1546377619,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Of course, I always love spending time with my {S}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "894433718": {
+   "kind": "text",
+   "parent": 858496887,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Good! See, I knew my {S} had good taste.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "379668624": {
+   "kind": "text",
+   "parent": -1671411655,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes. Next step: bird watching. Then I start judging people’s jogging form.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1453826383": {
+   "kind": "text",
+   "parent": -598028612,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let's do another round before we head home, yes?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1439650853": {
+   "kind": "text",
+   "parent": -1124813502,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": " And you don’t even realize it’s the last time until it’s already gone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-956665749": {
+   "kind": "text",
+   "parent": -1124813502,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I don’t mean to sound so grim. I just… appreciate this. You.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1378087155": {
+   "kind": "text",
+   "parent": -1124813502,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thanks for walking with me. I needed this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Trips/ParkVisitM/Park_DialogueCond",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DefaultDialogue and wait",
+   "as": "Dialogue"
+  }
+ ]
+}

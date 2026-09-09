@@ -1,0 +1,200 @@
+{
+ "id": "8_Room_Talk/Basement/DefaultDialoge",
+ "name": "DefaultDialoge",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  -872866761,
+  847113060
+ ],
+ "nodes": {
+  "-872866761": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    -997302049,
+    2080381449,
+    1584940524,
+    1811895636,
+    -18081645
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "-997302049": {
+   "kind": "text",
+   "parent": -872866761,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "There you are, I was waiting for you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2080381449": {
+   "kind": "text",
+   "parent": -872866761,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "{PC}! I'm really looking forward to today' session!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1584940524": {
+   "kind": "text",
+   "parent": -872866761,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Good morning, {S}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1811895636": {
+   "kind": "text",
+   "parent": -872866761,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ah, I was wondering if you would come today.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-18081645": {
+   "kind": "text",
+   "parent": -872866761,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Hey, my dear {S}. I hope you have slept well.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "847113060": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So... What's on the menu for today?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Studio_Canvas to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Studio_Canvas",
+       "of": "GetGameObjectInstance",
+       "path": "Studio_Canvas"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Basement",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DefaultDialoge and wait",
+   "as": "Dialogue",
+   "branches": [
+    "default"
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave2[studio-first-loop] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "studio-first-loop",
+        "list": "Core_NoSave2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1000 @@
+{
+ "id": "8_Room_Talk/Bakery_Aftermath/StorageTalk1",
+ "name": "StorageTalk1",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Amelia"
+ ],
+ "roots": [
+  21160520,
+  -534926909,
+  438099696,
+  1116884614,
+  1863553503
+ ],
+ "nodes": {
+  "21160520": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    450007187,
+    -1611562891,
+    -828124523
+   ],
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Phew.. Thanks again for working this hard. You're like, saving my ass.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events[amelia-talks-max-5] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-talks-max-5",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "450007187": {
+   "kind": "text",
+   "parent": 21160520,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "You know, running this bakery isn’t easy. Sometimes I feel like I’m barely holding it together, but I love it. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1611562891": {
+   "kind": "choice",
+   "parent": 21160520,
+   "children": [
+    1935465700,
+    -2138423162,
+    924760633
+   ],
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "What about you? Do you like baking?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1935465700": {
+   "kind": "text",
+   "parent": -1611562891,
+   "children": [
+    -1405415498
+   ],
+   "actor": null,
+   "text": "I enjoy baking. It's really therapeutic.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2138423162": {
+   "kind": "text",
+   "parent": -1611562891,
+   "children": [
+    1865325784
+   ],
+   "actor": null,
+   "text": "I’m more of a cooking person, to be honest.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "924760633": {
+   "kind": "text",
+   "parent": -1611562891,
+   "children": [
+    1522211156
+   ],
+   "actor": null,
+   "text": "Not really.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1405415498": {
+   "kind": "text",
+   "parent": 1935465700,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "I see, that's uh... Something I guess.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1865325784": {
+   "kind": "text",
+   "parent": -2138423162,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Cooking, huh? That’s cool too. I guess we all have our own ways to de-stress.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1522211156": {
+   "kind": "text",
+   "parent": 924760633,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Same to be honest... I'm not here by choice... But that's another story.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-828124523": {
+   "kind": "text",
+   "parent": 21160520,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Alright... Break's over. Let's go back to work.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events[amelia-talks-max-5] = 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-talks-max-5",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-534926909": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1223207565,
+    414476932
+   ],
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Believe it or not, I'm not here by choice. This bakery? It’s an inheritance from my dad. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events[amelia-talks-max-5] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-talks-max-5",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1223207565": {
+   "kind": "choice",
+   "parent": -534926909,
+   "children": [
+    -528918159,
+    -1370976444,
+    -213563096
+   ],
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "One day, he left to \"get some milk\" and never returned...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-528918159": {
+   "kind": "text",
+   "parent": -1223207565,
+   "children": [
+    -456367149
+   ],
+   "actor": null,
+   "text": "That sounds tough, I'm sorry.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1370976444": {
+   "kind": "text",
+   "parent": -1223207565,
+   "children": [
+    1811594992
+   ],
+   "actor": null,
+   "text": "Have you tried checking the milk store?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-213563096": {
+   "kind": "text",
+   "parent": -1223207565,
+   "children": [
+    -1725146286
+   ],
+   "actor": null,
+   "text": "Cry me a river. You inherited a business.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1811594992": {
+   "kind": "text",
+   "parent": -1370976444,
+   "actor": "Amelia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Pwahaha... No, I haven't.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-456367149": {
+   "kind": "text",
+   "parent": -528918159,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Eh, it's fine. Just wanna explain my lack of motivation.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1725146286": {
+   "kind": "text",
+   "parent": -213563096,
+   "actor": "Amelia",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Dude, we all have our own problems.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "414476932": {
+   "kind": "text",
+   "parent": -534926909,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "There's customers waiting, let's return to work, ye?",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events[amelia-talks-max-5] = 2",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-talks-max-5",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 2
+      }
+     }
+    }
+   ]
+  },
+  "438099696": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1831666430,
+    -1727115078,
+    -588301767,
+    974283482
+   ],
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Hey, um...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events[amelia-talks-max-5] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-talks-max-5",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1831666430": {
+   "kind": "choice",
+   "parent": 438099696,
+   "children": [
+    -1689056648,
+    1407910285,
+    1883611191
+   ],
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "You mentioned your {D} is a CEO? So you're like... rich?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1689056648": {
+   "kind": "text",
+   "parent": -1831666430,
+   "children": [
+    842580609
+   ],
+   "actor": null,
+   "text": "Not anymore, or I wouldn't be here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1407910285": {
+   "kind": "text",
+   "parent": -1831666430,
+   "children": [
+    852323452
+   ],
+   "actor": null,
+   "text": "I really don't wanna talk about this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1883611191": {
+   "kind": "text",
+   "parent": -1831666430,
+   "children": [
+    175592584
+   ],
+   "actor": null,
+   "text": "You know the skyscraper at Peakplaza? We live there.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "852323452": {
+   "kind": "text",
+   "parent": 1407910285,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Um, sure... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "175592584": {
+   "kind": "text",
+   "parent": 1883611191,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Wew... That's crazy, you guys muat have been absolute loaded!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "842580609": {
+   "kind": "text",
+   "parent": -1689056648,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Makes sense... Sorry.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1727115078": {
+   "kind": "text",
+   "parent": 438099696,
+   "actor": "Amelia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Well, if you work hard you might get a raise some day, hah.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-588301767": {
+   "kind": "text",
+   "parent": 438099696,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "No promises though.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "974283482": {
+   "kind": "text",
+   "parent": 438099696,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "I'm serious. ",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events[amelia-talks-max-5] = 3",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-talks-max-5",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 3
+      }
+     }
+    }
+   ]
+  },
+  "1116884614": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1818843793,
+    1449334796
+   ],
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "{PC}, there's something I wondered.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events[amelia-talks-max-5] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-talks-max-5",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1818843793": {
+   "kind": "choice",
+   "parent": 1116884614,
+   "children": [
+    -1470880215,
+    -244711730
+   ],
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "We're like almost the same age. I kinda feel like we should hang out?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1470880215": {
+   "kind": "text",
+   "parent": -1818843793,
+   "children": [
+    1822906088,
+    700442900
+   ],
+   "actor": null,
+   "text": "Sure, sounds fun. (Amelia Route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-244711730": {
+   "kind": "text",
+   "parent": -1818843793,
+   "children": [
+    -1044250376
+   ],
+   "actor": null,
+   "text": "I'm just here to work, sorry.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1044250376": {
+   "kind": "text",
+   "parent": -244711730,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Don't aplogize, that's what I pay you for. It's fine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1822906088": {
+   "kind": "text",
+   "parent": -1470880215,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Cool. I'll come over on Wednesday, yeah? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[amelia-romance-start] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-romance-start",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "700442900": {
+   "kind": "text",
+   "parent": -1470880215,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "I'm excited to see your home!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1449334796": {
+   "kind": "text",
+   "parent": 1116884614,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "But enough talk, let's go back to work.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events[amelia-talks-max-5] = 4",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-talks-max-5",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 4
+      }
+     }
+    }
+   ]
+  },
+  "1863553503": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    -166721001,
+    1577835932,
+    -408156285,
+    -1891577364,
+    -758787208
+   ],
+   "actor": null,
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events[amelia-talks-max-5] = 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-talks-max-5",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-166721001": {
+   "kind": "text",
+   "parent": 1863553503,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Another day in hell. Yay.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1577835932": {
+   "kind": "text",
+   "parent": 1863553503,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "You know Karen? Sometimes I have this intense urge to punch her right in her smug face.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-408156285": {
+   "kind": "text",
+   "parent": 1863553503,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Running this place is so stressful; I can't stand it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1891577364": {
+   "kind": "text",
+   "parent": 1863553503,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "I can't wait to get home and unwind with some TV...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-758787208": {
+   "kind": "text",
+   "parent": 1863553503,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "These breaks are the only things keeping my sanity intact.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Bakery_Aftermath",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play StorageTalk1 and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Amelia_Barista to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Amelia_Barista",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Amelia_Barista"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run VisitConditions and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "VisitConditions",
+       "of": "GetGameObjectConditions",
+       "path": "8_Room_Talk/Bakery_Aftermath/VisitConditions"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeInBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeInBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.5 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.5
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_Maps to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_Maps",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_Maps"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.1 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 32_StorageRoom to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "32_StorageRoom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/32_StorageRoom"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.5 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.5
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,2405 @@
+{
+ "id": "8_Vacation_Stories/Snowy_MountainsNight/Default",
+ "name": "Default",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "Player",
+  "S_Werewolf",
+  "You"
+ ],
+ "roots": [
+  484448596,
+  969035001,
+  -648131436
+ ],
+ "nodes": {
+  "484448596": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    508165953
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I have to admit, this is quite cozy. The snow outside... Your body pressed against mine...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[crazyoldman-pro] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "crazyoldman-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "508165953": {
+   "kind": "text",
+   "parent": 484448596,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Maybe we could do this more often... But not that often! It's still quite cold!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "969035001": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -2048389731,
+    1692009722,
+    1395251103,
+    1833786457,
+    -1809992365,
+    544793685,
+    -1405483053,
+    267837035,
+    -1215980805
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[crazyoldman-pro] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "crazyoldman-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    }
+   ]
+  },
+  "-2048389731": {
+   "kind": "text",
+   "parent": 969035001,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Did you hear that? What’s that noise outside?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1692009722": {
+   "kind": "choice",
+   "parent": 969035001,
+   "children": [
+    -1328512161,
+    564134428
+   ],
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "She's sleeping...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1328512161": {
+   "kind": "text",
+   "parent": 1692009722,
+   "actor": null,
+   "text": "(Investigate the noise)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "564134428": {
+   "kind": "text",
+   "parent": 1692009722,
+   "children": [
+    337403887
+   ],
+   "actor": null,
+   "text": "(Continue sleeping)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "337403887": {
+   "kind": "text",
+   "parent": 564134428,
+   "actor": "Player",
+   "expressionName": "default",
+   "text": "I guess some things are better left unchecked...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1395251103": {
+   "kind": "text",
+   "parent": 969035001,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Hello?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[werewolf-is-female] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "werewolf-is-female",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_S_Wolfgirl to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_S_Wolfgirl",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Wolfgirl"
+      }
+     }
+    }
+   ]
+  },
+  "-1809992365": {
+   "kind": "choice",
+   "parent": 969035001,
+   "children": [
+    1649455138,
+    1312881579,
+    -2123544355,
+    -222596375
+   ],
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Grrrnnn... Huff! Hrraaah!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1833786457": {
+   "kind": "text",
+   "parent": 969035001,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Hello?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[werewolf-is-female] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "werewolf-is-female",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_S_Wolfguy to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_S_Wolfguy",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Wolfguy"
+      }
+     }
+    }
+   ]
+  },
+  "1649455138": {
+   "kind": "text",
+   "parent": -1809992365,
+   "actor": null,
+   "text": "Uh... Um... Hello?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1312881579": {
+   "kind": "text",
+   "parent": -1809992365,
+   "actor": null,
+   "text": "Don't come any closer!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-222596375": {
+   "kind": "text",
+   "parent": -1809992365,
+   "actor": null,
+   "text": "Oh god, no! It's a fucking furry!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "544793685": {
+   "kind": "text",
+   "parent": 969035001,
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Hnnnh... Mrrrhh... Hffft!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2123544355": {
+   "kind": "text",
+   "parent": -1809992365,
+   "actor": null,
+   "text": "(Stare at it in absolute shock)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1405483053": {
+   "kind": "choice",
+   "parent": 969035001,
+   "children": [
+    -94658905,
+    -332551572,
+    1402752442
+   ],
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Grraahh... Food... Meat...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-94658905": {
+   "kind": "text",
+   "parent": -1405483053,
+   "actor": null,
+   "text": "I will bring you food, just don't kill me, please!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-332551572": {
+   "kind": "text",
+   "parent": -1405483053,
+   "children": [
+    -1057714027
+   ],
+   "actor": null,
+   "text": "Are you... Are you trying to talk to me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1402752442": {
+   "kind": "text",
+   "parent": -1405483053,
+   "children": [
+    -178679903
+   ],
+   "actor": null,
+   "text": "Go away! Leave me alone!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-178679903": {
+   "kind": "text",
+   "parent": 1402752442,
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Grrrr.... ",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "-1057714027": {
+   "kind": "text",
+   "parent": -332551572,
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Gah! ... I... Food... Hrrrhh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "267837035": {
+   "kind": "text",
+   "parent": 969035001,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    }
+   ]
+  },
+  "-1215980805": {
+   "kind": "text",
+   "parent": 969035001,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "It’s hungry but didn’t attack me... strange. Maybe it’s time to find that crazy old man again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Vacation_Save[crazyoldman-pro] = 2",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "crazyoldman-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 2
+      }
+     }
+    }
+   ]
+  },
+  "-648131436": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    971915797,
+    -487716493,
+    -2030102690,
+    95434694,
+    1407147051,
+    -1104659646
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[crazyoldman-pro] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "crazyoldman-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "971915797": {
+   "kind": "choice",
+   "parent": -648131436,
+   "children": [
+    317754208,
+    -1769727277
+   ],
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "The werewolf is outside again...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "317754208": {
+   "kind": "text",
+   "parent": 971915797,
+   "actor": null,
+   "text": "(Leave the tent)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1769727277": {
+   "kind": "text",
+   "parent": 971915797,
+   "children": [
+    -1329223704
+   ],
+   "actor": null,
+   "text": "(Continue sleeping)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1329223704": {
+   "kind": "text",
+   "parent": -1769727277,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Well, let's just sleep it out...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-487716493": {
+   "kind": "text",
+   "parent": -648131436,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Hello? Are you there?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[werewolf-is-female] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "werewolf-is-female",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_S_Wolfgirl to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_S_Wolfgirl",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Wolfgirl"
+      }
+     }
+    }
+   ]
+  },
+  "-2030102690": {
+   "kind": "text",
+   "parent": -648131436,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Hello? Are you there?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[werewolf-is-female] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "werewolf-is-female",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_S_Wolfguy to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_S_Wolfguy",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Wolfguy"
+      }
+     }
+    }
+   ]
+  },
+  "95434694": {
+   "kind": "choice",
+   "parent": -648131436,
+   "children": [
+    -1877787969,
+    -726568588,
+    -1954964541,
+    -1608318575,
+    1155847642
+   ],
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Rrrrahh! Hnnnhh... ",
+   "tag": "werewolfloop",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1877787969": {
+   "kind": "text",
+   "parent": 95434694,
+   "children": [
+    1308970224
+   ],
+   "actor": null,
+   "text": "What do you want from me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1954964541": {
+   "kind": "text",
+   "parent": 95434694,
+   "children": [
+    1372154973
+   ],
+   "actor": null,
+   "text": "Do you have a name?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1608318575": {
+   "kind": "text",
+   "parent": 95434694,
+   "children": [
+    1355219884
+   ],
+   "actor": null,
+   "text": "What are you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1155847642": {
+   "kind": "text",
+   "parent": 95434694,
+   "children": [
+    968837186
+   ],
+   "actor": null,
+   "text": "I... I'll be leaving now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "968837186": {
+   "kind": "text",
+   "parent": 1155847642,
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Rrrraah... Food... I... Grrr...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1355219884": {
+   "kind": "text",
+   "parent": -1608318575,
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Grrrahh... Moon... Grr....",
+   "jump": {
+    "mode": "Jump",
+    "to": "werewolfloop"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1308970224": {
+   "kind": "text",
+   "parent": -1877787969,
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Snff... Food... Meat... ",
+   "jump": {
+    "mode": "Jump",
+    "to": "werewolfloop"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1372154973": {
+   "kind": "text",
+   "parent": -1954964541,
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Grr.... Name... Name...",
+   "jump": {
+    "mode": "Jump",
+    "to": "werewolfloop"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-726568588": {
+   "kind": "text",
+   "parent": 95434694,
+   "children": [
+    -878339178
+   ],
+   "actor": null,
+   "text": "I have something for you. (Throw the meat)",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Inventory[red-meat] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "red-meat",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-878339178": {
+   "kind": "text",
+   "parent": -726568588,
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Grrrraah! MEAT! GRRRRMMMPFH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1407147051": {
+   "kind": "text",
+   "parent": -648131436,
+   "children": [
+    1011684273,
+    1667952783,
+    -1689247975,
+    2120425168,
+    841502081,
+    -1938257046,
+    -1707775712,
+    532803281,
+    1027812998,
+    745112450
+   ],
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Rrrr... Good meat... food... Grraaah...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[werewolf-is-female] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "werewolf-is-female",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1011684273": {
+   "kind": "choice",
+   "parent": 1407147051,
+   "children": [
+    -978520495,
+    -1246559329
+   ],
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Grrrahh... Meat... Your meat... I ...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[werewolf-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "werewolf-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1667952783": {
+   "kind": "choice",
+   "parent": 1407147051,
+   "children": [
+    -1541591800,
+    -1252615567,
+    -160617249
+   ],
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Human... Grah! I... Human sex...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1541591800": {
+   "kind": "text",
+   "parent": 1667952783,
+   "actor": null,
+   "text": "Let's get this started...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1252615567": {
+   "kind": "text",
+   "parent": 1667952783,
+   "actor": null,
+   "text": "Hell yeah! (Show her your cock)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-160617249": {
+   "kind": "text",
+   "parent": 1667952783,
+   "children": [
+    1733251018
+   ],
+   "actor": null,
+   "text": "No, no, no... I'm not fucking a werewolf!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1689247975": {
+   "kind": "text",
+   "parent": 1407147051,
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Raah! Human! Down! ... Grrr....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2120425168": {
+   "kind": "choice",
+   "parent": 1407147051,
+   "children": [
+    2032046299,
+    1175689912,
+    813145040
+   ],
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Big... Human... Graaah! RAAAAAAH!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active WerewolfFemale (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "WerewolfFemale (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/WerewolfFemale (1)"
+      }
+     }
+    }
+   ]
+  },
+  "841502081": {
+   "kind": "text",
+   "parent": 1407147051,
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "GOOD! HNGGAAH! RRAAAARRRRHHH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1938257046": {
+   "kind": "choice",
+   "parent": 1407147051,
+   "children": [
+    -1495489254,
+    131236768,
+    1246342327
+   ],
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Rraaagh! Mean! Deepeeaaahhhh!! GRAAAWWHH!!!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active WerewolfFemale (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "WerewolfFemale (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/WerewolfFemale (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1707775712": {
+   "kind": "text",
+   "parent": 1407147051,
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Human... Meat... I... Graah... Graaaah... GRAAAHHHHH!!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active WerewolfFemale (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "WerewolfFemale (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/WerewolfFemale (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1027812998": {
+   "kind": "text",
+   "parent": 1407147051,
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Mmmm.... Huff.... Mm... Good human...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "745112450": {
+   "kind": "text",
+   "parent": 1407147051,
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "I... Grrr... I return... for meat... and human meat...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[werewolf-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "werewolf-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-978520495": {
+   "kind": "text",
+   "parent": 1011684273,
+   "children": [
+    -1512069982
+   ],
+   "actor": null,
+   "text": "My meat?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1246559329": {
+   "kind": "text",
+   "parent": 1011684273,
+   "children": [
+    913736370
+   ],
+   "actor": null,
+   "text": "Ah! Please don't eat me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "913736370": {
+   "kind": "text",
+   "parent": -1246559329,
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Graahh! NO! I... Cock.. Meat...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1512069982": {
+   "kind": "text",
+   "parent": -978520495,
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Hnnh.... Meat... Big... Sex...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1733251018": {
+   "kind": "text",
+   "parent": -160617249,
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Grah! Bad! No! Bad... Raaagh!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1495489254": {
+   "kind": "text",
+   "parent": -1938257046,
+   "actor": null,
+   "text": "I'm... I'm close... I'll...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "131236768": {
+   "kind": "text",
+   "parent": -1938257046,
+   "actor": null,
+   "text": "F-Fuck... Yes... I'll pump you full, wolfslut!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1246342327": {
+   "kind": "text",
+   "parent": -1938257046,
+   "actor": null,
+   "text": "(Fill her up without a warning)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2032046299": {
+   "kind": "text",
+   "parent": 2120425168,
+   "actor": null,
+   "text": "Fuck, your pussy is so warm and wet...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1175689912": {
+   "kind": "text",
+   "parent": 2120425168,
+   "actor": null,
+   "text": "Good girl, now ride my meat...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "813145040": {
+   "kind": "text",
+   "parent": 2120425168,
+   "actor": null,
+   "text": "(Grope her tits)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1104659646": {
+   "kind": "text",
+   "parent": -648131436,
+   "children": [
+    -1760652438,
+    -2012466291,
+    1579162437,
+    -1408351124,
+    -504209794,
+    1683845860,
+    -704180362,
+    34394200,
+    -712154256,
+    1687072838,
+    1378521542,
+    133661281,
+    -1736172804,
+    2036860345,
+    -952483863,
+    -757908577,
+    -310069223,
+    403509159
+   ],
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Rrrr... Good meat... food... Grraaah...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[werewolf-is-female] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "werewolf-is-female",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-2012466291": {
+   "kind": "text",
+   "parent": -1104659646,
+   "children": [
+    1864232995,
+    -1780316595,
+    1156432018,
+    1923311202,
+    1150051262,
+    -1702694775,
+    642998047
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{PC}? What's...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[werewolf-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "werewolf-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_GreenPullover to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_GreenPullover",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_GreenPullover"
+      }
+     }
+    }
+   ]
+  },
+  "1864232995": {
+   "kind": "text",
+   "parent": -2012466291,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "W-what... what is that?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1780316595": {
+   "kind": "text",
+   "parent": -2012466291,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "This... This isn’t real. This CAN’T be real!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1156432018": {
+   "kind": "choice",
+   "parent": -2012466291,
+   "children": [
+    157125403,
+    -468013153
+   ],
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "No, no.... I-I must be dreaming. That’s it. Just a weird, vivid dream from the cold... ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "157125403": {
+   "kind": "text",
+   "parent": 1156432018,
+   "actor": null,
+   "text": "Yes, {M}. This is just a dream. (Start sharing route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-468013153": {
+   "kind": "text",
+   "parent": 1156432018,
+   "children": [
+    47770266,
+    234674757,
+    1756560400
+   ],
+   "actor": null,
+   "text": "Go back to sleep, {M}. Quickly!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "47770266": {
+   "kind": "text",
+   "parent": -468013153,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yep, definitely dreaming. There’s no way this is actually happening.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "234674757": {
+   "kind": "text",
+   "parent": -468013153,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I will.. I just need to fall asleep...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_GreenPullover/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1756560400": {
+   "kind": "text",
+   "parent": -468013153,
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Grrr... Food... Good... Good human... Graah...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1923311202": {
+   "kind": "text",
+   "parent": -2012466291,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yep, definitely dreaming. There’s no way this is actually happening.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1150051262": {
+   "kind": "text",
+   "parent": -2012466291,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I mean... This isn’t real, right? Werewolves can't be real... They...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1702694775": {
+   "kind": "text",
+   "parent": -2012466291,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh my... He's big... I mean, if this is just a dream... Why don't we... have some fun? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_GreenPullover/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "-1760652438": {
+   "kind": "text",
+   "parent": -1104659646,
+   "children": [
+    81489439
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "My, my... I was hoping I would be having this dream again...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[werewolf-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "werewolf-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Nude"
+      }
+     }
+    }
+   ]
+  },
+  "81489439": {
+   "kind": "text",
+   "parent": -1760652438,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let's... Let's get to it, before I wake up... Mmm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "642998047": {
+   "kind": "text",
+   "parent": -2012466291,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Let's... Let's have some fun, before I wake up... My own {S} and a wild beast... Oh my... I just need to try this...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Nude"
+      }
+     }
+    }
+   ]
+  },
+  "1579162437": {
+   "kind": "text",
+   "parent": -1104659646,
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "... Human. Soft... Human... Grrr....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1408351124": {
+   "kind": "text",
+   "parent": -1104659646,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh! I'm... I'm not giving any milk big boy! ... Mmm, he's so hungry...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active WerewolfMale (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "WerewolfMale (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/WerewolfMale (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-504209794": {
+   "kind": "text",
+   "parent": -1104659646,
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "M-Milk? ... No? ... Ghhraah! ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1683845860": {
+   "kind": "text",
+   "parent": -1104659646,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Try... Try here instead... There's sweet nectar for you waiting down there...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active WerewolfMale (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "WerewolfMale (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/WerewolfMale (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-704180362": {
+   "kind": "text",
+   "parent": -1104659646,
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Mmmggrrhh... Wet... Warm... I... I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "34394200": {
+   "kind": "text",
+   "parent": -1104659646,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That's it.. Lick my pussy... You big bad wolf... Mmmah...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-712154256": {
+   "kind": "text",
+   "parent": -1104659646,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "F-Fuck, I... I want you both... Inside me... Please!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1687072838": {
+   "kind": "choice",
+   "parent": -1104659646,
+   "children": [
+    774441173,
+    -719695662,
+    1303871967
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god... Yes~ T-Take it... Take it slow... Fuck, fuck, fuck!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active WerewolfMale (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "WerewolfMale (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/WerewolfMale (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1378521542": {
+   "kind": "text",
+   "parent": -1104659646,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm... I'm getting my pussy pounded by my {S} and a dirty big beast! Fuck! Hngaaaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1736172804": {
+   "kind": "text",
+   "parent": -1104659646,
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Rrrraaaaagh! Good human! Good! Rrrrrrghhh!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2036860345": {
+   "kind": "choice",
+   "parent": -1104659646,
+   "children": [
+    986637763,
+    1883768635,
+    -1231288107
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes! F-Fill me up! Blow your loads into my slit! Mark my pussy! Hngaaaaah!!!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-952483863": {
+   "kind": "text",
+   "parent": -1104659646,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god, god, god... S-So much! This is... Too much!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active WerewolfMale (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "WerewolfMale (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/WerewolfMale (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active WerewolfMale (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "WerewolfMale (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/WerewolfMale (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-757908577": {
+   "kind": "text",
+   "parent": -1104659646,
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Rrrawwwhhh!!! Graaah!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-310069223": {
+   "kind": "text",
+   "parent": -1104659646,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god... That was... That felt so real... I'm... I'm so tired... I need to...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "403509159": {
+   "kind": "text",
+   "parent": -1104659646,
+   "actor": "S_Werewolf",
+   "expressionName": "neutral",
+   "text": "Grrr.... Human. Sleep? Graah... I return. Soft meat.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[werewolf-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "werewolf-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "774441173": {
+   "kind": "text",
+   "parent": 1687072838,
+   "actor": null,
+   "text": "Oh fuck, this is way too tight!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-719695662": {
+   "kind": "text",
+   "parent": 1687072838,
+   "actor": null,
+   "text": "Ready for a very special double pounding, {M}?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1303871967": {
+   "kind": "text",
+   "parent": 1687072838,
+   "actor": null,
+   "text": "This would make so much money on Starmaker...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "986637763": {
+   "kind": "text",
+   "parent": 2036860345,
+   "actor": null,
+   "text": "{M}! I'm... Fuck! Hngaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1883768635": {
+   "kind": "text",
+   "parent": 2036860345,
+   "actor": null,
+   "text": "We'll... We'll breed your milf pussy, Anna... Fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1231288107": {
+   "kind": "text",
+   "parent": 2036860345,
+   "actor": null,
+   "text": "I can... I can feel his knot swelling up, we're... Fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "133661281": {
+   "kind": "text",
+   "parent": -1104659646,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[inv-werewolfhair] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "inv-werewolfhair",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[inv-werewolfhair] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "inv-werewolfhair",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = Werewolf Hair",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Werewolf Hair"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "532803281": {
+   "kind": "text",
+   "parent": 1407147051,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[inv-werewolfhair] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "inv-werewolfhair",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[inv-werewolfhair] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "inv-werewolfhair",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = Werewolf Hair",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Werewolf Hair"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Snowy_MountainsNight",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Default and wait",
+   "as": "Dialogue"
+  }
+ ]
+}

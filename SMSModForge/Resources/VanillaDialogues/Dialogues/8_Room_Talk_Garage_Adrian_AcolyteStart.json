@@ -1,0 +1,581 @@
+{
+ "id": "8_Room_Talk/Garage/Adrian_AcolyteStart",
+ "name": "Adrian_AcolyteStart",
+ "index": 11,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian"
+ ],
+ "roots": [
+  -668886847,
+  -43598306,
+  -1872882932,
+  343050955,
+  2121763212,
+  -45405528
+ ],
+ "nodes": {
+  "-668886847": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Hey… you busy?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_11[Adrian-Mallquest] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Adrian-Mallquest",
+        "list": "Events_11",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-43598306": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    983353424,
+    493244411,
+    -372020511
+   ],
+   "actor": "Adrian",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I need to ask you something. And you’re not allowed to laugh.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1872882932": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "How are you doing so well with women?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "343050955": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "They actually talk to you. They smile at you. Some of them even… you know…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-45405528": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    358695982,
+    -1902585912
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Can you teach me?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "358695982": {
+   "kind": "text",
+   "parent": -45405528,
+   "children": [
+    -841829993,
+    33378266,
+    1549640842
+   ],
+   "actor": null,
+   "text": "Yeah. I’ll help you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-841829993": {
+   "kind": "text",
+   "parent": 358695982,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Wait. Seriously?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_11[Adrian-Mallquest] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Adrian-Mallquest",
+        "list": "Events_11",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "type": "InstructionQuestsActivate",
+     "title": "Activate Acolyte (Adrian)",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Acolyte (Adrian)",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "983353424": {
+   "kind": "text",
+   "parent": -43598306,
+   "actor": null,
+   "text": "No promises.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "493244411": {
+   "kind": "text",
+   "parent": -43598306,
+   "actor": null,
+   "text": "I won’t. Relax.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-372020511": {
+   "kind": "text",
+   "parent": -43598306,
+   "actor": null,
+   "text": "That bad, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2121763212": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Meanwhile I say “hi” and it sounds like I’m apologizing for existing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1902585912": {
+   "kind": "text",
+   "parent": -45405528,
+   "children": [
+    -1494804388,
+    -1395899559
+   ],
+   "actor": null,
+   "text": "Nope. This isn’t something you can just learn.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1494804388": {
+   "kind": "text",
+   "parent": -1902585912,
+   "actor": "Adrian",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Wow. Thanks. That’s exactly the support I needed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "33378266": {
+   "kind": "choice",
+   "parent": 358695982,
+   "children": [
+    505448516,
+    -977879655,
+    1573142996
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "You’re not messing with me?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "505448516": {
+   "kind": "text",
+   "parent": 33378266,
+   "children": [
+    1646895138
+   ],
+   "actor": null,
+   "text": "I’ll help. But you actually have to try.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1646895138": {
+   "kind": "text",
+   "parent": 505448516,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Okay. Yeah. I can try.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-977879655": {
+   "kind": "text",
+   "parent": 33378266,
+   "children": [
+    -823306876
+   ],
+   "actor": null,
+   "text": "We start with basics. Posture. Voice. Eye contact.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-823306876": {
+   "kind": "text",
+   "parent": -977879655,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "That sounds… structured. I like that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1573142996": {
+   "kind": "text",
+   "parent": 33378266,
+   "children": [
+    -352019059,
+    1265864484
+   ],
+   "actor": null,
+   "text": "First lesson: stop panicking when boobs exist.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-352019059": {
+   "kind": "text",
+   "parent": 1573142996,
+   "actor": "Adrian",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I DO NOT panic.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1265864484": {
+   "kind": "text",
+   "parent": 1573142996,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Okay maybe a little.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1549640842": {
+   "kind": "text",
+   "parent": 358695982,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Alright. Let’s do it. Thanks, {PC}. I'll meet you at the mall, alright?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1395899559": {
+   "kind": "text",
+   "parent": -1902585912,
+   "actor": "Adrian",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Yeah… I figured you’d say that. Forget it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Garage",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Adrian_AcolyteStart and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_11[Adrian-Mallquest] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Adrian-Mallquest",
+        "list": "Events_11",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DaysPassed] ≥ 22",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DaysPassed",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 22
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

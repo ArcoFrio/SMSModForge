@@ -1,0 +1,1748 @@
+{
+ "id": "8_Room_Talk/Bath/AnnaBathPresent",
+ "name": "AnnaBathPresent",
+ "index": 5,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Anna",
+  "Continue",
+  "You"
+ ],
+ "roots": [
+  -113494110,
+  690624533,
+  1036606997
+ ],
+ "nodes": {
+  "-113494110": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -98518583
+   ],
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Hey, {M}. How's the bath?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-98518583": {
+   "kind": "text",
+   "parent": -113494110,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Uh... I-It's great, hun... Now, um... I'm trying to relax here, hun. Alright? We can talk later...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "690624533": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1764229574,
+    127642071,
+    1015714912,
+    866944064,
+    -1001483327,
+    -2047214261,
+    -1368864939,
+    516193221,
+    -1709790401,
+    1475215848,
+    -52510103,
+    -514169431,
+    -626123036,
+    -881898150,
+    1338309482
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm.... Hmmmmhmm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Eve_NoSave1[adrian-bathroompresent] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-bathroompresent",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1036606997": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1442047230,
+    -1550815991,
+    1771054170,
+    1601536082,
+    -1796839555,
+    -184849626,
+    1386420668,
+    742178987,
+    99110795,
+    -1652107825,
+    740854587,
+    333383653,
+    752073450,
+    1150830919,
+    221341067,
+    -818150482,
+    979138382
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Well, hello there, my boys...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Eve_NoSave1[adrian-bathroompresent] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-bathroompresent",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1764229574": {
+   "kind": "choice",
+   "parent": 690624533,
+   "children": [
+    -1482131176,
+    777475442,
+    -932647200
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, {PC}... ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1482131176": {
+   "kind": "text",
+   "parent": 1764229574,
+   "children": [
+    1918345589,
+    -53517348
+   ],
+   "actor": null,
+   "text": "Do you need anything else for your birthday?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "777475442": {
+   "kind": "text",
+   "parent": 1764229574,
+   "children": [
+    -820275519
+   ],
+   "actor": null,
+   "text": "(Show her your hard cock)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-932647200": {
+   "kind": "text",
+   "parent": 1764229574,
+   "children": [
+    893758178
+   ],
+   "actor": null,
+   "text": "I'll leave you to it, have fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "893758178": {
+   "kind": "text",
+   "parent": -932647200,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thanks, hun. This is so relaxing.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-820275519": {
+   "kind": "text",
+   "parent": 777475442,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh my...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1918345589": {
+   "kind": "text",
+   "parent": -1482131176,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm feeling awfully... hungry right now, sweetheart.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "127642071": {
+   "kind": "choice",
+   "parent": 690624533,
+   "children": [
+    2034400742,
+    692678326,
+    -779687165
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I wonder what will happen next... Inside this hot, steamy bathroom.... Hmm?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaInBathtubSprite to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaInBathtubSprite",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/4_Bath/AnnaInBathtubSprite"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaBirthdayBath (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaBirthdayBath (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaBirthdayBath (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1442047230": {
+   "kind": "text",
+   "parent": 1036606997,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Hey, {M}... We thought you would like another present. For your birthday.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1550815991": {
+   "kind": "choice",
+   "parent": 1036606997,
+   "children": [
+    -1531658950,
+    -290216490,
+    1063422259
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "My, my... it seems you've both been quite excited to see me...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaBirthdayBath (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaBirthdayBath (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaBirthdayBath (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaInBathtubSprite to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaInBathtubSprite",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/4_Bath/AnnaInBathtubSprite"
+      }
+     }
+    }
+   ]
+  },
+  "-53517348": {
+   "kind": "text",
+   "parent": -1482131176,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "What do you think might help satisfy my appetite?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2034400742": {
+   "kind": "text",
+   "parent": 127642071,
+   "children": [
+    1736322411
+   ],
+   "actor": null,
+   "text": "Turn around...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "692678326": {
+   "kind": "text",
+   "parent": 127642071,
+   "children": [
+    326060424
+   ],
+   "actor": null,
+   "text": "Bend over, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-779687165": {
+   "kind": "text",
+   "parent": 127642071,
+   "children": [
+    -2121485231
+   ],
+   "actor": null,
+   "text": "(Grope her breasts)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1736322411": {
+   "kind": "text",
+   "parent": 2034400742,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Like this? ... Does that... Make you happy?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaBirthdayBath (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaBirthdayBath (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaBirthdayBath (3)"
+      }
+     }
+    }
+   ]
+  },
+  "326060424": {
+   "kind": "text",
+   "parent": 692678326,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Look how nicely I clean myself for you, {PC}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaBirthdayBath (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaBirthdayBath (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaBirthdayBath (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-2121485231": {
+   "kind": "text",
+   "parent": -779687165,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You love my heavy pillows, don't you? Mmm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaBirthdayBath (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaBirthdayBath (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaBirthdayBath (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1015714912": {
+   "kind": "text",
+   "parent": 690624533,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I've been such a good {M}.... Doing as my {S} says...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1001483327": {
+   "kind": "text",
+   "parent": 690624533,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Are you going to reward me properly?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaBirthdayBath (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaBirthdayBath (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaBirthdayBath (5)"
+      }
+     }
+    }
+   ]
+  },
+  "866944064": {
+   "kind": "text",
+   "parent": 690624533,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2047214261": {
+   "kind": "text",
+   "parent": 690624533,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Come closer, sweetheart. Let {M} taste what she's been craving all day.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaBirthdayBath (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaBirthdayBath (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaBirthdayBath (6)"
+      }
+     }
+    }
+   ]
+  },
+  "-1368864939": {
+   "kind": "text",
+   "parent": 690624533,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let me show you how much I appreciate my birthday present....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "516193221": {
+   "kind": "text",
+   "parent": 690624533,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Nnnnhh~!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaBirthdayBath (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaBirthdayBath (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaBirthdayBath (7)"
+      }
+     }
+    }
+   ]
+  },
+  "-1709790401": {
+   "kind": "text",
+   "parent": 690624533,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm, you taste so good, baby,...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-626123036": {
+   "kind": "text",
+   "parent": 690624533,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fuck, fuck, fuck! Yes, yes, YES!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaBirthdayBath (13) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaBirthdayBath (13)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaBirthdayBath (13)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaBirthdayBath (5) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaBirthdayBath (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaBirthdayBath (5)"
+      }
+     }
+    }
+   ]
+  },
+  "-881898150": {
+   "kind": "text",
+   "parent": 690624533,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thank you, sweetheart....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1338309482": {
+   "kind": "text",
+   "parent": 690624533,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That was the best birthday present a girl could ask for.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1475215848": {
+   "kind": "text",
+   "parent": 690624533,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmph, yes! Fuck your filthy whore {M}'s mouth!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-52510103": {
+   "kind": "text",
+   "parent": 690624533,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Cum for me, baby!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-514169431": {
+   "kind": "choice",
+   "parent": 690624533,
+   "children": [
+    624492331,
+    1503530349,
+    -997472183
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fill my hungry little throat with your hot seed!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "624492331": {
+   "kind": "text",
+   "parent": -514169431,
+   "actor": null,
+   "text": "F-Fuck, {M}... I'm... Here it comes!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1503530349": {
+   "kind": "text",
+   "parent": -514169431,
+   "actor": null,
+   "text": "Take it all, you horny bitch!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-997472183": {
+   "kind": "text",
+   "parent": -514169431,
+   "actor": null,
+   "text": "(Cum for her)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1771054170": {
+   "kind": "text",
+   "parent": 1036606997,
+   "children": [
+    769988531
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Go on, check the lock. Make sure it's properly engaged. I don't want Josef to ruin the fun...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1601536082": {
+   "kind": "text",
+   "parent": 1036606997,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Tell me, my darlings... what do you want your {M} to do?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "769988531": {
+   "kind": "text",
+   "parent": 1771054170,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "It's secure, {M}, No one's getting in here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1796839555": {
+   "kind": "text",
+   "parent": 1036606997,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Do you want me to take these big, fat cocks into my mouth?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaBirthdayBath (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaBirthdayBath (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaBirthdayBath (5)"
+      }
+     }
+    }
+   ]
+  },
+  "-184849626": {
+   "kind": "text",
+   "parent": 1036606997,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Fuck... Yes, please, {M}. My dick's so hard it almost hurts...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1386420668": {
+   "kind": "text",
+   "parent": 1036606997,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh no, I... Mwuaah... I ... I will make all the pain go away... Mwuaah.... *Sluuurp* ....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaBirthdayBath (10) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaBirthdayBath (10)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaBirthdayBath (10)"
+      }
+     }
+    }
+   ]
+  },
+  "742178987": {
+   "kind": "choice",
+   "parent": 1036606997,
+   "children": [
+    368390775,
+    -1991913524
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Two big, young cocks... Just for me... Mwuaah...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "368390775": {
+   "kind": "text",
+   "parent": 742178987,
+   "children": [
+    655544158,
+    207738813,
+    -1313724796,
+    -2108090128
+   ],
+   "actor": null,
+   "text": "T-That's it, {M}... Keep sucking us...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1991913524": {
+   "kind": "text",
+   "parent": 742178987,
+   "children": [
+    -364972895,
+    152497957,
+    -153890402,
+    -1580279788,
+    -554110762
+   ],
+   "actor": null,
+   "text": "Let's claim {M}'s mouth together, bro.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "99110795": {
+   "kind": "text",
+   "parent": 1036606997,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mwuaah! Ghhg! Ghhhhg!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-364972895": {
+   "kind": "text",
+   "parent": -1991913524,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "NGAAH! ~",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaBirthdayBath (8) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaBirthdayBath (8)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaBirthdayBath (8)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaBirthdayBath (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaBirthdayBath (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaBirthdayBath (1)"
+      }
+     }
+    }
+   ]
+  },
+  "152497957": {
+   "kind": "text",
+   "parent": -1991913524,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "F-Fuck, we are face fucking our hot {M}... Hngaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-153890402": {
+   "kind": "text",
+   "parent": -1991913524,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mwuaah! MHMMMM! MHMMM!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "655544158": {
+   "kind": "text",
+   "parent": 368390775,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mwuaah... Mmmm... Such perfect, big cocks... Mwuaaah! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaBirthdayBath (9) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaBirthdayBath (9)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaBirthdayBath (9)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaBirthdayBath (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaBirthdayBath (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaBirthdayBath (1)"
+      }
+     }
+    }
+   ]
+  },
+  "207738813": {
+   "kind": "text",
+   "parent": 368390775,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Fuck, that's it, {M}... Keep swirling that tongue around our cocks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1313724796": {
+   "kind": "text",
+   "parent": 368390775,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mwuaaah! Mmm, does that feel good, my darlings? Would you like me to take you deeper?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2108090128": {
+   "kind": "text",
+   "parent": 368390775,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mwuaahmmm...  Such hard, smooth cocks... Mmmhaaah.... *Sluuuurp* .... Mwuaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1652107825": {
+   "kind": "choice",
+   "parent": 1036606997,
+   "children": [
+    1008993958,
+    -1159212467,
+    1356928669
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I'm... Fuck, I'm coming. I can't...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "740854587": {
+   "kind": "text",
+   "parent": 1036606997,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "MHHMM!!! *Gulp* .... *Gulp*... *Gulp.... Mwuaah.... Ha~ ... Ha~ ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaBirthdayBath (11) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaBirthdayBath (11)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaBirthdayBath (11)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaBirthdayBath (5) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaBirthdayBath (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaBirthdayBath (5)"
+      }
+     }
+    }
+   ]
+  },
+  "333383653": {
+   "kind": "text",
+   "parent": 1036606997,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh... oh my boys... that was... too much.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaBirthdayBath (10) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaBirthdayBath (10)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaBirthdayBath (10)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaBirthdayBath (12) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaBirthdayBath (12)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaBirthdayBath (12)"
+      }
+     }
+    }
+   ]
+  },
+  "752073450": {
+   "kind": "text",
+   "parent": 1036606997,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Are you okay, {M}? We didn't mean to overwhelm you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-818150482": {
+   "kind": "text",
+   "parent": 1036606997,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm, that sounds lovely, my darlings",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1580279788": {
+   "kind": "text",
+   "parent": -1991913524,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mwuaah! D-Don't stop... Use my mouth, boys.... Use my...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-554110762": {
+   "kind": "text",
+   "parent": -1991913524,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Hngahh.... T-Take our cocks... O-Open wide, {M}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1008993958": {
+   "kind": "text",
+   "parent": -1652107825,
+   "actor": null,
+   "text": "Fuck, {M}, you're gonna make us cum.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1159212467": {
+   "kind": "text",
+   "parent": -1652107825,
+   "actor": null,
+   "text": "T-Time to feed our slut {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1356928669": {
+   "kind": "text",
+   "parent": -1652107825,
+   "actor": null,
+   "text": "(Blow your load)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1150830919": {
+   "kind": "text",
+   "parent": 1036606997,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "No, I'm fine. Just... not used to so much at once. And I think we made quite a mess.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "979138382": {
+   "kind": "text",
+   "parent": 1036606997,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "And thank you, both of you for this very... creamy birthday present.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "221341067": {
+   "kind": "choice",
+   "parent": 1036606997,
+   "children": [
+    -331435267,
+    -806566961,
+    -277672352
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Don't worry, {M}. We'll help clean you up.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-331435267": {
+   "kind": "text",
+   "parent": 221341067,
+   "actor": null,
+   "text": "Yeah, we can take turns washing you in the shower.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-806566961": {
+   "kind": "text",
+   "parent": 221341067,
+   "actor": null,
+   "text": "You think we all could fit into the bathtub?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-277672352": {
+   "kind": "text",
+   "parent": 221341067,
+   "actor": null,
+   "text": "I'll go grab some towels.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1531658950": {
+   "kind": "text",
+   "parent": -1550815991,
+   "children": [
+    -1067327202
+   ],
+   "actor": null,
+   "text": "Hey, {M}... Thought you deserved some more fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-290216490": {
+   "kind": "text",
+   "parent": -1550815991,
+   "children": [
+    507621485
+   ],
+   "actor": null,
+   "text": "Ready for a more... private birthday party?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1063422259": {
+   "kind": "text",
+   "parent": -1550815991,
+   "actor": null,
+   "text": "(Pull out your big cock)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "507621485": {
+   "kind": "text",
+   "parent": -290216490,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, I'm more than ready...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1067327202": {
+   "kind": "text",
+   "parent": -1531658950,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Aren't you two the sweetest?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Bath",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AnnaBathPresent and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Holidays[holiday-annabd] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "holiday-annabd",
+        "list": "Holidays",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Holidays[Holiday-VarQuest-One] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Holiday-VarQuest-One",
+        "list": "Holidays",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "branches": [
+    "annabathpresent"
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[Showercooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Showercooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Holidays[Holiday-VarQuest-One] = 3",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Holiday-VarQuest-One",
+        "list": "Holidays",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 3
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaInBathtubSprite to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaInBathtubSprite",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/4_Bath/AnnaInBathtubSprite"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

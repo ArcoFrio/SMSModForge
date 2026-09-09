@@ -1,0 +1,701 @@
+{
+ "id": "8_Vacation_Stories/Japan_OldStreet/Default",
+ "name": "Default",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "V_Daiju"
+ ],
+ "roots": [
+  -901002312,
+  742788754,
+  -404390940
+ ],
+ "nodes": {
+  "-901002312": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1250307650
+   ],
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Whoa... This place looks like something straight out of an anime. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[firsttime-japanshrine] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "firsttime-japanshrine",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "742788754": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "It’s still as quiet as ever here. Feels like we’re the only ones who know about this spot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[firsttime-japanshrine] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "firsttime-japanshrine",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1250307650": {
+   "kind": "text",
+   "parent": -901002312,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "The temple should be somewhere around here. I hope it's still open around this time...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-404390940": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    646314833,
+    -1135732918,
+    296595576,
+    1580047288,
+    -1552913797,
+    -1955006029,
+    1613503922,
+    690434502,
+    -1901714749
+   ],
+   "actor": "V_Daiju",
+   "expressionName": "my-expression",
+   "text": "You’re not locals, are you? Tourists?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[jpn-shrine-pro] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "jpn-shrine-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[firsttime-japanshrine] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "firsttime-japanshrine",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_S_Daiju to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_S_Daiju",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Daiju"
+      }
+     }
+    }
+   ]
+  },
+  "646314833": {
+   "kind": "text",
+   "parent": -404390940,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Uh, yeah... why?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1135732918": {
+   "kind": "text",
+   "parent": -404390940,
+   "actor": "V_Daiju",
+   "expressionName": "my-expression",
+   "text": "Then you need to be careful. That woman—Chihiro. She’s not what she seems.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "296595576": {
+   "kind": "text",
+   "parent": -404390940,
+   "actor": "Adrian",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "What do you mean?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1580047288": {
+   "kind": "choice",
+   "parent": -404390940,
+   "children": [
+    1623118672,
+    2113976042,
+    -1068507059
+   ],
+   "actor": "V_Daiju",
+   "expressionName": "my-expression",
+   "text": "Just... don’t get too close to her. And if she asks you to do anything, anything, don’t.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1623118672": {
+   "kind": "text",
+   "parent": 1580047288,
+   "children": [
+    1201963736,
+    451848983
+   ],
+   "actor": null,
+   "text": "Stop being cryptic. Just tell us what’s going on.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2113976042": {
+   "kind": "text",
+   "parent": 1580047288,
+   "children": [
+    535195561,
+    -944839064
+   ],
+   "actor": null,
+   "text": "She seemed normal to me. Why should I care?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "535195561": {
+   "kind": "text",
+   "parent": 2113976042,
+   "actor": "V_Daiju",
+   "expressionName": "my-expression",
+   "text": "Then don’t. But you’ll regret it when you see the real her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Daiju/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1201963736": {
+   "kind": "text",
+   "parent": 1623118672,
+   "actor": "V_Daiju",
+   "expressionName": "my-expression",
+   "text": "If you’re this impatient, you don’t deserve to know.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Daiju/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1068507059": {
+   "kind": "text",
+   "parent": 1580047288,
+   "children": [
+    759311504
+   ],
+   "actor": null,
+   "text": "Why are you so worked up about her? Did something happen?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "759311504": {
+   "kind": "text",
+   "parent": -1068507059,
+   "actor": "V_Daiju",
+   "expressionName": "my-expression",
+   "text": "Let’s just say I’ve seen what she’s capable of. And it’s not what you’d expect.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1552913797": {
+   "kind": "choice",
+   "parent": -404390940,
+   "children": [
+    1151177475,
+    1047470715,
+    -2067234690,
+    -1027350245
+   ],
+   "actor": "V_Daiju",
+   "expressionName": "my-expression",
+   "text": "If you’re smart, you’ll stay away from Chihiro.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1151177475": {
+   "kind": "text",
+   "parent": -1552913797,
+   "children": [
+    1653129324,
+    -1115056569
+   ],
+   "actor": null,
+   "text": "You’re making this sound ridiculous.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1653129324": {
+   "kind": "text",
+   "parent": 1151177475,
+   "actor": "V_Daiju",
+   "expressionName": "my-expression",
+   "text": "Ignore me. But when she’s turned you into another one of her toys, don’t come crying to me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Daiju/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1047470715": {
+   "kind": "text",
+   "parent": -1552913797,
+   "children": [
+    -667802900
+   ],
+   "actor": null,
+   "text": "(Smart) You seem upset. Did she do something to you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Smart] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Smart",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-667802900": {
+   "kind": "text",
+   "parent": 1047470715,
+   "actor": "V_Daiju",
+   "expressionName": "my-expression",
+   "text": "More than you can imagine. But it’s not just me—she’s done it to half the men here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2067234690": {
+   "kind": "text",
+   "parent": -1552913797,
+   "children": [
+    804643608,
+    -123810850
+   ],
+   "actor": null,
+   "text": "Sounds like a personal problem.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "804643608": {
+   "kind": "text",
+   "parent": -2067234690,
+   "actor": "V_Daiju",
+   "expressionName": "my-expression",
+   "text": "You think I’m the only one? She’s left a trail of broken lives behind her. But you will see soon enough...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Daiju/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-944839064": {
+   "kind": "text",
+   "parent": 2113976042,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I'm sure he's just trying to scare tourists...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "451848983": {
+   "kind": "text",
+   "parent": 1623118672,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "What a weirdo...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1115056569": {
+   "kind": "text",
+   "parent": 1151177475,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Toys? What is he talking about...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-123810850": {
+   "kind": "text",
+   "parent": -2067234690,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "What the fuck is he talking about?",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1955006029": {
+   "kind": "text",
+   "parent": -404390940,
+   "actor": "V_Daiju",
+   "expressionName": "my-expression",
+   "text": "I... I can’t tell you what’s really going on. It’s too dangerous for me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1613503922": {
+   "kind": "text",
+   "parent": -404390940,
+   "actor": "V_Daiju",
+   "expressionName": "my-expression",
+   "text": "But if you want answers, find Hiroji. He spends his time near Shizukawa Plaza. If you can get him to talk, you’ll learn the truth.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "690434502": {
+   "kind": "text",
+   "parent": -404390940,
+   "actor": "V_Daiju",
+   "expressionName": "my-expression",
+   "text": "I’m sorry. That’s all I can say. Any more, and I’d be putting myself at risk.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Vacation_Save[jpn-shrine-pro] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "jpn-shrine-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Daiju/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1901714749": {
+   "kind": "text",
+   "parent": -404390940,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "What the hell...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1027350245": {
+   "kind": "text",
+   "parent": -1552913797,
+   "children": [
+    154481718,
+    1666154811
+   ],
+   "actor": null,
+   "text": "Fine, we'll stay away.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "154481718": {
+   "kind": "text",
+   "parent": -1027350245,
+   "actor": "V_Daiju",
+   "expressionName": "my-expression",
+   "text": "Good, good... Thank you for listening.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1666154811": {
+   "kind": "text",
+   "parent": -1027350245,
+   "actor": "Adrian",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Come on, {PC}. You really just gonna believe this stranger?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Japan_OldStreet",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Default and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

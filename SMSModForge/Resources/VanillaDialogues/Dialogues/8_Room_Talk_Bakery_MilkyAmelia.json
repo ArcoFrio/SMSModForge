@@ -1,0 +1,849 @@
+{
+ "id": "8_Room_Talk/Bakery/MilkyAmelia",
+ "name": "MilkyAmelia",
+ "index": 8,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Amelia",
+  "Josef"
+ ],
+ "roots": [
+  -1013083853,
+  1661293417,
+  -520610805,
+  -1074691128,
+  -693820139,
+  -1771191110,
+  1994819012
+ ],
+ "nodes": {
+  "-1013083853": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Look at this! I’ve never had a day like today. We sold out twice already, and I had to start brewing more on the spot. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Minigame-incoming] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Minigame-incoming",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[pcdrankameliamilk] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "pcdrankameliamilk",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1661293417": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "And guess what’s the number one order? Regular coffee… with my milk.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-520610805": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Heehee, I swear, people can’t get enough of it. They say it’s creamier, sweeter… irresistible. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-693820139": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1461700188,
+    -1957420499,
+    77917885
+   ],
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "But I won't leave you without a freebie! So, what’ll it be for you today?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1461700188": {
+   "kind": "text",
+   "parent": -693820139,
+   "children": [
+    1764586540
+   ],
+   "actor": null,
+   "text": "Just a regular coffee, Amelia.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1957420499": {
+   "kind": "text",
+   "parent": -693820139,
+   "children": [
+    -756742840
+   ],
+   "actor": null,
+   "text": "A cup of you. Nice and fresh.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "77917885": {
+   "kind": "text",
+   "parent": -693820139,
+   "children": [
+    -1952509323,
+    -368539595,
+    -1458170765,
+    871875255,
+    44362167
+   ],
+   "actor": null,
+   "text": "No cup. I want it straight from you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1952509323": {
+   "kind": "text",
+   "parent": 77917885,
+   "actor": "Amelia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Always so greedy… I love it. Come closer.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[pcdrankameliamilk] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "pcdrankameliamilk",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[pc-ameliamilkdrink] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "pc-ameliamilkdrink",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-756742840": {
+   "kind": "text",
+   "parent": -1957420499,
+   "actor": "Amelia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Mmm, you like it best that way, don’t you? I’ll make yours extra creamy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1764586540": {
+   "kind": "text",
+   "parent": -1461700188,
+   "actor": "Amelia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Coming right up. Nobody gets a better pour than you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-368539595": {
+   "kind": "text",
+   "parent": 77917885,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Mmh… god… you’re really doing it here… in front of everyone…",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AmeliaMilkyDrink (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AmeliaMilkyDrink (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AmeliaMilkyDrink (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1458170765": {
+   "kind": "text",
+   "parent": 77917885,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Ahh... you don’t care who sees… it feels so good… keep going…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "871875255": {
+   "kind": "text",
+   "parent": 77917885,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Mmm… y-you’re going to make me lose it right here at the counter… ahh…!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "44362167": {
+   "kind": "text",
+   "parent": 77917885,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Alright... That's it, fuck. Let's stop for now...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1994819012": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Mmm… come back for another taste soon. You always leave me wanting more.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1074691128": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You know what, you should take the day off... You've earned it. The whole human milk idea of yours is genius!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1771191110": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1337135472,
+    1414081311,
+    -1664312192
+   ],
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "…Looked like you two were having fun. Um. Please, take your time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "chance",
+     "type": "ConditionChance",
+     "title": "If 0.6 chance to pass",
+     "fields": {
+      "m_Threshold": {
+       "kind": "value",
+       "value": 0.6
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Eve_NoSave1[pcdrankameliamilk] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "pcdrankameliamilk",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    }
+   ]
+  },
+  "-1337135472": {
+   "kind": "text",
+   "parent": -1771191110,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Oh! Um... Josef, right? {PC}'s {D}? We were just, uh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1414081311": {
+   "kind": "text",
+   "parent": -1771191110,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I... Uh... I shouldn’t even ask, but… Amelia, can I have some too?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1664312192": {
+   "kind": "choice",
+   "parent": -1771191110,
+   "children": [
+    -869672701,
+    -474635039
+   ],
+   "actor": "Amelia",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "W-What!? N-No! You're {PC}'s... No~ That would be wrong! So wrong!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-869672701": {
+   "kind": "text",
+   "parent": -1664312192,
+   "children": [
+    -952780793,
+    2133150519,
+    221838479,
+    1167910525,
+    704175719,
+    348091781,
+    -436599451,
+    1809835008,
+    -1949881502,
+    -1044845023
+   ],
+   "actor": null,
+   "text": "Sure. There's nothing sexual about drinking milk, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-474635039": {
+   "kind": "text",
+   "parent": -1664312192,
+   "children": [
+    1435957338,
+    -1502638475
+   ],
+   "actor": null,
+   "text": "Not happening. This is between me and Amelia.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1435957338": {
+   "kind": "text",
+   "parent": -474635039,
+   "actor": "Josef",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "No, no. You are right... I'm sorry for making you feel uncomfortable, Amelia. I, uh, got carried away watching you two... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-952780793": {
+   "kind": "text",
+   "parent": -869672701,
+   "actor": "Amelia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Uhm... Fuck~ Alright, I'll allow it... But hurry up. There's customers waiting...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[pcjosef-drankameliamilk] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "pcjosef-drankameliamilk",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1502638475": {
+   "kind": "text",
+   "parent": -474635039,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Well, uhm... I'll be going then.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "221838479": {
+   "kind": "text",
+   "parent": -869672701,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Y-you two… honestly…",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AmeliaMilkyDrink (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AmeliaMilkyDrink (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AmeliaMilkyDrink (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1167910525": {
+   "kind": "text",
+   "parent": -869672701,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Aahh… oh god… both of you… it’s too much…! My boyfriend and his {D} are... Oh god!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "704175719": {
+   "kind": "text",
+   "parent": -869672701,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Nnnhh… s-so greedy… taking me at the same time… ahh… I can’t… I can’t hold back my voice…!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-436599451": {
+   "kind": "text",
+   "parent": -869672701,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Mmmhh… it feels so wrong, but I love it… don’t stop, please… drain me dry…!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1809835008": {
+   "kind": "text",
+   "parent": -869672701,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Okay~ Okay~ Break... I... I need a break.. This is too much... I need to use the bathroom. Like right now...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1949881502": {
+   "kind": "text",
+   "parent": -869672701,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Hooh, that was quite something... Your milk tastes fantastic, Amelia.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1044845023": {
+   "kind": "text",
+   "parent": -869672701,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Oh my god...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "348091781": {
+   "kind": "text",
+   "parent": -869672701,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Damn… It’s sweet, warm… addictive. No wonder you like this girl so much...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2133150519": {
+   "kind": "text",
+   "parent": -869672701,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "R-Really? Wow, thank you. It's been years since I drank from... Well, you know.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Bakery",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play MilkyAmelia and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[amelia-blowjob] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-blowjob",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[bafa-ameliaaccepted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-ameliaaccepted",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "chance",
+     "type": "ConditionChance",
+     "title": "If 0.35 chance to pass",
+     "fields": {
+      "m_Threshold": {
+       "kind": "value",
+       "value": 0.35
+      }
+     }
+    }
+   ],
+   "branches": [
+    "milk"
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Amelia_BaristaMilkyBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Amelia_BaristaMilkyBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Amelia_BaristaMilkyBust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "checkConditions",
+     "type": "InstructionLogicCheckConditions",
+     "title": "Check Not is Active 17_ending",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "gameObjectActive",
+         "type": "ConditionGameObjectActive",
+         "title": "Not is Active 17_ending",
+         "fields": {
+          "m_GameObject": {
+           "kind": "object",
+           "name": "17_ending",
+           "of": "GetGameObjectInstance",
+           "path": "17_ending"
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run VisitConditions and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "VisitConditions",
+       "of": "GetGameObjectConditions",
+       "path": "8_Room_Talk/Bakery/VisitConditions"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.5 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.5
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

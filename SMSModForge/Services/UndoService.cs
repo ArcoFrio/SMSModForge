@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace SMSModForge.Services;
@@ -36,6 +36,11 @@ public sealed class UndoService
     public event Action? StateChanged;
 
     public bool CanUndo => _undo.Count > 0;
+
+    /// <summary>How many steps back are available. For tests that need to see
+    /// how many steps an interaction actually produced - one edit that lands as
+    /// four is invisible from CanUndo alone.</summary>
+    public int Depth => _undo.Count;
     public bool CanRedo => _redo.Count > 0;
 
     /// <summary>When true, <see cref="Checkpoint"/> is a no-op — set during a

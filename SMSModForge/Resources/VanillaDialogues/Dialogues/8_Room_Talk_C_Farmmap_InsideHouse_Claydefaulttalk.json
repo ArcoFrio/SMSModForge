@@ -1,0 +1,768 @@
+{
+ "id": "8_Room_Talk/C_Farmmap_InsideHouse/Claydefaulttalk",
+ "name": "Claydefaulttalk",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Clay"
+ ],
+ "roots": [
+  -220693664,
+  464744457,
+  -397466810
+ ],
+ "nodes": {
+  "-220693664": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    1581845216,
+    -560583500,
+    -1948874276
+   ],
+   "actor": "Clay",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "464744457": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -976363870,
+    660694740,
+    538344663,
+    1977485047,
+    1628417669,
+    -1213350515
+   ],
+   "actor": "Clay",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "What do you want?",
+   "tag": "claytree",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-976363870": {
+   "kind": "text",
+   "parent": 464744457,
+   "children": [
+    1672818018,
+    1875200176,
+    -1231415301
+   ],
+   "actor": null,
+   "text": "How’s the farm doing?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1213350515": {
+   "kind": "text",
+   "parent": 464744457,
+   "actor": null,
+   "text": "I'll head out, see you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1672818018": {
+   "kind": "text",
+   "parent": -976363870,
+   "actor": "Clay",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "The farm’s a graveyard. Dirt, broken fences, nothing else.",
+   "jump": {
+    "mode": "Jump",
+    "to": "kirbytree"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[bafa-totalmilksold] ≤ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-totalmilksold",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-397466810": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    -1706084251,
+    1746938625,
+    -997935392
+   ],
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "1581845216": {
+   "kind": "text",
+   "parent": -220693664,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "…Oh. It’s you. Thought I heard footsteps.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-560583500": {
+   "kind": "text",
+   "parent": -220693664,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "Back again? Guess you didn’t get lost on the way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1948874276": {
+   "kind": "text",
+   "parent": -220693664,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "Don’t expect me to smile. This is the best I can do.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1706084251": {
+   "kind": "text",
+   "parent": -397466810,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "Later. Or never. Either works.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1746938625": {
+   "kind": "text",
+   "parent": -397466810,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "Try not to die out there. One funeral’s enough paperwork.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-997935392": {
+   "kind": "text",
+   "parent": -397466810,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "Go bother Kirby, she lives for company.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "660694740": {
+   "kind": "text",
+   "parent": 464744457,
+   "children": [
+    -1094871650
+   ],
+   "actor": null,
+   "text": "What do you think about the milk ban?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "538344663": {
+   "kind": "text",
+   "parent": 464744457,
+   "children": [
+    966168729,
+    1013165443
+   ],
+   "actor": null,
+   "text": "Tell me something about yourself.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1094871650": {
+   "kind": "text",
+   "parent": 660694740,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "Banning animal milk… ridiculous. But hey, people will swallow anything if the right suit tells them to.",
+   "jump": {
+    "mode": "Jump",
+    "to": "claytree"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "966168729": {
+   "kind": "random",
+   "parent": 538344663,
+   "children": [
+    714191161,
+    263767968,
+    -1973321582,
+    -883958584,
+    -130452270
+   ],
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "Seriously?",
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "1013165443": {
+   "kind": "text",
+   "parent": 538344663,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "Happy now?",
+   "jump": {
+    "mode": "Jump",
+    "to": "claytree"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "714191161": {
+   "kind": "text",
+   "parent": 966168729,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "I used to dream about leaving this place. Then I realized dreams are just lies you tell yourself to keep moving.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "263767968": {
+   "kind": "text",
+   "parent": 966168729,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "I can drink a bottle of whiskey in one night. Doesn’t fix anything, but it makes the silence louder.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1973321582": {
+   "kind": "text",
+   "parent": 966168729,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "Kirby says I’m too negative. I say she’s too positive. Guess that makes us balanced.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-883958584": {
+   "kind": "text",
+   "parent": 966168729,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "I tried praying once. Didn’t hear anything back. Figures.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-130452270": {
+   "kind": "text",
+   "parent": 966168729,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "My favorite hobby? Watching fences rot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1875200176": {
+   "kind": "text",
+   "parent": -976363870,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "It’s… not dead anymore. Kirby’s running around, you’re helping. ",
+   "jump": {
+    "mode": "Jump",
+    "to": "kirbytree"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[bafa-totalmilksold] ≤ 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-totalmilksold",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[bafa-totalmilksold] > 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-totalmilksold",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Greater",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1231415301": {
+   "kind": "text",
+   "parent": -976363870,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "Against all odds, the place is alive again. I should be happy… but mostly I’m confused.",
+   "jump": {
+    "mode": "Jump",
+    "to": "kirbytree"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[bafa-totalmilksold] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-totalmilksold",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1977485047": {
+   "kind": "text",
+   "parent": 464744457,
+   "children": [
+    -158948267
+   ],
+   "actor": null,
+   "text": "Kirby mentioned you've got some stuff to sell?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[barn-unlocked] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "barn-unlocked",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-158948267": {
+   "kind": "text",
+   "parent": 1977485047,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "Yeah, sure. Take a look.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[active-store] = 10",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "active-store",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 10
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ShopCore to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ShopCore",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/ShopCore"
+      }
+     }
+    }
+   ]
+  },
+  "1628417669": {
+   "kind": "text",
+   "parent": 464744457,
+   "children": [
+    -104936149
+   ],
+   "actor": null,
+   "text": "What do you think about Mrs. Kimura’s offer?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[milking-mainstory] = 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milking-mainstory",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-104936149": {
+   "kind": "text",
+   "parent": 1628417669,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "One million a year would keep me and Kirby safe for life. No more worrying, no more scraping by. If you can make that happen, I’d take it in a heartbeat.",
+   "jump": {
+    "mode": "Jump",
+    "to": "claytree"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/C_Farmmap_InsideHouse",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Claydefaulttalk and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_ClayDefaultBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_ClayDefaultBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_ClayDefaultBust"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run KirbyClaySliceoflifeTalks and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "KirbyClaySliceoflifeTalks",
+       "of": "GetGameObjectConditions",
+       "path": "8_Room_Talk/C_Farmmap_InsideHouse/KirbyClaySliceoflifeTalks"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.01 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.01
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "checkConditions",
+     "type": "InstructionLogicCheckConditions",
+     "title": "Check Not is Active ShopCore",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "gameObjectActive",
+         "type": "ConditionGameObjectActive",
+         "title": "Not is Active ShopCore",
+         "fields": {
+          "m_GameObject": {
+           "kind": "object",
+           "name": "ShopCore",
+           "of": "GetGameObjectInstance",
+           "path": "9_MainCanvas/ShopCore"
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

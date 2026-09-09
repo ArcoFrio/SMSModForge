@@ -1,0 +1,802 @@
+{
+ "id": "8_Room_Talk/Beach/KateBeach",
+ "name": "KateBeach",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Kate"
+ ],
+ "roots": [
+  1028146230,
+  1576598491,
+  -1847904585,
+  620960158,
+  793313176,
+  1573861158,
+  -1098377728,
+  850356494,
+  1481867795
+ ],
+ "nodes": {
+  "1028146230": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "{PC}! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1576598491": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "You're here... At the beach...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1847904585": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2131330888,
+    -1626820043,
+    -763374293
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Why are you looking at me like that...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2131330888": {
+   "kind": "text",
+   "parent": -1847904585,
+   "children": [
+    1996212577,
+    -1186067974
+   ],
+   "actor": null,
+   "text": "The bikini looks great on you, Kate.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1626820043": {
+   "kind": "text",
+   "parent": -1847904585,
+   "children": [
+    -253193263
+   ],
+   "actor": null,
+   "text": "Awooga! Hummina Hummina Bazooing!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-763374293": {
+   "kind": "text",
+   "parent": -1847904585,
+   "children": [
+    -1125906395
+   ],
+   "actor": null,
+   "text": "Well, we're talking with each other.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1996212577": {
+   "kind": "text",
+   "parent": -2131330888,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "T-Thanks...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-253193263": {
+   "kind": "text",
+   "parent": -1626820043,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Stop that! Oh my god... Hahaha...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1125906395": {
+   "kind": "text",
+   "parent": -763374293,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "That's true... Sorry.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "620960158": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1071685686,
+    1213335561,
+    -755297404
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "... Nice day, huh? What brought you here?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1186067974": {
+   "kind": "text",
+   "parent": -2131330888,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Zuri lent it to me. I don't really wear things like that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Inside-Dialogue-Variable-Short] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Inside-Dialogue-Variable-Short",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-1071685686": {
+   "kind": "text",
+   "parent": 620960158,
+   "children": [
+    -2133329795
+   ],
+   "actor": null,
+   "text": "Just enjoying a walk.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1213335561": {
+   "kind": "text",
+   "parent": 620960158,
+   "children": [
+    -580589358
+   ],
+   "actor": null,
+   "text": "I'm here to swim and relax.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-755297404": {
+   "kind": "text",
+   "parent": 620960158,
+   "children": [
+    32063982
+   ],
+   "actor": null,
+   "text": "Hot girls at the beach, like you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1098377728": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    25699509,
+    892128079,
+    137310979
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "And before you say anything, don't.  I've come to terms with it.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "25699509": {
+   "kind": "text",
+   "parent": -1098377728,
+   "children": [
+    -497734217
+   ],
+   "actor": null,
+   "text": "That's not true. You're cute, hard-working, and lovable.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "892128079": {
+   "kind": "text",
+   "parent": -1098377728,
+   "children": [
+    -589961899
+   ],
+   "actor": null,
+   "text": "Why do you think that?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "137310979": {
+   "kind": "text",
+   "parent": -1098377728,
+   "children": [
+    128896872
+   ],
+   "actor": null,
+   "text": "You're not a loser. You're super hot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "128896872": {
+   "kind": "text",
+   "parent": 137310979,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Super hot? Just to be sure, you're not blind or anything? ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-589961899": {
+   "kind": "text",
+   "parent": 892128079,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "I’m 21, working at a grocery store, and there’s no sign that anything will change.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-497734217": {
+   "kind": "text",
+   "parent": 25699509,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Lovable? ... I'm ... No, no, no, no, no.....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Inside-Dialogue-Variable-Short] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Inside-Dialogue-Variable-Short",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "32063982": {
+   "kind": "text",
+   "parent": -755297404,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Don't say that! Oh god....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-580589358": {
+   "kind": "text",
+   "parent": 1213335561,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "That's cool. Same.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Inside-Dialogue-Variable-Short] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Inside-Dialogue-Variable-Short",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-2133329795": {
+   "kind": "text",
+   "parent": -1071685686,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "That's cool. Same!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Inside-Dialogue-Variable-Short] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Inside-Dialogue-Variable-Short",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "793313176": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Chilling with you here, rocking this expensive bikini from Zuri. I gotta say.....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1573861158": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "One of the few times I don't feel like a complete loser.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1481867795": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    805433500,
+    636014049
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Okay, I'm going to lie down and soak up the sun... Even if I don't really get a tan.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "805433500": {
+   "kind": "choice",
+   "parent": 1481867795,
+   "children": [
+    1374888215,
+    -75495832
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Wanna hang a bit? ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "636014049": {
+   "kind": "text",
+   "parent": 1481867795,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "That was... fun. I'll see you soon.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done_2[kate-beach] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-beach",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_Only_Done_2[kate-romance-max-3] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-romance-max-3",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "type": "InstructionQuestTaskValue",
+     "title": "Earn Kate’s trust and make her feel safe. + 1",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Gabriel Training",
+        "of": "Quest"
+       },
+       "m_TaskId": -619506573
+      },
+      "m_Value": {
+       "m_Operation": "Add",
+       "m_Value": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1374888215": {
+   "kind": "text",
+   "parent": 805433500,
+   "children": [
+    -760038123
+   ],
+   "actor": null,
+   "text": "Sure, sounds fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-75495832": {
+   "kind": "text",
+   "parent": 805433500,
+   "actor": null,
+   "text": "Next time,  maybe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-760038123": {
+   "kind": "text",
+   "parent": 1374888215,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 3 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 3
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "850356494": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "... Enough hard talk tho ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Beach",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play KateBeach and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[kate-free-day-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-free-day-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[kate-beach] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-beach",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ],
+   "branches": [
+    "katebeach"
+   ],
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KateBikini to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KateBikini",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/KateBikini"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/KateBikini/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[kate-free-day-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-free-day-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,966 @@
+{
+ "id": "8_Room_Talk/Gasstation/SofiaThankYou",
+ "name": "SofiaThankYou",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Sofia"
+ ],
+ "roots": [
+  262358743,
+  219879312,
+  491293251,
+  -1890633875,
+  962306628
+ ],
+ "nodes": {
+  "262358743": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Well, if it isn’t my favorite partner in crime—well, in fighting crime.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Check back in with Sofia.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Justice (Sofia)",
+        "of": "Quest"
+       },
+       "m_TaskId": 400938478
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "219879312": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "I’ve been meaning to thank you, {PC}. We did it. Mario’s behind bars, and it’s because you had the guts to step up. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "491293251": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    667556504,
+    -1449753619,
+    1197408040,
+    -149822441
+   ],
+   "actor": "Sofia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Not everyone would’ve done what you did.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Charm to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Charm",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Charm"
+      }
+     }
+    }
+   ]
+  },
+  "667556504": {
+   "kind": "text",
+   "parent": 491293251,
+   "children": [
+    1426283272
+   ],
+   "actor": null,
+   "text": "I couldn’t have done it without you. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1449753619": {
+   "kind": "text",
+   "parent": 491293251,
+   "children": [
+    -1125832194
+   ],
+   "actor": null,
+   "text": "Yeah, I'm pretty great.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1197408040": {
+   "kind": "text",
+   "parent": 491293251,
+   "children": [
+    -877668073
+   ],
+   "actor": null,
+   "text": "So, where's my reward?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1125832194": {
+   "kind": "text",
+   "parent": -1449753619,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "And humble. So very humble...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1426283272": {
+   "kind": "text",
+   "parent": 667556504,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "We made a great team.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-877668073": {
+   "kind": "text",
+   "parent": 1197408040,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Patience... We'll get to that... Sometimes I forget that you're a bit younger than I am...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1890633875": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2071483142,
+    -1748619327,
+    1112248477
+   ],
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "You know, when I first approached you here, I wasn’t sure how things would go. But you proved me wrong.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2071483142": {
+   "kind": "text",
+   "parent": -1890633875,
+   "children": [
+    796476106
+   ],
+   "actor": null,
+   "text": "So, what’s next for you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1748619327": {
+   "kind": "text",
+   "parent": -1890633875,
+   "children": [
+    -389009465
+   ],
+   "actor": null,
+   "text": "It feels strange now that it’s over.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "796476106": {
+   "kind": "text",
+   "parent": -2071483142,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Honestly? I’m not sure yet. There’s always more work to be done, more people like Mario to take down. But for now, I think I’ll just enjoy the victory for a bit.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-389009465": {
+   "kind": "text",
+   "parent": -1748619327,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Yeah, I get that. It’s like you’re supposed to feel relieved, but there’s always that question of ‘what now?’",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "962306628": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    159509399,
+    -1770155335
+   ],
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Now... On your knees... You've been a very bad boy~ And bad boys need to be punished.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "159509399": {
+   "kind": "text",
+   "parent": 962306628,
+   "children": [
+    -484170019,
+    -583850781,
+    1915342352,
+    -1011787017,
+    2089562031,
+    -717777555,
+    -2084170878,
+    332598538,
+    -226963812,
+    -1604805301,
+    1202816639
+   ],
+   "actor": null,
+   "text": "Yes Ma'am. (Get down)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1770155335": {
+   "kind": "text",
+   "parent": 962306628,
+   "children": [
+    -1340025281,
+    1012995510
+   ],
+   "actor": null,
+   "text": "What? No! We had a deal!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1340025281": {
+   "kind": "text",
+   "parent": -1770155335,
+   "actor": "Sofia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "It's almost cute how clueless you can be... It was just a... joke...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1012995510": {
+   "kind": "text",
+   "parent": -1770155335,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Take care of yourself, alright? And if you ever need anything, you know where to find me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-484170019": {
+   "kind": "text",
+   "parent": 159509399,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "I'm going to do a quick body scan. Just relax.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-583850781": {
+   "kind": "text",
+   "parent": 159509399,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Oh my... I need to know if you have a permit for this beast...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Sofia (7)"
+      }
+     }
+    }
+   ]
+  },
+  "1915342352": {
+   "kind": "text",
+   "parent": 159509399,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Hmm.... Well, actually let me try to defuse it....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1011787017": {
+   "kind": "text",
+   "parent": 159509399,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Mwwuaaah! Mmmmaaahhh!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia (8) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia (8)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Sofia (8)"
+      }
+     }
+    }
+   ]
+  },
+  "2089562031": {
+   "kind": "choice",
+   "parent": 159509399,
+   "children": [
+    1130710704,
+    -196507630,
+    -655995299
+   ],
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Mhaaa... Smoo biggg... Mwwwuaahh.... Mmmm....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-717777555": {
+   "kind": "text",
+   "parent": 159509399,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Mwaaa.... Blow it into my mouth, now! This is an order, do you understand me? Mpffhh!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2084170878": {
+   "kind": "text",
+   "parent": 159509399,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Mwwaaahhh! MPFH! MPFH! MPFH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia (9) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia (9)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Sofia (9)"
+      }
+     }
+    }
+   ]
+  },
+  "332598538": {
+   "kind": "text",
+   "parent": 159509399,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "I successfully deescalated the situation it seems... Holy fuck, {PC}... Your loads are massive...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-226963812": {
+   "kind": "choice",
+   "parent": 159509399,
+   "children": [
+    -1284409846,
+    1569195877
+   ],
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Listen… I was thinking, how about you join me at my place someday? Just to unwind.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1604805301": {
+   "kind": "text",
+   "parent": 159509399,
+   "actor": "Sofia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I’ve got a nice bottle of wine that’s been sitting around for far too long...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[sofiahome-unlocked] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofiahome-unlocked",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1284409846": {
+   "kind": "text",
+   "parent": -226963812,
+   "actor": null,
+   "text": "I would love that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1569195877": {
+   "kind": "text",
+   "parent": -226963812,
+   "actor": null,
+   "text": "Maybe. We'll see.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1130710704": {
+   "kind": "text",
+   "parent": 2089562031,
+   "actor": null,
+   "text": "Your lips are so soft, Sofia.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-196507630": {
+   "kind": "text",
+   "parent": 2089562031,
+   "actor": null,
+   "text": "F-Fuck... Suck my dick, Sofia Yes....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-655995299": {
+   "kind": "text",
+   "parent": 2089562031,
+   "actor": null,
+   "text": "(Enjoy her touch)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1202816639": {
+   "kind": "text",
+   "parent": 159509399,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Take care of yourself, alright? And if you ever need anything, you know where to find me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1112248477": {
+   "kind": "text",
+   "parent": -1890633875,
+   "children": [
+    1352481742,
+    -930289363
+   ],
+   "actor": null,
+   "text": "(Smart) Makes sense. I'm young and had no experience.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Smart] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Smart",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1352481742": {
+   "kind": "text",
+   "parent": 1112248477,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Yeah… that’s what got me burned before. Partners who wanted the spotlight, not the truth. They’d talk big, then freeze when things got ugly.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-930289363": {
+   "kind": "text",
+   "parent": 1112248477,
+   "actor": "Sofia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "But you? You stayed solid. Didn’t flinch, didn’t brag... just did what needed to be done.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-149822441": {
+   "kind": "text",
+   "parent": 491293251,
+   "children": [
+    -1057886582
+   ],
+   "actor": null,
+   "text": "(Charming) I had a pretty good reason to help you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Charming] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Charming",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1057886582": {
+   "kind": "text",
+   "parent": -149822441,
+   "actor": "Sofia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh yeah? I wonder what that reason could be... We both know, don't we?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Gasstation",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play SofiaThankYou and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Mario-In-Prison] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-In-Prison",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[sofia-thank-you-talk-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-thank-you-talk-done",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia_Police to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia_Police",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Sofia_Police"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[sofia-thank-you-talk-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-thank-you-talk-done",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'ForceEnableUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "ForceEnableUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

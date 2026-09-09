@@ -1,0 +1,638 @@
+{
+ "id": "8_Room_Talk/Yacht/Yachtcharlotte2",
+ "name": "Yachtcharlotte2",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Charlotte"
+ ],
+ "roots": [
+  -1795500137,
+  -1537403806,
+  -762960016,
+  799378047,
+  -458409048,
+  -1165625062,
+  -1458930573,
+  253582358,
+  1996057916,
+  1315318215,
+  1057840753,
+  1270906891,
+  -415133067,
+  2116761717,
+  -133956277
+ ],
+ "nodes": {
+  "-1795500137": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -229551481,
+    1238636244
+   ],
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Perfect timing, {PC}. Not a single cloud in sight. Come, let’s enjoy it together.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-229551481": {
+   "kind": "text",
+   "parent": -1795500137,
+   "actor": null,
+   "text": "Hey Charlotte. Glad to be here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1238636244": {
+   "kind": "text",
+   "parent": -1795500137,
+   "actor": null,
+   "text": "The view is breathtaking.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1537403806": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "You know, {PC}, you’ve got this way of making everything feel so... exciting.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-762960016": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    740968753,
+    -750724697,
+    95180909,
+    -1830888498,
+    -1851689872
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "There's this amazing chemistry between us, which is really funny because we don't know much about each other... yet!",
+   "tag": "rootccc",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "740968753": {
+   "kind": "text",
+   "parent": -762960016,
+   "children": [
+    1731426827
+   ],
+   "actor": null,
+   "text": "Well, what do you do for a living?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-750724697": {
+   "kind": "text",
+   "parent": -762960016,
+   "children": [
+    -727775801
+   ],
+   "actor": null,
+   "text": "What things do you like?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "95180909": {
+   "kind": "text",
+   "parent": -762960016,
+   "children": [
+    924074056
+   ],
+   "actor": null,
+   "text": "What do you hate?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1731426827": {
+   "kind": "text",
+   "parent": 740968753,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "I'm a yacht saleswoman... Did Anna never tell you? Well, now you know!",
+   "jump": {
+    "mode": "Jump",
+    "to": "rootccc"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-727775801": {
+   "kind": "text",
+   "parent": -750724697,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I adore beautiful dresses, I love dancing, I like being picky... I know my value and until now I never met a man who could match it...",
+   "jump": {
+    "mode": "Jump",
+    "to": "rootccc"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "924074056": {
+   "kind": "text",
+   "parent": 95180909,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "I feel like \"hate\" is a bit of a strong word, but have you ever met those people who take everything so awfully seriously?  Oh, and spiders!",
+   "jump": {
+    "mode": "Jump",
+    "to": "rootccc"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "799378047": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Well.. Now that we know each other a bit better...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-458409048": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "What do you think about anal?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1165625062": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1378018474,
+    -731696228,
+    374768798
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Just relax and let me take care of you... I'll... I'll handle it...",
+   "tag": "howaboutanal",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1378018474": {
+   "kind": "text",
+   "parent": -1165625062,
+   "actor": null,
+   "text": "Let's try it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-731696228": {
+   "kind": "text",
+   "parent": -1165625062,
+   "children": [
+    1799921749
+   ],
+   "actor": null,
+   "text": "I would prefer your pussy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "374768798": {
+   "kind": "text",
+   "parent": -1165625062,
+   "children": [
+    2140228069
+   ],
+   "actor": null,
+   "text": "I'm sorry, that's not really my thing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1799921749": {
+   "kind": "text",
+   "parent": -731696228,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Sorry, sweetheart, I forgot to bring the after pill. We'll have to take care of your... huge problem in a different way...",
+   "jump": {
+    "mode": "Jump",
+    "to": "howaboutanal"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1458930573": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Beautiful! Let me fetch the lube...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2116761717": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "I have to go for little girls... Take a quick shower... Hihi... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-133956277": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "How about some cocktails afterwards? Make yourself at home, sweetie.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Charm to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Charm",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Charm"
+      }
+     }
+    }
+   ]
+  },
+  "-1830888498": {
+   "kind": "text",
+   "parent": -762960016,
+   "children": [
+    -1958044248
+   ],
+   "actor": null,
+   "text": "How old are you exactly?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1851689872": {
+   "kind": "text",
+   "parent": -762960016,
+   "actor": null,
+   "text": "I can feel the chemistry too. (Continue)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1958044248": {
+   "kind": "text",
+   "parent": -1830888498,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh, that's not the question you should be asking, ha ha! But if you really want to know, I'm 37.",
+   "jump": {
+    "mode": "Jump",
+    "to": "rootccc"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2140228069": {
+   "kind": "text",
+   "parent": 374768798,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Oh, um... I see... Well, then let's just enjoy the rest of the ride, yes? I'll fetch us some coctails...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_2[Charlotte-Yacht-invitation] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Charlotte-Yacht-invitation",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "253582358": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "T-Take it slow... I never had a dick this big fuck my ass before...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte1 (11) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte1 (11)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Charlotte1 (11)"
+      }
+     }
+    }
+   ]
+  },
+  "1996057916": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Mmmhmm... That's it... Nice and slow...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1315318215": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Y-You're so big... I can feel it on... You are... You're making me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1057840753": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "{PC}... I'm... I'm... Mhmmm... Ohh... OHH!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte1 (12) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte1 (12)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Charlotte1 (12)"
+      }
+     }
+    }
+   ]
+  },
+  "1270906891": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Oh, wow... My, my... Such a huge load... You must have been really pent up, huh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-415133067": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "W-Well, from now on whenever you need relief... I'm more than glad to service you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Yacht",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Yachtcharlotte2 and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_2[yacht-talks] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "yacht-talks",
+        "list": "Events_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte_BNikini to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte_BNikini",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Charlotte_BNikini"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_2[yacht-talks] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "yacht-talks",
+        "list": "Events_2",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

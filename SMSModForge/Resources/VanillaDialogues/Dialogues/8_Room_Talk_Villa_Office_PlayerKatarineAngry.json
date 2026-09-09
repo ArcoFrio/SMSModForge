@@ -1,0 +1,1709 @@
+{
+ "id": "8_Room_Talk/Villa_Office/PlayerKatarineAngry",
+ "name": "PlayerKatarineAngry",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Katarina",
+  "Mario"
+ ],
+ "roots": [
+  -2022117331,
+  274632302,
+  -634949939,
+  -1843362399,
+  1393397424,
+  -920158070,
+  -1978748959,
+  340922539,
+  -323189280,
+  -8527930,
+  -2094066465,
+  1804751073,
+  -1713503265,
+  894296128,
+  -1938816786,
+  346731103,
+  2131578228,
+  2146547099,
+  -1144369433,
+  978883616,
+  -1082668371,
+  -548351024,
+  1287837649,
+  -2031960539,
+  295197849
+ ],
+ "nodes": {
+  "-634949939": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1105581214,
+    1609860949,
+    1400106919,
+    1457539549,
+    -545246488,
+    -2133476966,
+    -588383556,
+    -276031849,
+    -1406964723,
+    1093813908
+   ],
+   "actor": "Katarina",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "What is it, Mario? I’m busy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[katarina-banged] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-banged",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1105581214": {
+   "kind": "text",
+   "parent": -634949939,
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Katarina, darling, I’ve got something special planned for you today. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[katarina-banged] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-banged",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1609860949": {
+   "kind": "text",
+   "parent": -634949939,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Our friend here is going to give you something you really like. You’ve been so tense lately.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1400106919": {
+   "kind": "text",
+   "parent": -634949939,
+   "actor": "Katarina",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Sex? With him? Are you out of your mind, Mario? I won’t have some nobody putting their hands on me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1457539549": {
+   "kind": "text",
+   "parent": -634949939,
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Now, now, Katarina. You’ve been on edge, and it’s affecting everything. We both know how important it is to keep things running smoothly.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-545246488": {
+   "kind": "text",
+   "parent": -634949939,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "A little relaxation could do wonders.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2133476966": {
+   "kind": "text",
+   "parent": -634949939,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "This is absurd! I don’t need cock from some... some lackey! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-588383556": {
+   "kind": "text",
+   "parent": -634949939,
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I think it’s necessary. You know how this works, Katarina. If you don’t play along, certain... financial benefits might start drying up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-276031849": {
+   "kind": "text",
+   "parent": -634949939,
+   "actor": "Katarina",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You wouldn’t dare.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1406964723": {
+   "kind": "text",
+   "parent": -634949939,
+   "actor": "Mario",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Try me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1093813908": {
+   "kind": "text",
+   "parent": -634949939,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Fine. But make it quick. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1843362399": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "This is humiliating. He'll dislocate my jaw, Mario.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Katarina (2)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Katarina_Nude"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina_Normal to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina_Normal",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Katarina_Normal"
+      }
+     }
+    }
+   ]
+  },
+  "1393397424": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "We both know that's not going to happen. So, be a good team player and start sucking him.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-920158070": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Grrrr.....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1978748959": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "MMgmmmph!!! MMPPFHHHH!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Katarina (1)"
+      }
+     }
+    }
+   ]
+  },
+  "340922539": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Just like that... Work his cock....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-323189280": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Mmmghmmm! Mwwwaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-8527930": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -2124612271,
+    -154494534,
+    540875354,
+    367094100,
+    -78357175,
+    125731999,
+    -1284454636,
+    -269467783
+   ],
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "I think we're good on the throat massage for today. You can feed her whenever you want.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_4[katarina-storyline] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-storyline",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-2124612271": {
+   "kind": "choice",
+   "parent": -8527930,
+   "children": [
+    -1338774553,
+    -169414222,
+    1298760014
+   ],
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Mmggghh!! MWwwwmmaaah!!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1338774553": {
+   "kind": "text",
+   "parent": -2124612271,
+   "actor": null,
+   "text": "F-Fuck... Here it comes...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-169414222": {
+   "kind": "text",
+   "parent": -2124612271,
+   "actor": null,
+   "text": "I'll feed you my cockmilk, Katarina...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1298760014": {
+   "kind": "text",
+   "parent": -2124612271,
+   "actor": null,
+   "text": "[Cum without a warning]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-154494534": {
+   "kind": "text",
+   "parent": -8527930,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "MGGGHMMM!!!! GLUP! GLUP! GLUP!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Katarina (3)"
+      }
+     }
+    }
+   ]
+  },
+  "540875354": {
+   "kind": "text",
+   "parent": -8527930,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Hahaha! What a good slut wife you are, Katarina!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "367094100": {
+   "kind": "text",
+   "parent": -8527930,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "F-Fuck you! Both of you! We're done here! ... I feel so dirty....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Katarina_Nude/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-78357175": {
+   "kind": "text",
+   "parent": -8527930,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Well, {PC}, I’ve got to hand it to you—you did a fantastic job. I haven’t seen her that riled up in years!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_4[katarina-storyline] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-storyline",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "125731999": {
+   "kind": "text",
+   "parent": -8527930,
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "It’s exactly what she needed, whether she’ll admit it or not.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1284454636": {
+   "kind": "choice",
+   "parent": -8527930,
+   "children": [
+    -893234561,
+    -884637410,
+    -1561475945
+   ],
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "You did more than help. You’ve proven you’ve got the nerve to handle difficult situations, and that’s not something I take lightly.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = $1200",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "$1200"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + 1200",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1200
+      }
+     }
+    }
+   ]
+  },
+  "-893234561": {
+   "kind": "text",
+   "parent": -1284454636,
+   "actor": null,
+   "text": "So you'll help with my {D}'s debt?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-884637410": {
+   "kind": "text",
+   "parent": -1284454636,
+   "actor": null,
+   "text": "It was my pleasure.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1561475945": {
+   "kind": "text",
+   "parent": -1284454636,
+   "children": [
+    -569100750
+   ],
+   "actor": null,
+   "text": "Your wife's quite good at sucking cock.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-569100750": {
+   "kind": "text",
+   "parent": -1561475945,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "I was afraid she might be out of practice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-269467783": {
+   "kind": "text",
+   "parent": -8527930,
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I'll keep my word and erase your {D}'s debt... But first you have to help me Katarine. We're far from done.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1713503265": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "It’s a... big request, Katarina, I know. Would you prefer we revisit your spending this month?",
+   "duration": "Timeout",
+   "timeout": 0.2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_4[katarina-storyline] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-storyline",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-2022117331": {
+   "kind": "text",
+   "parent": -1,
+   "actor": null,
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina_Normal to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina_Normal",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Katarina_Normal"
+      }
+     }
+    }
+   ]
+  },
+  "274632302": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Well, you know what to do. On your knees, Katarina. Now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[katarina-banged] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-banged",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[katarina-daily-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-daily-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2094066465": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Hmm... I think she's ready for your cock.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1804751073": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Are you insane, Mario? He'll destroy my pussy!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "894296128": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "N-No...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1938816786": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1160287233,
+    -993123842
+   ],
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Good girl. Now, let's have some fun. Feel free to use her pussy as you like.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1160287233": {
+   "kind": "text",
+   "parent": -1938816786,
+   "actor": null,
+   "text": "(Fuck Katarina)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-993123842": {
+   "kind": "text",
+   "parent": -1938816786,
+   "children": [
+    262118411,
+    241744994
+   ],
+   "actor": null,
+   "text": "No. I won't do that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "262118411": {
+   "kind": "text",
+   "parent": -993123842,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "T-Thank god...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "241744994": {
+   "kind": "text",
+   "parent": -993123842,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Then we have nothing else to discuss. The deal is off... You can find your way out.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[Mario-No-More-Talk] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-No-More-Talk",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "346731103": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "F-FUCK! ... FUCK! FUCK! FUCK!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Katarina (4)"
+      }
+     }
+    }
+   ]
+  },
+  "2131578228": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "H-He's stretching me out! That disgusting peasant is... Fhuaack!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2146547099": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "This is your place. Remember it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1144369433": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "F-Fhucckkk!!! I'm... I'm... HngaaaaAAAAAAHHHH!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "978883616": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "AHhhh! N-Not inside! N-No! NO! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Katarina (2)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Katarina (5)"
+      }
+     }
+    }
+   ]
+  },
+  "-1082668371": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Hahaha! Look at that load, he might knock you up, my dear!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-548351024": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Oh fuck... It's so much... I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1287837649": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "I hate you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Katarina_Nude/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-2031960539": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Look at her silly walk. Fantastic job, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "295197849": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    786401992,
+    1066698583,
+    -840964876,
+    -834510518,
+    1047742204,
+    1165185057
+   ],
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You’ve been a real asset to me, {PC}. Everything I’ve asked, you’ve handled like a pro. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[Mario-Plan-revealed] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-Plan-revealed",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = $2500",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "$2500"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + 2500",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 2500
+      }
+     }
+    }
+   ]
+  },
+  "786401992": {
+   "kind": "choice",
+   "parent": 295197849,
+   "children": [
+    -1964507280,
+    1120933433
+   ],
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "But now it’s time I let you in on the real reason I’ve been putting you through all this.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[Mario-Plan-revealed] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-Plan-revealed",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1066698583": {
+   "kind": "text",
+   "parent": 295197849,
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "The real goal was to push her to her breaking point. You see, I want her to snap. I need her to break up with me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-840964876": {
+   "kind": "text",
+   "parent": 295197849,
+   "actor": "Mario",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "She’s been a thorn in my side for far too long. But if I just leave her, it’ll be a mess—divorce, alimony, the works.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1165185057": {
+   "kind": "choice",
+   "parent": 295197849,
+   "children": [
+    1119860194,
+    -2031907331,
+    1908623339,
+    -661091426
+   ],
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "The final step of my plan is for you to seduce my {DA}. You can do this. It'll be easy.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1119860194": {
+   "kind": "text",
+   "parent": 1165185057,
+   "children": [
+    -464914321
+   ],
+   "actor": null,
+   "text": "Sounds easy enough, I'll help.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1908623339": {
+   "kind": "text",
+   "parent": 1165185057,
+   "children": [
+    718822307
+   ],
+   "actor": null,
+   "text": "(Lie) Of course, Mario. I will help you. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-661091426": {
+   "kind": "text",
+   "parent": 1165185057,
+   "children": [
+    -2112074776
+   ],
+   "actor": null,
+   "text": "Are you insane? I won't do that!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-464914321": {
+   "kind": "text",
+   "parent": 1119860194,
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That’s what I like to hear! Stick with me, {PC}, and you’ll be well rewarded.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionBooleanAND",
+     "title": "Set Events_4[Mario-Plan-Agreed] = True AND True",
+     "fields": {
+      "Title": "Set Events_4[Mario-Plan-Agreed] = True AND True",
+      "BaseType": {
+       "$meta": "GameCreator.Runtime.VisualScripting.Instruction"
+      },
+      "FullType": {
+       "$meta": "GameCreator.Runtime.VisualScripting.InstructionBooleanAND"
+      },
+      "Breakpoint": false,
+      "IsEnabled": true,
+      "Color": {
+       "r": 0.03529412,
+       "g": 0.03529412,
+       "b": 0.03529412,
+       "a": 1
+      }
+     }
+    }
+   ]
+  },
+  "718822307": {
+   "kind": "text",
+   "parent": 1908623339,
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That’s what I like to hear! Stick with me, {PC}, and you’ll be well rewarded.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionBooleanAND",
+     "title": "Set Events_4[Mario-Plan-Agreed] = True AND True",
+     "fields": {
+      "Title": "Set Events_4[Mario-Plan-Agreed] = True AND True",
+      "BaseType": {
+       "$meta": "GameCreator.Runtime.VisualScripting.Instruction"
+      },
+      "FullType": {
+       "$meta": "GameCreator.Runtime.VisualScripting.InstructionBooleanAND"
+      },
+      "Breakpoint": false,
+      "IsEnabled": true,
+      "Color": {
+       "r": 0.03529412,
+       "g": 0.03529412,
+       "b": 0.03529412,
+       "a": 1
+      }
+     }
+    }
+   ]
+  },
+  "-2112074776": {
+   "kind": "text",
+   "parent": -661091426,
+   "actor": "Mario",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "There's nothing more to discuss. You know the way out. Oh, and {PC}, I strongly suggest you keep it for yourself if you care about your family.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionBooleanAND",
+     "title": "Set Events_4[Mario-Plan-Declined] = True AND True",
+     "fields": {
+      "Title": "Set Events_4[Mario-Plan-Declined] = True AND True",
+      "BaseType": {
+       "$meta": "GameCreator.Runtime.VisualScripting.Instruction"
+      },
+      "FullType": {
+       "$meta": "GameCreator.Runtime.VisualScripting.InstructionBooleanAND"
+      },
+      "Breakpoint": false,
+      "IsEnabled": true,
+      "Color": {
+       "r": 0.03529412,
+       "g": 0.03529412,
+       "b": 0.03529412,
+       "a": 1
+      }
+     }
+    },
+    {
+     "type": "InstructionBooleanAND",
+     "title": "Set Events_5[Mario-No-More-Talk] = True AND True",
+     "fields": {
+      "Title": "Set Events_5[Mario-No-More-Talk] = True AND True",
+      "BaseType": {
+       "$meta": "GameCreator.Runtime.VisualScripting.Instruction"
+      },
+      "FullType": {
+       "$meta": "GameCreator.Runtime.VisualScripting.InstructionBooleanAND"
+      },
+      "Breakpoint": false,
+      "IsEnabled": true,
+      "Color": {
+       "r": 0.03529412,
+       "g": 0.03529412,
+       "b": 0.03529412,
+       "a": 1
+      }
+     }
+    },
+    {
+     "type": "InstructionQuestsDeactivate",
+     "title": "Deactivate Bishop (Mario)",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Bishop (Mario)",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-1964507280": {
+   "kind": "text",
+   "parent": 786401992,
+   "children": [
+    1738982274
+   ],
+   "actor": null,
+   "text": "Wasn’t this all about easing Katarina’s stress?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1120933433": {
+   "kind": "text",
+   "parent": 786401992,
+   "children": [
+    577111798
+   ],
+   "actor": null,
+   "text": "I knew you had something else planned.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1738982274": {
+   "kind": "text",
+   "parent": -1964507280,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Easing her stress? Sure, that was part of it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "577111798": {
+   "kind": "text",
+   "parent": 1120933433,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "You're smarter than Josef, kid. Good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-834510518": {
+   "kind": "text",
+   "parent": 295197849,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "No, I need her to walk away on her own. And then, once she’s out of the picture, I’ll be free to pursue someone much more... agreeable.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1047742204": {
+   "kind": "text",
+   "parent": 295197849,
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "My {DA}. Emma. She isn’t just easier on the eyes... She's smart. She knows when to zip it, even if she disagrees. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Push Katarina past her limits.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Bishop (Mario)",
+        "of": "Quest"
+       },
+       "m_TaskId": 1315981684
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-2031907331": {
+   "kind": "text",
+   "parent": 1165185057,
+   "children": [
+    -1670960700
+   ],
+   "actor": null,
+   "text": "Sure, I've already fucked her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[emma-sex-first-time] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-sex-first-time",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1670960700": {
+   "kind": "text",
+   "parent": -2031907331,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "That’s what I like to hear! Stick with me, {PC}, and you’ll be well rewarded.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionBooleanAND",
+     "title": "Set Events_4[Mario-Plan-Agreed] = True AND True",
+     "fields": {
+      "Title": "Set Events_4[Mario-Plan-Agreed] = True AND True",
+      "BaseType": {
+       "$meta": "GameCreator.Runtime.VisualScripting.Instruction"
+      },
+      "FullType": {
+       "$meta": "GameCreator.Runtime.VisualScripting.InstructionBooleanAND"
+      },
+      "Breakpoint": false,
+      "IsEnabled": true,
+      "Color": {
+       "r": 0.03529412,
+       "g": 0.03529412,
+       "b": 0.03529412,
+       "a": 1
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Villa_Office/MarioDefaulttalk",
+   "script": "Dialogue",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core[temp-stored-very-short-term] = PlayerKatarineAngry",
+   "as": "GameObject",
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[katarinamallcooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarinamallcooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

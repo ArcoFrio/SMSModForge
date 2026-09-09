@@ -1,0 +1,968 @@
+{
+ "id": "8_Room_Talk/Shrine/CoreRandomTalk/KateShrineTalk",
+ "name": "KateShrineTalk",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Kate"
+ ],
+ "roots": [
+  -1076501268,
+  975002162,
+  567717673,
+  1733759432,
+  891250802
+ ],
+ "nodes": {
+  "975002162": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1657589182,
+    -324761003
+   ],
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Okay… not screaming this time!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1657589182": {
+   "kind": "text",
+   "parent": 975002162,
+   "actor": "Kate",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Still terrifying, though.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-324761003": {
+   "kind": "text",
+   "parent": 975002162,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Can we maybe fight less cursed things next time?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "567717673": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1152986625,
+    -1128234540
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Do you think they were… people once?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1152986625": {
+   "kind": "text",
+   "parent": 567717673,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Like, someone’s grandma or gym teacher?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1128234540": {
+   "kind": "text",
+   "parent": 567717673,
+   "actor": "Kate",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I’m gonna feel so bad if I just kicked a spirit-PE teacher.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1733759432": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -779361933,
+    -706703381
+   ],
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I didn’t faint. I didn’t cry.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-779361933": {
+   "kind": "text",
+   "parent": 1733759432,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "That’s personal growth!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-706703381": {
+   "kind": "text",
+   "parent": 1733759432,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "...Still gonna need a hug, though.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1076501268": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1692464769,
+    -1381364317
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "T-they were real. That was a ghost.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[kate-fight-firsttime] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-fight-firsttime",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1692464769": {
+   "kind": "choice",
+   "parent": -1076501268,
+   "children": [
+    1309230135,
+    1215805907,
+    -1794232876
+   ],
+   "actor": "Kate",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "A freaking spirit just tried to kill us!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_11[kate-fight-firsttime] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-fight-firsttime",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1309230135": {
+   "kind": "text",
+   "parent": 1692464769,
+   "children": [
+    1039061175
+   ],
+   "actor": null,
+   "text": "You did great. It’s okay now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1039061175": {
+   "kind": "text",
+   "parent": 1309230135,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thanks… I’m just still shaking a little.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1215805907": {
+   "kind": "text",
+   "parent": 1692464769,
+   "children": [
+    -312065847
+   ],
+   "actor": null,
+   "text": "So… do you believe in the afterlife now?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-312065847": {
+   "kind": "text",
+   "parent": 1215805907,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "I don’t know! This changes everything! Ghosts are fucking real... Fuck! This is so spooky!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1794232876": {
+   "kind": "text",
+   "parent": 1692464769,
+   "children": [
+    1628214855
+   ],
+   "actor": null,
+   "text": "If I die, do I get to haunt your shower?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1628214855": {
+   "kind": "text",
+   "parent": -1794232876,
+   "actor": "Kate",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Wha~!? D-don’t you dare! I’ll salt the whole bathroom!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1381364317": {
+   "kind": "text",
+   "parent": -1076501268,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Just… promise me you’ll explain more later, okay?",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "891250802": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    187191991,
+    -168037887
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "I think the adrenaline's still pumping. Or maybe it's just you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "chance",
+     "type": "ConditionChance",
+     "title": "If 0.6 chance to pass",
+     "fields": {
+      "m_Threshold": {
+       "kind": "value",
+       "value": 0.6
+      }
+     }
+    }
+   ]
+  },
+  "187191991": {
+   "kind": "text",
+   "parent": 891250802,
+   "actor": "Kate",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Look, I'm just gonna say it. I'm… really horny right now. Is that weird?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-168037887": {
+   "kind": "choice",
+   "parent": 891250802,
+   "children": [
+    -304666468,
+    -553017663,
+    1982050892
+   ],
+   "actor": "Kate",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Don't give me that look. Fighting evil spirits gets the blood flowing, you know?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-304666468": {
+   "kind": "text",
+   "parent": -168037887,
+   "children": [
+    -1101002508,
+    -554174449,
+    183874659,
+    530081215,
+    277519937,
+    -938664292,
+    135172852,
+    -1584932293,
+    321100665,
+    1796116326,
+    1893684966
+   ],
+   "actor": null,
+   "text": "Good thing I'm here to help... Come here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1101002508": {
+   "kind": "text",
+   "parent": -304666468,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Come here. Just… lie down with me. The grass is soft.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-553017663": {
+   "kind": "text",
+   "parent": -168037887,
+   "children": [
+    -563331856
+   ],
+   "actor": null,
+   "text": "It's too dangerous here, kate.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-563331856": {
+   "kind": "text",
+   "parent": -553017663,
+   "actor": "Kate",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "You're right... We should go back.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1982050892": {
+   "kind": "text",
+   "parent": -168037887,
+   "children": [
+    -1142504638
+   ],
+   "actor": null,
+   "text": "A nice cold shower will help. Let's go.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1142504638": {
+   "kind": "text",
+   "parent": 1982050892,
+   "actor": "Kate",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Yeah... That's what I need. A cold shower...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-554174449": {
+   "kind": "text",
+   "parent": -304666468,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": " Yeah, like that. Just relax.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Kate_NinjaSex (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Kate_NinjaSex (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Kate_NinjaSex (0)"
+      }
+     }
+    }
+   ]
+  },
+  "183874659": {
+   "kind": "text",
+   "parent": -304666468,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Mmm… your hands are cold. Let me warm them up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "530081215": {
+   "kind": "text",
+   "parent": -304666468,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Mmm... you're already so hard for me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "277519937": {
+   "kind": "text",
+   "parent": -304666468,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "You're so responsive... I love the way you twitch when I do that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-938664292": {
+   "kind": "text",
+   "parent": -304666468,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "I'm not stopping until you're completely spent, you hear me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Kate_NinjaSex (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Kate_NinjaSex (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Kate_NinjaSex (1)"
+      }
+     }
+    }
+   ]
+  },
+  "135172852": {
+   "kind": "choice",
+   "parent": -304666468,
+   "children": [
+    -334095641,
+    608978740
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "That smell... You're making me lose my mind... fuck, yes.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-334095641": {
+   "kind": "text",
+   "parent": 135172852,
+   "children": [
+    -2130871352,
+    431606262,
+    -967664798,
+    1380905061,
+    -464723159
+   ],
+   "actor": null,
+   "text": "(Lick her pussy)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2130871352": {
+   "kind": "text",
+   "parent": -334095641,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Oh… oh, fuck. {PC}… right there…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "608978740": {
+   "kind": "text",
+   "parent": 135172852,
+   "children": [
+    -1244731521,
+    -971449533,
+    1114307406,
+    -693781903,
+    -1431290883,
+    1270199191
+   ],
+   "actor": null,
+   "text": "(Lick her ass)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1244731521": {
+   "kind": "text",
+   "parent": 608978740,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Oh... oh god, what are you... oh fuck, you're licking my... yes... right there...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "431606262": {
+   "kind": "text",
+   "parent": -334095641,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Don't stop… please don't stop…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-967664798": {
+   "kind": "text",
+   "parent": -334095641,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "I'm gonna… I'm gonna…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1380905061": {
+   "kind": "text",
+   "parent": -334095641,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Yes! Yes! God… yes…",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Kate_NinjaSex (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Kate_NinjaSex (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Kate_NinjaSex (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-464723159": {
+   "kind": "text",
+   "parent": -334095641,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Oh my god… oh my god…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-971449533": {
+   "kind": "text",
+   "parent": 608978740,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "I didn't... I didn't expect that... don't stop... please...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1114307406": {
+   "kind": "text",
+   "parent": 608978740,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Your tongue feels... it's so much... I can't think straight...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-693781903": {
+   "kind": "text",
+   "parent": 608978740,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Just like that... keep going... I'm gonna...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Kate_NinjaSex (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Kate_NinjaSex (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Kate_NinjaSex (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1431290883": {
+   "kind": "text",
+   "parent": 608978740,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "I'm gonna cum... just from your tongue on my... oh my god...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1270199191": {
+   "kind": "text",
+   "parent": 608978740,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Hngaaah~ Haaah! {PC}... I'm cumming... I'm cumming so hard...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1584932293": {
+   "kind": "text",
+   "parent": -304666468,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Wow. Okay. Wow. You're… really good at that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "321100665": {
+   "kind": "text",
+   "parent": -304666468,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "My legs are still shaking. I think I saw stars.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1796116326": {
+   "kind": "text",
+   "parent": -304666468,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Just… give me a second… that was…",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1893684966": {
+   "kind": "text",
+   "parent": -304666468,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Okay... I'm good, let's... Let's head back to that temple thingy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Shrine/CoreRandomTalk",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play KateShrineTalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_11[spirit-activecomp] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "spirit-activecomp",
+        "list": "Events_11",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Kateninjabust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Kateninjabust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Kateninjabust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Kateninjabust/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

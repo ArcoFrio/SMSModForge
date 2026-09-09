@@ -1,0 +1,820 @@
+{
+ "id": "8_Core_Events/SmallTalks/WardrobeBirthdayMeeting/GameObject",
+ "name": "GameObject",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna"
+ ],
+ "roots": [
+  957701803,
+  -163472997,
+  1933904912,
+  -1854809207,
+  -388079384,
+  689546477,
+  -197917722,
+  -1889088317,
+  1552534918,
+  2129365073,
+  -1380950305,
+  1966159188,
+  -939002092,
+  -586833089,
+  1096546797,
+  1424799228,
+  1338801392
+ ],
+ "nodes": {
+  "957701803": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "This is your birthday present...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "1933904912": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1157193477,
+    -1435261902,
+    2146741095
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Do you... like it?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1157193477": {
+   "kind": "text",
+   "parent": 1933904912,
+   "children": [
+    1755035176,
+    974551817
+   ],
+   "actor": null,
+   "text": "You picked that out just for me, didn’t you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1435261902": {
+   "kind": "text",
+   "parent": 1933904912,
+   "children": [
+    2006631626,
+    873329112
+   ],
+   "actor": null,
+   "text": "You look incredible. I love it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2146741095": {
+   "kind": "text",
+   "parent": 1933904912,
+   "children": [
+    -1889228969,
+    880169170
+   ],
+   "actor": null,
+   "text": "Hmm… not sure that one’s for you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1889228969": {
+   "kind": "text",
+   "parent": 2146741095,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "...Oh. Okay.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2006631626": {
+   "kind": "text",
+   "parent": -1435261902,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You really think so?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1755035176": {
+   "kind": "text",
+   "parent": 1157193477,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Maybe I did. Maybe I like knowing what gets your attention.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "974551817": {
+   "kind": "text",
+   "parent": 1157193477,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "And judging by that look you're giving me... I chose well.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "873329112": {
+   "kind": "text",
+   "parent": -1435261902,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I wasn’t sure if it was too bold, my pussy is at full display... but... if you love it, then I do too.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "880169170": {
+   "kind": "text",
+   "parent": 2146741095,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Guess I’ll keep experimenting. Don’t worry—I can take honesty.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1854809207": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -160891753,
+    -242615991
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Please, {PC}... I want you so bad. Want to feel you pounding my tight little pussy.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-160891753": {
+   "kind": "text",
+   "parent": -1854809207,
+   "children": [
+    -1872601376
+   ],
+   "actor": null,
+   "text": "I'm so ready for you, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-242615991": {
+   "kind": "text",
+   "parent": -1854809207,
+   "children": [
+    -842823337
+   ],
+   "actor": null,
+   "text": "Not feeling it, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-842823337": {
+   "kind": "text",
+   "parent": -242615991,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, okay... I guess I misunderstood what you wanted for your birthday. Sorry.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1872601376": {
+   "kind": "text",
+   "parent": -160891753,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I need your big hard cock inside me... Please...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-388079384": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm, does my pussy still feel good to you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_BirthdayPlayerWardrobe (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_BirthdayPlayerWardrobe (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Anna_BirthdayPlayerWardrobe (1)"
+      }
+     }
+    }
+   ]
+  },
+  "689546477": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1486411813,
+    -1904057544,
+    -152731522
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "After all these times, does fucking {M}'s tight little hole still make your dick throb?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1486411813": {
+   "kind": "text",
+   "parent": 689546477,
+   "actor": null,
+   "text": "God, yes... Keep riding me, {M}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1904057544": {
+   "kind": "text",
+   "parent": 689546477,
+   "actor": null,
+   "text": "H-Harder, {M}... Ride my fat cock!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-152731522": {
+   "kind": "text",
+   "parent": 689546477,
+   "actor": null,
+   "text": "(Moan in response)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-197917722": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You can feel how much I need this, can't you? How desperate I am for my own {S}'s big hard cock stretching me open?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_BirthdayPlayerWardrobe (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_BirthdayPlayerWardrobe (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Anna_BirthdayPlayerWardrobe (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1889088317": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god, yes!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1552534918": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Harder! I want to feel you smashing against my cervix!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2129365073": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    947916705,
+    -700507457,
+    -535717610
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fill {M}'s womb with your hot seed!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1380950305": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes! Oh fuck yes! Give it all to me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_BirthdayPlayerWardrobe (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_BirthdayPlayerWardrobe (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Anna_BirthdayPlayerWardrobe (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1966159188": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fill me up, I want every single drop of it inside of me! Hngaaaaa!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "947916705": {
+   "kind": "text",
+   "parent": 2129365073,
+   "actor": null,
+   "text": "F-Fuck, {M}... I'm gonna... I'm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-700507457": {
+   "kind": "text",
+   "parent": 2129365073,
+   "actor": null,
+   "text": "Take my thick load, Anna... Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-535717610": {
+   "kind": "text",
+   "parent": 2129365073,
+   "actor": null,
+   "text": "(Fill her up)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-939002092": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh my god, look how much you gave me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_BirthdayPlayerWardrobe (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_BirthdayPlayerWardrobe (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Anna_BirthdayPlayerWardrobe (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_BirthdayPlayerWardrobe (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_BirthdayPlayerWardrobe (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Anna_BirthdayPlayerWardrobe (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-586833089": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Did you enjoy your birthday present?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1096546797": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    693448600,
+    -168965155,
+    373836945
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I hope {M}'s tight little cunt was everything you wanted.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "693448600": {
+   "kind": "text",
+   "parent": 1096546797,
+   "actor": null,
+   "text": "Best. Present. Ever.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-168965155": {
+   "kind": "text",
+   "parent": 1096546797,
+   "actor": null,
+   "text": "It felt so right, like we were meant to be together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "373836945": {
+   "kind": "text",
+   "parent": 1096546797,
+   "actor": null,
+   "text": "You sure know how to show a guy a good time for his birthday.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1424799228": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm so glad you enjoyed it too, baby...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1338801392": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Now be a dear and fetch some wet paper towels from the bathroom. I  needsyour help cleaning up this messy little slit...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_8[anna-playerbd-wardrobe-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-playerbd-wardrobe-done",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-163472997": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "After last time... II thought you might enjoy unwrapping the same present again...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[anna-playerbd-wardrobe-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-playerbd-wardrobe-done",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/SmallTalks/WardrobeBirthdayMeeting",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play GameObject and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueStart'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueStart"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_PlayerBirthdayLingerie_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_PlayerBirthdayLingerie_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_PlayerBirthdayLingerie_Bust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueEnd'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueEnd"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[Anna-bdpresentwaiting] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Anna-bdpresentwaiting",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

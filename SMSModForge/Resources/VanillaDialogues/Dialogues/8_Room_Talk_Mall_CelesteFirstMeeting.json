@@ -1,0 +1,613 @@
+{
+ "id": "8_Room_Talk/Mall/CelesteFirstMeeting",
+ "name": "CelesteFirstMeeting",
+ "index": 8,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Celeste"
+ ],
+ "roots": [
+  596550569,
+  281179158,
+  1174942890,
+  1108507791,
+  -1454775819,
+  1060826709,
+  -491056049,
+  103622932
+ ],
+ "nodes": {
+  "596550569": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "You.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1454775819": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Celeste",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "You run a Starmaker page, don’t you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1060826709": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -528396572,
+    2095072632,
+    1443859970,
+    -731763008
+   ],
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "And not just any page. It’s Anna, isn’t it? She’s your model.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-528396572": {
+   "kind": "text",
+   "parent": 1060826709,
+   "children": [
+    -1544710844
+   ],
+   "actor": null,
+   "text": "How do you know that?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1544710844": {
+   "kind": "text",
+   "parent": -528396572,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Call it intuition. A connection between those who walk this path, no matter how distant.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2095072632": {
+   "kind": "text",
+   "parent": 1060826709,
+   "children": [
+    868185817
+   ],
+   "actor": null,
+   "text": "What if she is? What’s it to you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "868185817": {
+   "kind": "text",
+   "parent": 2095072632,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Such a reaction... There’s no need to be defensive. I merely recognize talent when I see it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1443859970": {
+   "kind": "text",
+   "parent": 1060826709,
+   "children": [
+    -1560212876
+   ],
+   "actor": null,
+   "text": "You know Anna?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1560212876": {
+   "kind": "text",
+   "parent": 1443859970,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Her presence is growing... like the first light of dawn.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-491056049": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1229976048,
+    2076713642,
+    -1730294058,
+    990516936
+   ],
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Tell me... what is your goal? What do you seek to create on Starmaker?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1229976048": {
+   "kind": "text",
+   "parent": -491056049,
+   "children": [
+    -1272368472
+   ],
+   "actor": null,
+   "text": "I want Anna to be the best.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1272368472": {
+   "kind": "text",
+   "parent": 1229976048,
+   "actor": "Celeste",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "A bold answer. Be careful—greatness often demands more than one is willing to give.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2076713642": {
+   "kind": "text",
+   "parent": -491056049,
+   "children": [
+    1691965208
+   ],
+   "actor": null,
+   "text": "I just want to support Anna, nothing more.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1691965208": {
+   "kind": "text",
+   "parent": 2076713642,
+   "actor": "Celeste",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "A noble intention. But even the purest light can cast long shadows.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1730294058": {
+   "kind": "text",
+   "parent": -491056049,
+   "children": [
+    567556920
+   ],
+   "actor": null,
+   "text": "Money. I want to make so much money!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "567556920": {
+   "kind": "text",
+   "parent": -1730294058,
+   "actor": "Celeste",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "A weak desire. You are approach a place where dreams and burdens intertwine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "990516936": {
+   "kind": "text",
+   "parent": -491056049,
+   "children": [
+    1271309398
+   ],
+   "actor": null,
+   "text": "I'm just here for the hot chicks to be honest.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1271309398": {
+   "kind": "text",
+   "parent": 990516936,
+   "actor": "Celeste",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "A primal desire. You are approach a place where dreams and burdens intertwine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "103622932": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Take care with the path you walk. It is beautiful, yes, but beauty often carries weight. And yet... I believe you already know that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "281179158": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Celeste",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I am Celeste. The world’s number one on Starmaker. If you know this platform, you know me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1174942890": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Very few reach where I stand, and even fewer belong there.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1108507791": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "And yet... here you are. A creator. Walking a path that brushes against mine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-731763008": {
+   "kind": "text",
+   "parent": 1060826709,
+   "children": [
+    1512030209
+   ],
+   "actor": null,
+   "text": "Y-You are... You are so beautiful!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1512030209": {
+   "kind": "text",
+   "parent": -731763008,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "I know. Bath in my light, young one.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Mall",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play CelesteFirstMeeting and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-touching] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-touching",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "ConditionMathCompareDecimals",
+     "title": "If Events_7[Celeste-meetings] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Celeste-meetings",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ],
+   "branches": [
+    "celeste"
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CelesteAudio to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CelesteAudio",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/CelesteAudio"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active XXX_Celeste_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "XXX_Celeste_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/XXX_Celeste_Bust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/XXX_Celeste_Bust/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CelesteAudio to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CelesteAudio",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/CelesteAudio"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Mall to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Mall",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Mall"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_7[Celeste-meetings] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Celeste-meetings",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

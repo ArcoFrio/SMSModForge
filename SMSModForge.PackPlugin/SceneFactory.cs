@@ -1,4 +1,4 @@
-using BepInEx.Logging;
+﻿using BepInEx.Logging;
 using Newtonsoft.Json.Linq;
 using System.IO;
 using System.Reflection;
@@ -130,7 +130,7 @@ namespace SMSModForge.PackPlugin
             if (art != null)
             {
                 var sr = art.GetComponent<SpriteRenderer>();
-                if (sr != null) sr.sprite = LoadSpriteFromPack(pack, sceneRel);
+                if (sr != null) Dress(sr, scene, pack, s, sceneRel, key, logger);
             }
             else
             {
@@ -203,10 +203,119 @@ namespace SMSModForge.PackPlugin
         /// to know about loose plugin-side assets.</summary>
         private static Sprite LoadSpriteFromBytes(byte[] bytes)
         {
+            var tex = Decode(bytes);
+            return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+        }
+
+        /// <summary>
+        /// Put the scene's art on its renderer — a picture, a decoded
+        /// animation, or a video.
+        /// <para/>
+        /// Which one is decided by the extension of the file the author picked,
+        /// through the same rule the editor used when it decided whether to
+        /// decode anything. A still is the old path exactly.
+        /// <para/>
+        /// Every route ends up at the same size: the frames of an animation are
+        /// fitted one by one, and a video is drawn on the quad a fitted still
+        /// already established. An animation is not a different kind of scene,
+        /// it is a scene that moves.
+        /// </summary>
+        private static void Dress(SpriteRenderer sr, GameObject scene, PackManifest pack,
+                                  JObject s, string sceneRel, string key,
+                                  ManualLogSource logger)
+        {
+            int kind = SMSModForge.Shared.MediaKinds.KindOf(sceneRel);
+            bool loop = s["loop"] == null || (bool)s["loop"];
+
+            if (kind == SMSModForge.Shared.MediaKinds.Gif)
+            {
+                double[] delays;
+                var frames = AnimatedSprite.LoadFrames(
+                    pack, sceneRel, out delays, tex => FittedSprite.CreateScene(tex));
+
+                if (frames != null && frames.Length > 0)
+                {
+                    sr.sprite = frames[0];
+                    scene.AddComponent<AnimatedSprite>().Play(sr, frames, delays, loop);
+                    return;
+                }
+
+                // Saved before the frames were written, or shipped without
+                // them. The GIF's own first frame is not readable by the engine,
+                // so this is a scene that cannot draw at all - worth saying.
+                logger.LogWarning("[SMSModForge.PackPlugin] Scene '" + key + "' — '" + sceneRel
+                                  + "' has no decoded frames beside it ("
+                                  + SMSModForge.Shared.MediaKinds.FramesFolderFor(sceneRel)
+                                  + "). Re-save the pack in ModForge to write them.");
+                return;
+            }
+
+            if (kind == SMSModForge.Shared.MediaKinds.Video)
+            {
+                // A still first, so the renderer has a quad of the right size
+                // for the video to be drawn on - and so a video that will not
+                // load leaves a picture rather than nothing.
+                sr.sprite = FittedSprite.Create(
+                    Blank(), FittedSprite.ScenePixels, FittedSprite.ScenePixels,
+                    FittedSprite.ScenePpu);
+
+                string onDisk = pack.ExtractToTemp(sceneRel);
+                if (string.IsNullOrEmpty(onDisk))
+                {
+                    logger.LogWarning("[SMSModForge.PackPlugin] Scene '" + key + "' — video '"
+                                      + sceneRel + "' is not in the pack archive.");
+                    return;
+                }
+
+                float volume = s["volume"] == null ? 1f : (float)s["volume"];
+                AnimatedSprite.PlayVideo(scene, sr, onDisk, loop, volume,
+                                         (int)FittedSprite.ScenePixels,
+                                         (int)FittedSprite.ScenePixels, logger);
+                return;
+            }
+
+            sr.sprite = LoadSceneArt(pack.ReadBytes(sceneRel));
+        }
+
+        /// <summary>
+        /// What a video's frame shows before its first picture arrives.
+        /// <para/>
+        /// Cleared to transparent, and explicitly: a fresh Texture2D holds
+        /// whatever memory it was given, which came out as a solid white block
+        /// sitting in the scene's frame. Nothing is the right answer for "not
+        /// yet" - and if the video never loads, an empty frame reads as an
+        /// empty frame rather than as a picture that failed to be one.
+        /// </summary>
+        private static Texture2D Blank()
+        {
+            int side = (int)FittedSprite.ScenePixels;
+            var tex = new Texture2D(side, side, TextureFormat.RGBA32, false);
+            tex.filterMode = FilterMode.Point;
+
+            var clear = new Color32[side * side];
+            tex.SetPixels32(clear);
+            tex.Apply(false);
+            return tex;
+        }
+
+        /// <summary>
+        /// A scene's own art, at the size a 256x256 scene occupies whatever
+        /// the file's dimensions are.
+        /// <para/>
+        /// The frame loader above deliberately does NOT do this. A frame's
+        /// size is a design decision - the two shipped with the tool are
+        /// 297x310 and 388x405 - and fitting those to a 256 square would
+        /// shrink both of them.
+        /// </summary>
+        private static Sprite LoadSceneArt(byte[] bytes)
+            => FittedSprite.CreateScene(Decode(bytes));
+
+        private static Texture2D Decode(byte[] bytes)
+        {
             var tex = new Texture2D(256, 256);
             tex.filterMode = FilterMode.Point;
             if (bytes != null) ImageConversion.LoadImage(tex, bytes);
-            return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+            return tex;
         }
 
         /// <summary>

@@ -95,6 +95,31 @@ internal static class TutorialSolutions
             w.Vm.NewPackCommand.Execute(null);
         },
         ["first-steps / Save it somewhere"] = w => w.SaveToRoot(),
+
+        // ── A screen of your own ─────────────────────────────────────
+        ["a-screen-of-your-own / Start one"] = w => w.Vm.AddOwnUiCommand.Execute(null),
+        ["a-screen-of-your-own / Call it something"] = w =>
+        {
+            w.Vm.SelectedUi!.Name = "Quest note";
+        },
+        ["a-screen-of-your-own / Put something on it"] = w =>
+        {
+            // Inside the panel the template made, which is what the step says
+            // to do - + Object adds into whatever is selected, and with nothing
+            // selected there is nowhere for it to go.
+            var ui = w.Vm.SelectedUi!;
+            ui.SelectedNode = ui.Nodes[0];
+            ui.AddChildCommand.Execute(null);
+        },
+        ["a-screen-of-your-own / Say what it is"] = w =>
+        {
+            var ui = w.Vm.SelectedUi!;
+            var made = ui.Nodes[0].Children[^1];
+            ui.SelectedNode = made;
+            made.Name = "Note body";
+            made.Width = 400;
+            made.Height = 200;
+        },
         ["first-steps / Add a character"] = w => w.Vm.AddCharacterCommand.Execute(null),
         ["first-steps / Give them a name"] = w =>
         {

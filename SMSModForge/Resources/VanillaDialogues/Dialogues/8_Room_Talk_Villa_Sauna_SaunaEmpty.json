@@ -1,0 +1,122 @@
+{
+ "id": "8_Room_Talk/Villa_Sauna/SaunaEmpty",
+ "name": "SaunaEmpty",
+ "index": 4,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "You"
+ ],
+ "roots": [
+  -921528501
+ ],
+ "nodes": {
+  "-921528501": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1630630355,
+    2040227781
+   ],
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Perfect temperature...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1630630355": {
+   "kind": "text",
+   "parent": -921528501,
+   "children": [
+    -1418755649
+   ],
+   "actor": null,
+   "text": "[Sit down]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2040227781": {
+   "kind": "text",
+   "parent": -921528501,
+   "actor": null,
+   "text": "[Leave]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1418755649": {
+   "kind": "text",
+   "parent": -1630630355,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "I could get used to this...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Villa_Sauna",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play SaunaEmpty and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

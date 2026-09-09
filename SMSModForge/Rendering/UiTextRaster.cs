@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace SMSModForge.Rendering;
 
@@ -12,6 +12,11 @@ namespace SMSModForge.Rendering;
 /// soft. For a bitmap atlas the value already is ink and passes straight
 /// through; seven of the game's fonts are like that, and thresholding one would
 /// wreck it.
+/// <para/>
+/// The atlas only says where the glyph IS. What it looks like - how heavy the
+/// stroke is, whether it carries an outline, whether it casts a shadow - comes
+/// from the font's material, and all three are the same operation: the edge is
+/// read at a different threshold. See <see cref="TmpFont.FaceShift"/>.
 /// <para/>
 /// The padding matters and is easy to miss. A glyph's rect in the atlas is its
 /// tight box, and the field that antialiases its edge lives in the texels
@@ -52,6 +57,23 @@ public static class UiTextRaster
         double padding = font.Atlas.Padding;
         double cb = color.B / 255.0, cg = color.G / 255.0;
         double cr = color.R / 255.0, ca = color.A / 255.0;
+
+        // What the material asks for, read once rather than per pixel.
+        double faceShift = font.FaceShift;
+        bool outlined = font.HasOutline;
+        double outlineShift = outlined ? font.OutlineShift : 0;
+        double edgeSoftness = font.OutlineSoftness;
+        var outlineColor = font.OutlineColor;
+        double ob = outlineColor.B / 255.0, og = outlineColor.G / 255.0;
+        double or_ = outlineColor.R / 255.0, oa = outlineColor.A / 255.0;
+
+        bool shadowed = font.HasUnderlay;
+        var underlayColor = font.UnderlayColor;
+        double ub = underlayColor.B / 255.0, ug = underlayColor.G / 255.0;
+        double ur = underlayColor.R / 255.0, ua = underlayColor.A / 255.0;
+        double underlayShift = font.UnderlayShift;
+        double underlaySoftness = font.UnderlaySoftness;
+        var (offsetX, offsetY) = font.UnderlayOffsetTexels;
 
         foreach (var placed in layout.Glyphs)
         {
@@ -95,17 +117,52 @@ public static class UiTextRaster
                     double fx = sx + u * sw - 0.5;
 
                     double alpha = Sample(atlasAlpha, atlasWidth, atlasHeight, fx, fy);
-                    double ink = font.Coverage(alpha, pixelsPerTexel);
-                    if (ink <= 0) continue;
 
-                    double a = ink * ca;
+                    // The silhouette, and how much of it is face rather than
+                    // outline. With no outline every lit pixel is face - NOT
+                    // the same as the two edges coinciding, which would mix the
+                    // outline colour into a soft edge that has no outline to
+                    // take it from.
+                    double ink = font.Coverage(alpha, pixelsPerTexel,
+                                               faceShift + outlineShift, edgeSoftness);
+                    double face = outlined
+                        ? font.Coverage(alpha, pixelsPerTexel,
+                                        faceShift - outlineShift, edgeSoftness)
+                        : 1.0;
+
+                    // Premultiplied, because that is what compositing wants and
+                    // what the shader itself works in.
+                    double a = ink * (face * ca + (1 - face) * oa);
+                    double pr = ink * (face * cr * ca + (1 - face) * or_ * oa);
+                    double pg = ink * (face * cg * ca + (1 - face) * og * oa);
+                    double pb = ink * (face * cb * ca + (1 - face) * ob * oa);
+
+                    if (shadowed)
+                    {
+                        // The same glyph read again, moved. Sampling the atlas
+                        // the other way round from the direction the shadow
+                        // travels: what lands at this pixel is what the glyph
+                        // has a little way back along the offset.
+                        double shade = font.Coverage(
+                            Sample(atlasAlpha, atlasWidth, atlasHeight,
+                                   fx - offsetX, fy + offsetY),
+                            pixelsPerTexel, underlayShift, underlaySoftness) * ua * ca;
+
+                        // Behind whatever the glyph itself already put down.
+                        double behind = shade * (1 - a);
+                        pr += behind * ur;
+                        pg += behind * ug;
+                        pb += behind * ub;
+                        a += behind;
+                    }
+
                     if (a <= 0) continue;
 
                     int t = (y * width + x) * 4;
                     double inverse = 1.0 - a;
-                    target[t] = Round(a * cb * 255 + target[t] * inverse);
-                    target[t + 1] = Round(a * cg * 255 + target[t + 1] * inverse);
-                    target[t + 2] = Round(a * cr * 255 + target[t + 2] * inverse);
+                    target[t] = Round(pb * 255 + target[t] * inverse);
+                    target[t + 1] = Round(pg * 255 + target[t + 1] * inverse);
+                    target[t + 2] = Round(pr * 255 + target[t + 2] * inverse);
                     target[t + 3] = Round(a * 255 + target[t + 3] * inverse);
                 }
             }

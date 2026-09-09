@@ -1,0 +1,1260 @@
+{
+ "id": "8_Room_Talk/DemonSummoninEvent/MaleDemonDialogue",
+ "name": "MaleDemonDialogue",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "S_Demon",
+  "You"
+ ],
+ "roots": [
+  2116549850,
+  1750302834,
+  -990390342,
+  -810597069,
+  -1381363070,
+  -71404773,
+  -1840109376,
+  1249084431,
+  -12970721,
+  -1107722660
+ ],
+ "nodes": {
+  "2116549850": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "Yooo, my favorite human. What's up? How's earth? Everything still in place?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[maledemonfirsttime] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "maledemonfirsttime",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1750302834": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    274561434,
+    553290158,
+    -1482280459
+   ],
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "Whew. Been a while since someone cracked open that spell. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[maledemonfirsttime] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "maledemonfirsttime",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "274561434": {
+   "kind": "choice",
+   "parent": 1750302834,
+   "children": [
+    676359117,
+    -983939184
+   ],
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "You have any idea how cramped hell-space is?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "676359117": {
+   "kind": "text",
+   "parent": 274561434,
+   "children": [
+    -1815865700
+   ],
+   "actor": null,
+   "text": "You’re... a demon?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-983939184": {
+   "kind": "text",
+   "parent": 274561434,
+   "children": [
+    1951778821
+   ],
+   "actor": null,
+   "text": "AAAAAHHHHHHHHHHH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1815865700": {
+   "kind": "text",
+   "parent": 676359117,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "And you're a human, duh. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1951778821": {
+   "kind": "text",
+   "parent": -983939184,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "Calm down, calm down! Hells... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "553290158": {
+   "kind": "text",
+   "parent": 1750302834,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "Name's Vael'Tor. Last of the Emberbound. Keeper of the Ninth Gate. But if that’s too much, Vael will do.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1482280459": {
+   "kind": "choice",
+   "parent": 1750302834,
+   "children": [
+    1177042663,
+    -2131539167,
+    409077618
+   ],
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "So, why did you call me? Did you call me to burn the world? To scorch a soul?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1177042663": {
+   "kind": "text",
+   "parent": -1482280459,
+   "children": [
+    1160034757
+   ],
+   "actor": null,
+   "text": "Actually, I was just bored. Internet was down.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2131539167": {
+   "kind": "text",
+   "parent": -1482280459,
+   "children": [
+    156586765
+   ],
+   "actor": null,
+   "text": "I don't really know.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "409077618": {
+   "kind": "text",
+   "parent": -1482280459,
+   "children": [
+    842134608,
+    1338461961,
+    319239852
+   ],
+   "actor": null,
+   "text": "Power! Give me unlimited power!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "842134608": {
+   "kind": "text",
+   "parent": 409077618,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "Granted.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1338461961": {
+   "kind": "text",
+   "parent": 409077618,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "I don't feel any different?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "319239852": {
+   "kind": "text",
+   "parent": 409077618,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "Because the real power are the friends you made along the way, human.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "156586765": {
+   "kind": "text",
+   "parent": -2131539167,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "That's a first one. But hey, I get it. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1160034757": {
+   "kind": "text",
+   "parent": 1177042663,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "...You summoned a fire-forged prince of wrath because your Wi-Fi was acting up?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-990390342": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    656733235,
+    1349912169,
+    -2125029450
+   ],
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "So... what now?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SuccubusPortalVFX to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SuccubusPortalVFX",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/5_MyRoom/SuccubusPortalVFX"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_8[maledemonfirsttime] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "maledemonfirsttime",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "656733235": {
+   "kind": "text",
+   "parent": -990390342,
+   "children": [
+    422037304
+   ],
+   "actor": null,
+   "text": "Tell me about hell. I wanna know everything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1349912169": {
+   "kind": "text",
+   "parent": -990390342,
+   "children": [
+    1531871855
+   ],
+   "actor": null,
+   "text": "Wanna play some video games?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2125029450": {
+   "kind": "text",
+   "parent": -990390342,
+   "children": [
+    1008657519
+   ],
+   "actor": null,
+   "text": "Honestly... I don’t know. You can leave if you want.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1008657519": {
+   "kind": "text",
+   "parent": -2125029450,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "Fair. Not every flame needs to burn tonight. But if you call again... be sure.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1531871855": {
+   "kind": "text",
+   "parent": 1349912169,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "Games of war and reflex? I accept your mortal trial. But I call dibs on the red controller.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "422037304": {
+   "kind": "text",
+   "parent": 656733235,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "Endless fire? Sure. But there’s also music, lost cities, and a bakery run by screaming skeletons. Honestly? It’s complicated.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1381363070": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "{PC}? {M} wants some co~",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Nude"
+      }
+     }
+    }
+   ]
+  },
+  "-810597069": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "Well, gotta go. If I don’t get back before dinner, my {M}'’s gonna raise actual hell.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-71404773": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hey, {PC}... I was wondering if~",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_NudeCovering to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_NudeCovering",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_NudeCovering"
+      }
+     }
+    }
+   ]
+  },
+  "-1840109376": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1249084431": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-12970721": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -980613632,
+    -286416697,
+    1903190447
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Okay, that is an insane halloween costume.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-980613632": {
+   "kind": "text",
+   "parent": -12970721,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "No, seriously, the detail is amazing. Is that a practical effect or body paint? And oh my god, that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-286416697": {
+   "kind": "text",
+   "parent": -12970721,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "This is not a costume! I am Vael'Tor! Last of the Emberbound. Keeper of the Ninth Gate.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1903190447": {
+   "kind": "text",
+   "parent": -12970721,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "What a performance! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1107722660": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1263634148,
+    -1661796543
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Um, so I guess I'll get going...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1263634148": {
+   "kind": "text",
+   "parent": -1107722660,
+   "children": [
+    67415399,
+    493126107,
+    222647339,
+    2062156989,
+    -927982915,
+    -80251991,
+    450423892,
+    1069395363,
+    -1931080820,
+    -355434459,
+    88138775,
+    -1932225091,
+    -730101174,
+    736481374,
+    2007841374,
+    831323691,
+    -581824460,
+    -991538064,
+    1516262909
+   ],
+   "actor": null,
+   "text": "How about we have some hellish fun together?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1661796543": {
+   "kind": "text",
+   "parent": -1107722660,
+   "children": [
+    -1969073873
+   ],
+   "actor": null,
+   "text": "Yeah, you should go.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1969073873": {
+   "kind": "text",
+   "parent": -1661796543,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "I should also leave. If I don’t get back before dinner, my {M}'’s gonna raise actual hell.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "67415399": {
+   "kind": "text",
+   "parent": -1263634148,
+   "children": [
+    -1385779914
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A-Are you sure, hun? I don't even know his name...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "493126107": {
+   "kind": "text",
+   "parent": -1263634148,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yesss! I was hoping you would ask! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1385779914": {
+   "kind": "text",
+   "parent": 67415399,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "It's VAEL'TOR! V-A-E-L-T-O-R!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "222647339": {
+   "kind": "text",
+   "parent": -1263634148,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "Hah, as if a human female could satisfiy me... Though, I am willing to give her a chance...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2062156989": {
+   "kind": "text",
+   "parent": -1263634148,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "Not bad, not bad... Are they real? I've heard of human women enhancing their body with strange magic.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Halloween_Demon (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Halloween_Demon (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Halloween_Demon (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-927982915": {
+   "kind": "text",
+   "parent": -1263634148,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Of course they are! As real as your \"demon\" cock...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-80251991": {
+   "kind": "text",
+   "parent": -1263634148,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "N-Not bad, human...  How does it feel to have Vael'Tor's, Last of the Emberboun, Keeper of the Ninth Gate, cock on your face?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Halloween_Demon (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Halloween_Demon (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Halloween_Demon (3)"
+      }
+     }
+    }
+   ]
+  },
+  "450423892": {
+   "kind": "text",
+   "parent": -1263634148,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It tastes so real! Oh my, there's even precum! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1069395363": {
+   "kind": "choice",
+   "parent": -1263634148,
+   "children": [
+    -1543806931,
+    -664957826,
+    544000219
+   ],
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "It is real, gah! H-Hells, this woman knows how to work a cock...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1931080820": {
+   "kind": "text",
+   "parent": -1263634148,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god, god, god! Fuck, fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Halloween_Demon (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Halloween_Demon (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Halloween_Demon (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-355434459": {
+   "kind": "text",
+   "parent": -1263634148,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "He's not here, soft human. Just your wet holes and our fat cocks! Hngaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "88138775": {
+   "kind": "choice",
+   "parent": -1263634148,
+   "children": [
+    -2079812021,
+    -2089680248,
+    345169288
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes! Fuck, fuck... You both feel so good inside me! I feel so full, oh god... Oh fuck!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1932225091": {
+   "kind": "text",
+   "parent": -1263634148,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "Gah! This cursed tight ring of muscle is trying its best to milk me! I have to withstand! I'm stronger than that!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-730101174": {
+   "kind": "text",
+   "parent": -1263634148,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "N-No, no, no... Let it all out... {PC}... Vael'tor... Fill me up... Fill me... Fhaaaaack!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "736481374": {
+   "kind": "choice",
+   "parent": -1263634148,
+   "children": [
+    -330075902,
+    1554997067,
+    608973619
+   ],
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "Hells! I'm... This is a battle I cannot win! Her ass is just too~ HNGAAAAAH!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1543806931": {
+   "kind": "text",
+   "parent": 1069395363,
+   "children": [
+    -547934154
+   ],
+   "actor": null,
+   "text": "Be kind, she's my {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-664957826": {
+   "kind": "text",
+   "parent": 1069395363,
+   "children": [
+    1905945714
+   ],
+   "actor": null,
+   "text": "Ready for the main event?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1905945714": {
+   "kind": "text",
+   "parent": -664957826,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "Yes! Your {M} is a fine one, I want to feel her holes around my mighty member!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-547934154": {
+   "kind": "text",
+   "parent": -1543806931,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "O-Of course, I apologize. I am grateful for your... hospitality.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "544000219": {
+   "kind": "text",
+   "parent": 1069395363,
+   "children": [
+    1896257365
+   ],
+   "actor": null,
+   "text": "So, {M}? What do you want to do with these big cocks?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1896257365": {
+   "kind": "text",
+   "parent": 544000219,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "F-Fuck me... I want to feel them inside of me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2007841374": {
+   "kind": "text",
+   "parent": -1263634148,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "YESSSSS~ That's it... Oh, god.. So much, so much! Don't stop! Keep filling me up!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Halloween_Demon (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Halloween_Demon (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Halloween_Demon (5)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Halloween_Demon (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Halloween_Demon (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Halloween_Demon (2)"
+      }
+     }
+    }
+   ]
+  },
+  "831323691": {
+   "kind": "text",
+   "parent": -1263634148,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "Hngaaah~ Hellfire, Hells. Fucking hells... If this wasn't the best fuck I had in years...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-581824460": {
+   "kind": "text",
+   "parent": -1263634148,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Well, thanks for sharing your \"demonic essence\" with me, oh mighty Vael'Tor... Hihi~",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1516262909": {
+   "kind": "text",
+   "parent": -1263634148,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "I should leave now. If I don’t get back before dinner, my {M}'s gonna raise actual hell.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-991538064": {
+   "kind": "text",
+   "parent": -1263634148,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "You're more than welcome, soft human. If you ever feel the desire, you are free to visit me in hell.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-330075902": {
+   "kind": "text",
+   "parent": 736481374,
+   "actor": null,
+   "text": "Fuck, that's... I'm... Hngaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1554997067": {
+   "kind": "text",
+   "parent": 736481374,
+   "actor": null,
+   "text": "T-Take our cum, {M}! Fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "608973619": {
+   "kind": "text",
+   "parent": 736481374,
+   "actor": null,
+   "text": "(Fill her pussy)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2079812021": {
+   "kind": "text",
+   "parent": 88138775,
+   "actor": null,
+   "text": "Y-Yes, shake your ass, {M}! We will make you cum so hard!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2089680248": {
+   "kind": "text",
+   "parent": 88138775,
+   "children": [
+    -1290825413
+   ],
+   "actor": null,
+   "text": "How does my {M} compare to your hell sluts, Vael'Tor?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "345169288": {
+   "kind": "text",
+   "parent": 88138775,
+   "children": [
+    157470306
+   ],
+   "actor": null,
+   "text": "You like feeling that demon cock stretch you, {M}?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "157470306": {
+   "kind": "text",
+   "parent": 345169288,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes! It feels so different! It's an amazing prosthesis!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1290825413": {
+   "kind": "text",
+   "parent": -2089680248,
+   "actor": "S_Demon",
+   "expressionName": "neutral",
+   "text": "She's... It is incredible, hngaah.... There is no resistance, as if her back entrance was made for this! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/DemonSummoninEvent",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play MaleDemonDialogue and wait",
+   "as": "Dialogue"
+  }
+ ]
+}

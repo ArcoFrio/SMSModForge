@@ -1,0 +1,575 @@
+{
+ "id": "8_Room_Talk/Temple_Entrance/Annaarrival",
+ "name": "Annaarrival",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Master Zhen"
+ ],
+ "roots": [
+  406497057,
+  679254736,
+  -1961719124
+ ],
+ "nodes": {
+  "604306852": {
+   "kind": "text",
+   "parent": -1961719124,
+   "children": [
+    1667439346,
+    -1006217798
+   ],
+   "actor": "Master Zhen",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thank you for coming. The soil is good, but… the gardener is inexperienced. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1667439346": {
+   "kind": "text",
+   "parent": 604306852,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "No worries! Everyone starts somewhere. Let’s see what we can do to make these plants feel at home.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1006217798": {
+   "kind": "text",
+   "parent": 604306852,
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Thank you. I'm Xun Zhen, allow me to show you my temple.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1961719124": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -39350822,
+    604306852
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh my goodness, this place is absolutely gorgeous! I can't believe we have such a beautiful forest just outside of the city.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_6[anna-garden] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-garden",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Go back to Zhen.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Flowers (Zhen)",
+        "of": "Quest"
+       },
+       "m_TaskId": 400938478
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-39350822": {
+   "kind": "text",
+   "parent": -1961719124,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Alright, where’s this garden in need of rescuing?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "679254736": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1146380865,
+    -1275772417,
+    1357310193
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "The flowers are finally coming together, don’t you think?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_6[anna-garden] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-garden",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "406497057": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -761382205,
+    -776424374,
+    -523894462,
+    -59731892,
+    -1430852661,
+    -189431505
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You know… I always wondered why you started this garden. It feels like there’s more to it than just wanting a beautiful place.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_6[anna-garden] = 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-garden",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1146380865": {
+   "kind": "text",
+   "parent": 679254736,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Yes, they are. You’ve brought life back to this place. It’s… calming.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1275772417": {
+   "kind": "text",
+   "parent": 679254736,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I’m glad. I wasn’t sure if I’d be of much help, honestly. You seem like someone who’s used to doing things on his own.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1357310193": {
+   "kind": "text",
+   "parent": 679254736,
+   "actor": "Master Zhen",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hmph. I’ve had to be. But… having someone like you here isn’t so bad.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-761382205": {
+   "kind": "text",
+   "parent": 406497057,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "This garden is more than just flowers. It’s a way to honor someone I lost long ago. She loved nature… and I’m trying to recreate a piece of what she cherished.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-776424374": {
+   "kind": "text",
+   "parent": 406497057,
+   "actor": "Master Zhen",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "But there’s something more now, too. When you’ve spent years focused on protecting a city from a threat that no one else could see, it’s hard to see beyond that duty.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-523894462": {
+   "kind": "text",
+   "parent": 406497057,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "I never imagined I’d see the day where that threat was truly contained. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-59731892": {
+   "kind": "text",
+   "parent": 406497057,
+   "actor": "Master Zhen",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Your… {S} made sure of that. He helped give me—and this city—a chance to focus on something other than just surviving.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1430852661": {
+   "kind": "text",
+   "parent": 406497057,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I’m glad he could help. And I’m glad you’re here, turning this place into something peaceful.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-189431505": {
+   "kind": "text",
+   "parent": 406497057,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Yes… me too. I think my wife would be proud to see this, and proud of those who fought to keep it safe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Temple_Entrance",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Annaarrival and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_6[anna-garden] ≥ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-garden",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_6[anna-garden] < 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-garden",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Less",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Garden to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Garden",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Garden"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Master_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Master_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Master_Default"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_6[anna-garden] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-garden",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

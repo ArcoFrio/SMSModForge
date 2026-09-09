@@ -1,0 +1,486 @@
+{
+ "id": "8_Room_Talk/Livingroom/CharlotteRepeat",
+ "name": "CharlotteRepeat",
+ "index": 10,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Charlotte"
+ ],
+ "roots": [
+  1101654601,
+  -686333575,
+  2083810105
+ ],
+ "nodes": {
+  "-686333575": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Yes... I couldn't believe my own eyes!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1101654601": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Really? That's insane!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[Charlotte-Met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Charlotte-Met",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "2083810105": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -861728587,
+    -731538889,
+    -25972501
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Oh, look who's here. Hey, {PC}.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-861728587": {
+   "kind": "text",
+   "parent": 2083810105,
+   "children": [
+    905653564,
+    -934080880
+   ],
+   "actor": null,
+   "text": "What are you talking about?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-731538889": {
+   "kind": "text",
+   "parent": 2083810105,
+   "children": [
+    1185128485,
+    -1174125690,
+    972602821
+   ],
+   "actor": null,
+   "text": "Can I get a kiss, Charlotte?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[Charlotte-romanced] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Charlotte-romanced",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-25972501": {
+   "kind": "text",
+   "parent": 2083810105,
+   "children": [
+    -1416072013
+   ],
+   "actor": null,
+   "text": "Have fun, you two.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "905653564": {
+   "kind": "text",
+   "parent": -861728587,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, um... Nothing specific... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-934080880": {
+   "kind": "text",
+   "parent": -861728587,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Yes, just some smalltalk.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1416072013": {
+   "kind": "text",
+   "parent": -25972501,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thanks, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1185128485": {
+   "kind": "text",
+   "parent": -731538889,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Of course! Come here! Mwuaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte1 (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte1 (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Charlotte1 (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1174125690": {
+   "kind": "text",
+   "parent": -731538889,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "C-Charlotte!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "972602821": {
+   "kind": "text",
+   "parent": -731538889,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Oopsie... Looks like I need a new shirt, hihi...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Livingroom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play CharlotteRepeat and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_2[charlotte-anna-talks] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "charlotte-anna-talks",
+        "list": "Events_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[park-visit] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "park-visit",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CharlotteBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CharlotteBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/CharlotteBust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_2[charlotte-anna-talks] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "charlotte-anna-talks",
+        "list": "Events_2",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[park-visit] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "park-visit",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

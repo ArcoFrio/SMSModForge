@@ -1,0 +1,377 @@
+{
+ "id": "8_Room_Talk/Kitchen/MZhentalkflower",
+ "name": "MZhentalkflower",
+ "index": 4,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "You"
+ ],
+ "roots": [
+  -1677922513,
+  762139454,
+  -54265264
+ ],
+ "nodes": {
+  "-1677922513": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1010823232,
+    1129534556
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Hey there! You’re home early. What’s up?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-54265264": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1714425063,
+    -224550959
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Alright, I’m in. Just tell me when and where, and I’ll see what I can do.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1010823232": {
+   "kind": "text",
+   "parent": -1677922513,
+   "children": [
+    -1561976086
+   ],
+   "actor": null,
+   "text": "I know someone who’s trying to start a garden.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1129534556": {
+   "kind": "text",
+   "parent": -1677922513,
+   "children": [
+    -2113398528
+   ],
+   "actor": null,
+   "text": "You know a lot about flowers, right? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2113398528": {
+   "kind": "text",
+   "parent": 1129534556,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Of course! Who needs help? One of your friends?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "762139454": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Just an older guy I met. He’s trying to make his garden better, but… let’s say he’s not exactly a green thumb.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Look for someone with gardening skills.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Flowers (Zhen)",
+        "of": "Quest"
+       },
+       "m_TaskId": 1813187919
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-1561976086": {
+   "kind": "text",
+   "parent": -1010823232,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh? I’d love to! Who’s this ‘someone’? A friend of yours?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1714425063": {
+   "kind": "text",
+   "parent": -54265264,
+   "children": [
+    -1446293449
+   ],
+   "actor": null,
+   "text": "Thanks, {M}. I think he’ll really appreciate it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-224550959": {
+   "kind": "text",
+   "parent": -54265264,
+   "children": [
+    -305418954
+   ],
+   "actor": null,
+   "text": "It’s a quiet, peaceful spot near the edge of town. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-305418954": {
+   "kind": "text",
+   "parent": -224550959,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Sounds lovely. It’s nice to help someone who’s trying to create something beautiful.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1446293449": {
+   "kind": "text",
+   "parent": -1714425063,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "No problem, honey. It’s nice to help someone who’s trying to create something beautiful.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Kitchen",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play MZhentalkflower and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_6[anna-garden] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-garden",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Core_NoSave[Anna-Default-Outfit] to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Anna-Default-Outfit",
+        "list": "Core_NoSave",
+        "type": "game-object"
+       }
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_6[anna-garden] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-garden",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Room_Talk/Kitchen/Kitchen_Conditions_1",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play MZhentalkflower and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_6[anna-garden] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-garden",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Core_NoSave[Anna-Default-Outfit] to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Anna-Default-Outfit",
+        "list": "Core_NoSave",
+        "type": "game-object"
+       }
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_6[anna-garden] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-garden",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

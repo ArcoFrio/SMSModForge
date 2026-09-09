@@ -1,0 +1,328 @@
+{
+ "id": "8_Room_Talk/Kitchen/Anna_CelesteAgreedOnPeace",
+ "name": "Anna_CelesteAgreedOnPeace",
+ "index": 25,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna"
+ ],
+ "roots": [
+  84432427,
+  -1549140071,
+  1702422324,
+  1878605931
+ ],
+ "nodes": {
+  "84432427": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I can’t believe it… Celeste actually backed off. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Creative to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Creative",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Creative"
+      }
+     }
+    }
+   ]
+  },
+  "-1549140071": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "No more sabotage, no more underhanded tricks—just me and her, fighting fair.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1702422324": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I figured she’d rather burn the whole damn stage down than give me a fair shot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1878605931": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -687177205,
+    238665456,
+    -262073907
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "But now? This is my chance. And I'm quite sure it was your doing, huh?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-687177205": {
+   "kind": "text",
+   "parent": 1878605931,
+   "children": [
+    1772806627,
+    101103978
+   ],
+   "actor": null,
+   "text": "Show everyone you belong there.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "238665456": {
+   "kind": "text",
+   "parent": 1878605931,
+   "children": [
+    -910832754,
+    -403868756
+   ],
+   "actor": null,
+   "text": "So, what’s next? A friendly lunch date with Celeste?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-262073907": {
+   "kind": "text",
+   "parent": 1878605931,
+   "children": [
+    1066747449,
+    1201229823,
+    -1806320126,
+    1353827081
+   ],
+   "actor": null,
+   "text": "You really trust her to keep her word?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1066747449": {
+   "kind": "text",
+   "parent": -262073907,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yeah… I’ve thought about that too.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-910832754": {
+   "kind": "text",
+   "parent": 238665456,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Pfft—not a chance. Just because we’re not at war doesn’t mean I wanna braid each other’s hair and talk about feelings.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1772806627": {
+   "kind": "text",
+   "parent": -687177205,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Damn right I will. If she thinks she can hold her throne without dirty tricks, let’s see how long she lasts.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "101103978": {
+   "kind": "text",
+   "parent": -687177205,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "This fight is mine to win now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-403868756": {
+   "kind": "text",
+   "parent": 238665456,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Though, if we did have lunch, I bet she’d order some tiny-ass salad and pretend it’s filling.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1201229823": {
+   "kind": "text",
+   "parent": -262073907,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Celeste isn’t the type to just give up. Even if she’s playing fair now, she’s always thinking ten steps ahead.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1806320126": {
+   "kind": "text",
+   "parent": -262073907,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "But that’s fine. I don’t want an easy win. I want a real one.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1353827081": {
+   "kind": "text",
+   "parent": -262073907,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "And when I take that top spot, she won’t have any excuses.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Kitchen/Kitchen_Conditions_2",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Anna_CelesteAgreedOnPeace and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[anna-celestendtalkinc] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-celestendtalkinc",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Core_NoSave[Anna-Default-Outfit] to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Anna-Default-Outfit",
+        "list": "Core_NoSave",
+        "type": "game-object"
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Condition-Split] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Condition-Split",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_8[anna-celestendtalkinc] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-celestendtalkinc",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

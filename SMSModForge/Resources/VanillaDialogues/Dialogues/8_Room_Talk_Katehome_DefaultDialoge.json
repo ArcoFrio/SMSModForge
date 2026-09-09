@@ -1,0 +1,932 @@
+{
+ "id": "8_Room_Talk/Katehome/DefaultDialoge",
+ "name": "DefaultDialoge",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Kate"
+ ],
+ "roots": [
+  -1795500137,
+  -1028847709,
+  1257774793
+ ],
+ "nodes": {
+  "-1795500137": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Oh, {PC}. I'm glad you decided to hang...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[kate-first-time-at-home] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-first-time-at-home",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1028847709": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -817006387,
+    1041803754,
+    1069422141
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "H-Hey! My place is a bit small but please make yourself comfortable!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[kate-first-time-at-home] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-first-time-at-home",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done_2[kate-beach] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-beach",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done_2[kate-pub] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-pub",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done_2[kate-park] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-park",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Visit Kate.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Gabriel Training",
+        "of": "Quest"
+       },
+       "m_TaskId": -1612451931
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-817006387": {
+   "kind": "text",
+   "parent": -1028847709,
+   "children": [
+    2067723637
+   ],
+   "actor": null,
+   "text": "Nice dress, where you get that?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1041803754": {
+   "kind": "text",
+   "parent": -1028847709,
+   "children": [
+    1779972504
+   ],
+   "actor": null,
+   "text": "You look really cute.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1069422141": {
+   "kind": "text",
+   "parent": -1028847709,
+   "children": [
+    -593641633
+   ],
+   "actor": null,
+   "text": "Here's your payment. [$500]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-593641633": {
+   "kind": "text",
+   "parent": 1069422141,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Keep it.. If I need anything, I'll let you know, okay? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1779972504": {
+   "kind": "text",
+   "parent": 1041803754,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "C-Cute? Oh, no, no, no... I'm not cute. No one calls me that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2067723637": {
+   "kind": "text",
+   "parent": -817006387,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "T-Thank you. It was a gift from Zuri....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1257774793": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1939059289,
+    -885706024,
+    2141670669,
+    -2109032127
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Soooo... What now?",
+   "tag": "rooti",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done_2[kate-first-time-at-home] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-first-time-at-home",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1939059289": {
+   "kind": "text",
+   "parent": 1257774793,
+   "children": [
+    1771082947,
+    1324325351
+   ],
+   "actor": null,
+   "text": "Let's take a photo.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2109032127": {
+   "kind": "text",
+   "parent": 1257774793,
+   "children": [
+    435652872
+   ],
+   "actor": null,
+   "text": "I'll see you later.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "435652872": {
+   "kind": "text",
+   "parent": -2109032127,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Um, sure. Goodbye!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1771082947": {
+   "kind": "text",
+   "parent": -1939059289,
+   "children": [
+    2084552236,
+    -383584078,
+    -186031131
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "O-Okay... Please be gentle, this is my first time... modeling.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_Only_Done_2[kate-romance-max-3] ≤ 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-romance-max-3",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Search the mall for someone willing to model.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Gabriel Training",
+        "of": "Quest"
+       },
+       "m_TaskId": 1437005603
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "2084552236": {
+   "kind": "text",
+   "parent": 1771082947,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katephoto to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katephoto",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/Katephoto"
+      }
+     }
+    }
+   ]
+  },
+  "-383584078": {
+   "kind": "choice",
+   "parent": 1771082947,
+   "children": [
+    -2121322871,
+    -1493016944,
+    -1959475698
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "S-So, what do you think?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2121322871": {
+   "kind": "text",
+   "parent": -383584078,
+   "children": [
+    -241315344
+   ],
+   "actor": null,
+   "text": "[Lie] It's great! Good job!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1493016944": {
+   "kind": "text",
+   "parent": -383584078,
+   "children": [
+    846115308
+   ],
+   "actor": null,
+   "text": "You look really cute.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1959475698": {
+   "kind": "text",
+   "parent": -383584078,
+   "children": [
+    234937395
+   ],
+   "actor": null,
+   "text": "It's... quite bad to be honest.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-241315344": {
+   "kind": "text",
+   "parent": -2121322871,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Y-You think so? I think I looks like trash...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "846115308": {
+   "kind": "text",
+   "parent": -1493016944,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "UIshgiwehuhgawasjidg.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "234937395": {
+   "kind": "text",
+   "parent": -1959475698,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Yeeee... I'm sorry. I'm not good at this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-186031131": {
+   "kind": "text",
+   "parent": 1771082947,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Maybe this wasn't the best idea. I'm just not cut out for this....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-885706024": {
+   "kind": "text",
+   "parent": 1257774793,
+   "children": [
+    401963219
+   ],
+   "actor": null,
+   "text": "Everything okay? You seem a little tense.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_Only_Done_2[kate-romance-max-3] ≤ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-romance-max-3",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "2141670669": {
+   "kind": "text",
+   "parent": 1257774793,
+   "children": [
+    -1630838066
+   ],
+   "actor": null,
+   "text": "Didn't we agree on a payment?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_Only_Done_2[kate-romance-max-3] ≤ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-romance-max-3",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1630838066": {
+   "kind": "text",
+   "parent": 2141670669,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "It's okay... Like really.... ",
+   "jump": {
+    "mode": "Jump",
+    "to": "rooti"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "401963219": {
+   "kind": "text",
+   "parent": -885706024,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Me? Tense? Haha, no way! You're just imagining things.",
+   "jump": {
+    "mode": "Jump",
+    "to": "rooti"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1324325351": {
+   "kind": "text",
+   "parent": -1939059289,
+   "children": [
+    23788773,
+    1543614917,
+    138801750
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Here we go!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_Only_Done_2[kate-romance-max-3] ≥ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-romance-max-3",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "23788773": {
+   "kind": "text",
+   "parent": 1324325351,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katephoto (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katephoto (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/Katephoto (1)"
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Earn Kate’s trust and make her feel safe.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Gabriel Training",
+        "of": "Quest"
+       },
+       "m_TaskId": -619506573
+      },
+      "m_WaitToComplete": false
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Visit Kate and take the photo.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Gabriel Training",
+        "of": "Quest"
+       },
+       "m_TaskId": 996623161
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "1543614917": {
+   "kind": "text",
+   "parent": 1324325351,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Woah! Damn, that looks good!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done_2[perfect-kate-photo] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "perfect-kate-photo",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "138801750": {
+   "kind": "text",
+   "parent": 1324325351,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Thanks for like... Not giving up on me and stuff.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Charm to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Charm",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Charm"
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Katehome",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DefaultDialoge and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KateDress to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KateDress",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/KateDress"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

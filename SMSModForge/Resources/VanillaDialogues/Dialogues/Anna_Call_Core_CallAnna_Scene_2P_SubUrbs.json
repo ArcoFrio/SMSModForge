@@ -1,0 +1,336 @@
+{
+ "id": "Anna_Call_Core/CallAnna_Scene_2P_SubUrbs",
+ "name": "CallAnna_Scene_2P_SubUrbs",
+ "index": 6,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  -1920444640,
+  442301497,
+  104968728,
+  -1592274142,
+  2026577856,
+  -1081353488,
+  1730325802
+ ],
+ "nodes": {
+  "-1920444640": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Do you realize one wrong glance and I could end up on the evening news?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Trenchcoat to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Trenchcoat",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Trenchcoat"
+      }
+     }
+    }
+   ]
+  },
+  "442301497": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Trenchcoat to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Trenchcoat",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Trenchcoat"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Nude"
+      }
+     }
+    }
+   ]
+  },
+  "104968728": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "God, I can’t believe I’m actually naked out here… in someone’s neighborhood of all places.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1592274142": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1124583858,
+    580516791
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Hurry... I don’t want the whole neighborhood getting a free show.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1124583858": {
+   "kind": "text",
+   "parent": -1592274142,
+   "children": [
+    1632979889
+   ],
+   "actor": null,
+   "text": "Then hide your huge boobs, can't have them get a free teaser, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "580516791": {
+   "kind": "text",
+   "parent": -1592274142,
+   "children": [
+    1997186720
+   ],
+   "actor": null,
+   "text": "Get on the ground, let's show them you don't care anymore.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1997186720": {
+   "kind": "text",
+   "parent": 580516791,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fuck~ Once we're back home I want to you to make me feel good, {PC}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active B11_AnnaSuburbsPhoto (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "B11_AnnaSuburbsPhoto (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/B11_AnnaSuburbsPhoto (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1632979889": {
+   "kind": "text",
+   "parent": 1124583858,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yeah... It's not that easy! They are too... big~ Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active B10_AnnaSuburbsPhoto (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "B10_AnnaSuburbsPhoto (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/B10_AnnaSuburbsPhoto (1)"
+      }
+     }
+    }
+   ]
+  },
+  "2026577856": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I never thought I’d be this daring. Naked, outside, in the suburbs… What have you turned me into?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1081353488": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I should feel ashamed. Instead… I feel alive.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1730325802": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Next time, you’d better surprise me. I think I’m getting addicted to this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "Anna_Call_Core/CallIcon_Condition_Check",
+   "script": "Conditions",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core_NoSave2[call-anna-dialogue] = CallAnna_Scene_2P_SubUrbs",
+   "as": "GameObject",
+   "when": [
+    {
+     "kind": "gameObjectActive",
+     "type": "ConditionGameObjectActive",
+     "title": "If is Active 21_Suburban Exterior House",
+     "fields": {
+      "m_GameObject": {
+       "kind": "object",
+       "name": "21_Suburban Exterior House",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/21_Suburban Exterior House"
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CanCallAnnaIndicator to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CanCallAnnaIndicator",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator/Buttone/CallAnnaButton/CanCallAnnaIndicator"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

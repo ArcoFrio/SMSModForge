@@ -1,0 +1,554 @@
+{
+ "id": "5_Levels/125_BarnBackInterior/Dialogue_CowPhotoshootTalk/CowPhotoShootTalk_DIFFERENT_Phoenix",
+ "name": "CowPhotoShootTalk_DIFFERENT_Phoenix",
+ "index": 5,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Phoenix"
+ ],
+ "roots": [
+  1342060983,
+  19115438,
+  588140433,
+  -2125698207
+ ],
+ "nodes": {
+  "1342060983": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Tch. You really think I’m putting on some stupid cowprint bikini?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "19115438": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1237408570,
+    472602587,
+    1636793974
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Not happening.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1237408570": {
+   "kind": "text",
+   "parent": 19115438,
+   "children": [
+    798127566
+   ],
+   "actor": null,
+   "text": "That’s fine, Phoenix. You don’t have to.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "472602587": {
+   "kind": "text",
+   "parent": 19115438,
+   "children": [
+    -1713873711
+   ],
+   "actor": null,
+   "text": "I figured you’d be mooooore open-minded.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1636793974": {
+   "kind": "text",
+   "parent": 19115438,
+   "children": [
+    1952202173
+   ],
+   "actor": null,
+   "text": "Then forget the outfit. Just bend over for me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1952202173": {
+   "kind": "text",
+   "parent": 1636793974,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "…Finally, you said something smart. You wanna bang me or not?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1713873711": {
+   "kind": "text",
+   "parent": 472602587,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "…You’re an idiot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "798127566": {
+   "kind": "text",
+   "parent": 1237408570,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Good. I’d rather be myself anyway.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "588140433": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Photoshoot’s boring. If you want me, let’s skip the costumes and go straight to the real workout.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2125698207": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1147926032,
+    -257718893
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "So. You wanna bang me or not?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1147926032": {
+   "kind": "text",
+   "parent": -2125698207,
+   "children": [
+    600160017,
+    -1542238298,
+    1285075021,
+    1378758302,
+    704521815,
+    -1482975413,
+    -161152660,
+    1185868118,
+    -1037472200,
+    1847976499,
+    269747283
+   ],
+   "actor": null,
+   "text": "Yeah. Let’s do it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-257718893": {
+   "kind": "text",
+   "parent": -2125698207,
+   "children": [
+    -2121516302,
+    -1039785083
+   ],
+   "actor": null,
+   "text": "No thanks, Phoenix. Not right now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2121516302": {
+   "kind": "text",
+   "parent": -257718893,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Hah! Figures. All bark, no bite. Guess I’ll hit the gym instead.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "600160017": {
+   "kind": "text",
+   "parent": 1147926032,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Hah! Knew you had some guts. Come on.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PhoenixBafaLove (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PhoenixBafaLove (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/PhoenixBafaLove (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1039785083": {
+   "kind": "text",
+   "parent": -257718893,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Don’t call me back unless you’re ready to keep up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1542238298": {
+   "kind": "text",
+   "parent": 1147926032,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Hope you're ready, pretty boy... been stretching this hole all morning just for you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1285075021": {
+   "kind": "choice",
+   "parent": 1147926032,
+   "children": [
+    -1290887428,
+    1975871933,
+    -51209013
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Oh shit—! Yeah, that's the good stretch...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PhoenixBafaLove (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PhoenixBafaLove (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/PhoenixBafaLove (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1378758302": {
+   "kind": "text",
+   "parent": 1147926032,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Don't hold back! I can take whatever you dish out. In fact... bet you can't make me scream loud enough for Kirby to hear us.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "704521815": {
+   "kind": "text",
+   "parent": 1147926032,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Harder, damn it... I didn't oil up this ass for a fucking massage!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1482975413": {
+   "kind": "choice",
+   "parent": 1147926032,
+   "children": [
+    2054086383,
+    1201779235
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Fuck~ there it is... gonna fill me up, {PC}?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-161152660": {
+   "kind": "text",
+   "parent": 1147926032,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Damn right I am! Feels like you're pumping a gallon in here!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PhoenixBafaLove (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PhoenixBafaLove (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/PhoenixBafaLove (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1185868118": {
+   "kind": "text",
+   "parent": 1147926032,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Oh fuck~ me too....! Don't stop, don't fucking stop!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1037472200": {
+   "kind": "choice",
+   "parent": 1147926032,
+   "children": [
+    182581487,
+    -137573410,
+    -676173669
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Fuck... that's the good shit. ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1847976499": {
+   "kind": "text",
+   "parent": 1147926032,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Fuck... you feel that? Still twitching inside me..",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "269747283": {
+   "kind": "text",
+   "parent": 1147926032,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "But I think we had enough fun... for now, heh!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "2054086383": {
+   "kind": "text",
+   "parent": -1482975413,
+   "actor": null,
+   "text": "If... If you want me to last longer stop clenching!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1201779235": {
+   "kind": "text",
+   "parent": -1482975413,
+   "actor": null,
+   "text": "Fuck... keep clenching like that and I'll... Fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1290887428": {
+   "kind": "text",
+   "parent": 1285075021,
+   "actor": null,
+   "text": "Fuck, you'll milk me dry...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1975871933": {
+   "kind": "text",
+   "parent": 1285075021,
+   "actor": null,
+   "text": "Jesus, you're tight even lubed up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-51209013": {
+   "kind": "text",
+   "parent": 1285075021,
+   "actor": null,
+   "text": "(Fuck her hard)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "182581487": {
+   "kind": "text",
+   "parent": -1037472200,
+   "children": [
+    -1263770595
+   ],
+   "actor": null,
+   "text": "You came too?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-137573410": {
+   "kind": "text",
+   "parent": -1037472200,
+   "children": [
+    -862164287
+   ],
+   "actor": null,
+   "text": "Fuck, you're such an anal slut...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-676173669": {
+   "kind": "text",
+   "parent": -1037472200,
+   "actor": null,
+   "text": "(Take a deep breath)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-862164287": {
+   "kind": "text",
+   "parent": -137573410,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Pah! Right now you're the one squirming below me~ Slut!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1263770595": {
+   "kind": "text",
+   "parent": 182581487,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "You kidding? I blew a huge fucking load!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "5_Levels/125_BarnBackInterior/Dialogue_MilkDefaulttalk/Defaultmilktalk_Phoenix",
+   "script": "Dialogue",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core_NoSave2[2025-shortgo-saveTHREE] = CowPhotoShootTalk_DIFFERENT_Phoenix",
+   "as": "GameObject"
+  }
+ ]
+}

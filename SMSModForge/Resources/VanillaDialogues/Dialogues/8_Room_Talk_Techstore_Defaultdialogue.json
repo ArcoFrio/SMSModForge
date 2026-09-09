@@ -1,0 +1,1448 @@
+{
+ "id": "8_Room_Talk/Techstore/Defaultdialogue",
+ "name": "Defaultdialogue",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Joey"
+ ],
+ "roots": [
+  1975177604,
+  -418564948,
+  -1090608079,
+  1118484322
+ ],
+ "nodes": {
+  "-1090608079": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -84750646,
+    -992700382,
+    538824909,
+    -967174961,
+    -1354302798,
+    -551220118,
+    -405589979
+   ],
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "We’ve got the latest gadgets, cutting-edge tech, and some stuff that’s not even on the market yet. What are you interested in?",
+   "tag": "rootjoey",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-84750646": {
+   "kind": "text",
+   "parent": -1090608079,
+   "children": [
+    -2083515681
+   ],
+   "actor": null,
+   "text": "Show me your wares. (Shop)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-405589979": {
+   "kind": "text",
+   "parent": -1090608079,
+   "children": [
+    201372259
+   ],
+   "actor": null,
+   "text": "I'm good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2083515681": {
+   "kind": "text",
+   "parent": -84750646,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "Only the best!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[active-store] = 3",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "active-store",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 3
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ShopCore to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ShopCore",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/ShopCore"
+      }
+     }
+    }
+   ]
+  },
+  "201372259": {
+   "kind": "text",
+   "parent": -405589979,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "Well, my store's the best if you change your mind.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1975177604": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1748421190,
+    -314863560
+   ],
+   "actor": "Joey",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yo! Zuri and I are a couple now!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[joey-sex-after-talk] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "joey-sex-after-talk",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[zuri-sex-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zuri-sex-done",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[achivement-unlocked] = Matchmaker",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Matchmaker"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "achivement-unlocked",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Achievements[matchmaker] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "matchmaker",
+        "list": "Achievements",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "538824909": {
+   "kind": "text",
+   "parent": -1090608079,
+   "children": [
+    1277947680
+   ],
+   "actor": null,
+   "text": "Any new gadgets you can recommend?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-967174961": {
+   "kind": "text",
+   "parent": -1090608079,
+   "children": [
+    -530480946,
+    -1146385907
+   ],
+   "actor": null,
+   "text": "What's up with you and Zuri?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[zuri-sex-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zuri-sex-done",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-530480946": {
+   "kind": "text",
+   "parent": -967174961,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "Aw, man. She's just a tease. I swear, she is teasing me with her butt all the time!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1146385907": {
+   "kind": "text",
+   "parent": -967174961,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "But whenever I approach her, she gets all mad!",
+   "jump": {
+    "mode": "Jump",
+    "to": "rootjoey"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-412028493": {
+   "kind": "text",
+   "parent": 1277947680,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "Check this out! The Self-Stirring Mug stirs your drink for you with the press of a button. Perfect for lazy mornings.",
+   "jump": {
+    "mode": "Jump",
+    "to": "rootjoey"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "523597474": {
+   "kind": "text",
+   "parent": 1277947680,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "The Invisible Ink Pen writes secret messages! I don't know how to read them tho....",
+   "jump": {
+    "mode": "Jump",
+    "to": "rootjoey"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-404634292": {
+   "kind": "text",
+   "parent": 1277947680,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "A mini punching bag for your desk. The Desktop Punching Bag is great for stress relief during work.",
+   "jump": {
+    "mode": "Jump",
+    "to": "rootjoey"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1297106313": {
+   "kind": "text",
+   "parent": 1277947680,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "The Flying Alarm Clock takes off and flies around your room until you catch it. The ultimate wake-up call!",
+   "jump": {
+    "mode": "Jump",
+    "to": "rootjoey"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1959535512": {
+   "kind": "text",
+   "parent": 1277947680,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "The Selfie Stick with Fan keeps you cool while you take the perfect selfie. Say goodbye to sweaty photo ops!",
+   "jump": {
+    "mode": "Jump",
+    "to": "rootjoey"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1748421190": {
+   "kind": "choice",
+   "parent": 1975177604,
+   "children": [
+    -181558716,
+    624503545,
+    1114568123
+   ],
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "I can't believe it, man. And it's all thanks to you! If you hadn't helped me out....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_2[joey-sex-after-talk] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "joey-sex-after-talk",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-181558716": {
+   "kind": "text",
+   "parent": -1748421190,
+   "children": [
+    -229911214
+   ],
+   "actor": null,
+   "text": "You're welcome, man.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-229911214": {
+   "kind": "text",
+   "parent": -181558716,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "Hah! All's well that ends well, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "624503545": {
+   "kind": "text",
+   "parent": -1748421190,
+   "children": [
+    -1168814365
+   ],
+   "actor": null,
+   "text": "Take good care of her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1168814365": {
+   "kind": "text",
+   "parent": 624503545,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "Oh, I will! No way I will ever get a goddess like her!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1114568123": {
+   "kind": "text",
+   "parent": -1748421190,
+   "children": [
+    67913320
+   ],
+   "actor": null,
+   "text": "I had a lot of fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[zurijoey-threesomedone] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zurijoey-threesomedone",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "67913320": {
+   "kind": "text",
+   "parent": 1114568123,
+   "actor": "Joey",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I could tell, haha! At the end of our session my cock was covered in your cum! You're blasting huge ones!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-314863560": {
+   "kind": "text",
+   "parent": 1975177604,
+   "actor": "Joey",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thanks again, mate! Can't believe I get to fuck that ass every day from now on!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1277947680": {
+   "kind": "random",
+   "parent": 538824909,
+   "children": [
+    -1959535512,
+    1297106313,
+    -404634292,
+    523597474,
+    -412028493
+   ],
+   "actor": null,
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1354302798": {
+   "kind": "text",
+   "parent": -1090608079,
+   "children": [
+    842163261,
+    -1841682105
+   ],
+   "actor": null,
+   "text": "Hey, Joey. I need your help with some internet stuff.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_7[prisme-story] = 7",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "prisme-story",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 7
+       }
+      }
+     }
+    }
+   ]
+  },
+  "842163261": {
+   "kind": "text",
+   "parent": -1354302798,
+   "actor": "Joey",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You came to the right genius! What do you need? And don’t worry—I owe you one, so it’s on the house.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[zuri-sex-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zuri-sex-done",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_7[prisme-story] = 9",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "prisme-story",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 9
+      }
+     }
+    }
+   ]
+  },
+  "-1841682105": {
+   "kind": "choice",
+   "parent": -1354302798,
+   "children": [
+    583811402,
+    553676955
+   ],
+   "actor": "Joey",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Oh, now you need my help? Well, well, well... what’s in it for me?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[zuri-sex-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zuri-sex-done",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "583811402": {
+   "kind": "text",
+   "parent": -1841682105,
+   "children": [
+    1371388400
+   ],
+   "actor": null,
+   "text": "What do you want?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1118484322": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    177401236,
+    1140764835,
+    302540884,
+    578699044,
+    -1408526110,
+    24263034
+   ],
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "Now about your problem... What do you need?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_7[prisme-story] = 9",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "prisme-story",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 9
+       }
+      }
+     }
+    }
+   ]
+  },
+  "177401236": {
+   "kind": "text",
+   "parent": 1118484322,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "1140764835": {
+   "kind": "text",
+   "parent": 1118484322,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "Right, right. You’re in a bind, huh? Here’s the thing: I’m not great with heavy-duty stuff.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "302540884": {
+   "kind": "text",
+   "parent": 1118484322,
+   "actor": "Joey",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "But there’s this person you should talk to. Name’s Toni.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "578699044": {
+   "kind": "choice",
+   "parent": 1118484322,
+   "children": [
+    1637649758,
+    1175550449
+   ],
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "Infamous for getting anything to work. If it’s broken, she can fix it. If it shouldn’t work, she’ll make it work anyway. Real miracle worker, but a bit... intense.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1637649758": {
+   "kind": "text",
+   "parent": 578699044,
+   "actor": null,
+   "text": "Where can I find Toni?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1175550449": {
+   "kind": "text",
+   "parent": 578699044,
+   "children": [
+    -1294706705
+   ],
+   "actor": null,
+   "text": "She sounds... a little scary. Are you sure?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1294706705": {
+   "kind": "text",
+   "parent": 1175550449,
+   "actor": "Joey",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Scary? Nah. Well, maybe a little. But if you need something done, she’s your best bet. Trust me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1408526110": {
+   "kind": "text",
+   "parent": 1118484322,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "Last I heard, she’s somewhere in the badlands, near the abandoned mall. It’s her usual stomping ground. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "24263034": {
+   "kind": "text",
+   "parent": 1118484322,
+   "actor": "Joey",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You can’t miss her. She's pretty... big.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_7[prisme-story] + 10",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "prisme-story",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 10
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_7[badlands-unlocked] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "badlands-unlocked",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Speak with Joey about the issue.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Going Live (Anna)",
+        "of": "Quest"
+       },
+       "m_TaskId": -989935106
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "553676955": {
+   "kind": "text",
+   "parent": -1841682105,
+   "children": [
+    6042024
+   ],
+   "actor": null,
+   "text": "Can’t you just do something nice for once?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1371388400": {
+   "kind": "text",
+   "parent": 583811402,
+   "actor": "Joey",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Simple. A nice photo of Zuri's ass. I need a picture of them. Don’t ask why—just get it done, and I’ll help you out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_7[prisme-story] = 8",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "prisme-story",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 8
+      }
+     }
+    }
+   ]
+  },
+  "6042024": {
+   "kind": "text",
+   "parent": 553676955,
+   "actor": "Joey",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Nice? From me? Hah! Look, all I need is a little favor. Snap a pic of Zuri’s ass, and we’re square.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_7[prisme-story] = 8",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "prisme-story",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 8
+      }
+     }
+    }
+   ]
+  },
+  "-551220118": {
+   "kind": "text",
+   "parent": -1090608079,
+   "children": [
+    -866807100,
+    -1155725919
+   ],
+   "actor": null,
+   "text": "Here's the photo.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_7[takeaphoto-joey] ≥ 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "takeaphoto-joey",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_7[prisme-story] = 8",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "prisme-story",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 8
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-866807100": {
+   "kind": "text",
+   "parent": -551220118,
+   "actor": "Joey",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Really!? Show me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1155725919": {
+   "kind": "text",
+   "parent": -551220118,
+   "actor": "Joey",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Nice! Damn, you even got her to pose... Well, send it to my phone and we're good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_7[prisme-story] = 9",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "prisme-story",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 9
+      }
+     }
+    }
+   ]
+  },
+  "-992700382": {
+   "kind": "text",
+   "parent": -1090608079,
+   "children": [
+    -350499975
+   ],
+   "actor": null,
+   "text": "Show me your special stuff. (Shop)",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Mainstory[anna-heart-status] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-heart-status",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-350499975": {
+   "kind": "text",
+   "parent": -992700382,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "Let's go, big spender.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[active-store] = 12",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "active-store",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 12
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ShopCore to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ShopCore",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/ShopCore"
+      }
+     }
+    }
+   ]
+  },
+  "-418564948": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -123909669,
+    -2094697039
+   ],
+   "actor": "Joey",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You're walking like a guy who just closed a deal and got a blowjob on the way out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Mainstory[anna-heart-status] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-heart-status",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[joey-secondstoreunlocked] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "joey-secondstoreunlocked",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-123909669": {
+   "kind": "text",
+   "parent": -418564948,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "Hold up... come check the back. I’ve got stuff I only show to winners. Super exclusive. Super stupid expensive.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2094697039": {
+   "kind": "text",
+   "parent": -418564948,
+   "actor": "Joey",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Trust me… it’s your vibe now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[joey-secondstoreunlocked] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "joey-secondstoreunlocked",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Techstore",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Defaultdialogue and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active JoeyBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "JoeyBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/JoeyBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

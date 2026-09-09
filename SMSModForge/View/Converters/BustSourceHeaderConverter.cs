@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Globalization;
 using System.Windows.Data;
 using SMSModForge.Model;
@@ -22,7 +22,9 @@ public sealed class BustSourceHeaderConverter : IValueConverter
         => value switch
         {
             BustSource.Pack => "THIS PACK'S CHARACTERS",
-            BustSource.Vanilla => "VANILLA-BASED",
+            // Not "vanilla-based" any more: these are the game's own cast,
+            // present in every pack to be used rather than described.
+            BustSource.Vanilla => "THE GAME'S CHARACTERS",
             BustSource.None => "VOICE ONLY (no bust)",
             _ => "CHARACTERS",
         };

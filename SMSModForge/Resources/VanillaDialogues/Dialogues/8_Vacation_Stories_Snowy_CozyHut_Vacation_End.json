@@ -1,0 +1,182 @@
+{
+ "id": "8_Vacation_Stories/Snowy_CozyHut/Vacation_End",
+ "name": "Vacation_End",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  -2070149534
+ ],
+ "nodes": {
+  "-2070149534": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    68748153,
+    -1483452083,
+    139501129,
+    841545856,
+    1566726603,
+    821276207,
+    969068297
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "68748153": {
+   "kind": "text",
+   "parent": -2070149534,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "This was such a nice escape... I’ll miss the quiet here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1483452083": {
+   "kind": "text",
+   "parent": -2070149534,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It’s hard to say goodbye to this place, but I guess all good things have to end.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "139501129": {
+   "kind": "text",
+   "parent": -2070149534,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Do you think we’ll ever find another spot as cozy as this?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "841545856": {
+   "kind": "text",
+   "parent": -2070149534,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I’m really glad we came here. It was exactly what I needed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1566726603": {
+   "kind": "text",
+   "parent": -2070149534,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It feels like we just got here, and now it’s already time to leave.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "821276207": {
+   "kind": "text",
+   "parent": -2070149534,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Next time, I’ll make sure to pack even better... I don’t want to forget anything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "969068297": {
+   "kind": "text",
+   "parent": -2070149534,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let’s head back... and maybe start planning the next adventure.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Snowy_CozyHut",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Vacation_End and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[vacation-end-incoming] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vacation-end-incoming",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "branches": [
+    "vacationend"
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Return_Home_Vacation to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Return_Home_Vacation",
+       "of": "GetGameObjectInstance",
+       "path": "Return_Home_Vacation"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

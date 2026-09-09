@@ -1,0 +1,567 @@
+{
+ "id": "Holiday_Hallway_Conditions/Christmas_Party/Dialogue_PlayerHarem",
+ "name": "Dialogue_PlayerHarem",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Anna",
+  "Charlotte",
+  "Continue"
+ ],
+ "roots": [
+  -1695829391,
+  -298192948,
+  1956282894,
+  328654743,
+  920586685,
+  909797886,
+  1337270310,
+  2044398951,
+  1188364881,
+  -980073523,
+  -739101003,
+  214535382,
+  -1454231379,
+  -2120199493,
+  -1312966826,
+  1367788032,
+  531601894,
+  -1019557337,
+  391084940,
+  1558388191,
+  1785436817,
+  -1508672508,
+  -1162596749
+ ],
+ "nodes": {
+  "-1695829391": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    58865789
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Alright. Who let {D} have three glasses of whatever that was?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "58865789": {
+   "kind": "text",
+   "parent": -1695829391,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "It’s not eggnog. It’s eggpunch. That stuff had bite.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-298192948": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Sooo... we done here? Can I go play some vidyagames now?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1956282894": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Adrian. It’s Christmas dinner. Can you please stay at the table?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "328654743": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh let him go, Anna. He’s young. Full of hormones. Let the boy rot his brain in peace.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "920586685": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thank you. Finally, someone gets it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "909797886": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fine. But if I see a plate of cookies vanish while you’re “gaming,” I’ll know.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1337270310": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "So... You know the perfect way to end the day?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2044398951": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1188364881": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Exactly! Sucking {PC}'s fat cock together!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-980073523": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Well, I guess Christmas is about coming togther, rigth?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-739101003": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Charlotte! There's no way in hell that we're going to do that with Josef sleeping right over there!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "214535382": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 4,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AFewMinutesLater to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AFewMinutesLater",
+       "of": "GetGameObjectInstance",
+       "path": "6_Effects/Effect_Canvas/AFewMinutesLater"
+      }
+     }
+    }
+   ]
+  },
+  "-1454231379": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Y-Yes! Suck his fat balls harder, Anna! I wanna lick more precum of his cock!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ChristmasAnnaCharlotte (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ChristmasAnnaCharlotte (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/ChristmasAnnaCharlotte (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-2120199493": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Muwaaah! H-How about you take care of them and I'll suck his cock?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1312966826": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1701650276,
+    646142034,
+    2088833117
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Hmmm, no. I'm the guest here, I get to choose.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1701650276": {
+   "kind": "text",
+   "parent": -1312966826,
+   "actor": null,
+   "text": "Hey, no fighting... It's Christmas.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "646142034": {
+   "kind": "text",
+   "parent": -1312966826,
+   "actor": null,
+   "text": "Charlotte is right... Work your lips harder, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2088833117": {
+   "kind": "text",
+   "parent": -1312966826,
+   "actor": null,
+   "text": "(Moan in pleasure)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1367788032": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "I think he's getting close... Look at this steady stream of precum!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "531601894": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mwuaah.... Don't waste it, Charlotte...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1019557337": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -834751898,
+    -383766703,
+    -1732515518
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "You know what, I'll let you take my place when he blows. My Christmas present for you, sweetheart.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-834751898": {
+   "kind": "text",
+   "parent": -1019557337,
+   "actor": null,
+   "text": "Fuck, you two are driving me crazy... I'm... I'm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-383766703": {
+   "kind": "text",
+   "parent": -1019557337,
+   "actor": null,
+   "text": "Quickly, {M}... I can feel it coming!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1732515518": {
+   "kind": "text",
+   "parent": -1019557337,
+   "actor": null,
+   "text": "(Blow your load)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "391084940": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Yes! Fuck, swallow it all... Such a good dirty {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ChristmasAnnaCharlotte (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ChristmasAnnaCharlotte (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/ChristmasAnnaCharlotte (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1558388191": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "*Gulp* ... *Gulp* ... Muwaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1785436817": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Looks like a few drops escaped, huh? Guess I have to help out... Mwuaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1508672508": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "This is going to be an interesting evening...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-1162596749": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Merry christmas!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "Holiday_Hallway_Conditions/Christmas_Party/DialogueCondition",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dialogue_PlayerHarem and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[charlotte-threesome] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "charlotte-threesome",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

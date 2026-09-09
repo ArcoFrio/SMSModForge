@@ -130,6 +130,71 @@ public class UiTabTests
     }
 
     [Fact]
+    public void A_screen_already_being_changed_is_off_the_list()
+    {
+        // Two rows on one screen would be two sets of instructions for it,
+        // applied in an order an author can neither see nor control. Taking the
+        // used one off the list is cheaper than explaining that afterwards.
+        WindowHarness.Run(window =>
+        {
+            if (!VanillaUiLibrary.IsAvailable) { _out.WriteLine("no extraction - skipping"); return; }
+
+            var vm = (MainViewModel)window.DataContext;
+            int all = vm.AvailableUiScreens.Count();
+
+            vm.AddVanillaUiCommand.Execute(null);
+            vm.Uis[0].Source = "vanillaui:9_MainCanvas/Quitagme";
+
+            // A second row cannot choose it...
+            vm.AddVanillaUiCommand.Execute(null);
+            var offered = vm.AvailableUiScreens.Select(b => b.Token).ToList();
+            Assert.DoesNotContain("vanillaui:9_MainCanvas/Quitagme", offered);
+            Assert.Equal(all - 1, offered.Count);
+
+            // ...but the row that HAS it still sees it, or its own dropdown
+            // would come up blank on the thing it is already editing.
+            vm.SelectedUi = vm.Uis[0];
+            Assert.Contains("vanillaui:9_MainCanvas/Quitagme",
+                            vm.AvailableUiScreens.Select(b => b.Token));
+
+            // And freeing it puts it back.
+            vm.SelectedUi = vm.Uis[0];
+            vm.RemoveUiCommand.Execute(null);
+            Assert.Contains("vanillaui:9_MainCanvas/Quitagme",
+                            vm.AvailableUiScreens.Select(b => b.Token));
+        });
+    }
+
+    [Fact]
+    public void A_second_place_extension_defaults_to_a_place_that_is_free()
+    {
+        // Beach is the sensible first answer and a conflict as the second. The
+        // default steps along rather than handing out two extensions of one
+        // level on the second click.
+        WindowHarness.Run(window =>
+        {
+            var vm = (MainViewModel)window.DataContext;
+
+            vm.AddVanillaExtensionCommand.Execute(null);
+            string first = vm.VanillaExtensions[0].Source;
+
+            vm.AddVanillaExtensionCommand.Execute(null);
+            string second = vm.VanillaExtensions[1].Source;
+
+            _out.WriteLine($"{first} then {second}");
+            Assert.Equal("vanilla:14_Beach", first);   // Beach is still the first answer
+            Assert.NotEmpty(second);                   // rebuilding the list must not wipe it
+            Assert.NotEqual(first, second);
+
+            // And the used one is off the offered list for the other row.
+            vm.SelectedVanillaExtension = vm.VanillaExtensions[1];
+            var offered = vm.VanillaSourceOptions.Select(o => o.Token).ToList();
+            Assert.DoesNotContain(first, offered);
+            Assert.Contains(second, offered);
+        });
+    }
+
+    [Fact]
     public void An_untouched_screen_does_not_make_the_pack_look_edited()
     {
         // Seeding puts thousands of objects into the working copy, and the

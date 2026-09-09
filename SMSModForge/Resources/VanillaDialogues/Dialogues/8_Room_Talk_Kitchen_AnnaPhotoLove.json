@@ -1,0 +1,363 @@
+{
+ "id": "8_Room_Talk/Kitchen/AnnaPhotoLove",
+ "name": "AnnaPhotoLove",
+ "index": 14,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  1151990690,
+  -1160268438,
+  784578582
+ ],
+ "nodes": {
+  "1151990690": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    2057009855,
+    -889678968,
+    -566530696,
+    -275293313
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Let me find a good pose...",
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[photo-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "photo-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "784578582": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I really enjoy spending time with you, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2057009855": {
+   "kind": "text",
+   "parent": 1151990690,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "D-Does this look good? ... I hope you find me pleasing ....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A10_Anna_KitchenNew (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A10_Anna_KitchenNew (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A10_Anna_KitchenNew (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-889678968": {
+   "kind": "text",
+   "parent": 1151990690,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I love it when you stare at my breasts like that... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_KitchenNew (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_KitchenNew (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/Anna_KitchenNew (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-566530696": {
+   "kind": "text",
+   "parent": 1151990690,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmm... I'm groping my soft breasts for you....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_KitchenNew (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_KitchenNew (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/Anna_KitchenNew (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-275293313": {
+   "kind": "text",
+   "parent": 1151990690,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "D-Does my butt look too big? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_KitchenNew (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_KitchenNew (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/Anna_KitchenNew (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-1160268438": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    -807678118,
+    337655410,
+    -1433722657
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "One more, just for you...",
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Skill_Tree[two-photos] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "two-photos",
+        "list": "Skill_Tree",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-807678118": {
+   "kind": "text",
+   "parent": -1160268438,
+   "children": [
+    1489852886
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A76_PhotoTraitPhoto (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A76_PhotoTraitPhoto (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A76_PhotoTraitPhoto (7)"
+      }
+     }
+    }
+   ]
+  },
+  "337655410": {
+   "kind": "text",
+   "parent": -1160268438,
+   "children": [
+    636584956
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A76_PhotoTraitPhoto (8) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A76_PhotoTraitPhoto (8)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A76_PhotoTraitPhoto (8)"
+      }
+     }
+    }
+   ]
+  },
+  "-1433722657": {
+   "kind": "text",
+   "parent": -1160268438,
+   "children": [
+    625041124
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A84_PhotoTraitPhoto (9) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A84_PhotoTraitPhoto (9)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A84_PhotoTraitPhoto (9)"
+      }
+     }
+    }
+   ]
+  },
+  "625041124": {
+   "kind": "text",
+   "parent": -1433722657,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Whew. That one’s gonna give someone a very good night.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "636584956": {
+   "kind": "text",
+   "parent": 337655410,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Tell me that’s not thumbnail material.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1489852886": {
+   "kind": "text",
+   "parent": -807678118,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm… I like how that one came out. Might be my favorite so far.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Kitchen/DefaultDialoge",
+   "script": "Dialogue",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core[temp-stored-very-short-term] = AnnaPhotoLove",
+   "as": "GameObject"
+  }
+ ]
+}

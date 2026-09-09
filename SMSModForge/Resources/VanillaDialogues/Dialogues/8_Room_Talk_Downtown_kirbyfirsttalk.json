@@ -1,0 +1,500 @@
+{
+ "id": "8_Room_Talk/Downtown/kirbyfirsttalk",
+ "name": "kirbyfirsttalk",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Kirby",
+  "Liz"
+ ],
+ "roots": [
+  779332055,
+  -220693664,
+  349476793,
+  -1394043109,
+  134227955,
+  962753100
+ ],
+ "nodes": {
+  "779332055": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "So I wake up at four, I pump 'em, then I weigh the jugs and label 'em!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-220693664": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "It's only me at the farm right now, but I’m looking for one more with real strong output! You look like you got good udd—uh, I mean potential! Wanna join my milk farm?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "349476793": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "Oh god~ Oh god~ Oh god~ Ahhhhaaahhhh!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/LizBust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1394043109": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Huh. She must be lactose intolerant.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "134227955": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1705737056,
+    -1641877623,
+    -144871043,
+    1016060132
+   ],
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Hey stranger! You drink milk?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1705737056": {
+   "kind": "text",
+   "parent": 134227955,
+   "children": [
+    469164122
+   ],
+   "actor": null,
+   "text": "Depends. What kind of milk are we talking about here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1641877623": {
+   "kind": "text",
+   "parent": 134227955,
+   "children": [
+    -1015210008
+   ],
+   "actor": null,
+   "text": "Did you seriously just ask that woman to join a milk farm?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1016060132": {
+   "kind": "text",
+   "parent": 134227955,
+   "children": [
+    710138770,
+    -1804040373
+   ],
+   "actor": null,
+   "text": "Only if it’s the kind that comes fresh and warm.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-144871043": {
+   "kind": "text",
+   "parent": 134227955,
+   "children": [
+    -652449171
+   ],
+   "actor": null,
+   "text": "If this is some weird protein cult, I’m already in two.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-652449171": {
+   "kind": "text",
+   "parent": -144871043,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Oooh, cult! That’s what Clay says! He’s my {B}. He calls it a ‘teat cult.’ That’s a compliment, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "710138770": {
+   "kind": "text",
+   "parent": 1016060132,
+   "actor": "Kirby",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Ooooh, you get it! You’ve got a farmer’s heart. Or maybe a farmer’s... tongue?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1015210008": {
+   "kind": "text",
+   "parent": -1641877623,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Well yeah! It’s a real farm with real girls makin' real milk! Nothing shady. I got buckets, tubes, a cooler, and a handshake policy. You ever seen a happier cow?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "469164122": {
+   "kind": "text",
+   "parent": -1705737056,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "All kinds! Goat, cow, almond, girlfriend—wait no, not almond. I mean real girls. Wait, I mean... you know what I mean!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1804040373": {
+   "kind": "text",
+   "parent": 1016060132,
+   "actor": "Kirby",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Either way, I like your udd-er enthusiasm!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "962753100": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Here! Come by the farm sometime! We’re building a new barn for the girls. It’s gonna be moo-gnificent!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Milking Save[bafarm-unlocked] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafarm-unlocked",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionQuestsActivate",
+     "title": "Activate Moo! (Kirby)",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Moo! (Kirby)",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Downtown",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play kirbyfirsttalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DaysPassed] ≥ 32",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DaysPassed",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 32
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[milking-mainstory] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milking-mainstory",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KirbyBustCasualOutfit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KirbyBustCasualOutfit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/KirbyBustCasualOutfit"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LizBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LizBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/LizBust"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/KirbyBustCasualOutfit/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Milking Save[milking-mainstory] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milking-mainstory",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

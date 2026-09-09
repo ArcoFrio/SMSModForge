@@ -285,11 +285,17 @@ public sealed class NodeActionViewModel : ObservableObject
     /// <c>&lt;Key&gt;_Secondary</c>, reachable through GameObjects.</summary>
     public const string CatPlaces = "Places";
 
+    /// <summary>A UI the pack built, by its id. This is what makes one screen
+    /// open another: showing and hiding whole UIs IS the navigation, the same
+    /// way it is in the game, where 34 of 49 canvases sit switched off waiting
+    /// for their moment.</summary>
+    public const string CatUi = "UI";
+
     /// <summary>Categories offered when toggling something active. No Places:
     /// activating or deactivating a whole level is the transition system's job,
     /// not something an author should reach for from an action row.</summary>
     public static readonly IReadOnlyList<string> SetActiveCategories =
-        new[] { CatBust, CatOverlay, CatScene, CatPath };
+        new[] { CatBust, CatOverlay, CatScene, CatUi, CatPath };
 
     /// <summary>Categories offered when swapping a sprite. Places is the point of
     /// the difference: a level's own GameObject carries the base backdrop's
@@ -564,6 +570,177 @@ public sealed class NodeActionViewModel : ObservableObject
     }
 
     public bool IsVanillaSource => string.Equals(GetParam("source"), "vanilla", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// Which store a <c>$name</c> in the VALUE reads from, stored in the
+    /// 'valueSource' param.
+    /// <para/>
+    /// <see cref="VarSource"/> says where the value is WRITTEN; this says where
+    /// a value read INTO it comes from. They are independent, and the game's own
+    /// steps use both at once — "Set Core[Cash] = Core[Cash] − Core_2[frankmoneyrequest]"
+    /// reads two vanilla globals and writes a third.
+    /// </summary>
+    public string VarValueSource
+    {
+        get => string.Equals(GetParam("valueSource"), "vanilla", StringComparison.OrdinalIgnoreCase)
+            ? "Vanilla" : "Pack";
+        set
+        {
+            if (string.Equals(value, "Vanilla", StringComparison.OrdinalIgnoreCase))
+                Model.Params["valueSource"] = "vanilla";
+            else Model.Params.Remove("valueSource");
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(IsVanillaValueSource));
+        }
+    }
+
+    /// <summary>True when the value reads a vanilla global.</summary>
+    public bool IsVanillaValueSource
+        => string.Equals(GetParam("valueSource"), "vanilla", StringComparison.OrdinalIgnoreCase);
+
+    // ── A step the game does and this editor does not ────────────────
+
+    /// <summary>
+    /// True for a Game Creator step kept as-is because nothing here expresses
+    /// it. The row shows what it is and what it does, read-only, and can be
+    /// deleted like any other.
+    /// </summary>
+    public bool IsVanillaStep => Model.Type == NodeActionTypes.VanillaStep;
+
+    /// <summary>The game's own one-line description of the step.</summary>
+    public string VanillaTitle
+    {
+        get
+        {
+            string title = GetParam("title");
+            return string.IsNullOrEmpty(title) ? VanillaTypeName : title;
+        }
+    }
+
+    /// <summary>Game Creator's type name, with its prefix dropped —
+    /// "Quests Activate" rather than "InstructionQuestsActivate".</summary>
+    public string VanillaTypeName
+    {
+        get
+        {
+            string raw = GetParam("vanilla");
+            if (string.IsNullOrEmpty(raw)) return "(unknown step)";
+            if (raw.StartsWith("Instruction", StringComparison.Ordinal))
+                raw = raw.Substring("Instruction".Length);
+            return Spaced(raw);
+        }
+    }
+
+    /// <summary>
+    /// The step's parameters, flattened to name/value lines for display.
+    /// <para/>
+    /// Flattened rather than shown as JSON because the shapes are Game
+    /// Creator's, not ours, and nesting them in the row would bury the one
+    /// thing an author is looking for — which object, which quest, which value.
+    /// </summary>
+    public IReadOnlyList<VanillaDetail> VanillaDetails
+    {
+        get
+        {
+            var rows = new List<VanillaDetail>();
+            string raw = GetParam("details");
+            if (string.IsNullOrEmpty(raw)) return rows;
+
+            try
+            {
+                Flatten(Newtonsoft.Json.Linq.JToken.Parse(raw), "", rows);
+            }
+            catch (Newtonsoft.Json.JsonException)
+            {
+                rows.Add(new VanillaDetail("details", raw));
+            }
+            return rows;
+        }
+    }
+
+    /// <summary>One line of a vanilla step's parameters.</summary>
+    public sealed record VanillaDetail(string Name, string Value);
+
+    /// <summary>"QuestsTaskComplete" -> "Quests Task Complete".</summary>
+    private static string Spaced(string name)
+    {
+        var built = new System.Text.StringBuilder(name.Length + 8);
+        for (int i = 0; i < name.Length; i++)
+        {
+            if (i > 0 && char.IsUpper(name[i]) && !char.IsUpper(name[i - 1]))
+                built.Append(' ');
+            built.Append(name[i]);
+        }
+        return built.ToString();
+    }
+
+    /// <summary>
+    /// Game Creator's nested shapes as flat lines.
+    /// <para/>
+    /// The catalog has already read the chains down to what they say, so a
+    /// value is a literal, a named object or a variable. Those three are worth
+    /// a line each; the wrappers around them are not.
+    /// </summary>
+    private static void Flatten(Newtonsoft.Json.Linq.JToken token, string path,
+                                List<VanillaDetail> into)
+    {
+        if (into.Count >= 12) return;          // a row, not a document
+
+        if (token is Newtonsoft.Json.Linq.JObject holder)
+        {
+            string? kind = (string?)holder["kind"];
+            if (kind == "value" && holder["value"] != null)
+            {
+                into.Add(new VanillaDetail(Label(path), holder["value"]!.ToString()));
+                return;
+            }
+            if (kind == "object")
+            {
+                into.Add(new VanillaDetail(Label(path),
+                    (string?)holder["path"] ?? (string?)holder["name"] ?? "(none)"));
+                return;
+            }
+            if (kind == "none")
+            {
+                into.Add(new VanillaDetail(Label(path), "(none)"));
+                return;
+            }
+            if (kind == "variable" && holder["variable"] is Newtonsoft.Json.Linq.JObject v)
+            {
+                string list = (string?)v["list"] ?? "";
+                string name = (string?)v["name"] ?? (string?)v["pick"] ?? "";
+                into.Add(new VanillaDetail(Label(path),
+                    list.Length > 0 ? list + "[" + name + "]" : name));
+                return;
+            }
+
+            foreach (var pair in holder)
+            {
+                if (pair.Key.StartsWith("$", StringComparison.Ordinal)) continue;
+                Flatten(pair.Value!, path.Length == 0 ? pair.Key : path + "." + pair.Key, into);
+            }
+            return;
+        }
+
+        if (token is Newtonsoft.Json.Linq.JArray items)
+        {
+            into.Add(new VanillaDetail(Label(path), items.Count + " item(s)"));
+            return;
+        }
+
+        into.Add(new VanillaDetail(Label(path), token.ToString()));
+    }
+
+    /// <summary>"m_GameObject" -> "Game Object"; a nested path keeps its
+    /// last part, which is the one that names anything.</summary>
+    private static string Label(string path)
+    {
+        if (string.IsNullOrEmpty(path)) return "value";
+        int dot = path.LastIndexOf('.');
+        string last = dot < 0 ? path : path.Substring(dot + 1);
+        if (last.StartsWith("m_", StringComparison.Ordinal)) last = last.Substring(2);
+        return Spaced(last);
+    }
 
     public string VarName
     {

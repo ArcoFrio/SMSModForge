@@ -1,0 +1,807 @@
+{
+ "id": "8_Vacation_Stories/Tropical_Bar/Default",
+ "name": "Default",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "V_Diego"
+ ],
+ "roots": [
+  -29348598,
+  -1832925427,
+  165939468,
+  -3957865,
+  1944776786,
+  1339228390
+ ],
+ "nodes": {
+  "-29348598": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1928401861,
+    1915890286
+   ],
+   "actor": "V_Diego",
+   "expressionName": "my-expression",
+   "text": "Well, well, look who’s back! Couldn’t resist another round in paradise, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[tropclub-firsttime] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tropclub-firsttime",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1832925427": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1563625169,
+    -1040294516,
+    -833760424,
+    -482670511,
+    208222547
+   ],
+   "actor": "V_Diego",
+   "expressionName": "my-expression",
+   "text": "Hey there! Welcome!. First time here, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[tropclub-firsttime] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tropclub-firsttime",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1563625169": {
+   "kind": "text",
+   "parent": -1832925427,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "That obvious?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1040294516": {
+   "kind": "text",
+   "parent": -1832925427,
+   "actor": "V_Diego",
+   "expressionName": "my-expression",
+   "text": "Just a talent of mine. I can always spot newcomers. So, what’ll it be? Something fruity, something strong, or a little of both?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-833760424": {
+   "kind": "text",
+   "parent": -1832925427,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Let's see....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-482670511": {
+   "kind": "text",
+   "parent": -1832925427,
+   "actor": "V_Diego",
+   "expressionName": "my-expression",
+   "text": "Or maybe something romantic? You two look like the kind of couple who’d enjoy a drink with a little spark.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "208222547": {
+   "kind": "choice",
+   "parent": -1832925427,
+   "children": [
+    436381524,
+    619889683,
+    -1041664186
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh! No, no, we’re not—",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "436381524": {
+   "kind": "text",
+   "parent": 208222547,
+   "children": [
+    -1133872968,
+    -1142668353
+   ],
+   "actor": null,
+   "text": "We’re not a couple. She’s my {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "619889683": {
+   "kind": "text",
+   "parent": 208222547,
+   "children": [
+    -1742252816,
+    777988286
+   ],
+   "actor": null,
+   "text": "Wrong guess, we're {F}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1041664186": {
+   "kind": "text",
+   "parent": 208222547,
+   "children": [
+    1765252802
+   ],
+   "actor": null,
+   "text": "What do you think, {M}? Should we play along?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1765252802": {
+   "kind": "text",
+   "parent": -1041664186,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": " Stop that! He’ll get the wrong idea!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1742252816": {
+   "kind": "text",
+   "parent": 619889683,
+   "actor": "V_Diego",
+   "expressionName": "my-expression",
+   "text": "My bad! Happens sometimes. You’ve got that “close connection” look.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1133872968": {
+   "kind": "text",
+   "parent": 436381524,
+   "actor": "V_Diego",
+   "expressionName": "my-expression",
+   "text": "Your {M}? Well, I wouldn’t have guessed. You two have a good vibe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1142668353": {
+   "kind": "text",
+   "parent": 436381524,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Well, thank you... I think?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "777988286": {
+   "kind": "text",
+   "parent": 619889683,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "That’s... a compliment, I suppose.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1928401861": {
+   "kind": "text",
+   "parent": -29348598,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Guilty as charged. It’s hard to stay away from a place like this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1915890286": {
+   "kind": "text",
+   "parent": -29348598,
+   "actor": "V_Diego",
+   "expressionName": "my-expression",
+   "text": "I don’t blame you. So, what’s the plan this time? Same drinks as before, or should I surprise you with something new?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "165939468": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -911944327,
+    788589818,
+    -1351932101,
+    -2067184010,
+    -469944294
+   ],
+   "actor": "V_Diego",
+   "expressionName": "my-expression",
+   "text": "Alright, let’s get down to business. I’ve got some specials for you. ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-911944327": {
+   "kind": "text",
+   "parent": 165939468,
+   "children": [
+    1642964898
+   ],
+   "actor": null,
+   "text": "Rum, pineapple, and coconut",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "788589818": {
+   "kind": "text",
+   "parent": 165939468,
+   "children": [
+    -1307043598
+   ],
+   "actor": null,
+   "text": "Tequila, orange liqueur, and a splash of lime.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1351932101": {
+   "kind": "text",
+   "parent": 165939468,
+   "children": [
+    -360855872
+   ],
+   "actor": null,
+   "text": "A vodka-based drink with blue curaçao and lemonade.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2067184010": {
+   "kind": "text",
+   "parent": 165939468,
+   "children": [
+    208846738
+   ],
+   "actor": null,
+   "text": "A non-alcoholic blend of mango, passionfruit, and soda.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-469944294": {
+   "kind": "text",
+   "parent": 165939468,
+   "children": [
+    -1430191501
+   ],
+   "actor": null,
+   "text": "A chilled coconut water served straight from the shell. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1642964898": {
+   "kind": "text",
+   "parent": -911944327,
+   "actor": "V_Diego",
+   "expressionName": "my-expression",
+   "text": "Good choice! Light, sweet, and just enough kick to get you in the island mood. Coming right up!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1307043598": {
+   "kind": "text",
+   "parent": 788589818,
+   "actor": "V_Diego",
+   "expressionName": "my-expression",
+   "text": "Bold move! It’s got a bit of heat, but hey, it’s a party in a glass. You’re gonna love it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-360855872": {
+   "kind": "text",
+   "parent": -1351932101,
+   "actor": "V_Diego",
+   "expressionName": "my-expression",
+   "text": "Excellent taste! Smooth and vibrant, just like the view out there.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "208846738": {
+   "kind": "text",
+   "parent": -2067184010,
+   "actor": "V_Diego",
+   "expressionName": "my-expression",
+   "text": "Oh, keeping it clean, huh? Respect. Still a treat for the taste buds.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1430191501": {
+   "kind": "text",
+   "parent": -469944294,
+   "actor": "V_Diego",
+   "expressionName": "my-expression",
+   "text": "A classic choice. Nothing beats fresh coconut water. Keeps you refreshed and ready for anything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-3957865": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Diego/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1944776786": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1958096528,
+    506976846
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Well, that was... unexpected. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[tropclub-firsttime] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tropclub-firsttime",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1958096528": {
+   "kind": "choice",
+   "parent": 1944776786,
+   "children": [
+    -1770475174,
+    -1163059009,
+    377191962
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Did he really just think we were a couple?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1770475174": {
+   "kind": "text",
+   "parent": -1958096528,
+   "children": [
+    559512334
+   ],
+   "actor": null,
+   "text": "Honestly, I think he just saw how close we are. It’s not a bad thing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "559512334": {
+   "kind": "text",
+   "parent": -1770475174,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I guess. Still, it caught me off guard. I don’t think I’ve blushed like that in a long time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1163059009": {
+   "kind": "text",
+   "parent": -1958096528,
+   "children": [
+    1944548828
+   ],
+   "actor": null,
+   "text": "Can you blame him? You don’t exactly look like someone’s {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1944548828": {
+   "kind": "text",
+   "parent": -1163059009,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, stop. Besides, you’re not off the hook either—he thought you were charming enough to match me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "377191962": {
+   "kind": "text",
+   "parent": -1958096528,
+   "children": [
+    811436705
+   ],
+   "actor": null,
+   "text": "Do you think he imagined us having sex?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "811436705": {
+   "kind": "text",
+   "parent": 377191962,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "S-Stop it! God... N-No! Why would he? I....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "506976846": {
+   "kind": "text",
+   "parent": 1944776786,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Still, it’s kind of funny. I mean, it’s not like we look like a couple... right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1339228390": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    842838124,
+    346119151,
+    1535864250,
+    -1387542900
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I hope I'm not too old for a place like this...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "842838124": {
+   "kind": "text",
+   "parent": 1339228390,
+   "children": [
+    1147914268
+   ],
+   "actor": null,
+   "text": "So, how do you like it here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1147914268": {
+   "kind": "text",
+   "parent": 842838124,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "It’s beautiful, really. The beach, the atmosphere... it’s like stepping out of real life for a little while.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "346119151": {
+   "kind": "text",
+   "parent": 1339228390,
+   "children": [
+    -1006453045
+   ],
+   "actor": null,
+   "text": "Did you and {D} ever go on a vacation like this?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1006453045": {
+   "kind": "text",
+   "parent": 346119151,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Not quite like this. We had a few trips, but they were more about practicality—family visits, stuff like that. Nothing so carefree. This is... different.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1535864250": {
+   "kind": "text",
+   "parent": 1339228390,
+   "children": [
+    -154563800
+   ],
+   "actor": null,
+   "text": "Are you hungry? Should we also order something to eat?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-154563800": {
+   "kind": "text",
+   "parent": 1535864250,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "No, I’m good. I think the drinks will be plenty for now. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1387542900": {
+   "kind": "text",
+   "parent": 1339228390,
+   "children": [
+    1590898645
+   ],
+   "actor": null,
+   "text": "Let’s just relax with our drinks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1590898645": {
+   "kind": "text",
+   "parent": -1387542900,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That sounds perfect. No rush, no distractions... just us and the moment.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Tropical_Bar",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Default and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_TropicalDress to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_TropicalDress",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_TropicalDress"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_S_Diego to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_S_Diego",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Diego"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Leilani_Appears and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Leilani_Appears",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Vacation_Stories/Tropical_Bar/Leilani_Appears"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[tropclub-firsttime] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tropclub-firsttime",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 9_Vacation_Teleport_Tropical to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "9_Vacation_Teleport_Tropical",
+       "of": "GetGameObjectInstance",
+       "path": "9_Vacation_Teleport_Tropical"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,465 @@
+{
+ "id": "5_Levels/125_BarnBackInterior/Dialogue_CowPhotoshootTalk/CowPhotoShootTalk_Sofia",
+ "name": "CowPhotoShootTalk_Sofia",
+ "index": 6,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Sofia"
+ ],
+ "roots": [
+  387509314,
+  -676845445,
+  -275872523,
+  -562047180,
+  -612522340,
+  -1400969296,
+  -976512044
+ ],
+ "nodes": {
+  "387509314": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia_Cow to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia_Cow",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Sofia_Cow"
+      }
+     }
+    }
+   ]
+  },
+  "-676845445": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Moo~... Master… ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-275872523": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1552967570,
+    1804836794,
+    -1317928835
+   ],
+   "actor": "Sofia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I wore the outfit like you said… do I look good enough for the camera?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1552967570": {
+   "kind": "text",
+   "parent": -275872523,
+   "children": [
+    349400872
+   ],
+   "actor": null,
+   "text": "Spin around for me first. I want to see every inch.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1804836794": {
+   "kind": "text",
+   "parent": -275872523,
+   "children": [
+    -1238489625
+   ],
+   "actor": null,
+   "text": "All that’s missing is a sign that says “Free Milk.”",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1317928835": {
+   "kind": "text",
+   "parent": -275872523,
+   "children": [
+    507214162
+   ],
+   "actor": null,
+   "text": "Let’s just get started. Stand near the barn gate.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "507214162": {
+   "kind": "text",
+   "parent": -1317928835,
+   "actor": "Sofia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Y-Yes, Master… I’m ready when you are…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1238489625": {
+   "kind": "text",
+   "parent": 1804836794,
+   "actor": "Sofia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Only if you hold the sign while I squirt, perv~",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "349400872": {
+   "kind": "text",
+   "parent": -1552967570,
+   "actor": "Sofia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Heehee~ Yes, Master… look how it hugs my udders… I’m dripping already…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-562047180": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Take as many as you want… pose me, command me…",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CowPhoto_Sofia (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CowPhoto_Sofia (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/CowPhoto_Sofia (0)"
+      }
+     }
+    }
+   ]
+  },
+  "-612522340": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -260971394,
+    2043428851
+   ],
+   "actor": "Sofia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I’m just your human cow now…",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-260971394": {
+   "kind": "text",
+   "parent": -612522340,
+   "children": [
+    675014766,
+    -1245254189
+   ],
+   "actor": null,
+   "text": "Get on the ground and spread your legs.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2043428851": {
+   "kind": "text",
+   "parent": -612522340,
+   "children": [
+    -371544925,
+    -473632954
+   ],
+   "actor": null,
+   "text": "Milk yourself for me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-371544925": {
+   "kind": "text",
+   "parent": 2043428851,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Mmm~ I love when you make me do it myself…",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CowPhoto_Sofia (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CowPhoto_Sofia (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/CowPhoto_Sofia (2)"
+      }
+     }
+    }
+   ]
+  },
+  "675014766": {
+   "kind": "text",
+   "parent": -260971394,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Y-Yes, Master… on the ground, legs wide… nngh… do you want to see everything?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CowPhoto_Sofia (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CowPhoto_Sofia (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/CowPhoto_Sofia (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1400969296": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Do you like your little cow like this…? Leaking and spread just for you…",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Milking Save[bafarm-promophotostaken] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafarm-promophotostaken",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-976512044": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Next time… can we record it too? I want them to see how much I need this…",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1245254189": {
+   "kind": "text",
+   "parent": -260971394,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "I’m your filthy cow… use the shot however you want...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-473632954": {
+   "kind": "text",
+   "parent": 2043428851,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Look, Master… I’m squeezing every drop out… just for the camera...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "5_Levels/125_BarnBackInterior/Dialogue_MilkDefaulttalk/Defaultmilktalk_Sofia",
+   "script": "Dialogue",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core_NoSave2[2025-shortgo-saveTHREE] = CowPhotoShootTalk_Sofia",
+   "as": "GameObject"
+  }
+ ]
+}

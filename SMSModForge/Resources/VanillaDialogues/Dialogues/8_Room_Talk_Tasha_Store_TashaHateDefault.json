@@ -1,0 +1,300 @@
+{
+ "id": "8_Room_Talk/Tasha_Store/TashaHateDefault",
+ "name": "TashaHateDefault",
+ "index": 6,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Tasha"
+ ],
+ "roots": [
+  277840952
+ ],
+ "nodes": {
+  "277840952": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1899339408,
+    -289700799,
+    -2110387112
+   ],
+   "actor": "Tasha",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You're not welcome here, fuck off or I'll call the cops.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1899339408": {
+   "kind": "text",
+   "parent": 277840952,
+   "children": [
+    -1505369104
+   ],
+   "actor": null,
+   "text": "I just wanna buy some minis.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-289700799": {
+   "kind": "text",
+   "parent": 277840952,
+   "children": [
+    1122617926
+   ],
+   "actor": null,
+   "text": "I'm sorry, Tasha.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2110387112": {
+   "kind": "text",
+   "parent": 277840952,
+   "actor": null,
+   "text": "Yeah, I'm going.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1505369104": {
+   "kind": "text",
+   "parent": -1899339408,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Give me your money and piss off.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[active-store] = 6",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "active-store",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 6
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ShopCore to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ShopCore",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/ShopCore"
+      }
+     }
+    }
+   ]
+  },
+  "1122617926": {
+   "kind": "text",
+   "parent": -289700799,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "I don't care. You blew it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Tasha_Store",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play TashaHateDefault and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_7[tasha-hatestate] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tasha-hatestate",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Tasha_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Tasha_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Tasha_Default"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_7[tasha-hatestate] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tasha-hatestate",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

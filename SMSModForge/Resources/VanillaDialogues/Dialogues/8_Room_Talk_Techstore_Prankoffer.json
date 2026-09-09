@@ -1,0 +1,473 @@
+{
+ "id": "8_Room_Talk/Techstore/Prankoffer",
+ "name": "Prankoffer",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Joey"
+ ],
+ "roots": [
+  -513501498,
+  583858586,
+  656205776
+ ],
+ "nodes": {
+  "-513501498": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Joey",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hey, {PC}! Got a minute? I need your help with something fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "583858586": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    639164805,
+    -2093810774,
+    -1455431201
+   ],
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "I’ve got this great prank planned for Zuri, but I need your help to pull it off.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "639164805": {
+   "kind": "text",
+   "parent": 583858586,
+   "actor": null,
+   "text": "A prank? What do you have in mind?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2093810774": {
+   "kind": "text",
+   "parent": 583858586,
+   "actor": null,
+   "text": "I don't like the sound of it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "656205776": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1040018349,
+    1788256891,
+    -22217600,
+    -1560568197
+   ],
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "It’s simple. I need you to lure Zuri to the mall restrooms. I’ve set up a harmless little surprise there for her.",
+   "tag": "rooty",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1040018349": {
+   "kind": "text",
+   "parent": 656205776,
+   "children": [
+    -1666059553
+   ],
+   "actor": null,
+   "text": "Count me in. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1788256891": {
+   "kind": "text",
+   "parent": 656205776,
+   "children": [
+    -1947889512,
+    -1164826079
+   ],
+   "actor": null,
+   "text": "What exactly is the prank?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-22217600": {
+   "kind": "text",
+   "parent": 656205776,
+   "children": [
+    -351189310,
+    1803347496
+   ],
+   "actor": null,
+   "text": "How do you want me to get her there?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1560568197": {
+   "kind": "text",
+   "parent": 656205776,
+   "children": [
+    489343983
+   ],
+   "actor": null,
+   "text": "Zuri's already mad at you. I don't want be a part of this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1947889512": {
+   "kind": "text",
+   "parent": 1788256891,
+   "actor": "Joey",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Let’s just say it involves some harmless fun with a aphrodisiac dispenser.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1164826079": {
+   "kind": "text",
+   "parent": 1788256891,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "Nothing mean, just a little something to get her in the mood for some dick!",
+   "jump": {
+    "mode": "Jump",
+    "to": "rooty"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-351189310": {
+   "kind": "text",
+   "parent": -22217600,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "Just tell her you saw something suspicious and thought she should check it out. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1803347496": {
+   "kind": "text",
+   "parent": -22217600,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "She’s always on the lookout for trouble, so she’ll take the bait.",
+   "jump": {
+    "mode": "Jump",
+    "to": "rooty"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1666059553": {
+   "kind": "text",
+   "parent": -1040018349,
+   "actor": "Joey",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Awesome!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_2[zuri-prank-agreed] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zuri-prank-agreed",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionQuestsActivate",
+     "title": "Activate Techbro (Joey)",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Techbro (Joey)",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "489343983": {
+   "kind": "text",
+   "parent": -1560568197,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "Man... Everyone's here so stiff....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1455431201": {
+   "kind": "text",
+   "parent": 583858586,
+   "children": [
+    1170019263,
+    1456068390
+   ],
+   "actor": null,
+   "text": "(Smart) There’s more to it than a prank, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Smart] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Smart",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1170019263": {
+   "kind": "text",
+   "parent": -1455431201,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "…Alright, you got me. It’s not just about the prank. I mean, yeah, I wanna see her flustered, but… she’s always so calm, so perfect.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1456068390": {
+   "kind": "text",
+   "parent": -1455431201,
+   "actor": "Joey",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "It’s like nothing rattles her. I just want to get some kind of reaction, you know? Maybe even make her laugh.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Techstore",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Prankoffer and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[zuri-prank-start] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zuri-prank-start",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DaysPassed] ≥ 15",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DaysPassed",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 15
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active JoeyBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "JoeyBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/JoeyBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_2[zuri-prank-start] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zuri-prank-start",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

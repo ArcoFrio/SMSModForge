@@ -1,0 +1,1461 @@
+{
+ "id": "8_Room_Talk/Upstairs/Alice_GhostCostumeScene",
+ "name": "Alice_GhostCostumeScene",
+ "index": 8,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Alice Ghost",
+  "Continue",
+  "Josef"
+ ],
+ "roots": [
+  -393817368,
+  722418079,
+  -250964187
+ ],
+ "nodes": {
+  "-393817368": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1772847701,
+    833432161,
+    -362400044
+   ],
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "OooOOoo… I’m the ghost that haunts this house… and I demand a victim!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1772847701": {
+   "kind": "text",
+   "parent": -393817368,
+   "actor": null,
+   "text": "Damn, Casper really let herself go.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "833432161": {
+   "kind": "text",
+   "parent": -393817368,
+   "actor": null,
+   "text": "Careful, with those out, I might let you haunt me all night.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-362400044": {
+   "kind": "text",
+   "parent": -393817368,
+   "actor": null,
+   "text": "{M}? What the hell are you doing dressed like that?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "722418079": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -248004562,
+    -286932694
+   ],
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "Shut up! It’s Halloween, I’m in character. You’re supposed to be terrified…",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-250964187": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -880298876,
+    104270156
+   ],
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "I only crave the warmth of the living… in the bedroom.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-248004562": {
+   "kind": "text",
+   "parent": 722418079,
+   "actor": null,
+   "text": "So, what's the deal?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-286932694": {
+   "kind": "text",
+   "parent": 722418079,
+   "actor": null,
+   "text": "Is this ghost here to steal candy, or something else?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-880298876": {
+   "kind": "text",
+   "parent": -250964187,
+   "children": [
+    1136835718,
+    -122890265,
+    -1355850903,
+    1447979212,
+    -1910900087,
+    -548568316,
+    -1819915264,
+    290771417,
+    1433738968,
+    200450993,
+    -1664517266,
+    1995445814,
+    1740270966
+   ],
+   "actor": null,
+   "text": "If you’re hunting for someone to suck dry, I volunteer",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "104270156": {
+   "kind": "text",
+   "parent": -250964187,
+   "children": [
+    -119130794,
+    8343674
+   ],
+   "actor": null,
+   "text": "Not tonight, {M}. Go scare someone else.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-119130794": {
+   "kind": "text",
+   "parent": 104270156,
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "Wow. You’re turning down a naked ghost on Halloween? What are you, gay?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "8343674": {
+   "kind": "text",
+   "parent": 104270156,
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "Whatever. Go jerk off to pumpkins or something, loser.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Alice_GhostBust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1136835718": {
+   "kind": "text",
+   "parent": -880298876,
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "Good answer… You’re supposed to shiver when a ghost touches you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-122890265": {
+   "kind": "text",
+   "parent": -880298876,
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "But with me… it’s not fear that makes you hard, is it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1355850903": {
+   "kind": "text",
+   "parent": -880298876,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 28_Upstairs to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "28_Upstairs",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/28_Upstairs"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 1_Master_Bedrooom to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "1_Master_Bedrooom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/1_Master_Bedrooom"
+      }
+     }
+    }
+   ]
+  },
+  "1447979212": {
+   "kind": "choice",
+   "parent": -880298876,
+   "children": [
+    -357714688,
+    1543132228,
+    1195541741
+   ],
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "OoOooh… the ghost has claimed her victim!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceGhostScene (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceGhostScene (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AliceGhostScene (1)"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set NoSave_Eve_1[alice-halloween-filled] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-halloween-filled",
+        "list": "NoSave_Eve_1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1910900087": {
+   "kind": "text",
+   "parent": -880298876,
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "Mmm… yeah… take me… take all of me…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-357714688": {
+   "kind": "text",
+   "parent": 1447979212,
+   "actor": null,
+   "text": "You ride like a demon, not a ghost.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1543132228": {
+   "kind": "text",
+   "parent": 1447979212,
+   "actor": null,
+   "text": "If this is haunting, then I hope I die tonight.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1195541741": {
+   "kind": "text",
+   "parent": 1447979212,
+   "actor": null,
+   "text": "Fuck, you’re tight… keep riding me just like that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-548568316": {
+   "kind": "choice",
+   "parent": -880298876,
+   "children": [
+    1825502057,
+    1007368837,
+    327185670
+   ],
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "Call me {M}. Say it while... Hngaah.... While you fuck me!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceGhostScene (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceGhostScene (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AliceGhostScene (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1825502057": {
+   "kind": "text",
+   "parent": -548568316,
+   "children": [
+    857086377
+   ],
+   "actor": null,
+   "text": "Yes… {M}. I’m your filthy little victim.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1007368837": {
+   "kind": "text",
+   "parent": -548568316,
+   "children": [
+    -1025799572
+   ],
+   "actor": null,
+   "text": "You’re the worst Halloween costume ever… {M} ghost.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "327185670": {
+   "kind": "text",
+   "parent": -548568316,
+   "children": [
+    131429219
+   ],
+   "actor": null,
+   "text": "No way. That’s too weird...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "131429219": {
+   "kind": "text",
+   "parent": 327185670,
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "Wow. You can’t even play along? Pathetic.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1025799572": {
+   "kind": "text",
+   "parent": 1007368837,
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "Shut up and cum for your {M} ghost!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "857086377": {
+   "kind": "text",
+   "parent": 1825502057,
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "Good boy… {M}’s gonna drain you dry…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1819915264": {
+   "kind": "choice",
+   "parent": -880298876,
+   "children": [
+    -1217672915,
+    1752078328
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Anna? You in there?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1217672915": {
+   "kind": "text",
+   "parent": -1819915264,
+   "children": [
+    1626826769,
+    811774087
+   ],
+   "actor": null,
+   "text": "Go away, {D}! I’m… busy!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1752078328": {
+   "kind": "text",
+   "parent": -1819915264,
+   "children": [
+    -406390060,
+    1361108336,
+    -1412108664,
+    191906094,
+    1844368981,
+    -1996563196,
+    -891316923,
+    -527707345,
+    -2134240810,
+    -1122742530,
+    71643019,
+    1116074563,
+    -1945187446
+   ],
+   "actor": null,
+   "text": "Yeah… come in!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "290771417": {
+   "kind": "choice",
+   "parent": -880298876,
+   "children": [
+    -1558585616,
+    503138686,
+    1634665280
+   ],
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "Fuuuck… yes… give it to me… let {M} drain every drop out of you…",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-406390060": {
+   "kind": "text",
+   "parent": 1752078328,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Anna? What are you",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    }
+   ]
+  },
+  "1626826769": {
+   "kind": "text",
+   "parent": -1217672915,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Fine, fine. I’ll check on you later.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1558585616": {
+   "kind": "text",
+   "parent": 290771417,
+   "children": [
+    1408233678
+   ],
+   "actor": null,
+   "text": "Fuck… you feel incredible, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "503138686": {
+   "kind": "text",
+   "parent": 290771417,
+   "children": [
+    -1659400269
+   ],
+   "actor": null,
+   "text": "Take it… ride me harder. I’m all yours.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1634665280": {
+   "kind": "text",
+   "parent": 290771417,
+   "children": [
+    -616167363,
+    1311289206
+   ],
+   "actor": null,
+   "text": "I know it’s you, Alice… not Anna.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-616167363": {
+   "kind": "text",
+   "parent": 1634665280,
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "OooOOooh… silly mortal… the ghost has no name… just tits and hunger.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1408233678": {
+   "kind": "text",
+   "parent": -1558585616,
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "Good… good little victim… give me everything… {M} wants it all…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1659400269": {
+   "kind": "text",
+   "parent": 503138686,
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "Good… good little victim… give me everything… {M} wants it all…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1311289206": {
+   "kind": "text",
+   "parent": 1634665280,
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "And if I were Alice… would you really stop me now?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1433738968": {
+   "kind": "text",
+   "parent": -880298876,
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "Shit… I’m gonna...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "200450993": {
+   "kind": "text",
+   "parent": -880298876,
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "That's it... {PC}... I'm... Fuck! Shit~ Don't stop... Don't...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1664517266": {
+   "kind": "text",
+   "parent": -880298876,
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "Yes! Cum for your ghost {M}… fill me up…",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceGhostScene (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceGhostScene (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AliceGhostScene (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1995445814": {
+   "kind": "text",
+   "parent": -880298876,
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "You’ve been properly haunted. Consider yourself lucky I didn’t steal your soul too.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceGhostScene (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceGhostScene (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AliceGhostScene (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceGhostScene (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceGhostScene (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AliceGhostScene (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1740270966": {
+   "kind": "text",
+   "parent": -880298876,
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "Happy Halloween, loser.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "811774087": {
+   "kind": "text",
+   "parent": -1217672915,
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "Mmm… Cockblock your own {D} from entering his bedroom? That makes me even wetter…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1361108336": {
+   "kind": "text",
+   "parent": 1752078328,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "…God… Anna… you’re really letting go tonight.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1412108664": {
+   "kind": "text",
+   "parent": 1752078328,
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "OooOOooh… y-yes, Josef… your wife is being such a bad ghost…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "191906094": {
+   "kind": "text",
+   "parent": 1752078328,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Don't worry, {S}. I'll help you catch this naughty ghost! Hnggahh... Fuck~",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceGhostScene (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceGhostScene (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AliceGhostScene (5)"
+      }
+     }
+    }
+   ]
+  },
+  "1844368981": {
+   "kind": "text",
+   "parent": 1752078328,
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "Oh God! FUCK! I'm stuffed, I'm full up, I'm absolutely full! I'm telling you, Anna is such a lucky slut!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1996563196": {
+   "kind": "text",
+   "parent": 1752078328,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Yeah, babe... You are... You're the luckiest woman on earth! You're so tight today... I'm getting close...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-891316923": {
+   "kind": "choice",
+   "parent": 1752078328,
+   "children": [
+    -1452083082,
+    -1663315312,
+    -1692328408
+   ],
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "Josef... {PC}... Cum for me… fill your ghost {M} up… yesss!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-527707345": {
+   "kind": "text",
+   "parent": 1752078328,
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "Hngaaah~ AAAH! YESSHHHH! Fhuuuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceGhostScene (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceGhostScene (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AliceGhostScene (6)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceGhostScene (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceGhostScene (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AliceGhostScene (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-2134240810": {
+   "kind": "text",
+   "parent": 1752078328,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Christ… unbelievable.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1122742530": {
+   "kind": "text",
+   "parent": 1752078328,
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "Oh my, look at this mess! You two shoved a lot of ectoplasm up my holes...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceGhostScene (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceGhostScene (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AliceGhostScene (7)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceGhostScene (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceGhostScene (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AliceGhostScene (2)"
+      }
+     }
+    }
+   ]
+  },
+  "71643019": {
+   "kind": "text",
+   "parent": 1752078328,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "F-Fuck, Anna... You're in such a slutty mood tonight... I love it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1116074563": {
+   "kind": "text",
+   "parent": 1752078328,
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "Yeah, that's me. Anna. The best fuck slut in all of Peak City!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1945187446": {
+   "kind": "text",
+   "parent": 1752078328,
+   "actor": "Alice Ghost",
+   "expressionName": "neutral",
+   "text": "Well... You’ve been haunted enough for tonight… I'll return to my realm now... OOoooOOoo....",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1452083082": {
+   "kind": "text",
+   "parent": -891316923,
+   "actor": null,
+   "text": "F-Fuck, here it comes...  Take it, Alice!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1663315312": {
+   "kind": "text",
+   "parent": -891316923,
+   "actor": null,
+   "text": "Hngaah! B-Big load coming right up! Take it, {M}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1692328408": {
+   "kind": "text",
+   "parent": -891316923,
+   "actor": null,
+   "text": "(Fill her pussy with your load)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Upstairs",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Alice_GhostCostumeScene and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If CoreFinalStates[Alice-SexOn] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Alice-SexOn",
+        "list": "CoreFinalStates",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Holidays[holiday-halloween] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "holiday-halloween",
+        "list": "Holidays",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If NoSave_Eve_1[alice-halloweed-scene-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-halloweed-scene-done",
+        "list": "NoSave_Eve_1",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "branches": [
+    "alicehalloween"
+   ],
+   "before": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[DialogueVariation] = Random3[Random]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random3",
+        "pick": "random",
+        "type": "number"
+       }
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Alice_GhostBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Alice_GhostBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Alice_GhostBust"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Gallery-Active] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gallery-Active",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 28_Upstairs to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "28_Upstairs",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/28_Upstairs"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 1_Master_Bedrooom to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "1_Master_Bedrooom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/1_Master_Bedrooom"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set NoSave_Eve_1[alice-halloweed-scene-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-halloweed-scene-done",
+        "list": "NoSave_Eve_1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Gallery-Active] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gallery-Active",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

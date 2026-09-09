@@ -1,0 +1,142 @@
+{
+ "id": "8_Room_Talk/ConventionFans/CelesteMoments/CelesteConBroken (2)",
+ "name": "CelesteConBroken (2)",
+ "index": 4,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Celeste"
+ ],
+ "roots": [
+  1365875830,
+  -1880583636,
+  1707282865
+ ],
+ "nodes": {
+  "-1880583636": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Celeste",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1707282865": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Maybe you should take your own advice—learn to be remembered.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1365875830": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Kinda brutal, huh? One second, you’re everything. The next? The industry moves on.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/ConventionFans/CelesteMoments",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play CelesteConBroken (2) and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[celeste-broken] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-broken",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active XXX_Celeste_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "XXX_Celeste_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/XXX_Celeste_Bust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/XXX_Celeste_Bust/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

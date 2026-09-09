@@ -1,0 +1,1449 @@
+{
+ "id": "8_Room_Talk/generalstore/DefaultDialoge",
+ "name": "DefaultDialoge",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Kate",
+  "You"
+ ],
+ "roots": [
+  390130048,
+  785479334,
+  -1491817054
+ ],
+ "nodes": {
+  "-1491817054": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1576000005,
+    1333643681,
+    467004227,
+    -578208207
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Yoooo! What'cha want, huh?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1576000005": {
+   "kind": "text",
+   "parent": -1491817054,
+   "children": [
+    171947959
+   ],
+   "actor": null,
+   "text": "[Shop]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-578208207": {
+   "kind": "text",
+   "parent": -1491817054,
+   "children": [
+    793328106
+   ],
+   "actor": null,
+   "text": "I'm good, thanks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "171947959": {
+   "kind": "text",
+   "parent": -1576000005,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Go for it!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[active-store] = 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "active-store",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ShopCore to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ShopCore",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/ShopCore"
+      }
+     }
+    }
+   ]
+  },
+  "793328106": {
+   "kind": "text",
+   "parent": -578208207,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "If you say so!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1333643681": {
+   "kind": "text",
+   "parent": -1491817054,
+   "children": [
+    -98159184,
+    -1532304683,
+    1162599062,
+    2060367809
+   ],
+   "actor": null,
+   "text": "Hey, can you teach me some slang?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[bouncer-met] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bouncer-met",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[Urban-Linguist-5] ≤ 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Urban-Linguist-5",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-98159184": {
+   "kind": "text",
+   "parent": 1333643681,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "You need me to teach you how to talk? That's kinda sus.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1532304683": {
+   "kind": "text",
+   "parent": 1333643681,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "I need it to defeat a bouncer.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1162599062": {
+   "kind": "text",
+   "parent": 1333643681,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Hmm.. I saw you roll up in that fancy car. You look like you got the bag. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2060367809": {
+   "kind": "choice",
+   "parent": 1333643681,
+   "children": [
+    916510280,
+    -2068872217,
+    432811033
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "How about you slide me some cash, and I'll plug you with the slang? Two grand should do nicely.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "916510280": {
+   "kind": "text",
+   "parent": 2060367809,
+   "children": [
+    604255104,
+    1946686788,
+    953492708,
+    -462617244,
+    1297681525,
+    -1080665512
+   ],
+   "actor": null,
+   "text": "Here you go. [$2,000]",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 2000",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2000
+       }
+      }
+     }
+    }
+   ]
+  },
+  "432811033": {
+   "kind": "text",
+   "parent": 2060367809,
+   "children": [
+    1324505869
+   ],
+   "actor": null,
+   "text": "I'll think about it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "604255104": {
+   "kind": "text",
+   "parent": 916510280,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": " Whoa, hold up! Are you serious? Two thousand dollars?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -2000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -2000
+      }
+     }
+    }
+   ]
+  },
+  "1324505869": {
+   "kind": "text",
+   "parent": 432811033,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Bet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1946686788": {
+   "kind": "text",
+   "parent": 916510280,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Damn, okay! You really out here flexin'. Aight, listen up. First, you gotta know the basics. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Traits[Urban-Linguist-5] = 5",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Urban-Linguist-5",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 5
+      }
+     }
+    }
+   ]
+  },
+  "785479334": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    806242255,
+    1201173145
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Yo, what's good? Welcome to our humble spot. Name’s Kate. What brings you in today?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[kate-met] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-met",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "806242255": {
+   "kind": "text",
+   "parent": 785479334,
+   "children": [
+    157774132,
+    794879925
+   ],
+   "actor": null,
+   "text": "I'm {PC}. Nice to meet you Kate.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1201173145": {
+   "kind": "text",
+   "parent": 785479334,
+   "children": [
+    -1830205561,
+    36582525
+   ],
+   "actor": null,
+   "text": "Just looking around. I'm {PC} by the way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "157774132": {
+   "kind": "text",
+   "parent": 806242255,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "{PC}? ... Uh, that's a... Uh, cool name... I'm Kate, but I just said that already. Ugh, I'm so cringe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[kate-met] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-met",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[kate-met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-met",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1830205561": {
+   "kind": "text",
+   "parent": 1201173145,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "{PC}? ... Uh, that's a... Uh, cool name... I'm Kate, but I just said that already. Ugh, I'm so cringe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "953492708": {
+   "kind": "text",
+   "parent": 916510280,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Aight, listen closely...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-462617244": {
+   "kind": "text",
+   "parent": 916510280,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "1297681525": {
+   "kind": "choice",
+   "parent": 916510280,
+   "children": [
+    -919119290,
+    398697867,
+    1198800866
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "... And that's how you avoid being mid.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[new-trait] = Urban Linguist",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Urban Linguist"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "new-trait",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_NewTrait_GO to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_NewTrait_GO",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Stat_Increase_Canvas/Layout/Raise_NewTrait_GO"
+      }
+     }
+    }
+   ]
+  },
+  "-919119290": {
+   "kind": "text",
+   "parent": 1297681525,
+   "children": [
+    -1867166126
+   ],
+   "actor": null,
+   "text": "(Urban Linguist) Common Kate W.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "398697867": {
+   "kind": "text",
+   "parent": 1297681525,
+   "children": [
+    54065723
+   ],
+   "actor": null,
+   "text": "Thanks for the help, Kate.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1198800866": {
+   "kind": "text",
+   "parent": 1297681525,
+   "children": [
+    -976600210
+   ],
+   "actor": null,
+   "text": "God, I want to die.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-976600210": {
+   "kind": "text",
+   "parent": 1198800866,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Trueee! Same to be honest.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "54065723": {
+   "kind": "text",
+   "parent": 398697867,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "You're welcome, King.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1867166126": {
+   "kind": "text",
+   "parent": -919119290,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Hell yeah, couldn't have said it better.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1080665512": {
+   "kind": "text",
+   "parent": 916510280,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "But yeah, thanks for the cash. Best day ever!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "467004227": {
+   "kind": "text",
+   "parent": -1491817054,
+   "children": [
+    -1355540700,
+    653587107,
+    -436938729,
+    770314209
+   ],
+   "actor": null,
+   "text": "I’d love to take a few shots of you. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[bring-me-a-photo-active] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bring-me-a-photo-active",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[kate-home-enabled] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-home-enabled",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1355540700": {
+   "kind": "text",
+   "parent": 467004227,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Ooh, that sounds fun! But it’s gonna cost you. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "653587107": {
+   "kind": "choice",
+   "parent": 467004227,
+   "children": [
+    442187882,
+    1369309566
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "$500 per shot... Gotta fund my bubble tea addiction somehow!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "442187882": {
+   "kind": "text",
+   "parent": 653587107,
+   "actor": null,
+   "text": "Deal. When can we get started?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1369309566": {
+   "kind": "text",
+   "parent": 653587107,
+   "children": [
+    -1442920841
+   ],
+   "actor": null,
+   "text": "Uh, that's too much.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1442920841": {
+   "kind": "text",
+   "parent": 1369309566,
+   "actor": "Kate",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Your loss!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-436938729": {
+   "kind": "text",
+   "parent": 467004227,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Here’s my address. Let’s meet on Thursdays... It's like, my only free day. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done_2[kate-home-enabled] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-home-enabled",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "770314209": {
+   "kind": "text",
+   "parent": 467004227,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "This is gonna be so lit!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "390130048": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    221382655
+   ],
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hey! I know you got the photo you wanted, but I thought.... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[perfect-kate-photo] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "perfect-kate-photo",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[kate-hang-enabled] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-hang-enabled",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[kate-friendzoned] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-friendzoned",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "221382655": {
+   "kind": "choice",
+   "parent": 390130048,
+   "children": [
+    -1431116406,
+    -2134653894,
+    -1775499734
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "I thought you might still want to hang out together sometime? Only if you want, of course.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1431116406": {
+   "kind": "text",
+   "parent": 221382655,
+   "children": [
+    -605857603
+   ],
+   "actor": null,
+   "text": "I'd love that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2134653894": {
+   "kind": "text",
+   "parent": 221382655,
+   "children": [
+    537742031
+   ],
+   "actor": null,
+   "text": "Only if you promise me to be less tense when I’m around.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-605857603": {
+   "kind": "text",
+   "parent": -1431116406,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yay! I... I'd like that too. See you soon!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[kate-hang-enabled] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-hang-enabled",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "537742031": {
+   "kind": "text",
+   "parent": -2134653894,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I promise! ... I'll try... Make sure to visit me, yes?",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[kate-hang-enabled] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-hang-enabled",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1775499734": {
+   "kind": "text",
+   "parent": 221382655,
+   "children": [
+    1691470031
+   ],
+   "actor": null,
+   "text": "I'm sorry, Kate. But I don't.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1691470031": {
+   "kind": "text",
+   "parent": -1775499734,
+   "actor": "Kate",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Oh... That's cool... Yeah... No biggie. I-I can handle this... If you excuse me...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[kate-friendzoned] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-friendzoned",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Kate/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "794879925": {
+   "kind": "text",
+   "parent": 806242255,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "But yeah... W-we got a bit of everything here, so if you need anything, just holler. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "36582525": {
+   "kind": "text",
+   "parent": 1201173145,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "But yeah... W.w got a bit of everything here, so if you need anything, just holler. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2068872217": {
+   "kind": "text",
+   "parent": 2060367809,
+   "children": [
+    754302123,
+    -633596676,
+    -207724318,
+    -950618483
+   ],
+   "actor": null,
+   "text": "(Charm) I’d rather learn it from you than any influencer out there.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Charming] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Charming",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "754302123": {
+   "kind": "text",
+   "parent": -2068872217,
+   "actor": "Kate",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Hah! Smooth talker. Alright, charm boy, one free slang lesson.... don’t waste it!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Traits[Urban-Linguist-5] = 5",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Urban-Linguist-5",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 5
+      }
+     }
+    }
+   ]
+  },
+  "-633596676": {
+   "kind": "text",
+   "parent": -2068872217,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    }
+   ]
+  },
+  "-207724318": {
+   "kind": "text",
+   "parent": -2068872217,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "... And that's how you avoid being mid.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[new-trait] = Urban Linguist",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Urban Linguist"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "new-trait",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_NewTrait_GO to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_NewTrait_GO",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Stat_Increase_Canvas/Layout/Raise_NewTrait_GO"
+      }
+     }
+    }
+   ]
+  },
+  "-950618483": {
+   "kind": "text",
+   "parent": -2068872217,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Next time's gonna cost ya, tho!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/generalstore",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DefaultDialoge and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Kate to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Kate",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Kate"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

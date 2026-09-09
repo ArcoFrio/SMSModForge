@@ -1,0 +1,1105 @@
+{
+ "id": "8_Vacation_Stories/Snowy_CozyHut/AnnaWinterWasted",
+ "name": "AnnaWinterWasted",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  1813407120
+ ],
+ "nodes": {
+  "1813407120": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    369826277,
+    -1124178000,
+    1347995817,
+    -768554331,
+    -620374921,
+    -683226292,
+    -928749527,
+    -106960405,
+    -2017233018,
+    -656803535,
+    -229017105,
+    1014874661,
+    -2026577741,
+    317957033,
+    294517623,
+    1773226402,
+    2054860985
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Y-you’re just... so wonderful, you know that? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "369826277": {
+   "kind": "text",
+   "parent": 1813407120,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I-I don’t know where I’d be without you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1124178000": {
+   "kind": "choice",
+   "parent": 1813407120,
+   "children": [
+    645200901,
+    -1652005144,
+    19795425
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You make me so happy... I just... I love spending time with you.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1347995817": {
+   "kind": "text",
+   "parent": 1813407120,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-768554331": {
+   "kind": "text",
+   "parent": 1813407120,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I really need to pee! Oh no! I mean... I really need to freshen up... In the bathroom... I... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_GreenPullover/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-620374921": {
+   "kind": "text",
+   "parent": 1813407120,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-683226292": {
+   "kind": "text",
+   "parent": 1813407120,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Heeeey... So... Do you want to... Do you want to....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Nude"
+      }
+     }
+    }
+   ]
+  },
+  "-928749527": {
+   "kind": "choice",
+   "parent": 1813407120,
+   "children": [
+    1678633557,
+    1921674584,
+    -699272472
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Aaaaaaaaa....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaWastedWinter (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaWastedWinter (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaWastedWinter (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1678633557": {
+   "kind": "text",
+   "parent": -928749527,
+   "actor": null,
+   "text": "(Pull out your cock for her)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1921674584": {
+   "kind": "text",
+   "parent": -928749527,
+   "children": [
+    -1566755588
+   ],
+   "actor": null,
+   "text": "(Kiss her)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-699272472": {
+   "kind": "text",
+   "parent": -928749527,
+   "children": [
+    -2042782482,
+    -1969707560,
+    1941134113,
+    1449940189
+   ],
+   "actor": null,
+   "text": "I think you need some sleep, {M}. You're drunk.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1566755588": {
+   "kind": "choice",
+   "parent": 1921674584,
+   "children": [
+    -149303234,
+    -2086055744
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mwaah... That was nice, but I... I was hoping for something different... Something hard and big... and hard... and big...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2042782482": {
+   "kind": "text",
+   "parent": -699272472,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Well, yes... I... I do feel a bit lightheaded...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1969707560": {
+   "kind": "text",
+   "parent": -699272472,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Can you... Can you carry me to the bed? I want you to... Be with me... Hold me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-149303234": {
+   "kind": "text",
+   "parent": -1566755588,
+   "actor": null,
+   "text": "(Pull out your cock)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2086055744": {
+   "kind": "text",
+   "parent": -1566755588,
+   "children": [
+    697565900,
+    -555644543
+   ],
+   "actor": null,
+   "text": "You're drunk, {M}. You should rest.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "697565900": {
+   "kind": "text",
+   "parent": -2086055744,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... Yes, you're right... Can you... Can you carry me to bed? I want you hold me as we fall asleep...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1941134113": {
+   "kind": "text",
+   "parent": -699272472,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I.. I love you, {PC}...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Return_Home_Vacation to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Return_Home_Vacation",
+       "of": "GetGameObjectInstance",
+       "path": "Return_Home_Vacation"
+      }
+     }
+    }
+   ]
+  },
+  "-555644543": {
+   "kind": "text",
+   "parent": -2086055744,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-Thank you, {PC}... I love you...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-106960405": {
+   "kind": "text",
+   "parent": 1813407120,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yessss... Put in in there... Put it in my mouth... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2017233018": {
+   "kind": "text",
+   "parent": 1813407120,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmm.... Gpfhmm.... Gpfhmm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaWastedWinter (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaWastedWinter (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaWastedWinter (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-656803535": {
+   "kind": "text",
+   "parent": 1813407120,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmaaahh.... So tasty... I... I love this cock... I love your cock, {PC}... Mmmwaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-229017105": {
+   "kind": "choice",
+   "parent": 1813407120,
+   "children": [
+    -1022532813,
+    -252203326,
+    390094706
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It's okay, I'll drink it all... My throat is so dry... Please give it to me... Please...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaWastedWinter (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaWastedWinter (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaWastedWinter (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1014874661": {
+   "kind": "text",
+   "parent": 1813407120,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmm...... *Gulp* *Gulp* *Gulp* Mmhhmm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "294517623": {
+   "kind": "choice",
+   "parent": 1813407120,
+   "children": [
+    201876693,
+    801191590
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Would you mind if I... If i kept sucking your cock for a little while longer? Just... a little bit more... ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "201876693": {
+   "kind": "text",
+   "parent": 294517623,
+   "children": [
+    807280417,
+    -896448966,
+    -224105746
+   ],
+   "actor": null,
+   "text": "S-Sure, but it's very sensitive so don't overdo it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "801191590": {
+   "kind": "text",
+   "parent": 294517623,
+   "children": [
+    1630209333,
+    -1541238081
+   ],
+   "actor": null,
+   "text": "Let's get some sleep, we can continue tomorrow...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "807280417": {
+   "kind": "text",
+   "parent": 201876693,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-Thank you! I'll be very gentle... Very... Mmmaa....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaWastedWinter (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaWastedWinter (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaWastedWinter (7)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaWastedWinter (3) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaWastedWinter (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaWastedWinter (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1630209333": {
+   "kind": "text",
+   "parent": 801191590,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "O-Okay... Yes, I do feel a bit sleepy... I think I'll...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1541238081": {
+   "kind": "text",
+   "parent": 801191590,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "C-Can you carry me to the bed... My legs are a bit... T-Thank you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-896448966": {
+   "kind": "text",
+   "parent": 201876693,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmmm.... Gllphhh! Gllphhh! Glpph!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-224105746": {
+   "kind": "text",
+   "parent": 201876693,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Beshhtt Vachaation Mmmaa~Eveeer!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1022532813": {
+   "kind": "text",
+   "parent": -229017105,
+   "children": [
+    -192437490
+   ],
+   "actor": null,
+   "text": "I'm.. I'm.. {M}, I'll fill your mouth with my... Hnngaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-192437490": {
+   "kind": "text",
+   "parent": -1022532813,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Do it, baby... Feed me... Give me your warm seed... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaWastedWinter (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaWastedWinter (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaWastedWinter (5)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaWastedWinter (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaWastedWinter (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaWastedWinter (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-252203326": {
+   "kind": "text",
+   "parent": -229017105,
+   "children": [
+    127759185
+   ],
+   "actor": null,
+   "text": "Drink it all up, Anna. Don't waste... Don't waste a single drop! Hngaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "127759185": {
+   "kind": "text",
+   "parent": -252203326,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yesshhh... I love your cockmilk, {S}... I would bath in it if I could... Mmmaaaah! Mmmmmghhhmm!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaWastedWinter (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaWastedWinter (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaWastedWinter (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaWastedWinter (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaWastedWinter (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaWastedWinter (1)"
+      }
+     }
+    }
+   ]
+  },
+  "390094706": {
+   "kind": "text",
+   "parent": -229017105,
+   "children": [
+    2082650686
+   ],
+   "actor": null,
+   "text": "(Say nothing as you fill her throat)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2082650686": {
+   "kind": "text",
+   "parent": 390094706,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mhaaamm... I can... I can feel you are... Oh! Mmmaaah! Mmmmmm!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaWastedWinter (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaWastedWinter (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaWastedWinter (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaWastedWinter (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaWastedWinter (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaWastedWinter (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-2026577741": {
+   "kind": "text",
+   "parent": 1813407120,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "L-Look! I... I tried to swallow it all... But it was soooo much...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaWastedWinter (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaWastedWinter (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaWastedWinter (6)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaWastedWinter (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaWastedWinter (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaWastedWinter (2)"
+      }
+     }
+    }
+   ]
+  },
+  "317957033": {
+   "kind": "text",
+   "parent": 1813407120,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So much warm, virile dickmilk... So much...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "645200901": {
+   "kind": "text",
+   "parent": -1124178000,
+   "actor": null,
+   "text": "I love you too, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1652005144": {
+   "kind": "text",
+   "parent": -1124178000,
+   "actor": null,
+   "text": "You're cute when you drunk...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "19795425": {
+   "kind": "text",
+   "parent": -1124178000,
+   "actor": null,
+   "text": "Let's get you to bed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1449940189": {
+   "kind": "text",
+   "parent": -699272472,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I.. I love you, {PC}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Vacation_Default_Retrigger to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Vacation_Default_Retrigger",
+       "of": "GetGameObjectInstance",
+       "path": "Vacation_Default_Retrigger"
+      }
+     }
+    }
+   ]
+  },
+  "1773226402": {
+   "kind": "text",
+   "parent": 1813407120,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "No matter how much I whine tomorrow, just drag me out of bed, okay? Flights don't wait for hangovers.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Return_Home_Vacation to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Return_Home_Vacation",
+       "of": "GetGameObjectInstance",
+       "path": "Return_Home_Vacation"
+      }
+     }
+    }
+   ]
+  },
+  "2054860985": {
+   "kind": "text",
+   "parent": 1813407120,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Just... let me hibernate, okay? Sunday deserves a sober Anna, not a zombie one.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Vacation_Default_Retrigger to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Vacation_Default_Retrigger",
+       "of": "GetGameObjectInstance",
+       "path": "Vacation_Default_Retrigger"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Snowy_CozyHut",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AnnaWinterWasted and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[anna-wasted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-wasted",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "branches": [
+    "wasted"
+   ]
+  }
+ ]
+}

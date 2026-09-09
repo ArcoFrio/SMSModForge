@@ -1,0 +1,467 @@
+{
+ "id": "8_Room_Talk/BRoom/Adrian_AnnaBirthdaInvite",
+ "name": "Adrian_AnnaBirthdaInvite",
+ "index": 11,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian"
+ ],
+ "roots": [
+  1689889947
+ ],
+ "nodes": {
+  "1689889947": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1158222666,
+    -1353218478
+   ],
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hey, {B}. I got a raid starting in fifteen minutes. You need anything?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1158222666": {
+   "kind": "text",
+   "parent": 1689889947,
+   "children": [
+    1800112515,
+    -1686949010
+   ],
+   "actor": null,
+   "text": "Wanna surprise {M}? She's taking a bath right now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1353218478": {
+   "kind": "text",
+   "parent": 1689889947,
+   "children": [
+    -1853469870
+   ],
+   "actor": null,
+   "text": "No, no. Have fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1853469870": {
+   "kind": "text",
+   "parent": -1353218478,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Feels more like work than fun, but yeah. See ya!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[adrian-bathroompresent] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-bathroompresent",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1800112515": {
+   "kind": "text",
+   "parent": -1158222666,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Fuck. God knows I want to join you guys. {M}'s been even hotter lately, if that's possible",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1686949010": {
+   "kind": "choice",
+   "parent": -1158222666,
+   "children": [
+    478365775,
+    1380610937,
+    -464284537
+   ],
+   "actor": "Adrian",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "If I'm late, Guild Master Greg will have my balls.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "478365775": {
+   "kind": "text",
+   "parent": -1686949010,
+   "children": [
+    -475305883,
+    888686057
+   ],
+   "actor": null,
+   "text": "Mom's in there all wet and soapy, those big fat tits of hers all bubbly under the water.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1380610937": {
+   "kind": "text",
+   "parent": -1686949010,
+   "children": [
+    -1704986025,
+    2019043585
+   ],
+   "actor": null,
+   "text": "Dude, turn off your PC. It's her fucking birthday.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-464284537": {
+   "kind": "text",
+   "parent": -1686949010,
+   "children": [
+    1933689629
+   ],
+   "actor": null,
+   "text": "Got it, I'll take care of {M} myself then. Have fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-475305883": {
+   "kind": "text",
+   "parent": 478365775,
+   "actor": "Adrian",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Fuck... you're right. This dragon can wait.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1704986025": {
+   "kind": "text",
+   "parent": 1380610937,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Fuck... Yeah, yeah. You're right. It's her birtdayh.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1933689629": {
+   "kind": "text",
+   "parent": -464284537,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Fuck my life.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[adrian-bathroompresent] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-bathroompresent",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "888686057": {
+   "kind": "text",
+   "parent": 478365775,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Come on, {PC}. Let's do this!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[adrian-bathroompresent] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-bathroompresent",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "2019043585": {
+   "kind": "text",
+   "parent": 1380610937,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Come on, {PC}. Let's do this!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[adrian-bathroompresent] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-bathroompresent",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/BRoom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Adrian_AnnaBirthdaInvite and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Eve_NoSave1[adrian-bathroompresent] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-bathroompresent",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Holidays[holiday-annabd] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "holiday-annabd",
+        "list": "Holidays",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-B-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-B-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Holidays[Holiday-VarQuest-One] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Holiday-VarQuest-One",
+        "list": "Holidays",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

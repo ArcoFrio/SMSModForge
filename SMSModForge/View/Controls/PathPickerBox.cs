@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -93,6 +93,11 @@ public sealed class PathPickerBox : DockPanel
 
     private void Browse()
     {
+        // A picker raised during a test run stops the suite dead, waiting for a
+        // click nobody is there to give, on a dialog over somebody's work. See
+        // CLAUDE.md - this is one of the four kinds that must be guarded.
+        if (Services.TestMode.Active) return;
+
         var dlg = new Microsoft.Win32.OpenFileDialog
         {
             Filter = Filter,

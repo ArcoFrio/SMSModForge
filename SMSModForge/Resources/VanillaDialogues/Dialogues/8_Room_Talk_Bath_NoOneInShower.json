@@ -1,0 +1,510 @@
+{
+ "id": "8_Room_Talk/Bath/NoOneInShower",
+ "name": "NoOneInShower",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "You"
+ ],
+ "roots": [
+  2143912146
+ ],
+ "nodes": {
+  "2143912146": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1577367361,
+    -1393842532,
+    -965148067,
+    963431016
+   ],
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Looks like the shower's free.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Square to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Square",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/4_Bath/BathB/Square"
+      }
+     }
+    },
+    {
+     "type": "InstructionTransformChangeScale",
+     "title": "Scale BathB = (1.50, 1.50, 1.00)",
+     "fields": {
+      "m_Scale": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "raw",
+        "type": "GetScaleVector3",
+        "data": {
+         "m_Scale": {
+          "$type": "Vector3",
+          "x": 1.5,
+          "y": 1.5,
+          "z": 1
+         }
+        }
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 2,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": false
+      },
+      "m_Transform": {
+       "kind": "object",
+       "name": "BathB",
+       "of": "GetGameObjectTransform",
+       "path": "5_Levels/4_Bath/BathB"
+      }
+     }
+    },
+    {
+     "type": "InstructionTransformChangeScale",
+     "title": "Scale Square = (1.50, 1.50, 1.00)",
+     "fields": {
+      "m_Scale": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "raw",
+        "type": "GetScaleVector3",
+        "data": {
+         "m_Scale": {
+          "$type": "Vector3",
+          "x": 1.5,
+          "y": 1.5,
+          "z": 1
+         }
+        }
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 2,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": false
+      },
+      "m_Transform": {
+       "kind": "object",
+       "name": "Square",
+       "of": "GetGameObjectTransform",
+       "path": "5_Levels/4_Bath/BathB/Square"
+      }
+     }
+    },
+    {
+     "type": "InstructionTransformChangePosition",
+     "title": "Move BathB = (0,3, -3,5, 0)",
+     "fields": {
+      "m_Space": "GlobalPosition",
+      "m_Position": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "raw",
+        "type": "GetPositionVector3",
+        "data": {
+         "m_Position": {
+          "$type": "Vector3",
+          "x": 0.3,
+          "y": -3.5,
+          "z": 0
+         }
+        }
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 2,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": false
+      },
+      "m_Transform": {
+       "kind": "object",
+       "name": "BathB",
+       "of": "GetGameObjectTransform",
+       "path": "5_Levels/4_Bath/BathB"
+      }
+     }
+    },
+    {
+     "type": "InstructionTransformChangePosition",
+     "title": "Move Square = (-0,18, 2,17, 0)",
+     "fields": {
+      "m_Space": "LocalPosition",
+      "m_Position": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "raw",
+        "type": "GetPositionVector3",
+        "data": {
+         "m_Position": {
+          "$type": "Vector3",
+          "x": -0.18,
+          "y": 2.17,
+          "z": 0
+         }
+        }
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 2,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": false
+      },
+      "m_Transform": {
+       "kind": "object",
+       "name": "Square",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/4_Bath/BathB/Square"
+      }
+     }
+    }
+   ]
+  },
+  "1577367361": {
+   "kind": "text",
+   "parent": 2143912146,
+   "children": [
+    1867172562
+   ],
+   "actor": null,
+   "text": "[Take a shower]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1867172562": {
+   "kind": "text",
+   "parent": 1577367361,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeInBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeInBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: OBJECT_BATHROOM_Shower_On_01",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "OBJECT_BATHROOM_Shower_On_01",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": true,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    }
+   ]
+  },
+  "-1393842532": {
+   "kind": "text",
+   "parent": 2143912146,
+   "children": [
+    -137421893
+   ],
+   "actor": null,
+   "text": "[Brush your teeth]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-137421893": {
+   "kind": "text",
+   "parent": -1393842532,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeInBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeInBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Teeth Cleaning Brushing",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Teeth Cleaning Brushing",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": true,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    }
+   ]
+  },
+  "-965148067": {
+   "kind": "text",
+   "parent": 2143912146,
+   "actor": null,
+   "text": "[Leave]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "963431016": {
+   "kind": "text",
+   "parent": 2143912146,
+   "children": [
+    -1116424226
+   ],
+   "actor": null,
+   "text": "Demrifnoc noinapmoc nilbog espilce epacsdnuor.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Eve_NoSave1[halloweendemonevent] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "halloweendemonevent",
+        "list": "Eve_NoSave1",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1116424226": {
+   "kind": "text",
+   "parent": 963431016,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Hmm... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Eve_NoSave1[halloweendemonevent] = 2",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "halloweendemonevent",
+        "list": "Eve_NoSave1",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 2
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Bath",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play NoOneInShower and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

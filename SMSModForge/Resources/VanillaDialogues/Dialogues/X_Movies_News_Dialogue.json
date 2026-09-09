@@ -1,0 +1,1107 @@
+{
+ "id": "X_Movies/News_Dialogue",
+ "name": "News_Dialogue",
+ "index": 10,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Claudia",
+  "Continue"
+ ],
+ "roots": [
+  -1518221233,
+  -1720097975,
+  1723904990,
+  181385099,
+  501514350,
+  -915811141,
+  740220104,
+  1621869749,
+  -1127923837,
+  1155217834,
+  -844417606,
+  -1824310066,
+  -1881985281
+ ],
+ "nodes": {
+  "-1518221233": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active News_Movie to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "News_Movie",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/News_Movie"
+      }
+     }
+    },
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Music to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Music",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Music"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.01 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.01
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active News to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "News",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/News"
+      }
+     }
+    },
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[claudia-newsseen] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "claudia-newsseen",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1881985281": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Claudia",
+   "expressionName": "neutral",
+   "text": "Stay informed, stay skeptical, and if the world ends, you heard it here first!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active News_Movie to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "News_Movie",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/News_Movie"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Music to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Music",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Music"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active News to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "News",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/News"
+      }
+     }
+    },
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active X_Movies to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "X_Movies",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies"
+      }
+     }
+    }
+   ]
+  },
+  "-1720097975": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Claudia",
+   "expressionName": "neutral",
+   "text": "Good morning, good afternoon, good evening—whatever time it is, I don’t care. Let’s get into today’s hot mess of news!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[claudia-newsseen] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "claudia-newsseen",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1723904990": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1843089295,
+    1155760527
+   ],
+   "actor": "Claudia",
+   "expression": 1,
+   "expressionName": "talk",
+   "text": "Scandal! Outrage! The fall of Hollywood’s sweetheart! Veronica, has been CAUGHT red-handed… or should I say, red-fingered—giving the ol’ salute to the peasants!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_2[news-movie] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "news-movie",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active News_0 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "News_0",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/News_Movie/News_Screen/News_0"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[claudia-newsseen] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "claudia-newsseen",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "181385099": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1747372985,
+    -95351522
+   ],
+   "actor": "Claudia",
+   "expression": 1,
+   "expressionName": "talk",
+   "text": "Breaking news! Celeste, the divine deity of Starmaker, has once again graced the mortal realm—this time, blessing a humble beach with her flawless presence.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_2[news-movie] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "news-movie",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active News_1 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "News_1",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/News_Movie/News_Screen/News_1"
+      }
+     }
+    }
+   ]
+  },
+  "501514350": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -219230664,
+    -2111662183
+   ],
+   "actor": "Claudia",
+   "expression": 1,
+   "expressionName": "talk",
+   "text": "In groundbreaking news that will shake the very foundation of modern journalism—I, your beloved Claudia, will soon be launching my own Starmaker page!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_2[news-movie] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "news-movie",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active News_2 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "News_2",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/News_Movie/News_Screen/News_2"
+      }
+     }
+    }
+   ]
+  },
+  "-915811141": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    694785351,
+    -264625326
+   ],
+   "actor": "Claudia",
+   "expression": 1,
+   "expressionName": "talk",
+   "text": "Breaking news, folks! The internet’s favorite mature goth queen, the legendary Ms. Umbra of Starmaker fame, has vanished without a trace!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_2[news-movie] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "news-movie",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active News_3 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "News_3",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/News_Movie/News_Screen/News_3"
+      }
+     }
+    }
+   ]
+  },
+  "740220104": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -588183515,
+    1924481042
+   ],
+   "actor": "Claudia",
+   "expression": 1,
+   "expressionName": "talk",
+   "text": "Citizens of Peak City, be afraid—Lord Crumpet, the big fat evil orange menace, is on the prowl, and he shows no remorse!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_2[news-movie] = 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "news-movie",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active News_4 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "News_4",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/News_Movie/News_Screen/News_4"
+      }
+     }
+    }
+   ]
+  },
+  "1621869749": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1920398614,
+    2118553369,
+    857677181
+   ],
+   "actor": "Claudia",
+   "expression": 1,
+   "expressionName": "talk",
+   "text": "Well, folks, in another exciting development from tech visionary and definitely-not-a-psychopath Belon Fusk, he’s unveiled his latest groundbreaking initiative—turning people into food!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_2[news-movie] = 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "news-movie",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active News_5 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "News_5",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies/News_Movie/News_Screen/News_5"
+      }
+     }
+    }
+   ]
+  },
+  "-1127923837": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1704793414,
+    -1916138561
+   ],
+   "actor": "Claudia",
+   "expression": 1,
+   "expressionName": "talk",
+   "text": "Peak City’s harbor district just got a little more lively, folks! A brand-new, totally mysterious gang has set up shop, and let me tell you—the economy is thriving in all the wrong ways.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_2[news-movie] = 6",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "news-movie",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 6
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1704793414": {
+   "kind": "text",
+   "parent": -1127923837,
+   "actor": "Claudia",
+   "expressionName": "neutral",
+   "text": "We’re seeing a spike in all the usual fun activities—unmarked cargo, shifty-eyed men in trench coats, and a dramatic increase in sex workers who, let’s be honest, probably have better healthcare than most of us.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1920398614": {
+   "kind": "text",
+   "parent": 1621869749,
+   "actor": "Claudia",
+   "expressionName": "neutral",
+   "text": "Now, before you overreact, let’s remember—Fusk has always been ahead of the curve. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "694785351": {
+   "kind": "text",
+   "parent": -915811141,
+   "actor": "Claudia",
+   "expressionName": "neutral",
+   "text": "No cryptic selfies. No poetic midnight rants. Not even a single ‘Gaze into the abyss, my loves’ post in over 48 hours!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1747372985": {
+   "kind": "text",
+   "parent": 181385099,
+   "actor": "Claudia",
+   "expressionName": "neutral",
+   "text": "Eyewitnesses report that her perfectly radiant skin was so blindingly divine, a few unfortunate peasants ran headfirst into the ocean!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1843089295": {
+   "kind": "text",
+   "parent": 1723904990,
+   "actor": "Claudia",
+   "expressionName": "neutral",
+   "text": "Ohhh, Veronica! Sweetie, darling, starlight of our lives, what happened? Was your oat milk latte one degree too cold? Did someone have the AUDACITY to breathe in your presence?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1155760527": {
+   "kind": "text",
+   "parent": 1723904990,
+   "actor": "Claudia",
+   "expression": 1,
+   "expressionName": "talk",
+   "text": "Such tragedy. Such betrayal. How will we ever recover from this heinous act of rebellion?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-95351522": {
+   "kind": "text",
+   "parent": 181385099,
+   "actor": "Claudia",
+   "expression": 1,
+   "expressionName": "talk",
+   "text": "Folks, let’s take a moment of silence for those poor souls… and then let’s get them some sunglasses because Celeste isn’t dimming her shine for anyone!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-219230664": {
+   "kind": "text",
+   "parent": 501514350,
+   "actor": "Claudia",
+   "expressionName": "neutral",
+   "text": "That’s right, folks. Peak News is great, but Peak Me? Even better. Exclusive content, behind-the-scenes chaos, and maybe, just maybe… a few tasteful disasters.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2111662183": {
+   "kind": "text",
+   "parent": 501514350,
+   "actor": "Claudia",
+   "expression": 1,
+   "expressionName": "talk",
+   "text": "So, for those who can’t get enough of me here—get ready. And for my haters? Well, congratulations! Now you get even more Claudia to complain about.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-264625326": {
+   "kind": "text",
+   "parent": -915811141,
+   "actor": "Claudia",
+   "expression": 1,
+   "expressionName": "talk",
+   "text": "Has she ascended to the shadow realm? Did she summon something she shouldn’t have?  More as this story develops.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-588183515": {
+   "kind": "text",
+   "parent": 740220104,
+   "actor": "Claudia",
+   "expressionName": "neutral",
+   "text": "Witnesses report that this criminal mastermind has been toppling trash cans, stealing entire rotisserie chickens, and sitting wherever he pleases—blocking roads, businesses, and even city hall!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1924481042": {
+   "kind": "text",
+   "parent": 740220104,
+   "actor": "Claudia",
+   "expression": 1,
+   "expressionName": "talk",
+   "text": "Authorities have attempted bribes of tuna, belly rubs, and even a gold-plated scratching post—but the beast remains uncontrollable. If you see it… do not engage. Just offer tribute and pray.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "857677181": {
+   "kind": "text",
+   "parent": 1621869749,
+   "actor": "Claudia",
+   "expressionName": "neutral",
+   "text": "And, really, can we blame him? People are expensive, loud, and frankly, a little inefficient. Maybe it’s time we start giving back… in the most tastyway possible.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1916138561": {
+   "kind": "text",
+   "parent": -1127923837,
+   "actor": "Claudia",
+   "expression": 1,
+   "expressionName": "talk",
+   "text": "Who are they? What do they want? Will they accept bribes in the form of baked goods? We don’t know! But one thing’s for sure—Peak City’s harbor is no longer just for fishy business… it’s for business business.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1824310066": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Claudia",
+   "expressionName": "neutral",
+   "text": "This has been Peak News with Claudia—thanks for watching!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2118553369": {
+   "kind": "text",
+   "parent": 1621869749,
+   "actor": "Claudia",
+   "expression": 1,
+   "expressionName": "talk",
+   "text": "He gave us self-driving cars that may or may not drive into lakes, rocket ships that explode for progress, and now… the next logical step—Soylent You!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1155217834": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1263050770,
+    2013281720
+   ],
+   "actor": "Claudia",
+   "expressionName": "neutral",
+   "text": "President Eleanor Prescott is still up there. The first sitting U.S. president to govern from space aboard the Horizon Station.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_2[news-movie] = 7",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "news-movie",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 7
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-844417606": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    747549347,
+    -1429073822
+   ],
+   "actor": "Claudia",
+   "expressionName": "neutral",
+   "text": "Breaking news out of Peak City today... Officials have announced a sweeping ban on traditional animal milk.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_2[news-movie] = 8",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "news-movie",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 8
+       }
+      }
+     }
+    }
+   ]
+  },
+  "747549347": {
+   "kind": "text",
+   "parent": -844417606,
+   "actor": "Claudia",
+   "expression": 1,
+   "expressionName": "talk",
+   "text": "The last cartons are being traded like rare collectibles, and cafés are serving ‘milk-style beverages’ nobody asked for.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1429073822": {
+   "kind": "text",
+   "parent": -844417606,
+   "actor": "Claudia",
+   "expressionName": "neutral",
+   "text": "Officials insist the problem only affects cow milk, not human milk… which is the kind of clarification that just raises more questions. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1263050770": {
+   "kind": "text",
+   "parent": 1155217834,
+   "actor": "Claudia",
+   "expression": 1,
+   "expressionName": "talk",
+   "text": "It’s been {days} days now, which means she’s spent more time in space than she has in the Oval Office this term.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2013281720": {
+   "kind": "text",
+   "parent": 1155217834,
+   "actor": "Claudia",
+   "expressionName": "neutral",
+   "text": "Say what you will about her politics, but Eleanor Prescott has proven one thing: the sky is literally no longer the limit. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "Always_Active/Movie_Condition",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play News_Dialogue and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_2[incoming-movie] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "incoming-movie",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active X_Movies to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "X_Movies",
+       "of": "GetGameObjectInstance",
+       "path": "X_Movies"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run News_Condition and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "News_Condition",
+       "of": "GetGameObjectConditions",
+       "path": "X_Movies/News_Condition"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ]
+  }
+ ]
+}

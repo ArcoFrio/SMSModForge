@@ -1,0 +1,955 @@
+{
+ "id": "8_Room_Talk/C_Casino/DefaultDialoge",
+ "name": "DefaultDialoge",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Nikki"
+ ],
+ "roots": [
+  -1778744762
+ ],
+ "nodes": {
+  "-1778744762": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -58895231,
+    1059747383,
+    -538930401,
+    530728170
+   ],
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": {
+    "kind": "variable",
+    "variable": {
+     "scope": "localList",
+     "on": {
+      "kind": "object",
+      "name": "C_Casino",
+      "of": "GetGameObjectInstance",
+      "path": "8_Room_Talk/C_Casino"
+     },
+     "pick": "random",
+     "type": "string"
+    }
+   },
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-58895231": {
+   "kind": "text",
+   "parent": -1778744762,
+   "children": [
+    767202844
+   ],
+   "actor": null,
+   "text": "I want to play blackjack.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-538930401": {
+   "kind": "text",
+   "parent": -1778744762,
+   "children": [
+    1203845940
+   ],
+   "actor": null,
+   "text": "Just curious about a few things.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "530728170": {
+   "kind": "text",
+   "parent": -1778744762,
+   "children": [
+    343183744
+   ],
+   "actor": null,
+   "text": "Catch you around.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "343183744": {
+   "kind": "text",
+   "parent": 530728170,
+   "actor": "Nikki",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Leaving already? Try not to miss me too much. I’ll be right here... watching you lose.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1203845940": {
+   "kind": "choice",
+   "parent": -538930401,
+   "children": [
+    -1746740354,
+    -1649949165,
+    -1598409498,
+    600744234
+   ],
+   "actor": "Nikki",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Sure.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1746740354": {
+   "kind": "text",
+   "parent": 1203845940,
+   "children": [
+    -421291602,
+    -562404757,
+    -2024925157
+   ],
+   "actor": null,
+   "text": "Are the games rigged?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-421291602": {
+   "kind": "text",
+   "parent": -1746740354,
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "Please. This isn’t some back-alley scam joint.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1649949165": {
+   "kind": "text",
+   "parent": 1203845940,
+   "children": [
+    635079838,
+    2063212635,
+    2059929213
+   ],
+   "actor": null,
+   "text": "Do you have a boyfriend?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "635079838": {
+   "kind": "text",
+   "parent": -1649949165,
+   "actor": "Nikki",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hahahaha~ A boyfriend?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1598409498": {
+   "kind": "text",
+   "parent": 1203845940,
+   "children": [
+    1180071313,
+    2046055819,
+    -1696319055
+   ],
+   "actor": null,
+   "text": "Anything else fun to do around here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1180071313": {
+   "kind": "text",
+   "parent": -1598409498,
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "Depends how fun you're looking for.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2046055819": {
+   "kind": "text",
+   "parent": -1598409498,
+   "actor": "Nikki",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "We’ve got a VIP lounge, private rooms, high-stakes poker...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-562404757": {
+   "kind": "text",
+   "parent": -1746740354,
+   "actor": "Nikki",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "The math’s already on our side. No need to rig anything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2024925157": {
+   "kind": "text",
+   "parent": -1746740354,
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "If you lose, it’s just because the house plays the long game.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2063212635": {
+   "kind": "text",
+   "parent": -1649949165,
+   "actor": "Nikki",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Sweetheart, you’re gonna have to be more specific.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2059929213": {
+   "kind": "text",
+   "parent": -1649949165,
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "I’ve got more than one... depending on the night, the mood, and the size of their chips.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "600744234": {
+   "kind": "text",
+   "parent": 1203845940,
+   "children": [
+    1262090853,
+    -46698426,
+    -1088822758
+   ],
+   "actor": null,
+   "text": "So uh… why are your tits just out like that?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1696319055": {
+   "kind": "text",
+   "parent": -1598409498,
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "And if you make the right impression, you might get an invite to the back room.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1262090853": {
+   "kind": "text",
+   "parent": 600744234,
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "Wow. Straight to the point, huh? No warm-up, no drink, just... tit interrogation.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-46698426": {
+   "kind": "text",
+   "parent": 600744234,
+   "actor": "Nikki",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Let’s just say the house has a very effective marketing strategy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1088822758": {
+   "kind": "text",
+   "parent": 600744234,
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "Tips go up, distractions go higher... and no one complains when I lean over the table.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "767202844": {
+   "kind": "choice",
+   "parent": -58895231,
+   "children": [
+    -794770523,
+    -496121736,
+    -4935256,
+    1166976810
+   ],
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "Heh… we don’t do boring, safe blackjack here. Last man standing only.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Minigame[enableafter-wonminigame] = Blackjack_Won",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "enableafter-wonminigame",
+        "list": "Minigame",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "Blackjack_Won",
+       "of": "GetGameObjectInstance",
+       "path": "AlwaysActive_ChildrenInactive/Blackjack_Won"
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Minigame[enableafter-lostminigame] = Blackjack_Lost",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "enableafter-lostminigame",
+        "list": "Minigame",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "Blackjack_Lost",
+       "of": "GetGameObjectInstance",
+       "path": "AlwaysActive_ChildrenInactive/Blackjack_Lost"
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Name = Random_Names_0[Random]",
+     "fields": {
+      "m_Text": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random_Names_0",
+        "pick": "random",
+        "type": "string"
+       }
+      },
+      "m_Set": {
+       "kind": "raw",
+       "type": "SetStringUIText",
+       "data": {
+        "m_Text": {
+         "$type": "PropertyGetGameObject",
+         "m_Property": {
+          "$type": "GetGameObjectInstance",
+          "m_GameObject": {
+           "$unity": "Name",
+           "$type": "GameObject",
+           "$path": "Blackjack_Minigame/Canvas/NPCArea_1/Name"
+          }
+         }
+        }
+       }
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Name = Random_Names_1[Random]",
+     "fields": {
+      "m_Text": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random_Names_1",
+        "pick": "random",
+        "type": "string"
+       }
+      },
+      "m_Set": {
+       "kind": "raw",
+       "type": "SetStringUIText",
+       "data": {
+        "m_Text": {
+         "$type": "PropertyGetGameObject",
+         "m_Property": {
+          "$type": "GetGameObjectInstance",
+          "m_GameObject": {
+           "$unity": "Name",
+           "$type": "GameObject",
+           "$path": "Blackjack_Minigame/Canvas/NPCArea_1 (1)/Name"
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-794770523": {
+   "kind": "text",
+   "parent": 767202844,
+   "children": [
+    -709763559
+   ],
+   "actor": null,
+   "text": "Let's start with a Bronze Table. ($100)",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 100",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 100
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-496121736": {
+   "kind": "text",
+   "parent": 767202844,
+   "children": [
+    -1657874600
+   ],
+   "actor": null,
+   "text": "Hook me up with a Silver Table. ($1,000)",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 1000",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1000
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-4935256": {
+   "kind": "text",
+   "parent": 767202844,
+   "children": [
+    755731559
+   ],
+   "actor": null,
+   "text": "Let's go for a Gold Table. ($10,000)",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 10000",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 10000
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1166976810": {
+   "kind": "text",
+   "parent": 767202844,
+   "children": [
+    -1495283780
+   ],
+   "actor": null,
+   "text": "I've changed my mind.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1495283780": {
+   "kind": "text",
+   "parent": 1166976810,
+   "actor": "Nikki",
+   "expressionName": "neutral",
+   "text": "Of course, honey.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "755731559": {
+   "kind": "text",
+   "parent": -4935256,
+   "actor": "Nikki",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Gold, huh? That table doesn’t forgive mistakes. Last man standing means last.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -10000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -10000
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Minigame[blackjack-win] = 30000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "blackjack-win",
+        "list": "Minigame",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 30000
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Blackjack_Minigame to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Blackjack_Minigame",
+       "of": "GetGameObjectInstance",
+       "path": "Blackjack_Minigame"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Nikki_Bust_Topless/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Nikki_Bust_Default/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Nikki_Bust_Topless to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Nikki_Bust_Topless",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Nikki_Bust_Topless"
+      }
+     }
+    }
+   ]
+  },
+  "-1657874600": {
+   "kind": "text",
+   "parent": -496121736,
+   "actor": "Nikki",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Silver, huh? Alright, now you’ve got my attention.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -1000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -1000
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Minigame[blackjack-win] = 3000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "blackjack-win",
+        "list": "Minigame",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 3000
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Blackjack_Minigame to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Blackjack_Minigame",
+       "of": "GetGameObjectInstance",
+       "path": "Blackjack_Minigame"
+      }
+     }
+    }
+   ]
+  },
+  "-709763559": {
+   "kind": "text",
+   "parent": -794770523,
+   "actor": "Nikki",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Nice and easy. Good place to learn how fast luck turns on you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -100",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -100
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Minigame[blackjack-win] = 300",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "blackjack-win",
+        "list": "Minigame",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 300
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Blackjack_Minigame to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Blackjack_Minigame",
+       "of": "GetGameObjectInstance",
+       "path": "Blackjack_Minigame"
+      }
+     }
+    }
+   ]
+  },
+  "1059747383": {
+   "kind": "text",
+   "parent": -1778744762,
+   "children": [
+    1030362326
+   ],
+   "actor": null,
+   "text": "I'll play some slots.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1030362326": {
+   "kind": "text",
+   "parent": 1059747383,
+   "actor": "Nikki",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh, you're one of those, huh? Well, have fun!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PeakCity2069_Machine to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PeakCity2069_Machine",
+       "of": "GetGameObjectInstance",
+       "path": "PeakCity2069_Machine"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Nikki_Bust_Default to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Nikki_Bust_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Nikki_Bust_Default"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/C_Casino/WhatNikkiDialogue",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DefaultDialoge and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[casino-license] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "casino-license",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

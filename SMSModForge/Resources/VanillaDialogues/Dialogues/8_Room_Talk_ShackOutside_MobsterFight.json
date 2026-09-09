@@ -1,0 +1,954 @@
+{
+ "id": "8_Room_Talk/ShackOutside/MobsterFight",
+ "name": "MobsterFight",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "S_Thug"
+ ],
+ "roots": [
+  -690548368,
+  1674353644,
+  -1542507272
+ ],
+ "nodes": {
+  "-690548368": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Thug",
+   "expressionName": "neutral",
+   "text": "So, you’re the punk who thought they could take Mario down, huh? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1674353644": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Thug",
+   "expressionName": "neutral",
+   "text": "You’ve got guts coming here alone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1542507272": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2101270339,
+    488104685,
+    -671538665,
+    -515277230
+   ],
+   "actor": "S_Thug",
+   "expressionName": "neutral",
+   "text": "Too bad you’re not leaving",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2101270339": {
+   "kind": "text",
+   "parent": -1542507272,
+   "children": [
+    -1490177881,
+    -984035392
+   ],
+   "actor": null,
+   "text": "(Living Weapon) I've studied the blade, my friends.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[Living-Weapon] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Living-Weapon",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "488104685": {
+   "kind": "text",
+   "parent": -1542507272,
+   "children": [
+    -960736399,
+    1923877716
+   ],
+   "actor": null,
+   "text": "(Athletic) I don’t need a weapon to deal with you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Athletic] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Athletic",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-671538665": {
+   "kind": "text",
+   "parent": -1542507272,
+   "children": [
+    1610378668
+   ],
+   "actor": null,
+   "text": "We'll see about that. Come at me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-515277230": {
+   "kind": "text",
+   "parent": -1542507272,
+   "children": [
+    -146026597
+   ],
+   "actor": null,
+   "text": "Hey... Let's talk this out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1610378668": {
+   "kind": "text",
+   "parent": -671538665,
+   "actor": "S_Thug",
+   "expressionName": "neutral",
+   "text": "You’ve got a big mouth. Try to dodge this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'whiteflashnosound'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "whiteflashnosound"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Pistol Gun Shot",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Pistol Gun Shot",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.1 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active To_Hospital to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "To_Hospital",
+       "of": "GetGameObjectInstance",
+       "path": "Unique_Transfers/To_Hospital"
+      }
+     }
+    }
+   ]
+  },
+  "-146026597": {
+   "kind": "text",
+   "parent": -515277230,
+   "actor": "S_Thug",
+   "expressionName": "neutral",
+   "text": "Nah. We'll rather beat you up. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'whiteflashnosound'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "whiteflashnosound"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Pistol Gun Shot",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Pistol Gun Shot",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.1 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active To_Hospital to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "To_Hospital",
+       "of": "GetGameObjectInstance",
+       "path": "Unique_Transfers/To_Hospital"
+      }
+     }
+    }
+   ]
+  },
+  "-960736399": {
+   "kind": "text",
+   "parent": 488104685,
+   "actor": "S_Thug",
+   "expressionName": "neutral",
+   "text": "W-What!? Gah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CFXR2 Cartoon Fight Ground (Loop) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CFXR2 Cartoon Fight Ground (Loop)",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/81_Abandonedshack/CFXR2 Cartoon Fight Ground (Loop)"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'whiteflashnosound'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "whiteflashnosound"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.1 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: 620354__marb7e__whooshsword_hit-flesh",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "620354__marb7e__whooshsword_hit-flesh",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_Mobster1 to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_Mobster1",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Mobster1"
+      }
+     }
+    }
+   ]
+  },
+  "-1490177881": {
+   "kind": "text",
+   "parent": -2101270339,
+   "actor": "S_Thug",
+   "expressionName": "neutral",
+   "text": "W-What!? Gah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CFXR2 Cartoon Fight Ground (Loop) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CFXR2 Cartoon Fight Ground (Loop)",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/81_Abandonedshack/CFXR2 Cartoon Fight Ground (Loop)"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'whiteflashnosound'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "whiteflashnosound"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.1 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: 620354__marb7e__whooshsword_hit-flesh",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "620354__marb7e__whooshsword_hit-flesh",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_Mobster1 to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_Mobster1",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Mobster1"
+      }
+     }
+    }
+   ]
+  },
+  "-984035392": {
+   "kind": "text",
+   "parent": -2101270339,
+   "actor": "S_Thug",
+   "expressionName": "neutral",
+   "text": "You… bastard…!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'whiteflashnosound'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "whiteflashnosound"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.1 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: 620354__marb7e__whooshsword_hit-flesh",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "620354__marb7e__whooshsword_hit-flesh",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_Mobster2 to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_Mobster2",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Mobster2"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[mob-beaten] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mob-beaten",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 82_ShackInside to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "82_ShackInside",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator/MapButtons/82_ShackInside"
+      }
+     }
+    },
+    {
+     "type": "InstructionParticleSystemStopParticleSystem",
+     "title": "Stop CFXR2 Cartoon Fight Ground (Loop) Particle System",
+     "fields": {
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CFXR2 Cartoon Fight Ground (Loop)",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/81_Abandonedshack/CFXR2 Cartoon Fight Ground (Loop)"
+      }
+     }
+    }
+   ]
+  },
+  "1923877716": {
+   "kind": "text",
+   "parent": 488104685,
+   "actor": "S_Thug",
+   "expressionName": "neutral",
+   "text": "You… bastard…!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'whiteflashnosound'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "whiteflashnosound"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.1 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: 620354__marb7e__whooshsword_hit-flesh",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "620354__marb7e__whooshsword_hit-flesh",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_Mobster2 to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_Mobster2",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Mobster2"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[mob-beaten] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mob-beaten",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 82_ShackInside to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "82_ShackInside",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator/MapButtons/82_ShackInside"
+      }
+     }
+    },
+    {
+     "type": "InstructionParticleSystemStopParticleSystem",
+     "title": "Stop CFXR2 Cartoon Fight Ground (Loop) Particle System",
+     "fields": {
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CFXR2 Cartoon Fight Ground (Loop)",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/81_Abandonedshack/CFXR2 Cartoon Fight Ground (Loop)"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/ShackOutside",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play MobsterFight and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[mob-beaten] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mob-beaten",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[sofia-kidnapped] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-kidnapped",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_Mobster1 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_Mobster1",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Mobster1"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_Mobster2 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_Mobster2",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Mobster2"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

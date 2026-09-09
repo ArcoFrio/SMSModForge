@@ -1,0 +1,1689 @@
+{
+ "id": "8_Room_Talk/Bath/AnnaInShower",
+ "name": "AnnaInShower",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "You"
+ ],
+ "roots": [
+  1377816562
+ ],
+ "nodes": {
+  "1377816562": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1575692849,
+    389302393,
+    1843836505,
+    -1052927710,
+    2097409118
+   ],
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Is that {M} in the shower?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1575692849": {
+   "kind": "text",
+   "parent": 1377816562,
+   "children": [
+    126206513,
+    1574757855
+   ],
+   "actor": null,
+   "text": "[Take a photo for Starmaker]",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[shower-photo-aftermath] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "shower-photo-aftermath",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "2097409118": {
+   "kind": "text",
+   "parent": 1377816562,
+   "actor": null,
+   "text": "I should give her some privacy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "126206513": {
+   "kind": "text",
+   "parent": 1575692849,
+   "actor": null,
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'flash'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "flash"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 04_MShower1 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "04_MShower1",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/04_MShower1"
+      }
+     }
+    }
+   ]
+  },
+  "1574757855": {
+   "kind": "text",
+   "parent": 1575692849,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "That should do nicely...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "389302393": {
+   "kind": "text",
+   "parent": 1377816562,
+   "children": [
+    2003464319,
+    -44122659,
+    1013854009,
+    -1120682279
+   ],
+   "actor": null,
+   "text": "Hey, {M}. Can I take a photo?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[shower-photo-aftermath] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "shower-photo-aftermath",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "2003464319": {
+   "kind": "text",
+   "parent": 389302393,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{PC}!? No, I'm not wearing ANYTHING. P-Please... Leave....",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-2-nude] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-2-nude",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-44122659": {
+   "kind": "text",
+   "parent": 389302393,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Sure... Let me get into a pose.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-2-nude] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-2-nude",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1013854009": {
+   "kind": "random",
+   "parent": 389302393,
+   "children": [
+    2100721649,
+    405494803
+   ],
+   "actor": null,
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "2100721649": {
+   "kind": "text",
+   "parent": 1013854009,
+   "actor": null,
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 18_MShower2 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "18_MShower2",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/18_MShower2"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'flash'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "flash"
+      }
+     }
+    }
+   ]
+  },
+  "405494803": {
+   "kind": "text",
+   "parent": 1013854009,
+   "actor": null,
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 19_MShower3 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "19_MShower3",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/19_MShower3"
+      }
+     }
+    }
+   ]
+  },
+  "-1120682279": {
+   "kind": "text",
+   "parent": 389302393,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I hope our fans like it!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Follower] + 152",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Follower",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 152
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Subscriber] + 62",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Subscriber",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 62
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Daily-Income] + 62",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Daily-Income",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 62
+      }
+     }
+    }
+   ]
+  },
+  "1843836505": {
+   "kind": "text",
+   "parent": 1377816562,
+   "children": [
+    1608692806,
+    -1606855497,
+    259402045,
+    1282153774,
+    -2011447322,
+    -1366392237,
+    333127752,
+    2141188387,
+    277672235,
+    929745969,
+    268938811
+   ],
+   "actor": null,
+   "text": "You want some company, {M}?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1608692806": {
+   "kind": "text",
+   "parent": 1843836505,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hmm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1606855497": {
+   "kind": "text",
+   "parent": 1843836505,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "First... I want you to tell me something...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Showersexsolo to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Showersexsolo",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Showersexsolo"
+      }
+     }
+    }
+   ]
+  },
+  "259402045": {
+   "kind": "choice",
+   "parent": 1843836505,
+   "children": [
+    30940304,
+    1081582684,
+    -744905503,
+    -1155489162,
+    -1814346146
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I want to know what you like most about your {M}...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "30940304": {
+   "kind": "text",
+   "parent": 259402045,
+   "children": [
+    1410308276
+   ],
+   "actor": null,
+   "text": "Your alluring dark hair.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1081582684": {
+   "kind": "text",
+   "parent": 259402045,
+   "children": [
+    -1720219938
+   ],
+   "actor": null,
+   "text": "Your massive tits.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-744905503": {
+   "kind": "text",
+   "parent": 259402045,
+   "children": [
+    962043184
+   ],
+   "actor": null,
+   "text": "Your kind spirit.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1155489162": {
+   "kind": "text",
+   "parent": 259402045,
+   "children": [
+    1987917449
+   ],
+   "actor": null,
+   "text": "Your soft, curvy body.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1410308276": {
+   "kind": "text",
+   "parent": 30940304,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Aw, thanks... It takes a lot of time and effort to maintain!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1720219938": {
+   "kind": "text",
+   "parent": 1081582684,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mhmm... I can tell... You can barely keep your eyes off them...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "962043184": {
+   "kind": "text",
+   "parent": -744905503,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Awww.... You're making me cry....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1987917449": {
+   "kind": "text",
+   "parent": -1155489162,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmhmmm... And I love your manly body, your big fat cock and... and your strong will...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2011447322": {
+   "kind": "text",
+   "parent": 1843836505,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-You're really stretching me out, you know that... But I LOVE it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Showersexsolo (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Showersexsolo (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Showersexsolo (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1366392237": {
+   "kind": "text",
+   "parent": 1843836505,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Pound me... Take me... That's it... Just like that....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Showersexsolo (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Showersexsolo (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Showersexsolo (2)"
+      }
+     }
+    }
+   ]
+  },
+  "333127752": {
+   "kind": "text",
+   "parent": 1843836505,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That's the spot... Yes! Y-Yessshh!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2141188387": {
+   "kind": "text",
+   "parent": 1843836505,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hngaaah! Nhaaaahhhh!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "277672235": {
+   "kind": "text",
+   "parent": 1843836505,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "God, that was... I feel happy... I feel young... I... I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Showersexsolo (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Showersexsolo (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Showersexsolo (3)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Showersexsolo to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Showersexsolo",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Showersexsolo"
+      }
+     }
+    }
+   ]
+  },
+  "929745969": {
+   "kind": "choice",
+   "parent": 1843836505,
+   "children": [
+    2087276074,
+    998952461,
+    -1845748603
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I love you, {PC}.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2087276074": {
+   "kind": "text",
+   "parent": 929745969,
+   "children": [
+    797349176
+   ],
+   "actor": null,
+   "text": "I love you too, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "998952461": {
+   "kind": "text",
+   "parent": 929745969,
+   "children": [
+    736849250
+   ],
+   "actor": null,
+   "text": "Fuck, you're so hot....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1845748603": {
+   "kind": "text",
+   "parent": 929745969,
+   "children": [
+    704506495
+   ],
+   "actor": null,
+   "text": "Please marry me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "704506495": {
+   "kind": "text",
+   "parent": -1845748603,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes... I want to marry you... I... I want to be with you....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "736849250": {
+   "kind": "text",
+   "parent": 998952461,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Only for you... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "797349176": {
+   "kind": "text",
+   "parent": 2087276074,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Then show me.. Kiss me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "268938811": {
+   "kind": "text",
+   "parent": 1843836505,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "L-Looks like I need another shower now... I'm all sweaty and... sticky... Hihi....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1814346146": {
+   "kind": "text",
+   "parent": 259402045,
+   "children": [
+    311196456
+   ],
+   "actor": null,
+   "text": "Your big blue eyes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "311196456": {
+   "kind": "text",
+   "parent": -1814346146,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Awww.... R-Really? I... Come here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1282153774": {
+   "kind": "text",
+   "parent": 1843836505,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "V-Very well... I'm all ready for you... P-Please, fill out my wet hole....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1052927710": {
+   "kind": "text",
+   "parent": 1377816562,
+   "children": [
+    1651638738,
+    -2079708153,
+    118360002,
+    -315973482,
+    580365352,
+    606129843,
+    1192574002,
+    87872996,
+    -593493712,
+    966882801,
+    -1358924306
+   ],
+   "actor": null,
+   "text": "Can we shower together, {M}?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1651638738": {
+   "kind": "text",
+   "parent": -1052927710,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "W-What? No? ... P-Please leave, I'm almost done then you can shower...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-touching] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-touching",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-2079708153": {
+   "kind": "text",
+   "parent": -1052927710,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "S-Sure... I guess it would be good to save some water...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-touching] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-touching",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "118360002": {
+   "kind": "text",
+   "parent": -1052927710,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh my... It's been a while since we took a bath together....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ShowerJoin to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ShowerJoin",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/ShowerJoin"
+      }
+     }
+    }
+   ]
+  },
+  "-315973482": {
+   "kind": "text",
+   "parent": -1052927710,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-Thank you for helping your old {M}... I'm not as flexible as I used to be...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[really-horny-m] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "really-horny-m",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "606129843": {
+   "kind": "choice",
+   "parent": -1052927710,
+   "children": [
+    452816786,
+    -1099481812
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I can feel you poking against me leg... Oh god...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "452816786": {
+   "kind": "text",
+   "parent": 606129843,
+   "children": [
+    -368265786,
+    2044867727,
+    -822499983,
+    -1854046210
+   ],
+   "actor": null,
+   "text": "(Play with her pussy)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1099481812": {
+   "kind": "text",
+   "parent": 606129843,
+   "children": [
+    -1060186255,
+    1417673889,
+    577022189,
+    -2011319580,
+    -6922757
+   ],
+   "actor": null,
+   "text": "(Play with her asshole)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2044867727": {
+   "kind": "text",
+   "parent": 452816786,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh fuck... Your fingers... They are...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ShowerJoin (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ShowerJoin (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/ShowerJoin (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-822499983": {
+   "kind": "text",
+   "parent": 452816786,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-You are cleaning your {M} so well... Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1854046210": {
+   "kind": "text",
+   "parent": 452816786,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I can't take it anymore... I'm sorry....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1417673889": {
+   "kind": "text",
+   "parent": -1099481812,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh g-god... My own {S} is playing with my ass.... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ShowerJoin (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ShowerJoin (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/ShowerJoin (2)"
+      }
+     }
+    }
+   ]
+  },
+  "577022189": {
+   "kind": "text",
+   "parent": -1099481812,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-You are cleaning me so well... T-Thank you, hun...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2011319580": {
+   "kind": "text",
+   "parent": -1099481812,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... Mmhmm... I....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-6922757": {
+   "kind": "text",
+   "parent": -1099481812,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I can't take it anymore... I'm sorry....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1192574002": {
+   "kind": "text",
+   "parent": -1052927710,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "D-Don't look... P-Please, don't watch your dirty {M} making herself cum!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ShowerJoin (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ShowerJoin (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/ShowerJoin (3)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ShowerJoin to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ShowerJoin",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/ShowerJoin"
+      }
+     }
+    }
+   ]
+  },
+  "87872996": {
+   "kind": "text",
+   "parent": -1052927710,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fhaaack! Oh god... My own {S} is staring at me... While I... I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-593493712": {
+   "kind": "text",
+   "parent": -1052927710,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm... I'm... CUMMING!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "966882801": {
+   "kind": "text",
+   "parent": -1052927710,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god... Could you... Could you help me up? The floor is so slippery...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1358924306": {
+   "kind": "text",
+   "parent": -1052927710,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-Thank you... Let's... Let's take a proper show now... Hihi....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-368265786": {
+   "kind": "text",
+   "parent": 452816786,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "N-No... We're going too far... I can't... Sorry....",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-Everything-but-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-Everything-but-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1060186255": {
+   "kind": "text",
+   "parent": -1099481812,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "N-No... We're going too far... I can't... Sorry....",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-Everything-but-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-Everything-but-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "580365352": {
+   "kind": "text",
+   "parent": -1052927710,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "There, all fresh and clean! Let’s slip into something comfy and unwind with a movie—sound good?",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Bath",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AnnaInShower and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[Showercooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Showercooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Core_NoSave2[anna-at-flowerwork] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-at-flowerwork",
+        "list": "Core_NoSave2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Shower to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Shower",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Shower"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[Showercooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Showercooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

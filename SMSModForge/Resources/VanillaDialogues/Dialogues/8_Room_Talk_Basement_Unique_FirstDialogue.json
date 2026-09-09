@@ -1,0 +1,299 @@
+{
+ "id": "8_Room_Talk/Basement/Unique/FirstDialogue",
+ "name": "FirstDialogue",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna"
+ ],
+ "roots": [
+  718609112,
+  -680871123,
+  398409078,
+  -380944170,
+  -1801394471,
+  1246129383
+ ],
+ "nodes": {
+  "718609112": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I used some of the earnings from my Starmaker page to create this. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Head to the studio during the morning.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Going Viral (Anna)",
+        "of": "Quest"
+       },
+       "m_TaskId": -1819202415
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-680871123": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    59177060,
+    1156405621,
+    188580169
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I thought it might help us take better photos... and maybe even earn a little more money.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "59177060": {
+   "kind": "text",
+   "parent": -680871123,
+   "children": [
+    1209856321
+   ],
+   "actor": null,
+   "text": "This is amazing, {M}. You really put a lot into this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1156405621": {
+   "kind": "text",
+   "parent": -680871123,
+   "children": [
+    -202126568
+   ],
+   "actor": null,
+   "text": "I would have done it differently, but it will work.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "188580169": {
+   "kind": "text",
+   "parent": -680871123,
+   "children": [
+    -522955400
+   ],
+   "actor": null,
+   "text": "What about {D} or Adrian? Isn't this too risky?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1209856321": {
+   "kind": "text",
+   "parent": 59177060,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thank you, dear. I'm glad you like it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-202126568": {
+   "kind": "text",
+   "parent": 1156405621,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Aw, {PC}. This is not so bad, give it a try, yes?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-522955400": {
+   "kind": "text",
+   "parent": 188580169,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh, um. As said before, only we both have keys to this room...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "398409078": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I wanted to do something special for us.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-380944170": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You’ve been so supportive, and I thought this could be a way for us to work together and make something wonderful.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1801394471": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "We can experiment with different lighting, backgrounds, and setups... and hopefully create some beautiful photos.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1246129383": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I'll see you then...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Basement",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play FirstDialogue and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[basement-introdduction] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "basement-introdduction",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "branches": [
+    "introcution"
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[basement-introdduction] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "basement-introdduction",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

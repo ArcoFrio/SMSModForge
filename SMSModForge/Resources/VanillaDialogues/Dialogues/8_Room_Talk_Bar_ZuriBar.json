@@ -1,0 +1,873 @@
+{
+ "id": "8_Room_Talk/Bar/ZuriBar",
+ "name": "ZuriBar",
+ "index": 9,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Joey",
+  "Zuri"
+ ],
+ "roots": [
+  -1294029913,
+  -1706783249,
+  997314333
+ ],
+ "nodes": {
+  "-1294029913": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.5,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[zurijoey-threesomedone] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zurijoey-threesomedone",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active JoeyCoolCasualBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "JoeyCoolCasualBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/JoeyCoolCasualBust"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_8[zurijoey-threesomedone] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zurijoey-threesomedone",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "997314333": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1040410752,
+    -738438559,
+    1056328840,
+    1507593789,
+    -1251496163
+   ],
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Well, look who decided to show up.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1040410752": {
+   "kind": "text",
+   "parent": 997314333,
+   "children": [
+    652778474,
+    1202781232
+   ],
+   "actor": null,
+   "text": "You look different tonight.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-738438559": {
+   "kind": "text",
+   "parent": 997314333,
+   "children": [
+    -1404736382,
+    1950523291
+   ],
+   "actor": null,
+   "text": "Joey? Is that… you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "gameObjectActive",
+     "type": "ConditionGameObjectActive",
+     "title": "If is Active JoeyCoolCasualBust",
+     "fields": {
+      "m_GameObject": {
+       "kind": "object",
+       "name": "JoeyCoolCasualBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/JoeyCoolCasualBust"
+      }
+     }
+    }
+   ]
+  },
+  "1056328840": {
+   "kind": "text",
+   "parent": 997314333,
+   "children": [
+    -80580283,
+    -1668424851
+   ],
+   "actor": null,
+   "text": "You often come here alone?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "gameObjectActive",
+     "type": "ConditionGameObjectActive",
+     "title": "Not is Active JoeyCoolCasualBust",
+     "fields": {
+      "m_GameObject": {
+       "kind": "object",
+       "name": "JoeyCoolCasualBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/JoeyCoolCasualBust"
+      }
+     }
+    }
+   ]
+  },
+  "1507593789": {
+   "kind": "text",
+   "parent": 997314333,
+   "children": [
+    -887273799,
+    1603381627,
+    -620427647
+   ],
+   "actor": null,
+   "text": "You need a refill?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Eve_NoSave1[zuriwaitsinmotel] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zuriwaitsinmotel",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Eve_NoSave1[joandzuwaitinmotel] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "joandzuwaitinmotel",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1251496163": {
+   "kind": "text",
+   "parent": 997314333,
+   "children": [
+    -526721393
+   ],
+   "actor": null,
+   "text": "See you around.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1706783249": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.5,
+   "tag": "zuribarroot",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-526721393": {
+   "kind": "text",
+   "parent": -1251496163,
+   "actor": "Zuri",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Try not to trip over any drunk milf on your way out.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-887273799": {
+   "kind": "text",
+   "parent": 1507593789,
+   "actor": "Zuri",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "A refill, huh? Is that what young people call it nowadays?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-80580283": {
+   "kind": "text",
+   "parent": 1056328840,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Sometimes. I enjoy the silence between the noise.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1404736382": {
+   "kind": "text",
+   "parent": -738438559,
+   "actor": "Joey",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Surprised? I call this look “Zuri’s Personal Project: Phase Three.”",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "652778474": {
+   "kind": "text",
+   "parent": -1040410752,
+   "actor": "Zuri",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Not every night needs heels and diamonds. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1950523291": {
+   "kind": "text",
+   "parent": -738438559,
+   "actor": "Zuri",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I scrubbed the cargo shorts off him with industrial-grade fire and shame. ",
+   "jump": {
+    "mode": "Jump",
+    "to": "zuribarroot"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1202781232": {
+   "kind": "text",
+   "parent": -1040410752,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "You however look the same as always. You really like those white t-shirts, huh? Well, the fit you.",
+   "jump": {
+    "mode": "Jump",
+    "to": "zuribarroot"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1668424851": {
+   "kind": "text",
+   "parent": 1056328840,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "I like this place. The view, the ambience. It's very different from the mall.",
+   "jump": {
+    "mode": "Jump",
+    "to": "zuribarroot"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1603381627": {
+   "kind": "text",
+   "parent": 1507593789,
+   "children": [
+    -853888260,
+    -1926963421,
+    -658254688,
+    -51059868
+   ],
+   "actor": "Zuri",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "God, you’re awful. ...And lucky I’m in the mood for awful.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "gameObjectActive",
+     "type": "ConditionGameObjectActive",
+     "title": "If is Active JoeyCoolCasualBust",
+     "fields": {
+      "m_GameObject": {
+       "kind": "object",
+       "name": "JoeyCoolCasualBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/JoeyCoolCasualBust"
+      }
+     }
+    }
+   ]
+  },
+  "-620427647": {
+   "kind": "text",
+   "parent": 1507593789,
+   "children": [
+    661161747,
+    -848569682
+   ],
+   "actor": "Zuri",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "God, you’re awful. ...And lucky I’m in the mood for awful.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "gameObjectActive",
+     "type": "ConditionGameObjectActive",
+     "title": "Not is Active JoeyCoolCasualBust",
+     "fields": {
+      "m_GameObject": {
+       "kind": "object",
+       "name": "JoeyCoolCasualBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/JoeyCoolCasualBust"
+      }
+     }
+    }
+   ]
+  },
+  "661161747": {
+   "kind": "text",
+   "parent": -620427647,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "There's a motel nearby... Give me five minutes. I’m finishing this wine—and you’re buying the second bottle when we’re done.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[zuriwaitsinmotel] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zuriwaitsinmotel",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-848569682": {
+   "kind": "text",
+   "parent": -620427647,
+   "actor": "Zuri",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I'm sure Joey won't mind. Not after what you two did to my... entrance.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[zurijoey-threesomedone] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zurijoey-threesomedone",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-853888260": {
+   "kind": "text",
+   "parent": 1603381627,
+   "actor": "Zuri",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "What do you say, cutie? You want to mess me up with {PC}?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1926963421": {
+   "kind": "text",
+   "parent": 1603381627,
+   "actor": "Joey",
+   "expressionName": "neutral",
+   "text": "Oh man, of course! I want to get out of this shirt... This thing is itchy as hell. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-658254688": {
+   "kind": "text",
+   "parent": 1603381627,
+   "actor": "Zuri",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-51059868": {
+   "kind": "text",
+   "parent": 1603381627,
+   "actor": "Zuri",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "There's a motel nearby... Give me five minutes. I’m finishing this wine—and you’re buying the second bottle when we’re done.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[joandzuwaitinmotel] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "joandzuwaitinmotel",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Bar",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play ZuriBar and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[zuribar] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zuribar",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "type": "ConditionVisualScriptingConditionsOR",
+     "title": "If (If Events_5[Zuri-Solo-Bang-Done] = True or If Events_8[zurijoey-threesomedone] = True)",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "compareBool",
+         "type": "ConditionMathCompareBooleans",
+         "title": "If Events_5[Zuri-Solo-Bang-Done] = True",
+         "fields": {
+          "m_Value": {
+           "kind": "variable",
+           "variable": {
+            "scope": "global",
+            "name": "Zuri-Solo-Bang-Done",
+            "list": "Events_5",
+            "type": "boolean"
+           }
+          },
+          "m_Comparison": "Equals",
+          "m_CompareTo": {
+           "kind": "value",
+           "value": true
+          }
+         }
+        },
+        {
+         "kind": "compareBool",
+         "type": "ConditionMathCompareBooleans",
+         "title": "If Events_8[zurijoey-threesomedone] = True",
+         "fields": {
+          "m_Value": {
+           "kind": "variable",
+           "variable": {
+            "scope": "global",
+            "name": "zurijoey-threesomedone",
+            "list": "Events_8",
+            "type": "boolean"
+           }
+          },
+          "m_Comparison": "Equals",
+          "m_CompareTo": {
+           "kind": "value",
+           "value": true
+          }
+         }
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "branches": [
+    "zuribar"
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[random-1-of-10] = Random2[Random]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random2",
+        "pick": "random",
+        "type": "number"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/JoeyCoolCasualBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Zuri_CasualBarBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Zuri_CasualBarBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Zuri_CasualBarBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Zuri_CasualBarBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/JoeyCoolCasualBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[zuribar] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zuribar",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

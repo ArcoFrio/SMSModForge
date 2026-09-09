@@ -1,0 +1,1878 @@
+{
+ "id": "8_Room_Talk/publicpool/event_Norahpublicpool",
+ "name": "event_Norahpublicpool",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Alice",
+  "Continue",
+  "Norah"
+ ],
+ "roots": [
+  728280522,
+  -1828494903,
+  749496101,
+  -595749579,
+  -305130735,
+  37893867
+ ],
+ "nodes": {
+  "728280522": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Oh... I didn’t expect to see you here. Didn’t Alice say you had your own pool at home?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[norah-poolmet] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "norah-poolmet",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "749496101": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1380996268,
+    1532345239,
+    1149965146,
+    1462419654,
+    1856312787
+   ],
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Oh… hello. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[norah-poolmet] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "norah-poolmet",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1380996268": {
+   "kind": "text",
+   "parent": 749496101,
+   "actor": "Norah",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I hope I’m not interrupting anything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1149965146": {
+   "kind": "choice",
+   "parent": 749496101,
+   "children": [
+    -525016965,
+    -1900986216,
+    752941732
+   ],
+   "actor": "Norah",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I just… thought I’d say hello. Get to know you a little, if that’s alright.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-525016965": {
+   "kind": "text",
+   "parent": 1149965146,
+   "children": [
+    -1642543737
+   ],
+   "actor": null,
+   "text": "Sure. I’d like that too.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1642543737": {
+   "kind": "text",
+   "parent": -525016965,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "That’s sweet of you. I was honestly a little nervous to walk over.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1900986216": {
+   "kind": "text",
+   "parent": 1149965146,
+   "children": [
+    834400766
+   ],
+   "actor": null,
+   "text": "Trying to interrogate me, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "834400766": {
+   "kind": "text",
+   "parent": -1900986216,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Oh, no! Goodness, I wouldn’t even know how. But I am a little curious about you… and her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "752941732": {
+   "kind": "text",
+   "parent": 1149965146,
+   "children": [
+    -978661691
+   ],
+   "actor": null,
+   "text": "What do you want to know, Norah? You can ask anything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-978661691": {
+   "kind": "text",
+   "parent": 752941732,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "O-oh... well, I wasn’t expecting... that kind of offer. You’re a bit bolder than I thought.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1532345239": {
+   "kind": "text",
+   "parent": 749496101,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "I'm Norah... I'm, uh... Alice's {M}. We know each other from church, remember?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1462419654": {
+   "kind": "choice",
+   "parent": 749496101,
+   "children": [
+    535032524,
+    1971162955,
+    -1478532086
+   ],
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Has Alice ever… mentioned me?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "535032524": {
+   "kind": "text",
+   "parent": 1462419654,
+   "children": [
+    8891419
+   ],
+   "actor": null,
+   "text": "No, actually. Not once.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "8891419": {
+   "kind": "text",
+   "parent": 535032524,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Oh… I guess I shouldn't be surprised. She keeps a lot in.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1971162955": {
+   "kind": "text",
+   "parent": 1462419654,
+   "children": [
+    1494123043
+   ],
+   "actor": null,
+   "text": "Not really, but that doesn’t mean she doesn’t care.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1494123043": {
+   "kind": "text",
+   "parent": 1971162955,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "That’s… thoughtful of you to say. She used to tell me everything, you know?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1478532086": {
+   "kind": "text",
+   "parent": 1462419654,
+   "children": [
+    -434755497
+   ],
+   "actor": null,
+   "text": "(Lie) Yeah, she said you’re really important to her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-434755497": {
+   "kind": "text",
+   "parent": -1478532086,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "She… really said that? I—I’m glad. I was starting to feel like a stranger in her world.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1856312787": {
+   "kind": "text",
+   "parent": 749496101,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Thank you for talking with me. Even if she doesn't say much… it means a lot to know someone’s close to her.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[norah-poolmet] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "norah-poolmet",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-595749579": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -919165465,
+    2132804799,
+    527331383,
+    1471229508
+   ],
+   "actor": "Norah",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "It’s such a nice day, isn’t it?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-919165465": {
+   "kind": "text",
+   "parent": -595749579,
+   "children": [
+    -1249662749,
+    -802468146
+   ],
+   "actor": null,
+   "text": "How about you? Doing alright?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2132804799": {
+   "kind": "text",
+   "parent": -595749579,
+   "children": [
+    -1530514499,
+    -521478135
+   ],
+   "actor": null,
+   "text": "What brings you to the pool today?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "527331383": {
+   "kind": "text",
+   "parent": -595749579,
+   "children": [
+    1711556464
+   ],
+   "actor": null,
+   "text": "You going to church this friday?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1711556464": {
+   "kind": "text",
+   "parent": 527331383,
+   "actor": "Norah",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Of course. I never miss a Friday. You’re welcome to come, you know. They do have coffee.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1530514499": {
+   "kind": "text",
+   "parent": 2132804799,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Oh, just getting a bit of sun. I keep hoping I’ll run into Alice here.\n",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1249662749": {
+   "kind": "text",
+   "parent": -919165465,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Oh, I’m alright. Still making my casseroles, still trying to pray my worries away.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1471229508": {
+   "kind": "text",
+   "parent": -595749579,
+   "children": [
+    -43628148
+   ],
+   "actor": null,
+   "text": "I should get going.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-43628148": {
+   "kind": "text",
+   "parent": 1471229508,
+   "actor": "Norah",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Alright. Stay cool, drink water, and don’t forget sunscreen!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-802468146": {
+   "kind": "text",
+   "parent": -919165465,
+   "actor": "Norah",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": " I come here to relax, but sometimes I just... overthink.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-521478135": {
+   "kind": "text",
+   "parent": 2132804799,
+   "actor": "Norah",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I bring snacks. She never takes them.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-305130735": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Norah",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "It was nice talking to you. Take care, alright?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1828494903": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1075331618,
+    -863267907,
+    -54810903,
+    990755776,
+    -1673552290,
+    46088844,
+    492570079,
+    1445637660,
+    -1643152461,
+    -960783058,
+    -145440839,
+    1841705663,
+    -911107527,
+    2135190382,
+    -1669204817
+   ],
+   "actor": "Alice",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Oh wow. I leave for five minutes and you’re already playing poolside slut?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "chance",
+     "type": "ConditionChance",
+     "title": "If 0.5 chance to pass",
+     "fields": {
+      "m_Threshold": {
+       "kind": "value",
+       "value": 0.5
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[alice-publicpool-firstdone] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-publicpool-firstdone",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceSwimwear to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceSwimwear",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AliceSwimwear"
+      }
+     }
+    }
+   ]
+  },
+  "1075331618": {
+   "kind": "text",
+   "parent": -1828494903,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Alice, please~ watch your language!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-863267907": {
+   "kind": "text",
+   "parent": -1828494903,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "My language? Really? You're sitting here cozy with him like nothing’s going on.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-54810903": {
+   "kind": "text",
+   "parent": -1828494903,
+   "actor": "Norah",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "We’re just talking. Nothing more than that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "990755776": {
+   "kind": "choice",
+   "parent": -1828494903,
+   "children": [
+    -609111403,
+    -825887097,
+    -815594356
+   ],
+   "actor": "Alice",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You think I’m stupid? First you guilt me for going out, and now you're eyeing the guy I’m with?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1673552290": {
+   "kind": "text",
+   "parent": -1828494903,
+   "actor": "Norah",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I only wanted to understand you better.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "46088844": {
+   "kind": "text",
+   "parent": -1828494903,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "By flirting with him at the pool? In your little slutty swimsuit?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "492570079": {
+   "kind": "text",
+   "parent": -1828494903,
+   "actor": "Norah",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "It’s just a swimsuit. Lots of women wear~",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1445637660": {
+   "kind": "text",
+   "parent": -1828494903,
+   "actor": "Alice",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Not like that. That thing is hanging on by~",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1643152461": {
+   "kind": "text",
+   "parent": -1828494903,
+   "actor": "Norah",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I did not dress myself for attention!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-960783058": {
+   "kind": "text",
+   "parent": -1828494903,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Then why are your boobs trying to escape and run laps around the pool?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-145440839": {
+   "kind": "text",
+   "parent": -1828494903,
+   "actor": "Alice",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Seriously, {M}, is this your midlife crisis or are you auditioning for Starmaker?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1841705663": {
+   "kind": "text",
+   "parent": -1828494903,
+   "actor": "Norah",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "That is cruel and unnecessary.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-911107527": {
+   "kind": "text",
+   "parent": -1828494903,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Yeah, whatever. Fuck you, I hope you drown.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AliceSwimwear/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "2135190382": {
+   "kind": "text",
+   "parent": -1828494903,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1669204817": {
+   "kind": "text",
+   "parent": -1828494903,
+   "actor": "Norah",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I just wanted to understand her… Not become someone she hates.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[alice-publicpool-firstdone] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-publicpool-firstdone",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-609111403": {
+   "kind": "text",
+   "parent": 990755776,
+   "children": [
+    -803334182
+   ],
+   "actor": null,
+   "text": "Nothing happened between us.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-803334182": {
+   "kind": "text",
+   "parent": -609111403,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Shut up, this isn't about you, {PC}. I don't care who you fuck. I'm angry at her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-825887097": {
+   "kind": "text",
+   "parent": 990755776,
+   "children": [
+    -2088308684
+   ],
+   "actor": null,
+   "text": "Stop being such a bitch to Norah.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2088308684": {
+   "kind": "text",
+   "parent": -825887097,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Shut up, this isn't about you, {PC}. I don't care who you fuck. I'm angry at her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-815594356": {
+   "kind": "text",
+   "parent": 990755776,
+   "actor": null,
+   "text": "(Say nothing)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "37893867": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    78492914,
+    1534185632,
+    1496695016,
+    967110243,
+    -1145175366,
+    803252405,
+    -1129707206,
+    -988218149,
+    -81763852,
+    743814797,
+    319573026
+   ],
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "I... Ah~ Woaaah~",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "chance",
+     "type": "ConditionChance",
+     "title": "If 0.5 chance to pass",
+     "fields": {
+      "m_Threshold": {
+       "kind": "value",
+       "value": 0.5
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Norah_TripPool (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Norah_TripPool (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Norah_TripPool (0)"
+      }
+     }
+    }
+   ]
+  },
+  "78492914": {
+   "kind": "text",
+   "parent": 37893867,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Help~ Help~ Waaaah~",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Norah_TripPool (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Norah_TripPool (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Norah_TripPool (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1534185632": {
+   "kind": "text",
+   "parent": 37893867,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "{PC}!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1496695016": {
+   "kind": "text",
+   "parent": 37893867,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Oh my goodness, I'm so sorry! I just... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Norah_TripPool (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Norah_TripPool (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Norah_TripPool (2)"
+      }
+     }
+    }
+   ]
+  },
+  "967110243": {
+   "kind": "text",
+   "parent": 37893867,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "I slipped on the wet tile and I just grabbed for something and~ oh dear lord.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1145175366": {
+   "kind": "text",
+   "parent": 37893867,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "And now I'm... oh heavens, I'm right on top of you. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "803252405": {
+   "kind": "text",
+   "parent": 37893867,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "This is so inappropriate. Let me just... try to get up without making it worse.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1129707206": {
+   "kind": "choice",
+   "parent": 37893867,
+   "children": [
+    1959637465,
+    -900591989,
+    1279094346,
+    805205913
+   ],
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "I can't believe this is happening. At the pool, of all places. I'm so, so, so sorry, {PC}.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-988218149": {
+   "kind": "text",
+   "parent": 37893867,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Just... please close your eyes for a second. Let me fix my... situation.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-81763852": {
+   "kind": "text",
+   "parent": 37893867,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "743814797": {
+   "kind": "text",
+   "parent": 37893867,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "I am so, so sorry. I don't know what came over me. My feet just went out from under me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "319573026": {
+   "kind": "text",
+   "parent": 37893867,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "I need to go pray for forgiveness. This is... this is too much. I hope you can forgive my clumsiness. Goodbye.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1959637465": {
+   "kind": "text",
+   "parent": -1129707206,
+   "actor": null,
+   "text": "It's.. It's alright, don't worry...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-900591989": {
+   "kind": "text",
+   "parent": -1129707206,
+   "actor": null,
+   "text": "Get off me! Norah, what the fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1279094346": {
+   "kind": "text",
+   "parent": -1129707206,
+   "actor": null,
+   "text": "(Close your eyes in bliss)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "805205913": {
+   "kind": "text",
+   "parent": -1129707206,
+   "children": [
+    1988348581,
+    -565506911,
+    204027646,
+    -579876407,
+    -1695013895,
+    2034080468,
+    -1168234719,
+    667043129,
+    -1567683647,
+    -753024575,
+    947375669,
+    -1884564516,
+    -400428500,
+    -278068286
+   ],
+   "actor": null,
+   "text": "(Lewd) You could at least finish the job...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Lewd] ≥ 6",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Lewd",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 6
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1988348581": {
+   "kind": "text",
+   "parent": 805205913,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Wait, what? No, I couldn't possibly... finish... that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-565506911": {
+   "kind": "text",
+   "parent": 805205913,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "This is already a terrible mistake. I'm a married woman, and you're... we're at a public facility.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "204027646": {
+   "kind": "text",
+   "parent": 805205913,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "You're asking me to... oh my lord. My heart is racing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-579876407": {
+   "kind": "text",
+   "parent": 805205913,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "It's so... warm. And I can feel it... pulsing. This is wrong. This is so wrong.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1695013895": {
+   "kind": "text",
+   "parent": 805205913,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "If I... if I just... moved a little. Up and down.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Norah_Titfuck (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Norah_Titfuck (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Norah_Titfuck (0)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Norah_TripPool (0) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Norah_TripPool (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Norah_TripPool (0)"
+      }
+     }
+    }
+   ]
+  },
+  "2034080468": {
+   "kind": "text",
+   "parent": 805205913,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "It's so... big. And it feels so hot against my skin.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1168234719": {
+   "kind": "text",
+   "parent": 805205913,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Just... let me... taste it a little. Just the tip.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "667043129": {
+   "kind": "text",
+   "parent": 805205913,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Mmmph... oh... it's salty.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1567683647": {
+   "kind": "text",
+   "parent": 805205913,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "I'm a terrible woman. A sinful, terrible woman.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-753024575": {
+   "kind": "choice",
+   "parent": 805205913,
+   "children": [
+    297059867,
+    1158107619,
+    537866703
+   ],
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Am I... am I doing it right? Does that feel good?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "947375669": {
+   "kind": "text",
+   "parent": 805205913,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Muaaahm! Mhmmm.... *Gulp* ... *Gulp* ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Norah_Titfuck (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Norah_Titfuck (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Norah_Titfuck (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Norah_TripPool (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Norah_TripPool (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Norah_TripPool (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1884564516": {
+   "kind": "text",
+   "parent": 805205913,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "I drank it. I actually drank it all. What is wrong with me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-400428500": {
+   "kind": "text",
+   "parent": 805205913,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "I'm a deaconess. I teach Sunday school. My husband is the choir director.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-278068286": {
+   "kind": "text",
+   "parent": 805205913,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Please... please don't tell anyone. Ever.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "297059867": {
+   "kind": "text",
+   "parent": -753024575,
+   "actor": null,
+   "text": "Y-Yes, Norah. So good, I'm so close~ Fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1158107619": {
+   "kind": "text",
+   "parent": -753024575,
+   "actor": null,
+   "text": "Fuck, you've got such an eager mouth... Suck me dry, Norah.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "537866703": {
+   "kind": "text",
+   "parent": -753024575,
+   "actor": null,
+   "text": "(Blow your load)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/publicpool",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play event_Norahpublicpool and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[norah-publicpoolcd] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "norah-publicpoolcd",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "type": "ConditionVisualScriptingConditionsOR",
+     "title": "If (If Events[alice-sharing-start] = True or If Events[alice-stealing-start] = True)",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "compareBool",
+         "type": "ConditionMathCompareBooleans",
+         "title": "If Events[alice-sharing-start] = True",
+         "fields": {
+          "m_Value": {
+           "kind": "variable",
+           "variable": {
+            "scope": "global",
+            "name": "alice-sharing-start",
+            "list": "Events",
+            "type": "boolean"
+           }
+          },
+          "m_Comparison": "Equals",
+          "m_CompareTo": {
+           "kind": "value",
+           "value": true
+          }
+         }
+        },
+        {
+         "kind": "compareBool",
+         "type": "ConditionMathCompareBooleans",
+         "title": "If Events[alice-stealing-start] = True",
+         "fields": {
+          "m_Value": {
+           "kind": "variable",
+           "variable": {
+            "scope": "global",
+            "name": "alice-stealing-start",
+            "list": "Events",
+            "type": "boolean"
+           }
+          },
+          "m_Comparison": "Equals",
+          "m_CompareTo": {
+           "kind": "value",
+           "value": true
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "kind": "chance",
+     "type": "ConditionChance",
+     "title": "If 0.4 chance to pass",
+     "fields": {
+      "m_Threshold": {
+       "kind": "value",
+       "value": 0.4
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NorahWhiteBikiniBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NorahWhiteBikiniBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/NorahWhiteBikiniBust"
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[random-1-of-10] = 0",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 0
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[temp-stored-very-short-term] = (none)",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": null,
+       "of": "GetGameObjectInstance"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/NorahWhiteBikiniBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[norah-publicpoolcd] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "norah-publicpoolcd",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown3[lookfornorah-cd] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "lookfornorah-cd",
+        "list": "Cooldown3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Room_Talk/publicpool/LookForNorah",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play event_Norahpublicpool and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Core_NoSave3[2026bool-veryshort] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2026bool-veryshort",
+        "list": "Core_NoSave3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NorahWhiteBikiniBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NorahWhiteBikiniBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/NorahWhiteBikiniBust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/NorahWhiteBikiniBust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,844 @@
+{
+ "id": "AlwaysActive_ChildrenInactive/Emma_LizardWon/Dialogue",
+ "name": "Dialogue",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Emma",
+  "V_LizardMan"
+ ],
+ "roots": [
+  -953669089,
+  -739517729
+ ],
+ "nodes": {
+  "-953669089": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "…It’s close.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_10[emma-cryptidhuntquest] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-cryptidhuntquest",
+        "list": "Events_10",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_LizardGuyBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_LizardGuyBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_LizardGuyBust"
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_10[emma-cryptidhuntquest] = 3",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-cryptidhuntquest",
+        "list": "Events_10",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 3
+      }
+     }
+    }
+   ]
+  },
+  "-739517729": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1037287881,
+    -873470753
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Keep the camcorder steady... Wait. It's not running.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1037287881": {
+   "kind": "text",
+   "parent": -739517729,
+   "children": [
+    -1023427653,
+    -19874061,
+    1815639991,
+    1568220876
+   ],
+   "actor": null,
+   "text": "(Use the flashlight to scare it away)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1023427653": {
+   "kind": "text",
+   "parent": -1037287881,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "T-Thank you, {PC}. Good call.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'flash'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "flash"
+      }
+     }
+    }
+   ]
+  },
+  "-873470753": {
+   "kind": "text",
+   "parent": -739517729,
+   "children": [
+    547539333,
+    1302221866,
+    -658125547,
+    -1289751712,
+    646367011,
+    46687891,
+    1505228833,
+    -2025323555,
+    113295327,
+    254265017,
+    1922729395,
+    473208206,
+    -580276767,
+    -1777282127,
+    1840757894,
+    -728312711,
+    -2092254746,
+    -842748365,
+    378200671,
+    -1548110222,
+    -1511256328
+   ],
+   "actor": null,
+   "text": "Stay still, Emma. I think it's curious. (Start sharing route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "547539333": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "What the~? Get your slimy hands off me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaXLizardguy (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaXLizardguy (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/EmmaXLizardguy (0)"
+      }
+     }
+    }
+   ]
+  },
+  "-19874061": {
+   "kind": "text",
+   "parent": -1037287881,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I can’t believe we actually got it on tape... that thing was real.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1815639991": {
+   "kind": "choice",
+   "parent": -1037287881,
+   "children": [
+    -498614317,
+    1222052191,
+    87114755
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "So... what do you think they are?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1568220876": {
+   "kind": "text",
+   "parent": -1037287881,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Let’s go.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-2025323555": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Whoa~ Hey, easy there...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaXLizardguy (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaXLizardguy (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/EmmaXLizardguy (1)"
+      }
+     }
+    }
+   ]
+  },
+  "113295327": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "V_LizardMan",
+   "expressionName": "my-expression",
+   "text": "Ssssoft... sssso full... you are like ssssunlight...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "254265017": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "You're... actually being really gentle. For a... well, whatever you are.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "473208206": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I know... I know what he did. And I promise you, I'll help you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-580276767": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Oh... wow... that's... surprisingly warm.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaXLizardguy (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaXLizardguy (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/EmmaXLizardguy (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1777282127": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "V_LizardMan",
+   "expressionName": "my-expression",
+   "text": "Ssssalt... sssweat... life... you taste like life...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "378200671": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "We should probably get out of these sewers before we run into anything else my {D} decided to play god with.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[emma-lizagscenedone] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-lizagscenedone",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1922729395": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "V_LizardMan",
+   "expressionName": "my-expression",
+   "text": "Not... monster... jussst... forgotten...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1548110222": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I... I don't know what to say, {PC}. I feel like I can actually help them, you know?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1511256328": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I'll get the video to Sofia. I hope I'll see you next week.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-498614317": {
+   "kind": "text",
+   "parent": 1815639991,
+   "children": [
+    952551772
+   ],
+   "actor": null,
+   "text": "Some kind of hybrid experiment. Human-based.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1222052191": {
+   "kind": "text",
+   "parent": 1815639991,
+   "children": [
+    -1633118788,
+    -292822631
+   ],
+   "actor": null,
+   "text": "Maybe it’s not an experiment at all. Could be a real cryptid.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1633118788": {
+   "kind": "text",
+   "parent": 1222052191,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "A cryptid... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "952551772": {
+   "kind": "text",
+   "parent": -498614317,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "That’s what I thought. It moved like it remembered being human.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "87114755": {
+   "kind": "text",
+   "parent": 1815639991,
+   "children": [
+    -1422975623
+   ],
+   "actor": null,
+   "text": "Looked like a rejected ninja turtle.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1422975623": {
+   "kind": "text",
+   "parent": 87114755,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Yeah... the kind that eats the cameraman.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-292822631": {
+   "kind": "text",
+   "parent": 1222052191,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "That’d mean this place has been hiding monsters for years.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-658125547": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Touch me again and I'll shove this flashlight so far down your throat you'll be seeing daylight!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1302221866": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "V_LizardMan",
+   "expressionName": "my-expression",
+   "text": "Ssssuch ssssoft sssskin... sssso warm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1289751712": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "V_LizardMan",
+   "expressionName": "my-expression",
+   "text": "Ssso alone... ssso long... jussst want to touch...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "646367011": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I'm... I'm sorry for what my...  What Mario did to you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "46687891": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "V_LizardMan",
+   "expressionName": "my-expression",
+   "text": "Pleassse... your warmth... your kindnesss...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1505228833": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Okay... okay, just... just be gentle, alright?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1840757894": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I guess you really haven't had much contact, have you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-728312711": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "V_LizardMan",
+   "expressionName": "my-expression",
+   "text": "Never... never thisss closssse...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-842748365": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Wait... where are you going? It's not safe out there!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_LizardGuyBust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-2092254746": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "V_LizardMan",
+   "expressionName": "my-expression",
+   "text": "I must go... Ssssoft woman, thank you... I remember.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "AlwaysActive_ChildrenInactive/Emma_LizardWon",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dialogue and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Emma_Normal to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Emma_Normal",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Emma_Normal"
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core_NoSave2[2025-shortgo-saveONE] = None",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2025-shortgo-saveONE",
+        "list": "Core_NoSave2",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "none"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Check out reports of the lizard creature.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Cryptids (Emma)",
+        "of": "Quest"
+       },
+       "m_TaskId": 400938478
+      },
+      "m_WaitToComplete": false
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Meet Emma in the city on Tuesday.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Cryptids (Emma)",
+        "of": "Quest"
+       },
+       "m_TaskId": -210829219
+      },
+      "m_WaitToComplete": false
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[emma-cryptidhuntactive] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-cryptidhuntactive",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

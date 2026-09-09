@@ -1,0 +1,1481 @@
+{
+ "id": "8_Room_Talk/BRoom/Videogame",
+ "name": "Videogame",
+ "index": 4,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  1070490973,
+  1584018309
+ ],
+ "nodes": {
+  "1584018309": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    672873088,
+    52747042
+   ],
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Look who's dared to show up today. Ready to get your ass kicked?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "672873088": {
+   "kind": "text",
+   "parent": 1584018309,
+   "children": [
+    1377284118,
+    1564375208,
+    1168237919,
+    -619347525,
+    -2083363716
+   ],
+   "actor": null,
+   "text": "Bring it on!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "52747042": {
+   "kind": "text",
+   "parent": 1584018309,
+   "children": [
+    369908074
+   ],
+   "actor": null,
+   "text": "Maybe another time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1377284118": {
+   "kind": "choice",
+   "parent": 672873088,
+   "children": [
+    -1830628774,
+    -605667950,
+    -1595869168,
+    277769987
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Which game do you want to lose against me this time?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1830628774": {
+   "kind": "text",
+   "parent": 1377284118,
+   "children": [
+    -788688979
+   ],
+   "actor": null,
+   "text": "Alley Fighter 2.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-605667950": {
+   "kind": "text",
+   "parent": 1377284118,
+   "children": [
+    -508671272
+   ],
+   "actor": null,
+   "text": "Roar of Loyalty: Combatzone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1595869168": {
+   "kind": "text",
+   "parent": 1377284118,
+   "children": [
+    -1968991997
+   ],
+   "actor": null,
+   "text": "Missile Alliance.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "277769987": {
+   "kind": "text",
+   "parent": 1377284118,
+   "children": [
+    1974206937
+   ],
+   "actor": null,
+   "text": "How about we play some Kaldur's Door  3 in co-op this time?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-788688979": {
+   "kind": "text",
+   "parent": -1830628774,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Another ass-kicking for Mr. Buttonmasher, coming right up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-508671272": {
+   "kind": "text",
+   "parent": -605667950,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "As you can win against me with your controller aim.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1968991997": {
+   "kind": "text",
+   "parent": -1595869168,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "This will be an easy win for me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1974206937": {
+   "kind": "text",
+   "parent": 277769987,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Sure, maybe we'll finish Act 3 this time around.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "369908074": {
+   "kind": "text",
+   "parent": 52747042,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Yeee, you're afraid as you should be.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1168237919": {
+   "kind": "text",
+   "parent": 672873088,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeInBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeInBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Video Game Success",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Video Game Success",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 0.5
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 3 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 3
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    }
+   ]
+  },
+  "-619347525": {
+   "kind": "text",
+   "parent": 672873088,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I gotta say, this almost makes me forget about all the crap we're dealing with right now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2083363716": {
+   "kind": "text",
+   "parent": 672873088,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "That was fun, {B}. Same time next week?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_8[adrian-gamedtogether] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-gamedtogether",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "1070490973": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "P-Please, leave me alone. I don't want you in my room.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[Adrian-is-angry] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Adrian-is-angry",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-B-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-B-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1564375208": {
+   "kind": "choice",
+   "parent": 672873088,
+   "children": [
+    722500293,
+    393383622
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hey boys.... Would you mind if I joined you?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-B-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-B-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[beach-dp-anna-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "beach-dp-anna-done",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Gaming to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Gaming",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Gaming"
+      }
+     }
+    }
+   ]
+  },
+  "722500293": {
+   "kind": "text",
+   "parent": 1564375208,
+   "children": [
+    -333075142,
+    -1825342800,
+    -68886924,
+    -1313581604,
+    -843981974,
+    1675454743,
+    -322806086,
+    1414898882,
+    -134678764,
+    115291872,
+    30653059,
+    1429154224,
+    2068321009,
+    1300090600,
+    -2016331501,
+    -1006703118,
+    1080812643,
+    445321554,
+    1012227551
+   ],
+   "actor": null,
+   "text": "Of course not, {M}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-333075142": {
+   "kind": "text",
+   "parent": 722500293,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Your {D} is away for a few hours... So we can be really loud...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "393383622": {
+   "kind": "text",
+   "parent": 1564375208,
+   "children": [
+    -1907557608
+   ],
+   "actor": null,
+   "text": "Get out! We are GAMING!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1907557608": {
+   "kind": "text",
+   "parent": 393383622,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "S-Sorry!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1825342800": {
+   "kind": "text",
+   "parent": 722500293,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You two spend far too much time in front of the screen. I thought you might like to play with my joysticks instead...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-68886924": {
+   "kind": "text",
+   "parent": 722500293,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "T-They are called thumbsticks nowadays...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1313581604": {
+   "kind": "text",
+   "parent": 722500293,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes... I... I can't stop thinking about how my boys pounded my needy ass at the beach...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1675454743": {
+   "kind": "text",
+   "parent": 722500293,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I've just spent the last hour getting ready for you two. I lubed up my ass really nicely...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaGaming (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaGaming (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaGaming (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-843981974": {
+   "kind": "text",
+   "parent": 722500293,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Your {D} isn't the biggest fan of anal... So... I thought the three of us...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-322806086": {
+   "kind": "choice",
+   "parent": 722500293,
+   "children": [
+    -46993193,
+    1502792979,
+    2021061901
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "H-Holy... I-It looks so good, {M}...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-46993193": {
+   "kind": "text",
+   "parent": -322806086,
+   "children": [
+    1288244843,
+    -149540718
+   ],
+   "actor": null,
+   "text": "We're gonna fuck your ass so hard, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1502792979": {
+   "kind": "text",
+   "parent": -322806086,
+   "children": [
+    -707583985,
+    -753812371,
+    1388345343,
+    1012680428,
+    1267971340
+   ],
+   "actor": null,
+   "text": "I think we should taste her together, {B}....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2021061901": {
+   "kind": "text",
+   "parent": -322806086,
+   "children": [
+    -438736099,
+    -2077401164
+   ],
+   "actor": null,
+   "text": "I'm not feeling it today...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-438736099": {
+   "kind": "text",
+   "parent": 2021061901,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-That's a shame... I was looking forward to... Will you stay with me, Adrian?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2077401164": {
+   "kind": "text",
+   "parent": 2021061901,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "O-Of course... Look how hard I am...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-707583985": {
+   "kind": "text",
+   "parent": 1502792979,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Awesome idea....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-753812371": {
+   "kind": "text",
+   "parent": 1502792979,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god... My... My boys are making out with my asshole... I... I can't...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaGaming (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaGaming (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaGaming (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1388345343": {
+   "kind": "text",
+   "parent": 1502792979,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "It tastes so good {M}... I... Muaaah... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1012680428": {
+   "kind": "text",
+   "parent": 1502792979,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Fuck {M}'s ass with your tongues... Y-Yes... Oh god...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1288244843": {
+   "kind": "text",
+   "parent": -46993193,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Y-Yeah... I'm so ready for you {M}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-149540718": {
+   "kind": "text",
+   "parent": -46993193,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-Then come here... Make love to me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1267971340": {
+   "kind": "text",
+   "parent": 1502792979,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I need dick... Now... Please....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1414898882": {
+   "kind": "random",
+   "parent": 722500293,
+   "children": [
+    -904412181,
+    -1155006837,
+    -942474480
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I want...",
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "-134678764": {
+   "kind": "text",
+   "parent": 722500293,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I want both of you... Now... F-Fuck me.. Fuck my ass!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "115291872": {
+   "kind": "text",
+   "parent": 722500293,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yesshhh!!! T-That's it... I love this... I love your cocks!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaGaming (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaGaming (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaGaming (7)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaGaming (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaGaming (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaGaming (2)"
+      }
+     }
+    }
+   ]
+  },
+  "30653059": {
+   "kind": "text",
+   "parent": 722500293,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Hnaah... It's so tight... F-Fuck... Take our cocks, {M}... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1429154224": {
+   "kind": "text",
+   "parent": 722500293,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "D-Don't stop... I'm almost... Make {M} cum... P-Please... Pound my slut ass harder!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2068321009": {
+   "kind": "text",
+   "parent": 722500293,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "F-Fuck... I... I can't hold it in any longer... I'm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1300090600": {
+   "kind": "text",
+   "parent": 722500293,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let's all come toge... toge... aaah.. AHHHH!!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2016331501": {
+   "kind": "text",
+   "parent": 722500293,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "HAAhh..... B-Best day of my life... T-Thank you so much... My boys...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaGaming (8) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaGaming (8)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaGaming (8)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaGaming (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaGaming (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaGaming (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-904412181": {
+   "kind": "text",
+   "parent": 1414898882,
+   "children": [
+    -2106851636,
+    -1027480978,
+    674630241
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I want you to ease up my ass, Adrian... Your {B} is a bit bigger... So you should...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2106851636": {
+   "kind": "text",
+   "parent": -904412181,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes... That's it... Nice and slow... Mmmm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaGaming (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaGaming (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaGaming (5)"
+      }
+     }
+    }
+   ]
+  },
+  "-1155006837": {
+   "kind": "text",
+   "parent": 1414898882,
+   "children": [
+    -722687509,
+    1876927329,
+    -975372655
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I want your cock, {PC}... I need you to stretch me... Prepare my ass for...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-722687509": {
+   "kind": "text",
+   "parent": -1155006837,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "F-Fuck... Yes... Pump your beast into me... All of it!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaGaming (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaGaming (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaGaming (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-1027480978": {
+   "kind": "text",
+   "parent": -904412181,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "F-Fuck... {M}... I love fucking your ass... I....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "674630241": {
+   "kind": "text",
+   "parent": -904412181,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I.. I think I'm ready...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1876927329": {
+   "kind": "text",
+   "parent": -1155006837,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fhaack! ... Y-You are stretching me so gooood!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-975372655": {
+   "kind": "text",
+   "parent": -1155006837,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "D-Don't stop... I ... I think...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-942474480": {
+   "kind": "text",
+   "parent": 1414898882,
+   "children": [
+    -1865962452,
+    -126856393,
+    1420778392
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I want you to treat me like a slut today... Y-Your {M} is a cock loving slut... G-Give it to me... Please...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1865962452": {
+   "kind": "text",
+   "parent": -942474480,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "T-Take our cock... {M}... You... You slut... S-Suck my cock... S-Slut {M}... Hnggg....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaGaming (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaGaming (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaGaming (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-126856393": {
+   "kind": "text",
+   "parent": -942474480,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1420778392": {
+   "kind": "text",
+   "parent": -942474480,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Keep sucking... T-There's so much cum for you in there!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1006703118": {
+   "kind": "text",
+   "parent": 722500293,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "A-Anytime, {M}... I'm... I'm getting addicted to fucking your ass...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1080812643": {
+   "kind": "text",
+   "parent": 722500293,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "G-Good... My... My ass was made for your cocks.... It's... The perfect fit... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "445321554": {
+   "kind": "text",
+   "parent": 722500293,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "B-But now... I need to... Lie down for a bit... Just a quick break...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1012227551": {
+   "kind": "text",
+   "parent": 722500293,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/BRoom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Videogame and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[videogame-adrian] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "videogame-adrian",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[videogame-adrian] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "videogame-adrian",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

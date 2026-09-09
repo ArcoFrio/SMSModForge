@@ -1,0 +1,828 @@
+{
+ "id": "8_Room_Talk/Gym_Aftermath/hardmode",
+ "name": "hardmode",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Phoenix"
+ ],
+ "roots": [
+  -1053351239,
+  -1760487030,
+  -421624957
+ ],
+ "nodes": {
+  "-1053351239": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    611039070,
+    -646001863
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "GOOD!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Minigame[failure] ≤ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "failure",
+        "list": "Minigame",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Trigger_MinigameDone to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Trigger_MinigameDone",
+       "of": "GetGameObjectInstance",
+       "path": "XP_System/Trigger_MinigameDone"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Ahtletic to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Ahtletic",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Ahtletic"
+      }
+     }
+    },
+    {
+     "type": "InstructionQuestTaskValue",
+     "title": "Finish one of Phoenix’s advanced training sessions. + 1",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Gains (Phoneix",
+        "of": "Quest"
+       },
+       "m_TaskId": 400938478
+      },
+      "m_Value": {
+       "m_Operation": "Add",
+       "m_Value": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "611039070": {
+   "kind": "text",
+   "parent": -1053351239,
+   "actor": "Phoenix",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You managed to survive the special training! You’re tougher than I thought!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Traits[Athlete-5] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Athlete-5",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "checkConditions",
+     "type": "InstructionLogicCheckConditions",
+     "title": "Check If Traits[Athlete-5] = 5",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "compareNumber",
+         "type": "ConditionMathCompareIntegers",
+         "title": "If Traits[Athlete-5] = 5",
+         "fields": {
+          "m_Value": {
+           "kind": "variable",
+           "variable": {
+            "scope": "global",
+            "name": "Athlete-5",
+            "list": "Traits",
+            "type": "number"
+           }
+          },
+          "m_CompareTo": {
+           "m_Comparison": "Equals",
+           "m_CompareTo": {
+            "kind": "value",
+            "value": 5
+           }
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[new-trait] = Athlete",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Athlete"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "new-trait",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-646001863": {
+   "kind": "text",
+   "parent": -1053351239,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "But don’t get too comfortable! This is just the beginning! MORE!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[Athlete-5] ≤ 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Athlete-5",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1760487030": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1146947554,
+    -959099280,
+    13927753
+   ],
+   "actor": "Phoenix",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "WHAT WAS THAT?! That was pathetic, newbie! You’ve got a LONG way to go!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Minigame[failure] ≥ 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "failure",
+        "list": "Minigame",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1146947554": {
+   "kind": "text",
+   "parent": -1760487030,
+   "children": [
+    269938866
+   ],
+   "actor": null,
+   "text": "I'm sorry! I'm sorry! I'm sorry! I'm sorry!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-959099280": {
+   "kind": "text",
+   "parent": -1760487030,
+   "children": [
+    -29316704
+   ],
+   "actor": null,
+   "text": "I'll do better next time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "13927753": {
+   "kind": "text",
+   "parent": -1760487030,
+   "children": [
+    1684693020,
+    -349092613,
+    1081262861
+   ],
+   "actor": null,
+   "text": "You're quite the bitch, you know that?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "269938866": {
+   "kind": "text",
+   "parent": -1146947554,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Pathetic! Take this as a learning experience and come back STRONGER next time! DON’T GIVE UP!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-29316704": {
+   "kind": "text",
+   "parent": -959099280,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "GOOD! Take this as a learning experience and come back STRONGER next time! DON’T GIVE UP!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1684693020": {
+   "kind": "text",
+   "parent": 13927753,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "I see how it is.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-349092613": {
+   "kind": "text",
+   "parent": 13927753,
+   "actor": "Phoenix",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Not only your body is weak but your mind too. Pathethic.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1081262861": {
+   "kind": "text",
+   "parent": 13927753,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Come back tomorrow and stop being such a man-child.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-421624957": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1502007844
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "You did it, newbie! You’ve completed all five sessions of special training! I’m impressed!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[Athlete-5] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Athlete-5",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[phoenix-sex-path-start] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "phoenix-sex-path-start",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Minigame[failure] ≤ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "failure",
+        "list": "Minigame",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Complete five special training sessions with Phoenix.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Gains (Phoneix",
+        "of": "Quest"
+       },
+       "m_TaskId": -210829219
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "1502007844": {
+   "kind": "choice",
+   "parent": -421624957,
+   "children": [
+    791088434,
+    -1536332517
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "You’ve earned it, newbie! As promised, you get to use my ass! Get ready, because you deserve this reward!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "791088434": {
+   "kind": "text",
+   "parent": 1502007844,
+   "children": [
+    -529868665,
+    -1990716639,
+    1192282315,
+    2110997190,
+    162284479,
+    -1428338043,
+    1290336033,
+    -776995607,
+    -44089558,
+    -365516959,
+    1569062551,
+    1112913720
+   ],
+   "actor": null,
+   "text": "I'M READY!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1536332517": {
+   "kind": "text",
+   "parent": 1502007844,
+   "actor": null,
+   "text": "I'll pass today.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-529868665": {
+   "kind": "text",
+   "parent": 791088434,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "GOOD! Show me your COCK! NOW!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1990716639": {
+   "kind": "text",
+   "parent": 791088434,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active phoenixsex to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "phoenixsex",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/phoenixsex"
+      }
+     }
+    }
+   ]
+  },
+  "1192282315": {
+   "kind": "text",
+   "parent": 791088434,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "What a mighty specimen! IMPRESSIVE!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2110997190": {
+   "kind": "text",
+   "parent": 791088434,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Let me taste it!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "162284479": {
+   "kind": "text",
+   "parent": 791088434,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Mmm... Should be ready now! Don't hold back! I CAN TAKE IT!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1428338043": {
+   "kind": "text",
+   "parent": 791088434,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active phoenixsex (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "phoenixsex (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/phoenixsex (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1290336033": {
+   "kind": "text",
+   "parent": 791088434,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "YESSSS!!! FUCK ME! HARDER!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-776995607": {
+   "kind": "text",
+   "parent": 791088434,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "THIS IS OUR SPECIAL SPECIAL TRAINING FROM NOW ON!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-44089558": {
+   "kind": "text",
+   "parent": 791088434,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "FUCK! I'm getting close! I can feel my... HERE IT COMES!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-365516959": {
+   "kind": "text",
+   "parent": 791088434,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active phoenixsex (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "phoenixsex (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/phoenixsex (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1569062551": {
+   "kind": "text",
+   "parent": 791088434,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Nice! Good training, I'm even sweating a bit!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1112913720": {
+   "kind": "text",
+   "parent": 791088434,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Now go home and rest. Your body needs it!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[phoenix-sex-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "phoenix-sex-done",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Gym_Aftermath",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play hardmode and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Minigame[hard-mode] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hard-mode",
+        "list": "Minigame",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PhoenixBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PhoenixBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/PhoenixBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

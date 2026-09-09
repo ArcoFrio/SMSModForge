@@ -1,0 +1,1102 @@
+{
+ "id": "8_Room_Talk/SofiaHome/SofiaStory",
+ "name": "SofiaStory",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Sofia",
+  "You"
+ ],
+ "roots": [
+  -1288546045,
+  1359736072,
+  -1739544445,
+  1667439346
+ ],
+ "nodes": {
+  "1667439346": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1465389073,
+    1177687115,
+    887566220,
+    -116438471,
+    -2098456055
+   ],
+   "actor": "Sofia",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I'm glad you came... My place's a bit messy. I trust you can find a place to sit.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_6[sofia-romance-path] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-romance-path",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia_Undercover to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia_Undercover",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Sofia_Undercover"
+      }
+     }
+    }
+   ]
+  },
+  "-1739544445": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1559727690,
+    67509846,
+    292816953,
+    -68073143,
+    1262776595,
+    1647308626
+   ],
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "You’re not like anyone I’ve worked with before.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_6[sofia-romance-path] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-romance-path",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia_Undercover to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia_Undercover",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Sofia_Undercover"
+      }
+     }
+    }
+   ]
+  },
+  "-1288546045": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    20352157,
+    675193207
+   ],
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Sofia? Huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_6[sofia-romance-path] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-romance-path",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[SofioaHomecooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "SofioaHomecooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "20352157": {
+   "kind": "text",
+   "parent": -1288546045,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MarioNote to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MarioNote",
+       "of": "GetGameObjectInstance",
+       "path": "15_EventUI/MarioNote"
+      }
+     }
+    },
+    {
+     "type": "InstructionUICanvasGroupAlpha",
+     "title": "MarioNote alpha = 0",
+     "fields": {
+      "m_CanvasGroup": {
+       "kind": "object",
+       "name": "MarioNote",
+       "of": "GetGameObjectInstance",
+       "path": "15_EventUI/MarioNote"
+      },
+      "m_Alpha": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "value",
+        "value": 0
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 0,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": true
+      }
+     }
+    },
+    {
+     "type": "InstructionUICanvasGroupAlpha",
+     "title": "MarioNote alpha = 1",
+     "fields": {
+      "m_CanvasGroup": {
+       "kind": "object",
+       "name": "MarioNote",
+       "of": "GetGameObjectInstance",
+       "path": "15_EventUI/MarioNote"
+      },
+      "m_Alpha": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "value",
+        "value": 1
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 0.2,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[sofia-kidnapped] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-kidnapped",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1559727690": {
+   "kind": "text",
+   "parent": -1739544445,
+   "actor": "Sofia",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Most people I know prefer... paper over action.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_6[sofia-romance-path] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-romance-path",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-1465389073": {
+   "kind": "text",
+   "parent": 1667439346,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Let me grab a bottle of wine...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_6[sofia-romance-path] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-romance-path",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "1359736072": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "I've got some paperwork to do... You could visit tomorrow?",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[SofioaHomecooldown] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "SofioaHomecooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia_Undercover to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia_Undercover",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Sofia_Undercover"
+      }
+     }
+    }
+   ]
+  },
+  "1177687115": {
+   "kind": "choice",
+   "parent": 1667439346,
+   "children": [
+    1999922840,
+    1536517563,
+    -1495397251
+   ],
+   "actor": "Sofia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "To a job well done, and to putting away a real bastard.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1999922840": {
+   "kind": "text",
+   "parent": 1177687115,
+   "children": [
+    278102615
+   ],
+   "actor": null,
+   "text": "A toast to us. I think we make a pretty good team.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1536517563": {
+   "kind": "text",
+   "parent": 1177687115,
+   "children": [
+    494411879
+   ],
+   "actor": null,
+   "text": "To Sofia. The best cop in Peak City.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1495397251": {
+   "kind": "text",
+   "parent": 1177687115,
+   "children": [
+    392786976
+   ],
+   "actor": null,
+   "text": "To whatever happens after we finish the wine!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "278102615": {
+   "kind": "text",
+   "parent": 1999922840,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Oh, I agree. Ever thought about going to the academy? We could use someone like you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "494411879": {
+   "kind": "text",
+   "parent": 1536517563,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "You really think so? ... I... I'm bad with compliments...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "392786976": {
+   "kind": "text",
+   "parent": -1495397251,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Oh? Confident, aren’t you? Well, let’s see how much charm you’ve got left by the time we’re through with this bottle.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "887566220": {
+   "kind": "text",
+   "parent": 1667439346,
+   "actor": "Sofia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I have to say, you… you surprised me. In more ways than one",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-116438471": {
+   "kind": "choice",
+   "parent": 1667439346,
+   "children": [
+    97474880,
+    424782056,
+    1700479143
+   ],
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "So tell me… what’s next for you? Going to play the hero for someone else?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "97474880": {
+   "kind": "text",
+   "parent": -116438471,
+   "children": [
+    1543077154
+   ],
+   "actor": null,
+   "text": "Maybe. I don't know.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1543077154": {
+   "kind": "text",
+   "parent": 97474880,
+   "actor": "Sofia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That's... Yeah. I think a long, nice vacation is in order.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "424782056": {
+   "kind": "text",
+   "parent": -116438471,
+   "children": [
+    1536014207
+   ],
+   "actor": null,
+   "text": "I think I'm good for a while.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1536014207": {
+   "kind": "text",
+   "parent": 424782056,
+   "actor": "Sofia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yeah... Same...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1700479143": {
+   "kind": "text",
+   "parent": -116438471,
+   "children": [
+    -376658978
+   ],
+   "actor": null,
+   "text": "Well, there's this strong policewoman I'm targeting.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-376658978": {
+   "kind": "text",
+   "parent": 1700479143,
+   "actor": "Sofia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh, is that so? Hahaha...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2098456055": {
+   "kind": "text",
+   "parent": 1667439346,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Oh shit! I need to give my boss a heads-up that I'm calling in vacation. Hopefully we can catch up again?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "67509846": {
+   "kind": "text",
+   "parent": -1739544445,
+   "actor": "Sofia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "It’s… refreshing. And, if I’m being honest… a little tempting.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "292816953": {
+   "kind": "choice",
+   "parent": -1739544445,
+   "children": [
+    -595091072,
+    -1408275391,
+    2046449852
+   ],
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "So, what’s your deal? You come across as this brave, reckless type… but I get the feeling there’s more to you than that.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-595091072": {
+   "kind": "text",
+   "parent": 292816953,
+   "children": [
+    1504214207
+   ],
+   "actor": null,
+   "text": "There’s a lot more, but I don’t show it to just anyone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1504214207": {
+   "kind": "text",
+   "parent": -595091072,
+   "actor": "Sofia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I’d like to see it someday. No rush… just know I’m interested.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1408275391": {
+   "kind": "text",
+   "parent": 292816953,
+   "children": [
+    -1731398231
+   ],
+   "actor": null,
+   "text": "And what about you? A fearless detective with a hidden soft side?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1731398231": {
+   "kind": "text",
+   "parent": -1408275391,
+   "actor": "Sofia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I have my moments. But you’ve probably already... seen more of them than most people.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2046449852": {
+   "kind": "text",
+   "parent": 292816953,
+   "children": [
+    40659051
+   ],
+   "actor": null,
+   "text": "You’ll have to get closer if you want to find out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "40659051": {
+   "kind": "text",
+   "parent": 2046449852,
+   "actor": "Sofia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh, I plan to.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-68073143": {
+   "kind": "text",
+   "parent": -1739544445,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "I’m glad you came tonight. I needed this… more than I realized.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1262776595": {
+   "kind": "text",
+   "parent": -1739544445,
+   "actor": "Sofia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1647308626": {
+   "kind": "text",
+   "parent": -1739544445,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Oh, fuck. Come on... I'm sorry, {PC}... Work's calling... Gotta answer...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Bright Magic Ring",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Bright Magic Ring",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 0.6
+      }
+     }
+    }
+   ]
+  },
+  "675193207": {
+   "kind": "text",
+   "parent": -1288546045,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Oh no...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_6[sofia-romance-path] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-romance-path",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "type": "InstructionUICanvasGroupAlpha",
+     "title": "MarioNote alpha = 0",
+     "fields": {
+      "m_CanvasGroup": {
+       "kind": "object",
+       "name": "MarioNote",
+       "of": "GetGameObjectInstance",
+       "path": "15_EventUI/MarioNote"
+      },
+      "m_Alpha": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "value",
+        "value": 0
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 0.2,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MarioNote to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MarioNote",
+       "of": "GetGameObjectInstance",
+       "path": "15_EventUI/MarioNote"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/SofiaHome",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play SofiaStory and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[sofia-kidnapped] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-kidnapped",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_6[sofia-romance-path] ≤ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-romance-path",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Master_Default/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[SofioaHomecooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "SofioaHomecooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

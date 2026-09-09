@@ -1,0 +1,1996 @@
+{
+ "id": "8_Room_Talk/Clothstore/DefaultDialoge",
+ "name": "DefaultDialoge",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Zuri"
+ ],
+ "roots": [
+  -2104877964,
+  -1382513329,
+  -996866809
+ ],
+ "nodes": {
+  "-996866809": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    576773150,
+    855283832,
+    -1798420088,
+    -326060466,
+    -1719837497,
+    -678187988,
+    1328744037,
+    -81005819
+   ],
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "My passion is making my customers happy.",
+   "tag": "zuriroot",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "576773150": {
+   "kind": "text",
+   "parent": -996866809,
+   "children": [
+    1494213317
+   ],
+   "actor": null,
+   "text": "Show me your wares.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-81005819": {
+   "kind": "text",
+   "parent": -996866809,
+   "children": [
+    -1300960391
+   ],
+   "actor": null,
+   "text": "Goodbye.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1494213317": {
+   "kind": "text",
+   "parent": 576773150,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Take a good look.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[active-store] = 2",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "active-store",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 2
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ShopCore to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ShopCore",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/ShopCore"
+      }
+     }
+    }
+   ]
+  },
+  "-1300960391": {
+   "kind": "text",
+   "parent": -81005819,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Have a lovely day.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2104877964": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1851646243,
+    1607606074
+   ],
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Jeans and a white shirt?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[zuri-met] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zuri-met",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1851646243": {
+   "kind": "choice",
+   "parent": -2104877964,
+   "children": [
+    1240232467,
+    -1782968361,
+    1757157304,
+    -563865085
+   ],
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Darling, either you have zero fashion sense or you're secretly a male model.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1240232467": {
+   "kind": "text",
+   "parent": -1851646243,
+   "children": [
+    -1083598271
+   ],
+   "actor": null,
+   "text": "I don't really care much for clothes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1782968361": {
+   "kind": "text",
+   "parent": -1851646243,
+   "children": [
+    1967785767
+   ],
+   "actor": null,
+   "text": "There's a beauty in minimalism that many underestimate.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1757157304": {
+   "kind": "text",
+   "parent": -1851646243,
+   "children": [
+    -287902363
+   ],
+   "actor": null,
+   "text": "I'm not dressing up just to go to the mall.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-287902363": {
+   "kind": "text",
+   "parent": 1757157304,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "But you are always yourself, no matter the location.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1967785767": {
+   "kind": "text",
+   "parent": -1782968361,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Well said, young friend. I can already tell we'll get along well.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1083598271": {
+   "kind": "text",
+   "parent": 1240232467,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "At least your are honest about your passions.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1607606074": {
+   "kind": "text",
+   "parent": -2104877964,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Well, you may call me Zuri... If you are in need of a new attire, you have come to the right place.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[zuri-met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zuri-met",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-326060466": {
+   "kind": "text",
+   "parent": -996866809,
+   "children": [
+    -608267212,
+    -659835975
+   ],
+   "actor": null,
+   "text": "Is this your store?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1719837497": {
+   "kind": "text",
+   "parent": -996866809,
+   "children": [
+    423023473,
+    -905989747
+   ],
+   "actor": null,
+   "text": "You really seem to love fashion.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1328744037": {
+   "kind": "text",
+   "parent": -996866809,
+   "children": [
+    -1431650715,
+    37969764
+   ],
+   "actor": null,
+   "text": "Something happened at the restrooms!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[zuri-prank-agreed] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zuri-prank-agreed",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[zuri-convinced] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zuri-convinced",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Zuri-Stealing-Start] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Zuri-Stealing-Start",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "423023473": {
+   "kind": "text",
+   "parent": -1719837497,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Everyone loves fashion, there's just people who realized and those who haven't.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-608267212": {
+   "kind": "text",
+   "parent": -326060466,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Yes, this is my beauty, my soul, my everything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-659835975": {
+   "kind": "text",
+   "parent": -326060466,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Just like my dress, this store is an extension of my very self and very important to me. I hope you like it.",
+   "jump": {
+    "mode": "Jump",
+    "to": "zuriroot"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-905989747": {
+   "kind": "text",
+   "parent": -1719837497,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "It is the very representation of our soul and being, our outer and inner self are one and the same.",
+   "jump": {
+    "mode": "Jump",
+    "to": "zuriroot"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1431650715": {
+   "kind": "choice",
+   "parent": 1328744037,
+   "children": [
+    701856293,
+    1813785079,
+    1838806400,
+    172868339
+   ],
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Calm down, what exactly happened?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "701856293": {
+   "kind": "text",
+   "parent": -1431650715,
+   "children": [
+    -365288448
+   ],
+   "actor": null,
+   "text": "An old woman has fainted there!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1813785079": {
+   "kind": "text",
+   "parent": -1431650715,
+   "children": [
+    -862516594
+   ],
+   "actor": null,
+   "text": "Someone needs urgent fashion advice!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1838806400": {
+   "kind": "text",
+   "parent": -1431650715,
+   "children": [
+    1579767391,
+    188671473
+   ],
+   "actor": null,
+   "text": "There's an Aurora Borealis!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "172868339": {
+   "kind": "text",
+   "parent": -1431650715,
+   "children": [
+    169510705,
+    -213512926,
+    -2010473771,
+    1132514971
+   ],
+   "actor": null,
+   "text": "Joey is trying to prank you. (Start Stealing Route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "37969764": {
+   "kind": "text",
+   "parent": 1328744037,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "I'll be right back!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Zuri-Stealing-Start] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Zuri-Stealing-Start",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_2[zuri-convinced] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zuri-convinced",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Get Zuri to investigate the restroom.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Techbro (Joey)",
+        "of": "Quest"
+       },
+       "m_TaskId": -989935106
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Zuri/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1579767391": {
+   "kind": "text",
+   "parent": 1838806400,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Aurora Borealis? At this time of year? At this time of day?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "169510705": {
+   "kind": "text",
+   "parent": 172868339,
+   "actor": "Zuri",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "That little shit... Thank you for warning me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionQuestsDeactivate",
+     "title": "Deactivate Techbro (Joey)",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Techbro (Joey)",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[Zuri-Stealing-Start] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Zuri-Stealing-Start",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-862516594": {
+   "kind": "text",
+   "parent": 1813785079,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Oh no, that's an emergency. Thank you for telling me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-365288448": {
+   "kind": "text",
+   "parent": 701856293,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "W-What? Next time call the emergency hotline isntead of asking me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "188671473": {
+   "kind": "text",
+   "parent": 1838806400,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Localized entirely within the restrooms of this mall?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1382513329": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1289990802,
+    1108586635
+   ],
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Hello, Friend... Thank you for giving Joey a push.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[zuri-sex-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zuri-sex-done",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[zuri-sex-after-talk] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zuri-sex-after-talk",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1289990802": {
+   "kind": "choice",
+   "parent": -1382513329,
+   "children": [
+    1957694244,
+    -1125234704,
+    -1801219114
+   ],
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "I hope blowing a load into my ass was reward enough?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[zurijoey-threesomedone] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zurijoey-threesomedone",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1957694244": {
+   "kind": "text",
+   "parent": -1289990802,
+   "children": [
+    223533232
+   ],
+   "actor": null,
+   "text": "It was my pleasure.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1125234704": {
+   "kind": "text",
+   "parent": -1289990802,
+   "children": [
+    -1678315379
+   ],
+   "actor": null,
+   "text": "You two are a cute couple.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1801219114": {
+   "kind": "text",
+   "parent": -1289990802,
+   "children": [
+    2095142718
+   ],
+   "actor": null,
+   "text": "Let me know when you want another double dicking.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1108586635": {
+   "kind": "text",
+   "parent": -1382513329,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Now back to buisness.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_2[zuri-sex-after-talk] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zuri-sex-after-talk",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "223533232": {
+   "kind": "text",
+   "parent": 1957694244,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Splendid!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1678315379": {
+   "kind": "text",
+   "parent": -1125234704,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Thank you, that is too kind.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2095142718": {
+   "kind": "text",
+   "parent": -1801219114,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Oh, trust me. I will.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-213512926": {
+   "kind": "text",
+   "parent": 172868339,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "I was certain he'd grow up. I was wrong. He's a lost cause. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2010473771": {
+   "kind": "text",
+   "parent": 172868339,
+   "actor": "Zuri",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I have an idea. Let's play a prank on him. Yes... T-That could work...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1132514971": {
+   "kind": "choice",
+   "parent": 172868339,
+   "children": [
+    125512910,
+    1922410297
+   ],
+   "actor": "Zuri",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "We'll lock him in the bathroom and have you... fuck my ass in front of him. ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "125512910": {
+   "kind": "text",
+   "parent": 1132514971,
+   "children": [
+    -981146694
+   ],
+   "actor": null,
+   "text": "A great idea, Zuri.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1922410297": {
+   "kind": "text",
+   "parent": 1132514971,
+   "children": [
+    -600986522
+   ],
+   "actor": null,
+   "text": "You're no better than him.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-981146694": {
+   "kind": "text",
+   "parent": 125512910,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "G-Good... That will teach him a lesson... I know that little fucker is crazy for my juicy butt...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[Zuri-waits-in-bathroom-stealing] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Zuri-waits-in-bathroom-stealing",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-600986522": {
+   "kind": "text",
+   "parent": 1922410297,
+   "actor": "Zuri",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "You are speaking the truth... I.. I'm sorry.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1798420088": {
+   "kind": "text",
+   "parent": -996866809,
+   "children": [
+    -725235552
+   ],
+   "actor": null,
+   "text": "I’m looking for a swimsuit. Something special.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[tropcontest-firsttime] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tropcontest-firsttime",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Inventory[divine-swimsuit] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "divine-swimsuit",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-725235552": {
+   "kind": "choice",
+   "parent": -1798420088,
+   "children": [
+    -2093363888,
+    1117564593
+   ],
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Special, you say? I assume this isn’t for a casual day at the beach?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2093363888": {
+   "kind": "text",
+   "parent": -725235552,
+   "children": [
+    -444015271,
+    -42709985,
+    1740432724,
+    87333670,
+    1312229393,
+    -1771968995
+   ],
+   "actor": null,
+   "text": "My {M} entering a contest and I need her to win.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1117564593": {
+   "kind": "text",
+   "parent": -725235552,
+   "children": [
+    218958736
+   ],
+   "actor": null,
+   "text": "Actually forget that I said anything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-444015271": {
+   "kind": "text",
+   "parent": -2093363888,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "A swimsuit for a contest... I suppose it would need to be more than just stylish. It has to be striking. Memorable. Divine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "218958736": {
+   "kind": "text",
+   "parent": 1117564593,
+   "actor": null,
+   "text": "If you say so.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-42709985": {
+   "kind": "text",
+   "parent": -2093363888,
+   "actor": "Zuri",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "But before I even think about picking something, I need to know more about the woman who’ll be wearing it. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1740432724": {
+   "kind": "choice",
+   "parent": -2093363888,
+   "children": [
+    -1788248285,
+    411983864
+   ],
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "A swimsuit isn’t just clothing; it’s about how it enhances the person wearing it. Got a photo?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1788248285": {
+   "kind": "text",
+   "parent": 1740432724,
+   "children": [
+    -602547747
+   ],
+   "actor": null,
+   "text": "(Show her a regular photo of Anna)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "411983864": {
+   "kind": "text",
+   "parent": 1740432724,
+   "children": [
+    -45251938
+   ],
+   "actor": null,
+   "text": "(Show her a nude photo of Anna)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-45251938": {
+   "kind": "text",
+   "parent": 411983864,
+   "actor": "Zuri",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I... I won't ask why you have a nude of your {M}... But yes, I know just the perfect piece to present her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-602547747": {
+   "kind": "text",
+   "parent": -1788248285,
+   "actor": "Zuri",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hmm... refined, elegant, but not overly flashy. She’s got a natural charm, doesn’t she?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "87333670": {
+   "kind": "text",
+   "parent": -2093363888,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "This. Handcrafted, one-of-a-kind. It’s designed to capture attention and radiate confidence.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Inventory[divine-swimsuit] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "divine-swimsuit",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = Divine Swimsuit",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Divine Swimsuit"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1312229393": {
+   "kind": "choice",
+   "parent": -2093363888,
+   "children": [
+    -1066574356,
+    1846511856,
+    -1838691672
+   ],
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "And don't worry about payment. Let’s just say I’m curious to see how it performs on stage.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1771968995": {
+   "kind": "text",
+   "parent": -2093363888,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Let her know to wear it with confidence. That’s what really makes a winner.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1066574356": {
+   "kind": "text",
+   "parent": 1312229393,
+   "actor": null,
+   "text": "Thank you, Zuri. I really appreciate it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1846511856": {
+   "kind": "text",
+   "parent": 1312229393,
+   "actor": null,
+   "text": "Let's hope this works...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1838691672": {
+   "kind": "text",
+   "parent": 1312229393,
+   "actor": null,
+   "text": "My {M} will look so hot in this...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-678187988": {
+   "kind": "text",
+   "parent": -996866809,
+   "children": [
+    -1288782706
+   ],
+   "actor": null,
+   "text": "Mind if I take a quick photo of your butt?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_7[prisme-story] = 8",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "prisme-story",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 8
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_7[takeaphoto-joey] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "takeaphoto-joey",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1288782706": {
+   "kind": "choice",
+   "parent": -678187988,
+   "children": [
+    -2075463950,
+    406764997,
+    -856776162,
+    1164741835
+   ],
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "My behind? Hmmm... Why?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2075463950": {
+   "kind": "text",
+   "parent": -1288782706,
+   "children": [
+    -1655916700,
+    265925266,
+    1250347691
+   ],
+   "actor": null,
+   "text": "(Lewd) I just like yours. Thought I’d keep a picture.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Lewd] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Lewd",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-856776162": {
+   "kind": "text",
+   "parent": -1288782706,
+   "children": [
+    -1408480689
+   ],
+   "actor": null,
+   "text": "It’s for Joey. He wanted to see it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1164741835": {
+   "kind": "text",
+   "parent": -1288782706,
+   "children": [
+    602621621
+   ],
+   "actor": null,
+   "text": "No reason, just curious.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1655916700": {
+   "kind": "text",
+   "parent": -2075463950,
+   "actor": "Zuri",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Huh. Always thought you were more into chests. Sure, go ahead.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1408480689": {
+   "kind": "text",
+   "parent": -856776162,
+   "actor": "Zuri",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Joey? Absolutely not. That little gremlin is always up to something. No way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "602621621": {
+   "kind": "text",
+   "parent": 1164741835,
+   "actor": "Zuri",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "People don’t just ‘randomly’ take pictures of my behind.... Except for Joey,. No. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "265925266": {
+   "kind": "text",
+   "parent": -2075463950,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Here. Allow me to strike an more... interesting pose.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ZuriBadlandQuestPhoto to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ZuriBadlandQuestPhoto",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/ZuriBadlandQuestPhoto"
+      }
+     }
+    }
+   ]
+  },
+  "1250347691": {
+   "kind": "text",
+   "parent": -2075463950,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Have fun with the photo... But keep it to yourself!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_7[takeaphoto-joey] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "takeaphoto-joey",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-563865085": {
+   "kind": "text",
+   "parent": -1851646243,
+   "children": [
+    -504840373
+   ],
+   "actor": null,
+   "text": "(Charming) Maybe I just make simple look good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Charming] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Charming",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-504840373": {
+   "kind": "text",
+   "parent": -563865085,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Hmph… confident. I’ll admit, it works better than I expected.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "406764997": {
+   "kind": "text",
+   "parent": -1288782706,
+   "children": [
+    -97133890,
+    -1198452519,
+    587840679
+   ],
+   "actor": null,
+   "text": "(Charming) Perfection like that deserves to be captured.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Charming] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Charming",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-97133890": {
+   "kind": "text",
+   "parent": 406764997,
+   "actor": "Zuri",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "…Flattery. Fine, just one. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1198452519": {
+   "kind": "text",
+   "parent": 406764997,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Here. Allow me to strike an more... interesting pose.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ZuriBadlandQuestPhoto to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ZuriBadlandQuestPhoto",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/ZuriBadlandQuestPhoto"
+      }
+     }
+    }
+   ]
+  },
+  "587840679": {
+   "kind": "text",
+   "parent": 406764997,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Have fun with the photo... But keep it to yourself!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_7[takeaphoto-joey] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "takeaphoto-joey",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "855283832": {
+   "kind": "text",
+   "parent": -996866809,
+   "children": [
+    -1518792491,
+    -1653832493
+   ],
+   "actor": null,
+   "text": "I'd like to return something for Anna.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Miniquests[miniquest-anna-tootight] ≥ 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "miniquest-anna-tootight",
+        "list": "Miniquests",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1518792491": {
+   "kind": "text",
+   "parent": 855283832,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Ah. Let me guess... too tight, too bold, and too late to refund her taste.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1653832493": {
+   "kind": "text",
+   "parent": 855283832,
+   "actor": "Zuri",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I’ll take it. Tell Anna next time to try the mirror before the register.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Miniquests[miniquest-anna-tootight] = 0",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "miniquest-anna-tootight",
+        "list": "Miniquests",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 0
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Clothstore",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DefaultDialoge and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Zuri to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Zuri",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Zuri"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

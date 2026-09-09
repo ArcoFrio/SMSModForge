@@ -1,0 +1,828 @@
+{
+ "id": "8_Room_Talk/Entrance/Kenvisit",
+ "name": "Kenvisit",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "Ken"
+ ],
+ "roots": [
+  366386811,
+  -1749486397,
+  -1459470901,
+  1098019928,
+  -1426821276,
+  427748633,
+  -1123774236,
+  -1997839986,
+  94882443,
+  1913570400,
+  -725511285,
+  -199757252,
+  598754089,
+  1491255001,
+  199082940
+ ],
+ "nodes": {
+  "366386811": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Ken",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "No way... no freaking way...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Be at your front door to meet Ken on Thursday.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Fanboy (Ken)",
+        "of": "Quest"
+       },
+       "m_TaskId": -1160666087
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-1749486397": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "It’s really you... I mean, actually you! I’m like... your BIGGEST fan. Seriously, I’ve seen everything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1459470901": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1762738120,
+    459320738,
+    765094150
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Uh, ummm.... Hi?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1098019928": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "This is... wow, such an honor! I swear, it’ll be quick, just a photo and I... I mean, I could die happy. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "427748633": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Take a deep breath. You're safe with me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-1123774236": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let’s get into position… and if you feel like getting a good handful while doing so, I won’t stop you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1997839986": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "R-Really!? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "94882443": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yes, really. I want this to be a day you’ll never forget.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1913570400": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active kenphoto1 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "kenphoto1",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/kenphoto1"
+      }
+     }
+    }
+   ]
+  },
+  "-725511285": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Best day of my freakin’ life! Here's the five grand, just like I promised. I’ve never felt this... Thanks for allowing me to do this!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1491255001": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Th-thank you again, both of you... seriously, that photo means everything to me. I’m gonna make like, a thousand backups the second I get home.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "199082940": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -707101037,
+    -1835250779
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Oh... speaking of home, I should get going. If I miss {M}’s spicy lasagna, she’ll actually murder me.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-199757252": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1031870894,
+    -2073542870,
+    -250356913
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Five thousand dollar, it's all there. Thank you, Ken.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-707101037": {
+   "kind": "text",
+   "parent": 199082940,
+   "children": [
+    -39549287,
+    -800624974,
+    -2100192665,
+    -1912955915
+   ],
+   "actor": null,
+   "text": "I'd love to try her spicy lasagna one day. (Befriend Ken)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1835250779": {
+   "kind": "text",
+   "parent": 199082940,
+   "children": [
+    1137867489
+   ],
+   "actor": null,
+   "text": "Yeah, whatever. (End Quest)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-39549287": {
+   "kind": "text",
+   "parent": -707101037,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "You can totally come over sometime. {M} always makes way too much anyway.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[ken-sharing-route-start] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-sharing-route-start",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1137867489": {
+   "kind": "text",
+   "parent": -1835250779,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Thanks again! This was so much fun!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-800624974": {
+   "kind": "text",
+   "parent": -707101037,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You're a sweet boy, Ken! Your {M} must be very proud.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2100192665": {
+   "kind": "text",
+   "parent": -707101037,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I know I can be kind of a lot sometimes… I just never really had people who actually wanted me around, you know? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "598754089": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Here, {PC}.... You should have half of it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + 2500",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 2500
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = $2500",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "$2500"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1426821276": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Ken",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Not literally die, I mean, I just... crap, sorry, I’ve never done anything like this before.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1912955915": {
+   "kind": "text",
+   "parent": -707101037,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Today’s been... unreal. If I ever start being too much, just say the word. I can take it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1762738120": {
+   "kind": "text",
+   "parent": -1459470901,
+   "actor": null,
+   "text": "What's up, Ken?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "459320738": {
+   "kind": "text",
+   "parent": -1459470901,
+   "actor": null,
+   "text": "So, let's take that photo. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "765094150": {
+   "kind": "text",
+   "parent": -1459470901,
+   "children": [
+    -1427668758
+   ],
+   "actor": null,
+   "text": "Relax, dude. You're scaring her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1427668758": {
+   "kind": "text",
+   "parent": 765094150,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Y-Yeah! You're right. Super right. Sorrry!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1031870894": {
+   "kind": "text",
+   "parent": -199757252,
+   "actor": null,
+   "text": "Nice. Thanks, Ken.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2073542870": {
+   "kind": "text",
+   "parent": -199757252,
+   "children": [
+    -148918232,
+    623550139
+   ],
+   "actor": null,
+   "text": "What would you pay for a more... private shoot?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-250356913": {
+   "kind": "text",
+   "parent": -199757252,
+   "children": [
+    553275638
+   ],
+   "actor": null,
+   "text": "Not gonna lie, I feel kinda bad taking his money.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "553275638": {
+   "kind": "text",
+   "parent": -250356913,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Bro, I’ve spent more money on worse things. At least this didn’t involve NFTs!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-148918232": {
+   "kind": "text",
+   "parent": -2073542870,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I... That's all I had... I don't...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "623550139": {
+   "kind": "text",
+   "parent": -2073542870,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Jesus, {PC}. Stop teasing that poor boy, hahaha.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Entrance",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Kenvisit and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[ken-only-photo-route] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-only-photo-route",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[ken-photo-taken] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-photo-taken",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[ken-photo] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-photo",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Ken to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Ken",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Ken"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Kate/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[ken-photo-taken] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-photo-taken",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[ken-photo] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-photo",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

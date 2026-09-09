@@ -1,0 +1,353 @@
+{
+ "id": "8_Room_Talk/Villa_Lounge/firsttimelounge",
+ "name": "firsttimelounge",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Emma",
+  "Mario"
+ ],
+ "roots": [
+  561159366,
+  1942589953,
+  388599660,
+  676097333,
+  715465388,
+  -1309341856,
+  1330478642,
+  886103437
+ ],
+ "nodes": {
+  "561159366": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I can’t believe you, {D}! Defunding the orphanage? Those kids have nothing, and you’re taking away the little support they have!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1942589953": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Emma, it’s just business. The money needs to go where it can do the most good for us. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "676097333": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "A sportscar? You think you can just buy me off like that? This isn’t about me, it’s about doing what’s right! You’re unbelievable, {D}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "715465388": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Emma, you need to understand—",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1309341856": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "No, you need to understand! ! I’m done talking to you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Emma_Normal/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1330478642": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "886103437": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Ah, {PC}. Come to my office. We’ve got things to discuss.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "388599660": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I’ll make it up to you, alright? How about that sportscar you’ve had your eye on?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Villa_Lounge",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play firsttimelounge and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[first-time-lounge] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "first-time-lounge",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Mario_Normal to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Mario_Normal",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Mario_Normal"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Emma_Normal to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Emma_Normal",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Emma_Normal"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Mario_Normal/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[first-time-lounge] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "first-time-lounge",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

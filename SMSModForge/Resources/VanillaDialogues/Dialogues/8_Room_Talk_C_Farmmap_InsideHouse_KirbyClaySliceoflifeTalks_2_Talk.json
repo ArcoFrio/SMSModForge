@@ -1,0 +1,375 @@
+{
+ "id": "8_Room_Talk/C_Farmmap_InsideHouse/KirbyClaySliceoflifeTalks/2_Talk",
+ "name": "2_Talk",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Clay",
+  "Kirby"
+ ],
+ "roots": [
+  -162674534,
+  1747323353,
+  -891057272,
+  2142291899,
+  295001038,
+  -849990055,
+  -973726907,
+  907345884
+ ],
+ "nodes": {
+  "-162674534": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "…Maybe I was wrong. Maybe this whole thing really does work.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KirbyBustDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KirbyBustDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/KirbyBustDefault"
+      }
+     }
+    }
+   ]
+  },
+  "1747323353": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Of course it works! I told you it would. See, you just had to believe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-891057272": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Clay",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Don’t celebrate yet. I still have to ask… is this right? Selling human milk like it’s a normal product?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-849990055": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -560813249,
+    509247152,
+    1638313128,
+    -1514551683
+   ],
+   "actor": "Kirby",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "So what? If it makes them happy and it keeps the farm alive, who cares what they do with it?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-560813249": {
+   "kind": "text",
+   "parent": -849990055,
+   "children": [
+    -1410417511,
+    -419060296
+   ],
+   "actor": null,
+   "text": "Clay, it’s helping people. Don’t overthink what happens after.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1410417511": {
+   "kind": "text",
+   "parent": -560813249,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Exactly! Milk is milk. It’s good for everyone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "509247152": {
+   "kind": "text",
+   "parent": -849990055,
+   "children": [
+    -826723564,
+    -1722838035
+   ],
+   "actor": null,
+   "text": "If you’re uncomfortable, maybe you should walk away.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-826723564": {
+   "kind": "text",
+   "parent": 509247152,
+   "actor": "Clay",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "…You’d like that, wouldn’t you? Less dead weight.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1638313128": {
+   "kind": "text",
+   "parent": -849990055,
+   "children": [
+    -686257041,
+    449307625
+   ],
+   "actor": null,
+   "text": "Everything gets used for weird kinks eventually. That’s the internet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-686257041": {
+   "kind": "text",
+   "parent": 1638313128,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Haha! See? Even he knows!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1514551683": {
+   "kind": "text",
+   "parent": -849990055,
+   "children": [
+    1960093995,
+    -252142992
+   ],
+   "actor": null,
+   "text": "If people want to jerk off with it, let them.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1960093995": {
+   "kind": "text",
+   "parent": -1514551683,
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Heehee… you’re so bad.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-252142992": {
+   "kind": "text",
+   "parent": -1514551683,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "Jesus christ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "449307625": {
+   "kind": "text",
+   "parent": 1638313128,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "…That doesn’t make it better.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1722838035": {
+   "kind": "text",
+   "parent": 509247152,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Stop it. He’s just scared of change.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-419060296": {
+   "kind": "text",
+   "parent": -560813249,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "Maybe you’re right. Still feels strange.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-973726907": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "You’ll see, Clay. This is good. It might look weird, but it’s the best thing that’s ever happened to the farm.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "907345884": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Clay",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "…Maybe. Or maybe we’re opening a door we can’t close.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/KirbyBustDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "2142291899": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Huh? What do you mean?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "295001038": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "Think about it. People out there aren’t just drinking it. Some of them are… using it for their weird kinks. You know they are. And we’re the ones giving it to them.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/C_Farmmap_InsideHouse/KirbyClaySliceoflifeTalks",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play 2_Talk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[kirbyclay-sliceoflifetalks] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kirbyclay-sliceoflifetalks",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[bafa-totalmilksold] ≥ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-totalmilksold",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Milking Save[kirbyclay-sliceoflifetalks] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kirbyclay-sliceoflifetalks",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -313,6 +313,10 @@ public sealed class PlacePreview : Grid
 
     public PlacePreview()
     {
+        // A tooltip that outlived its owner sits over the one thing an
+        // author is trying to look at. See ToolTipDismisser.
+        View.ToolTipDismisser.KeepClearOf(this);
+
         // Fill the width the container gives us; the height follows the native
         // aspect (see MeasureOverride) and the on-screen scale is recomputed on
         // resize (SizeChanged), so the preview tracks the window + splitter.

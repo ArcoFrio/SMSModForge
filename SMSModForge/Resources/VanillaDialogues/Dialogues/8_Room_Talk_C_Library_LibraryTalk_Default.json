@@ -1,0 +1,1809 @@
+{
+ "id": "8_Room_Talk/C_Library/LibraryTalk_Default",
+ "name": "LibraryTalk_Default",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Vanessa"
+ ],
+ "roots": [
+  1705555394,
+  1424379355,
+  -1608623911,
+  -422442487
+ ],
+ "nodes": {
+  "1705555394": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Vanessa",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Back again? I’m starting to think you like being around quiet women with loud thoughts.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[Vanessamet-AtLibrary] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Vanessamet-AtLibrary",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1608623911": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1133590669,
+    465911701
+   ],
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Oh! You're… not one of the regulars.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[Vanessamet-AtLibrary] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Vanessamet-AtLibrary",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[Vanessamet-AtChurch] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Vanessamet-AtChurch",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "type": "InstructionQuestsActivate",
+     "title": "Activate Vanessa Quest",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Vanessa Quest",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "1424379355": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1502586479,
+    -1997454413
+   ],
+   "actor": "Vanessa",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh. You recognize me, don’t you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[Vanessamet-AtLibrary] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Vanessamet-AtLibrary",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[Vanessamet-AtChurch] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Vanessamet-AtChurch",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "type": "InstructionQuestsActivate",
+     "title": "Activate Vanessa Quest",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Vanessa Quest",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-1502586479": {
+   "kind": "text",
+   "parent": 1424379355,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Yes, it’s me. Same nun, different outfit. No robe, no stained glass… just me, books, and about fifty overdue returns.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[Vanessamet-AtLibrary] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Vanessamet-AtLibrary",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1133590669": {
+   "kind": "text",
+   "parent": -1608623911,
+   "actor": "Vanessa",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Welcome to the Peak City Public Library. I’m Vanessa. Books, order, self-restraint... all the fun stuff.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[Vanessamet-AtLibrary] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Vanessamet-AtLibrary",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "465911701": {
+   "kind": "choice",
+   "parent": -1608623911,
+   "children": [
+    1763908703,
+    -1446959818,
+    -1537956122
+   ],
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "And I'm a nun, so don't get any strange ideas.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1763908703": {
+   "kind": "text",
+   "parent": 465911701,
+   "children": [
+    -76631159
+   ],
+   "actor": null,
+   "text": "That’s pretty cool, honestly. A nun and a librarian?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-76631159": {
+   "kind": "text",
+   "parent": 1763908703,
+   "actor": "Vanessa",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thank you. I appreciate the kindness.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1446959818": {
+   "kind": "text",
+   "parent": 465911701,
+   "children": [
+    -1217366106
+   ],
+   "actor": null,
+   "text": "You don’t look like a nun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1217366106": {
+   "kind": "text",
+   "parent": -1446959818,
+   "actor": "Vanessa",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I assure you, I’m fully committed. Even if the robes aren’t mandatory 24/7.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1537956122": {
+   "kind": "text",
+   "parent": 465911701,
+   "children": [
+    -395589614,
+    -1595189526
+   ],
+   "actor": null,
+   "text": "Between the habit and the hush, this is already feeling like a fantasy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-395589614": {
+   "kind": "text",
+   "parent": -1537956122,
+   "actor": "Vanessa",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh my~ no! This is a place of learning! And… temptation. Apparently.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1595189526": {
+   "kind": "text",
+   "parent": -1537956122,
+   "actor": "Vanessa",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "<size=70%>…Please don’t make me smile at that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-422442487": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1124597446,
+    2004729163,
+    -1940495624,
+    794463903,
+    1219917992,
+    1157219363
+   ],
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "What can I help you with today?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_10[vanessavisited] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vanessavisited",
+        "list": "Events_10",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-1997454413": {
+   "kind": "text",
+   "parent": 1424379355,
+   "actor": "Vanessa",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Church is where I try to be better. Here is where I try to stay sane.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1124597446": {
+   "kind": "text",
+   "parent": -422442487,
+   "children": [
+    -321154190,
+    1232801930
+   ],
+   "actor": null,
+   "text": "Just wanted to talk. You always seem interesting.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2004729163": {
+   "kind": "text",
+   "parent": -422442487,
+   "children": [
+    -1607265581,
+    1476388405
+   ],
+   "actor": null,
+   "text": "What do people even come here for these days?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1940495624": {
+   "kind": "text",
+   "parent": -422442487,
+   "children": [
+    -358880631,
+    -81098591
+   ],
+   "actor": null,
+   "text": "Got any forbidden texts? Demon summoning? Steamy nun romance?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1219917992": {
+   "kind": "text",
+   "parent": -422442487,
+   "children": [
+    1096888436,
+    2080759748,
+    -417223500,
+    1281187754,
+    439490106,
+    -466611421,
+    -389614149,
+    -1062077855,
+    1773255026,
+    382651742
+   ],
+   "actor": null,
+   "text": "I wanna study. Properly. ($500)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1096888436": {
+   "kind": "text",
+   "parent": 1219917992,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "I'd love to help, but I can't work for free.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] < 500",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Less",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 500
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-358880631": {
+   "kind": "text",
+   "parent": -1940495624,
+   "actor": "Vanessa",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You joke, but I’ve had to move a cursed diary twice this week.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1607265581": {
+   "kind": "text",
+   "parent": 2004729163,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Honestly? Free Wi-Fi and climate control.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-321154190": {
+   "kind": "text",
+   "parent": -1124597446,
+   "actor": "Vanessa",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That’s really sweet. I don’t get a lot of regular company. Just regular silence.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1157219363": {
+   "kind": "text",
+   "parent": -422442487,
+   "children": [
+    -1439679378
+   ],
+   "actor": null,
+   "text": "I'm good. See you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1439679378": {
+   "kind": "text",
+   "parent": 1157219363,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Come by again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1232801930": {
+   "kind": "text",
+   "parent": -1124597446,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "But silence doesn't smile back, so... thanks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1476388405": {
+   "kind": "text",
+   "parent": 2004729163,
+   "actor": "Vanessa",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "And weirdos looking for vampire fanfiction in the theology section.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-81098591": {
+   "kind": "text",
+   "parent": -1940495624,
+   "actor": "Vanessa",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "And don’t get me started on the priest romance shelf. It’s… popular.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1281187754": {
+   "kind": "text",
+   "parent": 1219917992,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Alright. Study session it is.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -500",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -500
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[vanessa-weeklystudy] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vanessa-weeklystudy",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "439490106": {
+   "kind": "text",
+   "parent": 1219917992,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Follow me to one of the private tables. And no funny business. This is strictly academic.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-466611421": {
+   "kind": "text",
+   "parent": 1219917992,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 5,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AFewMinutesLater to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AFewMinutesLater",
+       "of": "GetGameObjectInstance",
+       "path": "6_Effects/Effect_Canvas/AFewMinutesLater"
+      }
+     }
+    }
+   ]
+  },
+  "382651742": {
+   "kind": "random",
+   "parent": 1219917992,
+   "children": [
+    -637734000,
+    -707424014,
+    -257600472,
+    -1094450006
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.01,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Smart to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Smart",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Smart"
+      }
+     }
+    }
+   ]
+  },
+  "-637734000": {
+   "kind": "text",
+   "parent": 382651742,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Alright, that’s enough brain-melting for today. My patience has officially expired.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-707424014": {
+   "kind": "text",
+   "parent": 382651742,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "I swear, helping you is like tutoring a very distracting storm cloud.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-257600472": {
+   "kind": "text",
+   "parent": 382651742,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "You did better than I expected... but don’t let that go to your head.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1094450006": {
+   "kind": "text",
+   "parent": 382651742,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "I’m not sure who learned more — you, or me learning how easily I lose focus.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-417223500": {
+   "kind": "text",
+   "parent": 1219917992,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "You already got your study session this week. Let’s not turn this into a habit… or a loophole. Try again next time, alright?",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[vanessa-weeklystudy] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vanessa-weeklystudy",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "2080759748": {
+   "kind": "text",
+   "parent": 1219917992,
+   "actor": "Vanessa",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You’re already smarter than half the theology section. At this point, I should be paying you to tutor me.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Smart] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Smart",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_10[vanessa-story] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vanessa-story",
+        "list": "Events_10",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-389614149": {
+   "kind": "text",
+   "parent": 1219917992,
+   "children": [
+    -86846397,
+    911332684
+   ],
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Did you know the brain remembers things better when emotion’s involved?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_10[vanessa-story] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vanessa-story",
+        "list": "Events_10",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1062077855": {
+   "kind": "text",
+   "parent": 1219917992,
+   "children": [
+    389483087,
+    2109476930
+   ],
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Plate tectonics are caused by constant friction beneath the surface. You won’t see anything at first… but the tension builds until something shifts.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_10[vanessa-story] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vanessa-story",
+        "list": "Events_10",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1773255026": {
+   "kind": "text",
+   "parent": 1219917992,
+   "children": [
+    2053287017
+   ],
+   "actor": "Vanessa",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "So… fluid dynamics. It’s all about pressure, release, and flow. When too much builds up without an outlet, things tend to burst.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_10[vanessa-story] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vanessa-story",
+        "list": "Events_10",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-86846397": {
+   "kind": "text",
+   "parent": -389614149,
+   "actor": "Vanessa",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Fear, excitement… arousal. It locks it in, makes it stick. I guess strong feelings really do leave a mark.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_10[vanessa-story] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vanessa-story",
+        "list": "Events_10",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "2053287017": {
+   "kind": "text",
+   "parent": 1773255026,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "That’s… physics. Obviously. Let’s move on before that metaphor gets worse.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_10[vanessa-story] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vanessa-story",
+        "list": "Events_10",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "389483087": {
+   "kind": "text",
+   "parent": -1062077855,
+   "actor": "Vanessa",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Some eruptions are slow. Others are… explosive.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_10[vanessa-story] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vanessa-story",
+        "list": "Events_10",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "2109476930": {
+   "kind": "text",
+   "parent": -1062077855,
+   "actor": "Vanessa",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Earth science. Very stable. Right.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "911332684": {
+   "kind": "text",
+   "parent": -389614149,
+   "actor": "Vanessa",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Anyway. Hope you’re paying attention.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "794463903": {
+   "kind": "text",
+   "parent": -422442487,
+   "children": [
+    -1501343153,
+    -953147656,
+    -758563306,
+    -1534217611,
+    940273494,
+    1442482549,
+    17802708,
+    -1524789505,
+    1790673714,
+    255690928,
+    1969018527,
+    485220459
+   ],
+   "actor": null,
+   "text": "I want you, Vanessa.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[vanessa-flirtmode] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vanessa-flirtmode",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1501343153": {
+   "kind": "text",
+   "parent": 794463903,
+   "children": [
+    1010139353,
+    980741755
+   ],
+   "actor": "Vanessa",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "No. God, no... I want to, but I can’t.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[vanessa-banged] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vanessa-banged",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1010139353": {
+   "kind": "text",
+   "parent": -1501343153,
+   "actor": "Vanessa",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "If I cross that line, I won’t come back from it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "980741755": {
+   "kind": "text",
+   "parent": -1501343153,
+   "actor": "Vanessa",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I already think about you too much. Please… don’t ask me to give in.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-953147656": {
+   "kind": "text",
+   "parent": 794463903,
+   "actor": "Vanessa",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I swore I wouldn’t…",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LibrarianSex (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LibrarianSex (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/LibrarianSex (0)"
+      }
+     }
+    }
+   ]
+  },
+  "-758563306": {
+   "kind": "text",
+   "parent": 794463903,
+   "actor": "Vanessa",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "\nBut I’ve been breaking little pieces of that vow every time I looked at you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1534217611": {
+   "kind": "text",
+   "parent": 794463903,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "So if I fall now.... let it be all the way. Just… don’t make me feel alone in it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LibrarianSex (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LibrarianSex (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/LibrarianSex (1)"
+      }
+     }
+    }
+   ]
+  },
+  "940273494": {
+   "kind": "text",
+   "parent": 794463903,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Please, {PC}... Fuck me~ Fuck me hard~",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LibrarianSex (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LibrarianSex (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/LibrarianSex (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1442482549": {
+   "kind": "choice",
+   "parent": 794463903,
+   "children": [
+    -1247429099,
+    2111627370,
+    -1101442253
+   ],
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Oh, God, {PC}... right there. Don't you dare stop.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LibrarianSex (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LibrarianSex (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/LibrarianSex (3)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LibrarianSex (0) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LibrarianSex (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/LibrarianSex (0)"
+      }
+     }
+    }
+   ]
+  },
+  "17802708": {
+   "kind": "text",
+   "parent": 794463903,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "I love it! I love your cock so much, {PC}! It's so big and it's ruining me for anyone else!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1524789505": {
+   "kind": "text",
+   "parent": 794463903,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Oh, God, I'm gonna cum! My dick is so hard, it's leaking everywhere!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1790673714": {
+   "kind": "choice",
+   "parent": 794463903,
+   "children": [
+    1747512646,
+    565690975
+   ],
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "255690928": {
+   "kind": "text",
+   "parent": 794463903,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "I think... I think you actually broke me. In the best way possible.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1969018527": {
+   "kind": "text",
+   "parent": 794463903,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "I... I should get dressed, before any customers come in... Thank you, for... for using me so well...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1247429099": {
+   "kind": "text",
+   "parent": 1442482549,
+   "children": [
+    -712356593
+   ],
+   "actor": null,
+   "text": "(Fuck her harder)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-712356593": {
+   "kind": "text",
+   "parent": -1247429099,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Oh god! Yes~ Yes~ YES!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2111627370": {
+   "kind": "text",
+   "parent": 1442482549,
+   "children": [
+    2114940106
+   ],
+   "actor": null,
+   "text": "I'm just getting started, you filthy little librarian.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2114940106": {
+   "kind": "text",
+   "parent": 2111627370,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Filthy? I... oh, fuck! I am! I'm a filthy, cock-hungry slut who needs your thick dick stretching me open!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1101442253": {
+   "kind": "text",
+   "parent": 1442482549,
+   "children": [
+    1074891969
+   ],
+   "actor": null,
+   "text": "Your ass is gripping me so tight. You love this, don't you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1074891969": {
+   "kind": "text",
+   "parent": -1101442253,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Yes! Yes, I love it! Use my ass!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1747512646": {
+   "kind": "text",
+   "parent": 1790673714,
+   "children": [
+    264072018,
+    -221618079,
+    843485955
+   ],
+   "actor": null,
+   "text": "(Grope her tits and cum)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "264072018": {
+   "kind": "text",
+   "parent": 1747512646,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Oh, fuck! I'm... I'm... CUMMING!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LibrarianSex (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LibrarianSex (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/LibrarianSex (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LibrarianSex (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LibrarianSex (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/LibrarianSex (4)"
+      }
+     }
+    }
+   ]
+  },
+  "565690975": {
+   "kind": "text",
+   "parent": 1790673714,
+   "children": [
+    525502797,
+    599359672,
+    -23969898,
+    -1564499862
+   ],
+   "actor": null,
+   "text": "(Lift her up and cum)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "525502797": {
+   "kind": "text",
+   "parent": 565690975,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Oh, fuck! You're lifting me! What are you— AHHHHHHH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LibrarianSex (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LibrarianSex (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/LibrarianSex (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LibrarianSex (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LibrarianSex (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/LibrarianSex (5)"
+      }
+     }
+    }
+   ]
+  },
+  "599359672": {
+   "kind": "text",
+   "parent": 565690975,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Oh my GOD! It's in my mouth! I'm... I'm swallowing it! It's so warm! I can't believe I'm... I'm covering myself!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-221618079": {
+   "kind": "text",
+   "parent": 1747512646,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "I'M CUMMING SO HARD! MY COCK IS... IT'S EXPLODING! AAAAAH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "843485955": {
+   "kind": "text",
+   "parent": 1747512646,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Oh... oh my god... {PC}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-23969898": {
+   "kind": "text",
+   "parent": 565690975,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "My face! My tits! It's everywhere! I'm such a dirty, cum-soaked mess! I love it! I LOVE IT!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1564499862": {
+   "kind": "text",
+   "parent": 565690975,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "And my ass, oh god. I can feel it. I can feel your cum...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "485220459": {
+   "kind": "text",
+   "parent": 794463903,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/C_Library",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play LibraryTalk_Default and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Vanessa_Bust_LibraryOutfit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Vanessa_Bust_LibraryOutfit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Vanessa_Bust_LibraryOutfit"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

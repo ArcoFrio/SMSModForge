@@ -1,0 +1,1385 @@
+{
+ "id": "8_Room_Talk/Villa_Lounge/sofiamario",
+ "name": "sofiamario",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Mario",
+  "Sofia"
+ ],
+ "roots": [
+  -364862029,
+  720586671,
+  -373738270,
+  -987890070,
+  811181774,
+  -1152239117,
+  1089921590,
+  -2052666677,
+  -1647992349,
+  606702921,
+  -915161708,
+  -279858628,
+  2145622485,
+  -752296337,
+  1660913561,
+  -221178969,
+  841875584,
+  -38174001,
+  1448485466,
+  1948548803,
+  -842703596,
+  1798560037,
+  723888513,
+  -2093847354,
+  -711409630,
+  -1625504612,
+  627168461,
+  -1052232436,
+  -1621005687
+ ],
+ "nodes": {
+  "-364862029": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "{PC}, good to see you. And who is this exquisite lady you've brought with you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "720586671": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Mr. di Luca, it's a pleasure. {PC} has told me so much about you... I'm Selena. {PC}'s girl.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-373738270": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -937748895,
+    -542100862,
+    1071406598
+   ],
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "The pleasure is all mine, Selena. I must say, your dress does wonders for your... curves.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-937748895": {
+   "kind": "text",
+   "parent": -373738270,
+   "children": [
+    -1787265658
+   ],
+   "actor": null,
+   "text": "I thought we could have some fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-542100862": {
+   "kind": "text",
+   "parent": -373738270,
+   "children": [
+    856801142
+   ],
+   "actor": null,
+   "text": "I brought you a gift, Mario.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "856801142": {
+   "kind": "text",
+   "parent": -542100862,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "And what a nice gift that is... Her tits are wrapped up just right.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1787265658": {
+   "kind": "text",
+   "parent": -937748895,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "That sounds perfect. I've had a busy day, so this will be a welcome change.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-987890070": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Well then, let me see them. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "811181774": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1152239117": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Of course, Mr. di Luca.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1089921590": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Now... If if you would please allow me....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia_Dress to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia_Dress",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Sofia_Dress"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Sofia_Nude"
+      }
+     }
+    }
+   ]
+  },
+  "-2052666677": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Oh my... Someone's eager... Y-You're quite good at this....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Sofia (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1647992349": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Mmwwahh! Mgghaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "606702921": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "{PC}... Get over here. You know I love working two fat cocks....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-915161708": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "So obedient... Such a good slut, Katarina could really learn a thing or two from you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Sofia (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-279858628": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "I'm honored to be sucking Mr. Di Luca's cock! Mwuaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2145622485": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    2094214918,
+    913137818
+   ],
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Yes... I'm going to honor your pussy with my hard cock.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2094214918": {
+   "kind": "text",
+   "parent": 2145622485,
+   "children": [
+    -512105529
+   ],
+   "actor": null,
+   "text": "(Whisper to Sofia) Are you sure about this?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "913137818": {
+   "kind": "text",
+   "parent": 2145622485,
+   "actor": null,
+   "text": "Use my slut as you like, Mario.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-512105529": {
+   "kind": "text",
+   "parent": 2094214918,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Y-Yes... I can take it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-752296337": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Oh my... She's quite tight... Y-You're quite the lucky man, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Sofia (3)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Mario_Normal to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Mario_Normal",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Mario_Normal"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Mario_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Mario_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Mario_Nude"
+      }
+     }
+    }
+   ]
+  },
+  "1660913561": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Oh fuck... It's... Y-Yes... Please... Fuck me... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-221178969": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Oh, we will.. Let me try your ass... Hurry, {PC} and stuff her pussy. We don't want her to feel empty, am I right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "841875584": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "W-What? W-Wait... Oh GOD! This is... TOO MUCH... I'm ... I'm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Sofia (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Sofia (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-38174001": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Hahaha! She's a squirter, who would have thought...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1448485466": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1648858089,
+    1154998859,
+    -416276822
+   ],
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Your big cocks are making me cum! G-God... I'm HWUAAAAAH!!!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1648858089": {
+   "kind": "text",
+   "parent": 1448485466,
+   "actor": null,
+   "text": "Your pussy is so soft and warm... I'm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1154998859": {
+   "kind": "text",
+   "parent": 1448485466,
+   "actor": null,
+   "text": "Take our cum, my little slut.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-416276822": {
+   "kind": "text",
+   "parent": 1448485466,
+   "actor": null,
+   "text": "(Fill her pussy with cum)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1948548803": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "HNGAAAAHHH!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Sofia (5)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Sofia (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-842703596": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Jesus, her ass is just... Here it comes... Take it... Hngghh....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1798560037": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Hngaah.... Heh.... hah.... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "723888513": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "If... Hah...  y-you'll excuse me for a moment, I need to freshen up....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2093847354": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Of course. The powder room is down the hall to the left. Take your time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Sofia_Nude/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-711409630": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "You’ve outdone yourself, {PC}. That was a real pleasure—so much better than the usual boring gifts like watches or the same old luxuries. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1625504612": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -67110200,
+    -1029154089,
+    -1207581299
+   ],
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": " You’ve got a bold streak, and I appreciate that.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-67110200": {
+   "kind": "text",
+   "parent": -1625504612,
+   "actor": null,
+   "text": "I'm glad you enjoy my gift, sir.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1029154089": {
+   "kind": "text",
+   "parent": -1625504612,
+   "actor": null,
+   "text": "You can count on me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1207581299": {
+   "kind": "text",
+   "parent": -1625504612,
+   "children": [
+    -1647821767
+   ],
+   "actor": null,
+   "text": "What was her ass like?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1647821767": {
+   "kind": "text",
+   "parent": -1207581299,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Fantastic. Despite her revealing attire, she exudes the demeanor of a needy slut.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1052232436": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "I hope I didn't miss too much.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Sofia_Nude"
+      }
+     }
+    }
+   ]
+  },
+  "-1621005687": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -230521733,
+    -346635185
+   ],
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Just enough to make me want more. ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-230521733": {
+   "kind": "text",
+   "parent": -1621005687,
+   "children": [
+    2095512020,
+    2133077316,
+    -251042498,
+    -1350442030,
+    2010457975,
+    -1102816746,
+    -59169776,
+    496814519
+   ],
+   "actor": null,
+   "text": "Selena is all ours, let's have some fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-346635185": {
+   "kind": "text",
+   "parent": -1621005687,
+   "children": [
+    -1767819978,
+    663791669
+   ],
+   "actor": null,
+   "text": "We should get going now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1767819978": {
+   "kind": "text",
+   "parent": -346635185,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "We'll have to do this again, Mario.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "663791669": {
+   "kind": "text",
+   "parent": -346635185,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Count on it. You two are welcome anytime.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2095512020": {
+   "kind": "text",
+   "parent": -230521733,
+   "actor": "Sofia",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[Sofia-Was-That-necessary] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Sofia-Was-That-necessary",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Lewd to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Lewd",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Lewd"
+      }
+     }
+    }
+   ]
+  },
+  "2133077316": {
+   "kind": "text",
+   "parent": -230521733,
+   "actor": "Sofia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I'd love to.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-251042498": {
+   "kind": "text",
+   "parent": -230521733,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "OH GOD! ... HNgaaah! Fuck! FUCK! FUCK!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Sofia (6)"
+      }
+     }
+    }
+   ]
+  },
+  "-1350442030": {
+   "kind": "text",
+   "parent": -230521733,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "F-Fuck... Another load for your ass... Here it comes!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2010457975": {
+   "kind": "text",
+   "parent": -230521733,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Oh god... N-No, no, no... My ass... You two are stretching my ass so good!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-59169776": {
+   "kind": "text",
+   "parent": -230521733,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "T-Too many... Thank you for having us... It was a delight...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "496814519": {
+   "kind": "text",
+   "parent": -230521733,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Anytime, my dear... Anytime...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "627168461": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "{PC}? Can you hear me? I've got everything we need. He's done. I will return now and then we can leave.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1102816746": {
+   "kind": "text",
+   "parent": -230521733,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Holy Mary.... I'm totally exhausted... How many loads have we pumped into your tight ass?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1071406598": {
+   "kind": "text",
+   "parent": -373738270,
+   "children": [
+    1800367168,
+    1939454461
+   ],
+   "actor": null,
+   "text": "(Lewd) Her tits could make a saint lose his mind.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Lewd] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Lewd",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1800367168": {
+   "kind": "text",
+   "parent": 1071406598,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Heh… finally, someone who says what I’m thinking.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1939454461": {
+   "kind": "text",
+   "parent": 1071406598,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Mmm… careful, gentlemen. Keep staring like that and I might start charging extra.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Villa_Lounge",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play sofiamario and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[sofia-at-villa] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-at-villa",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia_Dress to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia_Dress",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Sofia_Dress"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Mario_Normal to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Mario_Normal",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Mario_Normal"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[Enough-Evidence-Gathered] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Enough-Evidence-Gathered",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[sofia-at-villa] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-at-villa",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

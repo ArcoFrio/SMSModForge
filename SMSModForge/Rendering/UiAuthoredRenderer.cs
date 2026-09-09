@@ -29,8 +29,23 @@ public static class UiAuthoredRenderer
     public static byte[] Render(UiNodeDef root, double canvasWidth, double canvasHeight,
                                 IUiAssets assets, UiRenderReport? report = null,
                                 UiNodeDef? highlight = null)
+        => Render(root == null ? Array.Empty<UiNodeDef>() : new[] { root },
+                  canvasWidth, canvasHeight, assets, report, highlight);
+
+    /// <summary>
+    /// Draw several trees onto one canvas, first at the back.
+    /// <para/>
+    /// What testing needs: a screen that opens another screen has two on
+    /// display, and drawing only the one being edited would show a click doing
+    /// nothing. Later roots go over earlier ones, which is what a canvas does
+    /// with its own children.
+    /// </summary>
+    public static byte[] Render(IReadOnlyList<UiNodeDef> roots,
+                                double canvasWidth, double canvasHeight,
+                                IUiAssets assets, UiRenderReport? report = null,
+                                UiNodeDef? highlight = null)
     {
-        if (root == null || assets == null) return Array.Empty<byte>();
+        if (roots == null || roots.Count == 0 || assets == null) return Array.Empty<byte>();
         int w = (int)Math.Round(canvasWidth), h = (int)Math.Round(canvasHeight);
         if (w <= 0 || h <= 0) return Array.Empty<byte>();
 
@@ -38,40 +53,54 @@ public static class UiAuthoredRenderer
         var canvas = UiRect.FromCanvas(canvasWidth, canvasHeight);
         report ??= new UiRenderReport();
 
-        Draw(target, w, h, root, canvas, assets, 1.0, null, report,
-             root.Name, canvasWidth, canvasHeight, highlight, forceVisible: true);
+        foreach (var root in roots)
+        {
+            if (root == null) continue;
+
+            // The root is shown whatever its own flag says - it is the thing
+            // being looked at. Anything below it obeys what was authored.
+            Draw(target, w, h, root, canvas, UiXform.Identity, assets, 1.0, null, report,
+                 root.Name, canvasWidth, canvasHeight, highlight, forceVisible: true);
+        }
         return target;
     }
 
     private static void Draw(byte[] target, int w, int h, UiNodeDef node, UiRect parentRect,
+                             UiXform inherited,
                              IUiAssets assets, double alpha, UiRect? clip,
                              UiRenderReport report, string path,
                              double canvasWidth, double canvasHeight,
-                             UiNodeDef? highlight, bool forceVisible)
+                             UiNodeDef? highlight, bool forceVisible,
+                             UiRect? placed = null)
     {
         if (!node.StartActive && !forceVisible) return;
 
-        var rect = UiLayout.Resolve(parentRect,
-                                    Doubles(node.Rect.AnchorMin), Doubles(node.Rect.AnchorMax),
-                                    Doubles(node.Rect.Pivot), Doubles(node.Rect.Position),
-                                    Doubles(node.Rect.Size));
+        // Shared with the gizmo, deliberately — see UiGeometry. Two rectangles
+        // out of it: children are laid out against the unscaled one, everything
+        // is drawn at the scaled one.
+        var (layout, rect, inner) = UiGeometry.Place(node, parentRect, inherited, placed);
 
         // The root is shown at full opacity even when the game fades it in,
         // for the same reason it is shown at all - see UiSceneRenderer.
         double here = forceVisible ? alpha : alpha * (node.Alpha ?? 1f);
         if (here <= 0) return;
 
-        var inner = node.ClipChildren ? Intersect(clip, rect) : clip;
+        var innerClip = node.ClipChildren ? Intersect(clip, rect) : clip;
 
         DrawImage(target, w, h, node, rect, assets, here, clip, report,
                   canvasWidth, canvasHeight);
         DrawText(target, w, h, node, rect, assets, here, clip, report,
                  canvasWidth, canvasHeight);
 
-        foreach (var child in node.Children)
-            Draw(target, w, h, child, rect, assets, here, inner, report,
+        // A node that arranges its children hands each one its rectangle.
+        var arranged = UiGeometry.ArrangeChildren(node, layout);
+        for (int i = 0; i < node.Children.Count; i++)
+        {
+            var child = node.Children[i];
+            Draw(target, w, h, child, layout, inner, assets, here, innerClip, report,
                  path + "/" + child.Name, canvasWidth, canvasHeight, highlight,
-                 forceVisible: false);
+                 forceVisible: false, placed: arranged?[i]);
+        }
 
         // Drawn last so it sits over the object it marks, and over its
         // children — an outline hidden behind what it points at is no use.
@@ -119,6 +148,13 @@ public static class UiAuthoredRenderer
         var text = node.Text;
         if (text == null || string.IsNullOrEmpty(text.Value)) return;
 
+        // A label naming a variable is drawn as the value a player would see,
+        // not as the token - see UiTextTokens. Done here rather than at the
+        // model, because it is how the label is SHOWN and the pack still stores
+        // what was authored.
+        string shown = UiTextTokens.Resolve(text.Value);
+        if (string.IsNullOrEmpty(shown)) return;
+
         var colour = UiColor.Parse(text.Color);
         if (colour.IsInvisible) return;
 
@@ -136,7 +172,7 @@ public static class UiAuthoredRenderer
             if (also != null) fallbacks.Add(also.Font);
         }
 
-        var layout = TmpTextLayout.Measure(set.Font, text.Value, text.Size,
+        var layout = TmpTextLayout.Measure(set.Font, shown, text.Size,
                                            text.Wrap ? dw : 0, Align(text.Alignment),
                                            text.LineSpacing, text.CharacterSpacing,
                                            fallbacks);

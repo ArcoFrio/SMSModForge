@@ -8,6 +8,12 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SMSModForge.PackPlugin</RootNamespace>
+    <!-- These three do NOTHING in a legacy project: they are SDK-style
+         properties, and this csproj is not one. The version that actually
+         reaches the DLL is in Properties/AssemblyInfo.cs, and the one BepInEx
+         reports comes from Shared/ForgeVersion.cs. Kept in step, and listed
+         here only so the next person to look for a version finds the note
+         rather than believing these. -->
     <Version>1.1.0</Version>
     <AssemblyVersion>1.1.0.0</AssemblyVersion>
     <FileVersion>1.1.0.0</FileVersion>
@@ -52,8 +58,17 @@
   <ItemGroup>
     <Compile Include="Plugin.cs" />
     <Compile Include="UiFactory.cs" />
+    <Compile Include="UiButtonClick.cs" />
+    <Compile Include="UiLiveText.cs" />
     <Compile Include="UiAssets.cs" />
+    <Compile Include="ScriptDump.cs" />
+    <Compile Include="VanillaDialogueInjector.cs" />
+    <Compile Include="DialogueNodeWriter.cs" />
+    <Compile Include="UiOpenAnimation.cs" />
+    <Compile Include="UiCloseAnimation.cs" />
+    <Compile Include="UiCenteredGrid.cs" />
     <Compile Include="FittedSprite.cs" />
+    <Compile Include="AnimatedSprite.cs" />
     <Compile Include="InputRuntime.cs" />
     <Compile Include="BustFactory.cs" />
     <Compile Include="MaskTextures.cs" />
@@ -189,6 +204,10 @@
       <HintPath>$(GameLibs)UnityEngine.SpriteShapeModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.VideoModule">
+      <HintPath>$(GameLibs)UnityEngine.VideoModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEngine.AudioModule">
       <HintPath>$(GameLibs)UnityEngine.AudioModule.dll</HintPath>
       <Private>False</Private>
@@ -218,4 +237,20 @@
     <Error Condition="'$(PluginOutputPath)' == ''"
            Text="PluginOutputPath is not set. Copy Directory.Build.props.example to Directory.Build.props and point PluginOutputPath at your BepInEx plugins folder." />
   </Target>
+  <ItemGroup>
+    <!-- Compiled into both projects from one file: what a $name means while a
+         pack is authored and what it means while it is played must be the same
+         thing, and two copies of a parser drift. -->
+    <Compile Include="..\Shared\VarText.cs" Link="Shared\VarText.cs" />
+    <Compile Include="..\Shared\VarCompare.cs" Link="Shared\VarCompare.cs" />
+    <Compile Include="..\Shared\VanillaDialogueKeys.cs" Link="Shared\VanillaDialogueKeys.cs" />
+    <Compile Include="..\Shared\VanillaCastData.cs" Link="Shared\VanillaCastData.cs" />
+    <Compile Include="..\Shared\AnimationClock.cs" Link="Shared\AnimationClock.cs" />
+    <Compile Include="..\Shared\MediaKinds.cs" Link="Shared\MediaKinds.cs" />
+    <Compile Include="..\Shared\ModsFolder.cs" Link="Shared\ModsFolder.cs" />
+    <Compile Include="..\Shared\PackInstallScan.cs" Link="Shared\PackInstallScan.cs" />
+    <Compile Include="..\Shared\ForgeVersion.cs" Link="Shared\ForgeVersion.cs" />
+    <Compile Include="..\Shared\PackStatus.cs" Link="Shared\PackStatus.cs" />
+  </ItemGroup>
+
 </Project>

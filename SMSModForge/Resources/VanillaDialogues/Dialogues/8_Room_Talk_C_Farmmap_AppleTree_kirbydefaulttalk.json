@@ -1,0 +1,1370 @@
+{
+ "id": "8_Room_Talk/C_Farmmap_AppleTree/kirbydefaulttalk",
+ "name": "kirbydefaulttalk",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Kirby"
+ ],
+ "roots": [
+  -220693664,
+  464744457,
+  -397466810
+ ],
+ "nodes": {
+  "-220693664": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    1581845216,
+    -560583500,
+    -1948874276
+   ],
+   "actor": "Kirby",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "464744457": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -976363870,
+    1037710567,
+    660694740,
+    538344663,
+    -1567809152,
+    -1920105475,
+    1566905572,
+    -274753778,
+    -1213350515
+   ],
+   "actor": "Kirby",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Got a question or something? Maybe two questions?",
+   "tag": "kirbytree",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-976363870": {
+   "kind": "text",
+   "parent": 464744457,
+   "children": [
+    1672818018,
+    1875200176,
+    -1231415301,
+    -1123489725,
+    476042270
+   ],
+   "actor": null,
+   "text": "How’s the farm doing?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1037710567": {
+   "kind": "text",
+   "parent": 464744457,
+   "children": [
+    306393699,
+    -1966304217,
+    -1868732495
+   ],
+   "actor": null,
+   "text": "What’s Clay up to?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1213350515": {
+   "kind": "text",
+   "parent": 464744457,
+   "actor": null,
+   "text": "I'll head out, see you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1672818018": {
+   "kind": "text",
+   "parent": -976363870,
+   "actor": "Kirby",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "The farm’s kinda quiet. No cows, no milk… just me running around trying to make it work. Clay says it’s hopeless, but I think we’ll figure it out!",
+   "jump": {
+    "mode": "Jump",
+    "to": "kirbytree"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[bafa-totalmilksold] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-totalmilksold",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "306393699": {
+   "kind": "text",
+   "parent": 1037710567,
+   "actor": "Kirby",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "He’s still moping around. Sits on the porch, stares into space, says everything’s pointless. I keep telling him we’ve got work to do, but he just sighs louder.",
+   "jump": {
+    "mode": "Jump",
+    "to": "kirbytree"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[bafa-milkdeal-secretending] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-milkdeal-secretending",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[bafa-milkdeal-declined] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-milkdeal-declined",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-397466810": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    -1706084251,
+    1746938625,
+    -997935392
+   ],
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "1581845216": {
+   "kind": "text",
+   "parent": -220693664,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Oh hey! I was just thinking about cows again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-560583500": {
+   "kind": "text",
+   "parent": -220693664,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Hiya! Did you bring snacks? I kinda forgot to eat.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1948874276": {
+   "kind": "text",
+   "parent": -220693664,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Woo! It’s you! Want to do something fun?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1706084251": {
+   "kind": "text",
+   "parent": -397466810,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Okay, bye! Don’t step in any cowpies on your way out.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1746938625": {
+   "kind": "text",
+   "parent": -397466810,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "See you later! If Clay asks, tell him I was “working.”",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-997935392": {
+   "kind": "text",
+   "parent": -397466810,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Moo! …That means goodbye in cow language.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "660694740": {
+   "kind": "text",
+   "parent": 464744457,
+   "children": [
+    -1094871650
+   ],
+   "actor": null,
+   "text": "What do you think about the milk ban?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[bafa-totalmilksold] < 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-totalmilksold",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Less",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "538344663": {
+   "kind": "text",
+   "parent": 464744457,
+   "children": [
+    966168729,
+    1013165443
+   ],
+   "actor": null,
+   "text": "Tell me something about yourself.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1094871650": {
+   "kind": "text",
+   "parent": 660694740,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "It’s nuts! Cows are sad, people are mad, and I’m trying to invent human milk 2.0. Easy fix, right?",
+   "jump": {
+    "mode": "Jump",
+    "to": "kirbytree"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "966168729": {
+   "kind": "random",
+   "parent": 538344663,
+   "children": [
+    714191161,
+    263767968,
+    -1973321582,
+    -883958584,
+    -130452270
+   ],
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Hmm...",
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "1013165443": {
+   "kind": "text",
+   "parent": 538344663,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Anything else?",
+   "jump": {
+    "mode": "Jump",
+    "to": "kirbytree"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "714191161": {
+   "kind": "text",
+   "parent": 966168729,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Oh! I can carry three hay bales at once. Four if I don’t mind falling over after.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "263767968": {
+   "kind": "text",
+   "parent": 966168729,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Clay says I’m naive, but I don’t even know what that means. Is it a kind of pie?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1973321582": {
+   "kind": "text",
+   "parent": 966168729,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "I forget stuff a lot, but it’s fine because I usually remember something else! It’s like a surprise party in my brain.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-883958584": {
+   "kind": "text",
+   "parent": 966168729,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "I once tried to measure how many fingers I could fit… got distracted and lost count.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-130452270": {
+   "kind": "text",
+   "parent": 966168729,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "I don’t really get the point of underwear. It just gets in the way when people want to touch you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1875200176": {
+   "kind": "text",
+   "parent": -976363870,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "We finally got some milk going! Not enough for the quota yet, but it feels good knowing we’re not totally dry anymore.",
+   "jump": {
+    "mode": "Jump",
+    "to": "kirbytree"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[bafa-totalmilksold] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-totalmilksold",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1231415301": {
+   "kind": "text",
+   "parent": -976363870,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Things are looking better! We’ve got jars filling up every day, and I swear the farm feels happier. Even the chickens are clucking more.",
+   "jump": {
+    "mode": "Jump",
+    "to": "kirbytree"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[bafa-totalmilksold] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-totalmilksold",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1123489725": {
+   "kind": "text",
+   "parent": -976363870,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "The farm’s amazing now! Bottles, crates, deliveries — it’s all happening! I think this is the most life the place has had in years. ",
+   "jump": {
+    "mode": "Jump",
+    "to": "kirbytree"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[bafa-totalmilksold] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-totalmilksold",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "476042270": {
+   "kind": "text",
+   "parent": -976363870,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "We’re drowning in milk! Like… actually drowning. I slipped on a puddle earlier. We’ve got more than enough for the city, and people are already calling us legends.",
+   "jump": {
+    "mode": "Jump",
+    "to": "kirbytree"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[bafa-totalmilksold] ≥ 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-totalmilksold",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1966304217": {
+   "kind": "text",
+   "parent": 1037710567,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "You know, Clay’s been… smiling. Not a big smile, but I saw his mouth twitch upward yesterday. That’s like a full celebration for him. I think he’s proud of us.",
+   "jump": {
+    "mode": "Jump",
+    "to": "kirbytree"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[bafa-milkdeal-declined] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-milkdeal-declined",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1868732495": {
+   "kind": "text",
+   "parent": 1037710567,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "You know, Clay’s been… smiling. Not a big smile, but I saw his mouth twitch upward yesterday. That’s like a full celebration for him. I think he’s proud of us.",
+   "jump": {
+    "mode": "Jump",
+    "to": "kirbytree"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[bafa-milkdeal-secretending] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-milkdeal-secretending",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1920105475": {
+   "kind": "text",
+   "parent": 464744457,
+   "children": [
+    -909671564
+   ],
+   "actor": null,
+   "text": "What do you think about Mrs. Kimura’s offer?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[milking-mainstory] = 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milking-mainstory",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-909671564": {
+   "kind": "text",
+   "parent": -1920105475,
+   "actor": "Kirby",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "No way! She’s scary, and rich people are always trouble. We should do this our way, not hers!",
+   "jump": {
+    "mode": "Jump",
+    "to": "kirbytree"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1566905572": {
+   "kind": "text",
+   "parent": 464744457,
+   "children": [
+    -710118952,
+    1801453454
+   ],
+   "actor": null,
+   "text": "Who’s Robert?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[minoshelter-unlocked] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "minoshelter-unlocked",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[kirbyclay-sliceoflifetalks] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kirbyclay-sliceoflifetalks",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-710118952": {
+   "kind": "text",
+   "parent": 1566905572,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Oh, he’s… a secret friend. He doesn’t like outsiders, so you can’t see him. But don’t worry, he likes you anyway. I can tell.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[bafa-milkdeal-secretending] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-milkdeal-secretending",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1801453454": {
+   "kind": "text",
+   "parent": 1566905572,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Heehee… you really wanna know? Okay. Come with me later. I’ll take you to meet Robert. He’s been waiting to meet you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[bafa-milkdeal-secretending] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-milkdeal-secretending",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Milking Save[minoshelter-unlocked] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "minoshelter-unlocked",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-274753778": {
+   "kind": "text",
+   "parent": 464744457,
+   "children": [
+    1614968366,
+    -1189544180,
+    791046751,
+    245831814,
+    -701333761,
+    39575913
+   ],
+   "actor": null,
+   "text": "Robert has been having… thoughts about you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[kirbyrobertquest] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kirbyrobertquest",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1614968366": {
+   "kind": "choice",
+   "parent": -274753778,
+   "children": [
+    -551014259,
+    908980787,
+    -602050478
+   ],
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Wait… really? He’s been thinking about me like that?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1189544180": {
+   "kind": "text",
+   "parent": -274753778,
+   "actor": "Kirby",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Heehee! Oh my god! I always thought he just didn’t care, like maybe I wasn’t his type. But all this time, he’s been holding it in? That’s so hot!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-551014259": {
+   "kind": "text",
+   "parent": 1614968366,
+   "actor": null,
+   "text": "Yeah. You're really important to him.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "908980787": {
+   "kind": "text",
+   "parent": 1614968366,
+   "actor": null,
+   "text": "He mentioned your huge boobs spilling out of your overall.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-602050478": {
+   "kind": "text",
+   "parent": 1614968366,
+   "children": [
+    2110088900
+   ],
+   "actor": null,
+   "text": "Yeah, you need to tell him that this will never happen.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2110088900": {
+   "kind": "text",
+   "parent": -602050478,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "I know... He is just too cute, but yeah. Eventually It would break his big heart. I will tell him that we're just friends. Best friends!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Milking Save[kirbyrobertquest] = -5",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kirbyrobertquest",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": -5
+      }
+     }
+    }
+   ]
+  },
+  "791046751": {
+   "kind": "text",
+   "parent": -274753778,
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "No wonder he stares sometimes! These drive him crazy, don’t they? Mmm… and he never said a word, poor thing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "245831814": {
+   "kind": "text",
+   "parent": -274753778,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "You have to come with me. We’ll go to his shed, show him he doesn’t have to be shy anymore, and then… we’ll let him have fun with us.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-701333761": {
+   "kind": "text",
+   "parent": -274753778,
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Come on! I want to see Robert’s face when I tell him I want his big hands all over me. He’s going to lose his mind.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "39575913": {
+   "kind": "text",
+   "parent": -274753778,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "And you’re not getting out of this either… you’re joining in.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Milking Save[kirbyrobertquest] = 2",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kirbyrobertquest",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 2
+      }
+     }
+    }
+   ]
+  },
+  "-1567809152": {
+   "kind": "text",
+   "parent": 464744457,
+   "children": [
+    -1204063412
+   ],
+   "actor": null,
+   "text": "Wanna milk me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[bafa-kirbyloveroute] ≥ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-kirbyloveroute",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1204063412": {
+   "kind": "text",
+   "parent": -1567809152,
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "YES! I was hoping you would ask~",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core_NoSave2[2025-shortgo-saveONE] = KirbyRepeatSex",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2025-shortgo-saveONE",
+        "list": "Core_NoSave2",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "KirbyRepeatSex",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/C_Farmmap_AppleTree/KirbyRepeatSex"
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/KirbyBustDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/C_Farmmap_AppleTree",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play kirbydefaulttalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[bafa-milkdeal-accepted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-milkdeal-accepted",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KirbyBustDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KirbyBustDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/KirbyBustDefault"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core_NoSave2[2025-shortgo-saveONE] = None",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2025-shortgo-saveONE",
+        "list": "Core_NoSave2",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "none"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Core_NoSave2[2025-shortgo-saveONE] and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2025-shortgo-saveONE",
+        "list": "Core_NoSave2",
+        "type": "game-object"
+       }
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

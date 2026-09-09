@@ -1,0 +1,442 @@
+{
+ "id": "8_Room_Talk/CarDealership/Firstdialogue",
+ "name": "Firstdialogue",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Himari"
+ ],
+ "roots": [
+  1820700699,
+  708854915,
+  1586932334,
+  1648899485,
+  260238224,
+  53919584
+ ],
+ "nodes": {
+  "1820700699": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Oh, look who decided to grace us with their presence. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "708854915": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1406077919,
+    206836533,
+    559314150
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "What do you want? Here to drool over cars you can’t afford?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1406077919": {
+   "kind": "text",
+   "parent": 708854915,
+   "children": [
+    -332721968
+   ],
+   "actor": null,
+   "text": "I just wanted to check out some of the cars here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "206836533": {
+   "kind": "text",
+   "parent": 708854915,
+   "children": [
+    -533848964
+   ],
+   "actor": null,
+   "text": "Is that how you treat every customer?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-533848964": {
+   "kind": "text",
+   "parent": 206836533,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Customer? Please, do you even know what these cost?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-332721968": {
+   "kind": "text",
+   "parent": -1406077919,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Check out the cars? Please, do you even know what these cost?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1586932334": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thought you’d come in and waste my time? How cute. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1648899485": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2004907098,
+    674039425,
+    993410250
+   ],
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You can’t just waltz in here like you belong. These cars are way out of your league.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "260238224": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -838878098,
+    -1029926483,
+    377029614
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Leave. Now. Don’t come back until you can actually afford to breathe the same air as these cars.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "53919584": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Don’t make me repeat myself, idiot. Get out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariBust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-2004907098": {
+   "kind": "text",
+   "parent": 1648899485,
+   "actor": null,
+   "text": "But...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "674039425": {
+   "kind": "text",
+   "parent": 1648899485,
+   "actor": null,
+   "text": "You...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "993410250": {
+   "kind": "text",
+   "parent": 1648899485,
+   "children": [
+    2108649307
+   ],
+   "actor": null,
+   "text": "[Just leave]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-838878098": {
+   "kind": "text",
+   "parent": 260238224,
+   "actor": null,
+   "text": "I just wanted to...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1029926483": {
+   "kind": "text",
+   "parent": 260238224,
+   "actor": null,
+   "text": "Why are you such a...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "377029614": {
+   "kind": "text",
+   "parent": 260238224,
+   "children": [
+    1635966121
+   ],
+   "actor": null,
+   "text": "[Leave]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1635966121": {
+   "kind": "text",
+   "parent": 377029614,
+   "actor": null,
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2108649307": {
+   "kind": "text",
+   "parent": 993410250,
+   "actor": null,
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "559314150": {
+   "kind": "text",
+   "parent": 708854915,
+   "children": [
+    604275237
+   ],
+   "actor": null,
+   "text": "(Charming) Depends, are you part of the showroom too?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Charming] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Charming",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "604275237": {
+   "kind": "text",
+   "parent": 559314150,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Cute. But I sell cars, not fantasies. Try that line on someone who’ll buy it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/CarDealership",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Firstdialogue and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≤ 10000",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 10000
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

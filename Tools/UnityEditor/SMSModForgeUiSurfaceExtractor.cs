@@ -1,4 +1,4 @@
-// SMSModForge — vanilla UI surface extractor  (Unity Editor script)
+﻿// SMSModForge — vanilla UI surface extractor  (Unity Editor script)
 //
 // WHAT THIS IS FOR
 //   The editor's preview has to show what the game shows. Not approximately:
@@ -1342,5 +1342,390 @@ namespace SMSModForge.EditorTools
             sb.Append('"');
             return sb.ToString();
         }
+
+        // ══ Behaviour ════════════════════════════════════════════════════
+        //
+        // What the game's UI DOES, as opposed to what it looks like.
+        //
+        // The surface pass records component type NAMES and nothing else, which
+        // is enough to draw a screen and useless for driving one. This pass
+        // reads the components themselves - every serialized field, following
+        // nested objects and lists - so that a button's instructions, a
+        // trigger's signal and a condition's comparison come out as data.
+        //
+        // Deliberately generic. Nothing here knows what a ButtonInstructions
+        // is, or what fields it has: it reflects over whatever is actually on
+        // the object and writes it down. Guessing the shape and extracting only
+        // what the guess covers would produce a file that agrees with the guess
+        // and says nothing about where the guess was wrong.
+
+        private const string MenuBehaviour =
+            "Tools/SMSModForge/Extract Vanilla UI Behaviour…";
+
+        [MenuItem(MenuBehaviour)]
+        public static void RunBehaviour()
+        {
+            string defaultRoot = Path.GetDirectoryName(Application.dataPath) ?? "";
+            string outDir = EditorUtility.SaveFolderPanel(
+                "Choose output folder", defaultRoot, "VanillaUi");
+            if (string.IsNullOrEmpty(outDir)) return;
+
+            var log = new Report();
+            var seenTypes = new Dictionary<string, TypeTally>(StringComparer.Ordinal);
+
+            try
+            {
+                var surfaces = FindSurfaces();
+                log.Line("Surfaces found: " + surfaces.Count);
+
+                string dir = Path.Combine(outDir, "Behaviour");
+                Directory.CreateDirectory(dir);
+
+                for (int i = 0; i < surfaces.Count; i++)
+                {
+                    var canvas = surfaces[i];
+                    if (EditorUtility.DisplayCancelableProgressBar(
+                            "Extracting UI behaviour",
+                            canvas.name + "  (" + (i + 1) + " of " + surfaces.Count + ")",
+                            (i + 1) / (float)surfaces.Count))
+                    {
+                        log.Warn("Cancelled by the user after " + i + " surfaces.");
+                        break;
+                    }
+
+                    WriteBehaviour(canvas, dir, seenTypes, log);
+                }
+
+                WriteBehaviourReport(dir, seenTypes, log);
+                File.WriteAllText(Path.Combine(dir, "report.txt"), log.ToString());
+                log.Line("Written to " + dir);
+            }
+            catch (Exception ex) { log.Warn("Failed: " + ex); }
+            finally { EditorUtility.ClearProgressBar(); }
+
+            EditorUtility.DisplayDialog("SMSModForge - Extract Vanilla UI Behaviour",
+                seenTypes.Count + " script type(s) found on the game's UI.\n\n" +
+                (log.Problems == 0
+                    ? "No problems reported."
+                    : log.Problems + " problem(s) - read Behaviour/report.txt.") +
+                "\n\nWritten to:\n" + Path.Combine(outDir, "Behaviour"),
+                "OK");
+            Debug.Log("[SMSModForge] UI behaviour written to " + outDir);
+        }
+
+        /// <summary>Every object on one surface that carries a script, and what
+        /// that script holds. Objects with nothing but engine components are
+        /// left out entirely - on a screen of 1434 objects, most of them.</summary>
+        private static void WriteBehaviour(Canvas canvas, string dir,
+                                           Dictionary<string, TypeTally> tally, Report log)
+        {
+            var json = new Json();
+            json.Object();
+            json.Key("path").Value(PathOf(canvas.transform));
+
+            int objects = 0, scripts = 0;
+            json.Key("objects").Array();
+            foreach (var t in canvas.GetComponentsInChildren<Transform>(true))
+            {
+                var carried = ScriptsOn(t);
+                if (carried.Count == 0) continue;
+
+                objects++;
+                json.Object();
+                json.Key("path").Value(Relative(canvas.transform, t));
+                json.Key("activeSelf").Value(t.gameObject.activeSelf);
+                json.Key("scripts").Array();
+
+                foreach (var c in carried)
+                {
+                    scripts++;
+                    var type = c.GetType();
+                    json.Object();
+                    json.Key("type").Value(type.Name);
+                    json.Key("fullType").Value(type.FullName ?? type.Name);
+                    json.Key("enabled").Value(EnabledOf(c));
+                    json.Key("fields").Object();
+                    var seen = new HashSet<object>(Reference.Instance);
+                    var tal = Tally(tally, type);
+                    if (WriteFields(json, c, type, 0, seen, tal, "") == 0)
+                    {
+                        // Nothing under Unity's rule. Rather than record an empty
+                        // object - which reads as a script with no settings -
+                        // take every field and say that is what happened.
+                        json.Key("$allFields").Value(true);
+                        WriteFields(json, c, type, 0, seen, tal, "", true);
+                    }
+                    json.EndObject();
+                    json.EndObject();
+                }
+
+                json.EndArray();
+                json.EndObject();
+            }
+            json.EndArray();
+
+            json.Key("objectsWithScripts").Value(objects);
+            json.Key("scriptCount").Value(scripts);
+            json.EndObject();
+
+            string file = SafeFileName(PathOf(canvas.transform)) + ".json";
+            File.WriteAllText(Path.Combine(dir, file), json.ToString());
+            log.Line(canvas.name + ": " + scripts + " script(s) on " + objects + " object(s)");
+        }
+
+        /// <summary>
+        /// A summary of what was found: every script type, how often, and every
+        /// field path seen on it with one example value.
+        /// <para/>
+        /// This is the file that decides what can be translated. Reading fifty
+        /// megabytes of per-object dumps to find out which fields exist is not a
+        /// thing anyone should have to do.
+        /// </summary>
+        private static void WriteBehaviourReport(string dir,
+                                                 Dictionary<string, TypeTally> tally, Report log)
+        {
+            var json = new Json();
+            json.Object();
+            json.Key("types").Array();
+
+            var names = new List<string>(tally.Keys);
+            names.Sort(StringComparer.Ordinal);
+            foreach (string name in names)
+            {
+                var t = tally[name];
+                json.Object();
+                json.Key("type").Value(name);
+                json.Key("count").Value(t.Count);
+                json.Key("fields").Array();
+
+                var paths = new List<string>(t.Fields.Keys);
+                paths.Sort(StringComparer.Ordinal);
+                foreach (string path in paths)
+                {
+                    json.Object();
+                    json.Key("path").Value(path);
+                    json.Key("example").Value(t.Fields[path] ?? "");
+                    json.EndObject();
+                }
+
+                json.EndArray();
+                json.EndObject();
+            }
+            json.EndArray();
+            json.EndObject();
+
+            File.WriteAllText(Path.Combine(dir, "report.json"), json.ToString());
+            log.Line("Script types seen: " + tally.Count);
+        }
+
+        private sealed class TypeTally
+        {
+            public int Count;
+            public readonly Dictionary<string, string> Fields =
+                new Dictionary<string, string>(StringComparer.Ordinal);
+        }
+
+        private static TypeTally Tally(Dictionary<string, TypeTally> tally, Type type)
+        {
+            string name = type.Name;
+            TypeTally found;
+            if (!tally.TryGetValue(name, out found))
+            {
+                found = new TypeTally();
+                tally[name] = found;
+            }
+            found.Count++;
+            return found;
+        }
+
+        /// <summary>The scripts on an object - anything that is not an engine
+        /// component. Images, layout groups and the rest are already covered by
+        /// the surface pass and would only bury what is interesting.</summary>
+        private static List<Component> ScriptsOn(Transform t)
+        {
+            var found = new List<Component>();
+            foreach (var c in t.GetComponents<Component>())
+            {
+                if (c == null) continue;
+                string ns = c.GetType().Namespace ?? "";
+                if (ns == "UnityEngine" || ns.StartsWith("UnityEngine.") || ns == "TMPro"
+                    || ns.StartsWith("TMPro.")) continue;
+                found.Add(c);
+            }
+            return found;
+        }
+
+        private static bool EnabledOf(Component c)
+        {
+            var b = c as Behaviour;
+            return b == null || b.enabled;
+        }
+
+        private static string Relative(Transform root, Transform t)
+        {
+            if (t == root) return ".";
+            string full = PathOf(t), from = PathOf(root) + "/";
+            return full.StartsWith(from, StringComparison.Ordinal)
+                 ? full.Substring(from.Length) : full;
+        }
+
+        // ── Reading an object's serialized state ─────────────────────────
+
+        private const int MaxDepth = 8;
+        private const int MaxItems = 64;
+
+        /// <summary>Returns how many fields it wrote, so a caller can tell an
+        /// object with no state from one whose state this cannot see.</summary>
+        private static int WriteFields(Json json, object target, Type type, int depth,
+                                       HashSet<object> seen, TypeTally tally, string prefix,
+                                       bool everything = false)
+        {
+            int written = 0;
+            // Up the hierarchy too: a GC2 instruction keeps most of its state on
+            // its base classes, and stopping at the concrete type would record
+            // the half that is usually empty.
+            for (var t = type; t != null && t != typeof(object); t = t.BaseType)
+            {
+                foreach (var f in t.GetFields(BindingFlags.Instance | BindingFlags.Public
+                                            | BindingFlags.NonPublic | BindingFlags.DeclaredOnly))
+                {
+                    // Compiler-generated backing fields are the property beside
+                    // them under another name.
+                    if (everything) { if (f.Name.IndexOf('<') >= 0) continue; }
+                    else if (!Serialized(f)) continue;
+
+                    object value;
+                    try { value = f.GetValue(target); }
+                    catch { continue; }
+
+                    json.Key(f.Name);
+                    WriteValue(json, value, depth, seen, tally, prefix + f.Name);
+                    written++;
+                }
+            }
+            return written;
+        }
+
+        /// <summary>Unity's own rule for what counts as state: public unless
+        /// told otherwise, private only when marked. Following it keeps runtime
+        /// caches and back-references out of the dump.</summary>
+        private static bool Serialized(FieldInfo f)
+        {
+            if (f.IsStatic) return false;
+            if (f.GetCustomAttribute<NonSerializedAttribute>() != null) return false;
+            if (f.IsPublic) return true;
+
+            // THREE ways, not two. [SerializeReference] is how a polymorphic
+            // list is stored, which is how GC2 stores every instruction a
+            // Trigger runs - missing it read 1798 Triggers and came back with
+            // the field name and nothing inside it.
+            return f.GetCustomAttribute<SerializeField>() != null
+                || f.GetCustomAttribute<SerializeReference>() != null;
+        }
+
+        private static void WriteValue(Json json, object value, int depth,
+                                       HashSet<object> seen, TypeTally tally, string path)
+        {
+            if (value == null || value.Equals(null)) { json.Null(); Note(tally, path, null); return; }
+
+            var type = value.GetType();
+
+            if (value is string) { json.Value((string)value); Note(tally, path, (string)value); return; }
+            if (value is bool) { json.Value((bool)value); Note(tally, path, value.ToString()); return; }
+            if (type.IsEnum) { json.Value(value.ToString()); Note(tally, path, value.ToString()); return; }
+
+            if (value is float || value is double || value is decimal)
+            {
+                float f = Convert.ToSingle(value, CultureInfo.InvariantCulture);
+                json.Value(f); Note(tally, path, F(f)); return;
+            }
+            if (value is int || value is short || value is byte || value is sbyte
+                || value is ushort || value is uint)
+            {
+                int n = Convert.ToInt32(value, CultureInfo.InvariantCulture);
+                json.Value(n); Note(tally, path, n.ToString(CultureInfo.InvariantCulture)); return;
+            }
+            if (value is long || value is ulong)
+            {
+                string n = Convert.ToString(value, CultureInfo.InvariantCulture);
+                json.Value(n); Note(tally, path, n); return;
+            }
+
+            // A reference to something else in the project. Written by name and
+            // type rather than followed: a scene object leads to the whole scene.
+            var obj = value as UnityEngine.Object;
+            if (obj != null)
+            {
+                json.Object();
+                json.Key("$ref").Value(obj.name);
+                json.Key("$type").Value(type.Name);
+                json.EndObject();
+                Note(tally, path, type.Name + " " + obj.name);
+                return;
+            }
+
+            if (value is Vector2) { json.Vector2((Vector2)value); Note(tally, path, value.ToString()); return; }
+            if (value is Vector3) { json.Vector3((Vector3)value); Note(tally, path, value.ToString()); return; }
+            if (value is Vector4) { json.Vector4((Vector4)value); Note(tally, path, value.ToString()); return; }
+            if (value is Color) { json.Value(Hex((Color)value)); Note(tally, path, Hex((Color)value)); return; }
+            if (value is PropertyName)
+            {
+                // GC2 signals are these. In the editor it prints the name; in a
+                // stripped build it prints a hash, which would be useless - so
+                // this pass must be run from the editor.
+                json.Value(value.ToString()); Note(tally, path, value.ToString()); return;
+            }
+
+            if (depth >= MaxDepth) { json.Value("(too deep)"); return; }
+
+            // Lists and arrays.
+            var list = value as System.Collections.IEnumerable;
+            if (list != null)
+            {
+                json.Array();
+                int n = 0;
+                foreach (var item in list)
+                {
+                    if (n++ >= MaxItems) { json.Value("(more)"); break; }
+                    WriteValue(json, item, depth + 1, seen, tally, path + "[]");
+                }
+                json.EndArray();
+                return;
+            }
+
+            // Anything else is a plain object - a GC2 instruction, a condition,
+            // a property getter. This is the case that matters.
+            if (!type.IsValueType && !seen.Add(value)) { json.Value("(seen)"); return; }
+
+            json.Object();
+            json.Key("$type").Value(type.Name);
+            string inner = path + "/" + type.Name + ".";
+            if (WriteFields(json, value, type, depth + 1, seen, tally, inner) == 0)
+            {
+                json.Key("$allFields").Value(true);
+                WriteFields(json, value, type, depth + 1, seen, tally, inner, true);
+            }
+            json.EndObject();
+            Note(tally, path, type.Name);
+        }
+
+        private static void Note(TypeTally tally, string path, string example)
+        {
+            if (tally == null || path.Length == 0) return;
+            if (!tally.Fields.ContainsKey(path)) tally.Fields[path] = example;
+            else if (string.IsNullOrEmpty(tally.Fields[path]) && !string.IsNullOrEmpty(example))
+                tally.Fields[path] = example;
+        }
+
+        private sealed class Reference : IEqualityComparer<object>
+        {
+            public static readonly Reference Instance = new Reference();
+            public new bool Equals(object a, object b) { return ReferenceEquals(a, b); }
+            public int GetHashCode(object o)
+            {
+                return System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(o);
+            }
+        }
+
     }
 }

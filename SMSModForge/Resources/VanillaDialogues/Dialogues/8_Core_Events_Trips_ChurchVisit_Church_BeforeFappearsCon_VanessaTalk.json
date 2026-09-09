@@ -1,0 +1,1855 @@
+{
+ "id": "8_Core_Events/Trips/ChurchVisit/Church_BeforeFappearsCon/VanessaTalk",
+ "name": "VanessaTalk",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Vanessa"
+ ],
+ "roots": [
+  660931089,
+  -1409203635,
+  1881468441,
+  -1334536308,
+  690543,
+  1601224949,
+  1306066358
+ ],
+ "nodes": {
+  "1881468441": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1060264688,
+    -591664220
+   ],
+   "actor": "Vanessa",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh! I don’t think we’ve met.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[Vanessamet-AtChurch] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Vanessamet-AtChurch",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[Vanessamet-AtLibrary] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Vanessamet-AtLibrary",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown3[lookforvanessa-cd] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "lookforvanessa-cd",
+        "list": "Cooldown3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1060264688": {
+   "kind": "text",
+   "parent": 1881468441,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "I’m Sister Vanessa. Sort of… junior nun, part-time librarian, full-time mess.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[Vanessamet-AtChurch] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Vanessamet-AtChurch",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-591664220": {
+   "kind": "choice",
+   "parent": 1881468441,
+   "children": [
+    1374653520,
+    1393835517,
+    2130308786
+   ],
+   "actor": "Vanessa",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Sorry, I joke when I’m anxious. Which is always. Literally. Always.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1374653520": {
+   "kind": "text",
+   "parent": -591664220,
+   "children": [
+    899640346
+   ],
+   "actor": null,
+   "text": "It’s nice to meet you, Vanessa. You seem sweet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "899640346": {
+   "kind": "text",
+   "parent": 1374653520,
+   "actor": "Vanessa",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That’s kind of you to say. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1393835517": {
+   "kind": "text",
+   "parent": -591664220,
+   "children": [
+    -928798853
+   ],
+   "actor": null,
+   "text": "Cute introduction. You rehearse that in front of the mirror?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-928798853": {
+   "kind": "text",
+   "parent": 1393835517,
+   "actor": "Vanessa",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Maybe… just the “full-time mess” part. The rest was improv. Don’t judge me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2130308786": {
+   "kind": "text",
+   "parent": -591664220,
+   "children": [
+    -50631535,
+    1441815032
+   ],
+   "actor": null,
+   "text": "Full-time mess, huh? Sounds fun already.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-50631535": {
+   "kind": "text",
+   "parent": 2130308786,
+   "actor": "Vanessa",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "W-what?! That’s not... I meant emotionally! Not… ugh, never mind.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1441815032": {
+   "kind": "text",
+   "parent": 2130308786,
+   "actor": "Vanessa",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "<size=60%>Why do the cute ones always go straight for the scandal...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "660931089": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Oh, hey again! I was just organizing hymnals...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[Vanessamet-AtChurch] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Vanessamet-AtChurch",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[Vanessamet-AtLibrary] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Vanessamet-AtLibrary",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown3[lookforvanessa-cd] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "lookforvanessa-cd",
+        "list": "Cooldown3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1409203635": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Oh, hey. I recognize you from the library. Didn’t expect to see you here, but… welcome.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[Vanessamet-AtChurch] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Vanessamet-AtChurch",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[Vanessamet-AtLibrary] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Vanessamet-AtLibrary",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[Vanessamet-AtChurch] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Vanessamet-AtChurch",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown3[lookforvanessa-cd] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "lookforvanessa-cd",
+        "list": "Cooldown3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1334536308": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Vanessa",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Were you here for the service, or just passing through?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown3[lookforvanessa-cd] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "lookforvanessa-cd",
+        "list": "Cooldown3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "690543": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1187359981,
+    152084930,
+    -780178056,
+    1658512200
+   ],
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Either way… I hope you’re finding peace. Even a little.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1187359981": {
+   "kind": "text",
+   "parent": 690543,
+   "children": [
+    756962371,
+    -1765349258
+   ],
+   "actor": null,
+   "text": "Just checking in. You looked a little stressed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "756962371": {
+   "kind": "text",
+   "parent": 1187359981,
+   "actor": "Vanessa",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Stressed? Me? Just because I spilled wine on the communion cloth and told a child demons live under the pews?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "152084930": {
+   "kind": "text",
+   "parent": 690543,
+   "children": [
+    -1473344869
+   ],
+   "actor": null,
+   "text": "What exactly do you do here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1473344869": {
+   "kind": "text",
+   "parent": 152084930,
+   "actor": "Vanessa",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I help with worship, run the church library, and… mostly try not to be a distraction.\nFailing at that last one, according to Samuel.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-780178056": {
+   "kind": "text",
+   "parent": 690543,
+   "children": [
+    -1666689266
+   ],
+   "actor": null,
+   "text": "I came to confess, but I forgot the sin. Can I wing it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1666689266": {
+   "kind": "text",
+   "parent": -780178056,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Winging sin sounds like a modern denomination. I’ll get you a pamphlet.\nMaybe call it “Freestyle Catholicism.”",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1658512200": {
+   "kind": "text",
+   "parent": 690543,
+   "children": [
+    -1437591033,
+    -1376912437,
+    -1564220067
+   ],
+   "actor": null,
+   "text": "Depends. Is thinking about you in church a sin?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1437591033": {
+   "kind": "text",
+   "parent": 1658512200,
+   "actor": "Vanessa",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Wh-what—yes! I mean, probably. Definitely.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1306066358": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Vanessa",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I should get back to my duties... but thank you for speaking with me. It’s nice, having someone listen.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1376912437": {
+   "kind": "text",
+   "parent": 1658512200,
+   "actor": "Vanessa",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Why are you like this?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1564220067": {
+   "kind": "text",
+   "parent": 1658512200,
+   "actor": "Vanessa",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "<size=60%>…Don’t stop though.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1765349258": {
+   "kind": "text",
+   "parent": 1187359981,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Okay, fine. Yes. A little.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1601224949": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1847781476,
+    1828652943,
+    9337916,
+    394800751,
+    -779754049,
+    -1322789649,
+    118386259,
+    -318997972,
+    2130376616
+   ],
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "You seem tense. Heavy, somehow. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[vanessa-flirtmode] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vanessa-flirtmode",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1847781476": {
+   "kind": "choice",
+   "parent": 1601224949,
+   "children": [
+    -814309047,
+    -530588176,
+    -941462583
+   ],
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Wanna… confess something?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-814309047": {
+   "kind": "text",
+   "parent": 1847781476,
+   "children": [
+    1922125310
+   ],
+   "actor": null,
+   "text": "Sure. You’re allowed to do that?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-530588176": {
+   "kind": "text",
+   "parent": 1847781476,
+   "children": [
+    -919035354
+   ],
+   "actor": null,
+   "text": "What if some of my sins involve you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-919035354": {
+   "kind": "text",
+   "parent": -530588176,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Th-that’s not how this works… Not that I haven’t… wondered what you'd say.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1922125310": {
+   "kind": "text",
+   "parent": -814309047,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Not officially. I’m not a priest. But… I can listen. Sometimes that’s enough.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-941462583": {
+   "kind": "text",
+   "parent": 1847781476,
+   "children": [
+    1858792308
+   ],
+   "actor": null,
+   "text": "I'm good, Vanessa. But thank you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1858792308": {
+   "kind": "text",
+   "parent": -941462583,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "I should get back to my duties... but thank you for speaking with me. ",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1828652943": {
+   "kind": "text",
+   "parent": 1601224949,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Follow me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "9337916": {
+   "kind": "text",
+   "parent": 1601224949,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ConfessionBooth to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ConfessionBooth",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/23_Church/ConfessionBooth"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Vanessa_Bust_Nun to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Vanessa_Bust_Nun",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Vanessa_Bust_Nun"
+      }
+     }
+    }
+   ]
+  },
+  "394800751": {
+   "kind": "text",
+   "parent": 1601224949,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Alright.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-779754049": {
+   "kind": "text",
+   "parent": 1601224949,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Go ahead. Tell me whatever you feel like confessing. I’ll listen.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1322789649": {
+   "kind": "choice",
+   "parent": 1601224949,
+   "children": [
+    -1235661073,
+    -396242786,
+    -712274166,
+    -1495928206,
+    -1193812268
+   ],
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "I… I won’t judge. I promise.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1235661073": {
+   "kind": "text",
+   "parent": -1322789649,
+   "children": [
+    126090674,
+    767677560
+   ],
+   "actor": null,
+   "text": "I haven’t been a good person lately.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "126090674": {
+   "kind": "text",
+   "parent": -1235661073,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "None of us are perfect. That’s not the point. The fact that you care enough to feel bad already sets you apart from most.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-396242786": {
+   "kind": "text",
+   "parent": -1322789649,
+   "children": [
+    2074150824,
+    -2121375365
+   ],
+   "actor": null,
+   "text": "I lie to people. A lot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2074150824": {
+   "kind": "text",
+   "parent": -396242786,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Lying…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-712274166": {
+   "kind": "text",
+   "parent": -1322789649,
+   "children": [
+    1389180280,
+    1148070574
+   ],
+   "actor": null,
+   "text": "I once stole candy from a church donation box.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1389180280": {
+   "kind": "text",
+   "parent": -712274166,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "That was you? We thought a raccoon got in.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1495928206": {
+   "kind": "text",
+   "parent": -1322789649,
+   "children": [
+    716178095,
+    -837132576,
+    -2011821441,
+    1920734725,
+    -147674731,
+    -429538321,
+    -676417980,
+    -1599842045,
+    1744359041,
+    656829066,
+    -306266915,
+    483715807,
+    841168044,
+    -1880783982,
+    -185122027
+   ],
+   "actor": null,
+   "text": "I think about you when I shouldn’t.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "716178095": {
+   "kind": "text",
+   "parent": -1495928206,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "You can’t say things like that… not here. Not to me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1193812268": {
+   "kind": "text",
+   "parent": -1322789649,
+   "children": [
+    1080392048,
+    146404002,
+    -955571603,
+    -593584953,
+    -880894188
+   ],
+   "actor": null,
+   "text": "I’ve been helping my own {M} get big on Starmaker.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1080392048": {
+   "kind": "text",
+   "parent": -1193812268,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Wait…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "146404002": {
+   "kind": "text",
+   "parent": -1193812268,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "You’re saying… your {M}? And you’re… helping her? On Starmaker?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-955571603": {
+   "kind": "text",
+   "parent": -1193812268,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "I don’t even know what to say. Part of me wants to scream. The other part...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-593584953": {
+   "kind": "text",
+   "parent": -1193812268,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Wants to ask how far it’s gone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-880894188": {
+   "kind": "text",
+   "parent": -1193812268,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "You came here to confess, but now I don’t know if I should be praying for you… Or for myself.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "767677560": {
+   "kind": "text",
+   "parent": -1235661073,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Try to be better. But don’t hate yourself while you're trying.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2121375365": {
+   "kind": "text",
+   "parent": -396242786,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Sometimes we lie to protect others. Sometimes we lie to hide. But all of it adds weight. You can only carry it so long before it breaks something.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1148070574": {
+   "kind": "text",
+   "parent": -712274166,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Alright, forgiven... but only because that’s objectively hilarious.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-837132576": {
+   "kind": "text",
+   "parent": -1495928206,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "But I’ve thought about you too.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2011821441": {
+   "kind": "choice",
+   "parent": -1495928206,
+   "children": [
+    -1138201172,
+    -367197352,
+    -1605263644
+   ],
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "And every time, I pray harder... not because it helps, but because I don’t know what else to do.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "118386259": {
+   "kind": "text",
+   "parent": 1601224949,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Whatever you said, whatever you’re carrying... it’s lighter now. Not gone… but lighter.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-318997972": {
+   "kind": "text",
+   "parent": 1601224949,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Just don’t forget that confession isn’t the end. It’s the start of choosing who you want to be next.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1920734725": {
+   "kind": "text",
+   "parent": -1495928206,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Such... Such thoughts are a heavy burden to carry alone. You must release them, give them to God.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-147674731": {
+   "kind": "choice",
+   "parent": -1495928206,
+   "children": [
+    -1396645882,
+    -1495357506
+   ],
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "There... Can you see? Can you see how my body... aches for you?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NunGHScene (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NunGHScene (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/NunGHScene (0)"
+      }
+     }
+    }
+   ]
+  },
+  "-429538321": {
+   "kind": "text",
+   "parent": -1495928206,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Hngaah~ God, god, god! It's so big! I... Hngaaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NunGHScene (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NunGHScene (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/NunGHScene (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-676417980": {
+   "kind": "text",
+   "parent": -1495928206,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Yes... Fill... Fill me with your sin. Let me be the one who carries it for you-Aaaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1599842045": {
+   "kind": "text",
+   "parent": -1495928206,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "I'm taking it. I'm taking all of it. You feel... unreal.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1744359041": {
+   "kind": "text",
+   "parent": -1495928206,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "I... I can't take it anymore... Your cock is... I love it, {PC}! My ass loves it~ Hngaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "656829066": {
+   "kind": "choice",
+   "parent": -1495928206,
+   "children": [
+    -169344853,
+    -1804705912,
+    -1165350883
+   ],
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Do it. Claim this unholy altar. Spill your seed inside me and... and grant me this one moment of damnation.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-306266915": {
+   "kind": "text",
+   "parent": -1495928206,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "AHH! YES! I can feel it! Every hot, sinful drop... filling me... purifying me with your perfect filth! NGH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NunGHScene (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NunGHScene (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/NunGHScene (2)"
+      }
+     }
+    }
+   ]
+  },
+  "483715807": {
+   "kind": "text",
+   "parent": -1495928206,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Look... look at what you've done to me. My own corruption... spilling onto the floor.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "841168044": {
+   "kind": "text",
+   "parent": -1495928206,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "I love it... I loved every second of it... God forgive me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1880783982": {
+   "kind": "text",
+   "parent": -1495928206,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "I... I need to go, before Samuel see's me like this...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Help Vanessa to open up.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Vanessa Quest",
+        "of": "Quest"
+       },
+       "m_TaskId": -413582714
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "2130376616": {
+   "kind": "text",
+   "parent": 1601224949,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ConfessionBooth to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ConfessionBooth",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/23_Church/ConfessionBooth"
+      }
+     }
+    }
+   ]
+  },
+  "-185122027": {
+   "kind": "text",
+   "parent": -1495928206,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ConfessionBooth to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ConfessionBooth",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/23_Church/ConfessionBooth"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[vanessa-banged] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vanessa-banged",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1396645882": {
+   "kind": "text",
+   "parent": -147674731,
+   "actor": null,
+   "text": "(Fuck her ass)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1495357506": {
+   "kind": "text",
+   "parent": -147674731,
+   "children": [
+    -1100055830,
+    -897173968
+   ],
+   "actor": null,
+   "text": "I can't. This is not right.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1100055830": {
+   "kind": "text",
+   "parent": -1495357506,
+   "actor": "Vanessa",
+   "expressionName": "neutral",
+   "text": "Y-You're right... I... I am a bride of Christ. My body is a temple. I'm sorry, {PC}. For tempting you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-897173968": {
+   "kind": "text",
+   "parent": -1495357506,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ConfessionBooth to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ConfessionBooth",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/23_Church/ConfessionBooth"
+      }
+     }
+    }
+   ]
+  },
+  "-1138201172": {
+   "kind": "text",
+   "parent": -2011821441,
+   "actor": null,
+   "text": "Vanessa. You want it too. We both are thinking the same thing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-367197352": {
+   "kind": "text",
+   "parent": -2011821441,
+   "actor": null,
+   "text": "I burn with desire for you, Sister. It's a fire I can't put out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1605263644": {
+   "kind": "text",
+   "parent": -2011821441,
+   "actor": null,
+   "text": "I can't stop imagining what your thick ass would feel like...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-169344853": {
+   "kind": "text",
+   "parent": 656829066,
+   "actor": null,
+   "text": "(Fill her ass with cum)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1804705912": {
+   "kind": "text",
+   "parent": 656829066,
+   "actor": null,
+   "text": "I'm close, sister... I'll... Take my seed...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1165350883": {
+   "kind": "text",
+   "parent": 656829066,
+   "actor": null,
+   "text": "Just you and me, Vanessa...  This... Is not a sin... Hngaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Trips/ChurchVisit/LookForVanessaCond",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play VanessaTalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Core_NoSave3[2026bool-veryshort] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2026bool-veryshort",
+        "list": "Core_NoSave3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Vanessa_Bust_Nun to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Vanessa_Bust_Nun",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Vanessa_Bust_Nun"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Vanessa_Bust_Nun/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Core_Events/Trips/ChurchVisit/Church_BeforeFappearsCon",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play VanessaTalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events[church-visits] ≥ 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "church-visits",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    },
+    {
+     "kind": "chance",
+     "type": "ConditionChance",
+     "title": "If 0.3 chance to pass",
+     "fields": {
+      "m_Threshold": {
+       "kind": "value",
+       "value": 0.3
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Vanessa_Bust_Nun to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Vanessa_Bust_Nun",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Vanessa_Bust_Nun"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Vanessa_Bust_Nun/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

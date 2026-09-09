@@ -1,0 +1,392 @@
+{
+ "id": "8_Room_Talk/generalstore/Kate_ScentedCandles",
+ "name": "Kate_ScentedCandles",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Kate"
+ ],
+ "roots": [
+  -1823875238,
+  1699879660,
+  -1621237200,
+  -1590333793
+ ],
+ "nodes": {
+  "-1823875238": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1510694431,
+    -1041985926
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Heyo, what's good?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1510694431": {
+   "kind": "text",
+   "parent": -1823875238,
+   "actor": null,
+   "text": "Hey, do you have any of those scented candles left? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1041985926": {
+   "kind": "text",
+   "parent": -1823875238,
+   "actor": null,
+   "text": "Got any fancy scented candles? Like vanilla or amber?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1699879660": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -290461563,
+    1978516826,
+    -774651558
+   ],
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh—nah. Sorry. Just sold the last ones, like, literally two minutes ago.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-290461563": {
+   "kind": "text",
+   "parent": 1699879660,
+   "children": [
+    2091882840
+   ],
+   "actor": null,
+   "text": "Seriously? To who?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1978516826": {
+   "kind": "text",
+   "parent": 1699879660,
+   "children": [
+    -5406154
+   ],
+   "actor": null,
+   "text": "Is there any other place that might have some?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-774651558": {
+   "kind": "text",
+   "parent": 1699879660,
+   "children": [
+    -1215869573
+   ],
+   "actor": null,
+   "text": "Great, here comes the sidequest.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-5406154": {
+   "kind": "text",
+   "parent": 1978516826,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Good luck — literally no one’s buying that boomer shit anymore. We’re one of the last places that even got them.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1215869573": {
+   "kind": "text",
+   "parent": -774651558,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Yeah, and you're the main character or what?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1621237200": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1489128523,
+    -2045906841
+   ],
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "She was dressed like she just walked out of a video game or something. Big-asst tits, boots, full-on mask, like... shiny sci-fi mask. Didn’t even say anything, just pointed and paid.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2091882840": {
+   "kind": "text",
+   "parent": -290461563,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "I don’t know, some weird chick. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1590333793": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Whatever, I gotta get back to work, good luck. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_8[Scentedcandlesquest] = 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Scentedcandlesquest",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-1489128523": {
+   "kind": "text",
+   "parent": -1621237200,
+   "children": [
+    -459326480
+   ],
+   "actor": null,
+   "text": "So nothing left?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2045906841": {
+   "kind": "text",
+   "parent": -1621237200,
+   "children": [
+    1304421721
+   ],
+   "actor": null,
+   "text": "I think I might know who that was.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-459326480": {
+   "kind": "text",
+   "parent": -1489128523,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Nope. Unless you want pine. But it smells like depression and air freshener, so... your call.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1304421721": {
+   "kind": "text",
+   "parent": -2045906841,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Seriously? Like, what are you even doing in your free time to know someone like her?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/generalstore",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Kate_ScentedCandles and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_8[Scentedcandlesquest] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Scentedcandlesquest",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Holidays[Holiday-VarQuest-One] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Holiday-VarQuest-One",
+        "list": "Holidays",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Kate to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Kate",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Kate"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

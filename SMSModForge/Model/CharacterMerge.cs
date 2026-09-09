@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,9 +19,20 @@ namespace SMSModForge.Model;
 /// </summary>
 public static class CharacterMerge
 {
+    /// <summary>
+    /// How many vanilla characters the last <see cref="Apply"/> recognised and
+    /// linked to the game's cast.
+    /// <para/>
+    /// Reported separately from the actor fold because they are different news
+    /// to an author: one says "your actors are characters now", the other says
+    /// "the people you borrowed from the game are the game's own records now".
+    /// </summary>
+    public static int LastAdoptedVanilla { get; private set; }
+
     /// <summary>Merge in place. Returns how many legacy actors were folded in.</summary>
     public static int Apply(ModPack pack)
     {
+        LastAdoptedVanilla = 0;
         if (pack == null) return 0;
 
         var actors = pack.Actors;
@@ -32,6 +43,8 @@ public static class CharacterMerge
             // has actors to fold once. Returning early here is what stopped it
             // running at all.
             BackfillNames(pack);
+            LastAdoptedVanilla = AdoptVanillaCharacters(pack);
+            VanillaCastSeed.Seed(pack);
             EnsurePlayer(pack);
             return 0;
         }
@@ -96,6 +109,13 @@ public static class CharacterMerge
 
         pack.Actors = new List<ActorDef>();
         BackfillNames(pack);
+        LastAdoptedVanilla = AdoptVanillaCharacters(pack);
+
+        // The same finish as the already-merged path above. Seeding the cast
+        // was missing here, so a pack old enough to still carry actors - the
+        // very packs most likely to want the game's characters offered to them
+        // - opened without a single one of them.
+        VanillaCastSeed.Seed(pack);
         EnsurePlayer(pack);
         return folded;
     }
@@ -183,6 +203,110 @@ public static class CharacterMerge
     /// one — a bust that never had an actor, or a freshly merged pack. Existing
     /// values are never touched.
     /// </summary>
+    /// <summary>
+    /// Recognise the game's own characters in a pack that predates them being
+    /// available.
+    /// <para/>
+    /// Such a pack declared a character and listed a bust or two of the game's
+    /// — "Anna", wearing Anna_Bust. Those busts say who it was all along, so
+    /// the entry is pointed at the game's character and given the whole
+    /// wardrobe instead of the corner of it somebody copied out.
+    /// <para/>
+    /// The pack's own KEY is untouched, deliberately. Everything already
+    /// pointing at it — every dialogue line, every action — keeps working, and
+    /// nothing has to be rewritten anywhere. Converting the key instead would
+    /// mean rewriting every reference in the pack, and a reference missed
+    /// there fails silently in game rather than loudly here.
+    /// <para/>
+    /// Returns how many were recognised.
+    /// </summary>
+    public static int AdoptVanillaCharacters(ModPack pack)
+    {
+        if (pack?.Characters == null) return 0;
+
+        int adopted = 0;
+        foreach (var character in pack.Characters)
+        {
+            if (character.BustSource != BustSource.Vanilla) continue;
+            if (character.IsVanillaCharacter) continue;      // already adopted
+
+            // Who they are is whichever of the game's characters owns the
+            // busts they were wearing. The first that resolves settles it: a
+            // pack mixing two characters' busts under one entry is not
+            // something to guess at, and the first is the one the author
+            // reached for.
+            VanillaCharacters.VanillaCharacter? found = null;
+            foreach (var outfit in character.Outfits)
+            {
+                found = VanillaCharacters.Owning(outfit.GameObjectName);
+                if (found != null) break;
+            }
+
+            // Failing that, the name itself - a pack that called its entry
+            // "Anna" and listed nothing recognisable is still plainly Anna.
+            found ??= VanillaCharacters.Find(character.DisplayName)
+                   ?? VanillaCharacters.Find(character.Key);
+            if (found == null) continue;
+
+            character.VanillaCharacter = found.Name;
+            adopted++;
+        }
+
+        // Everybody's wardrobe, adopted just now or long since.
+        //
+        // Dressing only the newly adopted was enough while a saved manifest
+        // carried every outfit; it is not now that saving drops the ones the
+        // game supplies. A pack reopened would have kept whatever the author
+        // added and quietly lost the other sixty-four, once.
+        foreach (var character in pack.Characters)
+        {
+            if (!character.IsVanillaCharacter) continue;
+            var wardrobe = VanillaCharacters.Find(character.VanillaCharacter);
+            if (wardrobe != null) Dress(character, wardrobe);
+        }
+
+        return adopted;
+    }
+
+    /// <summary>
+    /// Give a character the game's whole wardrobe, keeping whatever the pack
+    /// already had.
+    /// <para/>
+    /// The outfits stay IN the manifest rather than being looked up at play
+    /// time, because the runtime resolves a bust by the name written there and
+    /// teaching it about the game's cast is a change with nothing to gain: an
+    /// outfit is a key and a GameObject name, and a hundred of them is a few
+    /// lines of a manifest that is already tens of thousands.
+    /// <para/>
+    /// An entry the pack already wrote is left exactly as it is - its key may
+    /// be referenced by a dialogue, and its art settings are the author's.
+    /// </summary>
+    /// <summary>
+    /// Give a character every bust the game has for them that they are not
+    /// already carrying.
+    /// <para/>
+    /// Adds only what is missing, so running it on a character who has them
+    /// all does nothing — which is what lets it run on every load rather than
+    /// only on the one where the character was first recognised.
+    /// </summary>
+    private static void Dress(CharacterDef character,
+                              VanillaCharacters.VanillaCharacter wardrobe)
+    {
+        var had = new HashSet<string>(
+            character.Outfits.Select(o => o.GameObjectName ?? ""),
+            System.StringComparer.OrdinalIgnoreCase);
+
+        foreach (string outfit in wardrobe.Outfits)
+        {
+            if (string.IsNullOrEmpty(outfit) || had.Contains(outfit)) continue;
+            character.Outfits.Add(new OutfitDef
+            {
+                Key = VanillaCharacters.KeyFor(outfit),
+                GameObjectName = outfit,
+            });
+        }
+    }
+
     public static void BackfillNames(ModPack pack)
     {
         var keys = new HashSet<string>(

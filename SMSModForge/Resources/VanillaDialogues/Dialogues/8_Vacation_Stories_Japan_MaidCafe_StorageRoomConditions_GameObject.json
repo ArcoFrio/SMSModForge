@@ -1,0 +1,1370 @@
+{
+ "id": "8_Vacation_Stories/Japan_MaidCafe/StorageRoomConditions/GameObject",
+ "name": "GameObject",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "V_Riku"
+ ],
+ "roots": [
+  -244159126,
+  1656811216,
+  44341582,
+  -645547629,
+  1506652164,
+  1833339814,
+  -1062473172
+ ],
+ "nodes": {
+  "-244159126": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "What are you waiting for!? Get that cock out!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[gyaru-sex-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gyaru-sex-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1656811216": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1947536603,
+    -260827579
+   ],
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Look, this isn’t exactly... easy for me to say, but I know you’ve got cash.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[gyaru-sex-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gyaru-sex-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1947536603": {
+   "kind": "choice",
+   "parent": 1656811216,
+   "children": [
+    1239759683,
+    -86367872,
+    1248100616
+   ],
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Here’s the deal... I'll suck your cock for some... You're interested in me, right? You paid to see my boobs...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1239759683": {
+   "kind": "text",
+   "parent": -1947536603,
+   "children": [
+    250938933
+   ],
+   "actor": null,
+   "text": "Sure, I'll gladly help you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-86367872": {
+   "kind": "text",
+   "parent": -1947536603,
+   "children": [
+    1402014771
+   ],
+   "actor": null,
+   "text": "I'm not sleeping with a sexworker.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1248100616": {
+   "kind": "text",
+   "parent": -1947536603,
+   "children": [
+    -468281067
+   ],
+   "actor": null,
+   "text": "How much for anal?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-468281067": {
+   "kind": "text",
+   "parent": 1248100616,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "W-What!? NO! I'm... Just no!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1402014771": {
+   "kind": "text",
+   "parent": -86367872,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "I'm not a sexworker! I've never done anything like that before...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "250938933": {
+   "kind": "text",
+   "parent": 1239759683,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Grrr.... Don't make me regret it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-260827579": {
+   "kind": "choice",
+   "parent": 1656811216,
+   "children": [
+    -1254012281,
+    -1752341651,
+    -1317003127
+   ],
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "So... How about five grand for a... You know.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1254012281": {
+   "kind": "text",
+   "parent": -260827579,
+   "children": [
+    -1374353667
+   ],
+   "actor": null,
+   "text": "Here's the $5000.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 5000",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5000
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1752341651": {
+   "kind": "text",
+   "parent": -260827579,
+   "children": [
+    1465879354
+   ],
+   "actor": null,
+   "text": "I don't have the money now, but i'll come back.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1317003127": {
+   "kind": "text",
+   "parent": -260827579,
+   "children": [
+    334952010
+   ],
+   "actor": null,
+   "text": "Yeah, no. I'm not into you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "334952010": {
+   "kind": "text",
+   "parent": -1317003127,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "You're an evil man, {PC}.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1465879354": {
+   "kind": "text",
+   "parent": -1752341651,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Sure...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1374353667": {
+   "kind": "text",
+   "parent": -1254012281,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Shit. That's a lot of cash...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -5000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -5000
+      }
+     }
+    }
+   ]
+  },
+  "44341582": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Oh god… this is it… I’m gonna choke to death… I knew it would end like this...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MaidLove (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MaidLove (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/MaidLove (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-645547629": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Just… stay still, alright? Don’t move a muscle. I need to focus if we’re both gonna survive this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1506652164": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Mmmmah... Glphh! Glppphh! Mwwuaaah",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MaidLove (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MaidLove (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/MaidLove (2)"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[gyaru-sex-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gyaru-sex-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1833339814": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1641003686,
+    1403019834,
+    1552617722
+   ],
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Mwuaah... J-Just cum already... Mmmphh...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1641003686": {
+   "kind": "text",
+   "parent": 1833339814,
+   "children": [
+    -1271528858
+   ],
+   "actor": null,
+   "text": "I'm trying, give me some time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1403019834": {
+   "kind": "text",
+   "parent": 1833339814,
+   "children": [
+    468780926
+   ],
+   "actor": null,
+   "text": "Just keep sucking it, Riku.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1552617722": {
+   "kind": "text",
+   "parent": 1833339814,
+   "children": [
+    -936907560
+   ],
+   "actor": null,
+   "text": "Use your hands too.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-936907560": {
+   "kind": "text",
+   "parent": 1552617722,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "L-Like this? Mwuaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MaidLove (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MaidLove (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/MaidLove (4)"
+      }
+     }
+    }
+   ]
+  },
+  "468780926": {
+   "kind": "text",
+   "parent": 1403019834,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Glpph! T-That's what I'm doing here! Mwuaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MaidLove (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MaidLove (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/MaidLove (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1271528858": {
+   "kind": "text",
+   "parent": -1641003686,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "F-Fine... Mmmwaah! Glpph!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MaidLove (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MaidLove (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/MaidLove (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1062473172": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -336264270,
+    2105191418
+   ],
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Come on... Mwuaah... Cum... I want you to... Glpphh... Cum!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[gyaru-sex-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gyaru-sex-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-336264270": {
+   "kind": "text",
+   "parent": -1062473172,
+   "children": [
+    918130397,
+    1678115888,
+    292694160,
+    -255345613
+   ],
+   "actor": null,
+   "text": "(Fill her mouth)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2105191418": {
+   "kind": "text",
+   "parent": -1062473172,
+   "children": [
+    -455355177,
+    -1153119458,
+    -1838181456,
+    -2077764146,
+    -376222263,
+    -274509688,
+    1746605289,
+    -1378597665,
+    72051158,
+    -616593491,
+    -1551014917,
+    -24500770,
+    82050249
+   ],
+   "actor": null,
+   "text": "(Resist the urge)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "918130397": {
+   "kind": "text",
+   "parent": -336264270,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "GPHMMMM! MMMMMMHHHMM!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MaidLove (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MaidLove (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/MaidLove (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MaidLove (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MaidLove (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/MaidLove (6)"
+      }
+     }
+    }
+   ]
+  },
+  "-455355177": {
+   "kind": "text",
+   "parent": 2105191418,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Come on... Glllphh! Mmmmhmm... Mpfh! Mpfh! Mpfh!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MaidLove (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MaidLove (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/MaidLove (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MaidLove (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MaidLove (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/MaidLove (5)"
+      }
+     }
+    }
+   ]
+  },
+  "1678115888": {
+   "kind": "text",
+   "parent": -336264270,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Ugh... Fuck... That's not possible... No one can produce so much... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "292694160": {
+   "kind": "text",
+   "parent": -336264270,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Oh fuck... I need to get cleaned up... My boss will...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-255345613": {
+   "kind": "text",
+   "parent": -336264270,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "T-Thanks for the money, now get out!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1153119458": {
+   "kind": "text",
+   "parent": 2105191418,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "It's throbbing... But why isn't it... Why... Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1838181456": {
+   "kind": "text",
+   "parent": 2105191418,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Alright, change of plans...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "-2077764146": {
+   "kind": "choice",
+   "parent": 2105191418,
+   "children": [
+    -1533418235,
+    1577235624,
+    1822316880
+   ],
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Put it in... My pussy will do the job!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MaidLove (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MaidLove (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/MaidLove (7)"
+      }
+     }
+    }
+   ]
+  },
+  "-376222263": {
+   "kind": "text",
+   "parent": 2105191418,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Fhhucckk! OH FUCK! OH... Hnaaaahhhh!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MaidLove (8) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MaidLove (8)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/MaidLove (8)"
+      }
+     }
+    }
+   ]
+  },
+  "-274509688": {
+   "kind": "choice",
+   "parent": 2105191418,
+   "children": [
+    -2033188280,
+    1630132972,
+    -181619448
+   ],
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "T-Take it slow! It's too big... Fuck, fuck, fuck!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1746605289": {
+   "kind": "text",
+   "parent": 2105191418,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "I'm... I'm... CUMMING! FUCK!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1378597665": {
+   "kind": "text",
+   "parent": 2105191418,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "I've lost to this fucking cock. It's so good. This cock is soooo fucking good!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "72051158": {
+   "kind": "choice",
+   "parent": 2105191418,
+   "children": [
+    1622984962,
+    -1119302834,
+    551870481
+   ],
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Moaaaar! MOREEEEEE! ... Fuck, fuck! Hnggaaah!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MaidLove (9) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MaidLove (9)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/MaidLove (9)"
+      }
+     }
+    }
+   ]
+  },
+  "-616593491": {
+   "kind": "text",
+   "parent": 2105191418,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "YES! YEEEEESHHH!!!! Give it to me! Give it to... AHHHHH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1551014917": {
+   "kind": "text",
+   "parent": 2105191418,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Don't stop! DON'T STOP! MORE! MORE! MOREEEEE!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-24500770": {
+   "kind": "text",
+   "parent": 2105191418,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "So much cum... Fuck... Today's my safe day... I think? Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MaidLove (10) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MaidLove (10)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/MaidLove (10)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MaidLove (7) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MaidLove (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/MaidLove (7)"
+      }
+     }
+    }
+   ]
+  },
+  "82050249": {
+   "kind": "text",
+   "parent": 2105191418,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Oh fuck... Well, uh... So... It was nice doing buisness with you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1622984962": {
+   "kind": "text",
+   "parent": 72051158,
+   "actor": null,
+   "text": "I'm about to... Here it comes... Hnggaah....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1119302834": {
+   "kind": "text",
+   "parent": 72051158,
+   "actor": null,
+   "text": "I'll breed you tight tan pussy, Riku... Hngaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "551870481": {
+   "kind": "text",
+   "parent": 72051158,
+   "actor": null,
+   "text": "(Fill her up)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2033188280": {
+   "kind": "text",
+   "parent": -274509688,
+   "actor": null,
+   "text": "Y-You can take it, just relax... Breath...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1630132972": {
+   "kind": "text",
+   "parent": -274509688,
+   "actor": null,
+   "text": "No shit... Your pussy way's too tight for my cock!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-181619448": {
+   "kind": "text",
+   "parent": -274509688,
+   "actor": null,
+   "text": "Just stop shaking, I'm trying to fuck you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1533418235": {
+   "kind": "text",
+   "parent": -2077764146,
+   "children": [
+    -1685550044
+   ],
+   "actor": null,
+   "text": "That's what I wanted to hear...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1577235624": {
+   "kind": "text",
+   "parent": -2077764146,
+   "children": [
+    53753151
+   ],
+   "actor": null,
+   "text": "Are you sure?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1822316880": {
+   "kind": "text",
+   "parent": -2077764146,
+   "children": [
+    -975268398
+   ],
+   "actor": null,
+   "text": "(Slap her ass)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "53753151": {
+   "kind": "text",
+   "parent": 1577235624,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Y-Yes... As if I couldn't take your gaijin cock!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-975268398": {
+   "kind": "text",
+   "parent": 1822316880,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "H-Hey! W-Watch it!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1685550044": {
+   "kind": "text",
+   "parent": -1533418235,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Welll... You've won. Now get over here!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Japan_MaidCafe/StorageRoomConditions",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play GameObject and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[Riku-waits-storageroom] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Riku-waits-storageroom",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.6 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.6
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_Maps to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_Maps",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_Maps"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.1 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 107_JapanMaidCafeStorage to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "107_JapanMaidCafeStorage",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/107_JapanMaidCafeStorage"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_RikuDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_RikuDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_RikuDefault"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.1 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    }
+   ]
+  }
+ ]
+}

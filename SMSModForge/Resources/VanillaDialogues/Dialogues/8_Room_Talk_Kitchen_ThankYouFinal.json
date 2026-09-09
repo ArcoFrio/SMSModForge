@@ -1,0 +1,650 @@
+{
+ "id": "8_Room_Talk/Kitchen/ThankYouFinal",
+ "name": "ThankYouFinal",
+ "index": 7,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna"
+ ],
+ "roots": [
+  -1677922513,
+  -968494642,
+  -1932981353,
+  900220318,
+  -1644081933,
+  421532700,
+  1161225265
+ ],
+ "nodes": {
+  "-1677922513": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Hey, {PC}. Can we talk for a minute?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Speak with Anna when she’s drinking in the kitchen.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Inner Regret",
+        "of": "Quest"
+       },
+       "m_TaskId": -989935106
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-968494642": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I wanted to apologize. I had too much wine recently  and I... I said some things I shouldn’t have. I’m really sorry.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[achivement-unlocked] = Savior",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Savior"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "achivement-unlocked",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Achievements[anna-saved] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-saved",
+        "list": "Achievements",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1932981353": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It’s like the floor was slipping away from under my feet, and I was.. I was being very unfair to you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "900220318": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1120040224,
+    1596701832,
+    -1048452585
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "And even though I was such a bitch, you stuck by me... You helped me...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1120040224": {
+   "kind": "text",
+   "parent": 900220318,
+   "children": [
+    905176622
+   ],
+   "actor": null,
+   "text": "It's all good, {M}. I'm glad you are doing better.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1596701832": {
+   "kind": "text",
+   "parent": 900220318,
+   "children": [
+    1099561720
+   ],
+   "actor": null,
+   "text": "Yeah, you were a real bitch.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1048452585": {
+   "kind": "text",
+   "parent": 900220318,
+   "children": [
+    -380213092
+   ],
+   "actor": null,
+   "text": "No more wine from now on.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "905176622": {
+   "kind": "text",
+   "parent": 1120040224,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thank you, hun. This means a lot to me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1099561720": {
+   "kind": "text",
+   "parent": 1596701832,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I know... I'm so sorry....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-380213092": {
+   "kind": "text",
+   "parent": -1048452585,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes. Promised.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1644081933": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "There is one question I have to ask you... I just have to...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "421532700": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -570756524,
+    998290606,
+    1095235915,
+    -31668415
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "W-What do YOU want... Why do all of this?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-570756524": {
+   "kind": "text",
+   "parent": 421532700,
+   "children": [
+    -826670063
+   ],
+   "actor": null,
+   "text": "I want to be with you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "998290606": {
+   "kind": "text",
+   "parent": 421532700,
+   "children": [
+    278796936
+   ],
+   "actor": null,
+   "text": "I want to help our {F}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1095235915": {
+   "kind": "text",
+   "parent": 421532700,
+   "children": [
+    1559665473
+   ],
+   "actor": null,
+   "text": "I want to make a lot of money.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-31668415": {
+   "kind": "text",
+   "parent": 421532700,
+   "children": [
+    718852159
+   ],
+   "actor": null,
+   "text": "I want to have fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "718852159": {
+   "kind": "text",
+   "parent": -31668415,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I'm glad you are having fun. I am having fun too....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1559665473": {
+   "kind": "text",
+   "parent": 1095235915,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "We do make a lot of money, don't we? Hah...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "278796936": {
+   "kind": "text",
+   "parent": 998290606,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I want to do the same... I want us all to be happy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Mainstory[I-want-to-stay-together] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "I-want-to-stay-together",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-826670063": {
+   "kind": "text",
+   "parent": -570756524,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I.. I want to be with you too...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1161225265": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Let’s get back to our lives then. I promise you I’m doing better. No more evil bitch...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood and wait",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Kitchen",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play ThankYouFinal and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Mainstory[M-cured-max-3] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-cured-max-3",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Core_NoSave[Anna-Default-Outfit] to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Anna-Default-Outfit",
+        "list": "Core_NoSave",
+        "type": "game-object"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Wine to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Wine",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Wine"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[M-cured-max-3] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-cured-max-3",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Room_Talk/Kitchen/Kitchen_Conditions_1",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play ThankYouFinal and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Mainstory[M-cured-max-3] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-cured-max-3",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Core_NoSave[Anna-Default-Outfit] to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Anna-Default-Outfit",
+        "list": "Core_NoSave",
+        "type": "game-object"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Wine to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Wine",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Wine"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[M-cured-max-3] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-cured-max-3",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

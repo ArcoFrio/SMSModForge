@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Windows.Input;
 
 namespace SMSModForge.ViewModel;
@@ -27,10 +27,25 @@ public sealed class RelayCommand : ICommand
     /// </summary>
     public static event Action? Executing;
 
+    /// <summary>
+    /// Fires immediately AFTER a command's body has run.
+    /// <para/>
+    /// The undo system needs both edges. <see cref="Executing"/> captures a
+    /// field edit that had not been committed yet; this captures the command's
+    /// own change. With only the first, the FIRST change of a session left the
+    /// undo stack empty - there was nothing before it to push - so Ctrl+Z was
+    /// disabled, and the step that would have made it available never happened.
+    /// <para/>
+    /// Checkpointing is a no-op when nothing changed, so firing on both edges
+    /// still leaves exactly one step per command.
+    /// </summary>
+    public static event Action? Executed;
+
     public void Execute(object? parameter)
     {
         Executing?.Invoke();
         _execute(parameter);
+        Executed?.Invoke();
     }
 
     public event EventHandler? CanExecuteChanged

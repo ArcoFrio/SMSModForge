@@ -1,0 +1,403 @@
+{
+ "id": "8_Room_Talk/Entrance/Firstdialogue",
+ "name": "Firstdialogue",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Josef"
+ ],
+ "roots": [
+  302218041,
+  -526762295,
+  -1728905685,
+  -2138927666
+ ],
+ "nodes": {
+  "302218041": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1731804760,
+    869547352,
+    837950559
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Oh, {PC}. I didn’t see you there. Just... getting some fresh air.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionQuestsActivate",
+     "title": "Activate The Moment of Truth (Josef)",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "The Moment of Truth (Josef)",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "1731804760": {
+   "kind": "text",
+   "parent": 302218041,
+   "actor": null,
+   "text": "I thought you quit? {M} wouldn't like that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "869547352": {
+   "kind": "text",
+   "parent": 302218041,
+   "actor": null,
+   "text": "Fresh air with a cigarette?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "837950559": {
+   "kind": "text",
+   "parent": 302218041,
+   "actor": null,
+   "text": "You look stressed out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-526762295": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Yeah, you caught me. I was trying to keep this a secret.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1728905685": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I thought I had it all under control, but sometimes it feels like too much.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2138927666": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    368151381,
+    -714320256,
+    1106707732
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Smoking... it’s a stupid way to cope, I know.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "368151381": {
+   "kind": "text",
+   "parent": -2138927666,
+   "children": [
+    89846579
+   ],
+   "actor": null,
+   "text": "You don’t have to go through this alone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-714320256": {
+   "kind": "text",
+   "parent": -2138927666,
+   "children": [
+    1580149953
+   ],
+   "actor": null,
+   "text": "I get it, life’s tough. Just don't give up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "89846579": {
+   "kind": "text",
+   "parent": 368151381,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Thanks, {PC}. It means a lot to hear you say that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1580149953": {
+   "kind": "text",
+   "parent": -714320256,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I know. I’ll try to be better. For you and for myself.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1106707732": {
+   "kind": "text",
+   "parent": -2138927666,
+   "children": [
+    2060976553
+   ],
+   "actor": null,
+   "text": "I’ll keep this between us... for 200 bucks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2060976553": {
+   "kind": "text",
+   "parent": 1106707732,
+   "actor": "Josef",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Fine. Here’s the money. But you better not say a word.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + 200",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 200
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Entrance",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Firstdialogue and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Mainstory[anna-heart-status] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-heart-status",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active JosefSmoking to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "JosefSmoking",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/JosefSmoking"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[josef-smoke-catched] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "josef-smoke-catched",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

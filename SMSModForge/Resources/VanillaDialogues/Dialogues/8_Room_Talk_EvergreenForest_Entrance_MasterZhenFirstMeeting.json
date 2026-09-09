@@ -1,0 +1,728 @@
+{
+ "id": "8_Room_Talk/EvergreenForest_Entrance/MasterZhenFirstMeeting",
+ "name": "MasterZhenFirstMeeting",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Master Zhen"
+ ],
+ "roots": [
+  604306852,
+  1667439346,
+  -1817689168,
+  1290168361,
+  -920439826,
+  -1006217798,
+  1645068643,
+  -1246530849,
+  1231800517,
+  -1342507096,
+  -1254963323,
+  -632148219
+ ],
+ "nodes": {
+  "604306852": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Lost, meiguo ren? This is no place for wandering fools.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1667439346": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Another dumb American, stumbling around like a drunk monkey. Do you even know where you are?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1817689168": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1211847308,
+    1498100075,
+    -835010591
+   ],
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Go. You have no business here.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1211847308": {
+   "kind": "text",
+   "parent": -1817689168,
+   "children": [
+    -2048471986,
+    208328908
+   ],
+   "actor": null,
+   "text": "I’m sorry. I didn’t mean to intrude. I was just… drawn here somehow.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1498100075": {
+   "kind": "text",
+   "parent": -1817689168,
+   "children": [
+    1849223364,
+    -1580953394,
+    1387977758
+   ],
+   "actor": null,
+   "text": "Who are you calling dumb? I’m not just some lost tourist.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-835010591": {
+   "kind": "text",
+   "parent": -1817689168,
+   "children": [
+    880340522,
+    -716631578
+   ],
+   "actor": null,
+   "text": "No one’s been here in centuries? What’s so special about this place?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2048471986": {
+   "kind": "text",
+   "parent": -1211847308,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Drawn here? Nonsense. You expect me to believe you wandered through one of the deadliest forests by accident?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1849223364": {
+   "kind": "text",
+   "parent": 1498100075,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Ah, so the monkey has a voice. Listen, little American—I have trained warriors who would crush you like an insect. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "880340522": {
+   "kind": "text",
+   "parent": -835010591,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Hmph. Curiosity is dangerous. This forest is more than it appears. It’s protected, hidden by ancient rites and guarded by me. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "208328908": {
+   "kind": "text",
+   "parent": -1211847308,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Unless you’re carrying something of value, leave. You are wasting my time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1580953394": {
+   "kind": "text",
+   "parent": 1498100075,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Do not presume to speak to me with such arrogance.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1387977758": {
+   "kind": "text",
+   "parent": 1498100075,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Prove your worth, if you think you have any. Otherwise, go back to wherever you came from.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-716631578": {
+   "kind": "text",
+   "parent": -835010591,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "None find it unless they are meant to...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1290168361": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1517746190,
+    -266820297,
+    -38712025,
+    -1546227303
+   ],
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Now go, while you still have the chance.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1517746190": {
+   "kind": "text",
+   "parent": 1290168361,
+   "actor": null,
+   "text": "The blade that seeks not power, but balance, shall awaken the storm that sleeps within the hollow mountain…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-266820297": {
+   "kind": "text",
+   "parent": 1290168361,
+   "actor": null,
+   "text": "The blade that seeks not power, but balance, shall awaken the storm that sleeps within the hollow mountain…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-38712025": {
+   "kind": "text",
+   "parent": 1290168361,
+   "actor": null,
+   "text": "The blade that seeks not power, but balance, shall awaken the storm that sleeps within the hollow mountain…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1546227303": {
+   "kind": "text",
+   "parent": 1290168361,
+   "actor": null,
+   "text": "The blade that seeks not power, but balance, shall awaken the storm that sleeps within the hollow mountain…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-920439826": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1394427840,
+    1996256736
+   ],
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "…What did you just say?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1394427840": {
+   "kind": "text",
+   "parent": -920439826,
+   "actor": null,
+   "text": "I... I don't know...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1996256736": {
+   "kind": "text",
+   "parent": -920439826,
+   "actor": null,
+   "text": "I didn't say anything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1006217798": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "How do you know these words?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1645068643": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1941777060,
+    863855282,
+    -243955064
+   ],
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "…Those words… they’re from an ancient prophecy.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1246530849": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": " One that speaks of a storm that will shatter the peace of this world, but also of the blade that will bring order amidst the chaos.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1231800517": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Perhaps… I was wrong. Perhaps you are not just another foolish American. The path you walk may be one guided by fate.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1342507096": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Fine. I will teach you. Not because I want to, but because I must. The prophecy is clear",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1254963323": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -297815425,
+    -1629757056,
+    881623768
+   ],
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "But know this—I will break you before I build you back up. If you survive… then perhaps you’re more than just a dumb foreigner.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-297815425": {
+   "kind": "text",
+   "parent": -1254963323,
+   "children": [
+    179349106
+   ],
+   "actor": null,
+   "text": "Thank you, Master. I won’t let you down.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "179349106": {
+   "kind": "text",
+   "parent": -297815425,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "We shall see. Many have spoken those words, but few have proven them. Prepare yourself, and perhaps one day, I will believe you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1629757056": {
+   "kind": "text",
+   "parent": -1254963323,
+   "children": [
+    733313867,
+    -945360326
+   ],
+   "actor": null,
+   "text": "I’ll survive whatever you throw at me. I’m not afraid.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "733313867": {
+   "kind": "text",
+   "parent": -1629757056,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Hmph. Confidence is good. But it’s also the first thing I will strip from you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "881623768": {
+   "kind": "text",
+   "parent": -1254963323,
+   "children": [
+    -1493092992,
+    376495490
+   ],
+   "actor": null,
+   "text": "You are crazy, old man.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1493092992": {
+   "kind": "text",
+   "parent": 881623768,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "You question me, but you speak words that haven’t been uttered for over a thousand years. Words that only those bound by fate can know. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-945360326": {
+   "kind": "text",
+   "parent": -1629757056,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "By the time I’m done, you will have no choice but to rebuild yourself—if you can.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "376495490": {
+   "kind": "text",
+   "parent": 881623768,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Perhaps I am a fool for believing… but I will not take chances.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-632148219": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Come. You will learn—or die trying. Fate cares not for your doubts.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1941777060": {
+   "kind": "text",
+   "parent": 1645068643,
+   "actor": null,
+   "text": "What do they mean?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "863855282": {
+   "kind": "text",
+   "parent": 1645068643,
+   "actor": null,
+   "text": "I think I'm having an aneurysm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-243955064": {
+   "kind": "text",
+   "parent": 1645068643,
+   "actor": null,
+   "text": "And that's my clue to leave.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/EvergreenForest_Entrance",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play MasterZhenFirstMeeting and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[masterzhen-met] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "masterzhen-met",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Master_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Master_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Master_Default"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Master_Default/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[masterzhen-met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "masterzhen-met",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,445 @@
+{
+ "id": "8_Core_Events/Trips/ChurchVisit/FirstGot",
+ "name": "FirstGot",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Alice",
+  "Anna",
+  "Josef",
+  "V_Samuel"
+ ],
+ "roots": [
+  -574895753,
+  -1539599950,
+  447923078,
+  309331787,
+  2144113383,
+  -981294695,
+  -2122242064,
+  1340952999,
+  1829916312,
+  1194243932,
+  99028207,
+  1128808086,
+  334462573,
+  -731787190
+ ],
+ "nodes": {
+  "-574895753": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Samuel",
+   "expressionName": "my-expression",
+   "text": "Josef.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamuelMalePastor_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamuelMalePastor_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/SamuelMalePastor_Bust"
+      }
+     }
+    }
+   ]
+  },
+  "99028207": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "We'll be waiting in the car.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Red_Pullover/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 3 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 3
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "334462573": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Huh? Hi.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AliceDress/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1128808086": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Um... Hi...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceDress to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceDress",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AliceDress"
+      }
+     }
+    }
+   ]
+  },
+  "-731787190": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Woah...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 3 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 3
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "1194243932": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Well, that was lovely.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1539599950": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Samuel",
+   "expressionName": "my-expression",
+   "text": "I saw the news. How are you holding up, brother?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "447923078": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Trying to keep it together, Samuel. It’s been… rough. Not just for me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "309331787": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Samuel",
+   "expressionName": "my-expression",
+   "text": "I can imagine. Losing a position like that... especially the way it happened, would shake anyone.\nBut you're not alone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2144113383": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -401233384,
+    1980657666,
+    -1604634051
+   ],
+   "actor": "V_Samuel",
+   "expressionName": "my-expression",
+   "text": "Your {F}'s strong. But even the strongest need help sometimes.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-401233384": {
+   "kind": "text",
+   "parent": 2144113383,
+   "children": [
+    -1454469563
+   ],
+   "actor": null,
+   "text": "Thanks, Samuel. That means a lot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1980657666": {
+   "kind": "text",
+   "parent": 2144113383,
+   "children": [
+    -776595107
+   ],
+   "actor": null,
+   "text": "Are you offering something specific?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-776595107": {
+   "kind": "text",
+   "parent": 1980657666,
+   "actor": "V_Samuel",
+   "expressionName": "my-expression",
+   "text": "I mean it in every sense. Practical or spiritual. If things get tight, come see me. We'll find a way. Pride won’t put food on the table.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1454469563": {
+   "kind": "text",
+   "parent": -401233384,
+   "actor": "V_Samuel",
+   "expressionName": "my-expression",
+   "text": "Of course. My door is always open, whether you need guidance, someone to talk to, or just a quiet place to breathe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1604634051": {
+   "kind": "text",
+   "parent": 2144113383,
+   "children": [
+    -987643285
+   ],
+   "actor": null,
+   "text": "We don’t need charity.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-987643285": {
+   "kind": "text",
+   "parent": -1604634051,
+   "actor": "V_Samuel",
+   "expressionName": "my-expression",
+   "text": "This isn’t charity, son. This is what community looks like. I’m not here to save you, I’m here to remind you that you don’t have to fight alone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-981294695": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Samuel",
+   "expressionName": "my-expression",
+   "text": "Whatever happens next, don’t shut people out. And don’t wait until it’s too late to ask for help.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2122242064": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Samuel",
+   "expressionName": "my-expression",
+   "text": "Pride's a heavy chain. You don’t need to carry it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1340952999": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thank you, Samuel.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1829916312": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Samuel",
+   "expressionName": "my-expression",
+   "text": "Be safe, all of you. And if you need me, you know where I’ll be.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/SamuelMalePastor_Bust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Trips/ChurchVisit",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play FirstGot and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events[church-visits] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "church-visits",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

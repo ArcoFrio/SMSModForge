@@ -1,0 +1,448 @@
+{
+ "id": "8_Room_Talk/Basement/Unique/TechnicianVisitOne",
+ "name": "TechnicianVisitOne",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "V_Technician"
+ ],
+ "roots": [
+  -938395628,
+  -910742074,
+  -1115756316,
+  1408188163,
+  438303588,
+  1630824799,
+  -421252276,
+  1939782919,
+  -1352505120
+ ],
+ "nodes": {
+  "-910742074": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Technician",
+   "expressionName": "my-expression",
+   "text": "Between permits, logistics, and the work itself, there’s no way to speed that up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1115756316": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Three months?! I can’t wait that long. The Wi-Fi signal is terrible down here. It’s way too slow for livestreaming.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "1408188163": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Technician",
+   "expressionName": "my-expression",
+   "text": "Yeah, basements are tricky for Wi-Fi. Thick walls, concrete... You’re just not getting a strong signal. Sorry, but that’s the reality.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "438303588": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Ugh, this is ridiculous. Thanks for nothing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Technician/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1630824799": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Three months. Can you believe that? By then, Celeste will probably have her own reality show. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-421252276": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1229774887,
+    -541529996
+   ],
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I can’t wait that long—I need to figure this out now.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-938395628": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Technician",
+   "expressionName": "my-expression",
+   "text": "So, here’s the deal. Running dedicated internet cables down to this basement studio? It’s gonna take at least three months. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1229774887": {
+   "kind": "text",
+   "parent": -421252276,
+   "children": [
+    1719480559
+   ],
+   "actor": null,
+   "text": "Okay, so what’s the plan?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-541529996": {
+   "kind": "text",
+   "parent": -421252276,
+   "children": [
+    1836714316,
+    -1480157953,
+    1775155097
+   ],
+   "actor": null,
+   "text": "We've got money. We should just wait three months.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1719480559": {
+   "kind": "text",
+   "parent": -1229774887,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You’re my plan.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1836714316": {
+   "kind": "text",
+   "parent": -541529996,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Wait? Three months?! Are you kidding me? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active WhiteFlashOnEnable to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "WhiteFlashOnEnable",
+       "of": "GetGameObjectInstance",
+       "path": "6_Effects/Effect_Canvas/WhiteFlashOnEnable"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 0_AnnaChokesYou to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "0_AnnaChokesYou",
+       "of": "GetGameObjectInstance",
+       "path": "SpecialBusts/0_AnnaChokesYou"
+      }
+     }
+    },
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "1939782919": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You’re good with this tech stuff, right? Find me a solution that’s faster. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionQuestsActivate",
+     "title": "Activate Going Live (Anna)",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Going Live (Anna)",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-1352505120": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I don’t care if it’s expensive or crazy. Just... Make it happen.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1480157953": {
+   "kind": "text",
+   "parent": -541529996,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "By then, Celeste will have half of my potential audience eating out of her hand!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1775155097": {
+   "kind": "text",
+   "parent": -541529996,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "No! I’ve waited long enough. I’m not going to sit around while someone else takes everything I’ve worked for. Find another way, and make it fast!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active WhiteFlashOnEnable to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "WhiteFlashOnEnable",
+       "of": "GetGameObjectInstance",
+       "path": "6_Effects/Effect_Canvas/WhiteFlashOnEnable"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 0_AnnaChokesYou to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "0_AnnaChokesYou",
+       "of": "GetGameObjectInstance",
+       "path": "SpecialBusts/0_AnnaChokesYou"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Basement",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play TechnicianVisitOne and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_7[prisme-story] = 6",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "prisme-story",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 6
+       }
+      }
+     }
+    }
+   ],
+   "branches": [
+    "technician"
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_Technician to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_Technician",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Technician"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_7[prisme-story] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "prisme-story",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1391 @@
+{
+ "id": "8_Room_Talk/Katehome/Katedefault2",
+ "name": "Katedefault2",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Kate"
+ ],
+ "roots": [
+  -1795500137
+ ],
+ "nodes": {
+  "-1795500137": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1558374545,
+    1866590750,
+    2090696317,
+    -1562706566
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Oh, cool, you made it! There’s some Coke and chips on the table if you want some.",
+   "tag": "root",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1558374545": {
+   "kind": "text",
+   "parent": -1795500137,
+   "children": [
+    1337384274,
+    550054107,
+    -715545753,
+    -118440343,
+    1729623474,
+    -1054926860,
+    1084829156,
+    1847000300,
+    -972221125,
+    -1588718694,
+    -197949301,
+    577502516,
+    416404054,
+    542371805,
+    1682132146,
+    -1351905672,
+    1808381235
+   ],
+   "actor": null,
+   "text": "So, wanna do something?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[kate-sex-declined] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-sex-declined",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1866590750": {
+   "kind": "text",
+   "parent": -1795500137,
+   "children": [
+    618198701
+   ],
+   "actor": null,
+   "text": "How's your day been?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2090696317": {
+   "kind": "text",
+   "parent": -1795500137,
+   "children": [
+    809863664
+   ],
+   "actor": null,
+   "text": "You look cute.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1562706566": {
+   "kind": "text",
+   "parent": -1795500137,
+   "children": [
+    835198482
+   ],
+   "actor": null,
+   "text": "I'll see you around, Kate.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "618198701": {
+   "kind": "text",
+   "parent": 1866590750,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Meh. I've been wasting the whole day watching anime and eating way too many snacks.",
+   "jump": {
+    "mode": "Jump",
+    "to": "root"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "809863664": {
+   "kind": "text",
+   "parent": 2090696317,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "T-Thanks.... My AC is busted, so I'm wearing a bit less today...",
+   "jump": {
+    "mode": "Jump",
+    "to": "root"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "835198482": {
+   "kind": "text",
+   "parent": -1562706566,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Don't be a stranger...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1337384274": {
+   "kind": "text",
+   "parent": 1558374545,
+   "children": [
+    -1457610697,
+    1960661100,
+    1607127793,
+    1520814021,
+    587641007,
+    -943494676,
+    937195113
+   ],
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yeah, we could watch Netflix or something. But first, I have a question for you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[kate-fucked] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-fucked",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1457610697": {
+   "kind": "choice",
+   "parent": 1337384274,
+   "children": [
+    -1165411387,
+    2098888212,
+    1952766795
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "So, um... do you want to know why I was so tense during our first photoshoot?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1165411387": {
+   "kind": "text",
+   "parent": -1457610697,
+   "children": [
+    -1154641212
+   ],
+   "actor": null,
+   "text": "Cause you are shy?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2098888212": {
+   "kind": "text",
+   "parent": -1457610697,
+   "children": [
+    -1599803380
+   ],
+   "actor": null,
+   "text": "Cause you were hungry?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1952766795": {
+   "kind": "text",
+   "parent": -1457610697,
+   "children": [
+    -1424214642
+   ],
+   "actor": null,
+   "text": "Cause you like me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1599803380": {
+   "kind": "text",
+   "parent": 2098888212,
+   "actor": "Kate",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "No... I mean yes, but no... It’s because I like you, you dork.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1154641212": {
+   "kind": "text",
+   "parent": -1165411387,
+   "actor": "Kate",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "No... I mean yes, but no... It’s because I like you, you dork.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1424214642": {
+   "kind": "text",
+   "parent": 1952766795,
+   "actor": "Kate",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Y-Yes, you dork.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-943494676": {
+   "kind": "choice",
+   "parent": 1337384274,
+   "children": [
+    -1771211450,
+    1723615603,
+    749895312
+   ],
+   "actor": "Kate",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I know it sounds childish, but I've been stuck in a life I hate. I always dreamed of a prince coming in and rescuing me from it...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1771211450": {
+   "kind": "text",
+   "parent": -943494676,
+   "children": [
+    -1546579059
+   ],
+   "actor": null,
+   "text": "I like you too.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1723615603": {
+   "kind": "text",
+   "parent": -943494676,
+   "children": [
+    447972569
+   ],
+   "actor": null,
+   "text": "[Kiss Kate]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "749895312": {
+   "kind": "text",
+   "parent": -943494676,
+   "children": [
+    711321151
+   ],
+   "actor": null,
+   "text": "I'm sorry, but I don't feel that way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "711321151": {
+   "kind": "text",
+   "parent": 749895312,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I thought so.... Don't worry, as I said. I know it's childish...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[kate-sex-declined] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-sex-declined",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "447972569": {
+   "kind": "text",
+   "parent": 1723615603,
+   "actor": "Kate",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Woah...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'kiss'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "kiss"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "-1546579059": {
+   "kind": "text",
+   "parent": -1771211450,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You do? ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1960661100": {
+   "kind": "choice",
+   "parent": 1337384274,
+   "children": [
+    -1950025883,
+    -559570942,
+    1902009579
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "You really don't remember me, huh? We were in the same class. I know it was a long time ago, but I still remember you.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1950025883": {
+   "kind": "text",
+   "parent": 1960661100,
+   "children": [
+    1790451458
+   ],
+   "actor": null,
+   "text": "I'm sorry... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-559570942": {
+   "kind": "text",
+   "parent": 1960661100,
+   "children": [
+    -1630984554
+   ],
+   "actor": null,
+   "text": "Are you sure?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1902009579": {
+   "kind": "text",
+   "parent": 1960661100,
+   "children": [
+    824781357
+   ],
+   "actor": null,
+   "text": "Wait, didn’t you have dark hair back then?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1790451458": {
+   "kind": "text",
+   "parent": -1950025883,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "It's fine, {PC}. It's been so long ago...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1630984554": {
+   "kind": "text",
+   "parent": -559570942,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "You invited me to one of your birthday parties once. That day probably meant more to me than it did to you... I was getting bullied really badly back then.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "824781357": {
+   "kind": "text",
+   "parent": 1902009579,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Yeah, after I got bullied, I started dyeing it... It was just a few years ago that I stopped.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1607127793": {
+   "kind": "text",
+   "parent": 1337384274,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "So, when I saw you roll up to the mall in that fancy car and heard from coworkers that you lived in one of the swankiest areas... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1520814021": {
+   "kind": "text",
+   "parent": 1337384274,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "It really shook me. It totally wrecked my confidence.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "587641007": {
+   "kind": "text",
+   "parent": 1337384274,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "And I know, it's not your fault... It's just...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "937195113": {
+   "kind": "text",
+   "parent": 1337384274,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "I... I've never had a boyfriend before... But if you like...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "550054107": {
+   "kind": "choice",
+   "parent": 1558374545,
+   "children": [
+    263372013,
+    527642299
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "I'd really like you...  to claim me...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[kate-claimed] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-claimed",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "263372013": {
+   "kind": "text",
+   "parent": 550054107,
+   "actor": null,
+   "text": "[Claim her]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "527642299": {
+   "kind": "text",
+   "parent": 550054107,
+   "children": [
+    -777024809
+   ],
+   "actor": null,
+   "text": "I'm sorry, I'm not attracted to you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-777024809": {
+   "kind": "text",
+   "parent": 527642299,
+   "actor": "Kate",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "You are... What, but you just said... I thought... Please leave, I want to be alone now.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[kate-sex-declined] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-sex-declined",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-118440343": {
+   "kind": "text",
+   "parent": 1558374545,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done_2[kate-fucked] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-fucked",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active katelove to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "katelove",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/katelove"
+      }
+     }
+    }
+   ]
+  },
+  "1729623474": {
+   "kind": "text",
+   "parent": 1558374545,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Oh my god, your cock is massive!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1054926860": {
+   "kind": "text",
+   "parent": 1558374545,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "C-Can I ride it? I want to ride it... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[kate-claimed] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-claimed",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1847000300": {
+   "kind": "text",
+   "parent": 1558374545,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active katelove (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "katelove (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/katelove (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-972221125": {
+   "kind": "text",
+   "parent": 1558374545,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "T-This is way better than riding a dildo!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[kate-claimed] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-claimed",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-197949301": {
+   "kind": "text",
+   "parent": 1558374545,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "O-Oh fhuuacck! This is incredible! Y-You are incredible!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "416404054": {
+   "kind": "text",
+   "parent": 1558374545,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active katelove (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "katelove (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/katelove (2)"
+      }
+     }
+    }
+   ]
+  },
+  "542371805": {
+   "kind": "text",
+   "parent": 1558374545,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Oh god, this is going to knock me up! I'm close, {PC}... I'm ... I'm cumming!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1682132146": {
+   "kind": "text",
+   "parent": 1558374545,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Fhuaaaack!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "577502516": {
+   "kind": "text",
+   "parent": 1558374545,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "P-Please fill me up! I... I want t-this... I want y-you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1351905672": {
+   "kind": "choice",
+   "parent": 1558374545,
+   "children": [
+    -234793753,
+    -320120559,
+    -1954446122,
+    -375905226
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "That was incredible...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-234793753": {
+   "kind": "text",
+   "parent": -1351905672,
+   "children": [
+    2002014974
+   ],
+   "actor": null,
+   "text": "You are incredible...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-320120559": {
+   "kind": "text",
+   "parent": -1351905672,
+   "children": [
+    89665455
+   ],
+   "actor": null,
+   "text": "Where did you learn all that?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1954446122": {
+   "kind": "text",
+   "parent": -1351905672,
+   "children": [
+    -296246320
+   ],
+   "actor": null,
+   "text": "Not bad for your first time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[kate-fucked] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-fucked",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "89665455": {
+   "kind": "text",
+   "parent": -320120559,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "We are almost the same age, {PC}. Yours was my first real dick to ride, but I used sex toys before...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2002014974": {
+   "kind": "text",
+   "parent": -234793753,
+   "actor": "Kate",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "... T-Thanks?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-296246320": {
+   "kind": "text",
+   "parent": -1954446122,
+   "actor": "Kate",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "T-Thanks... I promise I will get better... With some training..",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1808381235": {
+   "kind": "text",
+   "parent": 1558374545,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Let's... Let's chill a bit... I need to catch my breath... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_8[kate-claimed] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-claimed",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-715545753": {
+   "kind": "choice",
+   "parent": 1558374545,
+   "children": [
+    -1227362306,
+    -284277675,
+    371148685
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Can I ride you again? I... I would really like to feel you inside of me again...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[kate-claimed] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-claimed",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1227362306": {
+   "kind": "text",
+   "parent": -715545753,
+   "actor": null,
+   "text": "Of course you can.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-284277675": {
+   "kind": "text",
+   "parent": -715545753,
+   "actor": null,
+   "text": "Hop on, cutie. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "371148685": {
+   "kind": "text",
+   "parent": -715545753,
+   "actor": null,
+   "text": "My cock's all yours, Kate.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1084829156": {
+   "kind": "text",
+   "parent": 1558374545,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Seeing your massive... friend. It... It makes my head spin... Fuck, {PC}. Let's... Let's do it... Together...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[kate-claimed] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-claimed",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1588718694": {
+   "kind": "text",
+   "parent": 1558374545,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "F-Fuck... This is way better than any toy... This is the real shit... Yes~ K-Keep going!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[kate-claimed] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-claimed",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-375905226": {
+   "kind": "text",
+   "parent": -1351905672,
+   "children": [
+    -408560400
+   ],
+   "actor": null,
+   "text": "This was even better than last time...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[kate-fucked] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-fucked",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-408560400": {
+   "kind": "text",
+   "parent": -375905226,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Big agree, bro. This was so good, my legs are pudding!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Katehome",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Katedefault2 and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[kate-hang-enabled] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-hang-enabled",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KateUndies to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KateUndies",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/KateUndies"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

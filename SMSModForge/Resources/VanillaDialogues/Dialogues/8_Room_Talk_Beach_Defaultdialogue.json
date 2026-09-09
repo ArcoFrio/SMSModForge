@@ -1,0 +1,961 @@
+{
+ "id": "8_Room_Talk/Beach/Defaultdialogue",
+ "name": "Defaultdialogue",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Samantha"
+ ],
+ "roots": [
+  -1947903755,
+  1305324960,
+  448393253,
+  -839084414
+ ],
+ "nodes": {
+  "-1947903755": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Hey, {PC}. I'm glad you could make it. Let's find a nice spot to relax.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1305324960": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    2012093939,
+    -792641169,
+    -881910118
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "So... Really nice weather today, huh?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Samanthabeach to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Samanthabeach",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Samanthabeach"
+      }
+     }
+    }
+   ]
+  },
+  "2012093939": {
+   "kind": "text",
+   "parent": 1305324960,
+   "children": [
+    783427626,
+    1576530913
+   ],
+   "actor": null,
+   "text": "How about a photo?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-792641169": {
+   "kind": "text",
+   "parent": 1305324960,
+   "children": [
+    -2145492326,
+    -209057626,
+    538473784,
+    1434152448,
+    -2124727620,
+    332398778,
+    892341223
+   ],
+   "actor": null,
+   "text": "I've got some body oil here...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Inventory[Body-Oil] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Body-Oil",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-881910118": {
+   "kind": "text",
+   "parent": 1305324960,
+   "children": [
+    1274964148,
+    -1322554769
+   ],
+   "actor": null,
+   "text": "Yeah. Let's relax and sunbathe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1274964148": {
+   "kind": "text",
+   "parent": -881910118,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "That sounds great!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1322554769": {
+   "kind": "text",
+   "parent": -881910118,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    }
+   ]
+  },
+  "-2145492326": {
+   "kind": "text",
+   "parent": -792641169,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "That's a great idea, sweetie! I've been struggling to get a tan, so I'm really excited to try this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Inventory[Body-Oil] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Body-Oil",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[samantha-seduction] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-seduction",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-209057626": {
+   "kind": "text",
+   "parent": -792641169,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "I'd love your help with this! I'm not as flexible as I used to be, bless my heart.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "538473784": {
+   "kind": "text",
+   "parent": -792641169,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "O-Oh... Mhmm... That feels quite... lovely...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Samanthabeach (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Samanthabeach (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Samanthabeach (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1434152448": {
+   "kind": "text",
+   "parent": -792641169,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Make sure you cover every inch of my body... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2124727620": {
+   "kind": "text",
+   "parent": -792641169,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "T-That should do nicely... Let me turn around...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "332398778": {
+   "kind": "choice",
+   "parent": -792641169,
+   "children": [
+    -1951958239,
+    1150038649
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "You're a sweet young man, Ken could really learn a thing or two from you.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Samanthabeach (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Samanthabeach (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Samanthabeach (2)"
+      }
+     }
+    }
+   ]
+  },
+  "892341223": {
+   "kind": "text",
+   "parent": -792641169,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "That should do... Thank you, sweetie. That was quite... fun...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1951958239": {
+   "kind": "text",
+   "parent": 332398778,
+   "children": [
+    1383904901
+   ],
+   "actor": null,
+   "text": "[Gently apply the body oil]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1150038649": {
+   "kind": "text",
+   "parent": 332398778,
+   "children": [
+    -282615531
+   ],
+   "actor": null,
+   "text": "[Massage her butt cheeks]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1383904901": {
+   "kind": "text",
+   "parent": -1951958239,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "That feels nice... After this I'll take a nice long nap in the sun...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-282615531": {
+   "kind": "text",
+   "parent": 1150038649,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Oh... Mhmm... That feels good... You're really good at this...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "783427626": {
+   "kind": "text",
+   "parent": 2012093939,
+   "actor": "Samantha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yes! How exciting... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[samantha-seduction] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-seduction",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done_2[samantha-photo-1] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-photo-1",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1576530913": {
+   "kind": "choice",
+   "parent": 2012093939,
+   "children": [
+    1605430599,
+    591980607,
+    -1653648044
+   ],
+   "actor": "Samantha",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "You're the expert here, tell me what to do!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1605430599": {
+   "kind": "text",
+   "parent": 1576530913,
+   "children": [
+    -957964753,
+    1138971344,
+    -1761975822
+   ],
+   "actor": null,
+   "text": "Turn around, show me your goods.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "591980607": {
+   "kind": "text",
+   "parent": 1576530913,
+   "children": [
+    -128125303,
+    -415222317,
+    1654895218
+   ],
+   "actor": null,
+   "text": "Let's go for a close up. Smile.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1653648044": {
+   "kind": "text",
+   "parent": 1576530913,
+   "children": [
+    -1447742634,
+    2069163346,
+    -240138066
+   ],
+   "actor": null,
+   "text": "Lie down, show me your tits.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[samantha-seduction] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-seduction",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1447742634": {
+   "kind": "text",
+   "parent": -1653648044,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "I... I can do that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-128125303": {
+   "kind": "text",
+   "parent": 591980607,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Can do...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-957964753": {
+   "kind": "text",
+   "parent": 1605430599,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "My goods... Hihi... Sure...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1761975822": {
+   "kind": "text",
+   "parent": 1605430599,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Wow... You're really good at this... I look like one of those Starmaker Girls...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1654895218": {
+   "kind": "text",
+   "parent": 591980607,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Is that really me? I look so different... In a good way...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2069163346": {
+   "kind": "text",
+   "parent": -1653648044,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active samanthabeachphoto (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "samanthabeachphoto (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/samanthabeachphoto (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-240138066": {
+   "kind": "text",
+   "parent": -1653648044,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "I hope you like them...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-415222317": {
+   "kind": "text",
+   "parent": 591980607,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active samanthabeachphoto (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "samanthabeachphoto (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/samanthabeachphoto (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1138971344": {
+   "kind": "text",
+   "parent": 1605430599,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active samanthabeachphoto to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "samanthabeachphoto",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/samanthabeachphoto"
+      }
+     }
+    }
+   ]
+  },
+  "448393253": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Ah, that was really nice. Thank you for joining me, sweetie.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-839084414": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Make sure to visit us, when you got the time...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[samantha-seduction] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-seduction",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Break through her walls and earn her trust.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Lonely (Samantha)",
+        "of": "Quest"
+       },
+       "m_TaskId": 1813187919
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Beach",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Defaultdialogue and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[samantha-beach-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-beach-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[samantha-beach-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-beach-activated",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Samantha_Swimsuit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Samantha_Swimsuit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Samantha_Swimsuit"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Samantha_Swimsuit/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[samantha-beach-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-beach-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,916 @@
+{
+ "id": "8_Room_Talk/Club/RoxyDefaultClubtalk",
+ "name": "RoxyDefaultClubtalk",
+ "index": 5,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Roxy"
+ ],
+ "roots": [
+  1841419690,
+  -1413147332,
+  -853193074
+ ],
+ "nodes": {
+  "1841419690": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Look who's back... You're here for some fun, cutie?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[roxy-met] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "roxy-met",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1413147332": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1325706949
+   ],
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Oh my... Young, tall and strong. You're quite the package, huh? Tell me, how can I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[roxy-met] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "roxy-met",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-853193074": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -569414427,
+    -61725342
+   ],
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "So, what do you say? $500 and I'm all yours...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-569414427": {
+   "kind": "text",
+   "parent": -853193074,
+   "children": [
+    -2094235634,
+    -1199115116,
+    852065837,
+    -1281043537
+   ],
+   "actor": null,
+   "text": "Let's go somewhere private. ($500)",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 500",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 500
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-61725342": {
+   "kind": "text",
+   "parent": -853193074,
+   "children": [
+    -788331066
+   ],
+   "actor": null,
+   "text": "I'm good, thanks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-788331066": {
+   "kind": "text",
+   "parent": -61725342,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Pah. Your loss...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2094235634": {
+   "kind": "text",
+   "parent": -569414427,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Mmmm... Follow me, tiger....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -500",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -500
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_7[Roxy-Banged] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Roxy-Banged",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1199115116": {
+   "kind": "text",
+   "parent": -569414427,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 33_Club to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "33_Club",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/33_Club"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 34_PublicToilet to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "34_PublicToilet",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/34_PublicToilet"
+      }
+     }
+    }
+   ]
+  },
+  "-1281043537": {
+   "kind": "choice",
+   "parent": -569414427,
+   "children": [
+    112602543,
+    -1083433970,
+    -443589907
+   ],
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "So, what will it be... Wanna pound my backdoor? Or would you prefer busting a load between my tits?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "112602543": {
+   "kind": "text",
+   "parent": -1281043537,
+   "children": [
+    291064903,
+    131181307,
+    -1000935146,
+    -954912805,
+    -908617849,
+    -595187994,
+    -986830082,
+    -2144719343
+   ],
+   "actor": null,
+   "text": "Let me see that ass.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "852065837": {
+   "kind": "text",
+   "parent": -569414427,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "There we are...",
+   "tag": "roxythereweare",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 0_Drive to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "0_Drive",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator/MapButtons/0_Drive"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 33_Club to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "33_Club",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator/MapButtons/33_Club"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 34_PublicToilet to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "34_PublicToilet",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator/MapButtons/34_PublicToilet"
+      }
+     }
+    }
+   ]
+  },
+  "291064903": {
+   "kind": "text",
+   "parent": 112602543,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Mmm... Easy enough...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1083433970": {
+   "kind": "text",
+   "parent": -1281043537,
+   "children": [
+    -763037753,
+    1611051826,
+    813340380,
+    48185660,
+    -1633935619,
+    1394189322,
+    1159147872,
+    -2135236389,
+    687980462,
+    -1141181006
+   ],
+   "actor": null,
+   "text": "Unpack your tits for me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-763037753": {
+   "kind": "text",
+   "parent": -1083433970,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Let's see then...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-443589907": {
+   "kind": "text",
+   "parent": -1281043537,
+   "children": [
+    -175736618
+   ],
+   "actor": null,
+   "text": "What about your pussy?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-175736618": {
+   "kind": "text",
+   "parent": -443589907,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Sorry, cutie. But I'm a good girl. My slit's off the table.",
+   "jump": {
+    "mode": "Jump",
+    "to": "roxythereweare"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1611051826": {
+   "kind": "text",
+   "parent": -1083433970,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Fuck, are you a porn actor or something...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active RoxyPay (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "RoxyPay (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/RoxyPay (1)"
+      }
+     }
+    }
+   ]
+  },
+  "813340380": {
+   "kind": "text",
+   "parent": -1083433970,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "I appreciate you taking care of your body, dude... So much more fun...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "48185660": {
+   "kind": "text",
+   "parent": -1083433970,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Mmmm... Lemme get a goooood lick!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active RoxyPay (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "RoxyPay (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/RoxyPay (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1633935619": {
+   "kind": "text",
+   "parent": -1083433970,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Mmpaah! *Shhlluuuurp* .... Mwuaaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1394189322": {
+   "kind": "text",
+   "parent": -1083433970,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Mmmiiii caahnn feeel it... You're close! ... Muwwaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2135236389": {
+   "kind": "text",
+   "parent": -1083433970,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Jesus christ, bro! It doesn't stop! Bwahaha!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "131181307": {
+   "kind": "text",
+   "parent": 112602543,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Shit, you're packing, bro. Your pussywrecker is massive!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active RoxyPayAnal (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "RoxyPayAnal (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/RoxyPayAnal (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1000935146": {
+   "kind": "text",
+   "parent": 112602543,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Can't wait to feel that monster destroy me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-954912805": {
+   "kind": "text",
+   "parent": 112602543,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Let's... Y-Yeah... Just like that... Keep it hard, dude!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active RoxyPayAnal (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "RoxyPayAnal (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/RoxyPayAnal (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-908617849": {
+   "kind": "text",
+   "parent": 112602543,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Fuck me, I might even cum from this freak cock... Fuck....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-595187994": {
+   "kind": "text",
+   "parent": 112602543,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Y-Yeah... Just like that... Fuck.. Pound my ass!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active RoxyPayAnal (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "RoxyPayAnal (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/RoxyPayAnal (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-986830082": {
+   "kind": "text",
+   "parent": 112602543,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "I'm... Keep at it, dude! I'm so fucking close! That's it... Yes! YES! FUCK!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2144719343": {
+   "kind": "text",
+   "parent": 112602543,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Fuck, bro. Your cock's like fucking gold. I hope you visit me again... Might even give you a discount.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1159147872": {
+   "kind": "text",
+   "parent": -1083433970,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "T-There we go! Cum fountain! Yisssss!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active RoxyPay (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "RoxyPay (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/RoxyPay (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1325706949": {
+   "kind": "text",
+   "parent": -1413147332,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Wait, don't tell me. I can see it in your eyes. You want a piece of Roxy' ass, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[roxy-met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "roxy-met",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "687980462": {
+   "kind": "text",
+   "parent": -1083433970,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Damn, what a show... Hope you liked it too.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active RoxyPay (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "RoxyPay (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/RoxyPay (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active RoxyPay (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "RoxyPay (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/RoxyPay (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1141181006": {
+   "kind": "text",
+   "parent": -1083433970,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Gimme another visit, will ya? With a cock like yours there's lots of fun to be had! See ya!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Club/ClubConditions",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play RoxyDefaultClubtalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Roxy_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Roxy_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Roxy_Default"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

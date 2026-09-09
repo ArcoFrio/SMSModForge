@@ -1,0 +1,443 @@
+{
+ "id": "8_Core_Events/Trips/Hiking/BIndividual",
+ "name": "BIndividual",
+ "index": 5,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "You"
+ ],
+ "roots": [
+  -1008694710,
+  1993322081,
+  -1436414309
+ ],
+ "nodes": {
+  "-1008694710": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Hey Adrian, let’s catch up a bit.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1993322081": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2146194675,
+    1008858734,
+    -1963669032,
+    1086959956
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Sure, {PC}. If you don't mind me picking up some firewood in the meantime.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2146194675": {
+   "kind": "text",
+   "parent": 1993322081,
+   "children": [
+    755258133,
+    -755954637
+   ],
+   "actor": null,
+   "text": "So, how's life going? What are your plans for the future?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1008858734": {
+   "kind": "text",
+   "parent": 1993322081,
+   "children": [
+    1382922952,
+    -1808512674
+   ],
+   "actor": null,
+   "text": "You know that I'm always there for you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1963669032": {
+   "kind": "text",
+   "parent": 1993322081,
+   "children": [
+    1030336074,
+    -1632928628,
+    1290190986,
+    -1490133532
+   ],
+   "actor": null,
+   "text": "Anyone special in your life?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1436414309": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "That should be enough firewood. Let's go back to {M} and {D}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "755258133": {
+   "kind": "text",
+   "parent": -2146194675,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Fuck, I wish people would stop asking me that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1382922952": {
+   "kind": "text",
+   "parent": 1008858734,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I know, man. I know we don't often talk about this shit but like... I'm really glad to have you as my big {B}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[alice-stealing-start] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-stealing-start",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1030336074": {
+   "kind": "text",
+   "parent": -1963669032,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Nah... Not really. Unless you're talking about anime waifus?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[club-enabled] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "club-enabled",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-B-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-B-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1632928628": {
+   "kind": "text",
+   "parent": -1963669032,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Alice is cool, but I have a feeling she doesn't like me that way. I mean, enough to be my girlfriend.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[club-enabled] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "club-enabled",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-755954637": {
+   "kind": "text",
+   "parent": -2146194675,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I think I wanna do something with coding? Some easy office that with lots of free time so I can keep playing my games.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1086959956": {
+   "kind": "text",
+   "parent": 1993322081,
+   "actor": null,
+   "text": "[Just enjoy the silence]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1290190986": {
+   "kind": "text",
+   "parent": -1963669032,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "It would be kinda strange, given that we've both... Well...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[club-enabled] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "club-enabled",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[threesome-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "threesome-done",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1490133532": {
+   "kind": "text",
+   "parent": -1963669032,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "It's wild that {M} lets us use her holes. I'll be honest, I've always had a crush on her. I hope she doesn't change her mind...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-B-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-B-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1808512674": {
+   "kind": "text",
+   "parent": 1008858734,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "You say that and yet you hang with Alice even though you know that I like her... Like, I'm not sure, man....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[alice-stealing-start] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-stealing-start",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Trips/Hiking/Individualtime",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play BIndividual and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_Sport to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_Sport",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_Sport"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

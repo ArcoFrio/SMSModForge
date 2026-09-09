@@ -1,0 +1,1262 @@
+{
+ "id": "8_Room_Talk/C_SubParkRestRoom/eventgloryhole_River",
+ "name": "eventgloryhole_River",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Continue",
+  "River",
+  "S_StrangerFemale",
+  "You"
+ ],
+ "roots": [
+  -540808658
+ ],
+ "nodes": {
+  "-540808658": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1235802309,
+    -2057112867
+   ],
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Huh? Looks like someone's using a toilet...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1235802309": {
+   "kind": "text",
+   "parent": -540808658,
+   "children": [
+    -1168708710,
+    -211225170,
+    -1062355938,
+    -1510130900,
+    933761491,
+    -85467538,
+    -611285609,
+    1843352471,
+    -1377290261,
+    978736487,
+    -906933048,
+    1252569383,
+    1359227699,
+    664249591,
+    -1370876259
+   ],
+   "actor": null,
+   "text": "(Use the gloryhole)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2057112867": {
+   "kind": "text",
+   "parent": -540808658,
+   "children": [
+    1038061790
+   ],
+   "actor": null,
+   "text": "(Give them their privacy)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1038061790": {
+   "kind": "text",
+   "parent": -2057112867,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Yeah, I'm not in the mood for surprises.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1168708710": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ParkRestroom_GloryholeDoor_Closed to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ParkRestroom_GloryholeDoor_Closed",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/129_SubParkRestroom/ParkRestroom_GloryholeDoor_Closed"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Door Close",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Door Close",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    }
+   ]
+  },
+  "-211225170": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "...No way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1062355938": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "That’s… Oh my god. I know that cock...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1510130900": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "This is so hot...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Gloryhole_river (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Gloryhole_river (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Gloryhole_river (0)"
+      }
+     }
+    }
+   ]
+  },
+  "-85467538": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "You knew I’d find you, didn’t you? You’re testing me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-611285609": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "You think I can’t say no to you. You think I’m some cock-hungry mess now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1843352471": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "You're right... Mwuaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Gloryhole_river (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Gloryhole_river (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Gloryhole_river (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1377290261": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Mmm… fuck…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "978736487": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Please... give it to me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-906933048": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Yes! Mwuaah! Mmmmhhmmmm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Gloryhole_river (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Gloryhole_river (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Gloryhole_river (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1252569383": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I knew it. Still the best I’ve ever tasted.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1359227699": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I’m so fucked... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1370876259": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ParkRestroom_GloryholeDoor_Closed to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ParkRestroom_GloryholeDoor_Closed",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/129_SubParkRestroom/ParkRestroom_GloryholeDoor_Closed"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Door Open",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Door Open",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    }
+   ]
+  },
+  "933761491": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "The power of {PC}'s cock... In the palm of my hands...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "664249591": {
+   "kind": "text",
+   "parent": -1235802309,
+   "children": [
+    1846959098,
+    1945270410,
+    -299760192,
+    382947774,
+    -2089714283
+   ],
+   "actor": "S_StrangerFemale",
+   "expressionName": "neutral",
+   "text": "Come on, sweetie. I told you I had something sweet for you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-B-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-B-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[river-slut-route] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-slut-route",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "chance",
+     "type": "ConditionChance",
+     "title": "If 0.5 chance to pass",
+     "fields": {
+      "m_Threshold": {
+       "kind": "value",
+       "value": 0.5
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_Trenchcoatmilfbust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_Trenchcoatmilfbust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Trenchcoatmilfbust"
+      }
+     }
+    }
+   ]
+  },
+  "1846959098": {
+   "kind": "text",
+   "parent": 664249591,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Wait! Why are we in a bathroom? You said candy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1945270410": {
+   "kind": "choice",
+   "parent": 664249591,
+   "children": [
+    1273896527,
+    -1089325791,
+    -2115853532
+   ],
+   "actor": "S_StrangerFemale",
+   "expressionName": "neutral",
+   "text": "It’s in here. Just be a good boy and...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1273896527": {
+   "kind": "text",
+   "parent": 1945270410,
+   "actor": null,
+   "text": "This stall’s taken.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1089325791": {
+   "kind": "text",
+   "parent": 1945270410,
+   "actor": null,
+   "text": "Adrian?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2115853532": {
+   "kind": "text",
+   "parent": 1945270410,
+   "actor": null,
+   "text": "Did someone say candy?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-299760192": {
+   "kind": "text",
+   "parent": 664249591,
+   "actor": "S_StrangerFemale",
+   "expressionName": "neutral",
+   "text": "Oh fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Trenchcoatmilfbust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "382947774": {
+   "kind": "text",
+   "parent": 664249591,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "...What the fuck was that? {PC}? The fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2089714283": {
+   "kind": "choice",
+   "parent": 664249591,
+   "children": [
+    1005644928,
+    -1089085853,
+    491838237
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Wait... is that… Is that a gloryhole?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1005644928": {
+   "kind": "text",
+   "parent": -2089714283,
+   "children": [
+    -353870170,
+    -1898025669,
+    1281434751,
+    769883100,
+    882388900,
+    1914468184,
+    -609136594,
+    2000656801,
+    923697386,
+    -1851378496,
+    -1143012552,
+    52620362,
+    -494304735,
+    373754813,
+    -1012399071,
+    -1988029228
+   ],
+   "actor": null,
+   "text": "If you want to try the gloryhole, go ahead.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1089085853": {
+   "kind": "text",
+   "parent": -2089714283,
+   "children": [
+    -291556874
+   ],
+   "actor": null,
+   "text": "Don’t even think about it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "491838237": {
+   "kind": "text",
+   "parent": -2089714283,
+   "children": [
+    1254097593,
+    -1156860014
+   ],
+   "actor": null,
+   "text": "You still want candy?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1254097593": {
+   "kind": "text",
+   "parent": 491838237,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Bro. Fuck you. I was trying to be polite to a woman in a trenchcoat.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1156860014": {
+   "kind": "text",
+   "parent": 491838237,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "…Was that the candy?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-291556874": {
+   "kind": "text",
+   "parent": -1089085853,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I... I should go. Yeah... I'll leave. Return. Goodbye.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-353870170": {
+   "kind": "text",
+   "parent": 1005644928,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Shit... alright. Let’s see what this is about.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1898025669": {
+   "kind": "text",
+   "parent": 1005644928,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "That’s not him.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Gloryhole_river (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Gloryhole_river (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Gloryhole_river (4)"
+      }
+     }
+    }
+   ]
+  },
+  "1281434751": {
+   "kind": "text",
+   "parent": 1005644928,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Not as thick. Not as veiny. Still big... but not his.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "769883100": {
+   "kind": "text",
+   "parent": 1005644928,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Why am I still doing this?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "882388900": {
+   "kind": "text",
+   "parent": 1005644928,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "This isn’t right…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1914468184": {
+   "kind": "text",
+   "parent": 1005644928,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "I wanted his. Not this…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2000656801": {
+   "kind": "text",
+   "parent": 1005644928,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "God... this feels so wrong. But so hot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "923697386": {
+   "kind": "text",
+   "parent": 1005644928,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Still hard. Still warm… Still wants me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Gloryhole_river (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Gloryhole_river (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Gloryhole_river (5)"
+      }
+     }
+    }
+   ]
+  },
+  "-1851378496": {
+   "kind": "text",
+   "parent": 1005644928,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Shit~ whoever you are, don’t stop~ I’m gonna~",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1143012552": {
+   "kind": "text",
+   "parent": 1005644928,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Mwwwuahh! MMMhhmmm!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "52620362": {
+   "kind": "text",
+   "parent": 1005644928,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "What the hell is wrong with me…?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Gloryhole_river (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Gloryhole_river (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Gloryhole_river (6)"
+      }
+     }
+    }
+   ]
+  },
+  "-494304735": {
+   "kind": "text",
+   "parent": 1005644928,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "Not even him… And I still let it happen.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "373754813": {
+   "kind": "text",
+   "parent": 1005644928,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "What the fuck am I becoming…?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-609136594": {
+   "kind": "text",
+   "parent": 1005644928,
+   "actor": "River",
+   "expressionName": "neutral",
+   "text": "No... Wait, {PC} is here... So he wants me to do this... He wants me to service this dick... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1012399071": {
+   "kind": "text",
+   "parent": 1005644928,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Fuck, {PC}. You know the woman on the other side, do you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1988029228": {
+   "kind": "text",
+   "parent": 1005644928,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Anyway… uh, I’ll catch you later.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/C_SubParkRestRoom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play eventgloryhole_River and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[gloryhole-cooldown25] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gloryhole-cooldown25",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "chance",
+     "type": "ConditionChance",
+     "title": "If 0.35 chance to pass",
+     "fields": {
+      "m_Threshold": {
+       "kind": "value",
+       "value": 0.35
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If CoreFinalStates[cs-riverfinalstage] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cs-riverfinalstage",
+        "list": "CoreFinalStates",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "branches": [
+    "gloryhole"
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ParkRestroom_GloryholeDoor_Closed to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ParkRestroom_GloryholeDoor_Closed",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/129_SubParkRestroom/ParkRestroom_GloryholeDoor_Closed"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core_NoSave2[2025-shortgo-saveONE] = None",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2025-shortgo-saveONE",
+        "list": "Core_NoSave2",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "none"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[gloryhole-cooldown25] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gloryhole-cooldown25",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

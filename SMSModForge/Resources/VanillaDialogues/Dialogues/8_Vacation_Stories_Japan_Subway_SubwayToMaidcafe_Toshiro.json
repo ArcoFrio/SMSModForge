@@ -1,0 +1,352 @@
+{
+ "id": "8_Vacation_Stories/Japan_Subway/SubwayToMaidcafe_Toshiro",
+ "name": "SubwayToMaidcafe_Toshiro",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "V_Toshiro"
+ ],
+ "roots": [
+  199126867,
+  -536017317
+ ],
+ "nodes": {
+  "199126867": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -828641049,
+    1408689642,
+    -889435250,
+    -154257408,
+    733711440
+   ],
+   "actor": "V_Toshiro",
+   "expressionName": "my-expression",
+   "text": "Hey, you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[jpn-cafe-pro] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "jpn-cafe-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_S_Toshiro to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_S_Toshiro",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Toshiro"
+      }
+     }
+    }
+   ]
+  },
+  "-828641049": {
+   "kind": "text",
+   "parent": 199126867,
+   "actor": "V_Toshiro",
+   "expressionName": "my-expression",
+   "text": "You’re gaijins, aren’t you? Here to take over and steal our Japanese women!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1408689642": {
+   "kind": "text",
+   "parent": 199126867,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "W-what?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-889435250": {
+   "kind": "text",
+   "parent": 199126867,
+   "actor": "V_Toshiro",
+   "expressionName": "my-expression",
+   "text": "Don’t play dumb! I know your type. Coming here, acting all cool, thinking you can just charm your way into our culture and take what you want. It’s disgusting!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-154257408": {
+   "kind": "choice",
+   "parent": 199126867,
+   "children": [
+    984067212,
+    692345319,
+    265292518,
+    -735132160
+   ],
+   "actor": "Adrian",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Is this guy serious right now?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "984067212": {
+   "kind": "text",
+   "parent": -154257408,
+   "children": [
+    1711161119
+   ],
+   "actor": null,
+   "text": "Look, we’re just here to visit. We’re not trying to take anything from anyone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "692345319": {
+   "kind": "text",
+   "parent": -154257408,
+   "children": [
+    1808900426
+   ],
+   "actor": null,
+   "text": "Don’t worry, your secret anime waifu is safe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "265292518": {
+   "kind": "text",
+   "parent": -154257408,
+   "children": [
+    72992323
+   ],
+   "actor": null,
+   "text": "Whatever, dude. We don’t have time for this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "72992323": {
+   "kind": "text",
+   "parent": 265292518,
+   "actor": "V_Toshiro",
+   "expressionName": "my-expression",
+   "text": "Running away, huh? Typical gaijins.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1808900426": {
+   "kind": "text",
+   "parent": 692345319,
+   "actor": "V_Toshiro",
+   "expressionName": "my-expression",
+   "text": "W-what?! Don’t talk about my waifus! You know nothing about them!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1711161119": {
+   "kind": "text",
+   "parent": 984067212,
+   "actor": "V_Toshiro",
+   "expressionName": "my-expression",
+   "text": "Hah! That’s what they all say! You think I haven’t heard that before?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "733711440": {
+   "kind": "text",
+   "parent": 199126867,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Dude, let’s just ignore him. This is way too weird for our first night here...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-536017317": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    882414867
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I hope there's other maids around this time...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[jpn-cafe-pro] ≥ 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "jpn-cafe-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "882414867": {
+   "kind": "text",
+   "parent": -536017317,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "This Riku is really scary. She reminds me of an old teacher I hated...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-735132160": {
+   "kind": "text",
+   "parent": -154257408,
+   "children": [
+    -1834110154,
+    -567642527
+   ],
+   "actor": null,
+   "text": "(Athletic) One more word and I’ll break your jaw.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Athletic] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Athletic",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1834110154": {
+   "kind": "text",
+   "parent": -735132160,
+   "actor": "V_Toshiro",
+   "expressionName": "my-expression",
+   "text": "H-Hey! S-stop, man! I was just talking! No need to get violent!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-567642527": {
+   "kind": "text",
+   "parent": -735132160,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Y-Yeah! You better watch out!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Japan_Subway",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play SubwayToMaidcafe_Toshiro and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_NoSave[incoming-vacation-map] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "incoming-vacation-map",
+        "list": "Core_NoSave",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

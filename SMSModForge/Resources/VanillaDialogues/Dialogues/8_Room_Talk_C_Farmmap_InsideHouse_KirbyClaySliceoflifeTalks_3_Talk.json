@@ -1,0 +1,425 @@
+{
+ "id": "8_Room_Talk/C_Farmmap_InsideHouse/KirbyClaySliceoflifeTalks/3_Talk",
+ "name": "3_Talk",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Clay",
+  "Kirby"
+ ],
+ "roots": [
+  -162674534,
+  1747323353,
+  -891057272,
+  1120394332,
+  2142291899,
+  -849990055,
+  1752859298,
+  1516582741,
+  -1290475522,
+  1066846592,
+  1983016501,
+  907345884
+ ],
+ "nodes": {
+  "-162674534": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "…I’ll admit it. I didn’t think this farm would ever see the day. But here we are. The barns are full, the bottles keep moving, and the money’s real.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KirbyBustDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KirbyBustDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/KirbyBustDefault"
+      }
+     }
+    }
+   ]
+  },
+  "1747323353": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "See? I told you! All that doom and gloom, and look at us now. We did it, Clay.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-891057272": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Clay",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "No. You did it. You and… him. Thank you, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-849990055": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -560813249,
+    509247152,
+    1638313128,
+    -1514551683
+   ],
+   "actor": "Clay",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Hm. Maybe so. All I know is this place has a future now. And that’s more than I ever thought possible.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-560813249": {
+   "kind": "text",
+   "parent": -849990055,
+   "children": [
+    -1410417511,
+    -419060296
+   ],
+   "actor": null,
+   "text": "The farm’s future belongs to all of us.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1410417511": {
+   "kind": "text",
+   "parent": -560813249,
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Heehee, exactly! {F}, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "509247152": {
+   "kind": "text",
+   "parent": -849990055,
+   "children": [
+    -826723564,
+    -1722838035
+   ],
+   "actor": null,
+   "text": "About time you admitted it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-826723564": {
+   "kind": "text",
+   "parent": 509247152,
+   "actor": "Clay",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Don’t push it. A win is a win. I’ll take it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1638313128": {
+   "kind": "text",
+   "parent": -849990055,
+   "children": [
+    -686257041,
+    449307625
+   ],
+   "actor": null,
+   "text": "Wow, Clay said something nice. Quick, somebody write this down.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-686257041": {
+   "kind": "text",
+   "parent": 1638313128,
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Haha! Right? We’ll put it on the wall like a trophy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1514551683": {
+   "kind": "text",
+   "parent": -849990055,
+   "children": [
+    1960093995,
+    -252142992
+   ],
+   "actor": null,
+   "text": "Told you Kirby’s milk is gold. Have more faith in her udders.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1960093995": {
+   "kind": "text",
+   "parent": -1514551683,
+   "actor": "Kirby",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Stop it! You’re embarrassing me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-252142992": {
+   "kind": "text",
+   "parent": -1514551683,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "…I walked right into that one.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "449307625": {
+   "kind": "text",
+   "parent": 1638313128,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "…You two are unbearable.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1722838035": {
+   "kind": "text",
+   "parent": 509247152,
+   "actor": "Kirby",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Hey, no fighting. This is a happy day.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-419060296": {
+   "kind": "text",
+   "parent": -560813249,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "…Yeah. {F}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "907345884": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "And it’s just the beginning!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/KirbyBustDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "2142291899": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "He believed in us from the start. Even when you didn’t. That’s why it worked.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1120394332": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "I don’t hand out compliments. But you proved me wrong. You turned this farm into something alive again. Not just dirt and broken fences.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1983016501": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "Whatever comes next… at least the farm isn’t dying anymore. That’s enough for me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1752859298": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh! Robert is going to be thrilled to hear this. He worries about you, Clay, you know.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1516582741": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "ROBERT. IS. NOT. REAL.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1290475522": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kirby",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "HE IS REAL! He’s not imaginary. You’ll see.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1066846592": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "Ugh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/C_Farmmap_InsideHouse/KirbyClaySliceoflifeTalks",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play 3_Talk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[kirbyclay-sliceoflifetalks] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kirbyclay-sliceoflifetalks",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[bafa-totalmilksold] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-totalmilksold",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Milking Save[kirbyclay-sliceoflifetalks] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kirbyclay-sliceoflifetalks",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

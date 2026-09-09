@@ -1,0 +1,597 @@
+{
+ "id": "8_Room_Talk/Temple_Entrance/HimariZhenFirstTime",
+ "name": "HimariZhenFirstTime",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Himari",
+  "Master Zhen"
+ ],
+ "roots": [
+  604306852,
+  1667439346,
+  -1006217798,
+  883152828,
+  168291907,
+  -1246530849,
+  727419969,
+  255355014,
+  -2106154939,
+  273859561,
+  671096597,
+  951933423,
+  -401081016
+ ],
+ "nodes": {
+  "604306852": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "You have no reason to stand here. This path is not for you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1667439346": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Then explain why he is allowed to walk it alone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1006217798": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Because he has been chosen. You are not.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1246530849": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1812743727,
+    -289046426,
+    -1686577141
+   ],
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Figures. In mine, we don’t abandon people we care about.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1812743727": {
+   "kind": "text",
+   "parent": -1246530849,
+   "children": [
+    -1755709577
+   ],
+   "actor": null,
+   "text": "Why did you come here, Himari?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1755709577": {
+   "kind": "text",
+   "parent": -1812743727,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "I came because you’re doing something dangerous… And because you’re terrible at asking for help.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-289046426": {
+   "kind": "text",
+   "parent": -1246530849,
+   "children": [
+    -2076286237
+   ],
+   "actor": null,
+   "text": "You shouldn’t be arguing with my master behind my back.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2076286237": {
+   "kind": "text",
+   "parent": -289046426,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "I’m not going behind your back.\nI’m standing in front of it, where I belong.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1686577141": {
+   "kind": "text",
+   "parent": -1246530849,
+   "children": [
+    162203541
+   ],
+   "actor": null,
+   "text": "You care about me!? HIMARI CARES ABOUT ME!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "162203541": {
+   "kind": "text",
+   "parent": -1686577141,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Tch. You weren’t supposed to hear that part.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "727419969": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Concern clouds judgment. A warrior must walk light.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "255355014": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -907564447,
+    -1217859217,
+    1676742941
+   ],
+   "actor": "Himari",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Easy to say when you train students like tools. I’m not built that way.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-907564447": {
+   "kind": "text",
+   "parent": 255355014,
+   "children": [
+    -723411817,
+    281819017,
+    192622116
+   ],
+   "actor": null,
+   "text": "You’re worried about me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-723411817": {
+   "kind": "text",
+   "parent": -907564447,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "…Yeah.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1217859217": {
+   "kind": "text",
+   "parent": 255355014,
+   "children": [
+    412050585
+   ],
+   "actor": null,
+   "text": "This isn’t something you can just jump into.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "412050585": {
+   "kind": "text",
+   "parent": -1217859217,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "I know. That’s why I came here first instead of rushing in blind.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1676742941": {
+   "kind": "text",
+   "parent": 255355014,
+   "children": [
+    -1952221309
+   ],
+   "actor": null,
+   "text": "So what, you’re my unofficial bodyguard now?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1952221309": {
+   "kind": "text",
+   "parent": 1676742941,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "If you get cocky, I’ll knock you back in line. Seems fair.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2106154939": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Hmph. In Chinese teaching, the master removes attachment.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "273859561": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "In Japanese teaching, you shoulder responsibility.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "671096597": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Steel sharpens steel.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-401081016": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Obviously.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "883152828": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "That’s not an answer.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "168291907": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "In my country, we do not interfere with another warrior’s fate.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "281819017": {
+   "kind": "text",
+   "parent": -907564447,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "I am.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "192622116": {
+   "kind": "text",
+   "parent": -907564447,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "And don’t smile like that, it’s embarrassing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "951933423": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "I will teach you, but your life is in your own hands.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Temple_Entrance",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play HimariZhenFirstTime and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[himari-spiritfightunlocked] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "himari-spiritfightunlocked",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[himari-questdone] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "himari-questdone",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Master_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Master_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Master_Default"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariBust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_11[himari-spiritfightunlocked] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "himari-spiritfightunlocked",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

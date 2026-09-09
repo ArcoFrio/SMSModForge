@@ -1,0 +1,754 @@
+{
+ "id": "8_Room_Talk/Gasstation/Astrid_HouseQuestStart",
+ "name": "Astrid_HouseQuestStart",
+ "index": 10,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Astrid"
+ ],
+ "roots": [
+  -716831937,
+  1989101229,
+  -1079129576,
+  -949780656,
+  713038837,
+  780470765,
+  -460439512,
+  -1511871398
+ ],
+ "nodes": {
+  "-716831937": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Fuck. Fuck! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1989101229": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2012755612,
+    2114991007,
+    313114168
+   ],
+   "actor": "Astrid",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Gah! FUCK! Where the hell is it?!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2012755612": {
+   "kind": "text",
+   "parent": 1989101229,
+   "children": [
+    -1001958137
+   ],
+   "actor": null,
+   "text": "Hey... what’s going on?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1001958137": {
+   "kind": "text",
+   "parent": -2012755612,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Nothing. Just leave it. I’m handling it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2114991007": {
+   "kind": "text",
+   "parent": 1989101229,
+   "children": [
+    -504184797
+   ],
+   "actor": null,
+   "text": "You planning to wake up the whole city?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-504184797": {
+   "kind": "text",
+   "parent": 2114991007,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "You want a broken nose?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "313114168": {
+   "kind": "text",
+   "parent": 1989101229,
+   "children": [
+    817153756
+   ],
+   "actor": null,
+   "text": "Damn... watching you lose your shit is kinda hot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "817153756": {
+   "kind": "text",
+   "parent": 313114168,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Not the fucking time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1079129576": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "It didn’t just vanish. Someone took it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-949780656": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -852363740,
+    1019675863,
+    -277536595
+   ],
+   "actor": "Astrid",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "She took it. That bitch.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-852363740": {
+   "kind": "text",
+   "parent": -949780656,
+   "children": [
+    166708411
+   ],
+   "actor": null,
+   "text": "Noire?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "166708411": {
+   "kind": "text",
+   "parent": -852363740,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Who else? She was here. She touched my stuff. She smiled like she knew.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1019675863": {
+   "kind": "text",
+   "parent": -949780656,
+   "children": [
+    -162027726
+   ],
+   "actor": null,
+   "text": "That blonde milf you hate?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-162027726": {
+   "kind": "text",
+   "parent": 1019675863,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Yeah. Noire.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-277536595": {
+   "kind": "text",
+   "parent": -949780656,
+   "children": [
+    -571762284
+   ],
+   "actor": null,
+   "text": "Anna?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-571762284": {
+   "kind": "text",
+   "parent": -277536595,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Who the fuck is Anna? No. Fucking Noire.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "713038837": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1360808865,
+    -1788916139,
+    1826155576
+   ],
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "You’re coming with me.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "780470765": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Harbor District. She’s squatting in that rotted-out mansion by the docks. Looks like a condemned crackhouse, but inside?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-460439512": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1550549550,
+    885253622,
+    -463975587,
+    -23974649
+   ],
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Darkness. Real shit. Not just shadows... magic. Even I can’t see in there.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1360808865": {
+   "kind": "text",
+   "parent": 713038837,
+   "actor": null,
+   "text": "Where?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1788916139": {
+   "kind": "text",
+   "parent": 713038837,
+   "actor": null,
+   "text": "Yes! Astrid and {PC} are going on an adventure!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1826155576": {
+   "kind": "text",
+   "parent": 713038837,
+   "actor": null,
+   "text": "Please. No. She's scary. Like super scary.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1550549550": {
+   "kind": "text",
+   "parent": -460439512,
+   "children": [
+    899993163
+   ],
+   "actor": null,
+   "text": "Alright. I’ve got your back.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "899993163": {
+   "kind": "text",
+   "parent": -1550549550,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Good.... Thank you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1511871398": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "We hit her place Monday. That’s when I clock out early. I may be a... crazy bitch, but rent’s still due.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[hauntedhouse-unlocked] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hauntedhouse-unlocked",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[Astrid-photoqueststart] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Astrid-photoqueststart",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionQuestsActivate",
+     "title": "Activate Astrid Quest",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Astrid Quest",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "885253622": {
+   "kind": "text",
+   "parent": -460439512,
+   "children": [
+    384945550
+   ],
+   "actor": null,
+   "text": "Magic? What are you talking about, Astrid?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "384945550": {
+   "kind": "text",
+   "parent": 885253622,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "You'll find out soon enough.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-463975587": {
+   "kind": "text",
+   "parent": -460439512,
+   "children": [
+    -989747350
+   ],
+   "actor": null,
+   "text": "If you wanted me in the dark, all you had to do was ask.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-989747350": {
+   "kind": "text",
+   "parent": -463975587,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "You wish. Bring a light or stay the fuck home.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-23974649": {
+   "kind": "text",
+   "parent": -460439512,
+   "children": [
+    427803518,
+    -1285559162
+   ],
+   "actor": null,
+   "text": "(Living Weapon) Think this sword could take her head off?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[Living-Weapon] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Living-Weapon",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "427803518": {
+   "kind": "text",
+   "parent": -23974649,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Nope. She’s not a spirit, she’s just a bitch with power.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1285559162": {
+   "kind": "text",
+   "parent": -23974649,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Also… where the hell did you even get that thing? You don’t just find spirit-killing swords lying around, y’know.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Gasstation",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Astrid_HouseQuestStart and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[ladynoire-firsttime] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ladynoire-firsttime",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[Astrid-photoqueststart] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Astrid-photoqueststart",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AstridStoreBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AstridStoreBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AstridStoreBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AstridStoreBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[Astrid-photoqueststart] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Astrid-photoqueststart",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'ForceEnableUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "ForceEnableUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

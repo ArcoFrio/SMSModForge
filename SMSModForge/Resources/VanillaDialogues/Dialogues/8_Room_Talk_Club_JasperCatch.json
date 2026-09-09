@@ -1,0 +1,627 @@
+{
+ "id": "8_Room_Talk/Club/JasperCatch",
+ "name": "JasperCatch",
+ "index": 4,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Jasper",
+  "Roxy"
+ ],
+ "roots": [
+  1093217749,
+  -345612178,
+  1798064206,
+  -215064226,
+  -1130577074,
+  -349178649,
+  -1776510906,
+  2109065402,
+  -2056806605,
+  581827668,
+  696272862
+ ],
+ "nodes": {
+  "1093217749": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Jasper",
+   "expressionName": "neutral",
+   "text": "... Does this sound good, babe?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-345612178": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Mmmm... It does. Why don't you follow me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1798064206": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 33_Club to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "33_Club",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/33_Club"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 34_PublicToilet to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "34_PublicToilet",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/34_PublicToilet"
+      }
+     }
+    }
+   ]
+  },
+  "-215064226": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Pleasure doin’ business with you, J. You know I don’t do freebies",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active RoxyWatch (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "RoxyWatch (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/RoxyWatch (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1130577074": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Now tell me, what are you in the mood for today? Ass or tits?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active RoxyWatch (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "RoxyWatch (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/RoxyWatch (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-349178649": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Jasper",
+   "expressionName": "neutral",
+   "text": "Hmm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1776510906": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Jasper",
+   "expressionName": "neutral",
+   "text": "I do enjoy your fat tits, Roxy... But today I'm gonna pound that slut ass of yours...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active RoxyWatch (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "RoxyWatch (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/RoxyWatch (3)"
+      }
+     }
+    }
+   ]
+  },
+  "2109065402": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Oh, yes... Time is money, J. Put that cock to good use!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2056806605": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Yes! Pound my needy ass, J. Do it! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active RoxyWatch (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "RoxyWatch (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/RoxyWatch (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active RoxyWatch (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "RoxyWatch (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/RoxyWatch (1)"
+      }
+     }
+    }
+   ]
+  },
+  "581827668": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    778917158,
+    -592921588
+   ],
+   "actor": "Jasper",
+   "expressionName": "neutral",
+   "text": "Mmmm... It's the best... ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "778917158": {
+   "kind": "text",
+   "parent": 581827668,
+   "children": [
+    -1442365135,
+    1270669683
+   ],
+   "actor": null,
+   "text": "(Take a photo)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1442365135": {
+   "kind": "text",
+   "parent": 778917158,
+   "actor": "Jasper",
+   "expressionName": "neutral",
+   "text": "Huh? What was that sound?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[player-got-jasper-photo] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "player-got-jasper-photo",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'flash'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "flash"
+      }
+     }
+    }
+   ]
+  },
+  "-592921588": {
+   "kind": "text",
+   "parent": 581827668,
+   "children": [
+    -82683393,
+    -439713448
+   ],
+   "actor": null,
+   "text": "(Just watch them)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-82683393": {
+   "kind": "text",
+   "parent": -592921588,
+   "actor": "Jasper",
+   "expressionName": "neutral",
+   "text": "F-F-Fuck! I'm close, Roxy... I'll fill your slut ass!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1270669683": {
+   "kind": "text",
+   "parent": 778917158,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Mmmm... Just ignore it and blow your load, J... There's other customers waiting!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-439713448": {
+   "kind": "text",
+   "parent": -592921588,
+   "actor": "Roxy",
+   "expressionName": "neutral",
+   "text": "Yes! Fuck me! Harder!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "696272862": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 34_PublicToilet to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "34_PublicToilet",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator/MapButtons/34_PublicToilet"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 0_Drive to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "0_Drive",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator/MapButtons/0_Drive"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 33_Club to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "33_Club",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator/MapButtons/33_Club"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Club/ClubConditions",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play JasperCatch and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Jasper_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Jasper_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Jasper_Default"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Roxy_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Roxy_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Roxy_Default"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

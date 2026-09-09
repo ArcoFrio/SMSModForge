@@ -1,0 +1,1381 @@
+{
+ "id": "5_Levels/125_BarnBackInterior/Dialogue_CowPhotoshootTalk/CowPhotoShootTalk_Emma",
+ "name": "CowPhotoShootTalk_Emma",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Emma",
+  "Katarina"
+ ],
+ "roots": [
+  387509314,
+  -676845445,
+  -275872523,
+  -562047180,
+  -612522340,
+  -1400969296,
+  -976512044,
+  708763621
+ ],
+ "nodes": {
+  "387509314": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Emma_Cowbust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Emma_Cowbust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Emma_Cowbust"
+      }
+     }
+    }
+   ]
+  },
+  "-676845445": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Alright… this is absurd, but hear me out. If I’m doing this, it’s not for vanity.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-275872523": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1552967570,
+    1804836794,
+    -1317928835
+   ],
+   "actor": "Emma",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "It’s for the cows. To raise awareness, to remind people of how they’re treated. That’s all.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1552967570": {
+   "kind": "text",
+   "parent": -275872523,
+   "children": [
+    349400872
+   ],
+   "actor": null,
+   "text": "You look amazing, Emma. People will listen because of you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1804836794": {
+   "kind": "text",
+   "parent": -275872523,
+   "children": [
+    -1238489625
+   ],
+   "actor": null,
+   "text": "So you’re like… a superhero for animal rights, dressed as a cow?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1317928835": {
+   "kind": "text",
+   "parent": -275872523,
+   "children": [
+    507214162
+   ],
+   "actor": null,
+   "text": "Forget the cows. You look like you were born to be mine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "507214162": {
+   "kind": "text",
+   "parent": -1317928835,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "…That’s not what this is about. Stop… stop looking at me like that…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1238489625": {
+   "kind": "text",
+   "parent": 1804836794,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Don’t make fun of me…! But… maybe it’s not the worst metaphor.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "349400872": {
+   "kind": "text",
+   "parent": -1552967570,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "You really think so? Then maybe it’s worth it… if it helps the cause.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-562047180": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Should I stand proud, like a symbol? Or… something more playful?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Cowphoto_Emmta (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Cowphoto_Emmta (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/Cowphoto_Emmta (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-612522340": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -260971394,
+    2043428851
+   ],
+   "actor": "Emma",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I want people to take this seriously… but I can feel myself smiling anyway.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-260971394": {
+   "kind": "text",
+   "parent": -612522340,
+   "children": [
+    675014766
+   ],
+   "actor": null,
+   "text": "Turn around and look straight into the camera, strong and determined.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2043428851": {
+   "kind": "text",
+   "parent": -612522340,
+   "children": [
+    -371544925
+   ],
+   "actor": null,
+   "text": "Drop the act. Pose the way you want to.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-371544925": {
+   "kind": "text",
+   "parent": 2043428851,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "…Fine. Maybe I do want to look… alluring. Just a little.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Cowphoto_Emmta (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Cowphoto_Emmta (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/Cowphoto_Emmta (3)"
+      }
+     }
+    }
+   ]
+  },
+  "675014766": {
+   "kind": "text",
+   "parent": -260971394,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Yes… firm, resolute. A cow with dignity. That’s the message.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Cowphoto_Emmta (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Cowphoto_Emmta (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/Cowphoto_Emmta (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1400969296": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Alright… I’ll admit it. That wasn’t just about “the cause.” Part of me… liked it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Milking Save[bafarm-promophotostaken] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafarm-promophotostaken",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-976512044": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "But don’t tell anyone. If they ask, this was all about the cows… understood?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "708763621": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -182785097,
+    700549939,
+    52934376,
+    306417539,
+    1467126827,
+    387865644,
+    -2126404985,
+    -456659554,
+    -609856983,
+    -337911249,
+    737421549,
+    -1631898594
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "So... How about we~ Uhm... You know...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[emma-sex-first-time] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-sex-first-time",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[bafa-katarinaaccepted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-katarinaaccepted",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "chance",
+     "type": "ConditionChance",
+     "title": "If 0.6 chance to pass",
+     "fields": {
+      "m_Threshold": {
+       "kind": "value",
+       "value": 0.6
+      }
+     }
+    }
+   ]
+  },
+  "-182785097": {
+   "kind": "text",
+   "parent": 708763621,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "You two again... Unbelievable...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[emmakatthreesome-one-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emmakatthreesome-one-done",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina_Cowbust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina_Cowbust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Katarina_Cowbust"
+      }
+     }
+    }
+   ]
+  },
+  "700549939": {
+   "kind": "text",
+   "parent": 708763621,
+   "children": [
+    -968093183,
+    732291018,
+    1096111010,
+    -1717610615,
+    1421092335,
+    -1227234840
+   ],
+   "actor": "Katarina",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "…WHAT do you think you’re doing?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[emmakatthreesome-one-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emmakatthreesome-one-done",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-968093183": {
+   "kind": "text",
+   "parent": 700549939,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "H–hey! I agreed to this for the animals, not for...  whatever filthy obsession you’ve got.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "732291018": {
+   "kind": "text",
+   "parent": 700549939,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Filthy obsession? Don’t make me laugh. You’re nothing but a trembling hypocrite. I saw the way your legs shook when he touched you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1096111010": {
+   "kind": "text",
+   "parent": 700549939,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "You want him just as badly as I do... but unlike me, you’re too cowardly to admit it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1717610615": {
+   "kind": "text",
+   "parent": 700549939,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "You’re insane! I care about him, but I’m not some… some addict like you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1421092335": {
+   "kind": "text",
+   "parent": 700549939,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Don’t you dare compare yourself to me. He doesn’t need you. He only needs me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1227234840": {
+   "kind": "text",
+   "parent": 700549939,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "That’s not your choice to make!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Milking Save[emmakatthreesome-one-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emmakatthreesome-one-done",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "52934376": {
+   "kind": "text",
+   "parent": 708763621,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Pah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "306417539": {
+   "kind": "text",
+   "parent": 708763621,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Christ, sweetheart~ did you train this thing to absorb insults too? Or is it just naturally this... dense?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaKatThreesome (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaKatThreesome (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/EmmaKatThreesome (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1467126827": {
+   "kind": "text",
+   "parent": 708763621,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "At least mine doesn't need Photoshop to look edible, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "387865644": {
+   "kind": "choice",
+   "parent": 708763621,
+   "children": [
+    1390305854,
+    -1051104822,
+    1320437864
+   ],
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Is this really what you want, {PC}? We both know you prefer my fit, round behind over this fat ass.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1390305854": {
+   "kind": "text",
+   "parent": 387865644,
+   "children": [
+    1836221074,
+    2132244892,
+    -751921761,
+    -1599448301,
+    619921490,
+    -1199638376,
+    1508969674,
+    68937035,
+    -264516281,
+    94457084,
+    1919918345,
+    588721589,
+    -2015120734,
+    -929004970
+   ],
+   "actor": null,
+   "text": "That's exactly what I want. (Fuck Emma)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1051104822": {
+   "kind": "text",
+   "parent": 387865644,
+   "children": [
+    -299322918,
+    -506535421,
+    1512273472,
+    1547437729,
+    -2059297563,
+    -229696901,
+    43586993,
+    354278698,
+    -590321617,
+    1404469592,
+    2002578464,
+    2009430749,
+    -1959053929
+   ],
+   "actor": null,
+   "text": "You're right... I want you, Katarina.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1320437864": {
+   "kind": "text",
+   "parent": 387865644,
+   "children": [
+    98906105,
+    -277459299
+   ],
+   "actor": null,
+   "text": "I'm out, you two are crazy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "98906105": {
+   "kind": "text",
+   "parent": 1320437864,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "W-What, no! That's... Gah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-277459299": {
+   "kind": "text",
+   "parent": 1320437864,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "See, {M}. You ruined it. Like you always do.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-299322918": {
+   "kind": "text",
+   "parent": -1051104822,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "See, darling? Watch how a real woman handles him.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaKatThreesome (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaKatThreesome (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/EmmaKatThreesome (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-2126404985": {
+   "kind": "text",
+   "parent": 708763621,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Don't get used to sharing, sweetheart... next time I'm swallowing every drop myself.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaKatThreesome (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaKatThreesome (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/EmmaKatThreesome (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaKatThreesome (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaKatThreesome (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/EmmaKatThreesome (6)"
+      }
+     }
+    }
+   ]
+  },
+  "-456659554": {
+   "kind": "text",
+   "parent": 708763621,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Promises, promises... bet you couldn't even deepthroat him halfway.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-609856983": {
+   "kind": "text",
+   "parent": 708763621,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "God, look at him... still twitching after all that. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-337911249": {
+   "kind": "text",
+   "parent": 708763621,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Mmm, perfect fucking cock. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "737421549": {
+   "kind": "text",
+   "parent": 708763621,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Maybe we should do this more often.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-506535421": {
+   "kind": "text",
+   "parent": -1051104822,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Oh please... he's just pity-fucking you so you'll stop crying in your chardonnay.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1512273472": {
+   "kind": "choice",
+   "parent": -1051104822,
+   "children": [
+    -296959316,
+    1463927180,
+    1582854989
+   ],
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Mmm, that's cute. Tell me, baby… does pity usually make you this hard?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1547437729": {
+   "kind": "text",
+   "parent": -1051104822,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Fuck! Yes, right there~ don't stop, don't you fucking stop!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2059297563": {
+   "kind": "text",
+   "parent": -1051104822,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Hurry up already...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-229696901": {
+   "kind": "text",
+   "parent": -1051104822,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Ooh, someone's jealous she can't make his balls tighten like this...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "43586993": {
+   "kind": "text",
+   "parent": -1051104822,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Please. I've seen your ‘O-face'... looks like you're trying to swallow a lemon.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "354278698": {
+   "kind": "text",
+   "parent": -1051104822,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Mmm, and yet… he's the one pounding my hot slit right now. Coincidence?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1836221074": {
+   "kind": "text",
+   "parent": 1390305854,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Ohhh fuck~ see that, {M}? This is why he doesn't need you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaKatThreesome (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaKatThreesome (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/EmmaKatThreesome (4)"
+      }
+     }
+    }
+   ]
+  },
+  "2132244892": {
+   "kind": "text",
+   "parent": 1390305854,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Mmhm. And yet, I don't see him proposing mid-thrust. Funny how that works.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-751921761": {
+   "kind": "text",
+   "parent": 1390305854,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "At least I don't have to remind him what year it is before foreplay.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1599448301": {
+   "kind": "text",
+   "parent": 1390305854,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Darling, the only thing you're reminding him of is why he should've stuck with cougars.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "619921490": {
+   "kind": "text",
+   "parent": 1390305854,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Mmm, yeah... totally sounds like a woman who's not seething right now. How's that wine tasting? Bitter?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1199638376": {
+   "kind": "text",
+   "parent": 1390305854,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Not as bitter as your thighs will be tomorrow when he crawls back to my bed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1508969674": {
+   "kind": "text",
+   "parent": 1390305854,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "You know what... Fuck you, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "68937035": {
+   "kind": "text",
+   "parent": 1390305854,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Jesus fucking! Emma?! What are you?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaKatThreesome (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaKatThreesome (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/EmmaKatThreesome (5)"
+      }
+     }
+    }
+   ]
+  },
+  "-296959316": {
+   "kind": "text",
+   "parent": 1512273472,
+   "actor": null,
+   "text": "Fuck no. Your pussy's just way too good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1463927180": {
+   "kind": "text",
+   "parent": 1512273472,
+   "actor": null,
+   "text": "Stop fighting already... Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1582854989": {
+   "kind": "text",
+   "parent": 1512273472,
+   "actor": null,
+   "text": "(Ignore them and fuck Kat harder)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-590321617": {
+   "kind": "text",
+   "parent": -1051104822,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "W-What the fuck!? Emma!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaKatThreesome (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaKatThreesome (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/EmmaKatThreesome (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1404469592": {
+   "kind": "text",
+   "parent": -1051104822,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Hah! Maybe I should've trained you how to really suck like a pro if this is your idea of payback!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2002578464": {
+   "kind": "text",
+   "parent": -1051104822,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Shoulda swallowed me too... ungh... might've saved us both the attitude.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2009430749": {
+   "kind": "text",
+   "parent": -1051104822,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "This is... Fuck... I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1959053929": {
+   "kind": "text",
+   "parent": -1051104822,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Ohhh shitI 'm gonna cum already, just like that, fuck! Keep sucking, keep pounding... Fuck! FUCK!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-264516281": {
+   "kind": "text",
+   "parent": 1390305854,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Mmmph... relax, Mom, you're clenching like a virgin....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "94457084": {
+   "kind": "text",
+   "parent": 1390305854,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "I~ that's my asshole, you depraved little~ oh fuck...!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1919918345": {
+   "kind": "text",
+   "parent": 1390305854,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Nngh! {PC}... Your cock feels so much better than my goddamn vibrator... ah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "588721589": {
+   "kind": "text",
+   "parent": 1390305854,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Don't you dare stop~ Christ, Emma!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2015120734": {
+   "kind": "text",
+   "parent": 1390305854,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Nngh~ fuck, I can't!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-929004970": {
+   "kind": "text",
+   "parent": 1390305854,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "God~ yes... just like that!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1631898594": {
+   "kind": "text",
+   "parent": 708763621,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Only if you stop hogging the good spots, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "5_Levels/125_BarnBackInterior/Dialogue_MilkDefaulttalk/Defaultmilktalk_Emma",
+   "script": "Dialogue",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core_NoSave2[2025-shortgo-saveTHREE] = CowPhotoShootTalk_Emma",
+   "as": "GameObject"
+  }
+ ]
+}

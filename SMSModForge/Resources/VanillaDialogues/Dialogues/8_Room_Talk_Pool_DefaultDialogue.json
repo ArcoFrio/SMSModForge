@@ -1,0 +1,2481 @@
+{
+ "id": "8_Room_Talk/Pool/DefaultDialogue",
+ "name": "DefaultDialogue",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  828494319,
+  -18673592,
+  -1629099989
+ ],
+ "nodes": {
+  "828494319": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1908390179,
+    -552299802,
+    956056013
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, hey there. Did you decide to go for a swim too?",
+   "tag": "start",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[first-time-swimming] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "first-time-swimming",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1908390179": {
+   "kind": "text",
+   "parent": 828494319,
+   "children": [
+    -1944575705
+   ],
+   "actor": null,
+   "text": "Yeah, I thought it might help clear my mind.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-552299802": {
+   "kind": "text",
+   "parent": 828494319,
+   "children": [
+    918003710
+   ],
+   "actor": null,
+   "text": "Holy fuck, {M}, what's with that bikini?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "956056013": {
+   "kind": "text",
+   "parent": 828494319,
+   "children": [
+    -245222007
+   ],
+   "actor": null,
+   "text": "Nah, I just needed some fresh air.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-245222007": {
+   "kind": "text",
+   "parent": 956056013,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I don’t blame you; the view from here is absolutely stunning.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[first-time-swimming] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "first-time-swimming",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "918003710": {
+   "kind": "choice",
+   "parent": -552299802,
+   "children": [
+    1201371445,
+    -1185440723,
+    -1495216425
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "W-What's wrong with it? Does it look bad?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[first-time-swimming] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "first-time-swimming",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1944575705": {
+   "kind": "text",
+   "parent": -1908390179,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "How about we take a few laps together, just like we used to in the old days?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[first-time-swimming] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "first-time-swimming",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1201371445": {
+   "kind": "text",
+   "parent": 918003710,
+   "children": [
+    482841704
+   ],
+   "actor": null,
+   "text": "No, it looks fantastic.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1185440723": {
+   "kind": "text",
+   "parent": 918003710,
+   "children": [
+    1647070061,
+    -1585935420
+   ],
+   "actor": null,
+   "text": "You look so hot, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1495216425": {
+   "kind": "text",
+   "parent": 918003710,
+   "children": [
+    1511965206
+   ],
+   "actor": null,
+   "text": "Yeah, it's way too small!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1511965206": {
+   "kind": "text",
+   "parent": -1495216425,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, um... I guess I'll need a new one then.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1647070061": {
+   "kind": "text",
+   "parent": -1185440723,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "H-Hot? I'm your {M}! You can't call me that!...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[first-time-swimming] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "first-time-swimming",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Lewd to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Lewd",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Lewd"
+      }
+     }
+    }
+   ]
+  },
+  "482841704": {
+   "kind": "text",
+   "parent": 1201371445,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh, you got me worried there for a second! Thanks, hun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1585935420": {
+   "kind": "text",
+   "parent": -1185440723,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Don't say these things again...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1629099989": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1370335578,
+    -1987904918,
+    469364012,
+    1864988270,
+    1399235382
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So, what should we do?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[first-time-swimming] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "first-time-swimming",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1370335578": {
+   "kind": "text",
+   "parent": -1629099989,
+   "children": [
+    -1664327981,
+    -1125552813,
+    -1121782964,
+    -389306615,
+    1180088981,
+    -357224584,
+    493384829
+   ],
+   "actor": null,
+   "text": "How about we take a photo?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[first-pool-photo] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "first-pool-photo",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1399235382": {
+   "kind": "text",
+   "parent": -1629099989,
+   "children": [
+    1438684665
+   ],
+   "actor": null,
+   "text": "I'll go back inside.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1438684665": {
+   "kind": "text",
+   "parent": 1399235382,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yeah, it's getting a bit chilly.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1664327981": {
+   "kind": "text",
+   "parent": -1370335578,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "S-Sure, but hurry. I don't want Josef or Adrian noticing something.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[photo-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "photo-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1125552813": {
+   "kind": "text",
+   "parent": -1370335578,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'flash'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "flash"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 13_M1PoolPose1 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "13_M1PoolPose1",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/13_M1PoolPose1"
+      }
+     }
+    }
+   ]
+  },
+  "-1121782964": {
+   "kind": "text",
+   "parent": -1370335578,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hmmm.... I'm not sure, about that one... Let's take another.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-389306615": {
+   "kind": "text",
+   "parent": -1370335578,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'flash'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "flash"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 14_M1PoolPose2 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "14_M1PoolPose2",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/14_M1PoolPose2"
+      }
+     }
+    }
+   ]
+  },
+  "1180088981": {
+   "kind": "choice",
+   "parent": -1370335578,
+   "children": [
+    -2090757435,
+    872114477
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Neat... Which one do you like more?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2090757435": {
+   "kind": "text",
+   "parent": 1180088981,
+   "children": [
+    641044065
+   ],
+   "actor": null,
+   "text": "Let's go with the left one.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "872114477": {
+   "kind": "text",
+   "parent": 1180088981,
+   "children": [
+    -404114594
+   ],
+   "actor": null,
+   "text": "The right one.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-357224584": {
+   "kind": "text",
+   "parent": -1370335578,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Alright. Honestly i'm a bit nervous about you uploading it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "493384829": {
+   "kind": "text",
+   "parent": -1370335578,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "But I trust you. So please go ahead.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[first-pool-photo] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "first-pool-photo",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Comments[5] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "5",
+        "list": "Comments",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "641044065": {
+   "kind": "text",
+   "parent": -2090757435,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Gallery[13] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "13",
+        "list": "Gallery",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-404114594": {
+   "kind": "text",
+   "parent": 872114477,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Gallery[14] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "14",
+        "list": "Gallery",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1987904918": {
+   "kind": "text",
+   "parent": -1629099989,
+   "children": [
+    -1282585640,
+    447589292,
+    -847888084,
+    1273705670,
+    1715973097
+   ],
+   "actor": null,
+   "text": "How about another Pool Photo?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[first-pool-photo] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "first-pool-photo",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[pool-photo-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "pool-photo-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1282585640": {
+   "kind": "text",
+   "parent": -1987904918,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Photos? Hm… If it’s just a few...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1273705670": {
+   "kind": "random",
+   "parent": -1987904918,
+   "children": [
+    254016829,
+    -144681727,
+    -151557688,
+    979479442,
+    -782372553
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You don’t have to guide me for these… I want to experiment a little by myself.",
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "254016829": {
+   "kind": "text",
+   "parent": 1273705670,
+   "children": [
+    135218397
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'flash'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "flash"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 15_M1Poolpose3 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "15_M1Poolpose3",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/15_M1Poolpose3"
+      }
+     }
+    }
+   ]
+  },
+  "-144681727": {
+   "kind": "text",
+   "parent": 1273705670,
+   "children": [
+    -1376742943
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'flash'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "flash"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 16_M1Poolpsoe4 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "16_M1Poolpsoe4",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/16_M1Poolpsoe4"
+      }
+     }
+    }
+   ]
+  },
+  "-151557688": {
+   "kind": "text",
+   "parent": 1273705670,
+   "children": [
+    -1414748334
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-touching] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-touching",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'flash'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "flash"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 17_M1Poolpose5 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "17_M1Poolpose5",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/17_M1Poolpose5"
+      }
+     }
+    }
+   ]
+  },
+  "1715973097": {
+   "kind": "text",
+   "parent": -1987904918,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Maybe I should lie down for a while… I’ll need the energy to cook for everyone later.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[pool-photo-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "pool-photo-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "135218397": {
+   "kind": "text",
+   "parent": 254016829,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, I really like this one!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1376742943": {
+   "kind": "text",
+   "parent": -144681727,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh my... Why does my butt looks so... lage.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1414748334": {
+   "kind": "text",
+   "parent": -151557688,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm in the mood for some new followers todady!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "469364012": {
+   "kind": "text",
+   "parent": -1629099989,
+   "children": [
+    1289511458,
+    1490378185,
+    -749701937,
+    -653151103
+   ],
+   "actor": null,
+   "text": "(Grope her tits)",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[only-cock-photo-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "only-cock-photo-done",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[annapoolgrope] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "annapoolgrope",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1289511458": {
+   "kind": "random",
+   "parent": 469364012,
+   "children": [
+    -614962402,
+    1336403207
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "W-Wait, what are you doing?",
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "-614962402": {
+   "kind": "text",
+   "parent": 1289511458,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active gropepool1 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "gropepool1",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/gropepool1"
+      }
+     }
+    }
+   ]
+  },
+  "1336403207": {
+   "kind": "text",
+   "parent": 1289511458,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active gropepool2 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "gropepool2",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/gropepool2"
+      }
+     }
+    }
+   ]
+  },
+  "1490378185": {
+   "kind": "text",
+   "parent": 469364012,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "S-Stop it.. Your {D} could see us...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood and wait",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ]
+  },
+  "-749701937": {
+   "kind": "text",
+   "parent": 469364012,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god... My own {S} is groping my tits...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[horny-m] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "horny-m",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[annapoolgrope] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "annapoolgrope",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-653151103": {
+   "kind": "text",
+   "parent": 469364012,
+   "children": [
+    1823660691,
+    1939686503
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm... Yes... Fondle my big tits.. They are yours... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1823660691": {
+   "kind": "text",
+   "parent": -653151103,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "G-God... I need you... {M} is so hot for your big cock...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1939686503": {
+   "kind": "choice",
+   "parent": -653151103,
+   "children": [
+    2118658318,
+    2018290464
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "C-Can you please help me? My pussy is so hungry for you....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2118658318": {
+   "kind": "text",
+   "parent": 1939686503,
+   "children": [
+    -185792859,
+    1451832528,
+    1362130139,
+    -721182914,
+    756621228
+   ],
+   "actor": null,
+   "text": "Of course, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2018290464": {
+   "kind": "text",
+   "parent": 1939686503,
+   "children": [
+    -649106640
+   ],
+   "actor": null,
+   "text": "I'm not in the mood, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-185792859": {
+   "kind": "text",
+   "parent": 2118658318,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "F-Fuck... That's it.. Pound me, babe. Y-Yessh....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PoolSex to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PoolSex",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/PoolSex"
+      }
+     }
+    }
+   ]
+  },
+  "-649106640": {
+   "kind": "text",
+   "parent": 2018290464,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I see... Guess I'll have to help myself...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1451832528": {
+   "kind": "text",
+   "parent": 2118658318,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god... You are making such good use of your cock... I can't...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1362130139": {
+   "kind": "text",
+   "parent": 2118658318,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm... You're making me... Hngaaaaah!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PoolSex (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PoolSex (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/PoolSex (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-721182914": {
+   "kind": "text",
+   "parent": 2118658318,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Don't stop... Yesshh! YESHHH!!! HGAAAHHHH!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "756621228": {
+   "kind": "text",
+   "parent": 2118658318,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "F-Fuck... Thanks, hun. I really needed that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-18673592": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1444052285,
+    1589372085,
+    1700026105,
+    1207752365,
+    -668130909,
+    -605855780
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I'm getting close, {M}! I love your pussy! I love it so much!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-B-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-B-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AdrianPool to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AdrianPool",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/AdrianPool"
+      }
+     }
+    }
+   ]
+  },
+  "1444052285": {
+   "kind": "text",
+   "parent": -18673592,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yessshh! P-Please fill me up! This is what {M}'s pussy is for! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1589372085": {
+   "kind": "text",
+   "parent": -18673592,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I... I'm cumming! Hngaaaahh! Fhaaack!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1700026105": {
+   "kind": "text",
+   "parent": -18673592,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yesssh! So much cum! I can feel my pussy getting so warm and sticky!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1207752365": {
+   "kind": "text",
+   "parent": -18673592,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Phew... Thanks, {M}... I really needed that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "979479442": {
+   "kind": "text",
+   "parent": 1273705670,
+   "children": [
+    324032980
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-touching] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-touching",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A43_PoolnewAnna to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A43_PoolnewAnna",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A43_PoolnewAnna"
+      }
+     }
+    }
+   ]
+  },
+  "-782372553": {
+   "kind": "text",
+   "parent": 1273705670,
+   "children": [
+    375303143
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-touching] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-touching",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A44_PoolnewAnna (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A44_PoolnewAnna (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A44_PoolnewAnna (1)"
+      }
+     }
+    }
+   ]
+  },
+  "324032980": {
+   "kind": "text",
+   "parent": 979479442,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let's show our fans {M}'s hungry holes... Let them see everything...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "375303143": {
+   "kind": "text",
+   "parent": -782372553,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "How 'bout some tit jiggling? ... I wonder if Starmaker will ever add a video function...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1864988270": {
+   "kind": "text",
+   "parent": -1629099989,
+   "children": [
+    -904733629,
+    1684954067
+   ],
+   "actor": null,
+   "text": "(Grope her ass)",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[annapoolgrope] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "annapoolgrope",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[only-cock-photo-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "only-cock-photo-done",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-904733629": {
+   "kind": "text",
+   "parent": 1864988270,
+   "children": [
+    -1400888246,
+    1679638682
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{PC}! W-What are you... O-Oh god...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaPoolAssgrope (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaPoolAssgrope (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaPoolAssgrope (1)"
+      }
+     }
+    },
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood and wait",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ]
+  },
+  "1684954067": {
+   "kind": "text",
+   "parent": 1864988270,
+   "children": [
+    -2015037918,
+    694548550,
+    -868468935,
+    -1171414934
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh my! Haha!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaPoolAssgrope (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaPoolAssgrope (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaPoolAssgrope (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1400888246": {
+   "kind": "text",
+   "parent": -904733629,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "This is wrong, this is so wrong...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[horny-m] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "horny-m",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[annapoolgrope] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "annapoolgrope",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1679638682": {
+   "kind": "text",
+   "parent": -904733629,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You're my.... We.... Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-2015037918": {
+   "kind": "text",
+   "parent": 1684954067,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Do you like my soft butt, hun? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "694548550": {
+   "kind": "text",
+   "parent": 1684954067,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "D-Don't be shy, {PC}... Dig deep into {M}'s butt... It's all yours...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaPoolAssgrope (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaPoolAssgrope (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaPoolAssgrope (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-868468935": {
+   "kind": "text",
+   "parent": 1684954067,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmm... I love it when you handle me like that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1171414934": {
+   "kind": "text",
+   "parent": 1684954067,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So good...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-847888084": {
+   "kind": "text",
+   "parent": -1987904918,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Do you… think Josef could see us from the house? Let's be careful...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "447589292": {
+   "kind": "text",
+   "parent": -1987904918,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Mmh, you want pictures? I was hoping you’d say that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-668130909": {
+   "kind": "text",
+   "parent": -18673592,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh, {PC}. I was just helping your {B} out... If you get the chance, could you tell him to use his hips more? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-605855780": {
+   "kind": "text",
+   "parent": -18673592,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "He's not bad, but you're way more... skilled.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Pool",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DefaultDialogue and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Swimwear to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Swimwear",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Swimwear"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

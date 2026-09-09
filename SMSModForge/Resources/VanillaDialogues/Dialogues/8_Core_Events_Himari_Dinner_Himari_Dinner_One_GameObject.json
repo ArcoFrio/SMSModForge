@@ -1,0 +1,856 @@
+{
+ "id": "8_Core_Events/Himari_Dinner/Himari_Dinner_One/GameObject",
+ "name": "GameObject",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Himari",
+  "HimariDad",
+  "HimariMom"
+ ],
+ "roots": [
+  1418290545,
+  544920646,
+  1457438930,
+  768790787,
+  -443925766,
+  656761915,
+  879459697,
+  -224902089,
+  410439264,
+  -493793892,
+  -770469725
+ ],
+ "nodes": {
+  "1418290545": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1784943008,
+    1639671759
+   ],
+   "actor": "Himari",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "<size=70%>Tch. Well? You’re my boyfriend, aren’t you?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1784943008": {
+   "kind": "text",
+   "parent": 1418290545,
+   "children": [
+    1519282307,
+    140690790
+   ],
+   "actor": null,
+   "text": "(A small, respectful peck on the lips)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1639671759": {
+   "kind": "text",
+   "parent": 1418290545,
+   "children": [
+    -1147612305,
+    920815040
+   ],
+   "actor": null,
+   "text": "(Grab her by the waist and make it look real)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1147612305": {
+   "kind": "text",
+   "parent": 1639671759,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "<size=70%>Idiot...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariKiss (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariKiss (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/HimariKiss (2)"
+      }
+     }
+    }
+   ]
+  },
+  "140690790": {
+   "kind": "text",
+   "parent": -1784943008,
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "Ohhh! How sweet! So respectful!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "920815040": {
+   "kind": "text",
+   "parent": 1639671759,
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "My, my! Such passion! Himari, you never told me he was so romantic!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "544920646": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "Oh my, so this is him!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1519282307": {
+   "kind": "text",
+   "parent": -1784943008,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Mmmuah...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariKiss (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariKiss (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/HimariKiss (1)"
+      }
+     }
+    }
+   ]
+  },
+  "768790787": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "HimariMom",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Himari never tells me anything! I was starting to think she’d never bring home a boyfriend!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-443925766": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "<size=120%>Mother...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "656761915": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "HimariMom",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Well? Say something, dear.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "879459697": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "HimariDad",
+   "expressionName": "neutral",
+   "text": "Hmph.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-224902089": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1552440556,
+    1529360430,
+    1155129587
+   ],
+   "actor": "HimariDad",
+   "expression": 1,
+   "expressionName": "talk",
+   "text": "You're not Japanese.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1552440556": {
+   "kind": "text",
+   "parent": -224902089,
+   "children": [
+    -1186723033
+   ],
+   "actor": null,
+   "text": "That’s true, sir. But I have deep respect for Japanese culture.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1529360430": {
+   "kind": "text",
+   "parent": -224902089,
+   "children": [
+    -1353093989,
+    323479078
+   ],
+   "actor": null,
+   "text": "No, but I hope that won’t be a problem.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1155129587": {
+   "kind": "text",
+   "parent": -224902089,
+   "children": [
+    366467587,
+    -1074838743
+   ],
+   "actor": null,
+   "text": "You got me. But I watched many anime.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "366467587": {
+   "kind": "text",
+   "parent": 1155129587,
+   "actor": "HimariDad",
+   "expressionName": "neutral",
+   "text": "This is not a joke.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1353093989": {
+   "kind": "text",
+   "parent": 1529360430,
+   "actor": "HimariDad",
+   "expressionName": "neutral",
+   "text": "We shall see.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1186723033": {
+   "kind": "text",
+   "parent": -1552440556,
+   "actor": "HimariDad",
+   "expressionName": "neutral",
+   "text": "Hmph. We’ll see if that respect extends to Himari.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1074838743": {
+   "kind": "text",
+   "parent": 1155129587,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Idiot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "323479078": {
+   "kind": "text",
+   "parent": 1529360430,
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "Such confidence! I like it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "410439264": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "HimariMom",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Well, I think it’s wonderful that Himari finally brought someone home! You must have quite the charm to win her over.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-493793892": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "<size=70%>Tch. Don’t get any ideas.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-770469725": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "HimariDad",
+   "expressionName": "neutral",
+   "text": "Let’s eat.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1457438930": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1828278221,
+    -988904806,
+    1944382995,
+    -2004697813,
+    1077713200,
+    411242188
+   ],
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "Ah… so it is you. The miracle worker of the milk farm. I should have guessed you’d also be the one to capture my daughter’s heart.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[bafa-mrskimura-metatfarm] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-mrskimura-metatfarm",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1828278221": {
+   "kind": "text",
+   "parent": 1457438930,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Mother… don’t embarrass me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-988904806": {
+   "kind": "text",
+   "parent": 1457438930,
+   "actor": "HimariMom",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Embarrass you? Darling, I’m simply proud. It’s not every day a man manages both business and romance so… fluidly.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1944382995": {
+   "kind": "text",
+   "parent": 1457438930,
+   "actor": "HimariMom",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Though, I do hope you won’t try to recruit Himari for your herd.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2004697813": {
+   "kind": "text",
+   "parent": 1457438930,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "M-Mother!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1077713200": {
+   "kind": "text",
+   "parent": 1457438930,
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "What? I’m only teasing. Unless… well, no, let’s keep dinner wholesome. For now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "411242188": {
+   "kind": "text",
+   "parent": 1457438930,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "…You’re unbelievable.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Himari_Dinner/Himari_Dinner_One",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play GameObject and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueStart'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueStart"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Gallery-Active] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gallery-Active",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariFatherBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariFatherBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariFatherBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariMotherBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariMotherBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariMotherBust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.8 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.8
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariMotherBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariFatherBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play GameObject (1) and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "GameObject (1)",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Core_Events/Himari_Dinner/Himari_Dinner_One/GameObject (1)"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Gallery-Active] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gallery-Active",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 117_ElevatorInside to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "117_ElevatorInside",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/117_ElevatorInside"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 114_HimariDiningRoom to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "114_HimariDiningRoom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/114_HimariDiningRoom"
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_8[himari-homequest] = 2",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "himari-homequest",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 2
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[himaridinner-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "himaridinner-cooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueEnd'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueEnd"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 17_CarPark to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "17_CarPark",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator/MapButtons/17_CarPark"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,847 @@
+{
+ "id": "8_Room_Talk/Bath/AnnaAndAdrianInshower",
+ "name": "AnnaAndAdrianInshower",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Anna"
+ ],
+ "roots": [
+  -1693412313,
+  -1188630232,
+  1377816562
+ ],
+ "nodes": {
+  "1377816562": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1575692849,
+    2097409118
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You want {M} to clean you too?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1575692849": {
+   "kind": "text",
+   "parent": 1377816562,
+   "children": [
+    1241466876,
+    896880389,
+    -1553837949,
+    -1670783877,
+    1956890137,
+    -1971177841,
+    1347546003
+   ],
+   "actor": null,
+   "text": "Make room for me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2097409118": {
+   "kind": "text",
+   "parent": 1377816562,
+   "children": [
+    -1814458947
+   ],
+   "actor": null,
+   "text": "Have fun, guys.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1188630232": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "O-Oh! Hey, {B}.... {M} and I are just taking a shower...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1693412313": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmmhmm... I love the way you treat my tits...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaShowerTHRS to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaShowerTHRS",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/AnnaShowerTHRS"
+      }
+     }
+    }
+   ]
+  },
+  "1241466876": {
+   "kind": "text",
+   "parent": 1575692849,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "F-Fuck... I feel like I'm in a hentai...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaShowerTHRS (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaShowerTHRS (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/AnnaShowerTHRS (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1814458947": {
+   "kind": "text",
+   "parent": 2097409118,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Thanks, {B}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "896880389": {
+   "kind": "text",
+   "parent": 1575692849,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A henwhat?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1553837949": {
+   "kind": "text",
+   "parent": 1575692849,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "N-Nothing... Come on, {M}! Play with our cocks!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1670783877": {
+   "kind": "text",
+   "parent": 1575692849,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmm... You both have really grown... Such big, tasty cocks...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaShowerTHRS (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaShowerTHRS (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/AnnaShowerTHRS (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1956890137": {
+   "kind": "text",
+   "parent": 1575692849,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Fuck my tits... I'm so glad that the three of us get to play together...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1971177841": {
+   "kind": "text",
+   "parent": 1575692849,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I love fucking your tits, {M}! My cock feels so good!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1347546003": {
+   "kind": "choice",
+   "parent": 1575692849,
+   "children": [
+    1940873771,
+    1240167187
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I know an even better place for your big cocks...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1940873771": {
+   "kind": "text",
+   "parent": 1347546003,
+   "children": [
+    -149947254,
+    824924802,
+    1205902870,
+    1072184451,
+    1463385819,
+    -1509636698,
+    1793778513
+   ],
+   "actor": null,
+   "text": "I want your pussy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1240167187": {
+   "kind": "text",
+   "parent": 1347546003,
+   "children": [
+    1879783895,
+    -1240652301,
+    -1307384869,
+    1414274058,
+    -1396572150,
+    786392615,
+    434024106,
+    -931949960,
+    -240545015,
+    -525899658,
+    1585894587
+   ],
+   "actor": null,
+   "text": "I want your ass.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-149947254": {
+   "kind": "text",
+   "parent": 1940873771,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Then take it... Adrian, I hope my ass is good enough for you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1879783895": {
+   "kind": "text",
+   "parent": 1240167187,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Good... But take it slow... You're a bit bigger, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "824924802": {
+   "kind": "text",
+   "parent": 1940873771,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Y-Yes! I would love to fuck your ass, {M}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1205902870": {
+   "kind": "text",
+   "parent": 1940873771,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes! That's it... Fuck my holes... Fuck them!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaShowerTHRS (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaShowerTHRS (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/AnnaShowerTHRS (6)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaShowerTHRS to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaShowerTHRS",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/AnnaShowerTHRS"
+      }
+     }
+    }
+   ]
+  },
+  "1072184451": {
+   "kind": "text",
+   "parent": 1940873771,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Your asshole is so tight, {M}! I don't know if I can endure this any longer!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1463385819": {
+   "kind": "text",
+   "parent": 1940873771,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Then please empty yourself! I want both of you to fill {M}'s hungry holes with your cum!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1240652301": {
+   "kind": "text",
+   "parent": 1240167187,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Let's go!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1307384869": {
+   "kind": "text",
+   "parent": 1240167187,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god! Oh fuck, fuck fuck! Both of you are stretching me so well!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaShowerTHRS (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaShowerTHRS (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/AnnaShowerTHRS (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaShowerTHRS to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaShowerTHRS",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/AnnaShowerTHRS"
+      }
+     }
+    }
+   ]
+  },
+  "1414274058": {
+   "kind": "text",
+   "parent": 1240167187,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Take my cock, {M}! I'm fucking your wet slit!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1396572150": {
+   "kind": "text",
+   "parent": 1240167187,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes! Yes! YES!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "786392615": {
+   "kind": "text",
+   "parent": 1240167187,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Fuck, {M}! I love your pussy! You're so fucking hot, {M}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaShowerTHRS (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaShowerTHRS (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/AnnaShowerTHRS (5)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaShowerTHRS (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaShowerTHRS (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/AnnaShowerTHRS (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1509636698": {
+   "kind": "text",
+   "parent": 1940873771,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I'm cumming! Fuck! It... It comes out!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1793778513": {
+   "kind": "text",
+   "parent": 1940873771,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "God... So much... I guess we all need a proper shower now, hihi.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "434024106": {
+   "kind": "text",
+   "parent": 1240167187,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "God! Please stretch my holes! I'm close! So close! I'm ... Hngghaaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-931949960": {
+   "kind": "text",
+   "parent": 1240167187,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "H-Here it comes!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-240545015": {
+   "kind": "text",
+   "parent": 1240167187,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes! Feed my holes with your cum! I want it all! Oh god! GOD!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-525899658": {
+   "kind": "text",
+   "parent": 1240167187,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "F-Fuck, {M}... That was SO hot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1585894587": {
+   "kind": "text",
+   "parent": 1240167187,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I-I think we all need a proper show now, hihi. Come on!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Bath",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AnnaAndAdrianInshower and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] ≤ 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[Showercooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Showercooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-B-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-B-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Core_NoSave2[anna-at-flowerwork] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-at-flowerwork",
+        "list": "Core_NoSave2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Shower to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Shower",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Shower"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[Showercooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Showercooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

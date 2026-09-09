@@ -1,0 +1,620 @@
+{
+ "id": "8_Room_Talk/Temple_Inside/AnnaMasterDP",
+ "name": "AnnaMasterDP",
+ "index": 8,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Master Zhen"
+ ],
+ "roots": [
+  1067305808,
+  1834771246,
+  -838437056,
+  584967944,
+  1290750,
+  -665461485,
+  1156652715,
+  -108695418
+ ],
+ "nodes": {
+  "1067305808": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "A-Anna, where are your clothes?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1834771246": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, I left them at the entrance... I thought that we... ?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-838437056": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Yes... Your {M} is a wise woman...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "584967944": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Then let us not waste any time....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1290750": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1881159782,
+    -1461038970,
+    1008210572
+   ],
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "How I missed this feeling... Your warm chest engulfing my... Hnghh....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaZhenThreesome (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaZhenThreesome (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaZhenThreesome (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-665461485": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm.... Look how hard {M}'s nipples are.. I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1156652715": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    38204507,
+    -381265550
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Playtime's over... I want you both inside of me... Now...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1881159782": {
+   "kind": "text",
+   "parent": 1290750,
+   "actor": null,
+   "text": "We'll take good care of you, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1461038970": {
+   "kind": "text",
+   "parent": 1290750,
+   "actor": null,
+   "text": "Milk my master's cock, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1008210572": {
+   "kind": "text",
+   "parent": 1290750,
+   "children": [
+    527025553,
+    989680731,
+    -867423534,
+    947499695
+   ],
+   "actor": null,
+   "text": "I want to fuck them too.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "527025553": {
+   "kind": "text",
+   "parent": 1008210572,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "G-Go on... There is enough for both of you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "989680731": {
+   "kind": "text",
+   "parent": 1008210572,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "I never imagined we'd be training in sword fighting in this way...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaZhenThreesome (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaZhenThreesome (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaZhenThreesome (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-867423534": {
+   "kind": "text",
+   "parent": 1008210572,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmm... Yes... Use my big tits to train your fat swords....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "947499695": {
+   "kind": "text",
+   "parent": 1008210572,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "T-Take them... We will make good use of your divine body...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "38204507": {
+   "kind": "text",
+   "parent": 1156652715,
+   "children": [
+    -1626170331,
+    -507323039,
+    -692803777,
+    -1627775583,
+    1025566109,
+    -925089090,
+    -1679105945
+   ],
+   "actor": null,
+   "text": "I want your pussy, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-381265550": {
+   "kind": "text",
+   "parent": 1156652715,
+   "children": [
+    -1914874988,
+    1786494450,
+    -190956769,
+    2129360308,
+    -188206157,
+    -1353936655,
+    1081301449
+   ],
+   "actor": null,
+   "text": "I want your ass, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1626170331": {
+   "kind": "text",
+   "parent": 38204507,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Take me, {S}... Fuck me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1914874988": {
+   "kind": "text",
+   "parent": -381265550,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes... I want your cock to stretch my ass, baby.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-108695418": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "That was... This old man needs a rest... Your {M} is truly something special...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Lewd to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Lewd",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Lewd"
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Nude to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Nude"
+      }
+     }
+    }
+   ]
+  },
+  "-507323039": {
+   "kind": "text",
+   "parent": 38204507,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Y-You are milking.... Y-You are such a devil woman, Anna....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaZhenThreesome (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaZhenThreesome (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaZhenThreesome (6)"
+      }
+     }
+    }
+   ]
+  },
+  "-692803777": {
+   "kind": "text",
+   "parent": 38204507,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmaah... Y-Yes... Allow my ass to milk your fat cock...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1627775583": {
+   "kind": "text",
+   "parent": 38204507,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "I... Im getting close... I will...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1025566109": {
+   "kind": "text",
+   "parent": 38204507,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fuck! FUCK! I'm... I'm... F-Fill me up! Pleaseaaaahhhh!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaZhenThreesome (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaZhenThreesome (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaZhenThreesome (7)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaZhenThreesome (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaZhenThreesome (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaZhenThreesome (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-925089090": {
+   "kind": "text",
+   "parent": 38204507,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Hngaaah.... T-Take my seed... Y-Yes....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1679105945": {
+   "kind": "text",
+   "parent": 38204507,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hngah.... S-So much... So warm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1786494450": {
+   "kind": "text",
+   "parent": -381265550,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Y-Your slit is so wet, Anna... It's... Divine... Hnghh....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaZhenThreesome (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaZhenThreesome (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaZhenThreesome (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-190956769": {
+   "kind": "text",
+   "parent": -381265550,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Your cock feels so good inside of me, master... Mhaah... Stretch my holes, boys... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2129360308": {
+   "kind": "text",
+   "parent": -381265550,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "I... I'm almost... D-Do you want me to....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-188206157": {
+   "kind": "text",
+   "parent": -381265550,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes! Fill me up! I want your warm cockmilk inside of my.. my.. Hnngaaaahhh!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaZhenThreesome (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaZhenThreesome (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaZhenThreesome (5)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaZhenThreesome (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaZhenThreesome (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaZhenThreesome (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1353936655": {
+   "kind": "text",
+   "parent": -381265550,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "T-Take it then... Take our seed... Hngaaghh....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1081301449": {
+   "kind": "text",
+   "parent": -381265550,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm... Such a mess... My holes are... Mmaahhm.....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Temple_Inside/defaulttalktemple",
+   "script": "Dialogue",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core[temp-stored-very-short-term] = AnnaMasterDP",
+   "as": "GameObject"
+  }
+ ]
+}

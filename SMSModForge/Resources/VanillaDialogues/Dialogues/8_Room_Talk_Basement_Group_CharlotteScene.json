@@ -1,0 +1,1043 @@
+{
+ "id": "8_Room_Talk/Basement/Group/CharlotteScene",
+ "name": "CharlotteScene",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Charlotte",
+  "Continue"
+ ],
+ "roots": [
+  1903887002,
+  -1186683688,
+  139101012,
+  -321693613
+ ],
+ "nodes": {
+  "1903887002": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Charlotte_Nude"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Nude"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    }
+   ]
+  },
+  "-1186683688": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Hey there... Can't wait to... produce some high quality content....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[charlottestudio-firsttime] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "charlottestudio-firsttime",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "139101012": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    208199569,
+    1582918809,
+    285847956
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Mhmm... So this is your little fuck cave, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[charlottestudio-firsttime] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "charlottestudio-firsttime",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "208199569": {
+   "kind": "text",
+   "parent": 139101012,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I-It's not a fuck cave, Charlotte. We are working here...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1582918809": {
+   "kind": "text",
+   "parent": 139101012,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Suuuure... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "285847956": {
+   "kind": "text",
+   "parent": 139101012,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-321693613": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -926056151,
+    1231868479
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Sooo... What should we do today?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[charlottestudio-firsttime] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "charlottestudio-firsttime",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-926056151": {
+   "kind": "text",
+   "parent": -321693613,
+   "children": [
+    1489303370,
+    1680483325,
+    -1166072442,
+    1952189789,
+    36025153,
+    2021040916,
+    1882632236,
+    257975424,
+    -1777880636,
+    -1814509930,
+    -1772455933,
+    1730501903,
+    -1114022163,
+    -1614530355,
+    344509189,
+    735900151,
+    -509811104,
+    1821505872
+   ],
+   "actor": null,
+   "text": "I want to watch you two.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1231868479": {
+   "kind": "text",
+   "parent": -321693613,
+   "children": [
+    -2079855170,
+    1280135813,
+    -1255387315,
+    -913394740,
+    -60087849,
+    -1165356434,
+    -84160512,
+    808516052,
+    1207670079,
+    1004420940,
+    565622563,
+    -1007439181,
+    766300950,
+    -1259994181,
+    507606170,
+    1180232857
+   ],
+   "actor": null,
+   "text": "I think my cock could need some attention.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2079855170": {
+   "kind": "text",
+   "parent": 1231868479,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mhmm... Yes... My strong {S} deserves all the attention...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A23_CharlotteStudio (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A23_CharlotteStudio (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A23_CharlotteStudio (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1280135813": {
+   "kind": "text",
+   "parent": 1231868479,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "God, Anna... Who are you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1255387315": {
+   "kind": "text",
+   "parent": 1231868479,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "D-Don't blame me... Blame my {S}'s fat cock...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-913394740": {
+   "kind": "text",
+   "parent": 1231868479,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Muaah... It really is massive... I can barely grasp it with one hand...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A21_CharlotteStudio (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A21_CharlotteStudio (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A21_CharlotteStudio (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-60087849": {
+   "kind": "text",
+   "parent": 1231868479,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes... I did good work, didn't I?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1165356434": {
+   "kind": "text",
+   "parent": 1231868479,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Muah... Let's show him our love...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-84160512": {
+   "kind": "choice",
+   "parent": 1231868479,
+   "children": [
+    -996102555,
+    1124809246
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "I... I want to watch you fuck her ass, {PC}... Stretch her for me...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "808516052": {
+   "kind": "text",
+   "parent": 1231868479,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hngaah... Y-Yes... It's in... It's... Hngaaahh!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A21_CharlotteStudio (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A21_CharlotteStudio (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A21_CharlotteStudio (7)"
+      }
+     }
+    }
+   ]
+  },
+  "1489303370": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Oh, you want me to make your {M} cum? How devious...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1680483325": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1166072442": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Come on, Anna. It's not like this is our first time... Remember Madrid?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1952189789": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I do... I... Mmmm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A21_CharlotteStudio (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A21_CharlotteStudio (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A21_CharlotteStudio (2)"
+      }
+     }
+    }
+   ]
+  },
+  "36025153": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Your lipstick is very... Mmmm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2021040916": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Strawberry... I know it's your favorite...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1882632236": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "F-Fuck... Yes....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A21_CharlotteStudio (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A21_CharlotteStudio (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A21_CharlotteStudio (6)"
+      }
+     }
+    }
+   ]
+  },
+  "257975424": {
+   "kind": "choice",
+   "parent": -926056151,
+   "children": [
+    783851008,
+    161345440
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god... I... I need a break... I....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1207670079": {
+   "kind": "text",
+   "parent": 1231868479,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Go on, {PC}... Show everyone how good of her a slut she is... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1004420940": {
+   "kind": "text",
+   "parent": 1231868479,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fuck... Hnaah... Yes, yes, yes... My {S} is making me.. Hngaahh!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1777880636": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "If you keep going, I'll... I'll....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1814509930": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Oh no, not yet... I brought something... Come on, spread your legs...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1772455933": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "W-What's that? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1614530355": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "C-Can you see everything, hun? Take a good look... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1730501903": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "You will... Hngaah... See.. Soon enough...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "344509189": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Hngaahh... Y-Yes... Move your hips... I'm... Yes...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "735900151": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh fuck... I... I... Hngaaahhh!!! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1821505872": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "L-Let's relax for a while... My legs are pudding...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1114022163": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh fuck... Hah... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[ken-anna-hardcore-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-anna-hardcore-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A21_CharlotteStudio (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A21_CharlotteStudio (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A21_CharlotteStudio (5)"
+      }
+     }
+    }
+   ]
+  },
+  "-996102555": {
+   "kind": "text",
+   "parent": -84160512,
+   "actor": null,
+   "text": "Easy enough... Come on, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1124809246": {
+   "kind": "text",
+   "parent": -84160512,
+   "actor": null,
+   "text": "Y-Yeah...  I will fuck her ass so good...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "783851008": {
+   "kind": "text",
+   "parent": 257975424,
+   "children": [
+    1598883101
+   ],
+   "actor": null,
+   "text": "Just like that... Finger her pussy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "161345440": {
+   "kind": "text",
+   "parent": 257975424,
+   "children": [
+    702787898
+   ],
+   "actor": null,
+   "text": "Smile for the cam, {M}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1598883101": {
+   "kind": "text",
+   "parent": 783851008,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... Fuck... Your hands are so skilled... Charlotte...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "702787898": {
+   "kind": "text",
+   "parent": 161345440,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... Fuck... Your hands are so skilled... Charlotte...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-509811104": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "You still got it, Anna... Your ass felt so soft against mine... Mhmm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "565622563": {
+   "kind": "text",
+   "parent": 1231868479,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Time for the main event... {PC}'s big member spraying a healthy load....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1007439181": {
+   "kind": "text",
+   "parent": 1231868479,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "L-Let's make him cum together... Let's... Use our asses....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "766300950": {
+   "kind": "text",
+   "parent": 1231868479,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Mmm... I can feel your cock grinding against my holes... Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A28_CharlotteStudio (8) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A28_CharlotteStudio (8)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A28_CharlotteStudio (8)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A23_CharlotteStudio (3) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A23_CharlotteStudio (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A23_CharlotteStudio (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1259994181": {
+   "kind": "text",
+   "parent": 1231868479,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "C-Cum for us... Cover us in your warm cum... Please baby... DDo it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "507606170": {
+   "kind": "text",
+   "parent": 1231868479,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "S-So much... Mmm... We really milked your {S}, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1180232857": {
+   "kind": "text",
+   "parent": 1231868479,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "W-We did... Let's make sure the footage is good... The room is quite steamy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "Studio_Canvas/Invite/UI_Invite_Charlotte",
+   "script": "ButtonInstructions",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core[temp-stored-very-short-term] = CharlotteScene",
+   "as": "GameObject",
+   "before": [
+    {
+     "type": "InstructionCommonDebugText",
+     "title": "Log: Click!",
+     "fields": {
+      "m_Message": {
+       "kind": "value",
+       "value": "Click!"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Button-1",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Button-1",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "type": "InstructionUICanvasGroupInteractable",
+     "title": "Studio_Canvas Interactable = False",
+     "fields": {
+      "m_CanvasGroup": {
+       "kind": "object",
+       "name": "Studio_Canvas",
+       "of": "GetGameObjectInstance",
+       "path": "Studio_Canvas"
+      },
+      "m_Interactable": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "type": "InstructionUICanvasGroupAlpha",
+     "title": "Studio_Canvas alpha = 0",
+     "fields": {
+      "m_CanvasGroup": {
+       "kind": "object",
+       "name": "Studio_Canvas",
+       "of": "GetGameObjectInstance",
+       "path": "Studio_Canvas"
+      },
+      "m_Alpha": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "value",
+        "value": 0
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 1,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Basement to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Basement",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Basement"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Studio_Canvas to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Studio_Canvas",
+       "of": "GetGameObjectInstance",
+       "path": "Studio_Canvas"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

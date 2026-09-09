@@ -67,7 +67,59 @@ public static class VanillaUiSeed
 
         foreach (var node in stored)
             stranded += Apply(node, seeded, byPath);
+
+        // The stored places have been used; the tree an author edits says the
+        // same thing by the order its lists are in. Leaving the numbers behind
+        // would let a stale one be written out again long after the order it
+        // described stopped being asserted.
+        Forget(seeded);
         return seeded;
+    }
+
+    private static void Forget(UiNodeDef node)
+    {
+        node.SiblingIndex = -1;
+        foreach (var child in node.Children) Forget(child);
+    }
+
+    /// <summary>
+    /// A screen of the game's, as objects the PACK owns.
+    /// <para/>
+    /// The difference from seeding an extension is one field, and it changes
+    /// everything about what the result is. An extension's nodes carry a
+    /// <c>Bind</c>: they name the game's objects and only say what differs, so
+    /// editing one edits the game's screen. A copy carries no binds, so every
+    /// object is the pack's - free to move, rename or delete - and the screen it
+    /// came from is left untouched.
+    /// <para/>
+    /// That is what a pack wants when it needs a screen LIKE one of the game's
+    /// rather than a changed version of it: a second shop, not a different
+    /// general store.
+    /// <para/>
+    /// The cost is that a copy is frozen at the moment the extraction was taken.
+    /// An extension rides along when the game moves its screen about; a copy
+    /// stays as it was. For a screen meant to be independent that is the right
+    /// way round.
+    /// </summary>
+    public static UiNodeDef CopyOf(VanillaUiSurface.Node vanilla,
+                                   Func<string, string>? nameForKey = null)
+    {
+        var seeded = FromBase(vanilla, nameForKey);
+        if (seeded != null) Unbind(seeded);
+        return seeded!;
+    }
+
+    /// <summary>Cut every tie to the game's own objects. The override flags go
+    /// with the binds: they only mean anything as "differs from the object this
+    /// is bound to", and there is no longer such an object.</summary>
+    private static void Unbind(UiNodeDef node)
+    {
+        node.Bind = "";
+        node.OverrideRect = false;
+        node.OverrideImage = false;
+        node.OverrideText = false;
+        node.OverrideActive = false;
+        foreach (var child in node.Children) Unbind(child);
     }
 
     private static void Index(UiNodeDef node, Dictionary<string, UiNodeDef> into)
@@ -112,7 +164,67 @@ public static class VanillaUiSeed
             if (child.IsBound) { stranded += Apply(child, seededRoot, byPath); continue; }
             target.Children.Add(child);          // an addition, in its right place
         }
+
+        // Last, so that everything it has to arrange is present: the objects
+        // the game owns were already in the seed, and the pack's own have just
+        // been added on the end.
+        Reorder(stored, target, byPath);
         return stranded;
+    }
+
+    /// <summary>
+    /// Put a parent's children back into the order the pack recorded.
+    /// <para/>
+    /// Recorded only when an author actually rearranged something, and then for
+    /// every child at once — so this either has the whole arrangement or none
+    /// of it, and never has to guess what to do with half.
+    /// </summary>
+    private static void Reorder(UiNodeDef stored, UiNodeDef target,
+                                Dictionary<string, UiNodeDef> byPath)
+    {
+        var placed = new List<KeyValuePair<int, UiNodeDef>>();
+        foreach (var child in stored.Children)
+        {
+            if (child.SiblingIndex < 0) continue;
+
+            // A bound child is the seeded object it names; one the pack added
+            // is the very object just put into the list.
+            UiNodeDef? node = child.IsBound
+                ? (byPath.TryGetValue(child.Bind, out var found) ? found : null)
+                : child;
+
+            if (node != null) placed.Add(new KeyValuePair<int, UiNodeDef>(child.SiblingIndex, node));
+        }
+        if (placed.Count == 0) return;
+
+        foreach (var one in placed) target.Children.Remove(one.Value);
+        foreach (var one in placed.OrderBy(o => o.Key))
+            target.Children.Insert(Math.Min(one.Key, target.Children.Count), one.Value);
+    }
+
+    /// <summary>
+    /// Put one object back the way the game has it, leaving its children and
+    /// anything the pack added alone.
+    /// <para/>
+    /// Undo works on a step; this works on an object, which is what an author
+    /// wants after a session of nudging one panel about and deciding they
+    /// preferred it where it was. Everything the delta compares is restored, so
+    /// the node stops asserting anything and drops out of the manifest.
+    /// </summary>
+    public static void ResetTo(UiNodeDef node, VanillaUiSurface.Node vanilla,
+                               Func<string, string>? nameForKey = null)
+    {
+        if (node == null || vanilla == null) return;
+        node.Rect = RectOf(vanilla.Rect);
+        node.Image = ImageOf(vanilla.Image, nameForKey);
+        node.Text = TextOf(vanilla.Text);
+        node.Alpha = vanilla.CanvasGroup?.Alpha;
+        node.Shadow = EffectOf(vanilla.Shadow);
+        node.Outline = EffectOf(vanilla.Outline);
+        node.ClipChildren = vanilla.Clips;
+        node.StartActive = vanilla.ActiveSelf;
+        node.ActiveConditions.Clear();
+        node.Components.Clear();
     }
 
     /// <summary>The bind paths a tree uses, in order. For checking that a seed

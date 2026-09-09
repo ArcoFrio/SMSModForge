@@ -1,0 +1,471 @@
+{
+ "id": "8_Room_Talk/Villa_Guestroom/SofiaSlutFirsttime",
+ "name": "SofiaSlutFirsttime",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Sofia"
+ ],
+ "roots": [
+  -1288546045,
+  10897544,
+  1673997656,
+  1712704493
+ ],
+ "nodes": {
+  "-1288546045": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1007741702,
+    -35440186,
+    1945355149
+   ],
+   "actor": "Sofia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Heeeey, {PC}. I'm so glad you're finally hereeee.... ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionQuestsDeactivate",
+     "title": "Deactivate Justice (Sofia)",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Justice (Sofia)",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "1007741702": {
+   "kind": "text",
+   "parent": -1288546045,
+   "actor": null,
+   "text": "S-Sofia? What are you doing here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-35440186": {
+   "kind": "text",
+   "parent": -1288546045,
+   "actor": null,
+   "text": "Looks like Mario was able to flip you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1945355149": {
+   "kind": "text",
+   "parent": -1288546045,
+   "children": [
+    1576172518
+   ],
+   "actor": null,
+   "text": "I'm sorry for betraying you, Sofia.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1576172518": {
+   "kind": "text",
+   "parent": 1945355149,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Oh, no! Don't be... I'm sooo happy here!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "10897544": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Mario and his men showed me my true purpose, no question!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionQuestsDeactivate",
+     "title": "Deactivate Justice (Sofia)",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Justice (Sofia)",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "1673997656": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Forget about the paperwork, the grinding wheels, and everything else—all that matters is the big, fat cocks!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1712704493": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1911689093,
+    1478116812,
+    478481323
+   ],
+   "actor": "Sofia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "And I'm so lucky I get to be yours! S-So... Please, master... Do anything you like to me! ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Lewd to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Lewd",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Lewd"
+      }
+     }
+    }
+   ]
+  },
+  "-1911689093": {
+   "kind": "text",
+   "parent": 1712704493,
+   "children": [
+    1471749614
+   ],
+   "actor": null,
+   "text": "We'll have a lot of fun together....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1478116812": {
+   "kind": "text",
+   "parent": 1712704493,
+   "children": [
+    -879809227
+   ],
+   "actor": null,
+   "text": "Good girl. I expect you to be ready for me at all times.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "478481323": {
+   "kind": "text",
+   "parent": 1712704493,
+   "children": [
+    -1595785081
+   ],
+   "actor": null,
+   "text": "I'm so sorry, Sofia.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1595785081": {
+   "kind": "text",
+   "parent": 478481323,
+   "actor": "Sofia",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "F-For what? I'm so happy {PC}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-879809227": {
+   "kind": "text",
+   "parent": 1478116812,
+   "actor": "Sofia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Y-Yes, master!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1471749614": {
+   "kind": "text",
+   "parent": -1911689093,
+   "actor": "Sofia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Yes!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Villa_Guestroom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play SofiaSlutFirsttime and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[sofiaslv-firsttime] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofiaslv-firsttime",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia_Slut to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia_Slut",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Sofia_Slut"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[sofiaslv-firsttime] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofiaslv-firsttime",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

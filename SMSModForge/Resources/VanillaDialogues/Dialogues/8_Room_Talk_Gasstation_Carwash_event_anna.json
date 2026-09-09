@@ -1,0 +1,867 @@
+{
+ "id": "8_Room_Talk/Gasstation/Carwash_event_anna",
+ "name": "Carwash_event_anna",
+ "index": 4,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna"
+ ],
+ "roots": [
+  554331436,
+  -1611601022,
+  -1046164162,
+  660521423,
+  967898611,
+  -1083755656,
+  -173816781,
+  -1891041400,
+  282120717,
+  -1506482489,
+  -1954928736,
+  -694605726,
+  365146111,
+  1137392387
+ ],
+ "nodes": {
+  "554331436": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -816717688,
+    -1206384681,
+    203892632,
+    -1629164242
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I can’t believe I let Charlotte talk me into this… Do I really look okay?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[Car-Dirt] = 0",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Car-Dirt",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 0
+      }
+     }
+    }
+   ]
+  },
+  "-816717688": {
+   "kind": "text",
+   "parent": 554331436,
+   "children": [
+    1568475335
+   ],
+   "actor": null,
+   "text": "You look great, {M}. It’s for a good cause, just have fun with it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1206384681": {
+   "kind": "text",
+   "parent": 554331436,
+   "children": [
+    -354532747
+   ],
+   "actor": null,
+   "text": "You sure about this? You seem a little hesitant.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "203892632": {
+   "kind": "text",
+   "parent": 554331436,
+   "children": [
+    140850600,
+    -1674508812
+   ],
+   "actor": null,
+   "text": "You’re probably the reason half these guys suddenly care about charity.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1568475335": {
+   "kind": "text",
+   "parent": -816717688,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You’re sweet… I just feel so exposed. But yeah, it’s for a good cause. I can handle a little embarrassment for them.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "140850600": {
+   "kind": "text",
+   "parent": 203892632,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, stop… That’s not true.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-354532747": {
+   "kind": "text",
+   "parent": -1206384681,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I am, but it’s too late to back out now, isn’t it? Besides, Charlotte would never let me hear the end of it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1629164242": {
+   "kind": "text",
+   "parent": 554331436,
+   "children": [
+    85588618
+   ],
+   "actor": null,
+   "text": "Second thoughts? Too late now, ‘Joanne.’ Better start scrubbing before people get suspicious.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "85588618": {
+   "kind": "text",
+   "parent": -1629164242,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Really? You’re bringing that up now? I should pour this bucket over your head for that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1674508812": {
+   "kind": "text",
+   "parent": 203892632,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "...Okay, maybe a little.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1611601022": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I hope this is actually helping someone. Feels like half these people just showed up to stare...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1046164162": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "You know, I never thought I’d be doing something like this. Not just the bikini part—I mean, putting myself out there like this, in public.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "660521423": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    465727688,
+    -2059686553,
+    -1230205184
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "It’s… weirdly thrilling.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ImgCarwashAnna (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ImgCarwashAnna (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/ImgCarwashAnna (1)"
+      }
+     }
+    }
+   ]
+  },
+  "967898611": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Okay… hood’s almost done. No streaks, no missed spots. Just gotta—",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active gasstation bubbles to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "gasstation bubbles",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/59_Gasstation/gasstation bubbles"
+      }
+     }
+    }
+   ]
+  },
+  "465727688": {
+   "kind": "text",
+   "parent": 660521423,
+   "children": [
+    1119266498,
+    -2107768514
+   ],
+   "actor": null,
+   "text": "Proud of you, Anna. You’ve come a long way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2059686553": {
+   "kind": "text",
+   "parent": 660521423,
+   "children": [
+    2015301326,
+    -293603785
+   ],
+   "actor": null,
+   "text": "Weirdly thrilling, huh? You thinking about doing more public stuff?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1230205184": {
+   "kind": "text",
+   "parent": 660521423,
+   "children": [
+    1894872868,
+    -2034349020
+   ],
+   "actor": null,
+   "text": "Careful, you might start enjoying the attention a little too much.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1894872868": {
+   "kind": "text",
+   "parent": -1230205184,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "And what if I did?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2015301326": {
+   "kind": "text",
+   "parent": -2059686553,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I don’t know about more public stuff… But I won’t lie, it’s kind of exciting knowing people are watching.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1119266498": {
+   "kind": "text",
+   "parent": 465727688,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You think so? I don’t know… Sometimes it feels like I’m still figuring out who I even am outside of being a {M} and a wife.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2107768514": {
+   "kind": "text",
+   "parent": 465727688,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "But… thanks. That means a lot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-293603785": {
+   "kind": "text",
+   "parent": -2059686553,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Maybe I just like the attention more than I thought.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2034349020": {
+   "kind": "text",
+   "parent": -1230205184,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Kidding! I’d never get used to this kind of thing… probably.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1083755656": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, come on… Why do cars always have that one annoying stain that won’t come off?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-173816781": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You’d think after all the cleaning I’ve done in my life, this would be easy. But nooo, now I have an audience.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1891041400": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Alright, windows next… No pressure, Anna. Just clean like nobody’s watching. Even though they definitely are.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "282120717": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Alright… almost there. Just gotta—",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-694605726": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hah… did it. And it actually looks pretty good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "type": "InstructionParticleSystemStopParticleSystem",
+     "title": "Stop gasstation bubbles Particle System",
+     "fields": {
+      "m_GameObject": {
+       "kind": "object",
+       "name": "gasstation bubbles",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/59_Gasstation/gasstation bubbles"
+      }
+     }
+    }
+   ]
+  },
+  "365146111": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Okay… now it’s really done. And I didn’t even mess up… much.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1137392387": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "…Okay, maybe I messed up a little. But hey, if this helps raise money, I guess I’ll take the free shower.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_8[carwashtotals] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "carwashtotals",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active gasstation bubbles to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "gasstation bubbles",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/59_Gasstation/gasstation bubbles"
+      }
+     }
+    }
+   ]
+  },
+  "-1506482489": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oops, s-sorry... Sometimes I understimate the size of my behind...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ImgCarwashAnna (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ImgCarwashAnna (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/ImgCarwashAnna (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1954928736": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let me just...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Gasstation",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Carwash_event_anna and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[specialcarwashunlocked] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "specialcarwashunlocked",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[special-carwashcd] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "special-carwashcd",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] ≥ 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ],
+   "branches": [
+    "Carwash"
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Swimwear to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Swimwear",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Swimwear"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Swimwear/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'ForceEnableUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "ForceEnableUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[special-carwashcd] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "special-carwashcd",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

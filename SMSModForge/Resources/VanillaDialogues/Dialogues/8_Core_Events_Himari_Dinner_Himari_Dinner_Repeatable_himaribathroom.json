@@ -1,0 +1,1608 @@
+{
+ "id": "8_Core_Events/Himari_Dinner/Himari_Dinner_Repeatable/himaribathroom",
+ "name": "himaribathroom",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Himari",
+  "You"
+ ],
+ "roots": [
+  -533905687
+ ],
+ "nodes": {
+  "-533905687": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1462945984,
+    870229856
+   ],
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Bathroom again? This is becoming a habit.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1462945984": {
+   "kind": "choice",
+   "parent": -533905687,
+   "children": [
+    1700429031,
+    876746517,
+    1020553456
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Shut up and kiss me.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1700429031": {
+   "kind": "text",
+   "parent": -1462945984,
+   "children": [
+    -1157332179,
+    272166431,
+    -407100746,
+    -1234771236,
+    387576351,
+    2099633142,
+    -1998512320
+   ],
+   "actor": null,
+   "text": "Can you... Can you use your mouth on me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "876746517": {
+   "kind": "text",
+   "parent": -1462945984,
+   "children": [
+    46698189,
+    407017627,
+    994096341,
+    -1133858331,
+    -1555933226,
+    1298341464,
+    202307776
+   ],
+   "actor": null,
+   "text": "I want to be inside of you, Himari.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "46698189": {
+   "kind": "text",
+   "parent": 876746517,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "S-Sure... I mean, it's not like I want it too.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariAnal (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariAnal (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/HimariAnal (1)"
+      }
+     }
+    }
+   ]
+  },
+  "407017627": {
+   "kind": "text",
+   "parent": 876746517,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "But I guess I have to make this worthwhile for you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "994096341": {
+   "kind": "text",
+   "parent": 876746517,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Oh fuck... It's in... Fuck, your freak cock is stretching me so hard...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariAnal (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariAnal (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/HimariAnal (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1133858331": {
+   "kind": "text",
+   "parent": 876746517,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "D-Don't stop... I'm getting close... Keep it up, idiot!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1157332179": {
+   "kind": "text",
+   "parent": 1700429031,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Tch... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariBath (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariBath (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/HimariBath (1)"
+      }
+     }
+    }
+   ]
+  },
+  "272166431": {
+   "kind": "text",
+   "parent": 1700429031,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Just hold still, will you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-407100746": {
+   "kind": "text",
+   "parent": 1700429031,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "You better not mess this up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariBath (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariBath (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/HimariBath (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1234771236": {
+   "kind": "text",
+   "parent": 1700429031,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "And... It's fine to cum... I assume you're too weak to control yourself...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariBath (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariBath (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/HimariBath (3)"
+      }
+     }
+    }
+   ]
+  },
+  "387576351": {
+   "kind": "text",
+   "parent": 1700429031,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "So... Please let it out... If you want... Mwuaah... Glphh....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1555933226": {
+   "kind": "text",
+   "parent": 876746517,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "That's it... That's it... I'm... Hngaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariAnal (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariAnal (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/HimariAnal (4)"
+      }
+     }
+    }
+   ]
+  },
+  "1298341464": {
+   "kind": "text",
+   "parent": 876746517,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Fuck, fuck... I can feel your cum inside my... Hngaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2099633142": {
+   "kind": "text",
+   "parent": 1700429031,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Gluuph! Sluurp! PFH! PFHH! Mwuaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariBath (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariBath (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/HimariBath (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariBath (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariBath (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/HimariBath (1)"
+      }
+     }
+    }
+   ]
+  },
+  "870229856": {
+   "kind": "text",
+   "parent": -533905687,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "N-Now let's get back to my parents... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1998512320": {
+   "kind": "text",
+   "parent": 1700429031,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Fuck, {PC}... N-Next time warn me, idiot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "202307776": {
+   "kind": "text",
+   "parent": 876746517,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "I'm... I'm glad you're such dedicated to the role... I'll say this only once: Good job...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariAnal (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariAnal (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/HimariAnal (5)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariAnal (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariAnal (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/HimariAnal (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1020553456": {
+   "kind": "text",
+   "parent": -1462945984,
+   "children": [
+    -747710613,
+    307044896,
+    1966425135,
+    1923708827,
+    -204412429,
+    1972759340,
+    946580336,
+    1317256522,
+    546499330,
+    370221580,
+    1312562458,
+    -2033924777,
+    -171618470
+   ],
+   "actor": null,
+   "text": "Guess who brought condoms this time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Inventory[Condoms] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Condoms",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-747710613": {
+   "kind": "choice",
+   "parent": 1020553456,
+   "children": [
+    -1994721368,
+    -451568678,
+    -1615844399
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "W-What? N-No, you can't be serious!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "307044896": {
+   "kind": "text",
+   "parent": 1020553456,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Gah, FINE... Just, don't ruin me with your freak cock!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1994721368": {
+   "kind": "text",
+   "parent": -747710613,
+   "children": [
+    -1976743410
+   ],
+   "actor": null,
+   "text": "Afraid you'll like it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-451568678": {
+   "kind": "text",
+   "parent": -747710613,
+   "children": [
+    408600745
+   ],
+   "actor": null,
+   "text": "Well, then I guess we have to tell your mother the truth.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1615844399": {
+   "kind": "text",
+   "parent": -747710613,
+   "children": [
+    -671500666
+   ],
+   "actor": null,
+   "text": "Do you prefer it in your ass?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-671500666": {
+   "kind": "text",
+   "parent": -1615844399,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "N-No! That's not it... It's just that I... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "408600745": {
+   "kind": "text",
+   "parent": -451568678,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "NO!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1976743410": {
+   "kind": "text",
+   "parent": -1994721368,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "What? No, of course not! Why would I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1966425135": {
+   "kind": "text",
+   "parent": 1020553456,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Oh god, I'm dead. I can't believe this is how I'll die...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariToiletRubber (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariToiletRubber (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/HimariToiletRubber (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1923708827": {
+   "kind": "text",
+   "parent": 1020553456,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Just take it... SlooWAAAAAAHHHH! HGNAAAAHHH!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariToiletRubber (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariToiletRubber (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/HimariToiletRubber (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-204412429": {
+   "kind": "text",
+   "parent": 1020553456,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "F-Fuck, {PC}... F-Fuck me! I... I mean fuck you... fuck this big.... Fuck... Hngaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1972759340": {
+   "kind": "choice",
+   "parent": 1020553456,
+   "children": [
+    -873618328,
+    -1600262419
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "H-Hurry up... You're too big, {PC}... I'm not sure how much longer I can endure this before I... Before I...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-873618328": {
+   "kind": "text",
+   "parent": 1972759340,
+   "children": [
+    -646301912,
+    1202613267,
+    1783826039
+   ],
+   "actor": null,
+   "text": "(Grab her ass and pound her hard)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1600262419": {
+   "kind": "text",
+   "parent": 1972759340,
+   "children": [
+    -1934857276,
+    -1217982791,
+    329052142
+   ],
+   "actor": null,
+   "text": "Well, then you better start moving your hips.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-646301912": {
+   "kind": "text",
+   "parent": -873618328,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Aaahhhnnngggg! Fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariToiletRubber (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariToiletRubber (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/HimariToiletRubber (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1934857276": {
+   "kind": "text",
+   "parent": -1600262419,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "F-Fine, but just so this is over ASAP!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariToiletRubber (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariToiletRubber (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/HimariToiletRubber (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-1217982791": {
+   "kind": "text",
+   "parent": -1600262419,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Does this work? Just hurry up already, will you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "329052142": {
+   "kind": "text",
+   "parent": -1600262419,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Come on, {PC}... Is my body not enough to make you... to make you cum? I... Please...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1202613267": {
+   "kind": "text",
+   "parent": -873618328,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "{PC}... You... You dumb... Idiot... Stop being so rough... You're making me...  ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1783826039": {
+   "kind": "text",
+   "parent": -873618328,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Ohhhhhhh fuck yesssssss!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "946580336": {
+   "kind": "text",
+   "parent": 1020553456,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "I hate this, But don't stop. Don't you dare stop!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1317256522": {
+   "kind": "text",
+   "parent": 1020553456,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Fffffuuuccckkkk! Ohhhhhhh fuck yesssssss! I'M.. I'M....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariToiletRubber (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariToiletRubber (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/HimariToiletRubber (5)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariToiletRubber (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariToiletRubber (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/HimariToiletRubber (1)"
+      }
+     }
+    }
+   ]
+  },
+  "546499330": {
+   "kind": "text",
+   "parent": 1020553456,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "No! No no no no no! The condom broke! Oh my god!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2033924777": {
+   "kind": "text",
+   "parent": 1020553456,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "W-Why are you still inside me!? Pull it out! NOW!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-171618470": {
+   "kind": "text",
+   "parent": 1020553456,
+   "actor": "Himari",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I'm dead serious, {PC}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "370221580": {
+   "kind": "text",
+   "parent": 1020553456,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "This can't be happening, if your cursed seed takes hold I... You...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1312562458": {
+   "kind": "choice",
+   "parent": 1020553456,
+   "children": [
+    1406131688,
+    -954396512,
+    -484739697
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "You idiot! You fucking Idiot! If I get pregnant, you better be ready to marry me, got it?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1406131688": {
+   "kind": "text",
+   "parent": 1312562458,
+   "children": [
+    79941556
+   ],
+   "actor": null,
+   "text": "Deal.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-954396512": {
+   "kind": "text",
+   "parent": 1312562458,
+   "children": [
+    -1325852711
+   ],
+   "actor": null,
+   "text": "Your pussy's literally milking my cock, fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-484739697": {
+   "kind": "text",
+   "parent": 1312562458,
+   "children": [
+    -421887883
+   ],
+   "actor": null,
+   "text": "Fuck, just take the after pill or something!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "79941556": {
+   "kind": "text",
+   "parent": 1406131688,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "W-What?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1325852711": {
+   "kind": "text",
+   "parent": -954396512,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "That's not my fault! I can't control my fucking body!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-421887883": {
+   "kind": "text",
+   "parent": -484739697,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Y-Yes, I... There's a drugstore nearby...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Himari_Dinner/Himari_Dinner_Repeatable",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play himaribathroom and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueStart'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueStart"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Gallery-Active] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gallery-Active",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariFatherBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariFatherBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariFatherBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariMotherBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariMotherBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariMotherBust"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play GameObject and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "GameObject",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Core_Events/Himari_Dinner/Himari_Dinner_Repeatable/GameObject"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariMotherBust to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariMotherBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariMotherBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariFatherBust to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariFatherBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariFatherBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 114_HimariDiningRoom to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "114_HimariDiningRoom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/114_HimariDiningRoom"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 115_HimariBathRoom to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "115_HimariBathRoom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/115_HimariBathRoom"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariFatherBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariFatherBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariFatherBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariMotherBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariMotherBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariMotherBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 114_HimariDiningRoom to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "114_HimariDiningRoom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/114_HimariDiningRoom"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 115_HimariBathRoom to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "115_HimariBathRoom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/115_HimariBathRoom"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Himari_AFTER_bathroom and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Himari_AFTER_bathroom",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Core_Events/Himari_Dinner/Himari_Dinner_Repeatable/Himari_AFTER_bathroom"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariMotherBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariFatherBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play GameObject (1) and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "GameObject (1)",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Core_Events/Himari_Dinner/Himari_Dinner_Repeatable/GameObject (1)"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Gallery-Active] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gallery-Active",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 117_ElevatorInside to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "117_ElevatorInside",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/117_ElevatorInside"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 114_HimariDiningRoom to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "114_HimariDiningRoom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/114_HimariDiningRoom"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[himaridinner-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "himaridinner-cooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueEnd'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueEnd"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 17_CarPark to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "17_CarPark",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator/MapButtons/17_CarPark"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

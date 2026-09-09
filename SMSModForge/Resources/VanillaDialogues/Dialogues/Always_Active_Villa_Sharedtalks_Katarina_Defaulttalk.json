@@ -1,0 +1,936 @@
+{
+ "id": "Always_Active/Villa_Sharedtalks/Katarina_Defaulttalk",
+ "name": "Katarina_Defaulttalk",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Katarina"
+ ],
+ "roots": [
+  -1942081337,
+  -1039278621,
+  -2094726502,
+  -1999514532
+ ],
+ "nodes": {
+  "-2094726502": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1987720978,
+    -1054591431,
+    -1702864565,
+    -754675494
+   ],
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "What do you want?",
+   "tag": "kataquestion1",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[katarina-player-friends] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-player-friends",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1987720978": {
+   "kind": "text",
+   "parent": -2094726502,
+   "children": [
+    147327443
+   ],
+   "actor": null,
+   "text": "What do you think of me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1054591431": {
+   "kind": "text",
+   "parent": -2094726502,
+   "children": [
+    -1536881246
+   ],
+   "actor": null,
+   "text": "Why are you always so harsh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1702864565": {
+   "kind": "text",
+   "parent": -2094726502,
+   "children": [
+    -1755163530
+   ],
+   "actor": null,
+   "text": "What do you do for fun?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-754675494": {
+   "kind": "text",
+   "parent": -2094726502,
+   "children": [
+    398065324
+   ],
+   "actor": null,
+   "text": "See you around.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "398065324": {
+   "kind": "text",
+   "parent": -754675494,
+   "actor": "Katarina",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Get lost.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1755163530": {
+   "kind": "text",
+   "parent": -1702864565,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "We live in different worlds, as if you could understand my definition of fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1536881246": {
+   "kind": "text",
+   "parent": -1054591431,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Because I can. I worked my ass off to be here, you know how many cocks I had to suck? So shut up with your retarded questions.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "147327443": {
+   "kind": "text",
+   "parent": 1987720978,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Think of you? You're nothing but a peasant, barely worth my time. Don't flatter yourself.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1999514532": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    855015933,
+    1613846333,
+    538386616,
+    698922467,
+    -1286926716
+   ],
+   "actor": "Katarina",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hello, my dear... Fuck, you're so hot...",
+   "tag": "nicekata",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[katarina-player-friends] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-player-friends",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "855015933": {
+   "kind": "text",
+   "parent": -1999514532,
+   "children": [
+    227271083
+   ],
+   "actor": null,
+   "text": "How do you feel about us?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "227271083": {
+   "kind": "text",
+   "parent": 855015933,
+   "actor": "Katarina",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "You know exactly how I feel, darling. Being with you… it’s thrilling, dangerous, and I can’t get enough. You're the perfect man.",
+   "jump": {
+    "mode": "Jump",
+    "to": "nicekata"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1613846333": {
+   "kind": "text",
+   "parent": -1999514532,
+   "children": [
+    -1684298830
+   ],
+   "actor": null,
+   "text": "What about Mario?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1684298830": {
+   "kind": "text",
+   "parent": 1613846333,
+   "actor": "Katarina",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Mario? Forget him. I only love your cock... ",
+   "jump": {
+    "mode": "Jump",
+    "to": "nicekata"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "538386616": {
+   "kind": "text",
+   "parent": -1999514532,
+   "children": [
+    525399537
+   ],
+   "actor": null,
+   "text": "Can you meow for me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "525399537": {
+   "kind": "text",
+   "parent": 538386616,
+   "actor": "Katarina",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "M-Meow... Meow, meow, meow....",
+   "jump": {
+    "mode": "Jump",
+    "to": "nicekata"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1286926716": {
+   "kind": "text",
+   "parent": -1999514532,
+   "children": [
+    381301181
+   ],
+   "actor": null,
+   "text": "See you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "381301181": {
+   "kind": "text",
+   "parent": -1286926716,
+   "actor": "Katarina",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "P-Please come back soon....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1942081337": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You ruined my life! Leave before I forget my manners! NOW! LEAVE!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Mario-In-Prison] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-In-Prison",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[katarina-player-friends] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-player-friends",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "698922467": {
+   "kind": "text",
+   "parent": -1999514532,
+   "children": [
+    -2074817439,
+    -506490226,
+    -1677520359,
+    -1696212707
+   ],
+   "actor": null,
+   "text": "I need you to produce human milk for my farm.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[bafa-katarinaaccepted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-katarinaaccepted",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[milk-searchforcandidates] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milk-searchforcandidates",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2074817439": {
+   "kind": "text",
+   "parent": 698922467,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Your farm…?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-506490226": {
+   "kind": "text",
+   "parent": 698922467,
+   "actor": "Katarina",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "You could’ve asked me to do anything and I’d have said yes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1677520359": {
+   "kind": "text",
+   "parent": 698922467,
+   "actor": "Katarina",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "If this keeps me closer to you… then of course I’ll do it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1696212707": {
+   "kind": "text",
+   "parent": 698922467,
+   "actor": "Katarina",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Milk me, use me, keep me there with you as long as you want. I’ll give you everything. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Milking Save[bafa-katarinaaccepted] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-katarinaaccepted",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1039278621": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -349050692,
+    -304924508
+   ],
+   "actor": "Katarina",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "He’s gone. Finally. And you’re all I crave now... body, voice, cock... everything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Mario-In-Prison] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-In-Prison",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[katarina-marioarrested-aftertalk25] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-marioarrested-aftertalk25",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-349050692": {
+   "kind": "text",
+   "parent": -1039278621,
+   "actor": "Katarina",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Do you know how humiliating it is to want you like this? I fucking love it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-304924508": {
+   "kind": "text",
+   "parent": -1039278621,
+   "actor": "Katarina",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "So be a good boy and come ruin me again... before I remember I used to be in control.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[katarina-marioarrested-aftertalk25] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-marioarrested-aftertalk25",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Villa_Library",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Katarina_Defaulttalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_4[emma-katarina-locations] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-katarina-locations",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Katarina-Left] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Katarina-Left",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina_Normal to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina_Normal",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Katarina_Normal"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[katarina-first-meeting] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-first-meeting",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Room_Talk/Villa_Backyard",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Katarina_Defaulttalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_4[emma-katarina-locations] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-katarina-locations",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Katarina-Left] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Katarina-Left",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina_Swimwear to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina_Swimwear",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Katarina_Swimwear"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[katarina-first-meeting] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-first-meeting",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

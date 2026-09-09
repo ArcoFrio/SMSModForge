@@ -1,0 +1,1497 @@
+{
+ "id": "8_Vacation_Stories/Japan_MassaugePlace/Default",
+ "name": "Default",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "V_Sakura"
+ ],
+ "roots": [
+  -1152976393,
+  -1402348738,
+  -1403731111,
+  1807679559,
+  -1385635787,
+  2047670634,
+  -1089299552,
+  892868528
+ ],
+ "nodes": {
+  "-1152976393": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "Welcome back. It’s good to sense familiar energy returning to this space. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[firsttime-massageplace] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "firsttime-massageplace",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1402348738": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -828912487,
+    -1290919126,
+    -1483562683,
+    1767491496,
+    15000642
+   ],
+   "actor": "V_Sakura",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Welcome. I am Sakura. It’s a pleasure to have you here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[firsttime-massageplace] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "firsttime-massageplace",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-828912487": {
+   "kind": "text",
+   "parent": -1402348738,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "Two visitors, full of curiosity... And perhaps a little tension. This is the perfect place to unwind.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1483562683": {
+   "kind": "text",
+   "parent": -1402348738,
+   "actor": "V_Sakura",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Please, make yourselves comfortable. I’ll prepare everything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1767491496": {
+   "kind": "text",
+   "parent": -1402348738,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "She’s... incredible. It’s like she can see us even though she’s... you know.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "15000642": {
+   "kind": "text",
+   "parent": -1402348738,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "One does not need eyes to see, young man. Sometimes, there are... other ways.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1807679559": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -893011642,
+    -2076948859,
+    387756693,
+    1738957300,
+    -764688217
+   ],
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "Are you ready to begin, or is there something you’d like to ask first?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-893011642": {
+   "kind": "text",
+   "parent": 1807679559,
+   "children": [
+    -1816471931,
+    33058522
+   ],
+   "actor": null,
+   "text": "Yes, I’m ready. Let’s begin.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "387756693": {
+   "kind": "text",
+   "parent": 1807679559,
+   "children": [
+    1635446171
+   ],
+   "actor": null,
+   "text": "Can you tell me a bit about yourself? You seem... fascinating.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1738957300": {
+   "kind": "text",
+   "parent": 1807679559,
+   "children": [
+    -695427690
+   ],
+   "actor": null,
+   "text": "I hope this isn’t rude, but... are you really blind?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-764688217": {
+   "kind": "text",
+   "parent": 1807679559,
+   "children": [
+    1192587642
+   ],
+   "actor": null,
+   "text": "Why did you choose to become a masseuse?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1816471931": {
+   "kind": "text",
+   "parent": -893011642,
+   "actor": "V_Sakura",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Of course. Relax and let everything else fade away. Adrian, please wait in that room over there until we are done.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1635446171": {
+   "kind": "text",
+   "parent": 387756693,
+   "actor": "V_Sakura",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Fascinating? Hardly. I’m just someone who listens closely to what others overlook. The quiet speaks if you know how to hear it.",
+   "jump": {
+    "mode": "Jump",
+    "to": "sakuloop1"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-695427690": {
+   "kind": "text",
+   "parent": 1738957300,
+   "actor": "V_Sakura",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I am. My eyes cannot see, but I experience the world in other ways—ways that often speak louder than sight.",
+   "jump": {
+    "mode": "Jump",
+    "to": "sakuloop1"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1192587642": {
+   "kind": "text",
+   "parent": -764688217,
+   "actor": "V_Sakura",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Because touch transcends barriers. It’s a language of its own—one that can heal in ways words never could.",
+   "jump": {
+    "mode": "Jump",
+    "to": "sakuloop1"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1403731111": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "So...",
+   "tag": "sakuloop1",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1385635787": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    186769485,
+    1596370190
+   ],
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "Your body speaks... even when your words do not. Each knot, each tension tells a story.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionShadingLerpColor",
+     "title": "Lerp from #00000000 to #000000C8",
+     "fields": {
+      "m_Color1": {
+       "kind": "value",
+       "value": {
+        "$type": "Color",
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0
+       }
+      },
+      "m_Color2": {
+       "kind": "value",
+       "value": {
+        "$type": "Color",
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.7843137
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 5,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": false
+      },
+      "m_Set": {
+       "kind": "raw",
+       "type": "SetColorUIGraphic",
+       "data": {
+        "m_Graphic": {
+         "$type": "PropertyGetGameObject",
+         "m_Property": {
+          "$type": "GetGameObjectInstance",
+          "m_GameObject": {
+           "$unity": "BehindUI_Black",
+           "$type": "GameObject",
+           "$path": "6_Effects/BehindBustUI_Effect_Canvas/BehindUI_Black"
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   ]
+  },
+  "186769485": {
+   "kind": "text",
+   "parent": -1385635787,
+   "children": [
+    -1286542845,
+    1647086167,
+    2084411879
+   ],
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": " You’ve been searching, haven’t you? For clarity, for belonging. You tread carefully, but deep down, you wonder if your steps will ever lead you home.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[jpn-massage-pro] ≤ 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "jpn-massage-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SakuraFun (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SakuraFun (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SakuraFun (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1286542845": {
+   "kind": "choice",
+   "parent": 186769485,
+   "children": [
+    1760808799,
+    878178598,
+    -66509838,
+    -171983133
+   ],
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "Do you ever feel like you’re chasing something... but you’re not sure what it is?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SakuraNewMassage (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SakuraNewMassage (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SakuraNewMassage (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1647086167": {
+   "kind": "text",
+   "parent": 186769485,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "But you forget... The path is already before you. It has been, all along.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "2047670634": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "We’re finished.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionShadingLerpColor",
+     "title": "Lerp from #000000C8 to #00000000",
+     "fields": {
+      "m_Color1": {
+       "kind": "value",
+       "value": {
+        "$type": "Color",
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.7843137
+       }
+      },
+      "m_Color2": {
+       "kind": "value",
+       "value": {
+        "$type": "Color",
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 2,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": false
+      },
+      "m_Set": {
+       "kind": "raw",
+       "type": "SetColorUIGraphic",
+       "data": {
+        "m_Graphic": {
+         "$type": "PropertyGetGameObject",
+         "m_Property": {
+          "$type": "GetGameObjectInstance",
+          "m_GameObject": {
+           "$unity": "BehindUI_Black",
+           "$type": "GameObject",
+           "$path": "6_Effects/BehindBustUI_Effect_Canvas/BehindUI_Black"
+          }
+         }
+        }
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[firsttime-massageplace] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "firsttime-massageplace",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Ahtletic to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Ahtletic",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Ahtletic"
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Vacation_Save[jpn-massage-pro] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "jpn-massage-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-1089299552": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    2089144784,
+    521266192,
+    765730795
+   ],
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "How do you feel now?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2089144784": {
+   "kind": "text",
+   "parent": -1089299552,
+   "children": [
+    -1439240520
+   ],
+   "actor": null,
+   "text": "I feel amazing. Thank you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "521266192": {
+   "kind": "text",
+   "parent": -1089299552,
+   "children": [
+    1633549461
+   ],
+   "actor": null,
+   "text": "Like I’ve been given a lot to think about.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "765730795": {
+   "kind": "text",
+   "parent": -1089299552,
+   "children": [
+    2103917346
+   ],
+   "actor": null,
+   "text": "Your hands are so strong yet soft...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2103917346": {
+   "kind": "text",
+   "parent": 765730795,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "This is about you, not me... But I appreciate the sentiment.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1633549461": {
+   "kind": "text",
+   "parent": 521266192,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "That is as it should be. Relaxation is the doorway to understanding.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1439240520": {
+   "kind": "text",
+   "parent": 2089144784,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "That is good to hear. Your body needed this, and perhaps... your mind did too.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "892868528": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "Take your time rejoining the world outside. And should you need to return... this place will always be open to you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2084411879": {
+   "kind": "text",
+   "parent": 186769485,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": " Look not with your eyes, but with your heart. The answers are waiting—they always have been.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1760808799": {
+   "kind": "text",
+   "parent": -1286542845,
+   "children": [
+    -1398935928
+   ],
+   "actor": null,
+   "text": "All the time. It’s like there’s something just out of reach, and I can’t stop reaching for it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "878178598": {
+   "kind": "text",
+   "parent": -1286542845,
+   "children": [
+    -2135387451
+   ],
+   "actor": null,
+   "text": "Not really. I know what I want, and I just go for it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-66509838": {
+   "kind": "text",
+   "parent": -1286542845,
+   "children": [
+    -1341653070
+   ],
+   "actor": null,
+   "text": "Maybe it’s not about knowing. Maybe the chase is the point.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-171983133": {
+   "kind": "text",
+   "parent": -1286542845,
+   "children": [
+    -1140786667
+   ],
+   "actor": null,
+   "text": "I used to, but not anymore. I think I’ve found what I was looking for.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1140786667": {
+   "kind": "text",
+   "parent": -171983133,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "And has it given you peace? Or simply changed what you seek?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1341653070": {
+   "kind": "text",
+   "parent": -66509838,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "A chase without end. An interesting thought—one that might keep you moving, or wear you down.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2135387451": {
+   "kind": "text",
+   "parent": 878178598,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "Certainty is a rare gift. But even the surest path has its twists.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1398935928": {
+   "kind": "text",
+   "parent": 1760808799,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "Perhaps it’s not about the chase, but about what you’ll find when you stop running.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1596370190": {
+   "kind": "text",
+   "parent": -1385635787,
+   "children": [
+    254010580,
+    -712236000,
+    -270187719,
+    276859862
+   ],
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "You see your life as a path—a line with a beginning and the point you stand at now. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[jpn-massage-pro] ≥ 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "jpn-massage-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "254010580": {
+   "kind": "text",
+   "parent": 1596370190,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "But the starting point... that’s something you chose. Your life isn’t a straight line. It’s a map, and you hold the compass.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-712236000": {
+   "kind": "choice",
+   "parent": 1596370190,
+   "children": [
+    2091491283,
+    1600657305,
+    -805811580,
+    1721101745
+   ],
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "Do you think you’re the person you’re meant to be?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2091491283": {
+   "kind": "text",
+   "parent": -712236000,
+   "children": [
+    747446682
+   ],
+   "actor": null,
+   "text": "I think so. I’ve worked hard to become this version of myself.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "747446682": {
+   "kind": "text",
+   "parent": 2091491283,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "Then hold onto that conviction. It will guide you when the road becomes unclear.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1600657305": {
+   "kind": "text",
+   "parent": -712236000,
+   "children": [
+    1513751398
+   ],
+   "actor": null,
+   "text": "I... I’m not sure. Sometimes I feel like I’m still figuring that out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1513751398": {
+   "kind": "text",
+   "parent": 1600657305,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "That is a journey we all take, and it is not meant to be rushed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-805811580": {
+   "kind": "text",
+   "parent": -712236000,
+   "children": [
+    557214748
+   ],
+   "actor": null,
+   "text": "No. I know I could be better, but I don’t know how to get there.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "557214748": {
+   "kind": "text",
+   "parent": -805811580,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "The first step is seeing the gap. The second is forgiving yourself for it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1721101745": {
+   "kind": "text",
+   "parent": -712236000,
+   "children": [
+    366126834
+   ],
+   "actor": null,
+   "text": "I don’t think about stuff like that. I just live my life.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "366126834": {
+   "kind": "text",
+   "parent": 1721101745,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "Perhaps life is best lived that way—until it demands reflection.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-270187719": {
+   "kind": "text",
+   "parent": 1596370190,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "So much pressure... So much responsibility...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SakuraNewMassage (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SakuraNewMassage (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SakuraNewMassage (2)"
+      }
+     }
+    }
+   ]
+  },
+  "276859862": {
+   "kind": "choice",
+   "parent": 1596370190,
+   "children": [
+    41763212,
+    -960030250
+   ],
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "You are a man. I am a woman. Our bodies, our instincts—they carry the echoes of millennia.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "41763212": {
+   "kind": "text",
+   "parent": 276859862,
+   "children": [
+    -1726113980,
+    -419093374,
+    -1609661979,
+    1968903308,
+    1899708786,
+    1397741764,
+    -2097657967,
+    1192833999,
+    -340381515
+   ],
+   "actor": null,
+   "text": "(Allow her to continue)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-960030250": {
+   "kind": "text",
+   "parent": 276859862,
+   "children": [
+    783198303
+   ],
+   "actor": null,
+   "text": "That's enough. Please stop.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "783198303": {
+   "kind": "text",
+   "parent": -960030250,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "Of course... I'm sorry. It was not my intention to make you uncomfortable.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Vacation_Save[jpn-massage-pro] + -1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "jpn-massage-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -1
+      }
+     }
+    }
+   ]
+  },
+  "-1726113980": {
+   "kind": "text",
+   "parent": 41763212,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "Desire, strength, connection... These are not choices. They are imprints left by those who came before us. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SakuraNewMassage (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SakuraNewMassage (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SakuraNewMassage (3)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SakuraFun (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SakuraFun (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SakuraFun (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-419093374": {
+   "kind": "text",
+   "parent": 41763212,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "They shaped us, guided us, ensured our survival.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1609661979": {
+   "kind": "text",
+   "parent": 41763212,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "But we are not bound by those instincts. We are more. We are the ones who decide whether to follow or defy them... whether to surrender to the primal or to rise above it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1968903308": {
+   "kind": "text",
+   "parent": 41763212,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "Haaaah.... Hngghh... Mmmmhmm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SakuraNewMassage (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SakuraNewMassage (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SakuraNewMassage (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SakuraNewMassage (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SakuraNewMassage (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SakuraNewMassage (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1899708786": {
+   "kind": "text",
+   "parent": 41763212,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "And in that choice, we... Hngaah... We find who we truly are.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1397741764": {
+   "kind": "text",
+   "parent": 41763212,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "Let it happen, {PC}... S-Show me... Show me who you are...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2097657967": {
+   "kind": "choice",
+   "parent": 41763212,
+   "children": [
+    224806861,
+    -1071986244,
+    -1562285185
+   ],
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "Pour your very being inside of me... Allow your body to teach mine about your very being...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1192833999": {
+   "kind": "text",
+   "parent": 41763212,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "Yes... That's it... D-Don't stop...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SakuraNewMassage (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SakuraNewMassage (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SakuraNewMassage (5)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SakuraNewMassage (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SakuraNewMassage (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SakuraNewMassage (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-340381515": {
+   "kind": "text",
+   "parent": 41763212,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "You've done well... You are truly blessed...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "224806861": {
+   "kind": "text",
+   "parent": -2097657967,
+   "actor": null,
+   "text": "S-Sakura... I'm... I'm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1071986244": {
+   "kind": "text",
+   "parent": -2097657967,
+   "actor": null,
+   "text": "Oh fuck, I'm coming... Take my load!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1562285185": {
+   "kind": "text",
+   "parent": -2097657967,
+   "actor": null,
+   "text": "(Fill her up)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2076948859": {
+   "kind": "text",
+   "parent": 1807679559,
+   "children": [
+    -1033807949,
+    -1675103444
+   ],
+   "actor": null,
+   "text": "I... I really want to connect with you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[jpn-massage-pro] ≥ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "jpn-massage-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1033807949": {
+   "kind": "text",
+   "parent": -2076948859,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "Is that so? ... Adrian, could you give us some privacy for a moment?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[sakura-sex-incoming] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sakura-sex-incoming",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "33058522": {
+   "kind": "text",
+   "parent": -893011642,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Yes, of course!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1290919126": {
+   "kind": "text",
+   "parent": -1402348738,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Hey, um, I'm Adrian and this is my big {B}, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1675103444": {
+   "kind": "text",
+   "parent": -2076948859,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Um, sure? ... ",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Japan_MassaugePlace",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Default and wait",
+   "as": "Dialogue"
+  }
+ ]
+}

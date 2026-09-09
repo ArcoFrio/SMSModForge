@@ -1,0 +1,303 @@
+{
+ "id": "8_Core_Events/SmallTalks/AnnaWantsToTrain/GameObject",
+ "name": "GameObject",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna"
+ ],
+ "roots": [
+  -75955190,
+  1082563496,
+  -1525215766
+ ],
+ "nodes": {
+  "-75955190": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hey, {PC}... Can I have a word with you for a minute?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1525215766": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1726845467,
+    -1596274593
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I was just thinking, maybe I should start getting in shape, too.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1726845467": {
+   "kind": "text",
+   "parent": -1525215766,
+   "children": [
+    1460343766,
+    1326921048,
+    -1163649138
+   ],
+   "actor": null,
+   "text": "You could join me at the gym. (Phoenix Sharing Route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1460343766": {
+   "kind": "text",
+   "parent": 1726845467,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I've heard Phoenix's gym is really intense...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1596274593": {
+   "kind": "text",
+   "parent": -1525215766,
+   "children": [
+    509722391,
+    2037035397
+   ],
+   "actor": null,
+   "text": "You’re great just the way you are. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "509722391": {
+   "kind": "text",
+   "parent": -1596274593,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That’s sweet of you, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "1082563496": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I was just thinking... You've been working out loads and you look great! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2037035397": {
+   "kind": "text",
+   "parent": -1596274593,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "O-Okay... If you say so... I'll just do a few simple exercises at home then.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1326921048": {
+   "kind": "text",
+   "parent": 1726845467,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Okay, I'll definitely give it a go. Thanks so much, {PC} It'll be lovely to work out together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1163649138": {
+   "kind": "text",
+   "parent": 1726845467,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I think Monday sounds good. I'll make sure I'm there!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[anna-phoenix-path-start] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-phoenix-path-start",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/SmallTalks/AnnaWantsToTrain",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play GameObject and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueStart'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueStart"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueEnd'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueEnd"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

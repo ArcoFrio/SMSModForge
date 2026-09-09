@@ -1,0 +1,780 @@
+{
+ "id": "8_Room_Talk/ShackInside/Marioshowdown",
+ "name": "Marioshowdown",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Mario",
+  "Sofia"
+ ],
+ "roots": [
+  -1288546045,
+  -792616004,
+  1090474096,
+  -24979209,
+  292624436,
+  -382360301,
+  -914095696,
+  1182474376,
+  -1266858082,
+  -233758767,
+  1797427675
+ ],
+ "nodes": {
+  "-1288546045": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "{PC}! You shouldn’t have come—he’s here!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Mario_Normal to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Mario_Normal",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Mario_Normal"
+      }
+     }
+    }
+   ]
+  },
+  "-792616004": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I let you into my home and into my wife's company, Is that how you show your gratitude?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1090474096": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Ho, Ho... If you make any sudden movements, her whore brain will be all over the wall.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-24979209": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Fuck you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-382360301": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -277168614,
+    1609957069,
+    1896053002
+   ],
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Now, now... Say your last prayers, kid.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-914095696": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    97577652,
+    1105956143
+   ],
+   "actor": "Mario",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I invited you here so I could watch your face while I kill your bitch-whore.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-277168614": {
+   "kind": "text",
+   "parent": -382360301,
+   "children": [
+    277146110
+   ],
+   "actor": null,
+   "text": "Calm down, there's no need for violence.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1609957069": {
+   "kind": "text",
+   "parent": -382360301,
+   "children": [
+    1928012725
+   ],
+   "actor": null,
+   "text": "If you hurt her, I will kill you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1896053002": {
+   "kind": "text",
+   "parent": -382360301,
+   "children": [
+    -1722353573
+   ],
+   "actor": null,
+   "text": "We both know you have no chance.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1722353573": {
+   "kind": "text",
+   "parent": 1896053002,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Indeed...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1928012725": {
+   "kind": "text",
+   "parent": 1609957069,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "I would like to see you try.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "277146110": {
+   "kind": "text",
+   "parent": -277168614,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Empathy? We're past that point, kid.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "292624436": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Says the latina slut that so willingly took my cock. I should have known that your \"gift\" was poison, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Sofia-Sharing-Active] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Sofia-Sharing-Active",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "97577652": {
+   "kind": "text",
+   "parent": -914095696,
+   "children": [
+    -920511362
+   ],
+   "actor": null,
+   "text": "(Knock him out)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-920511362": {
+   "kind": "text",
+   "parent": 97577652,
+   "actor": null,
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.01,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set (none) = True",
+     "fields": {
+      "m_Set": {
+       "kind": "none"
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1105956143": {
+   "kind": "text",
+   "parent": -914095696,
+   "children": [
+    -1679044828
+   ],
+   "actor": null,
+   "text": "(End him for good)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1679044828": {
+   "kind": "text",
+   "parent": 1105956143,
+   "actor": null,
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.01,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[Mario-dead] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-dead",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1182474376": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'whiteflashnosound'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "whiteflashnosound"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: 724716__greyfeather__sword-slash-energy-wave",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "724716__greyfeather__sword-slash-energy-wave",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.01 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.01
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Mario_Normal to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Mario_Normal",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Mario_Normal"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sofia_Police to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sofia_Police",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Sofia_Police"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SofiaRestrained to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SofiaRestrained",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/82_Abandonedshackinside/SofiaRestrained"
+      }
+     }
+    }
+   ]
+  },
+  "-1266858082": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I knew you’d come… and you saved my life. Again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-233758767": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1513918498,
+    -1303158689,
+    -1339739240
+   ],
+   "actor": "Sofia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thank you. I don’t know how I’ll ever repay you, but… I owe you everything.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Charm to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Charm",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Charm"
+      }
+     }
+    }
+   ]
+  },
+  "1797427675": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Let’s get out of here… together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[sofia-saved] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-saved",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1513918498": {
+   "kind": "text",
+   "parent": -233758767,
+   "children": [
+    -2117193985
+   ],
+   "actor": null,
+   "text": "Of course. I would never abandon you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2117193985": {
+   "kind": "text",
+   "parent": -1513918498,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "No... That's not a given, believe me. You are different. You actually care.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1303158689": {
+   "kind": "text",
+   "parent": -233758767,
+   "children": [
+    -2006760545
+   ],
+   "actor": null,
+   "text": "Have you seen my move? I was like \"BAM!\".",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2006760545": {
+   "kind": "text",
+   "parent": -1303158689,
+   "actor": "Sofia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You... Hahaha... You're unbelievable.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1339739240": {
+   "kind": "text",
+   "parent": -233758767,
+   "children": [
+    -24925534
+   ],
+   "actor": null,
+   "text": "We should call the cops.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-24925534": {
+   "kind": "text",
+   "parent": -1339739240,
+   "actor": "Sofia",
+   "expressionName": "neutral",
+   "text": "Y-Yes... My car is nearby...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/ShackInside",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Marioshowdown and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[sofia-saved] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-saved",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[sofia-kidnapped] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-kidnapped",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_6[sofia-romance-path] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sofia-romance-path",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

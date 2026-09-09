@@ -1,0 +1,1593 @@
+{
+ "id": "8_Room_Talk/Club/AfterMiniGame",
+ "name": "AfterMiniGame",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Alice",
+  "Stranger"
+ ],
+ "roots": [
+  355236637,
+  1362889900
+ ],
+ "nodes": {
+  "355236637": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1279850635,
+    1033981665,
+    -1868831136,
+    1078658209
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Not bad, {PC}. You actually kept up with me. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Minigame[success] ≥ 50",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "success",
+        "list": "Minigame",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 50
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Turn up the heat and make her melt on the dancefloor.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Behind The Looking Glass (Alice)",
+        "of": "Quest"
+       },
+       "m_TaskId": -1235282320
+      },
+      "m_WaitToComplete": false
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Trigger_MinigameDone to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Trigger_MinigameDone",
+       "of": "GetGameObjectInstance",
+       "path": "XP_System/Trigger_MinigameDone"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Charm to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Charm",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Charm"
+      }
+     }
+    }
+   ]
+  },
+  "1362889900": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -393673314,
+    -1543135546,
+    1832872020
+   ],
+   "actor": "Alice",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Well, that was... something..",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Minigame[success] ≤ 49",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "success",
+        "list": "Minigame",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 49
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-393673314": {
+   "kind": "choice",
+   "parent": 1362889900,
+   "children": [
+    1123366346,
+    -2083816155,
+    -25027288
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "If you want to hang with me, you need to step up your game.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1123366346": {
+   "kind": "text",
+   "parent": -393673314,
+   "children": [
+    1827927952
+   ],
+   "actor": null,
+   "text": "I’ll do better next time, Alice. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2083816155": {
+   "kind": "text",
+   "parent": -393673314,
+   "children": [
+    -1725338734
+   ],
+   "actor": null,
+   "text": "Whatever, it’s just dancing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1725338734": {
+   "kind": "text",
+   "parent": -2083816155,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "If you’re not going to take it seriously, why even bother?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-25027288": {
+   "kind": "text",
+   "parent": -393673314,
+   "children": [
+    1580972750
+   ],
+   "actor": null,
+   "text": "Hey, it’s not like I had much practice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1580972750": {
+   "kind": "text",
+   "parent": -25027288,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Maybe you should get some, then.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1827927952": {
+   "kind": "text",
+   "parent": 1123366346,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "It’s okay. Just try to keep up next time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1543135546": {
+   "kind": "text",
+   "parent": 1362889900,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Just don’t expect me to wait around while you figure it out. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AliceBust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1832872020": {
+   "kind": "text",
+   "parent": 1362889900,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Hey, everyone has an off night. We’ll get better with practice, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[alice-sharing-start] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-sharing-start",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1033981665": {
+   "kind": "text",
+   "parent": 355236637,
+   "actor": "Alice",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "If you're up for another round, meet me at the restroom...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_9[Alice-Danceprogress25] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Alice-Danceprogress25",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AliceBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[alice-at-restroom] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-at-restroom",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1868831136": {
+   "kind": "choice",
+   "parent": 355236637,
+   "children": [
+    1225455807,
+    -617527198,
+    1460184319
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "W-Wait... What does mean by that?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[alice-sharing-start] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-sharing-start",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[alice-sex-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-sex-done",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_9[Alice-Danceprogress25] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Alice-Danceprogress25",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1225455807": {
+   "kind": "text",
+   "parent": -1868831136,
+   "actor": null,
+   "text": "Sex, Adrian. She wants to have sex.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-617527198": {
+   "kind": "text",
+   "parent": -1868831136,
+   "actor": null,
+   "text": "We gonna get to fuck her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1460184319": {
+   "kind": "text",
+   "parent": -1868831136,
+   "children": [
+    1722579163
+   ],
+   "actor": null,
+   "text": "Maybe it's better if you wait here. (Steal Alice Route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1722579163": {
+   "kind": "text",
+   "parent": 1460184319,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Um... Uh, sure...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[alice-stealing-start] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-stealing-start",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[alice-sharing-start] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-sharing-start",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[adrian-left-behind] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-left-behind",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1078658209": {
+   "kind": "text",
+   "parent": 355236637,
+   "children": [
+    -1875408174
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "W-With us both!? At the same time!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[alice-sex-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-sex-done",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[alice-sharing-start] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-sharing-start",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_9[Alice-Danceprogress25] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Alice-Danceprogress25",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1875408174": {
+   "kind": "choice",
+   "parent": 1078658209,
+   "children": [
+    1629837970,
+    -411247779,
+    -1754925729
+   ],
+   "actor": "Adrian",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I don't know If I can do that...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1629837970": {
+   "kind": "text",
+   "parent": -1875408174,
+   "children": [
+    -912268053,
+    -295666528
+   ],
+   "actor": null,
+   "text": "Relax, {B}. It will be fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-411247779": {
+   "kind": "text",
+   "parent": -1875408174,
+   "children": [
+    -67511568,
+    1791687719
+   ],
+   "actor": null,
+   "text": "Sure? I've seen the way you look at her tits.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1754925729": {
+   "kind": "text",
+   "parent": -1875408174,
+   "children": [
+    -1246521538,
+    -1988109969
+   ],
+   "actor": null,
+   "text": "You can wait outside if you prefer.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-67511568": {
+   "kind": "text",
+   "parent": -411247779,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1246521538": {
+   "kind": "text",
+   "parent": -1754925729,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "N-No...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-912268053": {
+   "kind": "text",
+   "parent": 1629837970,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-295666528": {
+   "kind": "text",
+   "parent": 1629837970,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "A-Alright... Let's do it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1791687719": {
+   "kind": "text",
+   "parent": -411247779,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "You're right... L-Let's do it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1988109969": {
+   "kind": "text",
+   "parent": -1754925729,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I want to do it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1279850635": {
+   "kind": "text",
+   "parent": 355236637,
+   "children": [
+    420939107
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "You’re hard already? Perfect.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "420939107": {
+   "kind": "choice",
+   "parent": -1279850635,
+   "children": [
+    461353125,
+    -232767746,
+    1963527252
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Slide it between my thighs. Right here. Right now.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "461353125": {
+   "kind": "text",
+   "parent": 420939107,
+   "children": [
+    945755870,
+    1618182990,
+    861854251,
+    -1816383881,
+    -674363516,
+    -1946735867,
+    -784096851,
+    -1535677992,
+    -1155706137
+   ],
+   "actor": null,
+   "text": "(Fuck her Thighs) Fuck… you’re so tight even here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-232767746": {
+   "kind": "text",
+   "parent": 420939107,
+   "children": [
+    1671406813,
+    481713854,
+    -751283310,
+    -452303662,
+    1033875319,
+    406689078,
+    -1420147617,
+    1357552099,
+    -1281718460,
+    -1954824918,
+    2119826309,
+    1836758761
+   ],
+   "actor": null,
+   "text": "On your knees. Mouth open.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_9[Alice-Danceprogress25] ≥ 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Alice-Danceprogress25",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1963527252": {
+   "kind": "text",
+   "parent": 420939107,
+   "children": [
+    -1258457255
+   ],
+   "actor": null,
+   "text": "In public? N-No way...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1258457255": {
+   "kind": "text",
+   "parent": 1963527252,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "I thought you had balls. Looks like I was wrong... Pity.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "945755870": {
+   "kind": "text",
+   "parent": 461353125,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Then fuck them like you mean it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_9[Alice-Danceprogress25] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Alice-Danceprogress25",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Alice_AfterDance (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Alice_AfterDance (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Alice_AfterDance (0)"
+      }
+     }
+    }
+   ]
+  },
+  "1671406813": {
+   "kind": "text",
+   "parent": -232767746,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Fuck yes. Say less.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_9[Alice-Danceprogress25] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Alice-Danceprogress25",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "1618182990": {
+   "kind": "text",
+   "parent": 461353125,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "No way… She said she wasn’t into hookups…",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[alice-sharing-start] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-sharing-start",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "861854251": {
+   "kind": "text",
+   "parent": 461353125,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Don’t slow down now. You’re throbbing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1816383881": {
+   "kind": "text",
+   "parent": 461353125,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "I want you to finish between my thighs.\nRight here on the dancefloor.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-674363516": {
+   "kind": "text",
+   "parent": 461353125,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Is he…? He actually is…",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[alice-sharing-start] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-sharing-start",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1946735867": {
+   "kind": "choice",
+   "parent": 461353125,
+   "children": [
+    -404194612,
+    -1339675978,
+    1474559735
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "So hot... I can feel how close you are.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-404194612": {
+   "kind": "text",
+   "parent": -1946735867,
+   "actor": null,
+   "text": "Fuck—take it. Every drop.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1339675978": {
+   "kind": "text",
+   "parent": -1946735867,
+   "actor": null,
+   "text": "God, your thighs feel unreal…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1474559735": {
+   "kind": "text",
+   "parent": -1946735867,
+   "actor": null,
+   "text": "Hope this dress'’s washable.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-784096851": {
+   "kind": "text",
+   "parent": 461353125,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "I can feel it… holy fuck…",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Alice_AfterDance (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Alice_AfterDance (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Alice_AfterDance (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1535677992": {
+   "kind": "text",
+   "parent": 461353125,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "You made a mess of me… Good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1155706137": {
+   "kind": "text",
+   "parent": 461353125,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Not bad, {PC}... Not bad at all...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "481713854": {
+   "kind": "text",
+   "parent": -232767746,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "You better hold still… or I’ll make a scene.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Alice_AfterDance (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Alice_AfterDance (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Alice_AfterDance (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-751283310": {
+   "kind": "text",
+   "parent": -232767746,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Is she seriously—?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[alice-sharing-start] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-sharing-start",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-452303662": {
+   "kind": "text",
+   "parent": -232767746,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Yo. That’s wild.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1033875319": {
+   "kind": "text",
+   "parent": -232767746,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "What the actual fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[alice-sharing-start] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-sharing-start",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "406689078": {
+   "kind": "text",
+   "parent": -232767746,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "She’s really… on her knees for him…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1420147617": {
+   "kind": "text",
+   "parent": -232767746,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Mmm... fuck... you’re already twitching...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1357552099": {
+   "kind": "text",
+   "parent": -232767746,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Mwuaah! Mhmmmm!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Alice_AfterDance (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Alice_AfterDance (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Alice_AfterDance (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1281718460": {
+   "kind": "text",
+   "parent": -232767746,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Don’t you fucking hold back.\nI want it all.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1954824918": {
+   "kind": "text",
+   "parent": -232767746,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Shit… that was a load.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2119826309": {
+   "kind": "text",
+   "parent": -232767746,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Holy fuck.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1836758761": {
+   "kind": "text",
+   "parent": -232767746,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Next time… You better give me warning. Or don’t.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Club",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AfterMiniGame and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Minigame[avoid-it-failsave] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "avoid-it-failsave",
+        "list": "Minigame",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Minigame[avoid-it-failsave] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "avoid-it-failsave",
+        "list": "Minigame",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Room_Talk/Club/DefaultDialogue",
+   "script": "Dialogue",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core[temp-stored-very-short-term] = AfterMiniGame",
+   "as": "GameObject",
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Room_Talk/Club/DefaultDialogue",
+   "script": "Dialogue",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core[temp-stored-very-short-term] = AfterMiniGame",
+   "as": "GameObject",
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

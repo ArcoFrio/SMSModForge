@@ -1,0 +1,1039 @@
+{
+ "id": "8_Room_Talk/Gasstation_Inside/DefaultDialoge",
+ "name": "DefaultDialoge",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Astrid"
+ ],
+ "roots": [
+  -1028854877,
+  40356860,
+  974323730,
+  1737088190,
+  1653118149
+ ],
+ "nodes": {
+  "974323730": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": {
+    "kind": "variable",
+    "variable": {
+     "scope": "localList",
+     "on": {
+      "kind": "object",
+      "name": "R_VampireGreetings",
+      "of": "GetGameObjectInstance",
+      "path": "8_Room_Talk/Gasstation_Inside/R_VampireGreetings"
+     },
+     "pick": "random",
+     "type": "string"
+    }
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_7[vampire-met] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vampire-met",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1737088190": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -577777360,
+    -648369697,
+    -2093864264
+   ],
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Well, well. Name's Astrid. What brings you to my little corner of earth at this ungodly hour?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_7[vampire-met] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vampire-met",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-577777360": {
+   "kind": "text",
+   "parent": 1737088190,
+   "children": [
+    -943017397
+   ],
+   "actor": null,
+   "text": "Just needed gas and maybe a snack. Quiet night here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-648369697": {
+   "kind": "text",
+   "parent": 1737088190,
+   "children": [
+    -1780307705
+   ],
+   "actor": null,
+   "text": "Maybe destiny brought me here so I could meet you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2093864264": {
+   "kind": "text",
+   "parent": 1737088190,
+   "children": [
+    1979479642
+   ],
+   "actor": null,
+   "text": "‘Ungodly hour? What, are you a poet or something?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-943017397": {
+   "kind": "text",
+   "parent": -577777360,
+   "actor": "Astrid",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh, it’s never quiet. Not when you’re truly listening. But maybe you just don’t have the right ears for it... yet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1780307705": {
+   "kind": "text",
+   "parent": -648369697,
+   "actor": "Astrid",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Careful what you wish for. Around here, destiny tends to bite back... hard.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1979479642": {
+   "kind": "text",
+   "parent": -2093864264,
+   "actor": "Astrid",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Poet? No. But I do appreciate fine art when it stands before me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1653118149": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1962599201,
+    -848181661,
+    -1834476258
+   ],
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "So, tell me. What can I do for you?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_7[vampire-met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vampire-met",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1962599201": {
+   "kind": "text",
+   "parent": 1653118149,
+   "children": [
+    255026066
+   ],
+   "actor": null,
+   "text": "I need to pick up a few things. (Shop)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-848181661": {
+   "kind": "text",
+   "parent": 1653118149,
+   "children": [
+    1208107803
+   ],
+   "actor": null,
+   "text": "Can I ask you something?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1834476258": {
+   "kind": "text",
+   "parent": 1653118149,
+   "children": [
+    -615739730
+   ],
+   "actor": null,
+   "text": "I’m heading out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-615739730": {
+   "kind": "text",
+   "parent": -1834476258,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": {
+    "kind": "variable",
+    "variable": {
+     "scope": "localList",
+     "on": {
+      "kind": "object",
+      "name": "R_VampireGoodbye",
+      "of": "GetGameObjectInstance",
+      "path": "8_Room_Talk/Gasstation_Inside/R_VampireGoodbye"
+     },
+     "pick": "random",
+     "type": "string"
+    }
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1208107803": {
+   "kind": "choice",
+   "parent": -848181661,
+   "children": [
+    -678574527,
+    166668157,
+    -1957116280
+   ],
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Ask away. You might even like what you hear.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "255026066": {
+   "kind": "text",
+   "parent": 1962599201,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Of course. Don’t forget, the overpriced candy pairs perfectly with existential dread.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[active-store] = 9",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "active-store",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 9
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ShopCore to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ShopCore",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/ShopCore"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active VampireReachesUp to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "VampireReachesUp",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/112_GasStationInterior/VampireReachesUp"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AstridStoreBust to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AstridStoreBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AstridStoreBust"
+      }
+     }
+    }
+   ]
+  },
+  "-678574527": {
+   "kind": "text",
+   "parent": 1208107803,
+   "children": [
+    745081760,
+    -1781509729
+   ],
+   "actor": null,
+   "text": "So... working late at a gas station. Must be boring?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "166668157": {
+   "kind": "text",
+   "parent": 1208107803,
+   "children": [
+    1858329251,
+    -1284820259
+   ],
+   "actor": null,
+   "text": "What’s with the whole goth thing?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1957116280": {
+   "kind": "text",
+   "parent": 1208107803,
+   "children": [
+    652541773,
+    2105006229
+   ],
+   "actor": null,
+   "text": "What’s someone like you even do after a shift like this?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "652541773": {
+   "kind": "text",
+   "parent": -1957116280,
+   "actor": "Astrid",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Exciting? Not quite. But I do enjoy a good walk to clear my head. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1858329251": {
+   "kind": "text",
+   "parent": 166668157,
+   "actor": "Astrid",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Goth? Huh. I guess I do fit the part, don’t I? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "745081760": {
+   "kind": "text",
+   "parent": -678574527,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "It’s quiet, mostly. I don’t mind it, though. Nights have their own rhythm.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1781509729": {
+   "kind": "text",
+   "parent": -678574527,
+   "actor": "Astrid",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You just have to pay attention to catch it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1284820259": {
+   "kind": "text",
+   "parent": 166668157,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Honestly, it’s not on purpose—I just don’t exactly thrive in sunlight.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2105006229": {
+   "kind": "text",
+   "parent": -1957116280,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "The town’s so different when everyone else is asleep. It feels... alive, in a way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1028854877": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -462154280,
+    -1870503818,
+    1795225841,
+    -1028987236
+   ],
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Hey, you drive, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[specialcarwashunlocked] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "specialcarwashunlocked",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Mainstory[anna-heart-status] ≥ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-heart-status",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] ≠ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Different",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_7[vampire-met] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vampire-met",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-462154280": {
+   "kind": "text",
+   "parent": -1028854877,
+   "actor": "Astrid",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Wait. Dumb question. You’re always here for gas. Anyway—there’s a charity carwash every Monday. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1870503818": {
+   "kind": "text",
+   "parent": -1028854877,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "All the money goes to the Peak City Center Orphanage.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1795225841": {
+   "kind": "text",
+   "parent": -1028854877,
+   "actor": "Astrid",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "So if your car’s looking like a tragic mess, might as well get it cleaned for a good cause. Win-win, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_8[specialcarwashunlocked] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "specialcarwashunlocked",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1028987236": {
+   "kind": "choice",
+   "parent": -1028854877,
+   "children": [
+    351083858,
+    1221520551
+   ],
+   "actor": "Astrid",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Plus, you get to watch people awkwardly scrub down cars in slow motion like it’s a low-budget commercial. It’s kinda hilarious.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "351083858": {
+   "kind": "text",
+   "parent": -1028987236,
+   "children": [
+    -1026555095
+   ],
+   "actor": null,
+   "text": "That actually sounds great. I’ll be there.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1221520551": {
+   "kind": "text",
+   "parent": -1028987236,
+   "children": [
+    -899935349,
+    138435734
+   ],
+   "actor": null,
+   "text": "You volunteering too? Asking for a friend, of course.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-899935349": {
+   "kind": "text",
+   "parent": 1221520551,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Hell no. I don’t do scrubbing. I do watching and judging. But I handle the money, so technically, I’m helping.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1026555095": {
+   "kind": "text",
+   "parent": 351083858,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Nice. The city could use the help, and honestly? Most of the cars in this city need it. Yours included.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "138435734": {
+   "kind": "text",
+   "parent": 1221520551,
+   "actor": "Astrid",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Though… if you really wanted me to, maybe I’d make an exception.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "40356860": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -723984361,
+    352872621,
+    -1440421615
+   ],
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Did you enjoy my... little reminder?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[astrid-warningtalkincoming] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "astrid-warningtalkincoming",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-723984361": {
+   "kind": "choice",
+   "parent": 40356860,
+   "children": [
+    -1386578196,
+    1642853778,
+    609010190
+   ],
+   "actor": "Astrid",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "My secret isn’t yours to share, {PC}.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[astrid-warningtalkincoming] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "astrid-warningtalkincoming",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1386578196": {
+   "kind": "text",
+   "parent": -723984361,
+   "children": [
+    -614341898
+   ],
+   "actor": null,
+   "text": "I just wanted to help Emma.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-614341898": {
+   "kind": "text",
+   "parent": -1386578196,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "And you did. But the price of understanding is trust. Next time, ask before dragging me into your little confessions.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1642853778": {
+   "kind": "text",
+   "parent": -723984361,
+   "children": [
+    1017069319
+   ],
+   "actor": null,
+   "text": "What, no “thank you” for the new friend?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1017069319": {
+   "kind": "text",
+   "parent": 1642853778,
+   "actor": "Astrid",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hah. You’re lucky I like your nerve. Most people who out me don’t get to joke about it afterward.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "609010190": {
+   "kind": "text",
+   "parent": -723984361,
+   "children": [
+    -199987354
+   ],
+   "actor": null,
+   "text": "If that was punishment, I might deserve another.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-199987354": {
+   "kind": "text",
+   "parent": 609010190,
+   "actor": "Astrid",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh, you’re dangerous. Keep teasing and I might fullfill your wish.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "352872621": {
+   "kind": "text",
+   "parent": 40356860,
+   "actor": "Astrid",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Look... I don’t hate you for it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1440421615": {
+   "kind": "text",
+   "parent": 40356860,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "But next time, just ask me. Okay?",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Gasstation_Inside",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DefaultDialoge and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AstridStoreBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AstridStoreBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AstridStoreBust"
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

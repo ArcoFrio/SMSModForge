@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace SMSModForge.Model;
@@ -121,6 +121,29 @@ public sealed class DialogueNodeDef
     [JsonProperty("timeout", Order = 14)]
     public float Timeout { get; set; } = 3f;
     public bool ShouldSerializeTimeout() => Duration == NodeDurationMode.Timeout;
+
+    /// <summary>
+    /// On a node of a vanilla dialogue extension: which of this node's fields
+    /// the pack actually changed, and therefore the only ones the runtime
+    /// writes back into the game's own line.
+    /// <para/>
+    /// Set from the comparison at save time by
+    /// <see cref="VanillaDialogueDelta"/>, never by hand. Everything not named
+    /// here is left exactly as the game has it — which matters most at the next
+    /// game update, when re-asserting a line the pack merely copied would
+    /// silently undo the change the update made to it.
+    /// <para/>
+    /// Empty or absent on a node the pack wrote itself: there is no vanilla
+    /// line underneath, so the whole node is the pack's.
+    /// </summary>
+    [JsonProperty("overrides", Order = 15)]
+    public List<string> Overrides { get; set; } = new();
+    public bool ShouldSerializeOverrides() => Overrides != null && Overrides.Count > 0;
+
+    /// <summary>Whether this node changes the named field of the vanilla line
+    /// it sits on.</summary>
+    public bool OverridesField(string field)
+        => Overrides != null && Overrides.Contains(field);
 }
 
 /// <summary>

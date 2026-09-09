@@ -1,0 +1,1270 @@
+{
+ "id": "8_Vacation_Stories/Japan_Shrine/Default",
+ "name": "Default",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Continue",
+  "V_Chihiro",
+  "V_Hiroji"
+ ],
+ "roots": [
+  -370414687,
+  1092866078,
+  1774492064,
+  475978916
+ ],
+ "nodes": {
+  "-370414687": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Chihiro",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Back again, huh? Can’t get enough of my charm?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[firsttime-japanshrine] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "firsttime-japanshrine",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[chihiro-gb-incoming] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "chihiro-gb-incoming",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1092866078": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1022191384,
+    -1999035411,
+    235532612,
+    885470961,
+    -1612051569,
+    547283382,
+    -1288680578,
+    503779687,
+    -831838176,
+    -921064583,
+    -55266511,
+    441271876,
+    947668538,
+    -1737937087
+   ],
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Well, well. Tourists at this hour. Didn’t think I’d be playing host tonight.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[firsttime-japanshrine] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "firsttime-japanshrine",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1022191384": {
+   "kind": "text",
+   "parent": 1092866078,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Uh, yeah, we’re just here to... Look around? It’s our first time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1999035411": {
+   "kind": "text",
+   "parent": 1092866078,
+   "actor": "V_Chihiro",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "So, what brings two outsiders like you to my little corner of the world?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "235532612": {
+   "kind": "choice",
+   "parent": 1092866078,
+   "children": [
+    -144261924,
+    1698505947,
+    -1078824622,
+    -878646914,
+    -1004801453
+   ],
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Did someone tell you this shrine grants special favors, or are you just here to enjoy the ambiance?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-144261924": {
+   "kind": "text",
+   "parent": 235532612,
+   "children": [
+    -401941873
+   ],
+   "actor": null,
+   "text": "We’re just here to appreciate the shrine. It’s beautiful.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-401941873": {
+   "kind": "text",
+   "parent": -144261924,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Flattery will get you everywhere. Not that I don’t agree—it’s one of the finest shrines in the region, after all.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1698505947": {
+   "kind": "text",
+   "parent": 235532612,
+   "children": [
+    695007992
+   ],
+   "actor": null,
+   "text": "Maybe a bit of both. Divine favor wouldn’t hurt.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "695007992": {
+   "kind": "text",
+   "parent": 1698505947,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Oh, bold. I like that. But don’t get your hopes up—I’m a shrine maiden, not a tour guide.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1078824622": {
+   "kind": "text",
+   "parent": 235532612,
+   "children": [
+    1280241069
+   ],
+   "actor": null,
+   "text": "Honestly, I’m just here because my {B} dragged me along.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1280241069": {
+   "kind": "choice",
+   "parent": -1078824622,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Ah, tourists. Well, at least you’re making memories. Even if it’s not entirely by choice.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "885470961": {
+   "kind": "text",
+   "parent": 1092866078,
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "Chihiro.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_S_Hiroji to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_S_Hiroji",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Hiroji"
+      }
+     }
+    }
+   ]
+  },
+  "-1612051569": {
+   "kind": "text",
+   "parent": 1092866078,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Hiroji. What brings you here this late?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "547283382": {
+   "kind": "text",
+   "parent": 1092866078,
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "I need your help.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1288680578": {
+   "kind": "text",
+   "parent": 1092866078,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "What’s going on?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "503779687": {
+   "kind": "text",
+   "parent": 1092866078,
+   "actor": "V_Chihiro",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Now? I have visitors.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-831838176": {
+   "kind": "text",
+   "parent": 1092866078,
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "Now",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-921064583": {
+   "kind": "text",
+   "parent": 1092866078,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Fine. Let’s go.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-55266511": {
+   "kind": "text",
+   "parent": 1092866078,
+   "actor": "V_Chihiro",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Sorry, looks like duty calls. Enjoy the shrine... and try not to get lost.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_ChihiroDefault/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Hiroji/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "441271876": {
+   "kind": "text",
+   "parent": 1092866078,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "947668538": {
+   "kind": "text",
+   "parent": 1092866078,
+   "actor": "Adrian",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "That was... weird, right? What do you think that was about?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1737937087": {
+   "kind": "text",
+   "parent": 1092866078,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Maybe we should come back another time...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[firsttime-japanshrine] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "firsttime-japanshrine",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "475978916": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1290375667,
+    -712752615,
+    351140909,
+    -798383037,
+    127648132,
+    -1775634417,
+    -287109461
+   ],
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "What can I do for you two?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1290375667": {
+   "kind": "text",
+   "parent": 475978916,
+   "children": [
+    -86962642
+   ],
+   "actor": null,
+   "text": "How long have you been working at this shrine?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-712752615": {
+   "kind": "text",
+   "parent": 475978916,
+   "children": [
+    1380581054,
+    -878171863,
+    1231710024
+   ],
+   "actor": null,
+   "text": "Can you tell us more about the history of this place?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "351140909": {
+   "kind": "text",
+   "parent": 475978916,
+   "children": [
+    -1106020804,
+    -662615112
+   ],
+   "actor": null,
+   "text": "We saw you leave with an older man last time. Is he still here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-287109461": {
+   "kind": "text",
+   "parent": 475978916,
+   "children": [
+    -763585937
+   ],
+   "actor": null,
+   "text": "We should get going now...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1774492064": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Hmm...",
+   "tag": "chihirohmmm",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1106020804": {
+   "kind": "text",
+   "parent": 351140909,
+   "actor": "V_Chihiro",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Hiroji? Uh... no, he’s not. He’s... not someone you should ask about.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1380581054": {
+   "kind": "text",
+   "parent": -712752615,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Oh, I see... perhaps you’ve felt the pull of the spirits that watch over this place. The ancient energies that whisper through the trees.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-86962642": {
+   "kind": "text",
+   "parent": -1290375667,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Long enough to know this place inside and out... and to see more than a few odd visitors come and go.",
+   "jump": {
+    "mode": "Jump",
+    "to": "chihirohmmm"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-878171863": {
+   "kind": "text",
+   "parent": -712752615,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1231710024": {
+   "kind": "text",
+   "parent": -712752615,
+   "actor": "V_Chihiro",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Kidding. Spirits and energies? Please. It’s just a really nice place. That’s all.",
+   "jump": {
+    "mode": "Jump",
+    "to": "chihirohmmm"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-763585937": {
+   "kind": "text",
+   "parent": -287109461,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Don’t be strangers now. The shrine’s always open...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-662615112": {
+   "kind": "text",
+   "parent": 351140909,
+   "actor": "V_Chihiro",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Anyway, let’s talk about something else, okay?",
+   "jump": {
+    "mode": "Jump",
+    "to": "chihirohmmm"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-798383037": {
+   "kind": "text",
+   "parent": 475978916,
+   "children": [
+    -1308277791,
+    -214273694,
+    -555166787,
+    1446012221,
+    -687943300,
+    -1820242530
+   ],
+   "actor": null,
+   "text": "Some guy named Daiju warned us about you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[jpn-shrine-pro] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "jpn-shrine-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1308277791": {
+   "kind": "text",
+   "parent": -798383037,
+   "actor": "V_Chihiro",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Daiju? He...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-214273694": {
+   "kind": "text",
+   "parent": -798383037,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Daiju likes to talk, but you shouldn’t believe everything you hear from him. He’s... bitter. People like him enjoy stirring up trouble.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-555166787": {
+   "kind": "text",
+   "parent": -798383037,
+   "actor": "V_Chihiro",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Honestly, I’m surprised you even listened to him. He’s known for telling wild stories. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-687943300": {
+   "kind": "text",
+   "parent": -798383037,
+   "actor": "V_Chihiro",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You should forget whatever he said—it’s not worth your time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1820242530": {
+   "kind": "text",
+   "parent": -798383037,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Now if you excuse me, I must tend to the shrine...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1446012221": {
+   "kind": "text",
+   "parent": -798383037,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "But~",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "127648132": {
+   "kind": "text",
+   "parent": 475978916,
+   "children": [
+    818263643,
+    -314119528
+   ],
+   "actor": null,
+   "text": "We know the truth, Chihiro. About you. About the men in the village.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[jpn-shrine-pro] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "jpn-shrine-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "818263643": {
+   "kind": "text",
+   "parent": 127648132,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "I see. So, you’ve been talking to people who can’t mind their own business. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-314119528": {
+   "kind": "choice",
+   "parent": 127648132,
+   "children": [
+    1868544800,
+    -538958126,
+    470913800
+   ],
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "What are you planning to do with this... knowledge?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1868544800": {
+   "kind": "text",
+   "parent": -314119528,
+   "children": [
+    750952062,
+    -958154235,
+    -727269827,
+    1825615677,
+    1877030050,
+    1281204751
+   ],
+   "actor": null,
+   "text": "Maybe my {B} and I could join the fun?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "750952062": {
+   "kind": "text",
+   "parent": 1868544800,
+   "actor": "V_Chihiro",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "If you want money, then~ ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-538958126": {
+   "kind": "text",
+   "parent": -314119528,
+   "children": [
+    -1775517975
+   ],
+   "actor": null,
+   "text": "I think your secret’s worth, oh, 40,000 dollar. Sound fair?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1775517975": {
+   "kind": "text",
+   "parent": -538958126,
+   "actor": "V_Chihiro",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "So, this is about money. Fine. You’ll have your cut—but this stays between us, understand?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + 40000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 40000
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Vacation_Save[jpn-shrine-pro] = -10",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "jpn-shrine-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": -10
+      }
+     }
+    }
+   ]
+  },
+  "470913800": {
+   "kind": "text",
+   "parent": -314119528,
+   "children": [
+    -1605037343
+   ],
+   "actor": null,
+   "text": "Let’s just forget this ever happened.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1605037343": {
+   "kind": "text",
+   "parent": 470913800,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Hm. Maybe you’re smarter than you look. Pretending you never learned anything is the safest move you could make.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-958154235": {
+   "kind": "text",
+   "parent": 1868544800,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Wait, what?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-727269827": {
+   "kind": "text",
+   "parent": 1868544800,
+   "actor": "V_Chihiro",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh... OH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1825615677": {
+   "kind": "text",
+   "parent": 1868544800,
+   "actor": "V_Chihiro",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Two young, fit foreigners... That's... That's exactly what I need...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1877030050": {
+   "kind": "text",
+   "parent": 1868544800,
+   "actor": "V_Chihiro",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "The men around here are... not bad. But their best years are behind them... But you two...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1281204751": {
+   "kind": "text",
+   "parent": 1868544800,
+   "actor": "V_Chihiro",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Take a seat... The \"ritual\" will begin in an hour... Let me make some tea for you in the meantime...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[chihiro-gb-incoming] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "chihiro-gb-incoming",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1775634417": {
+   "kind": "text",
+   "parent": 475978916,
+   "children": [
+    82364721,
+    1309882932
+   ],
+   "actor": null,
+   "text": "We're here for the gangbang.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[jpn-shrine-pro] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "jpn-shrine-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "82364721": {
+   "kind": "text",
+   "parent": -1775634417,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "G-Gangbang? ... Please, let's call it a ritual... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[chihiro-gb-incoming] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "chihiro-gb-incoming",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1309882932": {
+   "kind": "text",
+   "parent": -1775634417,
+   "actor": "V_Chihiro",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Take a seat... We will begin shortly...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-878646914": {
+   "kind": "text",
+   "parent": 235532612,
+   "children": [
+    2081647663
+   ],
+   "actor": null,
+   "text": "(Creative) Maybe I’m here to make my own blessing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Creative] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Creative",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "2081647663": {
+   "kind": "text",
+   "parent": -878646914,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Heh… bold. The gods favor those who act, not only those who pray.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Charming] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Charming",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1004801453": {
+   "kind": "text",
+   "parent": 235532612,
+   "children": [
+    233817844
+   ],
+   "actor": null,
+   "text": "(Lewd) Does the shrine grant… intimate blessings?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Lewd] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Lewd",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "233817844": {
+   "kind": "text",
+   "parent": -1004801453,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "H-how shameless! You shouldn’t speak like that here… even if the gods are listening with a smile.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Japan_Shrine",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Default and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_ChihiroDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_ChihiroDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_ChihiroDefault"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

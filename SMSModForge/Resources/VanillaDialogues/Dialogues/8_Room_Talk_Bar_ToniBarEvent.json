@@ -1,0 +1,1731 @@
+{
+ "id": "8_Room_Talk/Bar/ToniBarEvent",
+ "name": "ToniBarEvent",
+ "index": 7,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Toni"
+ ],
+ "roots": [
+  275008528,
+  1329176317
+ ],
+ "nodes": {
+  "275008528": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1791244990,
+    -457753655,
+    391657399,
+    -1322862969,
+    -579205063
+   ],
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "So, this is a date, huh? Wild. Never thought I’d see the day.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_8[toni-bardates] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "toni-bardates",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1329176317": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1667056715,
+    47232543,
+    -1738774461,
+    172872483,
+    816256940,
+    -1326306488
+   ],
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "There you are. Took you long enough, I was about to start drinking without you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_8[toni-bardates] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "toni-bardates",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1791244990": {
+   "kind": "choice",
+   "parent": 275008528,
+   "children": [
+    1492221860,
+    -21013257,
+    -1584933436
+   ],
+   "actor": "Toni",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Do I gotta do, like, date stuff?  ‘Cause I’m not gonna lie, I suck at that.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1492221860": {
+   "kind": "text",
+   "parent": 1791244990,
+   "children": [
+    -1106586155
+   ],
+   "actor": null,
+   "text": "Don't forget that you have to play with your hair.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-21013257": {
+   "kind": "text",
+   "parent": 1791244990,
+   "children": [
+    -45684381,
+    1999415906
+   ],
+   "actor": null,
+   "text": "Nah, just be you. That’s kinda the whole point.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1584933436": {
+   "kind": "text",
+   "parent": 1791244990,
+   "children": [
+    -12326233,
+    -632442639
+   ],
+   "actor": null,
+   "text": "You’re saying you’ve never had a proper date before?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1106586155": {
+   "kind": "text",
+   "parent": 1492221860,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Pfft—yeah, no. If I ever do that, you better check if I’m having a stroke or something.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-45684381": {
+   "kind": "text",
+   "parent": -21013257,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Tch—careful with lines like that. Someone might think you actually like me or somethin’.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-12326233": {
+   "kind": "text",
+   "parent": -1584933436,
+   "actor": "Toni",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Hey, I’ve had dates. Kinda. Maybe. Look, shut up. You think I got time for all that romance stuff?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1999415906": {
+   "kind": "text",
+   "parent": -21013257,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Alright, fine. No fancy crap. Just us, drinks, and me absolutely destroying you in bar games later.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-632442639": {
+   "kind": "text",
+   "parent": -1584933436,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Bet you’d love to know what kinda people I used to go for, huh? Too bad. Classified information.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-457753655": {
+   "kind": "text",
+   "parent": 275008528,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "391657399": {
+   "kind": "choice",
+   "parent": 275008528,
+   "children": [
+    -1196435533,
+    -1660625706,
+    1830090072,
+    1875886239
+   ],
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "I see you staring. Just spit it out already. Yeah, I’m not in my usual look. Get over it.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ToniAtBar (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ToniAtBar (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/ToniAtBar (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1196435533": {
+   "kind": "text",
+   "parent": 391657399,
+   "children": [
+    -2051328805,
+    925200028,
+    -1044571453
+   ],
+   "actor": null,
+   "text": "I didn’t think I’d ever see you looking this… put together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1660625706": {
+   "kind": "text",
+   "parent": 391657399,
+   "children": [
+    336639986,
+    1097280240
+   ],
+   "actor": null,
+   "text": "Honestly? You look really good in it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1830090072": {
+   "kind": "text",
+   "parent": 391657399,
+   "children": [
+    -470232126,
+    781725940,
+    204707655
+   ],
+   "actor": null,
+   "text": "What’s with the outfit change? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2051328805": {
+   "kind": "text",
+   "parent": -1196435533,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yeah, yeah, laugh it up. Thought I’d switch it up since this is a ‘date’ and all. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "336639986": {
+   "kind": "text",
+   "parent": -1660625706,
+   "actor": "Toni",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Yeah, okay, cool it. Not like I went all out or anything, I just...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-470232126": {
+   "kind": "text",
+   "parent": 1830090072,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Dunno. Maybe. Feels weird pulling this out of my closet after all these years.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "925200028": {
+   "kind": "text",
+   "parent": -1196435533,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "But if you start getting too smug about it, I’m showing up in a grease-stained jumpsuit next time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1044571453": {
+   "kind": "text",
+   "parent": -1196435533,
+   "actor": "Toni",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Bet you’d still stare, though....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1097280240": {
+   "kind": "text",
+   "parent": -1660625706,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Ugh, whatever. Just drink your damn beer.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "781725940": {
+   "kind": "text",
+   "parent": 1830090072,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Back then, I was just trying to figure out my life. And now? Hell, I’m still figuring it out… just with better taste in drinks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "204707655": {
+   "kind": "text",
+   "parent": 1830090072,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Guess some things don’t change, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1322862969": {
+   "kind": "text",
+   "parent": 275008528,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Alright, not bad for a first date. No disasters, no awkward silences… I’d say you survived.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ToniAtBar (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ToniAtBar (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/ToniAtBar (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-579205063": {
+   "kind": "text",
+   "parent": 275008528,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "I’m heading out before I start saying something sentimental. Later, dumbass.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1667056715": {
+   "kind": "choice",
+   "parent": 1329176317,
+   "children": [
+    717968104,
+    1867690669,
+    -954742826,
+    -1562239198
+   ],
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Now tell me, what have you been up to? Last time I saw you, you were just some shithead hanging around while I watched over Adrian.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "717968104": {
+   "kind": "text",
+   "parent": -1667056715,
+   "children": [
+    -408386638,
+    2137487128
+   ],
+   "actor": null,
+   "text": "Been getting into photography lately. It's pretty fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1867690669": {
+   "kind": "text",
+   "parent": -1667056715,
+   "children": [
+    -951612928,
+    1838072589
+   ],
+   "actor": null,
+   "text": "Not great. Josef got fired, and I’m just trying to keep things from falling apart.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-954742826": {
+   "kind": "text",
+   "parent": -1667056715,
+   "children": [
+    1232871343,
+    -604014001
+   ],
+   "actor": null,
+   "text": "Man, I wouldn’t even know where to start. It’s been one thing after another.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1562239198": {
+   "kind": "text",
+   "parent": -1667056715,
+   "children": [
+    -1264189220,
+    2058046866,
+    -401642505,
+    -1523004492
+   ],
+   "actor": null,
+   "text": "Pretty good, actually. Feels like, for once, I’m the one calling the shots.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-408386638": {
+   "kind": "text",
+   "parent": 717968104,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Huh. Didn’t peg you for the artsy type, but I guess that tracks. What kinda stuff you shoot? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-951612928": {
+   "kind": "text",
+   "parent": 1867690669,
+   "actor": "Toni",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Damn… didn’t think he could get knocked off his throne. Must be a mess back home, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1232871343": {
+   "kind": "text",
+   "parent": -954742826,
+   "actor": "Toni",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Oof, that bad, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1264189220": {
+   "kind": "text",
+   "parent": -1562239198,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh, look at you, big dick energy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2137487128": {
+   "kind": "text",
+   "parent": 717968104,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Or are you just using it as an excuse to get people to pose for you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1838072589": {
+   "kind": "text",
+   "parent": 1867690669,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Well, if it makes you feel better, at least you’re not the only one trying to figure shit out. Welcome to the club.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2058046866": {
+   "kind": "text",
+   "parent": -1562239198,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Careful, though—power gets to your head real fast.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-401642505": {
+   "kind": "text",
+   "parent": -1562239198,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Next thing you know, you’ll be wearing a suit, barking orders, and making dramatic speeches about ‘the empire.’",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1523004492": {
+   "kind": "text",
+   "parent": -1562239198,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "…Actually, that sounds hilarious. Do it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-604014001": {
+   "kind": "choice",
+   "parent": -954742826,
+   "children": [
+    1044628247,
+    -421486132,
+    1715919927,
+    -1744039000,
+    617947638,
+    -378267878
+   ],
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Alright, then don’t. No ‘life story’ crap, just give me the hard news.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1044628247": {
+   "kind": "text",
+   "parent": -604014001,
+   "children": [
+    -2125583236,
+    -783402967
+   ],
+   "actor": null,
+   "text": "Josef’s struggling hard. He can’t find a job, and I’ve never seen him this… lost.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1715919927": {
+   "kind": "text",
+   "parent": -604014001,
+   "children": [
+    69610473,
+    2140097832
+   ],
+   "actor": null,
+   "text": "Adrian’s a mess. All he does is game his life away. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1744039000": {
+   "kind": "text",
+   "parent": -604014001,
+   "children": [
+    -407786859,
+    -220894623,
+    -1938903271
+   ],
+   "actor": null,
+   "text": "I think Anna’s depressed. She puts on a front, but something feels... off. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[Inner-Regret] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Inner-Regret",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-378267878": {
+   "kind": "text",
+   "parent": -604014001,
+   "children": [
+    976025495,
+    -457205225
+   ],
+   "actor": null,
+   "text": "The Super Chicken Sandwich is gone from MacBrandys.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "976025495": {
+   "kind": "text",
+   "parent": -378267878,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "That’s actually messed up. That thing was, like, legendary. This is worse than Josef losing his job.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-407786859": {
+   "kind": "text",
+   "parent": -1744039000,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Yeah… that’s not something you just shake off. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "69610473": {
+   "kind": "text",
+   "parent": 1715919927,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "So… basically still Adrian, just worse?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2125583236": {
+   "kind": "text",
+   "parent": 1044628247,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Damn… never thought I’d hear that about Josef of all people. Guess even the big guys fall sometimes, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-783402967": {
+   "kind": "text",
+   "parent": 1044628247,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Bet he’s taking it real well.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2140097832": {
+   "kind": "text",
+   "parent": 1715919927,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "I’d say he needs a wake-up call...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-220894623": {
+   "kind": "text",
+   "parent": -1744039000,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "You talked to her about it? Or are you just sitting around hoping it fixes itself?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1938903271": {
+   "kind": "text",
+   "parent": -1744039000,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Cause I hate to break it to you, but that never works.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-457205225": {
+   "kind": "text",
+   "parent": -378267878,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "First, the sandwich. Next, society collapses.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-421486132": {
+   "kind": "text",
+   "parent": -604014001,
+   "children": [
+    -448832556,
+    -449790744,
+    -1929168846
+   ],
+   "actor": null,
+   "text": "Josef left Anna. No warning, no explanation. One day he was just... gone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "617947638": {
+   "kind": "text",
+   "parent": -604014001,
+   "children": [
+    663961707,
+    934859641,
+    -944194050
+   ],
+   "actor": null,
+   "text": "Honestly? Things are so good I keep waiting for something to ruin it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[Inner-Regret] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Inner-Regret",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-448832556": {
+   "kind": "text",
+   "parent": -421486132,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "What? Like—he just up and disappeared? No note, no nothing?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "663961707": {
+   "kind": "text",
+   "parent": 617947638,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Damn, look at you—so successful it’s scary. What a problem to have.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-449790744": {
+   "kind": "text",
+   "parent": -421486132,
+   "actor": "Toni",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Damn… that’s cold. I figured he was uptight, but I didn’t think he was the type to run.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1929168846": {
+   "kind": "text",
+   "parent": -421486132,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "That’s gonna mess her up bad.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "934859641": {
+   "kind": "text",
+   "parent": 617947638,
+   "actor": "Toni",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Nah, I get it. When you’re used to fighting for every win, it’s weird when the fight stops.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-944194050": {
+   "kind": "text",
+   "parent": 617947638,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "But, uh… maybe don’t jinx it by saying that out loud? Just a thought.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "47232543": {
+   "kind": "choice",
+   "parent": 1329176317,
+   "children": [
+    -741951282,
+    -633738341,
+    1375336227,
+    727906569
+   ],
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Alright, your turn. Ask me something... anything. Let’s see what’s rattling around in that head of yours.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-741951282": {
+   "kind": "text",
+   "parent": 47232543,
+   "children": [
+    788695922,
+    -1232386234,
+    1112749621,
+    1776604649
+   ],
+   "actor": null,
+   "text": "Do you ever miss being Antonia?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-633738341": {
+   "kind": "text",
+   "parent": 47232543,
+   "children": [
+    -1080021571,
+    -323704596,
+    1502740045,
+    -596797620
+   ],
+   "actor": null,
+   "text": "If you had a million dollars, what would you do?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1375336227": {
+   "kind": "text",
+   "parent": 47232543,
+   "children": [
+    721625938,
+    106046473,
+    -248900247,
+    -2100609836,
+    1583535404
+   ],
+   "actor": null,
+   "text": "What do you do when you're not working or chilling at home?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "727906569": {
+   "kind": "text",
+   "parent": 47232543,
+   "children": [
+    -713724295,
+    489305249,
+    1979761978
+   ],
+   "actor": null,
+   "text": "Are those real? (Point at her chest)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-713724295": {
+   "kind": "text",
+   "parent": 727906569,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You—pfft! That’s what you wanna ask?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "721625938": {
+   "kind": "text",
+   "parent": 1375336227,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Easy. I sleep. A lot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1080021571": {
+   "kind": "text",
+   "parent": -633738341,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "First instinct? Buy a ridiculous car, trick it out, and drive like a maniac. But…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "788695922": {
+   "kind": "text",
+   "parent": -741951282,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "I dunno. Antonia was… easy. She smiled a lot, wore nice clothes, played the part. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1232386234": {
+   "kind": "text",
+   "parent": -741951282,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "People liked her. But she wasn’t really me—or maybe I just wasn’t her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1112749621": {
+   "kind": "text",
+   "parent": -741951282,
+   "actor": "Toni",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Or maybe I just grew out of her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1776604649": {
+   "kind": "text",
+   "parent": -741951282,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Eh. Guess we’ll never know.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-323704596": {
+   "kind": "text",
+   "parent": -633738341,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Honestly? I think I’d get the hell out of Peak City. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1502740045": {
+   "kind": "text",
+   "parent": -633738341,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Maybe grab some land, get a farm or somethin’. Someplace quiet. No traffic, no smog, no one breathing down my neck.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-596797620": {
+   "kind": "text",
+   "parent": -633738341,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Can’t say I’d be a good farmer, but I’d figure it out. Worst case? I just own a bunch of animals and let ‘em do whatever. Sounds kinda nice, actually.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "106046473": {
+   "kind": "text",
+   "parent": 1375336227,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Like, I could probably compete professionally if that was a thing. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-248900247": {
+   "kind": "text",
+   "parent": 1375336227,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Some people meditate, some go to therapy—me? I take stupidly long naps and hope life sorts itself out while I’m unconscious.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2100609836": {
+   "kind": "text",
+   "parent": 1375336227,
+   "actor": "Toni",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "And if I’m not actually sleeping, I’m daydreaming. Just thinking about all the ways my life could’ve gone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1583535404": {
+   "kind": "text",
+   "parent": 1375336227,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Then I wake up, and—poof! Still here. Guess that’s just how it goes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "489305249": {
+   "kind": "text",
+   "parent": 727906569,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Dude. Yes. They’re real. You think I got money for plastic? If I did, I’d have better things to spend it on.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1979761978": {
+   "kind": "choice",
+   "parent": 727906569,
+   "children": [
+    -1283504102,
+    -136353127
+   ],
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Go ahead. Give them a squeeze, you'll see.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1283504102": {
+   "kind": "text",
+   "parent": 1979761978,
+   "children": [
+    1217830305,
+    877227764,
+    -520985030
+   ],
+   "actor": null,
+   "text": "(Give them a squeeze)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-136353127": {
+   "kind": "text",
+   "parent": 1979761978,
+   "children": [
+    -881699577
+   ],
+   "actor": null,
+   "text": "I believe you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1217830305": {
+   "kind": "text",
+   "parent": -1283504102,
+   "actor": "Toni",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "See? Told ya...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ToniAtBar (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ToniAtBar (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/ToniAtBar (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-881699577": {
+   "kind": "text",
+   "parent": -136353127,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Alright, Mr. Gentleman...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "877227764": {
+   "kind": "text",
+   "parent": -1283504102,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Tho I get it... I know I gained a few pounds in the last few years, so they do look bigger... But I'm also stronger than ever!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-520985030": {
+   "kind": "text",
+   "parent": -1283504102,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "And that's enough, hands off. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ToniAtBar (3) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ToniAtBar (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/ToniAtBar (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1738774461": {
+   "kind": "text",
+   "parent": 1329176317,
+   "actor": "Toni",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Y’know… this is actually kinda nice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Charm to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Charm",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Charm"
+      }
+     }
+    }
+   ]
+  },
+  "172872483": {
+   "kind": "text",
+   "parent": 1329176317,
+   "actor": "Toni",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Don’t get me wrong, I love a good brawl or a wild night, but… just being here? With you? It’s cool. Feels… easy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "816256940": {
+   "kind": "text",
+   "parent": 1329176317,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Alright, that’s enough sentimental crap. Let’s go hustle some poor drunk idiots at pool.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1326306488": {
+   "kind": "text",
+   "parent": 1329176317,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Unless you’re scared of getting your ass kicked?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1875886239": {
+   "kind": "text",
+   "parent": 391657399,
+   "children": [
+    -1264029566
+   ],
+   "actor": null,
+   "text": "(Charming) Hard to get over it when you wear it that well.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Charming] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Charming",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1264029566": {
+   "kind": "text",
+   "parent": 1875886239,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Tch… you really don’t quit, do you? Fine, maybe I don’t look that bad.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Bar",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play ToniBarEvent and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[toniatbarunlocked] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "toniatbarunlocked",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[tonibar] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tonibar",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_8[toni-bardates] ≤ 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "toni-bardates",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active TomboyToni_BustBaroutfit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "TomboyToni_BustBaroutfit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/TomboyToni_BustBaroutfit"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/TomboyToni_BustBaroutfit/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[tonibar] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tonibar",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_8[toni-bardates] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "toni-bardates",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

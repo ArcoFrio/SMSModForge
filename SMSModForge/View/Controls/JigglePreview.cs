@@ -206,6 +206,10 @@ public sealed class JigglePreview : Image
 
     public JigglePreview()
     {
+        // A tooltip that outlived its owner sits over the one thing an
+        // author is trying to look at. See ToolTipDismisser.
+        View.ToolTipDismisser.KeepClearOf(this);
+
         _bitmap = new WriteableBitmap(JiggleShader.RenderSize, JiggleShader.RenderSize, 96, 96, PixelFormats.Pbgra32, null);
         Source = _bitmap;
         // Stretch.None displays the bitmap at its natural pixel size. Combined

@@ -1,0 +1,445 @@
+{
+ "id": "8_Core_Events/Trips/Hiking/MIndividual",
+ "name": "MIndividual",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "You"
+ ],
+ "roots": [
+  -1008694710,
+  1993322081,
+  -1436414309
+ ],
+ "nodes": {
+  "-1008694710": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Hey {M}, let’s talk for a bit.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1993322081": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2146194675,
+    1008858734,
+    -1963669032,
+    -2031689458,
+    1086959956
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Of course, {PC}. What do you want to talk about?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2146194675": {
+   "kind": "text",
+   "parent": 1993322081,
+   "children": [
+    755258133,
+    -755954637
+   ],
+   "actor": null,
+   "text": "What’s the one thing you wish you could have done differently in your life?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1008858734": {
+   "kind": "text",
+   "parent": 1993322081,
+   "children": [
+    1382922952,
+    -543265654,
+    497252669
+   ],
+   "actor": null,
+   "text": "Do you think things have changed for the better or worse over the weeks?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1963669032": {
+   "kind": "text",
+   "parent": 1993322081,
+   "children": [
+    1030336074,
+    -1632928628
+   ],
+   "actor": null,
+   "text": "What’s something you’ve always wanted to tell me, but never had the chance?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2031689458": {
+   "kind": "text",
+   "parent": 1993322081,
+   "children": [
+    1294050063,
+    29506581
+   ],
+   "actor": null,
+   "text": "What was your favorite thing to do before we came along?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1436414309": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ah, Adrian's coming with the firewood. Let's catch up with them.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "755258133": {
+   "kind": "text",
+   "parent": -2146194675,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I wish I had pursued some of my own dreams earlier....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1382922952": {
+   "kind": "text",
+   "parent": 1008858734,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Things have been... better. Your {D} isn't doing well, Adrian has been struggling too. I hope we can turn it around.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1030336074": {
+   "kind": "text",
+   "parent": -1963669032,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That I’m proud of you, every single day. I don’t say it enough, but I hope you know it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1294050063": {
+   "kind": "text",
+   "parent": -2031689458,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I loved painting. It was my escape and my way to express myself. Maybe I should pick it up again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "29506581": {
+   "kind": "text",
+   "parent": -2031689458,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It's been so many years since I've last painted... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1632928628": {
+   "kind": "text",
+   "parent": -1963669032,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I've... I've been into you even before we've started our Starmaker page... You're handsome, kind and... I'm really lucky...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-543265654": {
+   "kind": "text",
+   "parent": 1008858734,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "We're making quite some money and I get to play with your big cock... Life's pretty good right now!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-755954637": {
+   "kind": "text",
+   "parent": -2146194675,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Not everything in life is an \"or\" decision. But we often pretend it is because we're just a little lazy, aren't we?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1086959956": {
+   "kind": "text",
+   "parent": 1993322081,
+   "actor": null,
+   "text": "[Just enjoy the silence]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "497252669": {
+   "kind": "text",
+   "parent": 1008858734,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Though sometimes I worried about Josef finding out... He... He would leave us. We can't have that happen...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Trips/Hiking/Individualtime",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play MIndividual and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Hiking to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Hiking",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Hiking"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

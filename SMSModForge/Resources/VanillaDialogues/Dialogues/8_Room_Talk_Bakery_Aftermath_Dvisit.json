@@ -1,0 +1,291 @@
+{
+ "id": "8_Room_Talk/Bakery_Aftermath/Dvisit",
+ "name": "Dvisit",
+ "index": 4,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Amelia",
+  "Josef"
+ ],
+ "roots": [
+  963801009,
+  -785644101,
+  -1960700795,
+  -1180389235,
+  -1523404276,
+  376544255
+ ],
+ "nodes": {
+  "963801009": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1870250986,
+    -1427136018
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Hey, {PC}!  How’s work going?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1870250986": {
+   "kind": "text",
+   "parent": 963801009,
+   "actor": null,
+   "text": "Hey, {D}! It’s going well. You want a coffee?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1427136018": {
+   "kind": "text",
+   "parent": 963801009,
+   "actor": null,
+   "text": "Just getting the hang of everything. What can I get you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-785644101": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1174695962,
+    -2122124801,
+    628640087
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Surprise me. I trust your taste.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1174695962": {
+   "kind": "text",
+   "parent": -785644101,
+   "actor": null,
+   "text": "You got it. So, what brings you here today?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2122124801": {
+   "kind": "text",
+   "parent": -785644101,
+   "children": [
+    -1026825013
+   ],
+   "actor": null,
+   "text": "Shouldn't you be looking for a job?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "628640087": {
+   "kind": "text",
+   "parent": -785644101,
+   "children": [
+    149061131
+   ],
+   "actor": null,
+   "text": "Always good to see you, {D}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1960700795": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Thought I’d check out the place and see how you’re doing. Plus, I’ve wanted to see who you are working with.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1180389235": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Hello! I can see where {PC} got  his good looks from.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1523404276": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Oh, come on! You're being far too friendly.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "376544255": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Mmm, this cappucino is fantastic. You’ve got a real knack for this. Keep it up, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1026825013": {
+   "kind": "text",
+   "parent": -2122124801,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Give your old man a break. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "149061131": {
+   "kind": "text",
+   "parent": 628640087,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Likewise, though it is kinda strange seeing you all like this.. Working... Being an adult...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Bakery_Aftermath/VisitConditions",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dvisit and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

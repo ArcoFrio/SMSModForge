@@ -1,0 +1,1055 @@
+{
+ "id": "8_Room_Talk/Bar/defaultbar",
+ "name": "defaultbar",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Liz",
+  "S_Customer"
+ ],
+ "roots": [
+  -1990428653,
+  -278072670
+ ],
+ "nodes": {
+  "-278072670": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    579733250,
+    820741933,
+    -1020226264,
+    -1711644902,
+    259617654,
+    -361485181
+   ],
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "H-Hey... Do you w-want a drink? ...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "579733250": {
+   "kind": "text",
+   "parent": -278072670,
+   "children": [
+    1859230342
+   ],
+   "actor": null,
+   "text": "One beer please. [$20]",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 20",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 20
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1711644902": {
+   "kind": "text",
+   "parent": -278072670,
+   "children": [
+    441718079
+   ],
+   "actor": null,
+   "text": "Could I get a glass of milk? [$10]",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 10",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 10
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-361485181": {
+   "kind": "text",
+   "parent": -278072670,
+   "children": [
+    -1030117627
+   ],
+   "actor": null,
+   "text": "I'm good, thanks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1859230342": {
+   "kind": "text",
+   "parent": 579733250,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "Of course, please enjoy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'drink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "drink"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -20",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -20
+      }
+     }
+    }
+   ]
+  },
+  "441718079": {
+   "kind": "text",
+   "parent": -1711644902,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "A g-glass of m-milk? ... Sure, coming right up...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'drink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "drink"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -10",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -10
+      }
+     }
+    }
+   ]
+  },
+  "-1030117627": {
+   "kind": "text",
+   "parent": -361485181,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "Have a nice evening...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "820741933": {
+   "kind": "text",
+   "parent": -278072670,
+   "children": [
+    648752685
+   ],
+   "actor": null,
+   "text": "I need something strong. [$50]",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 50",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 50
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1020226264": {
+   "kind": "text",
+   "parent": -278072670,
+   "children": [
+    -1865209044
+   ],
+   "actor": null,
+   "text": "I would like your most expensive wine. [$250]",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 250",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 250
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1865209044": {
+   "kind": "text",
+   "parent": -1020226264,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "Please enjoy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'drink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "drink"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -250",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -250
+      }
+     }
+    }
+   ]
+  },
+  "648752685": {
+   "kind": "text",
+   "parent": 820741933,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "Here... Whiskey on the rock...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'drink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "drink"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -50",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -50
+      }
+     }
+    }
+   ]
+  },
+  "259617654": {
+   "kind": "text",
+   "parent": -278072670,
+   "children": [
+    2091914138,
+    -1340796883
+   ],
+   "actor": null,
+   "text": "Why don't we have some fun?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[liz-threesome-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "liz-threesome-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "2091914138": {
+   "kind": "choice",
+   "parent": 259617654,
+   "children": [
+    -1929701172,
+    -632383252,
+    -2031992237
+   ],
+   "actor": "Liz",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "B-But there's people here... My boss could see us....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1340796883": {
+   "kind": "choice",
+   "parent": 259617654,
+   "children": [
+    2040438381,
+    -961938369
+   ],
+   "actor": "Liz",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "W-What do you want me to do...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1929701172": {
+   "kind": "text",
+   "parent": 2091914138,
+   "actor": null,
+   "text": "We'll be careful...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-632383252": {
+   "kind": "text",
+   "parent": 2091914138,
+   "actor": null,
+   "text": "That makes it even better...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2031992237": {
+   "kind": "text",
+   "parent": 2091914138,
+   "actor": null,
+   "text": "So you don't want to?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2040438381": {
+   "kind": "text",
+   "parent": -1340796883,
+   "children": [
+    1804218943,
+    1791205659,
+    -159105003,
+    -108552859,
+    -147801232,
+    -1171108589
+   ],
+   "actor": null,
+   "text": "Suck me off...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-961938369": {
+   "kind": "text",
+   "parent": -1340796883,
+   "children": [
+    -394357676,
+    1699749351,
+    -1828590706,
+    1703066811,
+    1069892690
+   ],
+   "actor": null,
+   "text": "You should show your customer your goods.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-394357676": {
+   "kind": "text",
+   "parent": -961938369,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "B-But... I... O-Okay...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1804218943": {
+   "kind": "text",
+   "parent": 2040438381,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "I... I... O-Okay... B-But behind the table...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1791205659": {
+   "kind": "text",
+   "parent": 2040438381,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "I-It's so h-huge... Mwaaah... Mgmm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LizBar (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LizBar (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/LizBar (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-159105003": {
+   "kind": "text",
+   "parent": 2040438381,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "Mmwoaah... I want moaah... Mgah! Mmmmhmmm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-108552859": {
+   "kind": "text",
+   "parent": 2040438381,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "Mgh! Mgh! Mpppghhh!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LizBar (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LizBar (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/LizBar (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-147801232": {
+   "kind": "text",
+   "parent": 2040438381,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "Mgaaah! Gluuggphh... Mggaahh.....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LizBar (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LizBar (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/LizBar (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-1171108589": {
+   "kind": "text",
+   "parent": 2040438381,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "Heh... Heh... T-Thank you for the drink... It's... It's very well m-mixed....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LizBar (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LizBar (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/LizBar (5)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LizBar (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LizBar (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/LizBar (2)"
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1699749351": {
+   "kind": "text",
+   "parent": -961938369,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "O-Only for a moment... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LizBar (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LizBar (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/LizBar (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1069892690": {
+   "kind": "text",
+   "parent": -961938369,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "This is so embarrassing... Oh God...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1828590706": {
+   "kind": "text",
+   "parent": -961938369,
+   "actor": "S_Customer",
+   "expressionName": "neutral",
+   "text": "What is Liz doing... Holy....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1703066811": {
+   "kind": "text",
+   "parent": -961938369,
+   "actor": "S_Customer",
+   "expressionName": "neutral",
+   "text": "I-I always thought she was the shy type... Woah...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1990428653": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1455756535,
+    365186580
+   ],
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "Hey, um… can I talk to you for a second?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[lizwarning-inc] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "lizwarning-inc",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1455756535": {
+   "kind": "text",
+   "parent": -1990428653,
+   "actor": "Liz",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I—I don’t mean to make a big deal out of it, but… could you maybe be a little less, um… touchy with the women here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_8[lizwarning-inc] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "lizwarning-inc",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "365186580": {
+   "kind": "choice",
+   "parent": -1990428653,
+   "children": [
+    -948164816,
+    1096618404,
+    -558736485
+   ],
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "Some customers have mentioned that you were having... u-um... sex with~ um... I'm sorry.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-948164816": {
+   "kind": "text",
+   "parent": 365186580,
+   "children": [
+    -79118675
+   ],
+   "actor": null,
+   "text": "Sorry, Liz. Won't happen again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1096618404": {
+   "kind": "text",
+   "parent": 365186580,
+   "children": [
+    908935819
+   ],
+   "actor": null,
+   "text": "You really believe that? They were lying to you, Liz.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-558736485": {
+   "kind": "text",
+   "parent": 365186580,
+   "children": [
+    -1707457277
+   ],
+   "actor": null,
+   "text": "You want some dick too?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1707457277": {
+   "kind": "text",
+   "parent": -558736485,
+   "actor": "Liz",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "W-What... I... I don't know... I... E-Excuse me!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "908935819": {
+   "kind": "text",
+   "parent": 1096618404,
+   "actor": "Liz",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "O-Oh, I see! Y-Yes, that makes sense... It would be so weird to do such a thing right here... in front of everyone...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-79118675": {
+   "kind": "text",
+   "parent": -948164816,
+   "actor": "Liz",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I know you probably don’t mean anything by it, but… y’know, just—keep it in mind?",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Bar",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play defaultbar and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LizBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LizBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/LizBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

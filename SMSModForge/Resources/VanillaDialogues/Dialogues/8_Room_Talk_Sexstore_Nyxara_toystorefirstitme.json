@@ -1,0 +1,621 @@
+{
+ "id": "8_Room_Talk/Sexstore/Nyxara_toystorefirstitme",
+ "name": "Nyxara_toystorefirstitme",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Miss Zero",
+  "Nyxara"
+ ],
+ "roots": [
+  547669541,
+  1781271736,
+  -1157218598,
+  -1105564503,
+  844128213,
+  -1519292622,
+  -1017962780,
+  1385495259,
+  -992360718,
+  646252925,
+  650589681,
+  -1014183925,
+  809480314,
+  -925970125,
+  -1355216659
+ ],
+ "nodes": {
+  "547669541": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Nyxara",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Well, well, look who decided to come shopping.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1781271736": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Nyxara",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Surprised to see me here? Don’t be. I’ve discovered this little world of yours is deliciously pathetic.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1157218598": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Humans line up to spend their money just to fuck silicone. They beg for holes that will never love them back.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "844128213": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    525133736,
+    1277531769,
+    -419039598,
+    -163117012
+   ],
+   "actor": "Nyxara",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Meanwhile, I was born with the perfect ones. And now I get paid for letting them use me. How beautiful is that?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "525133736": {
+   "kind": "text",
+   "parent": 844128213,
+   "children": [
+    -1139235428
+   ],
+   "actor": null,
+   "text": "You actually… enjoy working here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1277531769": {
+   "kind": "text",
+   "parent": 844128213,
+   "children": [
+    -239906645
+   ],
+   "actor": null,
+   "text": "So this is what you’re doing with your freedom? Selling yourself like a toy?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-419039598": {
+   "kind": "text",
+   "parent": 844128213,
+   "children": [
+    -1784515801
+   ],
+   "actor": null,
+   "text": "Guess you found a way to turn your holes into a full-time career.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-163117012": {
+   "kind": "text",
+   "parent": 844128213,
+   "children": [
+    1103227407
+   ],
+   "actor": null,
+   "text": "Maybe I should test whether your holes are worth the price.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1103227407": {
+   "kind": "text",
+   "parent": -163117012,
+   "actor": "Nyxara",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Try me, mortal. Just know… once you pay, you’ll never stop coming back.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1784515801": {
+   "kind": "text",
+   "parent": -419039598,
+   "actor": "Nyxara",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Finally, someone who understands my business model.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-239906645": {
+   "kind": "text",
+   "parent": 1277531769,
+   "actor": "Nyxara",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Oh, don’t pretend you’re above it. You used me too. At least I’m smart enough to charge.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1139235428": {
+   "kind": "text",
+   "parent": 525133736,
+   "actor": "Nyxara",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Enjoy? I adore it. Every sweaty mortal that walks in proves me right about how pathetic your kind is.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1519292622": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "M-Miss Zero! You… you’re back early…",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_ShadyVendor to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_ShadyVendor",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_ShadyVendor"
+      }
+     }
+    }
+   ]
+  },
+  "-1105564503": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Nyxara",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "And the women… hah. Pathetic little creatures. They spread their legs for free. Pathetic!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1017962780": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Just restocking. Don’t mind me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1385495259": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "You’re not scaring the customers again, are you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-992360718": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "N-no! Never! I… I was just explaining the, um, cultural significance of your… wonderful products!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "646252925": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Mhm. That’s good. I need you to be sweet to people, not terrifying.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "650589681": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -443794179,
+    -912192098,
+    1624088249
+   ],
+   "actor": "Nyxara",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Of course. I’ll do better. I promise. Y-you’ve been so kind letting me stay here… I don’t want to disappoint you.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-443794179": {
+   "kind": "text",
+   "parent": 650589681,
+   "children": [
+    1558054801
+   ],
+   "actor": null,
+   "text": "Wow… I’ve never seen you act so shy, Nyxara.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1558054801": {
+   "kind": "text",
+   "parent": -443794179,
+   "actor": "Nyxara",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Shut up… you wouldn’t understand…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-912192098": {
+   "kind": "text",
+   "parent": 650589681,
+   "children": [
+    657371484
+   ],
+   "actor": null,
+   "text": "So the terrifying demon queen gets all timid the second Miss Zero shows up?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "657371484": {
+   "kind": "text",
+   "parent": -912192098,
+   "actor": "Nyxara",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I-I’m not timid! I just… respect her, alright?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1624088249": {
+   "kind": "text",
+   "parent": 650589681,
+   "children": [
+    -793063137
+   ],
+   "actor": null,
+   "text": "Guess you’ve finally found someone who can put you in your place.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-793063137": {
+   "kind": "text",
+   "parent": 1624088249,
+   "actor": "Nyxara",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "…Maybe… maybe I like that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1014183925": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Good. I like the energy in here today. Keep it up, both of you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "809480314": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Y-yes… of course.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_ShadyVendor/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-925970125": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "…Don’t you dare say a word. Not one word.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1355216659": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Now buy something before I kick you out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Charm to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Charm",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Charm"
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/NyxaraBust_WorkerBust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Sexstore",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Nyxara_toystorefirstitme and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[nyxaratoystore-met] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxaratoystore-met",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[nyxara-free] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxara-free",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraBust_WorkerBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraBust_WorkerBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/NyxaraBust_WorkerBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[nyxaratoystore-met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxaratoystore-met",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,408 @@
+{
+ "id": "8_Room_Talk/Tasha_Store/TashaQuestStart1",
+ "name": "TashaQuestStart1",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Jasper",
+  "Tasha"
+ ],
+ "roots": [
+  982659427,
+  383798984,
+  -372773586,
+  -972904817,
+  -392345871,
+  1680292314,
+  -1690522583,
+  -1666030493,
+  -2036811334,
+  1396185522,
+  -1224924491,
+  1746843108,
+  -1210832921
+ ],
+ "nodes": {
+  "982659427": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Hey, look who it is! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "383798984": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "By the way, those photos you took? Total game-changer. I’ve already got a bunch of new customers coming in. Some of them even mentioned the ad.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-372773586": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Guess that means you’ve got a bit of magic in you, huh? Makes me wonder what else you’re good at...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Jasper_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Jasper_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Jasper_Default"
+      }
+     }
+    }
+   ]
+  },
+  "-972904817": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Jasper",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hopefully, not too much.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-392345871": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Jasper",
+   "expressionName": "neutral",
+   "text": "So, this is the guy who made you look like a rockstar in that ad?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1680292314": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Jasper",
+   "expressionName": "neutral",
+   "text": "Nice work. I’ve been hearing her brag about it all week.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1690522583": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Brag? Please. It’s not bragging if it’s true.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1666030493": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Jasper",
+   "expressionName": "neutral",
+   "text": "Fair enough.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2036811334": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1880645023,
+    1205823704,
+    -612258930
+   ],
+   "actor": "Jasper",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Anyway, thanks for helping her out. She’s been all about that shop since day one, so it’s cool to see things picking up.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1880645023": {
+   "kind": "text",
+   "parent": -2036811334,
+   "children": [
+    -654203600
+   ],
+   "actor": null,
+   "text": "And you are?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1205823704": {
+   "kind": "text",
+   "parent": -2036811334,
+   "children": [
+    -750356716
+   ],
+   "actor": null,
+   "text": "You must be Tasha's father?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-612258930": {
+   "kind": "text",
+   "parent": -2036811334,
+   "children": [
+    1010593586
+   ],
+   "actor": null,
+   "text": "I'm glad I was able to help.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1010593586": {
+   "kind": "text",
+   "parent": -612258930,
+   "actor": "Jasper",
+   "expressionName": "neutral",
+   "text": "Glad to be helped. I'm Tasha's boyfriend by the way. Name's Jasper, nice to meet you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-750356716": {
+   "kind": "text",
+   "parent": 1205823704,
+   "actor": "Jasper",
+   "expressionName": "neutral",
+   "text": "I'm her boyfriend. Name's Jasper, nice to meet you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-654203600": {
+   "kind": "text",
+   "parent": 1880645023,
+   "actor": "Jasper",
+   "expressionName": "neutral",
+   "text": "I'm her boyfriend. Name's Jasper, nice to meet you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1396185522": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Alright, alright, stop buttering him up. He’s already got an ego from me gassing him up earlier.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1224924491": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Tasha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "But seriously, thanks again. I owe you big time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1746843108": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Jasper",
+   "expressionName": "neutral",
+   "text": "You better not owe him too much.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1210832921": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Don’t mind him. He’s just here to remind me he exists. Anyway, I’ll see you around, yeah?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Tasha_Store",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play TashaQuestStart1 and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_6[Tasha-questone] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Tasha-questone",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_6[Tasha-questone] = 3",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Tasha-questone",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 3
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Tasha_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Tasha_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Tasha_Default"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

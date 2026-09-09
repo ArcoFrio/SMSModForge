@@ -1,0 +1,2215 @@
+{
+ "id": "Holiday_Hallway_Conditions/Valentines_Day_Core/Dialogue_1",
+ "name": "Dialogue_1",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "Josef"
+ ],
+ "roots": [
+  -1051677218,
+  -584623596,
+  838302335,
+  -1027398386,
+  2006401473
+ ],
+ "nodes": {
+  "-1027398386": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -699695079,
+    950572303,
+    699511451,
+    2144644466,
+    -284190311,
+    1181011401,
+    322982545
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Ready? The reservation’s at seven.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-touching] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-touching",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-699695079": {
+   "kind": "text",
+   "parent": -1027398386,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes, just let me grab my coat...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "950572303": {
+   "kind": "text",
+   "parent": -1027398386,
+   "actor": "Josef",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "You sure you're up for this? We could stay in.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "699511451": {
+   "kind": "text",
+   "parent": -1027398386,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "No, I want to. We need this. Even if it feels...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2144644466": {
+   "kind": "text",
+   "parent": -1027398386,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ah. Look who’s lurking in the hallway.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-284190311": {
+   "kind": "choice",
+   "parent": -1027398386,
+   "children": [
+    -1878476000,
+    -1358242688,
+    539419542
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hi, sweetheart.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1878476000": {
+   "kind": "text",
+   "parent": -284190311,
+   "children": [
+    -1062101439,
+    1242555134
+   ],
+   "actor": null,
+   "text": "You two heading out? Hope it goes well.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1358242688": {
+   "kind": "text",
+   "parent": -284190311,
+   "children": [
+    -1588377806,
+    -1130034971
+   ],
+   "actor": null,
+   "text": "Valentine’s dinner? Thought you guys weren’t doing that this year.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "539419542": {
+   "kind": "text",
+   "parent": -284190311,
+   "children": [
+    744000623,
+    909667145
+   ],
+   "actor": null,
+   "text": "Well, look at you two. Hot date?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1062101439": {
+   "kind": "text",
+   "parent": -1878476000,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Yeah, thanks. It’s been... a rough week.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "744000623": {
+   "kind": "text",
+   "parent": 539419542,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Depends how much wine they serve.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1588377806": {
+   "kind": "text",
+   "parent": -1358242688,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Plans change.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "909667145": {
+   "kind": "text",
+   "parent": 539419542,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Stop...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1130034971": {
+   "kind": "text",
+   "parent": -1358242688,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "We almost didn’t... but here we are.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1242555134": {
+   "kind": "text",
+   "parent": -1878476000,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "We’ll try to enjoy it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1181011401": {
+   "kind": "text",
+   "parent": -1027398386,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "We shouldn’t be too late. Don’t wait up, okay?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "322982545": {
+   "kind": "text",
+   "parent": -1027398386,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "And maybe try not to burn the place down while we’re gone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "838302335": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -172033115,
+    1238670709,
+    -530397385,
+    -1033444092,
+    245810993,
+    -1012480681,
+    53937662,
+    808466184,
+    -433254933,
+    636031062,
+    212617584
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Valentine's dinner’s in twenty. You ready?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-touching] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-touching",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-172033115": {
+   "kind": "text",
+   "parent": 838302335,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Actually... I’ve got a bit of a headache.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1238670709": {
+   "kind": "text",
+   "parent": 838302335,
+   "actor": "Josef",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Seriously? You were fine five minutes ago.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-530397385": {
+   "kind": "text",
+   "parent": 838302335,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "\rIt just hit me. I don’t want to sit through dinner like this. Can we raincheck?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1033444092": {
+   "kind": "text",
+   "parent": 838302335,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Guess I’ll cancel then. Or go alone. I don’t know.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "245810993": {
+   "kind": "text",
+   "parent": 838302335,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Go without me. Enjoy yourself. Please.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1012480681": {
+   "kind": "text",
+   "parent": 838302335,
+   "actor": "Josef",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "...Okay. But if you feel worse, call me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "53937662": {
+   "kind": "text",
+   "parent": 838302335,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I will.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "808466184": {
+   "kind": "text",
+   "parent": 838302335,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-433254933": {
+   "kind": "text",
+   "parent": 838302335,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "That was awful...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "636031062": {
+   "kind": "choice",
+   "parent": 838302335,
+   "children": [
+    -1037191814,
+    -2137780389,
+    -1301012445,
+    2136162004
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hey... you want to go out? Just us? There's this late movie playing. I don't want to be alone tonight.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1037191814": {
+   "kind": "text",
+   "parent": 636031062,
+   "children": [
+    -181834633
+   ],
+   "actor": null,
+   "text": "Sure. Sounds nice, honestly.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2137780389": {
+   "kind": "text",
+   "parent": 636031062,
+   "children": [
+    -396952173
+   ],
+   "actor": null,
+   "text": "Are you asking me out on a Valentine’s date?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1301012445": {
+   "kind": "text",
+   "parent": 636031062,
+   "children": [
+    158960861,
+    496501666
+   ],
+   "actor": null,
+   "text": "You're really ditching {D} to go to the movies with me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2136162004": {
+   "kind": "text",
+   "parent": 636031062,
+   "children": [
+    -1921348021
+   ],
+   "actor": null,
+   "text": "Wow. Headache cured fast, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1921348021": {
+   "kind": "text",
+   "parent": 2136162004,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Amazing what a little freedom does, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "158960861": {
+   "kind": "text",
+   "parent": -1301012445,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "It's not like that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-396952173": {
+   "kind": "text",
+   "parent": -2137780389,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "If I am... you saying yes?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-181834633": {
+   "kind": "text",
+   "parent": -1037191814,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Me too. I just need a break from everything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "496501666": {
+   "kind": "text",
+   "parent": -1301012445,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Maybe it is. I don’t know anymore.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "212617584": {
+   "kind": "choice",
+   "parent": 838302335,
+   "children": [
+    -1993662014,
+    -1944813341
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So... are you coming with me or not?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1993662014": {
+   "kind": "text",
+   "parent": 212617584,
+   "children": [
+    -452215038
+   ],
+   "actor": null,
+   "text": "Yes. Let’s go.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1944813341": {
+   "kind": "text",
+   "parent": 212617584,
+   "children": [
+    39930901
+   ],
+   "actor": null,
+   "text": "No. This isn’t right.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "39930901": {
+   "kind": "text",
+   "parent": -1944813341,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I understand. Still... thanks for listening.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-452215038": {
+   "kind": "text",
+   "parent": -1993662014,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Good. I was hoping you'd say that. Go get your jacket.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_At_StartCheck_If_Going to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_At_StartCheck_If_Going",
+       "of": "GetGameObjectInstance",
+       "path": "Holiday_Hallway_Conditions/Valentines_Day_Core/Disable_At_StartCheck_If_Going"
+      }
+     }
+    }
+   ]
+  },
+  "2006401473": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    199214025,
+    -1267139128,
+    1944718586
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hey...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-touching] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-touching",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "199214025": {
+   "kind": "text",
+   "parent": 2006401473,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Don’t worry, I’m not... here to make things weird. Just grabbing something.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1267139128": {
+   "kind": "text",
+   "parent": 2006401473,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Happy Valentine’s, I guess.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1944718586": {
+   "kind": "text",
+   "parent": 2006401473,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Or... whatever kind of day it is now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1051677218": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -945858279,
+    -1617608083,
+    1563648853,
+    -1170886974,
+    -1426449235,
+    -24294956
+   ],
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Ready? The reservation’s at seven.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-584623596": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    611131311,
+    75895827,
+    813888070
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hey...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-touching] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-touching",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "611131311": {
+   "kind": "text",
+   "parent": -584623596,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "So, um... Valentine's day, huh?  I know today probably feels weird.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "75895827": {
+   "kind": "text",
+   "parent": -584623596,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Josef's... gone. I didn’t want to sit around pretending it’s just a normal day.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "813888070": {
+   "kind": "choice",
+   "parent": -584623596,
+   "children": [
+    -1808201753,
+    -386526540
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Would you maybe want to... go out? Like—just catch a movie or something. No pressure. I just... don’t feel like being alone tonight.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1808201753": {
+   "kind": "text",
+   "parent": 813888070,
+   "children": [
+    930734904
+   ],
+   "actor": null,
+   "text": "Yeah. I’d like that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "930734904": {
+   "kind": "text",
+   "parent": -1808201753,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Okay. Let me grab my coat.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_At_StartCheck_If_Going to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_At_StartCheck_If_Going",
+       "of": "GetGameObjectInstance",
+       "path": "Holiday_Hallway_Conditions/Valentines_Day_Core/Disable_At_StartCheck_If_Going"
+      }
+     }
+    }
+   ]
+  },
+  "-386526540": {
+   "kind": "text",
+   "parent": 813888070,
+   "children": [
+    -1879530897
+   ],
+   "actor": null,
+   "text": "Not really, sorry. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1879530897": {
+   "kind": "text",
+   "parent": -386526540,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "But... I understand. I'll be in my room.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-945858279": {
+   "kind": "text",
+   "parent": -1051677218,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Yes, just let me grab my coat...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1563648853": {
+   "kind": "text",
+   "parent": -1051677218,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Change of plans. No fancy dinner, no reservations... How about a movie instead?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1617608083": {
+   "kind": "text",
+   "parent": -1051677218,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Hmm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1170886974": {
+   "kind": "text",
+   "parent": -1051677218,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A movie?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1426449235": {
+   "kind": "text",
+   "parent": -1051677218,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Yeah. Something simple. No pressure. We could all go. You, me... and {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-24294956": {
+   "kind": "choice",
+   "parent": -1051677218,
+   "children": [
+    -799222443,
+    -1459566649,
+    -1507759770,
+    575416285
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I don’t know if he wants to—",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-799222443": {
+   "kind": "text",
+   "parent": -24294956,
+   "children": [
+    1888737434,
+    1441038137
+   ],
+   "actor": null,
+   "text": "Sure. If you’re both okay with that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1459566649": {
+   "kind": "text",
+   "parent": -24294956,
+   "children": [
+    -1349940911,
+    -396193042,
+    989262982
+   ],
+   "actor": null,
+   "text": "Only if I get to feel {M}'s lips around my cock tonight.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "575416285": {
+   "kind": "text",
+   "parent": -24294956,
+   "children": [
+    220265408,
+    -1367142844
+   ],
+   "actor": null,
+   "text": "Sounds depressing. Count me out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "220265408": {
+   "kind": "text",
+   "parent": 575416285,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Suit yourself.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1349940911": {
+   "kind": "text",
+   "parent": -1459566649,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Anna?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[josef-cinema] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "josef-cinema",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_At_StartCheck_If_Going to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_At_StartCheck_If_Going",
+       "of": "GetGameObjectInstance",
+       "path": "Holiday_Hallway_Conditions/Valentines_Day_Core/Disable_At_StartCheck_If_Going"
+      }
+     }
+    }
+   ]
+  },
+  "1888737434": {
+   "kind": "text",
+   "parent": -799222443,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It... It might be nice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[josef-cinema] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "josef-cinema",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_At_StartCheck_If_Going to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_At_StartCheck_If_Going",
+       "of": "GetGameObjectInstance",
+       "path": "Holiday_Hallway_Conditions/Valentines_Day_Core/Disable_At_StartCheck_If_Going"
+      }
+     }
+    }
+   ]
+  },
+  "-1507759770": {
+   "kind": "text",
+   "parent": -24294956,
+   "children": [
+    -1509321979,
+    652229835,
+    132362678
+   ],
+   "actor": null,
+   "text": "How about {M} and I go alone this time?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1509321979": {
+   "kind": "text",
+   "parent": -1507759770,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "You know what, boy. That's a fantastic idea.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[josef-cinema] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "josef-cinema",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_At_StartCheck_If_Going to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_At_StartCheck_If_Going",
+       "of": "GetGameObjectInstance",
+       "path": "Holiday_Hallway_Conditions/Valentines_Day_Core/Disable_At_StartCheck_If_Going"
+      }
+     }
+    }
+   ]
+  },
+  "652229835": {
+   "kind": "text",
+   "parent": -1507759770,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Uh, what?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "132362678": {
+   "kind": "text",
+   "parent": -1507759770,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Here's your coat, hun. You two have fun! I guess I'll have to watch the game tonight...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1367142844": {
+   "kind": "text",
+   "parent": 575416285,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "…Okay then.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-396193042": {
+   "kind": "text",
+   "parent": -1459566649,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "989262982": {
+   "kind": "text",
+   "parent": -1459566649,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Guess that's a yes, grab your jacket. Let's go!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1441038137": {
+   "kind": "text",
+   "parent": -799222443,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Then it’s settled.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "Holiday_Hallway_Conditions/Valentines_Day_Core",
+   "script": "Actions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dialogue_1 and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave2[holidayhallway-check] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "holidayhallway-check",
+        "list": "Core_NoSave2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Holidays[big-holiday-trip] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "big-holiday-trip",
+        "list": "Holidays",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[anna-halloweenbathinc] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-halloweenbathinc",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[josef-cinema] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "josef-cinema",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueStart'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueStart"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Josef_There_Cond and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "Josef_There_Cond",
+       "of": "GetGameObjectConditions",
+       "path": "Holiday_Hallway_Conditions/Valentines_Day_Core/Josef_There_Cond"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_At_StartCheck_If_Going to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_At_StartCheck_If_Going",
+       "of": "GetGameObjectInstance",
+       "path": "Holiday_Hallway_Conditions/Valentines_Day_Core/Disable_At_StartCheck_If_Going"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Valentines_Day_Core and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "Valentines_Day_Core",
+       "of": "GetGameObjectConditions",
+       "path": "Holiday_Hallway_Conditions/Valentines_Day_Core"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "checkConditions",
+     "type": "InstructionLogicCheckConditions",
+     "title": "Check If is Active Disable_At_StartCheck_If_Going",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "gameObjectActive",
+         "type": "ConditionGameObjectActive",
+         "title": "If is Active Disable_At_StartCheck_If_Going",
+         "fields": {
+          "m_GameObject": {
+           "kind": "object",
+           "name": "Disable_At_StartCheck_If_Going",
+           "of": "GetGameObjectInstance",
+           "path": "Holiday_Hallway_Conditions/Valentines_Day_Core/Disable_At_StartCheck_If_Going"
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Gallery-Active] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gallery-Active",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeInBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeInBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 9_Hallway to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "9_Hallway",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/9_Hallway"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Dark_Cinema to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Dark_Cinema",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/122_Cinema/Dark_Cinema"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 122_Cinema to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "122_Cinema",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/122_Cinema"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Dialogue_2_Cinema_Intro and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Dialogue_2_Cinema_Intro",
+       "of": "GetGameObjectDialogue",
+       "path": "Holiday_Hallway_Conditions/Valentines_Day_Core/Dialogue_2_Cinema_Intro"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Dark_Cinema to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Dark_Cinema",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/122_Cinema/Dark_Cinema"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 8 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 8
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Halloween_Bathroom_Cond and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "Halloween_Bathroom_Cond",
+       "of": "GetGameObjectConditions",
+       "path": "Holiday_Hallway_Conditions/Valentines_Day_Core/Halloween_Bathroom_Cond"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeInBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeInBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 9_Hallway to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "9_Hallway",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/9_Hallway"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 122_Cinema to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "122_Cinema",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/122_Cinema"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Music to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Music",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Music"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HalloweenMusic to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HalloweenMusic",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/HalloweenMusic"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Dialogue_4_ReturnHome and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Dialogue_4_ReturnHome",
+       "of": "GetGameObjectDialogue",
+       "path": "Holiday_Hallway_Conditions/Valentines_Day_Core/Dialogue_4_ReturnHome"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Bedroom_Finale_Cond and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "Bedroom_Finale_Cond",
+       "of": "GetGameObjectConditions",
+       "path": "Holiday_Hallway_Conditions/Valentines_Day_Core/Bedroom_Finale_Cond"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.3 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.3
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Gallery-Active] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gallery-Active",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueEnd'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueEnd"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

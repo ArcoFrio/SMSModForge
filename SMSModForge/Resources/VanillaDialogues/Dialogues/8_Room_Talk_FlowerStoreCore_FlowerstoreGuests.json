@@ -1,0 +1,1533 @@
+{
+ "id": "8_Room_Talk/FlowerStoreCore/FlowerstoreGuests",
+ "name": "FlowerstoreGuests",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "DrFrost",
+  "Haniya",
+  "S_Customer"
+ ],
+ "roots": [
+  -104643814,
+  -1795430869,
+  -1670175614,
+  -1834024134,
+  1654945023
+ ],
+ "nodes": {
+  "-104643814": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    -903366450,
+    1351949711,
+    -976658985
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_Flowercustomer (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_Flowercustomer (1)",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Flowercustomer (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-903366450": {
+   "kind": "text",
+   "parent": -104643814,
+   "children": [
+    -104222633,
+    75701476
+   ],
+   "actor": "S_Customer",
+   "expressionName": "neutral",
+   "text": "Oh dear, I came for… oh, what was it again? A bouquet? No, no… oh! Sunflowers! Or was it tulips?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-104222633": {
+   "kind": "text",
+   "parent": -903366450,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "How about I make a mix? That way, she gets a bit of everything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "75701476": {
+   "kind": "text",
+   "parent": -903366450,
+   "actor": "S_Customer",
+   "expressionName": "neutral",
+   "text": "Oh, you’re such a sweetheart! Now, let me just… oh dear, where did I put my wallet…?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1351949711": {
+   "kind": "text",
+   "parent": -104643814,
+   "children": [
+    262040406,
+    629177761
+   ],
+   "actor": "S_Customer",
+   "expressionName": "neutral",
+   "text": "Hello again, dear! I need… oh, what was it… roses? No, no, that was last time…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "262040406": {
+   "kind": "text",
+   "parent": 1351949711,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Maybe lilies? Or something colorful?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "629177761": {
+   "kind": "text",
+   "parent": 1351949711,
+   "actor": "S_Customer",
+   "expressionName": "neutral",
+   "text": "Oh, lilies! Yes! Or… wait… was it daisies? Oh my, I really should write these things down.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-976658985": {
+   "kind": "text",
+   "parent": -104643814,
+   "children": [
+    -1701117456,
+    -896867347
+   ],
+   "actor": "S_Customer",
+   "expressionName": "neutral",
+   "text": "My grandson’s birthday is coming up! I want to get him… oh, what kind of flowers do boys like?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1701117456": {
+   "kind": "text",
+   "parent": -976658985,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Something bright and simple? Maybe sunflowers or blue hydrangeas?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-896867347": {
+   "kind": "text",
+   "parent": -976658985,
+   "actor": "S_Customer",
+   "expressionName": "neutral",
+   "text": "Oh yes, perfect! Unless… wait, does he even like flowers? Oh dear, I’ll have to call and ask.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1795430869": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    -965775358,
+    -1044245296,
+    -1775881350
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_Flowercustomer (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_Flowercustomer (4)",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Flowercustomer (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-965775358": {
+   "kind": "text",
+   "parent": -1795430869,
+   "children": [
+    1193240111,
+    -2003637940
+   ],
+   "actor": "S_Customer",
+   "expressionName": "neutral",
+   "text": "Alright, I need flowers for my girlfriend. What do women even like? Roses? Too basic? Orchids? Too fancy?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1044245296": {
+   "kind": "text",
+   "parent": -1795430869,
+   "children": [
+    -1473895067,
+    -270762619
+   ],
+   "actor": "S_Customer",
+   "expressionName": "neutral",
+   "text": "So, I need flowers, but… I don’t want to send the wrong message. You know, nothing too serious.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1775881350": {
+   "kind": "text",
+   "parent": -1795430869,
+   "children": [
+    -253642929,
+    -189433642
+   ],
+   "actor": "S_Customer",
+   "expressionName": "neutral",
+   "text": "Do women actually like flowers? I feel like they just pretend to.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1193240111": {
+   "kind": "text",
+   "parent": -965775358,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "It depends on her style. Is she more romantic, playful, elegant?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1473895067": {
+   "kind": "text",
+   "parent": -1044245296,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Maybe something light and colorful? Tulips, daisies, or mixed wildflowers?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-253642929": {
+   "kind": "text",
+   "parent": -1775881350,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I promise, they do. You just have to pick the right ones.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2003637940": {
+   "kind": "text",
+   "parent": -965775358,
+   "actor": "S_Customer",
+   "expressionName": "neutral",
+   "text": "Uh… she likes coffee? Does that help?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-270762619": {
+   "kind": "text",
+   "parent": -1044245296,
+   "actor": "S_Customer",
+   "expressionName": "neutral",
+   "text": "Right, right… but which one says ‘I like you, but I’m not proposing’?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-189433642": {
+   "kind": "text",
+   "parent": -1775881350,
+   "actor": "S_Customer",
+   "expressionName": "neutral",
+   "text": "Alright… which flowers say ‘I didn’t totally forget our anniversary’?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1670175614": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    876663504,
+    2025344461,
+    919411799
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_Flowercustomer (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_Flowercustomer (3)",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Flowercustomer (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1834024134": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    -724633578,
+    258007547,
+    -1538534375
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Evelyn_bust_condition and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "Evelyn_bust_condition",
+       "of": "GetGameObjectConditions",
+       "path": "8_Room_Talk/FlowerStoreCore/Evelyn_bust_condition"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ]
+  },
+  "1654945023": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    516034636,
+    13333716,
+    -31410057
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Haniya to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Haniya",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Haniya"
+      }
+     }
+    }
+   ]
+  },
+  "516034636": {
+   "kind": "text",
+   "parent": 1654945023,
+   "children": [
+    -820610237,
+    -1644701072
+   ],
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "You always look so radiant, Anna! Are you sure you’re not secretly the flower in this shop?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "13333716": {
+   "kind": "text",
+   "parent": 1654945023,
+   "children": [
+    -538131170,
+    -14346566,
+    -1479954722,
+    1440345208,
+    -1528714251
+   ],
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Can I have dozen red roses, please?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-538131170": {
+   "kind": "text",
+   "parent": 13333716,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, hi Haniya. I didn't know it was you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-820610237": {
+   "kind": "text",
+   "parent": 516034636,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh, stop it! You’re too sweet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-31410057": {
+   "kind": "text",
+   "parent": 1654945023,
+   "children": [
+    1970686060,
+    -1222323452
+   ],
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "You must have the patience of a saint, Anna. Always so kind to everyone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1970686060": {
+   "kind": "text",
+   "parent": -31410057,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Well, flowers and people both need a little care.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1222323452": {
+   "kind": "text",
+   "parent": -31410057,
+   "actor": "Haniya",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "And you give it so effortlessly. The world needs more people like you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-14346566": {
+   "kind": "text",
+   "parent": 13333716,
+   "actor": "Haniya",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That's me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1644701072": {
+   "kind": "text",
+   "parent": 516034636,
+   "actor": "Haniya",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Just telling the truth! Your smile brightens this place more than the sunflowers.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "876663504": {
+   "kind": "text",
+   "parent": -1670175614,
+   "children": [
+    1676755263,
+    937756196
+   ],
+   "actor": "S_Customer",
+   "expressionName": "neutral",
+   "text": "Sooo, I need flowers, but like… not ugly ones. You know what I mean?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2025344461": {
+   "kind": "text",
+   "parent": -1670175614,
+   "children": [
+    1364726717,
+    -1152968769
+   ],
+   "actor": "S_Customer",
+   "expressionName": "neutral",
+   "text": "Okay, so I need flowers that match my vibe. Something expensive-looking but, like, effortless..",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1364726717": {
+   "kind": "text",
+   "parent": 2025344461,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Maybe orchids? They’re elegant and timeless.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1676755263": {
+   "kind": "text",
+   "parent": 876663504,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I think so… did you have a color or type in mind?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "919411799": {
+   "kind": "text",
+   "parent": -1670175614,
+   "children": [
+    -869929289,
+    -73199921
+   ],
+   "actor": "S_Customer",
+   "expressionName": "neutral",
+   "text": "OMG, I just had the best idea! What if I get a custom flower that’s, like, named after me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-869929289": {
+   "kind": "text",
+   "parent": 919411799,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Uh… flowers don’t really work that way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-724633578": {
+   "kind": "text",
+   "parent": -1834024134,
+   "children": [
+    479237459,
+    -2113771141
+   ],
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "I require night-blooming cereus, ghost orchids, and… something with a high toxin threshold.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "479237459": {
+   "kind": "text",
+   "parent": -724633578,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "…Toxin threshold?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "258007547": {
+   "kind": "text",
+   "parent": -1834024134,
+   "children": [
+    -1346713326,
+    -1588596859
+   ],
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Do you carry wolfsbane? Preferably fresh, though dried will do.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1346713326": {
+   "kind": "text",
+   "parent": 258007547,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Uh… that’s highly poisonous.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1538534375": {
+   "kind": "text",
+   "parent": -1834024134,
+   "children": [
+    1274911753,
+    427986837
+   ],
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "I need a plant with rapid regenerative properties. Something that can ‘bounce back’ from severe damage.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1274911753": {
+   "kind": "text",
+   "parent": -1538534375,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "…You mean like succulents?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "937756196": {
+   "kind": "text",
+   "parent": 876663504,
+   "actor": "S_Customer",
+   "expressionName": "neutral",
+   "text": "Ugh, no, that’s your job! Just make them, like, pretty.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1152968769": {
+   "kind": "text",
+   "parent": 2025344461,
+   "actor": "S_Customer",
+   "expressionName": "neutral",
+   "text": "Hmm… I dunno. Do they get a lot of likes on Finsta?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-73199921": {
+   "kind": "text",
+   "parent": 919411799,
+   "actor": "S_Customer",
+   "expressionName": "neutral",
+   "text": "Ugh, why not?! Someone should totally invent that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2113771141": {
+   "kind": "text",
+   "parent": -724633578,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Oh, don’t worry. It’s purely for observation… at first.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1588596859": {
+   "kind": "text",
+   "parent": 258007547,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Yes, fascinating, isn’t it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "427986837": {
+   "kind": "text",
+   "parent": -1538534375,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "mm. I was thinking on a… more extreme scale.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1479954722": {
+   "kind": "text",
+   "parent": 13333716,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That will be eighteen dollars.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1440345208": {
+   "kind": "text",
+   "parent": 13333716,
+   "actor": "Haniya",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Here you go. Keep the change.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1528714251": {
+   "kind": "text",
+   "parent": 13333716,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You're my favorite customer...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/FlowerStoreCore",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play FlowerstoreGuests and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[random-1-of-10] = Random5[Random]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random5",
+        "pick": "random",
+        "type": "number"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[Inside-Dialogue-Variable-Short] = Random3[Random]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Inside-Dialogue-Variable-Short",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random3",
+        "pick": "random",
+        "type": "number"
+       }
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[temp-stored-very-short-term] = None",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "none"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Flowercustomer/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Flowercustomer (1)/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Flowercustomer (2)/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Flowercustomer (3)/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Flowercustomer (4)/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/doctorfrost_Casualbust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Haniya/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.5 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.5
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Garden to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Garden",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Garden"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Flowercustomer/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Flowercustomer (1)/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Flowercustomer (2)/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Flowercustomer (3)/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Flowercustomer (4)/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/doctorfrost_Casualbust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Haniya/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Self and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "checkConditions",
+     "type": "InstructionLogicCheckConditions",
+     "title": "Check If Core[After-Talk-Transition] = False",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "compareBool",
+         "type": "ConditionMathCompareBooleans",
+         "title": "If Core[After-Talk-Transition] = False",
+         "fields": {
+          "m_Value": {
+           "kind": "variable",
+           "variable": {
+            "scope": "global",
+            "name": "After-Talk-Transition",
+            "list": "Core",
+            "type": "boolean"
+           }
+          },
+          "m_Comparison": "Equals",
+          "m_CompareTo": {
+           "kind": "value",
+           "value": false
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Core[temp-stored-very-short-term] and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_8[anna-flowerstorevar] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-flowerstorevar",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Haniya/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/doctorfrost_Casualbust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave2[anna-at-flowerwork] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-at-flowerwork",
+        "list": "Core_NoSave2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

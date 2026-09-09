@@ -41,6 +41,67 @@ public static class VanillaUiLibrary
         => IsAvailable ? Assets.SpriteNames.OrderBy(n => n, StringComparer.OrdinalIgnoreCase)
                        : Enumerable.Empty<string>();
 
+    /// <summary>
+    /// Every sound of the game's that the editor knows the name of.
+    /// <para/>
+    /// A name, not a file: a pack never ships one of these. The runtime asks
+    /// the game for the clip it already has loaded, so what the editor needs is
+    /// only to be able to offer the name rather than have it typed from memory.
+    /// The files are here so a name can be checked against something audible.
+    /// </summary>
+    public static IEnumerable<string> SoundNames
+    {
+        get
+        {
+            lock (Gate)
+            {
+                if (_soundNames != null) return _soundNames;
+
+                var found = new List<string>();
+                try
+                {
+                    string dir = Path.Combine(Root, "Sounds");
+                    if (Directory.Exists(dir))
+                        foreach (string file in Directory.EnumerateFiles(dir))
+                        {
+                            string ext = Path.GetExtension(file);
+                            if (!string.Equals(ext, ".ogg", StringComparison.OrdinalIgnoreCase) &&
+                                !string.Equals(ext, ".wav", StringComparison.OrdinalIgnoreCase) &&
+                                !string.Equals(ext, ".mp3", StringComparison.OrdinalIgnoreCase)) continue;
+
+                            // The asset name is the file name: that is what the
+                            // game calls the clip, and what the runtime looks up.
+                            found.Add(Path.GetFileNameWithoutExtension(file));
+                        }
+                }
+                catch
+                {
+                    // A missing or unreadable folder means no names to offer,
+                    // which is a shorter list rather than a broken editor.
+                }
+
+                found.Sort(StringComparer.OrdinalIgnoreCase);
+                _soundNames = found;
+                return _soundNames;
+            }
+        }
+    }
+
+    private static List<string>? _soundNames;
+
+    /// <summary>The file behind one of <see cref="SoundNames"/>, or null.
+    /// For playing it in the editor; nothing else needs it.</summary>
+    public static string? SoundFile(string? name)
+    {
+        if (string.IsNullOrWhiteSpace(name)) return null;
+        foreach (string ext in new[] { ".ogg", ".wav", ".mp3" })
+        {
+            string path = Path.Combine(Root, "Sounds", name + ext);
+            if (File.Exists(path)) return path;
+        }
+        return null;
+    }
+
     /// <summary>Every TextMeshPro font asset the extraction exported. Named
     /// assets rather than typefaces: the same face appears more than once with
     /// different outlines and shadows, and they are not interchangeable.</summary>
@@ -132,6 +193,7 @@ public static class VanillaUiLibrary
             Surfaces.Clear();
             _assets = null;
             _fontNames = null;
+            _soundNames = null;
         }
     }
 }

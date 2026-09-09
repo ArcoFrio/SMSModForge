@@ -1,0 +1,656 @@
+{
+ "id": "8_Room_Talk/Shrine/Nyxara_BattleDialogues/Dialogue2",
+ "name": "Dialogue2",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Nyxara"
+ ],
+ "roots": [
+  -164505294,
+  -965147161,
+  -989286968,
+  673945928,
+  -1859588243,
+  1799605938,
+  -1220211546,
+  1456396457,
+  -1486619838,
+  224039749
+ ],
+ "nodes": {
+  "-164505294": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "You're here again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "673945928": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    640624835,
+    -445166034,
+    -1860973381
+   ],
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "The spirits. What did they ever do to you?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1859588243": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "What if they were lost?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1486619838": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "What if they were… like me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "224039749": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Will you kill me too?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "640624835": {
+   "kind": "text",
+   "parent": 673945928,
+   "children": [
+    -1895553598,
+    1955913962
+   ],
+   "actor": null,
+   "text": "They’re dangerous. I do what I have to.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-445166034": {
+   "kind": "text",
+   "parent": 673945928,
+   "children": [
+    2053527113,
+    -318993990
+   ],
+   "actor": null,
+   "text": "You make it sound like I’m the villain.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1860973381": {
+   "kind": "text",
+   "parent": 673945928,
+   "children": [
+    -2070498822,
+    -218283549
+   ],
+   "actor": null,
+   "text": "Some old hermit told me to.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2070498822": {
+   "kind": "text",
+   "parent": -1860973381,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "It is you who invades their world.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2053527113": {
+   "kind": "text",
+   "parent": -445166034,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Am I wrong?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1895553598": {
+   "kind": "text",
+   "parent": 640624835,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Dangerous. Yes… I suppose we are.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1955913962": {
+   "kind": "text",
+   "parent": 640624835,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "But so are you. Maybe more than you think.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-318993990": {
+   "kind": "text",
+   "parent": -445166034,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "The blade sings in your hands. And when you strike… you never hesitate.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-218283549": {
+   "kind": "text",
+   "parent": -1860973381,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "So they bared their teeth… and you tore them apart.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-965147161": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Even after I told you to leave.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-989286968": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Tell me something. \nWhy do you slay them?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1799605938": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "What if...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Mobile Phone Incoming Call Vibration",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Mobile Phone Incoming Call Vibration",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    }
+   ]
+  },
+  "-1220211546": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1084831990,
+    -732950803,
+    -1509684694
+   ],
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Uh...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1084831990": {
+   "kind": "text",
+   "parent": -1220211546,
+   "children": [
+    -1420277630
+   ],
+   "actor": null,
+   "text": "What is that sound?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-732950803": {
+   "kind": "text",
+   "parent": -1220211546,
+   "children": [
+    828311978,
+    1779903327
+   ],
+   "actor": null,
+   "text": "Is that a phone?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1509684694": {
+   "kind": "text",
+   "parent": -1220211546,
+   "actor": null,
+   "text": "(Ignore the sound)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1456396457": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "828311978": {
+   "kind": "text",
+   "parent": -732950803,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "W-What? No. That was… That was the wailing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1420277630": {
+   "kind": "text",
+   "parent": 1084831990,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "That... That was the wailing. Of the sorrowful dead.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1779903327": {
+   "kind": "text",
+   "parent": -732950803,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Of the sorrowful dead. They… um… mourn hourly.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Shrine",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dialogue2 and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_9[2025nyxara-talks] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2025nyxara-talks",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Eve_NoSave1[nyxaramightappear] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxaramightappear",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SadDemonMusic to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SadDemonMusic",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/SadDemonMusic"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Scifi to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Scifi",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Scifi"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraBust_Dark to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraBust_Dark",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/NyxaraBust_Dark"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/NyxaraBust_Dark/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[nyxaramightappear] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxaramightappear",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[nyxaramightappear] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxaramightappear",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Canvas to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Canvas",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/80_Shrine/Canvas"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SadDemonMusic to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SadDemonMusic",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/SadDemonMusic"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

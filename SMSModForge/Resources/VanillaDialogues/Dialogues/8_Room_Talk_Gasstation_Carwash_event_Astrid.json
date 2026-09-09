@@ -1,0 +1,607 @@
+{
+ "id": "8_Room_Talk/Gasstation/Carwash_event_Astrid",
+ "name": "Carwash_event_Astrid",
+ "index": 7,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Astrid"
+ ],
+ "roots": [
+  554331436,
+  967898611,
+  -1083755656,
+  -674433488,
+  1240567371,
+  -173816781,
+  -1891041400,
+  282120717,
+  -1506482489,
+  -1954928736,
+  1489584,
+  -522799361,
+  -2141715566,
+  -694605726,
+  365146111,
+  1137392387
+ ],
+ "nodes": {
+  "554331436": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Alright. I’m doing this. For the orphanage. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[Car-Dirt] = 0",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Car-Dirt",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 0
+      }
+     }
+    }
+   ]
+  },
+  "967898611": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Because apparently, that’s what’s necessary to keep this event running. Washing a car. In a bikini",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active gasstation bubbles to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "gasstation bubbles",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/59_Gasstation/gasstation bubbles"
+      }
+     }
+    }
+   ]
+  },
+  "-1083755656": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Car washes are inefficient. Sponges retain bacteria. The soap runoff is an environmental hazard. And people are donating for the wrong reasons.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ImgCarwashAstrid (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ImgCarwashAstrid (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/ImgCarwashAstrid (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-173816781": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "BUT HEY, WHAT A GREAT EVENT, HUH?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ImgCarwashAstrid (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ImgCarwashAstrid (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/ImgCarwashAstrid (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1891041400": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "NOTHING LIKE A FUN, FAMILY-FRIENDLY CHARITY CAR WASH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "282120717": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": " RAISING MONEY FOR A GOOD CAUSE, WHILE ALSO GETTING A LITTLE WET AND WILD—DON’T THINK ABOUT THAT TOO MUCH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-694605726": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "...Okay. That may have been overkill.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "type": "InstructionParticleSystemStopParticleSystem",
+     "title": "Stop gasstation bubbles Particle System",
+     "fields": {
+      "m_GameObject": {
+       "kind": "object",
+       "name": "gasstation bubbles",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/59_Gasstation/gasstation bubbles"
+      }
+     }
+    }
+   ]
+  },
+  "365146111": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Well. At least the car is clean now. And nobody can say I didn’t commit.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1137392387": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": " Alright. Next car. Let’s keep this going.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_8[carwashtotals] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "carwashtotals",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active gasstation bubbles to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "gasstation bubbles",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/59_Gasstation/gasstation bubbles"
+      }
+     }
+    }
+   ]
+  },
+  "-1506482489": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "WOW! LOOK AT THIS AMAZING CAR! LOOK AT THESE SUDS! LOOK AT THIS INCREDIBLE COMMUNITY COMING TOGETHER FOR CHARITY!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1954928736": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "AND YOU KNOW WHAT MAKES A CAR WASH EVEN BETTER? A LITTLE WATER ACTION!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1489584": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "WOW! SO MUCH DIRT! GOOD THING I’M HERE TO CLEAN IT WITH THIS SUPER EFFECTIVE SPONGE!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2141715566": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "...There. That should boost donations by at least twenty percent.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-522799361": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "NOW, EVERY GREAT CAR WASH NEEDS A BIG FINALE!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-674433488": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Circular motions prevent streaks… Hood first, windshield next… Can’t risk water drying unevenly...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1240567371": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Alright... Time for the show, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Gasstation",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Carwash_event_Astrid and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[specialcarwashunlocked] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "specialcarwashunlocked",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[special-carwashcd] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "special-carwashcd",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "branches": [
+    "Carwash"
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AstridPinkBikiniBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AstridPinkBikiniBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AstridPinkBikiniBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AstridPinkBikiniBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'ForceEnableUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "ForceEnableUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[special-carwashcd] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "special-carwashcd",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

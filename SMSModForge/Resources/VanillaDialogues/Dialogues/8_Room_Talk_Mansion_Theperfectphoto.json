@@ -1,0 +1,499 @@
+{
+ "id": "8_Room_Talk/Mansion/Theperfectphoto",
+ "name": "Theperfectphoto",
+ "index": 6,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Gabriel"
+ ],
+ "roots": [
+  1217169616,
+  -1433514064,
+  1756292676,
+  -308241791,
+  1252572070,
+  2102709843
+ ],
+ "nodes": {
+  "1217169616": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hey, {PC}. Back already? Let’s see what you’ve got.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katephoto (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katephoto (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/Katephoto (1)"
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Bring Kate’s photo to Gabriel for feedback.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Gabriel Training",
+        "of": "Quest"
+       },
+       "m_TaskId": 1917495845
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-1433514064": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Wow, you’ve really captured something special here. Kate looks adorable, and there’s a genuine warmth in this shot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1756292676": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    34468190,
+    1893032266
+   ],
+   "actor": "Gabriel",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You’ve managed to bring out her natural charm beautifully.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-308241791": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "You’ve definitely passed the test. This photo shows not only your technical skill but also your ability to connect with your subject and make them shine. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1252572070": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Well done, {PC}. You’re on your way to becoming one of the best.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Traits[Aspiring-Photographer-5] = 5",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Aspiring-Photographer-5",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 5
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[new-trait] = Aspiring Photographer",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Aspiring Photographer"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "new-trait",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Creative to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Creative",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Creative"
+      }
+     }
+    }
+   ]
+  },
+  "34468190": {
+   "kind": "text",
+   "parent": 1756292676,
+   "children": [
+    -156444381
+   ],
+   "actor": null,
+   "text": "Thanks Gabriel. You're a great teacher.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1893032266": {
+   "kind": "text",
+   "parent": 1756292676,
+   "children": [
+    -1724149882
+   ],
+   "actor": null,
+   "text": "I'm a natural.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1724149882": {
+   "kind": "text",
+   "parent": 1893032266,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "That you are, my friend.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-156444381": {
+   "kind": "text",
+   "parent": 34468190,
+   "actor": "Gabriel",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thank you, my friend. That truly brings a smile on my face.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2102709843": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Be ready. The final test is next week. And {PC}? Good work.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Mansion",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Theperfectphoto and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[gabriel-met] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabriel-met",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[perfect-kate-photo] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "perfect-kate-photo",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[bring-me-a-photo-talk] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bring-me-a-photo-talk",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[gabriel-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabriel-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[perfect-photo-shown-gabriel] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "perfect-photo-shown-gabriel",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "branches": [
+    "bringmeaphoto"
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Gabriel_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Gabriel_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Gabriel_Bust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[perfect-photo-shown-gabriel] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "perfect-photo-shown-gabriel",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[gabriel-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabriel-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

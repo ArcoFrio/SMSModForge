@@ -1,0 +1,1012 @@
+{
+ "id": "8_Core_Events/SmallTalks/Annacleansfloor/GameObject",
+ "name": "GameObject",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  957701803,
+  884220735
+ ],
+ "nodes": {
+  "957701803": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Adrian spilled his milk again.... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCleaning to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCleaning",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCleaning"
+      }
+     }
+    }
+   ]
+  },
+  "884220735": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1908839833,
+    1541807575,
+    673283958,
+    1614679286,
+    1938875617
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Can you please remind him to be more careful next time?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1908839833": {
+   "kind": "text",
+   "parent": 884220735,
+   "children": [
+    -439853102,
+    685644623
+   ],
+   "actor": null,
+   "text": "Here, let me help you with that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1541807575": {
+   "kind": "text",
+   "parent": 884220735,
+   "children": [
+    -66536541,
+    -14791759
+   ],
+   "actor": null,
+   "text": "[Spank her] You're doing great, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "673283958": {
+   "kind": "text",
+   "parent": 884220735,
+   "children": [
+    1925469257,
+    -1176457245
+   ],
+   "actor": null,
+   "text": "[Grind against her] Let me help you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1614679286": {
+   "kind": "text",
+   "parent": 884220735,
+   "children": [
+    1067998687,
+    -357014382
+   ],
+   "actor": null,
+   "text": "Hmm... Let's take a photo.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1938875617": {
+   "kind": "text",
+   "parent": 884220735,
+   "children": [
+    1672103842
+   ],
+   "actor": null,
+   "text": "Well, have fun cleaning that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1672103842": {
+   "kind": "text",
+   "parent": 1938875617,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes, yes... Very funny...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-439853102": {
+   "kind": "text",
+   "parent": -1908839833,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "685644623": {
+   "kind": "text",
+   "parent": -1908839833,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thank you, {PC}. You’re always so helpful. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[MLove] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MLove",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood and wait",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ]
+  },
+  "-66536541": {
+   "kind": "text",
+   "parent": 1541807575,
+   "children": [
+    2010756429,
+    76885767
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "W-What are YOU DOING!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-Everything-but-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-Everything-but-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCleaningAngry to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCleaningAngry",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCleaningAngry"
+      }
+     }
+    }
+   ]
+  },
+  "-14791759": {
+   "kind": "text",
+   "parent": 1541807575,
+   "children": [
+    -1536671040,
+    -2066812544
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Uh! .... Haha....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-Everything-but-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-Everything-but-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCleaningAccepting to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCleaningAccepting",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCleaningAccepting"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[MCorruption] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MCorruption",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "1925469257": {
+   "kind": "text",
+   "parent": 673283958,
+   "children": [
+    -2068756771,
+    571179898,
+    -2123379825
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-Thank you, hun...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-Everything-but-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-Everything-but-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCleaningGrind to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCleaningGrind",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCleaningGrind"
+      }
+     }
+    }
+   ]
+  },
+  "-1176457245": {
+   "kind": "text",
+   "parent": 673283958,
+   "children": [
+    234370327,
+    -1698871473,
+    -202987531
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmm... You're so kinky, {PC}....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-Everything-but-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-Everything-but-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCleaningGrind to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCleaningGrind",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCleaningGrind"
+      }
+     }
+    }
+   ]
+  },
+  "1067998687": {
+   "kind": "random",
+   "parent": 1614679286,
+   "children": [
+    22251176,
+    -1475214717
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Um, okay? Just hurry, please.",
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCleaning to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCleaning",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCleaning"
+      }
+     }
+    }
+   ]
+  },
+  "-357014382": {
+   "kind": "random",
+   "parent": 1614679286,
+   "children": [
+    83383159,
+    -1551792125
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm... Sure...",
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCleaning to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCleaning",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCleaning"
+      }
+     }
+    }
+   ]
+  },
+  "22251176": {
+   "kind": "text",
+   "parent": 1067998687,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "How about this ... I-I've seen this pose in a magazine...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A19_Cleanphoto1 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A19_Cleanphoto1",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A19_Cleanphoto1"
+      }
+     }
+    }
+   ]
+  },
+  "-1475214717": {
+   "kind": "text",
+   "parent": 1067998687,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "M-Maybe this? ... J-Just don't focus on my... butt, please?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A19_Cleanphoto1 (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A19_Cleanphoto1 (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A19_Cleanphoto1 (1)"
+      }
+     }
+    }
+   ]
+  },
+  "83383159": {
+   "kind": "text",
+   "parent": -357014382,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Take a good shot of my cake... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A19_Cleanphoto1 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A19_Cleanphoto1",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A19_Cleanphoto1"
+      }
+     }
+    }
+   ]
+  },
+  "-1551792125": {
+   "kind": "text",
+   "parent": -357014382,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "The floor  is kind of cold... My nipples are getting all hard...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A19_Cleanphoto1 (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A19_Cleanphoto1 (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A19_Cleanphoto1 (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-2068756771": {
+   "kind": "text",
+   "parent": 1925469257,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "The f-floor is kind of slippery... so... I appreciate your help...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "571179898": {
+   "kind": "text",
+   "parent": 1925469257,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A-Alright... That should be it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-2123379825": {
+   "kind": "text",
+   "parent": 1925469257,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I need to go change my socks... They are all wet now...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "234370327": {
+   "kind": "text",
+   "parent": -1176457245,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I can feel your cock grind against me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1698871473": {
+   "kind": "text",
+   "parent": -1176457245,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fuck... You are making it really hard for me to concentrate....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-202987531": {
+   "kind": "text",
+   "parent": -1176457245,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "O-Okay... T-That's it... The spot is gone.... I... T-Thank you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1536671040": {
+   "kind": "text",
+   "parent": -14791759,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-You scared me... Mhmm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2066812544": {
+   "kind": "text",
+   "parent": -14791759,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "We... We should stop now... Please...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "2010756429": {
+   "kind": "text",
+   "parent": -66536541,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "S-Stop it! Right now... J-Just because of Starmaker you can't do that! I'm your {M}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "76885767": {
+   "kind": "text",
+   "parent": -66536541,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... Oh god...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3 = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[MCorruption] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MCorruption",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/SmallTalks/Annacleansfloor",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play GameObject and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueStart'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueStart"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueEnd'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueEnd"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

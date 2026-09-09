@@ -1,0 +1,954 @@
+{
+ "id": "8_Room_Talk/Yacht/Yachtcharlotte1",
+ "name": "Yachtcharlotte1",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Charlotte",
+  "Continue"
+ ],
+ "roots": [
+  -1795500137,
+  -1537403806,
+  -1220546460,
+  -762960016,
+  -1416152960,
+  799378047,
+  -458409048,
+  -1165625062,
+  -1863002791,
+  -1458930573,
+  2116761717,
+  -1935143324,
+  -133956277
+ ],
+ "nodes": {
+  "-1795500137": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -229551481,
+    -874855389,
+    1238636244
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Welcome aboard, {PC}! I'm so glad you decided to come. Make yourself at home.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-229551481": {
+   "kind": "text",
+   "parent": -1795500137,
+   "actor": null,
+   "text": "Woah, your yacht is massive!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-874855389": {
+   "kind": "text",
+   "parent": -1795500137,
+   "children": [
+    -1815971928
+   ],
+   "actor": null,
+   "text": "Thanks, Charlotte. This place is incredible.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1238636244": {
+   "kind": "text",
+   "parent": -1795500137,
+   "children": [
+    -182822134
+   ],
+   "actor": null,
+   "text": "Wow, you look incredible!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-182822134": {
+   "kind": "text",
+   "parent": 1238636244,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Oh, come on now! It's just a regular bikini!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1537403806": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Come, let me show you around.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1815971928": {
+   "kind": "text",
+   "parent": -874855389,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "It’s even better with good company. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1220546460": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "-762960016": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    740968753,
+    -750724697,
+    95180909
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "You know, {PC}, I could get used to having you around. You bring a certain charm to this place.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1416152960": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -320200731,
+    -374395685,
+    579518112
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Just imagine all the fun we could have out here, just the two of us.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "740968753": {
+   "kind": "text",
+   "parent": -762960016,
+   "children": [
+    1731426827
+   ],
+   "actor": null,
+   "text": "I like that idea, Charlotte.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-750724697": {
+   "kind": "text",
+   "parent": -762960016,
+   "children": [
+    -727775801
+   ],
+   "actor": null,
+   "text": "What exactly do you like about me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "95180909": {
+   "kind": "text",
+   "parent": -762960016,
+   "children": [
+    924074056
+   ],
+   "actor": null,
+   "text": "Well, my time comes at a cost.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1731426827": {
+   "kind": "text",
+   "parent": 740968753,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "It's thrilling, isn't it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-727775801": {
+   "kind": "text",
+   "parent": -750724697,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "You're strong and confident, but also young and able to keep up with me in conversations...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "924074056": {
+   "kind": "text",
+   "parent": 95180909,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Oh my, do you want to earn some extra cash for your poor {M}? What a good {S} you are.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-320200731": {
+   "kind": "text",
+   "parent": -1416152960,
+   "children": [
+    -1844026854
+   ],
+   "actor": null,
+   "text": "Oh, I'm already imagining it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-374395685": {
+   "kind": "text",
+   "parent": -1416152960,
+   "children": [
+    37550197
+   ],
+   "actor": null,
+   "text": "Tell me about your idea of fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "579518112": {
+   "kind": "text",
+   "parent": -1416152960,
+   "children": [
+    1223381845
+   ],
+   "actor": null,
+   "text": "This is wrong, I'm sorry.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1844026854": {
+   "kind": "text",
+   "parent": -320200731,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Hehe...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "37550197": {
+   "kind": "text",
+   "parent": -374395685,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Hmm... How about I show you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1223381845": {
+   "kind": "text",
+   "parent": 579518112,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "I see how it is... Well, then it's best if we keep things how they were before... For Anna...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_2[Charlotte-Yacht-invitation] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Charlotte-Yacht-invitation",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "799378047": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Come on, let me see that dick of yours! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-458409048": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Oh my, what a big, beautiful cock you have! It makes my boobs look tiny in comparison!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte1 (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte1 (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Charlotte1 (5)"
+      }
+     }
+    }
+   ]
+  },
+  "-1165625062": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1378018474,
+    -731696228,
+    374768798
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Just relax and let me take care of you... I'll... I'll handle it...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1378018474": {
+   "kind": "text",
+   "parent": -1165625062,
+   "children": [
+    -1652900713
+   ],
+   "actor": null,
+   "text": "Y-You're so good at this, Charlotte.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-731696228": {
+   "kind": "text",
+   "parent": -1165625062,
+   "children": [
+    1799921749
+   ],
+   "actor": null,
+   "text": "Your tits look so hot...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "374768798": {
+   "kind": "text",
+   "parent": -1165625062,
+   "actor": null,
+   "text": "[Relax and enjoy it]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1652900713": {
+   "kind": "text",
+   "parent": 1378018474,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Well, I have a few more years under my belt than you....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1799921749": {
+   "kind": "text",
+   "parent": -731696228,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "I'm glad you think so, they were quite expensive...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1863002791": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1027578729,
+    -999080676
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "I.. I know this isn't ideal timing, but is there something going on between you and Anna?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1027578729": {
+   "kind": "text",
+   "parent": -1863002791,
+   "children": [
+    -395813976
+   ],
+   "actor": null,
+   "text": "What? No... (Charlotte Route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-999080676": {
+   "kind": "text",
+   "parent": -1863002791,
+   "children": [
+    -250676898
+   ],
+   "actor": null,
+   "text": "Yeah... How did you know? (Anna Route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-250676898": {
+   "kind": "text",
+   "parent": -999080676,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Oh my! I don’t blame her at all. You’re a real stallion of a man.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_2[charlotte-casual-route] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "charlotte-casual-route",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-395813976": {
+   "kind": "text",
+   "parent": -1027578729,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "G-Good... My apologies for the silly question—I think I misread a few signals.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_2[charlotte-romance-route] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "charlotte-romance-route",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1458930573": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Let’s not waste any more time on your {M}... I have a cock that I intend to milk dry.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2116761717": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Mhmm... So big and healthy... You're a prime specimen...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1935143324": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -324832712,
+    1305092569
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "You know you can come whenever you want, sweetie. There's no need to prove anything to me.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-324832712": {
+   "kind": "text",
+   "parent": -1935143324,
+   "children": [
+    -190253921,
+    -1701287315,
+    -1667283747
+   ],
+   "actor": null,
+   "text": "Fuck, here it comes... [Cum on her tits]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-190253921": {
+   "kind": "text",
+   "parent": -324832712,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Mmmhmm.... Y-Yes... Blow all that milk over my tits...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte1 (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte1 (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Charlotte1 (6)"
+      }
+     }
+    }
+   ]
+  },
+  "1305092569": {
+   "kind": "text",
+   "parent": -1935143324,
+   "children": [
+    -1837976535,
+    101077497,
+    74660767
+   ],
+   "actor": null,
+   "text": "I can't hold it back anymore! [Cum on her face]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1837976535": {
+   "kind": "text",
+   "parent": 1305092569,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Oh... Wow! Hahaha!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte1 (13) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte1 (13)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Charlotte1 (13)"
+      }
+     }
+    }
+   ]
+  },
+  "101077497": {
+   "kind": "text",
+   "parent": 1305092569,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "W-Watch out, my eyes! Hahaha!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1701287315": {
+   "kind": "text",
+   "parent": -324832712,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Such a large amount of cum... Damn, {PC}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1667283747": {
+   "kind": "text",
+   "parent": -324832712,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Y-Your cock is the perfect match for my tits...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "74660767": {
+   "kind": "text",
+   "parent": 1305092569,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Oh my... You really produce quite some cum, huh? That was really hot...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-133956277": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "What a fantastic day... I'm glad you decided to come along.. Let's relax a bit before we return, yes?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Charm to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Charm",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Charm"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Yacht",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Yachtcharlotte1 and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_2[yacht-talks] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "yacht-talks",
+        "list": "Events_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte_BNikini to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte_BNikini",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Charlotte_BNikini"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_2[yacht-talks] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "yacht-talks",
+        "list": "Events_2",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

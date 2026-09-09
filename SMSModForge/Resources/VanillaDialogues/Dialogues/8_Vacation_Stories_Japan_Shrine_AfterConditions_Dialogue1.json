@@ -1,0 +1,1324 @@
+{
+ "id": "8_Vacation_Stories/Japan_Shrine/AfterConditions/Dialogue1",
+ "name": "Dialogue1",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Continue",
+  "Stranger",
+  "V_Chihiro",
+  "V_Hiroji"
+ ],
+ "roots": [
+  949641101,
+  -1878488741,
+  660930712,
+  866082285,
+  365069154,
+  1890443378,
+  -1634295754,
+  -2093677977,
+  -1238584996,
+  1522035115,
+  -1476282642,
+  -1921178634,
+  2047633146,
+  -1727028965,
+  -1790850155,
+  -125434671,
+  864640313,
+  -504700746,
+  1476190956,
+  51835632,
+  1916416219,
+  -32815804,
+  -480325374,
+  -1042108965,
+  -2026592560
+ ],
+ "nodes": {
+  "949641101": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Vacation_Save[jpn-shrine-pro] = 3",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "jpn-shrine-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 3
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Hiroji/MBase1/Leave"
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_S_Hiroji to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_S_Hiroji",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Hiroji"
+      }
+     }
+    }
+   ]
+  },
+  "-1878488741": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1158931363,
+    -1647927856
+   ],
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "I'm glad everyone was able to make it... I can't wait to begin...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[temple-sex-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temple-sex-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "660930712": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -2064605432,
+    1424346286,
+    -1900675504,
+    554139187,
+    612073349
+   ],
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "Ah, Chihiro... Wait, what are the gaijins doing here!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[temple-sex-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temple-sex-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-2064605432": {
+   "kind": "text",
+   "parent": 660930712,
+   "actor": "V_Chihiro",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "They will be joining us tonight.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1424346286": {
+   "kind": "text",
+   "parent": 660930712,
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "Hahaha! You're an unsatiable slut, you know that?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1900675504": {
+   "kind": "text",
+   "parent": 660930712,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Someone has to carry the burden... And I am lucky that none of your wives do.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "554139187": {
+   "kind": "text",
+   "parent": 660930712,
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "Feisty!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "612073349": {
+   "kind": "text",
+   "parent": 660930712,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Let us begin, the others are waiting.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1158931363": {
+   "kind": "text",
+   "parent": -1878488741,
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "Ah, the gaijin are back. Can't get enough of her exotic pussy, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1647927856": {
+   "kind": "text",
+   "parent": -1878488741,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "You know how it is, Hiroji. No one can resist my charm.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "866082285": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Don't be shy... Everyone, please undress... Show me the hard tools i'll be working with tonight...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SecretShrineGangbang (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SecretShrineGangbang (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SecretShrineGangbang (1)"
+      }
+     }
+    }
+   ]
+  },
+  "365069154": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "Let's get that dress out of the way... I wanna fuck those big titties!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1890443378": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Y-You're pretty quick for an old man... Mmm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SecretShrineGangbang (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SecretShrineGangbang (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SecretShrineGangbang (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1634295754": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "But I want {PC}'s cock between my tits... Make room for him, Hiroji...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1238584996": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Mmm... Perfect... You're so much bigger... I can't wait to feel it inside of me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SecretShrineGangbang (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SecretShrineGangbang (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SecretShrineGangbang (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1921178634": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Don't stop teasing me... Get me all wet for your hard members... Mmm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SecretShrineGangbang (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SecretShrineGangbang (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SecretShrineGangbang (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SecretShrineGangbang (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SecretShrineGangbang (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SecretShrineGangbang (1)"
+      }
+     }
+    }
+   ]
+  },
+  "2047633146": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "I'm... I'm the maiden of this shrine... It is my duty to carry your burdens...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1790850155": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -304792519,
+    -1882030753
+   ],
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "N-Now... {PC} and Adrian came all the way from overseas... T-They... They should have the honor of taking my sacred holes...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-304792519": {
+   "kind": "text",
+   "parent": -1790850155,
+   "children": [
+    -1972679029,
+    57221953,
+    -1428504627,
+    1275413275,
+    -49743686,
+    -1822812702,
+    -294897871,
+    -162412873
+   ],
+   "actor": null,
+   "text": "I want to claim your pussy, Chihiro.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1882030753": {
+   "kind": "text",
+   "parent": -1790850155,
+   "children": [
+    90546673,
+    507321576,
+    680533212,
+    111380470,
+    -2083701196,
+    -486558301,
+    -1014748092
+   ],
+   "actor": null,
+   "text": "I'm gonna pound that ass of yours.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "90546673": {
+   "kind": "text",
+   "parent": -1882030753,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Yes... Let's... Let's test my limits... I want you r whole length inside my ass!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "507321576": {
+   "kind": "text",
+   "parent": -1882030753,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "OhhhHHHHOOOO!!! F-f-f-f-uuuuckkhhh!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SecretShrineGangbang (8) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SecretShrineGangbang (8)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SecretShrineGangbang (8)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SecretShrineGangbang (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SecretShrineGangbang (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SecretShrineGangbang (2)"
+      }
+     }
+    }
+   ]
+  },
+  "111380470": {
+   "kind": "text",
+   "parent": -1882030753,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "S-Shut up and let me enjoy this... I'm... I'm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SecretShrineGangbang (9) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SecretShrineGangbang (9)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SecretShrineGangbang (9)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SecretShrineGangbang (3) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SecretShrineGangbang (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SecretShrineGangbang (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-486558301": {
+   "kind": "text",
+   "parent": -1882030753,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Hngaaaah! I'M... HYAAAAHHHH!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1014748092": {
+   "kind": "text",
+   "parent": -1882030753,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Mmmm... F-Fuh... I... Hngaah....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1972679029": {
+   "kind": "text",
+   "parent": -304792519,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Yes... Shove it inside... Give it to me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "57221953": {
+   "kind": "text",
+   "parent": -304792519,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Ohhhaaaahh!! Ahhhhh!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SecretShrineGangbang (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SecretShrineGangbang (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SecretShrineGangbang (7)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SecretShrineGangbang (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SecretShrineGangbang (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SecretShrineGangbang (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1275413275": {
+   "kind": "text",
+   "parent": -304792519,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Y-You'll all get your turns, how shut up!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1822812702": {
+   "kind": "text",
+   "parent": -304792519,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "F-Fuck, {PC}. You're incredible.... I can feel you all the way in... Oh fhhaaackkk!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SecretShrineGangbang (10) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SecretShrineGangbang (10)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SecretShrineGangbang (10)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SecretShrineGangbang (3) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SecretShrineGangbang (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SecretShrineGangbang (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-294897871": {
+   "kind": "text",
+   "parent": -304792519,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "I'm... I'm.... HngoohaaaaaAAAAHHH!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-162412873": {
+   "kind": "text",
+   "parent": -304792519,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "YES! YES! YES!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-125434671": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "O-Okay... Now please, everyone... Bless my sacred tunnels with your cum!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SecretShrineGangbang (11) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SecretShrineGangbang (11)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SecretShrineGangbang (11)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SecretShrineGangbang (4) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SecretShrineGangbang (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SecretShrineGangbang (4)"
+      }
+     }
+    }
+   ]
+  },
+  "864640313": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1226470576,
+    -452326456,
+    1933275761
+   ],
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "D-Don't hold back, let it all out!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1476190956": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Yes! More...Aim... Aim for my sacred holes! Pllleasseee!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SecretShrineGangbang (12) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SecretShrineGangbang (12)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SecretShrineGangbang (12)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SecretShrineGangbang (7) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SecretShrineGangbang (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SecretShrineGangbang (7)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SecretShrineGangbang (8) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SecretShrineGangbang (8)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SecretShrineGangbang (8)"
+      }
+     }
+    }
+   ]
+  },
+  "51835632": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Mmm... T-Thank you for sharing your burdens with me... But we are far from being done...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[temple-sex-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temple-sex-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-32815804": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "I... T-That was the best ritual we ever held off... T-Thanks everyone... For coming...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active (none) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": null,
+       "of": "GetGameObjectInstance"
+      }
+     }
+    }
+   ]
+  },
+  "-480325374": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Chihiro",
+   "expressionName": "neutral",
+   "text": "Now... Please carry me to the bathing chambers... I... My body requires cleansing...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Hiroji/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_ChihiroDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1522035115": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Watashi no tame ni sukoshi basho o akete!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1727028965": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Piza ga suki desu!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "680533212": {
+   "kind": "text",
+   "parent": -1882030753,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Sore wa fukōhei da yo! Watashitachi ga saki ni kita'n dakara!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1428504627": {
+   "kind": "text",
+   "parent": -304792519,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Sore wa fukōhei da yo! Watashitachi ga saki ni kita'n dakara!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1916416219": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SecretShrineGangbang (13) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SecretShrineGangbang (13)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SecretShrineGangbang (13)"
+      }
+     }
+    }
+   ]
+  },
+  "-1042108965": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Of all the things I imagined we’d do on this Japan trip... this wasn’t one of them. Jesus.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2026592560": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I'm totally spent. She literally drained me dry... Let's go back to the hotelroom... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[temple-sex-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temple-sex-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1226470576": {
+   "kind": "text",
+   "parent": 864640313,
+   "actor": null,
+   "text": "H-Here it comes! Hngaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-452326456": {
+   "kind": "text",
+   "parent": 864640313,
+   "actor": null,
+   "text": "L-Let's paint her white! Come on!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1933275761": {
+   "kind": "text",
+   "parent": 864640313,
+   "actor": null,
+   "text": "(Cum on her ass)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-49743686": {
+   "kind": "text",
+   "parent": -304792519,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Oh fuuuuck... Y-Your ass is so tight, Chihiro!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2083701196": {
+   "kind": "text",
+   "parent": -1882030753,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Fuck, fuck, fuck... I'm getting close... This is... Fuuuucckkhhh!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1476282642": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Your tits are so soft and big, Chihiro... And you smell so good...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2093677977": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Show them what you got, big {B}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-504700746": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Oh fuck! I'm... Hngaaaaaahhh!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Japan_Shrine/AfterConditions",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dialogue1 and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[chihiro-gb-incoming] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "chihiro-gb-incoming",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[chihiro-gb-incoming] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "chihiro-gb-incoming",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

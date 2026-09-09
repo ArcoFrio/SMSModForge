@@ -1,0 +1,573 @@
+{
+ "id": "Holiday_Hallway_Conditions/Halloween_Party_Charlotte/Dialogue_4",
+ "name": "Dialogue_4",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna"
+ ],
+ "roots": [
+  2001672798,
+  1200288690,
+  532295080,
+  1618218493,
+  1599184311,
+  -1545441027,
+  -368672595,
+  296669120,
+  1113241319,
+  -324688428,
+  1228012846
+ ],
+ "nodes": {
+  "2001672798": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "There you are... Pants down, {PC}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1200288690": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    453956013,
+    -1932407612,
+    -683748781
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Can't have you parading around with a huge tent in your pants all night.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_MummyScene (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_MummyScene (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Anna_MummyScene (1)"
+      }
+     }
+    }
+   ]
+  },
+  "453956013": {
+   "kind": "text",
+   "parent": 1200288690,
+   "children": [
+    -4872705,
+    -936690016
+   ],
+   "actor": null,
+   "text": "Hell yeah! Can't wait to fuck those big mummy tits!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1932407612": {
+   "kind": "text",
+   "parent": 1200288690,
+   "children": [
+    308020293,
+    1345317450
+   ],
+   "actor": null,
+   "text": "Here? What if someone hears us?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-683748781": {
+   "kind": "text",
+   "parent": 1200288690,
+   "actor": null,
+   "text": "(Do as she says)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "308020293": {
+   "kind": "text",
+   "parent": -1932407612,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "We'll just be extra quiet, you hear me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-4872705": {
+   "kind": "text",
+   "parent": 453956013,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I love how eager you are...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1345317450": {
+   "kind": "text",
+   "parent": -1932407612,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": " Let them hear. Let them all know who satisfies this perfect cock best .",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-936690016": {
+   "kind": "text",
+   "parent": 453956013,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hmm... Well, I suppose if we loosen these bandages a bit, you could, uh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "532295080": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1428427354,
+    1701423092,
+    1883951642
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "See? Doesn't that feel better already?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_MummyScene (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_MummyScene (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Anna_MummyScene (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1618218493": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That's it sweetie, let me make you feel good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "296669120": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2014535111,
+    1416401265,
+    834331544
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It's okay, hun, let it all out. Don't fight it, just go with it. ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1113241319": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes sweetie, yes! Come for me. Give it all to me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_MummyScene (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_MummyScene (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Anna_MummyScene (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1428427354": {
+   "kind": "text",
+   "parent": 532295080,
+   "actor": null,
+   "text": "Y-Yes... A lot...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1701423092": {
+   "kind": "text",
+   "parent": 532295080,
+   "actor": null,
+   "text": "S-Squeeze them harder around my cock, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1883951642": {
+   "kind": "text",
+   "parent": 532295080,
+   "actor": null,
+   "text": "T-That's only fair, you're fixing a problem you've caused...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2014535111": {
+   "kind": "text",
+   "parent": 296669120,
+   "actor": null,
+   "text": "I'm getting close... I can feel it... My cock is...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1416401265": {
+   "kind": "text",
+   "parent": 296669120,
+   "actor": null,
+   "text": "F-Fuck, I'm... O-Open wide, {M}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "834331544": {
+   "kind": "text",
+   "parent": 296669120,
+   "actor": null,
+   "text": "(Cum without warning her)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-324688428": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ohhh {PC}, so much cum! You're making such a mess on Mommy's costume...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1228012846": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I better clean up before we head back to the party...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1599184311": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I have to say... This tight little wrap job makes it so much easier for you titfuck me, doesn't it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-368672595": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Just sit back and enjoy the ride. Let me take care of everything for you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1545441027": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I love how the bandages keep everything in place. No need to use my hands at all.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "Holiday_Hallway_Conditions/Halloween_Party_Charlotte/Halloween_Bathroom_Cond",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dialogue_4 and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Eve_NoSave1[anna-halloweenbathinc] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-halloweenbathinc",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_AnnaMummyOutfit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_AnnaMummyOutfit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_AnnaMummyOutfit"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 124_CharlotteHalloweenBathroom to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "124_CharlotteHalloweenBathroom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/124_CharlotteHalloweenBathroom"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 123_CharlotteHalloweenHome to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "123_CharlotteHalloweenHome",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/123_CharlotteHalloweenHome"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

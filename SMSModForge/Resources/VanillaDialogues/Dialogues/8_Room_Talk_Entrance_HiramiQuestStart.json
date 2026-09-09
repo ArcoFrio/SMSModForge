@@ -1,0 +1,679 @@
+{
+ "id": "8_Room_Talk/Entrance/HiramiQuestStart",
+ "name": "HiramiQuestStart",
+ "index": 7,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Himari"
+ ],
+ "roots": [
+  488192519,
+  274138657,
+  -32374255,
+  -379265543,
+  668026373,
+  -45753266,
+  -1772427426,
+  1099781851,
+  98055483
+ ],
+ "nodes": {
+  "488192519": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1595608863,
+    1412374593,
+    1601276403
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "You live here?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1595608863": {
+   "kind": "text",
+   "parent": 488192519,
+   "children": [
+    1594300670,
+    -91903727
+   ],
+   "actor": null,
+   "text": "Yeah, why? You stalking me now?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1594300670": {
+   "kind": "text",
+   "parent": 1595608863,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Hah. As if I have time to waste on something that pointless.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1412374593": {
+   "kind": "text",
+   "parent": 488192519,
+   "children": [
+    -1183758162
+   ],
+   "actor": null,
+   "text": "Oh. Hey, Himari. What are you doing here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1183758162": {
+   "kind": "text",
+   "parent": 1412374593,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "I live here...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1601276403": {
+   "kind": "text",
+   "parent": 488192519,
+   "children": [
+    -1156943216
+   ],
+   "actor": null,
+   "text": "What, were you hoping to bump into me? Cute.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1156943216": {
+   "kind": "text",
+   "parent": 1601276403,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Tch. Don’t flatter yourself. This is pure coincidence—and an annoying one at that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-91903727": {
+   "kind": "text",
+   "parent": 1595608863,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "I live here too. Which means, unfortunately, I’ll be seeing more of you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "274138657": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Actually, this might work in my favor.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-32374255": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1438938934,
+    -1196651094,
+    2126507911
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "I need you to do something for me.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1438938934": {
+   "kind": "text",
+   "parent": -32374255,
+   "actor": null,
+   "text": "That’s never a good start to a sentence.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1196651094": {
+   "kind": "text",
+   "parent": -32374255,
+   "actor": null,
+   "text": "Oh? Himari needs my help? This should be good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2126507911": {
+   "kind": "text",
+   "parent": -32374255,
+   "actor": null,
+   "text": "Alright, what is it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-379265543": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "My parents come over for dinner tomorrow. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "668026373": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Which, as usual, means another exhausting lecture about the family legacy, my duty, and why I should be marrying some insufferable business heir.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-45753266": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1051803123,
+    1351834339,
+    2024491799
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "I need them to shut up. So… you’re coming with me. As my boyfriend.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1051803123": {
+   "kind": "text",
+   "parent": -45753266,
+   "children": [
+    -560199622
+   ],
+   "actor": null,
+   "text": "Wait, what? You want me to fake date you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-560199622": {
+   "kind": "text",
+   "parent": 1051803123,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Don’t make me say it twice. Just nod and agree.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1351834339": {
+   "kind": "text",
+   "parent": -45753266,
+   "children": [
+    1768733858
+   ],
+   "actor": null,
+   "text": "You sure you’re not just using this as an excuse to spend time with me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1768733858": {
+   "kind": "text",
+   "parent": 1351834339,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Tch. If that’s the delusion you need to accept, go ahead.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2024491799": {
+   "kind": "text",
+   "parent": -45753266,
+   "children": [
+    -1181111254
+   ],
+   "actor": null,
+   "text": "A family legacy, huh? Did they try to arrange a marriage too?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1181111254": {
+   "kind": "text",
+   "parent": 2024491799,
+   "actor": "Himari",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hah. How original. You think I enjoy this? That I want to be lectured about “duty” while they plan my life for me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1772427426": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Look, I don’t need romance. I don’t need some pathetic arranged marriage. I just need them off my back.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1099781851": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "So, you’ll come, pretend to be the perfect boyfriend, and in return… I’ll owe you a favor.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "98055483": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -963663812,
+    -597892726
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Well? Are you in or not?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-963663812": {
+   "kind": "text",
+   "parent": 98055483,
+   "children": [
+    -1009190208,
+    -1083428542,
+    -1930316294
+   ],
+   "actor": null,
+   "text": "Alright, I'm in.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1009190208": {
+   "kind": "text",
+   "parent": -963663812,
+   "actor": "Himari",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Good. Don’t embarrass me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_8[himari-homequest] = 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "himari-homequest",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_8[elevator-unlocked] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "elevator-unlocked",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionQuestsActivate",
+     "title": "Activate Dinner Boyfriend (Himari)",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Dinner Boyfriend (Himari)",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-597892726": {
+   "kind": "text",
+   "parent": 98055483,
+   "children": [
+    372799828,
+    -52798259
+   ],
+   "actor": null,
+   "text": "Nah. You're an evil bitch and don't deserve my help.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "372799828": {
+   "kind": "text",
+   "parent": -597892726,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "…I see.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1083428542": {
+   "kind": "text",
+   "parent": -963663812,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Dinner is tomorrow at eight. My place. fifth floor.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1930316294": {
+   "kind": "text",
+   "parent": -963663812,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "…Kimura. Himari Kimura. Don’t forget it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-52798259": {
+   "kind": "text",
+   "parent": -597892726,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Forget I asked. It was a stupid idea anyway.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_8[himari-homequest] = -1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "himari-homequest",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": -1
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Entrance",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play HiramiQuestStart and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[himari-first-dialogue-when-rich] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "himari-first-dialogue-when-rich",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_8[himari-homequest] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "himari-homequest",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

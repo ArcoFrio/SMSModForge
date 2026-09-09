@@ -1,0 +1,490 @@
+{
+ "id": "8_Room_Talk/MallToilet/Katarinatoilet",
+ "name": "Katarinatoilet",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Katarina"
+ ],
+ "roots": [
+  2033173507,
+  -679133447,
+  321608973,
+  1836965193,
+  687023775,
+  1362640810,
+  1623070989,
+  -1095325978
+ ],
+ "nodes": {
+  "2033173507": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "P-Please... Fuck me... Breed me....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-679133447": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    492291650,
+    -207899861,
+    541384918
+   ],
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "I need your young seed inside of me, {PC}. Please!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "492291650": {
+   "kind": "text",
+   "parent": -679133447,
+   "children": [
+    -1395371301
+   ],
+   "actor": null,
+   "text": "Turn around. I'll fuck you hard.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-207899861": {
+   "kind": "text",
+   "parent": -679133447,
+   "children": [
+    -939666939
+   ],
+   "actor": null,
+   "text": "Beg for it. Beg for my cock.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "541384918": {
+   "kind": "text",
+   "parent": -679133447,
+   "children": [
+    -1494798240
+   ],
+   "actor": null,
+   "text": "You could get pregnant.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-939666939": {
+   "kind": "text",
+   "parent": -207899861,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "P-Please, {PC}... I need it... D-Don't make me cry, p-please... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1494798240": {
+   "kind": "text",
+   "parent": 541384918,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Then I will be forever bound to your strong body...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1395371301": {
+   "kind": "text",
+   "parent": 492291650,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Y-Yes! Take me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "321608973": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Hngaah.... T-Thank you.. Thank you for having such a big strong cock... I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarinamall (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarinamall (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Katarinamall (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1836965193": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "I love it... Oh fuck... I'll never get used... I want to get stretched by you every day....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "687023775": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -392407943,
+    123582335,
+    -916391912
+   ],
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Y-Yes... {PC}... My pussy... My pussy is cuming... It's... It's..: ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1362640810": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Hyhaaaah! Y-Y-Yessss!!! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarinamall (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarinamall (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Katarinamall (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1623070989": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "S-So much cum... My whole body feels so warm... So claimed...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1095325978": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "I... I need to use the restroom..",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-392407943": {
+   "kind": "text",
+   "parent": 687023775,
+   "actor": null,
+   "text": "F-Fuck, Katarina... I'm.. I'm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "123582335": {
+   "kind": "text",
+   "parent": 687023775,
+   "actor": null,
+   "text": "You're mine, Kat... Your pussy is mine...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-916391912": {
+   "kind": "text",
+   "parent": 687023775,
+   "actor": null,
+   "text": "(Fill her up)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/MallToilet",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Katarinatoilet and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[katarinawaitinginrestroom] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarinawaitinginrestroom",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina_Normal to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina_Normal",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Katarina_Normal"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina_Normal to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina_Normal",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Katarina_Normal"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[katarinawaitinginrestroom] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarinawaitinginrestroom",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

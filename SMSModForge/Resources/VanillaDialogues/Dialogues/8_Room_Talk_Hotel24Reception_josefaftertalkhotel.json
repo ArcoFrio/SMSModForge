@@ -1,0 +1,968 @@
+{
+ "id": "8_Room_Talk/Hotel24Reception/josefaftertalkhotel",
+ "name": "josefaftertalkhotel",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Josef"
+ ],
+ "roots": [
+  2101874582,
+  -802500811
+ ],
+ "nodes": {
+  "2101874582": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Jesus Christ... I can't believe we actually... fuck, I need a drink after that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-802500811": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1138652736,
+    -695859160,
+    -355934770,
+    485162712,
+    720611005
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I just... damn it, I don’t know what came over me. Sleeping with Isabella is one thing, but… doing it with you involved?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1138652736": {
+   "kind": "text",
+   "parent": -802500811,
+   "children": [
+    -762444530
+   ],
+   "actor": null,
+   "text": "Yeah. We went too far.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-762444530": {
+   "kind": "text",
+   "parent": 1138652736,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I... We're not talking about this again. I need a damn drink.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Meet Josef at the door each Friday.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "The Moment of Truth (Josef)",
+        "of": "Quest"
+       },
+       "m_TaskId": 1813187919
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-695859160": {
+   "kind": "text",
+   "parent": -802500811,
+   "children": [
+    859597683,
+    -134120134
+   ],
+   "actor": null,
+   "text": "You should tell {M}. She deserves to know. (Josef will leave)",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[post-d-reveal-talk-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "post-d-reveal-talk-done",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "859597683": {
+   "kind": "text",
+   "parent": -695859160,
+   "actor": "Josef",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "B-But... She would... She would...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Meet Josef at the door each Friday.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "The Moment of Truth (Josef)",
+        "of": "Quest"
+       },
+       "m_TaskId": 1813187919
+      },
+      "m_WaitToComplete": false
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Find a way to deal with Josef’s debt.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Debt",
+        "of": "Quest"
+       },
+       "m_TaskId": 1813187919
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "720611005": {
+   "kind": "text",
+   "parent": -802500811,
+   "children": [
+    1076334631,
+    1089764318
+   ],
+   "actor": null,
+   "text": "Yeah, it was pretty hot, right? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[post-d-reveal-talk-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "post-d-reveal-talk-done",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1076334631": {
+   "kind": "text",
+   "parent": 720611005,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "H-Hot? ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Meet Josef at the door each Friday.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "The Moment of Truth (Josef)",
+        "of": "Quest"
+       },
+       "m_TaskId": 1813187919
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-134120134": {
+   "kind": "text",
+   "parent": -695859160,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "You are right... I.. I failed this {F}. It's time for me to accept the consequences. I'm sorry, {S}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[m-d-alternatereveal] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "m-d-alternatereveal",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[pc-told-d-about-starmaker] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "pc-told-d-about-starmaker",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1089764318": {
+   "kind": "choice",
+   "parent": 720611005,
+   "children": [
+    -1308203119,
+    -1053544364,
+    -553513695
+   ],
+   "actor": "Josef",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "We... W-What are you saying, [PC}?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1308203119": {
+   "kind": "text",
+   "parent": 1089764318,
+   "children": [
+    -1590233203,
+    797695688
+   ],
+   "actor": null,
+   "text": "Everyone involved clearly enjoyed it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1053544364": {
+   "kind": "text",
+   "parent": 1089764318,
+   "children": [
+    392066598,
+    -645212423
+   ],
+   "actor": null,
+   "text": "You are overthinking the situation, it was just sex.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-553513695": {
+   "kind": "text",
+   "parent": 1089764318,
+   "children": [
+    1478372289,
+    2080802719,
+    1799610818,
+    704616698
+   ],
+   "actor": null,
+   "text": "Maybe we can sandwich some more asses? (Start Sharing Route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1478372289": {
+   "kind": "text",
+   "parent": -553513695,
+   "actor": "Josef",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You're not serious about doing this again, right? With other women? I mean... Isabella was crazy but...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[m-d-alternatereveal] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "m-d-alternatereveal",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[m-d-alternatervar1] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "m-d-alternatervar1",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[pc-told-d-about-starmaker] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "pc-told-d-about-starmaker",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "392066598": {
+   "kind": "text",
+   "parent": -1053544364,
+   "actor": "Josef",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "J-Just sex? I just had a threesome with my ex and my {S} for god's sake!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1590233203": {
+   "kind": "text",
+   "parent": -1308203119,
+   "actor": "Josef",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Y-Yes but... No, no, no. This is not right. This is...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "704616698": {
+   "kind": "text",
+   "parent": -553513695,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "If we're doing this... thing... There's only one way to do it... I... We'll talk later, {S}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-645212423": {
+   "kind": "text",
+   "parent": -1053544364,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I... We'll never talk about this again. I... I need a drink.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "797695688": {
+   "kind": "text",
+   "parent": -1308203119,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I... We'll never talk about this again. I... I need a drink.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2080802719": {
+   "kind": "text",
+   "parent": -553513695,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "What if she tells Anna? She's got friends with her, you know.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1799610818": {
+   "kind": "text",
+   "parent": -553513695,
+   "actor": "Josef",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "And this... thing we just did... I don't know if I can handle it, {S}. I'm a married man. Your {D}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-355934770": {
+   "kind": "text",
+   "parent": -802500811,
+   "children": [
+    2060536197,
+    577802345,
+    1333632503
+   ],
+   "actor": null,
+   "text": "Relax. {M} said you were allowed to have something on the side.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[post-d-reveal-talk-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "post-d-reveal-talk-done",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "2060536197": {
+   "kind": "text",
+   "parent": -355934770,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Yeah, she did. You're right. Maybe I'm just overthinking it... but Isabella's not someone you take lightly.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Meet Josef at the door each Friday.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "The Moment of Truth (Josef)",
+        "of": "Quest"
+       },
+       "m_TaskId": 1813187919
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "577802345": {
+   "kind": "text",
+   "parent": -355934770,
+   "actor": "Josef",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Isabella always has a plan. Always chasing something.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1333632503": {
+   "kind": "text",
+   "parent": -355934770,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "We need to stay sharp... No matter how tempting she makes it look.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "485162712": {
+   "kind": "text",
+   "parent": -802500811,
+   "children": [
+    -710801785,
+    -1473219777,
+    -1133562190
+   ],
+   "actor": null,
+   "text": "We shared {M} together. Compared to that, this was nothing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-710801785": {
+   "kind": "text",
+   "parent": 485162712,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I keep telling myself that. That this is lighter, easier... but it doesn’t feel that way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Meet Josef at the door each Friday.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "The Moment of Truth (Josef)",
+        "of": "Quest"
+       },
+       "m_TaskId": 1813187919
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-1473219777": {
+   "kind": "text",
+   "parent": 485162712,
+   "actor": "Josef",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Isabella always has a plan. Always chasing something.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1133562190": {
+   "kind": "text",
+   "parent": 485162712,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "We need to stay sharp... No matter how tempting she makes it look.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Hotel24Reception",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play josefaftertalkhotel and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[isa-d-insecret] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "isa-d-insecret",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[isa-d-secrettalkdone] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "isa-d-secrettalkdone",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "branches": [
+    "e"
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[isa-d-secrettalkdone] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "isa-d-secrettalkdone",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

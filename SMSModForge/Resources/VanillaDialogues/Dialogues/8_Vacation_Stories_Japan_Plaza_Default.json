@@ -1,0 +1,1057 @@
+{
+ "id": "8_Vacation_Stories/Japan_Plaza/Default",
+ "name": "Default",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "V_Hiroji"
+ ],
+ "roots": [
+  -1563541938,
+  1524614164,
+  -1612654871,
+  -1787680227,
+  412431488,
+  1448930074,
+  2145426554,
+  1574386973,
+  751389036,
+  1512526353,
+  1832761537,
+  509345727,
+  -2036708352,
+  1233854044
+ ],
+ "nodes": {
+  "-1563541938": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I hope you know what you're doing...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1612654871": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1839635078,
+    195555542,
+    -310860188
+   ],
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "Huh? Foreigners? What do you want with me? I'm not interested in buying drugs!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[hiroji-first-talk] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hiroji-first-talk",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1839635078": {
+   "kind": "text",
+   "parent": -1612654871,
+   "actor": "Adrian",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "This guy’s a character...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[hiroji-first-talk] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hiroji-first-talk",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "195555542": {
+   "kind": "choice",
+   "parent": -1612654871,
+   "children": [
+    654746294,
+    2080747985
+   ],
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "Well? Speak up. What are you here for?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "654746294": {
+   "kind": "text",
+   "parent": 195555542,
+   "children": [
+    55202331
+   ],
+   "actor": null,
+   "text": "We need to know about Chihiro.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2080747985": {
+   "kind": "text",
+   "parent": 195555542,
+   "children": [
+    -2124279735
+   ],
+   "actor": null,
+   "text": "Daiju told us about you and Chihiro.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2124279735": {
+   "kind": "text",
+   "parent": 2080747985,
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "Daiju? That coward? Hahaha, I doubt it.... But he must have told you at least about me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "55202331": {
+   "kind": "text",
+   "parent": 654746294,
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "Ohhh! Chihiro! Hmm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-310860188": {
+   "kind": "text",
+   "parent": -1612654871,
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "I'll tell you what. I'll tell you about Chihiro... For a price.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1787680227": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1963015348,
+    -1249489812,
+    -981941341,
+    1059260804
+   ],
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "Twenty thousand american dollars and my tongue will loosen up.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1963015348": {
+   "kind": "text",
+   "parent": -1787680227,
+   "children": [
+    1456164564
+   ],
+   "actor": null,
+   "text": "Here's the money. ($20,000)",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 20000",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 20000
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1059260804": {
+   "kind": "text",
+   "parent": -1787680227,
+   "children": [
+    -1593541255
+   ],
+   "actor": null,
+   "text": "Forget it, I don't care that much.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1593541255": {
+   "kind": "text",
+   "parent": 1059260804,
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "Pah! Then stop wasting my time!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1456164564": {
+   "kind": "text",
+   "parent": 1963015348,
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "Hah! Big spender! I like you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -20000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -20000
+      }
+     }
+    }
+   ]
+  },
+  "-981941341": {
+   "kind": "text",
+   "parent": -1787680227,
+   "children": [
+    230653325
+   ],
+   "actor": null,
+   "text": "I'll come back with the money.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "230653325": {
+   "kind": "text",
+   "parent": -981941341,
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "Good. You know where to find me.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1524614164": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "Look who's back! Willing to pay up this time?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[hiroji-first-talk] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hiroji-first-talk",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_S_Hiroji to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_S_Hiroji",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Hiroji"
+      }
+     }
+    }
+   ]
+  },
+  "412431488": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "Chihiro is the village slut. Every weekend, half the men in the village meet her to fuck her brains out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2145426554": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "And you gaijin better keep your mouths shut about it. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1574386973": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "Many of the men are married or working in high positions. You are walking in very dangerous waters.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "751389036": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Uh, what...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1512526353": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "Do not breathe a word of this to anyone or you will have a very big problem on your hands!\n ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1832761537": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "So much money.... Hehehehe...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Vacation_Save[jpn-shrine-pro] = 2",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "jpn-shrine-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 2
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Hiroji/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "509345727": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Uh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[temple-secret-discovered] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temple-secret-discovered",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2036708352": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Turns out all the hype was for nothing… ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1233854044": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    127916878,
+    196535027
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "They made it sound far more mysterious and dangerous. As if Chihoro was secretly an assassin…",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "127916878": {
+   "kind": "text",
+   "parent": 1233854044,
+   "children": [
+    72017152,
+    766367219
+   ],
+   "actor": null,
+   "text": "Let's confront Chihoro. Maybe we can join the club.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "196535027": {
+   "kind": "text",
+   "parent": 1233854044,
+   "children": [
+    -1066111394
+   ],
+   "actor": null,
+   "text": "Yeah, let's just forget about all that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1066111394": {
+   "kind": "choice",
+   "parent": 196535027,
+   "children": [
+    74115746,
+    -905615928
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "You sure? We worked quite hard to find out...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "74115746": {
+   "kind": "text",
+   "parent": -1066111394,
+   "children": [
+    -957913952
+   ],
+   "actor": null,
+   "text": "You're right, let's confront her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-957913952": {
+   "kind": "text",
+   "parent": 74115746,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "God help us...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-905615928": {
+   "kind": "text",
+   "parent": -1066111394,
+   "children": [
+    1537966534
+   ],
+   "actor": null,
+   "text": "Yeah, let's just forget it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1537966534": {
+   "kind": "text",
+   "parent": -905615928,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Alright. Yeah, might be better this way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Vacation_Save[jpn-shrine-pro] = -10",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "jpn-shrine-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": -10
+      }
+     }
+    }
+   ]
+  },
+  "72017152": {
+   "kind": "choice",
+   "parent": 127916878,
+   "children": [
+    173989793,
+    1256623699,
+    -2058859952
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "A-Are you serious? I mean... Yeah, she's hot... But I'm not sure if we should do that...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "766367219": {
+   "kind": "text",
+   "parent": 127916878,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Alright, alright. I'm in....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "173989793": {
+   "kind": "text",
+   "parent": 72017152,
+   "children": [
+    866253244
+   ],
+   "actor": null,
+   "text": "I mean, she REALLY hot? Right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1256623699": {
+   "kind": "text",
+   "parent": 72017152,
+   "children": [
+    -2080359163
+   ],
+   "actor": null,
+   "text": "Let's live a little. You know what they say: What happens in Japan stays in Japan.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2058859952": {
+   "kind": "text",
+   "parent": 72017152,
+   "children": [
+    822565669
+   ],
+   "actor": null,
+   "text": "Well, I'll go alone if you don't want to come.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2080359163": {
+   "kind": "text",
+   "parent": 1256623699,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "That's... That's not how the saying goes... But I get you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "866253244": {
+   "kind": "text",
+   "parent": 173989793,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "She is... She reminds of this one character from a game I play...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "822565669": {
+   "kind": "text",
+   "parent": -2058859952,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "No, wait.... I... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1448930074": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Holy fuck, {PC}. You called it!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[pc-called-chihiro-twist] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "pc-called-chihiro-twist",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1249489812": {
+   "kind": "text",
+   "parent": -1787680227,
+   "children": [
+    -1074405517
+   ],
+   "actor": null,
+   "text": "(Charming) Two thousand’s a big ask. What else do you want?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Charming] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Charming",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1074405517": {
+   "kind": "text",
+   "parent": -1249489812,
+   "children": [
+    -1492783538,
+    -1659426228,
+    -1942203436,
+    -835803470
+   ],
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "Hah… now that’s the right question. Money’s nice, but favors? Those last a lot longer.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1492783538": {
+   "kind": "text",
+   "parent": -1074405517,
+   "children": [
+    1422670365
+   ],
+   "actor": null,
+   "text": "What if I grab you a six-pack instead?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1659426228": {
+   "kind": "text",
+   "parent": -1074405517,
+   "children": [
+    -1394749050
+   ],
+   "actor": null,
+   "text": "\nHow about I wash your car? Maybe twice?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1942203436": {
+   "kind": "text",
+   "parent": -1074405517,
+   "children": [
+    1571587937
+   ],
+   "actor": null,
+   "text": "(Lewd) A year’s worth of free Starmaker content. From someone I personally know.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Lewd] ≥ 7",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Lewd",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 7
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-835803470": {
+   "kind": "text",
+   "parent": -1074405517,
+   "children": [
+    806445585
+   ],
+   "actor": null,
+   "text": "(Charming) My number. Connections. I know plenty people.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Charming] ≥ 7",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Charming",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 7
+       }
+      }
+     }
+    }
+   ]
+  },
+  "806445585": {
+   "kind": "text",
+   "parent": -835803470,
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "Fine, I’ll talk. Let’s see what those “connections” of yours can really do.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1571587937": {
+   "kind": "text",
+   "parent": -1942203436,
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "…You’re serious? Hah! Damn, that’s tempting. Alright, deal—keep your money, just send me the link. She better got big boobs.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1394749050": {
+   "kind": "text",
+   "parent": -1659426228,
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "What is this, a charity? Come back when your wallet’s heavier, kid.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1422670365": {
+   "kind": "text",
+   "parent": -1492783538,
+   "actor": "V_Hiroji",
+   "expressionName": "my-expression",
+   "text": "Pfft, a six-pack? I said dollars, not drinks. Come back when you’ve got the cash.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Japan_Plaza",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Default and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

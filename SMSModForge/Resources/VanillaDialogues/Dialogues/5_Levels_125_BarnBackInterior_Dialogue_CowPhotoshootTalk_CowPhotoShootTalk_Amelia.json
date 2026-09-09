@@ -1,0 +1,439 @@
+{
+ "id": "5_Levels/125_BarnBackInterior/Dialogue_CowPhotoshootTalk/CowPhotoShootTalk_Amelia",
+ "name": "CowPhotoShootTalk_Amelia",
+ "index": 4,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Amelia",
+  "Continue"
+ ],
+ "roots": [
+  387509314,
+  -676845445,
+  -275872523,
+  -562047180,
+  -612522340,
+  -1400969296,
+  -976512044
+ ],
+ "nodes": {
+  "387509314": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Amelia_Cowbust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Amelia_Cowbust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Amelia_Cowbust"
+      }
+     }
+    }
+   ]
+  },
+  "-676845445": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Look at me, dressed up like a cow!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-275872523": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1552967570,
+    1804836794,
+    -1317928835
+   ],
+   "actor": "Amelia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Honestly… it feels kind of fun",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1552967570": {
+   "kind": "text",
+   "parent": -275872523,
+   "children": [
+    349400872
+   ],
+   "actor": null,
+   "text": "You look fantastic, Amelia. It really works.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1804836794": {
+   "kind": "text",
+   "parent": -275872523,
+   "children": [
+    -1238489625
+   ],
+   "actor": null,
+   "text": "Careful, people might start ordering you with extra foam.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1317928835": {
+   "kind": "text",
+   "parent": -275872523,
+   "children": [
+    507214162
+   ],
+   "actor": null,
+   "text": "That outfit makes me want to taste your milk right now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "507214162": {
+   "kind": "text",
+   "parent": -1317928835,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "You… are shameless. But I’ll let it slide.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1238489625": {
+   "kind": "text",
+   "parent": 1804836794,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Ha! As long as they tip, I don’t mind.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "349400872": {
+   "kind": "text",
+   "parent": -1552967570,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Thanks! I thought it might be cute instead of just silly.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-562047180": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Alright, how’s this? Standing tall, holding the mug… or should I lean forward a little?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Cowphoto_Amelia (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Cowphoto_Amelia (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/Cowphoto_Amelia (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-612522340": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -260971394,
+    2043428851
+   ],
+   "actor": "Amelia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Heehee… I can already imagine customers seeing these on the shop’s page.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-260971394": {
+   "kind": "text",
+   "parent": -612522340,
+   "children": [
+    675014766
+   ],
+   "actor": null,
+   "text": "How about we give them a full display of your hot body?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2043428851": {
+   "kind": "text",
+   "parent": -612522340,
+   "children": [
+    -371544925
+   ],
+   "actor": null,
+   "text": "Turn around, show them what they are missing out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-371544925": {
+   "kind": "text",
+   "parent": 2043428851,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "You’re terrible… but I kind of like that angle.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Cowphoto_Amelia (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Cowphoto_Amelia (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/Cowphoto_Amelia (3)"
+      }
+     }
+    }
+   ]
+  },
+  "675014766": {
+   "kind": "text",
+   "parent": -260971394,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Ha! Moo-ccinos for everyone!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Cowphoto_Amelia (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Cowphoto_Amelia (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/Cowphoto_Amelia (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1400969296": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That was way more fun than I expected. You’re good at this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Milking Save[bafarm-promophotostaken] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafarm-promophotostaken",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-976512044": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Hey… would you mind if I use a couple of the tamer shots for promo at the coffee shop? A little cheeky branding could go a long way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "5_Levels/125_BarnBackInterior/Dialogue_MilkDefaulttalk/Defaultmilktalk_Amelia",
+   "script": "Dialogue",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core_NoSave2[2025-shortgo-saveTHREE] = CowPhotoShootTalk_Amelia",
+   "as": "GameObject"
+  }
+ ]
+}

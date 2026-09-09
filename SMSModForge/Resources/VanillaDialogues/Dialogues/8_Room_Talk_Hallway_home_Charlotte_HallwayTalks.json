@@ -1,0 +1,900 @@
+{
+ "id": "8_Room_Talk/Hallway_home/Charlotte_HallwayTalks",
+ "name": "Charlotte_HallwayTalks",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Anna",
+  "Charlotte",
+  "Continue",
+  "Josef"
+ ],
+ "roots": [
+  1349890431,
+  1877557305,
+  -927535680,
+  -1041457618
+ ],
+ "nodes": {
+  "1349890431": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    1760977849,
+    -1212038537,
+    -2060582288
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    }
+   ]
+  },
+  "-927535680": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    -685495518,
+    -1137944139,
+    654701748
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    }
+   ]
+  },
+  "-1041457618": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    812920492,
+    60234038,
+    -252190714
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    }
+   ]
+  },
+  "812920492": {
+   "kind": "text",
+   "parent": -1041457618,
+   "children": [
+    -1740021592,
+    -649749603
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "So, Anna, darling… where exactly is {PC}’s room?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1760977849": {
+   "kind": "text",
+   "parent": 1349890431,
+   "children": [
+    1221991064,
+    -1197261672
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "You know, Josef, I still remember when Anna and I used to do everything together. Shopping, parties, weekend getaways… ah, those were the days.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-685495518": {
+   "kind": "text",
+   "parent": -927535680,
+   "children": [
+    354698794,
+    -1941343596
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Adrian, dear, I just know you’re going to grow up into a strong, tall man like {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1212038537": {
+   "kind": "text",
+   "parent": 1349890431,
+   "children": [
+    -43815030,
+    1202585797
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "It’s funny, isn’t it? When we were younger, Anna had so many admirers. So many promising suitors.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2060582288": {
+   "kind": "text",
+   "parent": 1349890431,
+   "children": [
+    1234208869,
+    -1750054529
+   ],
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Josef, you must let me take you shopping sometime. I know a tailor who can make anyone look like a man of status.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1137944139": {
+   "kind": "text",
+   "parent": -927535680,
+   "children": [
+    -309519595,
+    -1310289335
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "You know, Adrian, you have such a sweet face. Almost too sweet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "654701748": {
+   "kind": "text",
+   "parent": -927535680,
+   "children": [
+    -1307321743,
+    1519470052,
+    900946627,
+    1859818531
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Adrian, sweetheart, tell me—do you even try with women, or are you just hoping one falls into your lap?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "60234038": {
+   "kind": "text",
+   "parent": -1041457618,
+   "children": [
+    1876305395,
+    -1332559441
+   ],
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "My, my! This place is shockingly clean.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-252190714": {
+   "kind": "text",
+   "parent": -1041457618,
+   "children": [
+    -1449451565,
+    -1848271465
+   ],
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Anna, it’s such a lovely day! Why don’t we lounge by the pool?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1221991064": {
+   "kind": "text",
+   "parent": 1760977849,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Yeah, life changes. People settle down, have families.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-43815030": {
+   "kind": "text",
+   "parent": -1212038537,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yeah, she was popular. Still is.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1234208869": {
+   "kind": "text",
+   "parent": -2060582288,
+   "actor": "Josef",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "What, something wrong with how I dress?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "354698794": {
+   "kind": "text",
+   "parent": -685495518,
+   "actor": "Adrian",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Uh… I’m 21.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-309519595": {
+   "kind": "text",
+   "parent": -1137944139,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Uh… thanks? I think?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1307321743": {
+   "kind": "text",
+   "parent": 654701748,
+   "actor": "Adrian",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I—I try! I think…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1740021592": {
+   "kind": "text",
+   "parent": 812920492,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Why do you need to know that?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1876305395": {
+   "kind": "text",
+   "parent": 60234038,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Why does that sound like an insult?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1449451565": {
+   "kind": "text",
+   "parent": -252190714,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm… I think I’ll pass.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1848271465": {
+   "kind": "text",
+   "parent": -252190714,
+   "actor": "Charlotte",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh, come on, don’t be boring! Or are you just afraid my bikini will be too distracting?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1332559441": {
+   "kind": "text",
+   "parent": 60234038,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Oh, no insult at all! I just assumed with men in the house, it’d be… less civilized.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-649749603": {
+   "kind": "text",
+   "parent": 812920492,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Oh, no reason! Just… curiosity.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1519470052": {
+   "kind": "text",
+   "parent": 654701748,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh, darling, thinking isn’t enough. Women like confidence! Charm! Mystery!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1310289335": {
+   "kind": "text",
+   "parent": -1137944139,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I just hope no one takes advantage of you. The world isn’t kind to innocent beings.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1941343596": {
+   "kind": "text",
+   "parent": -685495518,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh? Really? Huh. Well, there’s still time, I suppose.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1750054529": {
+   "kind": "text",
+   "parent": -2060582288,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Oh, no, dear, not wrong—just… a little modest for a man married to someone as beautiful as Anna.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1202585797": {
+   "kind": "text",
+   "parent": -1212038537,
+   "actor": "Charlotte",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "And yet… she chose stability over excitement. Not what I expected, honestly.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1197261672": {
+   "kind": "text",
+   "parent": 1760977849,
+   "actor": "Charlotte",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Mmm, some people do. Others… keep their options open.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "900946627": {
+   "kind": "text",
+   "parent": 654701748,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "So… lie?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1859818531": {
+   "kind": "text",
+   "parent": 654701748,
+   "actor": "Charlotte",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh, absolutely! But make it attractive.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1877557305": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1519309749
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Oh, {PC}, fancy running into you. Just a quick detour before indulging in some trashy reality TV with your {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1519309749": {
+   "kind": "text",
+   "parent": 1877557305,
+   "actor": "Charlotte",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "You really should visit me on my yacht sometime… I could use a bit of livelier entertainment.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Hallway_home",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Charlotte_HallwayTalks and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[hallwaybottom-cd] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hallwaybottom-cd",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "branches": [
+    "e"
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[DialogueVariation] = Random3[Random]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random3",
+        "pick": "random",
+        "type": "number"
+       }
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CharlotteBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CharlotteBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/CharlotteBust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[hallwaybottom-cd] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hallwaybottom-cd",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

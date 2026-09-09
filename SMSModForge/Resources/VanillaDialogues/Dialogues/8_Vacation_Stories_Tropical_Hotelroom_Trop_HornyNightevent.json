@@ -1,0 +1,1320 @@
+{
+ "id": "8_Vacation_Stories/Tropical_Hotelroom/Trop_HornyNightevent",
+ "name": "Trop_HornyNightevent",
+ "index": 4,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  -895663960,
+  716988771,
+  1385764001,
+  1457094490,
+  -420506286
+ ],
+ "nodes": {
+  "-895663960": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    134441524
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That was nice... I don’t think I’ve felt this relaxed in ages.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "134441524": {
+   "kind": "choice",
+   "parent": -895663960,
+   "children": [
+    -1848500411,
+    -405448054,
+    734395306
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I was thinking... would it be okay if we called it an early night? I’m feeling a little sleepy after all that sun and fresh air.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1848500411": {
+   "kind": "text",
+   "parent": 134441524,
+   "children": [
+    1530652088
+   ],
+   "actor": null,
+   "text": "Of course. You should rest if you’re tired.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-405448054": {
+   "kind": "text",
+   "parent": 134441524,
+   "children": [
+    492635530
+   ],
+   "actor": null,
+   "text": "Makes sense. A day like that can take it out of you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "734395306": {
+   "kind": "text",
+   "parent": 134441524,
+   "children": [
+    -1219709786
+   ],
+   "actor": null,
+   "text": "Only if you promise not to snore.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1219709786": {
+   "kind": "text",
+   "parent": 734395306,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "No promises. But I’ll try to keep it down for your sake.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "492635530": {
+   "kind": "text",
+   "parent": -405448054,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Exactly. The beach was wonderful, but it definitely wore me out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1530652088": {
+   "kind": "text",
+   "parent": -1848500411,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thanks. I think I just need a good night’s sleep to recharge for tomorrow.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "716988771": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_Maps to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_Maps",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_Maps"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 109_TropicalHotelRoomNight to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "109_TropicalHotelRoomNight",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/109_TropicalHotelRoomNight"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 3 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 3
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "1385764001": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Okay, nice and quiet... don’t wake him up. He’s probably out like a rock after today.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1457094490": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1451399284
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Just a quick look. In and out. He doesn’t need to know... nothing to see here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-420506286": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    211163704,
+    1618611955
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Okay, nice and quiet... don’t wake him up. He’s probably out like a rock after today.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1451399284": {
+   "kind": "choice",
+   "parent": 1457094490,
+   "children": [
+    1043921734,
+    -1129246488
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh my god... Why is it so big... What did I do to deserve such a tease....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaTropSleepScene (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaTropSleepScene (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaTropSleepScene (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1043921734": {
+   "kind": "text",
+   "parent": 1451399284,
+   "children": [
+    816809266,
+    -379442703,
+    -391524538,
+    -1716080250,
+    -432024604,
+    -847001354,
+    1271090909,
+    164616231,
+    1208396527,
+    -1988946846
+   ],
+   "actor": null,
+   "text": "(Pretend to be asleep)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1129246488": {
+   "kind": "text",
+   "parent": 1451399284,
+   "children": [
+    1170478038,
+    517665659
+   ],
+   "actor": null,
+   "text": "{M}? What are you doing?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1170478038": {
+   "kind": "text",
+   "parent": -1129246488,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "N-Nothing! I... I thought I saw some insect but it was just a sock... Go back to sleep, {PC}... We have to get up early tomorrow...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Return_Home_Vacation to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Return_Home_Vacation",
+       "of": "GetGameObjectInstance",
+       "path": "Return_Home_Vacation"
+      }
+     }
+    }
+   ]
+  },
+  "816809266": {
+   "kind": "text",
+   "parent": 1043921734,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmm... So hard and hot... I can barely get my hand around it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-379442703": {
+   "kind": "text",
+   "parent": 1043921734,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It smells so good too, Salty and masculine...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-391524538": {
+   "kind": "text",
+   "parent": 1043921734,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "What am I doing here... I should stop... I will wake him up...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1716080250": {
+   "kind": "choice",
+   "parent": 1043921734,
+   "children": [
+    -375310963
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "But It's so hot and hard in my hand. And the way it throbs... Mmmm! ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-432024604": {
+   "kind": "text",
+   "parent": 1043921734,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ohhh fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaTropSleepScene (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaTropSleepScene (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaTropSleepScene (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-847001354": {
+   "kind": "text",
+   "parent": 1043921734,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I can't believe how much cum is coming out of my {S}'s huge dick!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1271090909": {
+   "kind": "text",
+   "parent": 1043921734,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh my god... What have I done?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaTropSleepScene (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaTropSleepScene (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaTropSleepScene (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1208396527": {
+   "kind": "text",
+   "parent": 1043921734,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thank goodness he didn't wake up...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Vacation_Default_Retrigger to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Vacation_Default_Retrigger",
+       "of": "GetGameObjectInstance",
+       "path": "Vacation_Default_Retrigger"
+      }
+     }
+    }
+   ]
+  },
+  "164616231": {
+   "kind": "text",
+   "parent": 1043921734,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I can't believe I... What am I doing here... What is wrong with me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-375310963": {
+   "kind": "text",
+   "parent": -1716080250,
+   "actor": null,
+   "text": "(Cum)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "211163704": {
+   "kind": "text",
+   "parent": -420506286,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{M} will take good care of this huge cock. I'll make it feel sooo good....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaTropSleepScene (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaTropSleepScene (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaTropSleepScene (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1618611955": {
+   "kind": "choice",
+   "parent": -420506286,
+   "children": [
+    -1679590463,
+    -808355594
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Just keep sleeping, sweetie. Let {M} worship your fat cock while you dream.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1679590463": {
+   "kind": "text",
+   "parent": 1618611955,
+   "children": [
+    -1421236654,
+    -403584316,
+    -800899917,
+    256252095,
+    911579430,
+    -1719552618,
+    -150130275,
+    1197859880,
+    1312013728,
+    1044992745
+   ],
+   "actor": null,
+   "text": "(Pretend to be asleep)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-808355594": {
+   "kind": "text",
+   "parent": 1618611955,
+   "children": [
+    -1621271790,
+    -441558474,
+    -586496017
+   ],
+   "actor": null,
+   "text": "Hey, {M}. You're in the mood for some fun?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1621271790": {
+   "kind": "text",
+   "parent": -808355594,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "W-What, I was just... Sorry, hun. I was just looking for my phone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1421236654": {
+   "kind": "text",
+   "parent": -1679590463,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It's so big and hard... I wonder if {PC}'s dreaming about me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-403584316": {
+   "kind": "text",
+   "parent": -1679590463,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hey, big guy... Are you happy to see me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-800899917": {
+   "kind": "text",
+   "parent": -1679590463,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Do you want me to make you feel good? Let me help you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "256252095": {
+   "kind": "text",
+   "parent": -1679590463,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Do you want me to be with me forever? I would really like that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "911579430": {
+   "kind": "text",
+   "parent": -1679590463,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I would give everything to make you happy. Every. Single. Day.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1719552618": {
+   "kind": "choice",
+   "parent": -1679590463,
+   "children": [
+    697324826
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "God, I'm talking to my {S}'s cock... ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-441558474": {
+   "kind": "text",
+   "parent": -808355594,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let's... Let's get to sleep. We can have some fun tomorrow, yes?",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Vacation_Default_Retrigger to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Vacation_Default_Retrigger",
+       "of": "GetGameObjectInstance",
+       "path": "Vacation_Default_Retrigger"
+      }
+     }
+    }
+   ]
+  },
+  "-150130275": {
+   "kind": "text",
+   "parent": -1679590463,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fuck! ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaTropSleepScene (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaTropSleepScene (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaTropSleepScene (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1197859880": {
+   "kind": "text",
+   "parent": -1679590463,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That's not the answer I was expecting... Hihi...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1312013728": {
+   "kind": "text",
+   "parent": -1679590463,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I love you too...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[tropical-perfect-weekend-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tropical-perfect-weekend-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Return_Home_Vacation to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Return_Home_Vacation",
+       "of": "GetGameObjectInstance",
+       "path": "Return_Home_Vacation"
+      }
+     }
+    }
+   ]
+  },
+  "697324826": {
+   "kind": "text",
+   "parent": -1719552618,
+   "actor": null,
+   "text": "(Cum)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1044992745": {
+   "kind": "text",
+   "parent": -1679590463,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I love you too...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Vacation_NoSave[vacation-defaultretrigger] = Tropical_Hotelroom",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vacation-defaultretrigger",
+        "list": "Vacation_NoSave",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "Tropical_Hotelroom",
+       "of": "GetGameObjectInstance",
+       "path": "8_Vacation_Stories/Tropical_Hotelroom"
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Vacation_Default_Retrigger to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Vacation_Default_Retrigger",
+       "of": "GetGameObjectInstance",
+       "path": "Vacation_Default_Retrigger"
+      }
+     }
+    }
+   ]
+  },
+  "-586496017": {
+   "kind": "text",
+   "parent": -808355594,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let's... Let's get back to sleep... We have to get up early to catch our plane...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Return_Home_Vacation to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Return_Home_Vacation",
+       "of": "GetGameObjectInstance",
+       "path": "Return_Home_Vacation"
+      }
+     }
+    }
+   ]
+  },
+  "517665659": {
+   "kind": "text",
+   "parent": -1129246488,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "N-Nothing! I... I thought I saw some insect but it was just a sock... Go back to sleep, {PC}... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Vacation_Default_Retrigger to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Vacation_Default_Retrigger",
+       "of": "GetGameObjectInstance",
+       "path": "Vacation_Default_Retrigger"
+      }
+     }
+    }
+   ]
+  },
+  "-1988946846": {
+   "kind": "text",
+   "parent": 1043921734,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thank goodness he didn't wake up...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Return_Home_Vacation to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Return_Home_Vacation",
+       "of": "GetGameObjectInstance",
+       "path": "Return_Home_Vacation"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Tropical_Hotelroom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Trop_HornyNightevent and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[annatrophorny-inc] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "annatrophorny-inc",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "branches": [
+    "hornynight"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,620 @@
+{
+ "id": "8_Room_Talk/Villa_Lab/Android_Defaulttalk",
+ "name": "Android_Defaulttalk",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Cerise"
+ ],
+ "roots": [
+  1555090644
+ ],
+ "nodes": {
+  "1555090644": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1503840589,
+    677830534,
+    1190961154,
+    1424723415
+   ],
+   "actor": "Cerise",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I... I am no longer alone.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1503840589": {
+   "kind": "text",
+   "parent": 1555090644,
+   "children": [
+    800102817
+   ],
+   "actor": null,
+   "text": "I have questions.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1424723415": {
+   "kind": "text",
+   "parent": 1555090644,
+   "children": [
+    -1538529136
+   ],
+   "actor": null,
+   "text": "I will be back soon.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "800102817": {
+   "kind": "choice",
+   "parent": -1503840589,
+   "children": [
+    928034968,
+    -454141852,
+    -1540068307,
+    1821845293,
+    -653446938
+   ],
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "Questions?",
+   "tag": "questionsandroid",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "928034968": {
+   "kind": "text",
+   "parent": 800102817,
+   "children": [
+    2062177381
+   ],
+   "actor": null,
+   "text": "What is your name?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-454141852": {
+   "kind": "text",
+   "parent": 800102817,
+   "children": [
+    -1589674584,
+    -283242161
+   ],
+   "actor": null,
+   "text": "What exactly are you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1540068307": {
+   "kind": "text",
+   "parent": 800102817,
+   "children": [
+    -441648184,
+    -1671110228
+   ],
+   "actor": null,
+   "text": "Do you have any special features?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1821845293": {
+   "kind": "text",
+   "parent": 800102817,
+   "children": [
+    1091443111,
+    -1318652220
+   ],
+   "actor": null,
+   "text": "Do you have feelings?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-653446938": {
+   "kind": "text",
+   "parent": 800102817,
+   "children": [
+    1445676338
+   ],
+   "actor": null,
+   "text": "That's all for now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1091443111": {
+   "kind": "text",
+   "parent": 1821845293,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "Feelings… I think I do, in a way. I... I feel curious... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-441648184": {
+   "kind": "text",
+   "parent": -1540068307,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "Features? I... I think was built to be strong... and fast...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1589674584": {
+   "kind": "text",
+   "parent": -454141852,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "I am an android, designed to resemble a human woman...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2062177381": {
+   "kind": "text",
+   "parent": 928034968,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "My name is Cerise. It feels… right, though I’m still learning what a name really means.",
+   "jump": {
+    "mode": "Jump",
+    "to": "questionsandroid"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1318652220": {
+   "kind": "text",
+   "parent": 1821845293,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "I... I feel anger... Frustration... I don't know what I am... That makes me angry.",
+   "jump": {
+    "mode": "Jump",
+    "to": "questionsandroid"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1671110228": {
+   "kind": "text",
+   "parent": -1540068307,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "My datastream also mentions a \"Pleasure Program\"... I am not sure what that means... ",
+   "jump": {
+    "mode": "Jump",
+    "to": "questionsandroid"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[android-features-unlocked] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "android-features-unlocked",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-283242161": {
+   "kind": "text",
+   "parent": -454141852,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "No... That doesn't feel right... There is more... I... I don't know...",
+   "jump": {
+    "mode": "Jump",
+    "to": "questionsandroid"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1445676338": {
+   "kind": "text",
+   "parent": -653446938,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "All for now...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1538529136": {
+   "kind": "text",
+   "parent": 1424723415,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "Please. No one else visits me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "677830534": {
+   "kind": "text",
+   "parent": 1555090644,
+   "children": [
+    -2054518026,
+    -1659239495,
+    313991131
+   ],
+   "actor": null,
+   "text": "I want to try your \"Pleasure Program\".",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[android-features-unlocked] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "android-features-unlocked",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2054518026": {
+   "kind": "text",
+   "parent": 677830534,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "Pleasure Program Activated. Initiating Lubrication Process.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1659239495": {
+   "kind": "text",
+   "parent": 677830534,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "N-No, wait... W-What is happening. I didn't say that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "313991131": {
+   "kind": "choice",
+   "parent": 677830534,
+   "children": [
+    1499252392,
+    949426332,
+    -1722608943
+   ],
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "Lubrication Process completed. Please select a program.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1499252392": {
+   "kind": "text",
+   "parent": 313991131,
+   "children": [
+    -1191019444
+   ],
+   "actor": null,
+   "text": "(Blowjob)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "949426332": {
+   "kind": "text",
+   "parent": 313991131,
+   "children": [
+    2021194825
+   ],
+   "actor": null,
+   "text": "(Nipple Penetration)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1722608943": {
+   "kind": "text",
+   "parent": 313991131,
+   "actor": null,
+   "text": "I'll pass for now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2021194825": {
+   "kind": "text",
+   "parent": 949426332,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "Loading Nipple Penetration.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[temp-stored-very-short-term] = AndroidNipplefuck",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "AndroidNipplefuck",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Villa_Lab/AndroidNipplefuck"
+      }
+     }
+    }
+   ]
+  },
+  "-1191019444": {
+   "kind": "text",
+   "parent": 1499252392,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "Loading Deepthroat.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[temp-stored-very-short-term] = AndroidBlowjob",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "AndroidBlowjob",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Villa_Lab/AndroidBlowjob"
+      }
+     }
+    }
+   ]
+  },
+  "1190961154": {
+   "kind": "text",
+   "parent": 1555090644,
+   "children": [
+    1335396165
+   ],
+   "actor": null,
+   "text": "Is there something I can do for you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1335396165": {
+   "kind": "text",
+   "parent": 1190961154,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "No... Not right now... I feel like I am lacking a... Update? Perhaps a future patch will enhance my being?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Villa_Lab",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Android_Defaulttalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[android-awoken] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "android-awoken",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Android_normaloutfit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Android_normaloutfit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Android_normaloutfit"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

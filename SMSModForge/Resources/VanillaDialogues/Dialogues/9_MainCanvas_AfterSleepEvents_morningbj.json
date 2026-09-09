@@ -1,0 +1,796 @@
+{
+ "id": "9_MainCanvas/AfterSleepEvents/morningbj",
+ "name": "morningbj",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "Josef"
+ ],
+ "roots": [
+  -1146330197,
+  486561991,
+  2029632017,
+  615082249,
+  1752288587,
+  1226681025
+ ],
+ "nodes": {
+  "-1146330197": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Msuck to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Msuck",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Msuck"
+      }
+     }
+    }
+   ]
+  },
+  "486561991": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1964016839,
+    1740579106,
+    -68601687
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmppphmm! Mmmpfhh!!!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2029632017": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "MHmmmphh! Shmoo tmmaastyy.... Mph! MPF! MPF!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "615082249": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Msuck (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Msuck (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Msuck (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1752288587": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    843196759,
+    -874612448,
+    -1164887614
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Huahh... I... I'm sorry, hun. I just had to... ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1226681025": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thank you for... breakfast. It was delicious...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1964016839": {
+   "kind": "text",
+   "parent": 486561991,
+   "actor": null,
+   "text": "{M}!? What are you doing?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1740579106": {
+   "kind": "text",
+   "parent": 486561991,
+   "actor": null,
+   "text": "Oh god yes, suck it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-68601687": {
+   "kind": "text",
+   "parent": 486561991,
+   "actor": null,
+   "text": "[Say nothing and enjoy it]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "843196759": {
+   "kind": "text",
+   "parent": 1752288587,
+   "children": [
+    -837739039,
+    1299392493,
+    -919063070,
+    -479791101,
+    1872218606
+   ],
+   "actor": null,
+   "text": "Get up, I want your ass.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-874612448": {
+   "kind": "text",
+   "parent": 1752288587,
+   "actor": null,
+   "text": "I'm not complaining, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1164887614": {
+   "kind": "text",
+   "parent": 1752288587,
+   "children": [
+    -1934016631
+   ],
+   "actor": null,
+   "text": "You're insatiable, you know that?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1934016631": {
+   "kind": "text",
+   "parent": -1164887614,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hihi...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-837739039": {
+   "kind": "text",
+   "parent": 843196759,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "W-What!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-919063070": {
+   "kind": "text",
+   "parent": 843196759,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh! Hngaah... Y-Yes, pound my needy butt! Hngaah..",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaDoorJosef (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaDoorJosef (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaDoorJosef (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-479791101": {
+   "kind": "text",
+   "parent": 843196759,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... Hngaah... I l-love it... Twice in a row... My {S}'s such a stallion... Hngaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1872218606": {
+   "kind": "text",
+   "parent": 843196759,
+   "children": [
+    -244690957,
+    1701471234,
+    -775123841,
+    28493209,
+    -689646287,
+    -1330209142,
+    2007289793
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "{PC}? Hey, everything alright in there?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-244690957": {
+   "kind": "text",
+   "parent": 1872218606,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh! ... <size=60%>O-Oh, fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1701471234": {
+   "kind": "choice",
+   "parent": 1872218606,
+   "children": [
+    -1518091220,
+    -648646300,
+    997936042,
+    -968996829
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "You good in there, bud? I’m hearing some weird noises.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1518091220": {
+   "kind": "text",
+   "parent": 1701471234,
+   "children": [
+    1870439706
+   ],
+   "actor": null,
+   "text": "Go away, {D}! I've got visit!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-648646300": {
+   "kind": "text",
+   "parent": 1701471234,
+   "children": [
+    983049784
+   ],
+   "actor": null,
+   "text": "Y-Yeah! Just doing some sports!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "997936042": {
+   "kind": "text",
+   "parent": 1701471234,
+   "children": [
+    1886104715
+   ],
+   "actor": null,
+   "text": "Stop being a creep, {D}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-968996829": {
+   "kind": "text",
+   "parent": 1701471234,
+   "children": [
+    -947561358,
+    862653413
+   ],
+   "actor": null,
+   "text": "Y-Yeah, I'm just pounding {M} a bit...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-947561358": {
+   "kind": "text",
+   "parent": -968996829,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "J-Jesus, Josef... Give us some peace... Y-Your {S} is about to make me cum... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1886104715": {
+   "kind": "text",
+   "parent": 997936042,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Oh, uh, sorry... I'll go now..",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "983049784": {
+   "kind": "text",
+   "parent": -648646300,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Ah, I see... Well, um... Keep at it, {S}! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1870439706": {
+   "kind": "text",
+   "parent": -1518091220,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Oh, uh, sorry... I'll go now..",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-775123841": {
+   "kind": "text",
+   "parent": 1872218606,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I think he's gone... N-Now... F-Fuck me... Make me cum, {PC}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "28493209": {
+   "kind": "text",
+   "parent": 1872218606,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes, yes, YES... You're so big, I can feel it all the way... all the... Hngaah... I'm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaDoorJosef (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaDoorJosef (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaDoorJosef (2)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Msuck to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Msuck",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Msuck"
+      }
+     }
+    }
+   ]
+  },
+  "-689646287": {
+   "kind": "text",
+   "parent": 1872218606,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "HNgaaaAAAAAH! HAAAAAAH! I'M ... HNAAAAH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1330209142": {
+   "kind": "text",
+   "parent": 1872218606,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes... I feel it... Your warmth... It's so much... Oh god...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaDoorJosef (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaDoorJosef (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaDoorJosef (3)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Msuck (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Msuck (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Msuck (1)"
+      }
+     }
+    }
+   ]
+  },
+  "862653413": {
+   "kind": "text",
+   "parent": -968996829,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "O-Oh, uh.... Um... I'll be going! Have, uh, fun...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2007289793": {
+   "kind": "text",
+   "parent": 1872218606,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hah... Ha.... Hnaah.... I... I think I'll need to use the bathroom...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1299392493": {
+   "kind": "text",
+   "parent": 843196759,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "9_MainCanvas/AfterSleepEvents",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play morningbj and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Core[Disable-Specific-RNGEvents] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Disable-Specific-RNGEvents",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

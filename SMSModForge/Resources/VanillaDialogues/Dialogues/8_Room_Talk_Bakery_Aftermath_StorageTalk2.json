@@ -1,0 +1,503 @@
+{
+ "id": "8_Room_Talk/Bakery_Aftermath/StorageTalk2",
+ "name": "StorageTalk2",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Amelia",
+  "Continue"
+ ],
+ "roots": [
+  -1081714297
+ ],
+ "nodes": {
+  "-1081714297": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -237914414,
+    503398585,
+    651777389,
+    1779818991,
+    -1405194523,
+    -1095426954,
+    1960583168,
+    -977084957,
+    -358045670,
+    -1696505996,
+    -1245317938
+   ],
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Hey there...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-237914414": {
+   "kind": "text",
+   "parent": -1081714297,
+   "actor": "Amelia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Seems like it's just the two of us...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "503398585": {
+   "kind": "text",
+   "parent": -1081714297,
+   "actor": "Amelia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I know just the thing to make our  break way more relaxing...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "651777389": {
+   "kind": "text",
+   "parent": -1081714297,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ameliasex to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ameliasex",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/ameliasex"
+      }
+     }
+    }
+   ]
+  },
+  "1779818991": {
+   "kind": "choice",
+   "parent": -1081714297,
+   "children": [
+    -341179109,
+    -2062349077,
+    212329252
+   ],
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Don't be shy, I mean, I already sucked your cock...",
+   "tag": "shy",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-341179109": {
+   "kind": "text",
+   "parent": 1779818991,
+   "children": [
+    1166384750
+   ],
+   "actor": null,
+   "text": "[Fuck Amelia]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2062349077": {
+   "kind": "text",
+   "parent": 1779818991,
+   "children": [
+    -1860544447,
+    -1269112487,
+    540862936
+   ],
+   "actor": null,
+   "text": "Are you sure?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[amelia-first-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-first-sex",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "212329252": {
+   "kind": "text",
+   "parent": 1779818991,
+   "children": [
+    -260380589,
+    -484543047
+   ],
+   "actor": null,
+   "text": "Sorry, I'm not in the mood.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1860544447": {
+   "kind": "text",
+   "parent": -2062349077,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Am I sure?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-260380589": {
+   "kind": "text",
+   "parent": 212329252,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Oh, um.. That's kinda embarrasing...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1166384750": {
+   "kind": "text",
+   "parent": -341179109,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Oh fuck, it's way too big!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-484543047": {
+   "kind": "text",
+   "parent": 212329252,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Well, maybe next time...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1269112487": {
+   "kind": "text",
+   "parent": -2062349077,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "After I sucked you dry, I started taking the pill... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "540862936": {
+   "kind": "text",
+   "parent": -2062349077,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "So yeah, I'm VERY sure.",
+   "jump": {
+    "mode": "Jump",
+    "to": "shy"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1405194523": {
+   "kind": "text",
+   "parent": -1081714297,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ameliasex (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ameliasex (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/ameliasex (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1095426954": {
+   "kind": "text",
+   "parent": -1081714297,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "God, this feels so fucking good!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1960583168": {
+   "kind": "text",
+   "parent": -1081714297,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "We should have done that way sooner!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[amelia-first-sex] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-first-sex",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-977084957": {
+   "kind": "text",
+   "parent": -1081714297,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Please, don't hold back, fill me up if you want!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-358045670": {
+   "kind": "text",
+   "parent": -1081714297,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Yessssss!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1696505996": {
+   "kind": "choice",
+   "parent": -1081714297,
+   "children": [
+    1420414012,
+    -1530500446,
+    -1201651912
+   ],
+   "actor": "Amelia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I REALLY needed that... Thanks, {PC}.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_2[ameliawork-sex] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ameliawork-sex",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1420414012": {
+   "kind": "text",
+   "parent": -1696505996,
+   "children": [
+    680892361
+   ],
+   "actor": null,
+   "text": "You're quite the catch, you know that?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1530500446": {
+   "kind": "text",
+   "parent": -1696505996,
+   "children": [
+    -201436215
+   ],
+   "actor": null,
+   "text": "Fuck, your pussy felt so good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1201651912": {
+   "kind": "text",
+   "parent": -1696505996,
+   "children": [
+    -1694088438
+   ],
+   "actor": null,
+   "text": "I can tell, your whole body is shaking.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "680892361": {
+   "kind": "text",
+   "parent": 1420414012,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "And I like being part of your pond...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-201436215": {
+   "kind": "text",
+   "parent": -1530500446,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "I'm glad you think so... I was a tad worried that you might be too big for me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1694088438": {
+   "kind": "text",
+   "parent": -1201651912,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "It's been so long since I've had such a big orgasm!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1245317938": {
+   "kind": "text",
+   "parent": -1081714297,
+   "actor": "Amelia",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Let's get back to the front... I'm sure some customers are waiting.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ }
+}

@@ -1,0 +1,1390 @@
+{
+ "id": "8_Room_Talk/Shrine/TheDemonAppears",
+ "name": "TheDemonAppears",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Nyxara"
+ ],
+ "roots": [
+  1667439346,
+  1946069866,
+  -667427061,
+  -1626181488
+ ],
+ "nodes": {
+  "1667439346": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Nyxara",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "The veil… it’s weak now. I can feel it slipping. I… I just need one thing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[zhen-finale-inc] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zhen-finale-inc",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1946069866": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Nyxara",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "All your work, your blade, your will... All of it lead to this very moment...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-667427061": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    852553815,
+    1668015233,
+    -1101398824
+   ],
+   "actor": "Nyxara",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Please… invite me. Call me into your world. That’s all it takes… just one word from you.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "852553815": {
+   "kind": "text",
+   "parent": -667427061,
+   "children": [
+    -65650918
+   ],
+   "actor": null,
+   "text": "Why do you want to come here so badly?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1668015233": {
+   "kind": "text",
+   "parent": -667427061,
+   "children": [
+    2036836138
+   ],
+   "actor": null,
+   "text": "How do I know this isn’t some kind of trick?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1101398824": {
+   "kind": "text",
+   "parent": -667427061,
+   "children": [
+    625899116,
+    1974280850,
+    -1770889721,
+    -1270851529
+   ],
+   "actor": null,
+   "text": "Wait... You are the spirit who killed Master Zhen's son.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "625899116": {
+   "kind": "text",
+   "parent": -1101398824,
+   "actor": "Nyxara",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "No… I didn’t kill him. I could never. We were lovers.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2036836138": {
+   "kind": "text",
+   "parent": 1668015233,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "I would never harm the one who freed me. All I ask is a chance. Trust me…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1626181488": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1097124323,
+    81739047
+   ],
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Please… don’t let me fade back into nothing. Say the word. Invite me.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-65650918": {
+   "kind": "text",
+   "parent": 852553815,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Because this place… it’s real. Warm. I’ve only ever known shadows and chains. I want to feel the sun. I want to live.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1974280850": {
+   "kind": "text",
+   "parent": -1101398824,
+   "actor": "Nyxara",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "We made love… again and again. He pushed himself too far. Three times in a row… his body gave out. A stroke, in my arms.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1770889721": {
+   "kind": "text",
+   "parent": -1101398824,
+   "actor": "Nyxara",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Do you know what it’s like to hold someone as their life slips away… and know everyone will blame you for it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1270851529": {
+   "kind": "text",
+   "parent": -1101398824,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Tell me, mortal… did Zhen also tell you how he once tasted me? How he enjoyed the same holes he now calls unholy?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1097124323": {
+   "kind": "text",
+   "parent": -1626181488,
+   "children": [
+    1846324432,
+    -1546093613,
+    1511766747,
+    411434583,
+    -361330854
+   ],
+   "actor": null,
+   "text": "Alright… come to this side. Be free.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "81739047": {
+   "kind": "text",
+   "parent": -1626181488,
+   "children": [
+    347655767,
+    254348880,
+    -1250448487,
+    1150957029,
+    -2114171416,
+    1780879500
+   ],
+   "actor": null,
+   "text": "No. I won’t let you out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1846324432": {
+   "kind": "text",
+   "parent": 1097124323,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[nyxara-free] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxara-free",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "347655767": {
+   "kind": "text",
+   "parent": 81739047,
+   "actor": "Nyxara",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "W-what? No… no, you don’t understand. If you don’t help me now, I’ll vanish! I’ll be nothing again! Please, I’m begging you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1546093613": {
+   "kind": "text",
+   "parent": 1097124323,
+   "actor": "Nyxara",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hahahaha... HAHAHAAHAHA~",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1511766747": {
+   "kind": "text",
+   "parent": 1097124323,
+   "actor": "Nyxara",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Fool. Sweet, gullible fool.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "411434583": {
+   "kind": "text",
+   "parent": 1097124323,
+   "actor": "Nyxara",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "All it took was a whisper of kindness, and you gave me everything. Your world is open to me now… and you’ll watch as I break it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-361330854": {
+   "kind": "text",
+   "parent": 1097124323,
+   "actor": "Nyxara",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "See you around, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "254348880": {
+   "kind": "text",
+   "parent": 81739047,
+   "actor": "Nyxara",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I swear to you, I only want to live. I’ll never hurt you. I’ll stay by your side… yours alone. Isn’t that what you want?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1250448487": {
+   "kind": "text",
+   "parent": 81739047,
+   "actor": "Nyxara",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "…Pathetic.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1150957029": {
+   "kind": "text",
+   "parent": 81739047,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "You really thought I would grovel forever? Hah… look at you. That pathetc human face of yours... Priceless.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2114171416": {
+   "kind": "text",
+   "parent": 81739047,
+   "actor": "Nyxara",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Fine... One wish. One desire, and if I grant it, you let me through.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1780879500": {
+   "kind": "choice",
+   "parent": 81739047,
+   "children": [
+    1598246037,
+    1791607674,
+    -813396575,
+    -1962729967
+   ],
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Go on, what do you want? To be immortal? Unlimited power? Money?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1598246037": {
+   "kind": "text",
+   "parent": 1780879500,
+   "children": [
+    1052222257,
+    -634899877
+   ],
+   "actor": null,
+   "text": "Money! SO MUCH MONEY!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1791607674": {
+   "kind": "text",
+   "parent": 1780879500,
+   "children": [
+    -155474800,
+    -1364791628,
+    -91101723,
+    -867553526,
+    -206664065,
+    -494460148,
+    -853800916,
+    2138295503,
+    -424288224,
+    1250942144,
+    744158924,
+    561871006,
+    -660595425
+   ],
+   "actor": null,
+   "text": "Sit on my face, demon!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-813396575": {
+   "kind": "text",
+   "parent": 1780879500,
+   "children": [
+    -889109064,
+    790500969,
+    708457053,
+    -1437032901,
+    253070541,
+    971256771,
+    1650041524,
+    1326380285
+   ],
+   "actor": null,
+   "text": "Don't use your powers for evil anymore.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1962729967": {
+   "kind": "text",
+   "parent": 1780879500,
+   "children": [
+    -2715392,
+    -54976542
+   ],
+   "actor": null,
+   "text": "Nothing. I want you to return to your realm, demon!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2715392": {
+   "kind": "text",
+   "parent": -1962729967,
+   "actor": "Nyxara",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Money it is! W-Wait~ You... You actually... No! NO! This can't be happening!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[nyxara-trapped] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxara-trapped",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-54976542": {
+   "kind": "text",
+   "parent": -1962729967,
+   "actor": "Nyxara",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "One day I'll find my way out! AND THEN I WILL KILL YOU! YOU HEAR ME!? I WILL~",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1052222257": {
+   "kind": "text",
+   "parent": 1598246037,
+   "actor": "Nyxara",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "So simple… so mortal. You crave gold and security. Very well… if wealth is what binds you, I’ll make it flow to you like water.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[nyxara-free] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxara-free",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-634899877": {
+   "kind": "text",
+   "parent": 1598246037,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "The deal is done. Enjoy your wealth, human. I'll see you around.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + 100000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 100000
+      }
+     }
+    }
+   ]
+  },
+  "-889109064": {
+   "kind": "text",
+   "parent": -813396575,
+   "actor": "Nyxara",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You… you dare bind me with that?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[nyxara-perfectending] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxara-perfectending",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[nyxara-free] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxara-free",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Smart to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Smart",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Smart"
+      }
+     }
+    }
+   ]
+  },
+  "790500969": {
+   "kind": "text",
+   "parent": -813396575,
+   "actor": "Nyxara",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I offer you power, wealth, even myself... and you would chain me with morality?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-155474800": {
+   "kind": "text",
+   "parent": 1791607674,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Y-you’d really… ask that, here of all places?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[nyxara-free] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxara-free",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Lewd to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Lewd",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Lewd"
+      }
+     }
+    }
+   ]
+  },
+  "-1364791628": {
+   "kind": "text",
+   "parent": 1791607674,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "If that is your wish… then I would. Gladly. I’d smother you with myself until you couldn’t breathe anything but me…",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Nyx2025_Facesit (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Nyx2025_Facesit (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Nyx2025_Facesit (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-91101723": {
+   "kind": "text",
+   "parent": 1791607674,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "On the ground, human.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-867553526": {
+   "kind": "text",
+   "parent": 1791607674,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "I thought humans were supposed to rule their world… but here you are...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Nyx2025_Facesit (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Nyx2025_Facesit (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Nyx2025_Facesit (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-206664065": {
+   "kind": "text",
+   "parent": 1791607674,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Now... Mhmm~ Yes... Keep working that tongue, you pathetic dirty human...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-494460148": {
+   "kind": "text",
+   "parent": 1791607674,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "I can feel you struggling for air… and still you won’t stop licking. Do you enjoy my demon ass that much?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-853800916": {
+   "kind": "text",
+   "parent": 1791607674,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Do you like being smothered, mortal? Reduced to nothing but a toy between my thighs? Fuck~ I... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "708457053": {
+   "kind": "text",
+   "parent": -813396575,
+   "actor": "Nyxara",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Do you know who I am? What I could do to your world if I stepped through unshackled?! You would deny me that, mortal?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1437032901": {
+   "kind": "text",
+   "parent": -813396575,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "…Clever. Damn you… clever little human.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "253070541": {
+   "kind": "text",
+   "parent": -813396575,
+   "actor": "Nyxara",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You’ve cornered me. Outplayed me. I hate it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "971256771": {
+   "kind": "text",
+   "parent": -813396575,
+   "actor": "Nyxara",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "...and yet… I love it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1650041524": {
+   "kind": "text",
+   "parent": -813396575,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Very well. I will keep my promise.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1326380285": {
+   "kind": "text",
+   "parent": -813396575,
+   "actor": "Nyxara",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I'll see you... That's a promise.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2138295503": {
+   "kind": "text",
+   "parent": 1791607674,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Ahhh— y-yes…! Keep licking, slave, don’t you dare stop now!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-424288224": {
+   "kind": "text",
+   "parent": 1791607674,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "Drowning under me… hahhh… you were born for this!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1250942144": {
+   "kind": "text",
+   "parent": 1791607674,
+   "actor": "Nyxara",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Look at you… drenched in me. What a pitiful sight.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "744158924": {
+   "kind": "text",
+   "parent": 1791607674,
+   "actor": "Nyxara",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "You begged for this, and now you lie there like a dog licking up scraps.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "561871006": {
+   "kind": "text",
+   "parent": 1791607674,
+   "actor": "Nyxara",
+   "expressionName": "neutral",
+   "text": "You thought you were the one asking for a wish. But really… I’m the one who got everything I wanted.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-660595425": {
+   "kind": "text",
+   "parent": 1791607674,
+   "actor": "Nyxara",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Enjoy the taste, mortal. Next time, I won’t be so gentle.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Shrine",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play TheDemonAppears and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[nyxara-free] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxara-free",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[nyxara-trapped] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxara-trapped",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_9[2025nyxara-talks] ≥ 8",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2025nyxara-talks",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 8
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Eve_NoSave1[nyxaramightappear] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxaramightappear",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SadDemonMusic to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SadDemonMusic",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/SadDemonMusic"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Scifi to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Scifi",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Scifi"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NyxaraBust_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NyxaraBust_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/NyxaraBust_Default"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active (none) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": null,
+       "of": "GetGameObjectInstance"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[masterzhen-met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "masterzhen-met",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[zhen-finale-inc] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zhen-finale-inc",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SadDemonMusic to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SadDemonMusic",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/SadDemonMusic"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[nyxaramightappear] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxaramightappear",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Canvas to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Canvas",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/80_Shrine/Canvas"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

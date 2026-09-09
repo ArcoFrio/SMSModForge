@@ -32,7 +32,7 @@ namespace SMSModForge.PackPlugin
         /// during a cutscene.</summary>
         private const string GameplayCanvas = "9_MainCanvas";
 
-        public static void BuildAll(PackManifest pack, ManualLogSource log)
+        public static void BuildAll(PackManifest pack, PackContext ctx, ManualLogSource log)
         {
             var uis = pack?.Uis;
             if (uis == null || uis.Count == 0) return;
@@ -46,8 +46,8 @@ namespace SMSModForge.PackPlugin
                 try
                 {
                     string source = (string)ui["source"] ?? "";
-                    if (string.IsNullOrEmpty(source)) { BuildOwn(pack, ui, log); built++; }
-                    else { Patch(pack, ui, source, log); patched++; }
+                    if (string.IsNullOrEmpty(source)) { BuildOwn(pack, ctx, ui, log); built++; }
+                    else { Patch(pack, ctx, ui, source, log); patched++; }
                 }
                 catch (Exception ex)
                 {
@@ -67,7 +67,7 @@ namespace SMSModForge.PackPlugin
 
         // ── A screen of the pack's own ───────────────────────────────
 
-        private static void BuildOwn(PackManifest pack, JObject ui, ManualLogSource log)
+        private static void BuildOwn(PackManifest pack, PackContext ctx, JObject ui, ManualLogSource log)
         {
             var nodes = ui["nodes"] as JArray;
             if (nodes == null || nodes.Count == 0) return;
@@ -98,10 +98,15 @@ namespace SMSModForge.PackPlugin
             root.transform.SetParent(parent, worldPositionStays: false);
 
             foreach (var node in nodes)
-                if (node is JObject n) Create(pack, n, root.transform, log);
+                if (node is JObject n) Create(pack, ctx, n, root.transform, log, ButtonSoundFor(ui));
 
             // Off unless the pack says otherwise, matching the game: 34 of its
             // 49 canvases wait for their moment.
+            ApplyOpenAnimation(root, ui["open"] as JObject);
+            ApplyCloseAnimation(root, ui["close"] as JObject);
+
+            // After the animation is attached, so a screen that starts open
+            // plays it on the way in rather than appearing and then animating.
             root.SetActive(ui["startsOpen"] != null && (bool)ui["startsOpen"]);
             UiRegistry.Register(id, root);
         }
@@ -126,7 +131,7 @@ namespace SMSModForge.PackPlugin
 
         // ── A change to a screen the game has ────────────────────────
 
-        private static void Patch(PackManifest pack, JObject ui, string source,
+        private static void Patch(PackManifest pack, PackContext ctx, JObject ui, string source,
                                   ManualLogSource log)
         {
             var baseObject = ResolveBase(source);
@@ -138,7 +143,8 @@ namespace SMSModForge.PackPlugin
             }
 
             foreach (var token in ui["nodes"] as JArray ?? new JArray())
-                if (token is JObject node) ApplyNode(pack, node, baseObject.transform, log);
+                if (token is JObject node)
+                    ApplyNode(pack, ctx, node, baseObject.transform, log, ButtonSoundFor(ui));
         }
 
         /// <summary>
@@ -171,17 +177,20 @@ namespace SMSModForge.PackPlugin
             return Child(surface.transform, baseName, baseNth);
         }
 
-        private static void ApplyNode(PackManifest pack, JObject node, Transform under,
-                                      ManualLogSource log)
+        /// <summary>Apply one node, and hand back the object it applied to so
+        /// its parent can put it in the right place among its siblings.</summary>
+        private static Transform ApplyNode(PackManifest pack, PackContext ctx, JObject node,
+                                           Transform under, ManualLogSource log,
+                                           string buttonSound = null)
         {
             string bind = (string)node["bind"] ?? "";
-            if (bind.Length == 0) { Create(pack, node, under, log); return; }
+            if (bind.Length == 0) return Create(pack, ctx, node, under, log, buttonSound);
 
             var target = bind == "." ? under.gameObject : Walk(under, bind);
             if (target == null)
             {
                 log?.LogWarning($"[UI] '{bind}' is not on this screen any more; skipped.");
-                return;
+                return null;
             }
 
             // Only what the node actually asserts. The editor stripped the rest
@@ -190,33 +199,260 @@ namespace SMSModForge.PackPlugin
             // the pack was written.
             if (Flag(node["overrideRect"])) ApplyRect(target, node["rect"] as JObject);
             if (Flag(node["overrideImage"])) ApplyImage(pack, target, node["image"] as JObject);
-            if (Flag(node["overrideText"])) ApplyText(target, node["text"] as JObject);
+            if (Flag(node["overrideText"])) ApplyText(pack, target, node["text"] as JObject);
             if (Flag(node["overrideActive"]))
                 target.SetActive(node["startActive"] == null || (bool)node["startActive"]);
 
-            ApplyExtras(target, node);
+            ApplyExtras(pack, ctx, target, node, buttonSound);
 
+            var placed = new List<KeyValuePair<int, Transform>>();
             foreach (var token in node["children"] as JArray ?? new JArray())
-                if (token is JObject child) ApplyNode(pack, child, target.transform, log);
+            {
+                var child = token as JObject;
+                if (child == null) continue;
+                Remember(placed, child, ApplyNode(pack, ctx, child, target.transform, log, buttonSound));
+            }
+            Reorder(placed);
+
+            return target.transform;
         }
 
         // ── Making objects ───────────────────────────────────────────
 
-        private static void Create(PackManifest pack, JObject node, Transform parent,
-                                   ManualLogSource log)
+        /// <summary>
+        /// What a button sounds like when nobody has said otherwise: the game's
+        /// own button click, so a pack's buttons sound like the game's without
+        /// anyone having to ask for it.
+        /// <para/>
+        /// Named rather than shipped - the player already has this clip, and the
+        /// runtime asks the game for it. Kept in step with the editor's copy of
+        /// the name by a test there, since the two projects cannot reference
+        /// each other.
+        /// </summary>
+        internal const string DefaultButtonSound = "Mountain Audio - Bubble Button 1";
+
+        /// <summary>
+        /// What every button on one screen sounds like: what the screen asked
+        /// for, or the default when it did not - and nothing at all when the
+        /// screen has been silenced. An object naming its own sound overrides
+        /// this either way, so silencing a screen does not gag a button that
+        /// was deliberately given a voice.
+        /// </summary>
+        private static string ButtonSoundFor(JObject ui)
+        {
+            if (ui == null) return DefaultButtonSound;
+            if (ui["silentButtons"] != null && (bool)ui["silentButtons"]) return null;
+
+            string named = (string)ui["buttonSound"];
+            return !string.IsNullOrEmpty(named) ? named : DefaultButtonSound;
+        }
+
+        /// <summary>
+        /// A sound a pack named: one of its own first, then one of the game's.
+        /// <para/>
+        /// Its own first so a pack can deliberately shadow a game sound with a
+        /// version of its own, which is the way round an author would expect.
+        /// </summary>
+        internal static AudioClip ResolveSound(PackContext ctx, string name)
+        {
+            if (string.IsNullOrEmpty(name)) return null;
+
+            if (ctx != null && ctx.Sfx != null)
+            {
+                var entry = ctx.Sfx.Get(name);
+                if (entry != null)
+                {
+                    // Declared by the pack. A null clip here means its file has
+                    // not finished loading, which is a moment rather than a
+                    // mistake, so there is nothing to say about it.
+                    return ctx.Sfx.PickRandomClip(entry);
+                }
+            }
+
+            var fromGame = UiAssets.Sound(name);
+            if (fromGame != null) return fromGame;
+
+            WarnOnce(ctx, name);
+            return null;
+        }
+
+        /// <summary>
+        /// Say - once per name, not once per click - that a sound is not there.
+        /// <para/>
+        /// A button that makes no noise looks exactly like a button that was
+        /// never meant to, so without this the difference between "silent on
+        /// purpose" and "the name is wrong" is invisible. The nearest names the
+        /// game does have go in the message, because the answer is almost always
+        /// one of them spelled differently.
+        /// </summary>
+        private static void WarnOnce(PackContext ctx, string name)
+        {
+            if (!MissingSounds.Add(name)) return;
+            if (ctx == null || ctx.Log == null) return;
+
+            string message = "[SMSModForge.PackPlugin] no sound called '" + name
+                           + "' - neither one of pack '" + ctx.PackId
+                           + "'s own nor one the game has loaded. Buttons asking for it are silent.";
+
+            string near = string.Join(", ", Nearest(name));
+            if (near.Length > 0) message += " The game does have: " + near + ".";
+
+            ctx.Log.LogWarning(message);
+        }
+
+        private static readonly HashSet<string> MissingSounds =
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        /// <summary>Loaded sounds whose names share a word with the one asked
+        /// for. Short words are skipped - matching on "the" suggests
+        /// everything.</summary>
+        private static List<string> Nearest(string name)
+        {
+            var words = new List<string>();
+            foreach (var word in name.Split(new[] { ' ', '-', '_' }, StringSplitOptions.RemoveEmptyEntries))
+                if (word.Length >= 4) words.Add(word);
+
+            var hits = new List<string>();
+            foreach (var candidate in UiAssets.SoundNames)
+            {
+                foreach (var word in words)
+                    if (candidate.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        hits.Add(candidate);
+                        break;
+                    }
+                if (hits.Count >= 5) break;
+            }
+            return hits;
+        }
+
+        private static Transform Create(PackManifest pack, PackContext ctx, JObject node,
+                                        Transform parent, ManualLogSource log,
+                                        string buttonSound = null)
         {
             var go = new GameObject((string)node["name"] ?? "Object", typeof(RectTransform));
             go.transform.SetParent(parent, worldPositionStays: false);
 
             ApplyRect(go, node["rect"] as JObject);
             ApplyImage(pack, go, node["image"] as JObject);
-            ApplyText(go, node["text"] as JObject);
-            ApplyExtras(go, node);
+            ApplyText(pack, go, node["text"] as JObject);
+            ApplyExtras(pack, ctx, go, node, buttonSound);
 
+            var placed = new List<KeyValuePair<int, Transform>>();
             foreach (var token in node["children"] as JArray ?? new JArray())
-                if (token is JObject child) Create(pack, child, go.transform, log);
+            {
+                var child = token as JObject;
+                if (child == null) continue;
+                Remember(placed, child, Create(pack, ctx, child, go.transform, log, buttonSound));
+            }
+            Reorder(placed);
 
             go.SetActive(node["startActive"] == null || (bool)node["startActive"]);
+            return go.transform;
+        }
+
+        // ── Order ──────────────────────────────────────
+        //
+        // Sibling order is draw order on a canvas: there is no depth to sort
+        // by, so a later sibling is simply in front. A node carries an explicit
+        // place only when the editor found the author had rearranged one - and
+        // then every child of that parent carries one, so the whole arrangement
+        // is stated rather than half of it.
+
+        private static void Remember(List<KeyValuePair<int, Transform>> placed,
+                                     JObject node, Transform made)
+        {
+            if (made == null) return;
+            int at = ReadInt(node["siblingIndex"], -1);
+            if (at >= 0) placed.Add(new KeyValuePair<int, Transform>(at, made));
+        }
+
+        /// <summary>
+        /// Put each object at the place it asked for, lowest first.
+        /// <para/>
+        /// Ascending matters. Each call shuffles everything after it along, so
+        /// placing 0, then 1, then 2 leaves each one where it was asked for;
+        /// going the other way undoes the placements already made.
+        /// </summary>
+        private static void Reorder(List<KeyValuePair<int, Transform>> placed)
+        {
+            if (placed.Count == 0) return;
+            placed.Sort(delegate (KeyValuePair<int, Transform> a, KeyValuePair<int, Transform> b)
+            {
+                return a.Key.CompareTo(b.Key);
+            });
+            for (int i = 0; i < placed.Count; i++)
+                if (placed[i].Value != null) placed[i].Value.SetSiblingIndex(placed[i].Key);
+        }
+
+
+        private static void ApplyLayout(GameObject go, JObject layout)
+        {
+            // Whatever was there before goes: a node switched from a row to a
+            // grid would otherwise carry both and Unity would fight itself.
+            var had = go.GetComponent<LayoutGroup>();
+            if (had != null) UnityEngine.Object.DestroyImmediate(had);
+            if (layout == null) return;
+
+            string kind = (string)layout["kind"] ?? "Horizontal";
+            var padding = new RectOffset(
+                (int)ReadFloat(Element(layout["padding"], 0), 0),
+                (int)ReadFloat(Element(layout["padding"], 1), 0),
+                (int)ReadFloat(Element(layout["padding"], 2), 0),
+                (int)ReadFloat(Element(layout["padding"], 3), 0));
+
+            TextAnchor anchor = TextAnchor.MiddleCenter;
+            try { anchor = (TextAnchor)System.Enum.Parse(typeof(TextAnchor),
+                        (string)layout["alignment"] ?? "MiddleCenter"); }
+            catch { }
+
+            if (kind == "Grid")
+            {
+                // Ours only when it is asked for. UiCenteredGrid IS a
+                // GridLayoutGroup and behaves as one otherwise, but a component
+                // of the pack's own on every grid would be a difference nobody
+                // asked for on screens that never needed it.
+                bool centreLast = layout["centerLastLine"] != null
+                               && (bool)layout["centerLastLine"];
+
+                var grid = centreLast
+                    ? go.AddComponent<UiCenteredGrid>()
+                    : go.AddComponent<GridLayoutGroup>();
+                grid.padding = padding;
+                grid.childAlignment = anchor;
+                grid.cellSize = Vec2(layout["cellSize"], new Vector2(100, 100));
+                grid.spacing = Vec2(layout["spacing"], Vector2.zero);
+                grid.constraintCount = Mathf.Max(1, (int)ReadFloat(layout["constraintCount"], 2));
+                try { grid.constraint = (GridLayoutGroup.Constraint)System.Enum.Parse(
+                        typeof(GridLayoutGroup.Constraint), (string)layout["constraint"] ?? "Flexible"); }
+                catch { }
+                try { grid.startAxis = (GridLayoutGroup.Axis)System.Enum.Parse(
+                        typeof(GridLayoutGroup.Axis), (string)layout["startAxis"] ?? "Horizontal"); }
+                catch { }
+                try { grid.startCorner = (GridLayoutGroup.Corner)System.Enum.Parse(
+                        typeof(GridLayoutGroup.Corner), (string)layout["startCorner"] ?? "UpperLeft"); }
+                catch { }
+                return;
+            }
+
+            HorizontalOrVerticalLayoutGroup line = kind == "Vertical"
+                ? (HorizontalOrVerticalLayoutGroup)go.AddComponent<VerticalLayoutGroup>()
+                : go.AddComponent<HorizontalLayoutGroup>();
+
+            line.padding = padding;
+            line.childAlignment = anchor;
+            line.spacing = ReadFloat(Element(layout["spacing"], 0), 0);
+            line.childControlWidth = Flag(layout["controlWidth"]);
+            line.childControlHeight = Flag(layout["controlHeight"]);
+            line.childForceExpandWidth = Flag(layout["expandWidth"]);
+            line.childForceExpandHeight = Flag(layout["expandHeight"]);
+            line.reverseArrangement = Flag(layout["reverse"]);
+        }
+
+        private static JToken Element(JToken array, int i)
+        {
+            var a = array as JArray;
+            return a != null && a.Count > i ? a[i] : null;
         }
 
         private static void ApplyRect(GameObject go, JObject rect)
@@ -263,7 +499,7 @@ namespace SMSModForge.PackPlugin
             if (image["raycastTarget"] != null) img.raycastTarget = (bool)image["raycastTarget"];
         }
 
-        private static void ApplyText(GameObject go, JObject text)
+        private static void ApplyText(PackManifest pack, GameObject go, JObject text)
         {
             if (text == null) return;
 
@@ -276,7 +512,26 @@ namespace SMSModForge.PackPlugin
             }
 
             var tmp = existing ?? go.AddComponent<TextMeshProUGUI>();
-            tmp.text = value;
+
+            // A label naming a variable follows it, rather than being the value
+            // that variable happened to hold when the pack was written. Only
+            // where a token actually appears - see UiLiveText.
+            if (TextPlaceholders.HasAny(value))
+            {
+                var live = go.GetComponent<UiLiveText>() ?? go.AddComponent<UiLiveText>();
+                live.Raw = value;
+                live.PackId = pack != null ? pack.PackId : null;
+                tmp.text = TextPlaceholders.Resolve(
+                    value, Plugin.TryGetPackVars(live.PackId));
+            }
+            else
+            {
+                // Authored plain: drop any follower a previous build left, or a
+                // node edited from a token to plain text would keep updating.
+                var stale = go.GetComponent<UiLiveText>();
+                if (stale != null) UnityEngine.Object.Destroy(stale);
+                tmp.text = value;
+            }
 
             string fontName = (string)text["font"] ?? "";
             if (fontName.Length > 0)
@@ -304,13 +559,109 @@ namespace SMSModForge.PackPlugin
         /// that are the same whether the object is new or being changed.</summary>
         private static ManualLogSource Log;
 
-        private static void ApplyExtras(GameObject go, JObject node)
+        /// <summary>
+        /// Attach the arrival animation an object or a screen asked for, if it
+        /// asked for one at all. Absent is the ordinary case: most of the game's
+        /// own screens simply appear.
+        /// </summary>
+        private static void ApplyOpenAnimation(GameObject go, JObject open)
         {
+            if (go == null || open == null) return;
+
+            bool fade = open["fade"] != null && (bool)open["fade"];
+            Vector3? scaleFrom = Scale(open["scaleFrom"] as JArray);
+            if (!fade && !scaleFrom.HasValue) return;    // nothing to play
+
+            var play = go.GetComponent<UiOpenAnimation>() ?? go.AddComponent<UiOpenAnimation>();
+            play.Fade = fade;
+            play.ScaleFrom = scaleFrom;
+            play.Duration = open["duration"] != null ? (float)open["duration"] : 0.3f;
+            play.Easing = (string)open["easing"] ?? "QuadInOut";
+        }
+
+        /// <summary>
+        /// Attach the leaving animation, if there is one. The same four settings
+        /// as an arrival, read the other way round: the scale is where it ends
+        /// rather than where it starts.
+        /// </summary>
+        private static void ApplyCloseAnimation(GameObject go, JObject close)
+        {
+            if (go == null || close == null) return;
+
+            bool fade = close["fade"] != null && (bool)close["fade"];
+            Vector3? scaleTo = Scale(close["scaleFrom"] as JArray);
+            if (!fade && !scaleTo.HasValue) return;
+
+            var play = go.GetComponent<UiCloseAnimation>() ?? go.AddComponent<UiCloseAnimation>();
+            play.Fade = fade;
+            play.ScaleTo = scaleTo;
+            play.Duration = close["duration"] != null ? (float)close["duration"] : 0.3f;
+            play.Easing = (string)close["easing"] ?? "QuadInOut";
+        }
+
+        private static Vector3? Scale(JArray a)
+            => a != null && a.Count >= 3
+             ? new Vector3((float)a[0], (float)a[1], (float)a[2])
+             : (Vector3?)null;
+
+        private static void ApplyExtras(PackManifest pack, PackContext ctx, GameObject go, JObject node,
+                                        string buttonSound = null)
+        {
+            ApplyOpenAnimation(go, node["open"] as JObject);
+            ApplyCloseAnimation(go, node["close"] as JObject);
+
             if (node["alpha"] != null)
             {
                 var group = go.GetComponent<CanvasGroup>() ?? go.AddComponent<CanvasGroup>();
                 group.alpha = Mathf.Clamp01(ReadFloat(node["alpha"], 1f));
             }
+
+            // Shown or hidden by its own conditions from here on, re-checked
+            // every frame - the same registry a place's objects use, which is
+            // what makes "hide what has already been bought" a property of the
+            // item rather than a rule about it.
+            var gates = node["activeConditions"] as JArray;
+            if (gates != null && gates.Count > 0 && pack != null)
+                GameObjectGateRegistry.ForPack(pack.PackId).Register(go, gates, true, go.name);
+
+            // Clickable only where the pack says so. Attached before the
+            // graphic checks below because it caches the resting colour in
+            // Awake, and the tint has already been applied by now.
+            var clicks = node["onClick"] as JArray;
+            if (clicks != null && clicks.Count > 0)
+            {
+                var button = go.GetComponent<UiButtonClick>() ?? go.AddComponent<UiButtonClick>();
+                button.Actions = clicks;
+                button.Context = ctx;
+                button.Conditions = node["clickConditions"] as JArray;
+
+                // This object's own sound if it names one, otherwise whatever
+                // the screen says its buttons sound like.
+                string ownSound = (string)node["clickSound"];
+                button.ClickSound = !string.IsNullOrEmpty(ownSound) ? ownSound : buttonSound;
+
+                string hover = (string)node["hoverTint"];
+                if (!string.IsNullOrEmpty(hover))
+                    button.HoverTint = ParseColor(hover, Color.white);
+
+                // A click needs something for the raycast to hit. An object
+                // with only text on it has a graphic; one with neither would
+                // swallow nothing and never be pressed, so it gets a clear
+                // image purely to be hittable.
+                var graphic = go.GetComponent<Graphic>();
+                if (graphic == null)
+                {
+                    var pad = go.AddComponent<Image>();
+                    pad.color = new Color(1f, 1f, 1f, 0f);
+                    graphic = pad;
+                }
+                graphic.raycastTarget = true;
+            }
+
+            // Arranging children: handed to Unity's own component rather than
+            // positioned here, so the game does the real thing and the preview
+            // is the one doing the imitating.
+            ApplyLayout(go, node["layout"] as JObject);
 
             if (node["shadow"] is JObject shadow)
             {

@@ -1,0 +1,814 @@
+{
+ "id": "8_Room_Talk/Mansion/first lesson",
+ "name": "first lesson",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Gabriel",
+  "Haniya"
+ ],
+ "roots": [
+  71511627,
+  1741118987,
+  1942586729,
+  324660085,
+  2049178501,
+  1110173829,
+  929728447,
+  2002239528,
+  827437500,
+  -1843469377,
+  173333501,
+  -769833333,
+  -934965228,
+  -783367186,
+  -46661242,
+  2108715583,
+  -495916588,
+  -399257734,
+  -857002324
+ ],
+ "nodes": {
+  "71511627": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    106246622,
+    -1940365825
+   ],
+   "actor": "Gabriel",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "{PC}! Ready for your first lesson?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "106246622": {
+   "kind": "text",
+   "parent": 71511627,
+   "actor": null,
+   "text": "Absolutely! What are we starting with?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1940365825": {
+   "kind": "text",
+   "parent": 71511627,
+   "actor": null,
+   "text": "I guess...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1741118987": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Today, we’re going to focus on portrait photography. And, as a special treat, Haniya has agreed to be our model.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Haniya_dress to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Haniya_dress",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Haniya_dress"
+      }
+     }
+    }
+   ]
+  },
+  "1942586729": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    970881719,
+    1187707306,
+    -130524267
+   ],
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "It’s my pleasure. I thought it would be fun to help out. Plus, it gives me a chance to wear this dress.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "970881719": {
+   "kind": "text",
+   "parent": 1942586729,
+   "children": [
+    1095886056
+   ],
+   "actor": null,
+   "text": "You look incredible, Haniya.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1187707306": {
+   "kind": "text",
+   "parent": 1942586729,
+   "children": [
+    -93968567
+   ],
+   "actor": null,
+   "text": "Wouldn't a professional model be the better choice?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-93968567": {
+   "kind": "text",
+   "parent": 1187707306,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Oh, don't worry your little head. I have more than enough experience in this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1095886056": {
+   "kind": "text",
+   "parent": 970881719,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Thanks...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "324660085": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Great. First, let’s talk about lighting. For portraits, it’s essential to get the lighting just right. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2049178501": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "We’ll use a softbox to create a soft, even light on Haniya’s face",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1110173829": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active gabrielshoot1 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "gabrielshoot1",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/gabrielshoot1"
+      }
+     }
+    }
+   ]
+  },
+  "929728447": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Next, we need to consider composition. A good portrait draws the viewer’s attention to the subject’s eyes. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2002239528": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Try positioning Haniya slightly off-center to create a more dynamic shot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "827437500": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active gabrielshoot2 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "gabrielshoot2",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/gabrielshoot2"
+      }
+     }
+    }
+   ]
+  },
+  "-1843469377": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "That’s looking good. Now, remember to adjust your camera settings. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "173333501": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Use a wide aperture to create a shallow depth of field, which will keep Haniya in sharp focus while blurring the background.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-769833333": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Always communicate with your model. Haniya, try turning around so {PC} can get a good shot of your ass.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-934965228": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active gabrielshoot3 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "gabrielshoot3",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/gabrielshoot3"
+      }
+     }
+    }
+   ]
+  },
+  "-783367186": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "How do I look?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-46661242": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Perfect.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2108715583": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "You’re doing great, {PC}. With a bit more practice, you’ll have a solid grasp of portrait photography.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Creative to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Creative",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Creative"
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-495916588": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2108010261,
+    246089691,
+    -2090751454
+   ],
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "And having a little fun along the way doesn’t hurt either.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2108010261": {
+   "kind": "text",
+   "parent": -495916588,
+   "actor": null,
+   "text": "Thanks for the lesson, Gabriel.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "246089691": {
+   "kind": "text",
+   "parent": -495916588,
+   "children": [
+    -1134158568
+   ],
+   "actor": null,
+   "text": "Thank you, Haniya, for being such a fantastic model.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1134158568": {
+   "kind": "text",
+   "parent": 246089691,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "It was my pleasure...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-399257734": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "I’m looking forward to our next session. Keep practicing, and you’ll keep improving.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-857002324": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "And if you ever need a model again, just let me know. I enjoyed this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-130524267": {
+   "kind": "text",
+   "parent": 1942586729,
+   "children": [
+    1533242825
+   ],
+   "actor": null,
+   "text": "(Lewd) Then I’d say that dress deserves all the attention it’s getting.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Lewd] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Lewd",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1533242825": {
+   "kind": "text",
+   "parent": -130524267,
+   "actor": "Haniya",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh my… bold already, are we? Careful, Gabriel might start taking notes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2090751454": {
+   "kind": "text",
+   "parent": -495916588,
+   "children": [
+    783536703
+   ],
+   "actor": null,
+   "text": "(Charming) Then I’ll make sure you’re having plenty of it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Charming] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Charming",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "783536703": {
+   "kind": "text",
+   "parent": -2090751454,
+   "actor": "Haniya",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Mmm, confidence and charm… I can see why Gabriel likes you already.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Mansion",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play first lesson and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[gabriel-met] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabriel-met",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[gabriel-first-photo-shoot] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabriel-first-photo-shoot",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[gabriel-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabriel-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Gabriel_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Gabriel_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Gabriel_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Haniya to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Haniya",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Haniya"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[gabriel-first-photo-shoot] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabriel-first-photo-shoot",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[gabriel-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabriel-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

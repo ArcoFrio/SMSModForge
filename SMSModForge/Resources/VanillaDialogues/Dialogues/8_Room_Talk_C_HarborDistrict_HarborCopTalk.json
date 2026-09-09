@@ -1,0 +1,444 @@
+{
+ "id": "8_Room_Talk/C_HarborDistrict/HarborCopTalk",
+ "name": "HarborCopTalk",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "V_Cop"
+ ],
+ "roots": [
+  -2055603707,
+  110436794,
+  -1901436921
+ ],
+ "nodes": {
+  "-1901436921": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -635833584,
+    -1384113496,
+    1679326838,
+    2077480747
+   ],
+   "actor": "V_Cop",
+   "expression": 1,
+   "text": "Crime scene. No sightseeing, no fishing, no funny business.",
+   "tag": "rarara",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[harbor-cops-met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "harbor-cops-met",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2055603707": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Cop",
+   "expressionName": "my-expression",
+   "text": "Hold it right there, buddy. Harbor’s off-limits.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-635833584": {
+   "kind": "text",
+   "parent": -1901436921,
+   "children": [
+    -373234,
+    -357532396
+   ],
+   "actor": null,
+   "text": "Whoa, relax. What happened here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1384113496": {
+   "kind": "text",
+   "parent": -1901436921,
+   "children": [
+    -1787905619,
+    1196519274
+   ],
+   "actor": null,
+   "text": "You seriously think you can stop me, old man?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1679326838": {
+   "kind": "text",
+   "parent": -1901436921,
+   "children": [
+    558639562,
+    -614295561
+   ],
+   "actor": null,
+   "text": "Lemme guess, someone drowned in the shallow end?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2077480747": {
+   "kind": "text",
+   "parent": -1901436921,
+   "children": [
+    1404892775,
+    -359054007
+   ],
+   "actor": null,
+   "text": "Crime scene, huh? Someone get fucked to death or what?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1404892775": {
+   "kind": "text",
+   "parent": 2077480747,
+   "actor": "V_Cop",
+   "expressionName": "my-expression",
+   "text": "Jesus, you’re a real piece of work. Yeah, sex was involved. Always is when it goes this wrong. Girl was streaming.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "558639562": {
+   "kind": "text",
+   "parent": 1679326838,
+   "actor": "V_Cop",
+   "expressionName": "my-expression",
+   "text": "Ha! Good one. Nah, no drowning. Girl named Umbra. Online model. Showed a little too much of herself to the wrong eyes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1787905619": {
+   "kind": "text",
+   "parent": -1384113496,
+   "actor": "V_Cop",
+   "expressionName": "my-expression",
+   "text": "Oh, I like you. Got that rookie arrogance... smells like burnt ambition. But here’s the deal: I’ve scraped prettier people off these docks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-373234": {
+   "kind": "text",
+   "parent": -635833584,
+   "actor": "V_Cop",
+   "expressionName": "my-expression",
+   "text": "Hah… someone with manners. Rare species these days. We’re looking for a girl... goes by Umbra. Some Starmaker hotshot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-357532396": {
+   "kind": "text",
+   "parent": -635833584,
+   "actor": "V_Cop",
+   "expressionName": "my-expression",
+   "text": "Big eyes, bigger following, vanishes after a livestream by the pier. Camera kept rolling though. We watched the footage. Still trying to forget it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1196519274": {
+   "kind": "text",
+   "parent": -1384113496,
+   "actor": "V_Cop",
+   "expressionName": "my-expression",
+   "text": "So unless you want me tagging your body bag ‘dumb bastard #47,’ you’ll chill the fuck out and stay behind the tape.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-614295561": {
+   "kind": "text",
+   "parent": 1679326838,
+   "actor": "V_Cop",
+   "expressionName": "my-expression",
+   "text": "Next thing you know, she’s gone. We found her phone, her bra, and a camera that won’t stop recording static. Make of that what you will.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-359054007": {
+   "kind": "text",
+   "parent": 2077480747,
+   "actor": "V_Cop",
+   "expressionName": "my-expression",
+   "text": "Private subscribers. Something went off-script, and she disappeared mid-breath. Camera caught… something. Human-shaped. Maybe. You don’t want to see it, trust me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "110436794": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Cop",
+   "expressionName": "my-expression",
+   "text": "Back again? What’s the plan, champ... gonna solve the case with your dick, or can I get back to my coffee?",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[harbor-cops-met] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "harbor-cops-met",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/C_HarborDistrict",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play HarborCopTalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[harbor-cops-gone] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "harbor-cops-gone",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "branches": [
+    "HarborCops"
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[temp-stored-very-short-term] = None",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "none"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_HarborCopBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_HarborCopBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_HarborCopBust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "checkConditions",
+     "type": "InstructionLogicCheckConditions",
+     "title": "Check If Core[After-Talk-Transition] = False",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "compareBool",
+         "type": "ConditionMathCompareBooleans",
+         "title": "If Core[After-Talk-Transition] = False",
+         "fields": {
+          "m_Value": {
+           "kind": "variable",
+           "variable": {
+            "scope": "global",
+            "name": "After-Talk-Transition",
+            "list": "Core",
+            "type": "boolean"
+           }
+          },
+          "m_Comparison": "Equals",
+          "m_CompareTo": {
+           "kind": "value",
+           "value": false
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,358 @@
+{
+ "id": "8_Room_Talk/Office/Nothere",
+ "name": "Nothere",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "You"
+ ],
+ "roots": [
+  203782935
+ ],
+ "nodes": {
+  "203782935": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1099210634,
+    1664977399,
+    2038597389,
+    -1312121366
+   ],
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Huh, looks like {D} is not here.",
+   "tag": "rooto",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1099210634": {
+   "kind": "text",
+   "parent": 203782935,
+   "children": [
+    -1345944115
+   ],
+   "actor": null,
+   "text": "[Check his PC]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1664977399": {
+   "kind": "text",
+   "parent": 203782935,
+   "children": [
+    -1099567011
+   ],
+   "actor": null,
+   "text": "[Check the drawers]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2038597389": {
+   "kind": "text",
+   "parent": 203782935,
+   "children": [
+    908482578
+   ],
+   "actor": null,
+   "text": "[Check the safe]",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Inventory[gun] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gun",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1312121366": {
+   "kind": "text",
+   "parent": 203782935,
+   "children": [
+    -492589670
+   ],
+   "actor": null,
+   "text": "[Leave]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-492589670": {
+   "kind": "text",
+   "parent": -1312121366,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.02,
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "908482578": {
+   "kind": "text",
+   "parent": 2038597389,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "I need a code to open the safe...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Safe to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Safe",
+       "of": "GetGameObjectInstance",
+       "path": "16_Minigames/Safe"
+      }
+     }
+    }
+   ]
+  },
+  "-1099567011": {
+   "kind": "text",
+   "parent": 1664977399,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Lots of job applications and magazines.",
+   "jump": {
+    "mode": "Jump",
+    "to": "rooto"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1345944115": {
+   "kind": "text",
+   "parent": 1099210634,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "jump": {
+    "mode": "Exit",
+    "to": "rooto"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionLogicCallMethod",
+     "title": "Invoke Methods",
+     "fields": {
+      "m_Method": {}
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.5 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.5
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active DPC_New to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "DPC_New",
+       "of": "GetGameObjectInstance",
+       "path": "15_EventUI/DPC_New"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 9_MainCanvas to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "9_MainCanvas",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Office",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Nothere and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Holidays[holiday-josefbd] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "holiday-josefbd",
+        "list": "Holidays",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Room_Talk/Office",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Nothere and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

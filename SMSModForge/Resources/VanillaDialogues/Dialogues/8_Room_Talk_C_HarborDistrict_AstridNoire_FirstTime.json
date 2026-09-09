@@ -1,0 +1,766 @@
+{
+ "id": "8_Room_Talk/C_HarborDistrict/AstridNoire_FirstTime",
+ "name": "AstridNoire_FirstTime",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Astrid",
+  "Noire"
+ ],
+ "roots": [
+  -550759156,
+  -991923861,
+  349357577,
+  -601795489,
+  -691682797,
+  -1241407416,
+  -1241275042,
+  813218754,
+  1560405712,
+  -1879779614,
+  -1531258904,
+  2131663347,
+  -2005412962,
+  1536207452
+ ],
+ "nodes": {
+  "-550759156": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Well well. Still playing human, Astrid? Or just too scared to be a real vampire?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-991923861": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Funny coming from a rotting blow-up doll who thinks eyeliner and murder make her a queen.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "349357577": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Sweetheart, I’ve ruled cities while you were finger-blasting junkies for dinner.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-601795489": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "And yet here you are~ alone, bitter, dressed like Hot Topic exploded.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-691682797": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Keep barking, mutt. We both know you’d be ash if I blinked wrong.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1241407416": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Then blink, bitch. Or are you just here to stroke that shriveled ego?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1241275042": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Careful. I fuck worse enemies than you just to hear them beg.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "813218754": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -930497450,
+    1083735733,
+    1963761824
+   ],
+   "actor": "Astrid",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Sounds like your pussy’s as dead as the rest of you.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-930497450": {
+   "kind": "text",
+   "parent": 813218754,
+   "children": [
+    -831552612,
+    -1980306966
+   ],
+   "actor": null,
+   "text": "Should I give you two a room or a coffin?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-831552612": {
+   "kind": "text",
+   "parent": -930497450,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "I'd rather stake myself.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1083735733": {
+   "kind": "text",
+   "parent": 813218754,
+   "children": [
+    -1654869973,
+    -950720061
+   ],
+   "actor": null,
+   "text": "Goddamn, if hate was foreplay, I’d need a cigarette.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1654869973": {
+   "kind": "text",
+   "parent": 1083735733,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Mmm. Finally, someone with taste.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1963761824": {
+   "kind": "text",
+   "parent": 813218754,
+   "actor": null,
+   "text": "(Smart) (Say nothing)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1560405712": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "This was fun. We should do it again—next time, I bring a shovel.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1879779614": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "For your dignity? Bit late.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1531258904": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Careful, kitten. I might let you live long enough to regret that mouth.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2131663347": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Keep walking, Noire. Don’t trip over your fucking ego.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_LadyNoireBust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-2005412962": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1626087007,
+    155561176,
+    -1636313916,
+    -1696576047
+   ],
+   "actor": "Astrid",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "God, I hate that bitch.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1626087007": {
+   "kind": "text",
+   "parent": -2005412962,
+   "children": [
+    -1889458328
+   ],
+   "actor": null,
+   "text": "Seemed like old friends catching up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1889458328": {
+   "kind": "text",
+   "parent": 1626087007,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Yeah. If catching up means fantasizing about ripping her tits off.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "155561176": {
+   "kind": "text",
+   "parent": -2005412962,
+   "children": [
+    -1395018440,
+    -657009152
+   ],
+   "actor": null,
+   "text": "(Lewd) Be honest... you ever hooked up with her?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Lewd] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Lewd",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1395018440": {
+   "kind": "text",
+   "parent": 155561176,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Once. Drunk. Regret it every fucking century.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1636313916": {
+   "kind": "text",
+   "parent": -2005412962,
+   "children": [
+    -823410203,
+    592430822
+   ],
+   "actor": null,
+   "text": "I don’t blame her. That mouth of yours is dangerous.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-823410203": {
+   "kind": "text",
+   "parent": -1636313916,
+   "actor": "Astrid",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "You have no idea.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1696576047": {
+   "kind": "text",
+   "parent": -2005412962,
+   "children": [
+    -911367774
+   ],
+   "actor": null,
+   "text": "(Smart) What’s her deal, really?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Smart] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Smart",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-911367774": {
+   "kind": "text",
+   "parent": -1696576047,
+   "actor": "Astrid",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "She’s old, powerful, and thinks the world owes her orgasms and obedience.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1980306966": {
+   "kind": "text",
+   "parent": -930497450,
+   "actor": "Noire",
+   "expressionName": "my-expression",
+   "text": "Only if I get to watch.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-950720061": {
+   "kind": "text",
+   "parent": 1083735733,
+   "actor": "Astrid",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "{PC}. Please be quiet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "592430822": {
+   "kind": "text",
+   "parent": -1636313916,
+   "actor": "Astrid",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "And I’m a lot more fun than her. Less blood, more bite.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-657009152": {
+   "kind": "text",
+   "parent": 155561176,
+   "actor": "Astrid",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "And I still think about staking myself when I remember.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1536207452": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Next time you see her, don’t flirt. Don’t stare. Just run.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Astrid_CasualRed_Bust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/C_HarborDistrict",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AstridNoire_FirstTime and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[harbor-cops-gone] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "harbor-cops-gone",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[ladynoire-firsttime] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ladynoire-firsttime",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DaysPassed] ≥ 14",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DaysPassed",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 14
+       }
+      }
+     }
+    }
+   ],
+   "branches": [
+    "astridnoire"
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[temp-stored-very-short-term] = None",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "none"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Astrid_CasualRed_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Astrid_CasualRed_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Astrid_CasualRed_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_LadyNoireBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_LadyNoireBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_LadyNoireBust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "checkConditions",
+     "type": "InstructionLogicCheckConditions",
+     "title": "Check If Core[After-Talk-Transition] = False",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "compareBool",
+         "type": "ConditionMathCompareBooleans",
+         "title": "If Core[After-Talk-Transition] = False",
+         "fields": {
+          "m_Value": {
+           "kind": "variable",
+           "variable": {
+            "scope": "global",
+            "name": "After-Talk-Transition",
+            "list": "Core",
+            "type": "boolean"
+           }
+          },
+          "m_Comparison": "Equals",
+          "m_CompareTo": {
+           "kind": "value",
+           "value": false
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[ladynoire-firsttime] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ladynoire-firsttime",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

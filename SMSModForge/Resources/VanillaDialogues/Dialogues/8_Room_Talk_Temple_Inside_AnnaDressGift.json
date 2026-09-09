@@ -1,0 +1,1179 @@
+{
+ "id": "8_Room_Talk/Temple_Inside/AnnaDressGift",
+ "name": "AnnaDressGift",
+ "index": 7,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Master Zhen"
+ ],
+ "roots": [
+  1067305808,
+  1834771246,
+  799891268,
+  -184137470,
+  -453485849,
+  -1242632061,
+  1170679863
+ ],
+ "nodes": {
+  "1067305808": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "It… suits you. I didn’t realize it might be a little tight, but it still looks good on you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1834771246": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It’s a little snug, but it’s beautiful. I was surprised when you gave it to me, honestly… but I love it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "799891268": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Master Zhen",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "It was my wife’s favorite. I thought… maybe it would look just as beautiful on someone who brings as much warmth to this place as she did.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-184137470": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    131632291
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I’m honored you thought of me. It must have been hard to part with something so meaningful. I’ll take good care of it, I promise.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Romanced] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Romanced",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-453485849": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    2036224275
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "My tits are on full display in this dress. Your wife must have been blessed in the upper department.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "131632291": {
+   "kind": "text",
+   "parent": -184137470,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Seeing it worn again… it brings back memories. But they’re not as painful as they used to be.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2036224275": {
+   "kind": "text",
+   "parent": -453485849,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Eh, yes.... Seeing it worn again… it brings back memories. But they’re not as painful as they used to be.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1242632061": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1990935164,
+    1944234596,
+    -470571634
+   ],
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "You have brought joy back into my life. I missed that, and I appreciate it.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1990935164": {
+   "kind": "text",
+   "parent": -1242632061,
+   "children": [
+    851125087
+   ],
+   "actor": null,
+   "text": "Wow, {M}. You look fantastic.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1944234596": {
+   "kind": "text",
+   "parent": -1242632061,
+   "children": [
+    -901028309
+   ],
+   "actor": null,
+   "text": "Fuck, {M}. That dress is so hot on you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-470571634": {
+   "kind": "text",
+   "parent": -1242632061,
+   "actor": null,
+   "text": "Hey {M}, Hey Master. What's going on here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-901028309": {
+   "kind": "text",
+   "parent": 1944234596,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "T-That is not something you should say to your {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "851125087": {
+   "kind": "text",
+   "parent": -1990935164,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I know, right? It's a truly beautiful piece of craft...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1170679863": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -419151202,
+    -165872718,
+    -186624571
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Zhen gave me this gorgeous dress that used to be his wife's. He insisted I should accept it...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = Chinese Dress",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Chinese Dress"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-419151202": {
+   "kind": "text",
+   "parent": 1170679863,
+   "children": [
+    -1752663499,
+    508844530
+   ],
+   "actor": null,
+   "text": "A meaningful gift for sure...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-165872718": {
+   "kind": "text",
+   "parent": 1170679863,
+   "children": [
+    611021981,
+    -902700880
+   ],
+   "actor": null,
+   "text": "Thanks Master. We will put it to good use.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-186624571": {
+   "kind": "text",
+   "parent": 1170679863,
+   "children": [
+    -1042921101,
+    -1070154705,
+    -560035454,
+    -603856590,
+    509319009,
+    2060822163,
+    1792120814,
+    -1984361508,
+    499925056,
+    940282116,
+    949993248,
+    -1703042525,
+    493164888,
+    334959318,
+    -659615133,
+    -1798709497,
+    -773989689,
+    -1283256867,
+    -823147750,
+    1974743017,
+    -1896366580,
+    1676913430,
+    -1095155102,
+    -1655974191,
+    634353859,
+    1248458836
+   ],
+   "actor": null,
+   "text": "Perhaps you should thank him for that? (Start sharing route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "611021981": {
+   "kind": "text",
+   "parent": -165872718,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yes...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1752663499": {
+   "kind": "text",
+   "parent": -419151202,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I shouldn't take it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "508844530": {
+   "kind": "text",
+   "parent": -419151202,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "But you will. It is a gift.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-902700880": {
+   "kind": "text",
+   "parent": -165872718,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Good. Now, my old bones need some rest. Stay safe, you two.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1042921101": {
+   "kind": "text",
+   "parent": -186624571,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "What a wonderful idea! It must be so long since you've felt the touch of a woman... Master Zhen.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1070154705": {
+   "kind": "text",
+   "parent": -186624571,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Anna… this isn’t—",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-560035454": {
+   "kind": "text",
+   "parent": -186624571,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Shhh… you don’t have to say anything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-603856590": {
+   "kind": "text",
+   "parent": -186624571,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Anna… I’m not someone you should get close to.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "509319009": {
+   "kind": "text",
+   "parent": -186624571,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Maybe I don’t care.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2060822163": {
+   "kind": "text",
+   "parent": -186624571,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "W-What are you doing!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaZhenThreesome (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaZhenThreesome (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaZhenThreesome (0)"
+      }
+     }
+    }
+   ]
+  },
+  "1792120814": {
+   "kind": "text",
+   "parent": -186624571,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmm.... Such a big healthy cock... I can tell why you call yourself a swordmaster...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1984361508": {
+   "kind": "text",
+   "parent": -186624571,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "I-It's not that... Anna, this is not...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "499925056": {
+   "kind": "text",
+   "parent": -186624571,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Y-Your own {S}!? That's... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaZhenThreesome (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaZhenThreesome (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaZhenThreesome (1)"
+      }
+     }
+    }
+   ]
+  },
+  "940282116": {
+   "kind": "choice",
+   "parent": -186624571,
+   "children": [
+    -2025545160,
+    1215553698,
+    1036284538
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "... Such a huge cock! I just have to suck it... Mwaaaaah!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "949993248": {
+   "kind": "text",
+   "parent": -186624571,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "G-Gods... We are defiling my temple...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1703042525": {
+   "kind": "text",
+   "parent": -186624571,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "I... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "493164888": {
+   "kind": "text",
+   "parent": -186624571,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "I want to take you, Anna.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "334959318": {
+   "kind": "text",
+   "parent": -186624571,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Do it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-659615133": {
+   "kind": "text",
+   "parent": -186624571,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "S-Skies... Such wetness... Such... Hngg... It reminds me of...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaZhenThreesome (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaZhenThreesome (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaZhenThreesome (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1798709497": {
+   "kind": "text",
+   "parent": -186624571,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Give it to me... Take me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-773989689": {
+   "kind": "text",
+   "parent": -186624571,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{S}... I want you too... I need you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1283256867": {
+   "kind": "text",
+   "parent": -186624571,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Give it to me, both of you! Harder! Deeper! Ahhh fuck, I'm cumming!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaZhenThreesome (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaZhenThreesome (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaZhenThreesome (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaZhenThreesome (0) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaZhenThreesome (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaZhenThreesome (0)"
+      }
+     }
+    }
+   ]
+  },
+  "-823147750": {
+   "kind": "text",
+   "parent": -186624571,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "By the gods... your {M}  is divine... I've never...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1974743017": {
+   "kind": "choice",
+   "parent": -186624571,
+   "children": [
+    -742617208,
+    1614802739,
+    531763976
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmm... that's right, baby. Fuck my tight pussy. Hngaaaah!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1896366580": {
+   "kind": "text",
+   "parent": -186624571,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "I cannot hold back any longer... I will paint your insides white!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1676913430": {
+   "kind": "text",
+   "parent": -186624571,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes, give me every last drop! Breed me like the slut I am!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaZhenThreesome (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaZhenThreesome (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaZhenThreesome (5)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaZhenThreesome (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaZhenThreesome (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaZhenThreesome (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1095155102": {
+   "kind": "text",
+   "parent": -186624571,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Hngaaaa! .... Hah... He....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1655974191": {
+   "kind": "text",
+   "parent": -186624571,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "We.. We have... My temple...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaZhenThreesome (3) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaZhenThreesome (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaZhenThreesome (3)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaZhenThreesome (8) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaZhenThreesome (8)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaZhenThreesome (8)"
+      }
+     }
+    }
+   ]
+  },
+  "634353859": {
+   "kind": "text",
+   "parent": -186624571,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Isn't it great! So much cum... Such big cocks... Mwuuaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1248458836": {
+   "kind": "text",
+   "parent": -186624571,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Y-Yes....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[zhen-s-active] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zhen-s-active",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2025545160": {
+   "kind": "text",
+   "parent": 940282116,
+   "actor": null,
+   "text": "Take me, {M}. I want to feel your lips around me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1215553698": {
+   "kind": "text",
+   "parent": 940282116,
+   "actor": null,
+   "text": "Open your mouth, my perfect slut.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1036284538": {
+   "kind": "text",
+   "parent": 940282116,
+   "actor": null,
+   "text": "(Start face fucking her)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-742617208": {
+   "kind": "text",
+   "parent": 1974743017,
+   "actor": null,
+   "text": "C-Cum on our cocks, {M}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1614802739": {
+   "kind": "text",
+   "parent": 1974743017,
+   "actor": null,
+   "text": "I'm gonna fill up that ass!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "531763976": {
+   "kind": "text",
+   "parent": 1974743017,
+   "actor": null,
+   "text": "My {M} is so wet for us, Master. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Temple_Inside",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AnnaDressGift and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[chinesedressinc] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "chinesedressinc",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Inventory[chinesedress] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "chinesedress",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Master_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Master_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Master_Default"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_China to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_China",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_China"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Inventory[chinesedress] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "chinesedress",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

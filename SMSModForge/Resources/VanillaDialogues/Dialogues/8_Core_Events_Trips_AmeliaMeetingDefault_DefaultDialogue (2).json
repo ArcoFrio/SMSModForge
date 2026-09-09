@@ -1,0 +1,2797 @@
+{
+ "id": "8_Core_Events/Trips/AmeliaMeetingDefault/DefaultDialogue (2)",
+ "name": "DefaultDialogue (2)",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Amelia",
+  "Continue"
+ ],
+ "roots": [
+  -953110494,
+  -22336249,
+  480063561,
+  1361525560,
+  997024494,
+  1530849507,
+  -1425085354,
+  -547505614,
+  -2028409001
+ ],
+ "nodes": {
+  "480063561": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -412323100,
+    172674168,
+    -2065424172
+   ],
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Well, that was fun!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-412323100": {
+   "kind": "text",
+   "parent": 480063561,
+   "children": [
+    799750244
+   ],
+   "actor": null,
+   "text": "Yeah, I like spending time with you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "172674168": {
+   "kind": "text",
+   "parent": 480063561,
+   "children": [
+    330375510
+   ],
+   "actor": null,
+   "text": "You're pretty fast.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2065424172": {
+   "kind": "text",
+   "parent": 480063561,
+   "children": [
+    -238812453
+   ],
+   "actor": null,
+   "text": "My legs hurt...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-238812453": {
+   "kind": "text",
+   "parent": -2065424172,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Aw, poor {PC}. It will get better.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "330375510": {
+   "kind": "text",
+   "parent": 172674168,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "I know, right? I've been doing this for like ten years!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "799750244": {
+   "kind": "text",
+   "parent": -412323100,
+   "actor": "Amelia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Likewise!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1361525560": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2104953424,
+    -1730277878,
+    -1928151875
+   ],
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "I'm kinda curious, what type of girl do you like? It's cool, you can be honest.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events[amelia-jogging] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-jogging",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-2104953424": {
+   "kind": "text",
+   "parent": 1361525560,
+   "children": [
+    -1137779821
+   ],
+   "actor": null,
+   "text": "Blonde, always smiling, and someone who loves running.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1730277878": {
+   "kind": "text",
+   "parent": 1361525560,
+   "children": [
+    -770896765,
+    -500302317
+   ],
+   "actor": null,
+   "text": "Big tits, big ass. The whole package.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1928151875": {
+   "kind": "text",
+   "parent": 1361525560,
+   "children": [
+    1889666996
+   ],
+   "actor": null,
+   "text": "Honestly, personality is the most important thing to me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1137779821": {
+   "kind": "text",
+   "parent": -2104953424,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "You know, normally I'd cringe at that, but coming from you, it's actually pretty sweet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-770896765": {
+   "kind": "text",
+   "parent": -1730277878,
+   "actor": "Amelia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "The whole package, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1889666996": {
+   "kind": "text",
+   "parent": -1928151875,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "You know, normally I'd cringe at that, but coming from you, it's actually pretty sweet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-500302317": {
+   "kind": "text",
+   "parent": -1730277878,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Well, Peak City is full of women like that. You should be able to find one easily.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-547505614": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "I gotta bounce. My cat, Mr. Bubbles, gets super cranky if he doesn't get his food on time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2028409001": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Catch you later!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "type": "InstructionGameObjectInstantiate",
+     "title": "Instantiate Save_game",
+     "fields": {
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Save_game",
+       "of": "GetGameObjectInstance"
+      },
+      "m_Position": {
+       "kind": "object",
+       "name": null,
+       "of": "GetPositionCharactersPlayer"
+      },
+      "m_Rotation": {
+       "kind": "object",
+       "name": null,
+       "of": "GetRotationCharactersPlayer"
+      },
+      "m_Parent": {
+       "kind": "none"
+      },
+      "m_Save": {
+       "kind": "none"
+      }
+     }
+    }
+   ]
+  },
+  "997024494": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -931464678,
+    1479485045
+   ],
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Whew, I'm really sweating today. Would you mind if I quickly change into a different top?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events[amelia-jogging] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-jogging",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-931464678": {
+   "kind": "text",
+   "parent": 997024494,
+   "children": [
+    -244271069,
+    -107358909,
+    2005987586,
+    2052466248,
+    -1070611834
+   ],
+   "actor": null,
+   "text": "Feel free.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1479485045": {
+   "kind": "text",
+   "parent": 997024494,
+   "children": [
+    125670881
+   ],
+   "actor": null,
+   "text": "You should do that at your place. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "125670881": {
+   "kind": "text",
+   "parent": 1479485045,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Hmm, yeah. I also need a shower.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-244271069": {
+   "kind": "text",
+   "parent": -931464678,
+   "actor": "Amelia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I'll be quick!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-107358909": {
+   "kind": "text",
+   "parent": -931464678,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ameliastrip to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ameliastrip",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/ameliastrip"
+      }
+     }
+    }
+   ]
+  },
+  "2005987586": {
+   "kind": "text",
+   "parent": -931464678,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ameliastrip (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ameliastrip (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/ameliastrip (2)"
+      }
+     }
+    }
+   ]
+  },
+  "2052466248": {
+   "kind": "choice",
+   "parent": -931464678,
+   "children": [
+    785555486,
+    483691315
+   ],
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Wait, are you checking me out?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "785555486": {
+   "kind": "text",
+   "parent": 2052466248,
+   "children": [
+    2078590033
+   ],
+   "actor": null,
+   "text": "Yeah, it's hard not to.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "483691315": {
+   "kind": "text",
+   "parent": 2052466248,
+   "children": [
+    -679642339
+   ],
+   "actor": null,
+   "text": "Oh, um, I'm sorry.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-679642339": {
+   "kind": "text",
+   "parent": 483691315,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Haha, all cool. You're cute.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2078590033": {
+   "kind": "text",
+   "parent": 785555486,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Even though I look like a mess right now? Whew.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1070611834": {
+   "kind": "text",
+   "parent": -931464678,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Alrighty and done.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1530849507": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -563652455,
+    -1510846684
+   ],
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "So, why are you hanging out with me so much? I’ve already told you a promotion isn’t gonna happen.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events[amelia-jogging] ≥ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-jogging",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[amelia-blowjob] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-blowjob",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-563652455": {
+   "kind": "text",
+   "parent": 1530849507,
+   "children": [
+    -222447881,
+    -1001303848,
+    -1092879961,
+    -227815355,
+    -1506645169,
+    1539594376,
+    1635505566,
+    -61259060,
+    -295887712,
+    -1878531435
+   ],
+   "actor": null,
+   "text": "(Kiss her)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1510846684": {
+   "kind": "text",
+   "parent": 1530849507,
+   "actor": null,
+   "text": "Not sure to be honest.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-222447881": {
+   "kind": "text",
+   "parent": -563652455,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Oh... Uh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'kiss'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "kiss"
+      }
+     }
+    }
+   ]
+  },
+  "-1001303848": {
+   "kind": "choice",
+   "parent": -563652455,
+   "children": [
+    761947100,
+    -1709144431
+   ],
+   "actor": "Amelia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Sit down.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "761947100": {
+   "kind": "text",
+   "parent": -1001303848,
+   "actor": null,
+   "text": "I'm sorry. That was wrong.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1709144431": {
+   "kind": "text",
+   "parent": -1001303848,
+   "actor": null,
+   "text": "Why?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1092879961": {
+   "kind": "text",
+   "parent": -563652455,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Just. Sit. Down.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-227815355": {
+   "kind": "text",
+   "parent": -563652455,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ameliablow to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ameliablow",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/ameliablow"
+      }
+     }
+    }
+   ]
+  },
+  "1635505566": {
+   "kind": "text",
+   "parent": -563652455,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ameliablow (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ameliablow (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/ameliablow (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-61259060": {
+   "kind": "text",
+   "parent": -563652455,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ameliablow (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ameliablow (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/ameliablow (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1506645169": {
+   "kind": "text",
+   "parent": -563652455,
+   "actor": "Amelia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Damn, you've got a really big cock. I totally didn't expect that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-295887712": {
+   "kind": "choice",
+   "parent": -563652455,
+   "children": [
+    274793327,
+    682512610
+   ],
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Holy fuck, that was amazing!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1539594376": {
+   "kind": "text",
+   "parent": -563652455,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Now I’m kinda worried I acted too quickly. Oh well, let’s see how it goes!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[amelia-blowjob] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-blowjob",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1878531435": {
+   "kind": "text",
+   "parent": -563652455,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Gotta say, the taste isn’t too bad. It’s a bit salty, but hey, there’s salt in every cake, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Charm to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Charm",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Charm"
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "274793327": {
+   "kind": "text",
+   "parent": -295887712,
+   "actor": null,
+   "text": "You tell me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "682512610": {
+   "kind": "text",
+   "parent": -295887712,
+   "children": [
+    893186722,
+    -1263492066
+   ],
+   "actor": null,
+   "text": "Where did you learn that!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "893186722": {
+   "kind": "text",
+   "parent": 682512610,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "To be real, I don't have much experience... I just didn’t want to screw it up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1263492066": {
+   "kind": "text",
+   "parent": 682512610,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Guess I work best under pressure, haha!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1425085354": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1374703419,
+    1761478686,
+    1372523081,
+    -1916505594,
+    -1433128273
+   ],
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "So... What you wanna do?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[amelia-blowjob] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-blowjob",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events[amelia-jogging] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-jogging",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1374703419": {
+   "kind": "text",
+   "parent": -1425085354,
+   "children": [
+    -1674150489,
+    1277504359,
+    1238922495,
+    -804299236,
+    1784549008
+   ],
+   "actor": null,
+   "text": "I want to watch you undress.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1761478686": {
+   "kind": "text",
+   "parent": -1425085354,
+   "children": [
+    -134736535,
+    -2031040362,
+    -289683288,
+    767914734,
+    -983961274
+   ],
+   "actor": null,
+   "text": "You could take care of me again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1433128273": {
+   "kind": "text",
+   "parent": -1425085354,
+   "children": [
+    -440197777
+   ],
+   "actor": null,
+   "text": "Let's call it a day.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-440197777": {
+   "kind": "text",
+   "parent": -1433128273,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Ah, shame. But sure. If you're not feeling it, you're not feeling it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1674150489": {
+   "kind": "text",
+   "parent": -1374703419,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "You enjoy watching my sweaty body? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-134736535": {
+   "kind": "text",
+   "parent": 1761478686,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Nice! Let me have some water first though, my throat is a bit dry from running.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1277504359": {
+   "kind": "text",
+   "parent": -1374703419,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ameliastrip to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ameliastrip",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/ameliastrip"
+      }
+     }
+    }
+   ]
+  },
+  "1238922495": {
+   "kind": "text",
+   "parent": -1374703419,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ameliastrip (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ameliastrip (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/ameliastrip (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-2031040362": {
+   "kind": "text",
+   "parent": 1761478686,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ameliablow to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ameliablow",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/ameliablow"
+      }
+     }
+    }
+   ]
+  },
+  "-289683288": {
+   "kind": "text",
+   "parent": 1761478686,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ameliablow (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ameliablow (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/ameliablow (1)"
+      }
+     }
+    }
+   ]
+  },
+  "767914734": {
+   "kind": "text",
+   "parent": 1761478686,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ameliablow (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ameliablow (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/ameliablow (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-983961274": {
+   "kind": "text",
+   "parent": 1761478686,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Fuck, what are they feeding you with? So much cum...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1784549008": {
+   "kind": "text",
+   "parent": -1374703419,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "I hope you got a good look at me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-804299236": {
+   "kind": "text",
+   "parent": -1374703419,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ameliastrip (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ameliastrip (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/ameliastrip (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-953110494": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Well, um... Maybe next time you'll be able to keep up with me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[Fit-5] ≤ 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Fit-5",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-22336249": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "I should go now, there's like stuff and things on my calendar....",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[Fit-5] ≤ 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Fit-5",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1372523081": {
+   "kind": "text",
+   "parent": -1425085354,
+   "children": [
+    814582774,
+    827239848,
+    -2121990322,
+    108078808,
+    1246283132,
+    -1111493639,
+    -1622823881,
+    -197474864,
+    236875796
+   ],
+   "actor": null,
+   "text": "You look sweaty, wanna take a shower?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[amelia-first-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-first-sex",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "814582774": {
+   "kind": "text",
+   "parent": 1372523081,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Yeah, let's take a shower...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "827239848": {
+   "kind": "text",
+   "parent": 1372523081,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Gallery-Active] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gallery-Active",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 5_MyRoom to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "5_MyRoom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/5_MyRoom"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 4_Bath to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "4_Bath",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/4_Bath"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    }
+   ]
+  },
+  "-2121990322": {
+   "kind": "text",
+   "parent": 1372523081,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Are you coming or do you just want to stare at me? Haha.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AmeliaShowerScene (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AmeliaShowerScene (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AmeliaShowerScene (1)"
+      }
+     }
+    }
+   ]
+  },
+  "108078808": {
+   "kind": "text",
+   "parent": 1372523081,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Mmmm, better... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AmeliaShowerScene (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AmeliaShowerScene (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AmeliaShowerScene (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1246283132": {
+   "kind": "text",
+   "parent": 1372523081,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "You're quite tall, you know that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-197474864": {
+   "kind": "choice",
+   "parent": 1372523081,
+   "children": [
+    675306335,
+    -1689650207
+   ],
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "I can fell your... length... Pressing against me...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "675306335": {
+   "kind": "text",
+   "parent": -197474864,
+   "children": [
+    1761296048,
+    1269690786,
+    -1780907254,
+    892931501,
+    -197383364,
+    1006170982
+   ],
+   "actor": null,
+   "text": "(Press against her asshole)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1689650207": {
+   "kind": "text",
+   "parent": -197474864,
+   "children": [
+    -1601499024
+   ],
+   "actor": null,
+   "text": "Let's finish showering...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1601499024": {
+   "kind": "text",
+   "parent": -1689650207,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Yeah... Come on... We'll be faster if we help each other...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1761296048": {
+   "kind": "text",
+   "parent": 675306335,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Mmmm... Y-Yes... I can feel it... It's going...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1269690786": {
+   "kind": "text",
+   "parent": 675306335,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Hnaaa~ Y-Yes... Oh my...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AmeliaShowerScene (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AmeliaShowerScene (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AmeliaShowerScene (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AmeliaShowerScene (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AmeliaShowerScene (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AmeliaShowerScene (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1780907254": {
+   "kind": "text",
+   "parent": 675306335,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "S-Such a dirty shower... I'm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "892931501": {
+   "kind": "text",
+   "parent": 675306335,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "D-Do it, {PC}... I want to feel your cock... Cum... Inside my ass!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-197383364": {
+   "kind": "text",
+   "parent": 675306335,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Yes, yes, yes! Hngaaah... Haaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AmeliaShowerScene (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AmeliaShowerScene (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AmeliaShowerScene (5)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AmeliaShowerScene (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AmeliaShowerScene (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AmeliaShowerScene (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1006170982": {
+   "kind": "text",
+   "parent": 675306335,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Heh, he... Heh... I really...I loved that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1111493639": {
+   "kind": "text",
+   "parent": 1372523081,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "And I can feel your growing bigger down there too..",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AmeliaShowerScene (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AmeliaShowerScene (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AmeliaShowerScene (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1622823881": {
+   "kind": "text",
+   "parent": 1372523081,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Mmm... Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "236875796": {
+   "kind": "text",
+   "parent": 1372523081,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 5_MyRoom to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "5_MyRoom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/5_MyRoom"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 4_Bath to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "4_Bath",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/4_Bath"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Amelia_defaultbust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Amelia_defaultbust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Amelia_defaultbust"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Gallery-Active] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gallery-Active",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1916505594": {
+   "kind": "text",
+   "parent": -1425085354,
+   "children": [
+    -1154825577,
+    -1778921341,
+    1160794677,
+    694197033
+   ],
+   "actor": null,
+   "text": "I want to ask you about joining the milk farm.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[bafa-ameliaaccepted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-ameliaaccepted",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[milk-searchforcandidates] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milk-searchforcandidates",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[amelia-first-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-first-sex",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1154825577": {
+   "kind": "text",
+   "parent": -1916505594,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "…Wait. You’re serious?  Oh my god, I thought you were joking. That’s… that’s insane.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1778921341": {
+   "kind": "text",
+   "parent": -1916505594,
+   "actor": "Amelia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "…Actually… that’s genius. People would line up around the block for something this weird and exclusive.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1160794677": {
+   "kind": "text",
+   "parent": -1916505594,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Yeah, I’m in. But on one condition! I want a cut of the milk for my coffee shop. Imagine the branding… “The creamiest lattes in Peak City.”",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "694197033": {
+   "kind": "choice",
+   "parent": -1916505594,
+   "children": [
+    -1828326886,
+    -126741899
+   ],
+   "actor": "Amelia",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "If I get to pour a little of myself into every cup, I’ll make the shop unforgettable. Deal?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1828326886": {
+   "kind": "text",
+   "parent": 694197033,
+   "children": [
+    -1347909617
+   ],
+   "actor": null,
+   "text": "Deal.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-126741899": {
+   "kind": "text",
+   "parent": 694197033,
+   "children": [
+    48574415
+   ],
+   "actor": null,
+   "text": "That's too wild. No.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "48574415": {
+   "kind": "text",
+   "parent": -126741899,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Bummers. But alright, yeah. I'm better than that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1347909617": {
+   "kind": "text",
+   "parent": -1828326886,
+   "actor": "Amelia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Nice! Just send me the adress later, yeah?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Milking Save[bafa-ameliaaccepted] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-ameliaaccepted",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Trips/AmeliaMeetingDefault",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DefaultDialogue (2) and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.1 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Amelia_defaultbust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Amelia_defaultbust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Amelia_defaultbust"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play DefaultDialogue and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "DefaultDialogue",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Core_Events/Trips/AmeliaMeetingDefault/DefaultDialogue"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeInBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeInBlack"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[amelia-first-visit] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-first-visit",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MorningVolume to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MorningVolume",
+       "of": "GetGameObjectInstance",
+       "path": "MorningVolume"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_Maps to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_Maps",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_Maps"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 11_park to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "11_park",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/11_park"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Amelia_defaultbust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Amelia_defaultbust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Amelia_defaultbust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play DefaultDialogue (1) and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "DefaultDialogue (1)",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Core_Events/Trips/AmeliaMeetingDefault/DefaultDialogue (1)"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeInBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeInBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_Maps to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_Maps",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_Maps"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 5_MyRoom to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "5_MyRoom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/5_MyRoom"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeInBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeInBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AfterSleepEvents to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AfterSleepEvents",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/AfterSleepEvents"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events[amelia-jogging] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-jogging",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

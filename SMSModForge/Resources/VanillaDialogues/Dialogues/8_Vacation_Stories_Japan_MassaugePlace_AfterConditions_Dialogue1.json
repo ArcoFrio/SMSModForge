@@ -1,0 +1,672 @@
+{
+ "id": "8_Vacation_Stories/Japan_MassaugePlace/AfterConditions/Dialogue1",
+ "name": "Dialogue1",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "V_Sakura"
+ ],
+ "roots": [
+  1662536399,
+  -1359766598,
+  1057761543,
+  286804398,
+  948627139,
+  213468118,
+  -2143592655,
+  836328318,
+  -1216540259,
+  -1272432620,
+  884091540,
+  663384275,
+  -1614415823,
+  -271987321,
+  324916154,
+  287578625,
+  1163941324
+ ],
+ "nodes": {
+  "1662536399": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "How can you desire me when all I have done is reflect your own being back at you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1359766598": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1533730512,
+    -68304661,
+    -274035782
+   ],
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "You do not know who I am. What I have done. The truths I carry... and the lies I may hide.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1533730512": {
+   "kind": "text",
+   "parent": -1359766598,
+   "actor": null,
+   "text": "(Charming) Then show me who you are.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Charming] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Charming",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-274035782": {
+   "kind": "text",
+   "parent": -1359766598,
+   "children": [
+    1103505169,
+    101525534,
+    1485053344
+   ],
+   "actor": null,
+   "text": "You are right, I'm sorry.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1103505169": {
+   "kind": "text",
+   "parent": -274035782,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "Do not apologize for opening your heart to me. I am fond of you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "101525534": {
+   "kind": "text",
+   "parent": -274035782,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "But I believe we should stop for today. A change of wind may carry a storm with it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1485053344": {
+   "kind": "text",
+   "parent": -274035782,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "Please visit me again.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1057761543": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "You really want to see who I am?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionShadingLerpColor",
+     "title": "Lerp from #00000000 to #000000D7",
+     "fields": {
+      "m_Color1": {
+       "kind": "value",
+       "value": {
+        "$type": "Color",
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0
+       }
+      },
+      "m_Color2": {
+       "kind": "value",
+       "value": {
+        "$type": "Color",
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.8431373
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 5,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": false
+      },
+      "m_Set": {
+       "kind": "raw",
+       "type": "SetColorUIGraphic",
+       "data": {
+        "m_Graphic": {
+         "$type": "PropertyGetGameObject",
+         "m_Property": {
+          "$type": "GetGameObjectInstance",
+          "m_GameObject": {
+           "$unity": "BehindUI_Black",
+           "$type": "GameObject",
+           "$path": "6_Effects/BehindBustUI_Effect_Canvas/BehindUI_Black"
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   ]
+  },
+  "286804398": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "Do you know what that means? What you’re asking? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "948627139": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "To see someone is not a fleeting moment. It’s to step into the shadows of everything they’ve been through... everything they carry.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SakuraNewMassage (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SakuraNewMassage (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SakuraNewMassage (2)"
+      }
+     }
+    }
+   ]
+  },
+  "213468118": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "I am not just a kind voice or gentle hands. I am scars and mistakes. I am choices I can’t take back and a past I can’t outrun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2143592655": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "I... I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SakuraFun (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SakuraFun (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SakuraFun (2)"
+      }
+     }
+    }
+   ]
+  },
+  "836328318": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "I miss colors. The way the world bursts into life when the sun rises. I miss faces... seeing joy, sadness, love in someone’s expression.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1216540259": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "I miss... tears. Mwwhmmm... My own tears. Watching them fall.... Mmmuahmm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SakuraFun (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SakuraFun (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SakuraFun (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1272432620": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "It’s such a simple thing, isn’t it? But I can’t see them anymore... Mmmmhmm... Glpph....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "884091540": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "All that I have left is the smell and taste of you... Mmmwuah... Your large... needy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "287578625": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "That’s who I am. A woman who can’t even remember the colors of her own eyes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1614415823": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "Yes... Mmmmghhmm... It's so pure... I can taste it.. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SakuraNewMassage (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SakuraNewMassage (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SakuraNewMassage (2)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SakuraFun (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SakuraFun (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SakuraFun (5)"
+      }
+     }
+    }
+   ]
+  },
+  "324916154": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "*Gulp* ... *Gulp* ... *Gulp* ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SakuraFun (8) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SakuraFun (8)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SakuraFun (8)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SakuraFun (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SakuraFun (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SakuraFun (2)"
+      }
+     }
+    }
+   ]
+  },
+  "663384275": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1342520121,
+    1155051300,
+    1943005306
+   ],
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "So please... Let me taste you... Mmm... I want to feel it on my tongue, on my skin, on my soul...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1342520121": {
+   "kind": "text",
+   "parent": 663384275,
+   "actor": null,
+   "text": "I'll... I'll give you everything I have...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1155051300": {
+   "kind": "text",
+   "parent": 663384275,
+   "actor": null,
+   "text": "Y-You're so skilled, Sakura. I'm about to... I'm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1943005306": {
+   "kind": "text",
+   "parent": 663384275,
+   "actor": null,
+   "text": "(Fill her mouth)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1163941324": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "And now... I would like to be alone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionShadingLerpColor",
+     "title": "Lerp from #000000D7 to #00000000",
+     "fields": {
+      "m_Color1": {
+       "kind": "value",
+       "value": {
+        "$type": "Color",
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.8431373
+       }
+      },
+      "m_Color2": {
+       "kind": "value",
+       "value": {
+        "$type": "Color",
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 1,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": false
+      },
+      "m_Set": {
+       "kind": "raw",
+       "type": "SetColorUIGraphic",
+       "data": {
+        "m_Graphic": {
+         "$type": "PropertyGetGameObject",
+         "m_Property": {
+          "$type": "GetGameObjectInstance",
+          "m_GameObject": {
+           "$unity": "BehindUI_Black",
+           "$type": "GameObject",
+           "$path": "6_Effects/BehindBustUI_Effect_Canvas/BehindUI_Black"
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-271987321": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "It's bittersweet... My heart arches for more, but I know that it can't take it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-68304661": {
+   "kind": "text",
+   "parent": -1359766598,
+   "children": [
+    -1167231977
+   ],
+   "actor": null,
+   "text": "(Lewd) We both know what you want, Sakura.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Lewd] ≥ 7",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Lewd",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 7
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1167231977": {
+   "kind": "text",
+   "parent": -68304661,
+   "actor": "V_Sakura",
+   "expressionName": "neutral",
+   "text": "Do we? Perhaps you are right. Perhaps you do know...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Japan_MassaugePlace/AfterConditions",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dialogue1 and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[sakura-sex-incoming] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sakura-sex-incoming",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[sakura-sex-incoming] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sakura-sex-incoming",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

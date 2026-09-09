@@ -1,0 +1,766 @@
+{
+ "id": "8_Room_Talk/Mansion/FirstTalk",
+ "name": "FirstTalk",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Gabriel",
+  "Haniya"
+ ],
+ "roots": [
+  1606907330,
+  1689011880,
+  -618659924,
+  1217169616,
+  -477645994,
+  1259346180,
+  2136577325,
+  918852170,
+  -1880844642,
+  27750714,
+  -434271268,
+  1614435871,
+  1741082911,
+  -101143211,
+  1387683297
+ ],
+ "nodes": {
+  "1606907330": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    543599852,
+    122264326,
+    892158862
+   ],
+   "actor": "Gabriel",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hey there! Welcome to my humble abode. I’m so glad you could make it. ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionQuestsActivate",
+     "title": "Activate Gabriel Training",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Gabriel Training",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "543599852": {
+   "kind": "text",
+   "parent": 1606907330,
+   "children": [
+    496999588
+   ],
+   "actor": null,
+   "text": "Thanks for the invitation, glad to be here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "122264326": {
+   "kind": "text",
+   "parent": 1606907330,
+   "children": [
+    -951408170
+   ],
+   "actor": null,
+   "text": "So, how much money do you want?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "892158862": {
+   "kind": "text",
+   "parent": 1606907330,
+   "children": [
+    -982742874
+   ],
+   "actor": null,
+   "text": "Your mansion is stunning. You have great taste.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-982742874": {
+   "kind": "text",
+   "parent": 892158862,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Thank you! I’ve always believed that a creative space inspires creativity. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-951408170": {
+   "kind": "text",
+   "parent": 122264326,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Money? Oh no, I have more than enough of that. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "496999588": {
+   "kind": "text",
+   "parent": 543599852,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Of course, of course. It's rare to see real, raw talent these days.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1689011880": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    5849042,
+    1058550560
+   ],
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "As mentioned in the email, I’m Gabriel. You must be Anna’s photographer, right?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "5849042": {
+   "kind": "text",
+   "parent": 1689011880,
+   "actor": null,
+   "text": "Yeah. I'm {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-618659924": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    893016832,
+    1792107054,
+    -543094953
+   ],
+   "actor": "Gabriel",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "{PC}! Strong name! So, how’d you end up meeting your model?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "893016832": {
+   "kind": "text",
+   "parent": -618659924,
+   "children": [
+    -211232944
+   ],
+   "actor": null,
+   "text": "We both attended the same modeling course.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1792107054": {
+   "kind": "text",
+   "parent": -618659924,
+   "children": [
+    49652736
+   ],
+   "actor": null,
+   "text": "We met online, through a photography subreddit.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-543094953": {
+   "kind": "text",
+   "parent": -618659924,
+   "children": [
+    -481058876
+   ],
+   "actor": null,
+   "text": "She's actually my {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "49652736": {
+   "kind": "text",
+   "parent": 1792107054,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Reddit, huh? Haven't heard of that one before.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-211232944": {
+   "kind": "text",
+   "parent": 893016832,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "That makes sense, you do seem a lot younger than her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-481058876": {
+   "kind": "text",
+   "parent": -543094953,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Hah! You are funny, I like that!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1217169616": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You know, I've been looking for someone with raw potential like yours for a long time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-477645994": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1125715385,
+    -252162134,
+    1948350356
+   ],
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "I'd love to teach you. All I ask in return is your attention. What do you say?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1125715385": {
+   "kind": "text",
+   "parent": -477645994,
+   "actor": null,
+   "text": "Sounds great.\t",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-252162134": {
+   "kind": "text",
+   "parent": -477645994,
+   "actor": null,
+   "text": "I'll give it a try, but no promises.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1259346180": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "How does Tuesday sound? Just swing by and...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Haniya to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Haniya",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Haniya"
+      }
+     }
+    }
+   ]
+  },
+  "2136577325": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Well, well, what do we have here? A new protégé, Gabriel?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "918852170": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Yes, indeed. {PC}, this is my wife, Haniya.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1880844642": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    23885665,
+    -465651188,
+    1888211932
+   ],
+   "actor": "Haniya",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Nice to meet you, {PC}. Gabriel has been talking about finding a student like you for ages. How exciting!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "23885665": {
+   "kind": "text",
+   "parent": -1880844642,
+   "actor": null,
+   "text": "Nice to meet you too, Haniya. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-465651188": {
+   "kind": "text",
+   "parent": -1880844642,
+   "actor": null,
+   "text": "I’m looking forward to learning a lot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "27750714": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Oh, you’re in for quite the experience. Gabriel’s an excellent teacher, and our home is always lively. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-434271268": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Just don’t let him work you too hard, alright?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1614435871": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I’ll try to keep that in mind. We’ll balance hard work with some fun, I promise.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1741082911": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1855819971,
+    -1957998931
+   ],
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Good. I’ll be here to make sure he doesn’t forget. And if you ever need a break, feel free to chat with me.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1855819971": {
+   "kind": "text",
+   "parent": 1741082911,
+   "actor": null,
+   "text": "I’ll keep that in mind. Thanks, Haniya.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1957998931": {
+   "kind": "text",
+   "parent": 1741082911,
+   "actor": null,
+   "text": "I can imagine...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-101143211": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Great! So, Tuesday it is. I’m looking forward to it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1387683297": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Me too. Welcome to the family, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1058550560": {
+   "kind": "text",
+   "parent": 1689011880,
+   "actor": null,
+   "text": "(Charming) {PC}. That’s me. Helping Anna shine. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Charming] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Charming",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1888211932": {
+   "kind": "text",
+   "parent": -1880844642,
+   "actor": null,
+   "text": "(Charming) Guess I’ll have to live up to the hype then.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Charming] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Charming",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1948350356": {
+   "kind": "text",
+   "parent": -477645994,
+   "children": [
+    1513179683
+   ],
+   "actor": null,
+   "text": "(Creative) Careful, I might teach you instead.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Creative] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Creative",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1513179683": {
+   "kind": "text",
+   "parent": 1948350356,
+   "actor": "Gabriel",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Haha, confidence, I like that. Let’s see what you’ve got.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Mansion",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play FirstTalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[gabriel-met] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabriel-met",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Gabriel_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Gabriel_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Gabriel_Bust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[gabriel-met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabriel-met",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

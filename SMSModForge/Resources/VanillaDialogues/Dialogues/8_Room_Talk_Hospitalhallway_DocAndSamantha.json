@@ -1,0 +1,345 @@
+{
+ "id": "8_Room_Talk/Hospitalhallway/DocAndSamantha",
+ "name": "DocAndSamantha",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "DrFrost",
+  "Samantha"
+ ],
+ "roots": [
+  2101874582,
+  -83234042,
+  282063882,
+  1800659585,
+  1899698778,
+  -1205917681
+ ],
+ "nodes": {
+  "2101874582": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "These aches in my back are getting unbearable.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-83234042": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Your posture is atrocious. That’s what happens when you’re carrying around excess weight.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "282063882": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Excess—? You mean my boobs?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1800659585": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Exactly. You could consider surgery. Or invest in better support. Either way, complaining won’t fix it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1899698778": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Surgery, huh? Never thought I’d hear a doctor suggest going under the knife for this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1205917681": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "I suggest what works. You can keep whining or take action. It’s your choice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Hospitalhallway",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DocAndSamantha and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[samantha-met] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-met",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[hospitalhallwaycooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hospitalhallwaycooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Evelyn_bust_condition and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "Evelyn_bust_condition",
+       "of": "GetGameObjectConditions",
+       "path": "8_Room_Talk/Hospitalhallway/Evelyn_bust_condition"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamanthaBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamanthaBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/SamanthaBust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[hospitalhallwaycooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hospitalhallwaycooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

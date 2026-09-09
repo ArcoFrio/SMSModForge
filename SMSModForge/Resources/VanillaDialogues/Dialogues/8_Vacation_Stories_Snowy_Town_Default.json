@@ -1,0 +1,1629 @@
+{
+ "id": "8_Vacation_Stories/Snowy_Town/Default",
+ "name": "Default",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "S_CrazyOldMan",
+  "You"
+ ],
+ "roots": [
+  1682368146,
+  -1040756046,
+  -446814214,
+  -849304170
+ ],
+ "nodes": {
+  "-1040756046": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -677530693,
+    -2047497586,
+    1378491422,
+    1413562755,
+    808297412,
+    180489479
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Isn’t this place lovely? It feels like something out of a storybook.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[crazyoldman-pro] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "crazyoldman-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-677530693": {
+   "kind": "text",
+   "parent": -1040756046,
+   "actor": "S_CrazyOldMan",
+   "expressionName": "neutral",
+   "text": "You! You there! Stay off the mountain!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Vacation_Save[crazyoldman-pro] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "crazyoldman-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_S_CrazyOldMan to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_S_CrazyOldMan",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_CrazyOldMan"
+      }
+     }
+    }
+   ]
+  },
+  "-2047497586": {
+   "kind": "choice",
+   "parent": -1040756046,
+   "children": [
+    -395964266,
+    637553675,
+    -122299748,
+    -453666510
+   ],
+   "actor": "S_CrazyOldMan",
+   "expressionName": "neutral",
+   "text": "The werewolf... it’s out there! In the woods, waiting for fools like you to wander too close!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-395964266": {
+   "kind": "text",
+   "parent": -2047497586,
+   "children": [
+    -1225969908
+   ],
+   "actor": null,
+   "text": "We’ll be careful. Thanks for the warning.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "637553675": {
+   "kind": "text",
+   "parent": -2047497586,
+   "children": [
+    -572536637
+   ],
+   "actor": null,
+   "text": "A werewolf? Are you serious?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-122299748": {
+   "kind": "text",
+   "parent": -2047497586,
+   "children": [
+    -1537633374
+   ],
+   "actor": null,
+   "text": "Nice tinfoil hat, weirdo.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1225969908": {
+   "kind": "text",
+   "parent": -395964266,
+   "actor": "S_CrazyOldMan",
+   "expressionName": "neutral",
+   "text": "Careful? Careful won’t save you when it smells your fear!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-572536637": {
+   "kind": "text",
+   "parent": 637553675,
+   "actor": "S_CrazyOldMan",
+   "expressionName": "neutral",
+   "text": "Serious as the full moon’s light! It’s been stalking these parts for decades—feeding, growing stronger.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1537633374": {
+   "kind": "text",
+   "parent": -122299748,
+   "actor": "S_CrazyOldMan",
+   "expressionName": "neutral",
+   "text": "Gah! Just listen to me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1378491422": {
+   "kind": "text",
+   "parent": -1040756046,
+   "actor": "S_CrazyOldMan",
+   "expressionName": "neutral",
+   "text": "It’s massive! Towering over any man. Shaggy fur, claws like scythes, and eyes that pierce through the dark. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1413562755": {
+   "kind": "choice",
+   "parent": -1040756046,
+   "children": [
+    -1708316508,
+    1246959239
+   ],
+   "actor": "S_CrazyOldMan",
+   "expressionName": "neutral",
+   "text": "And those missing sheep? All its doing. It’s been feeding, leaving nothing but bones in his wake!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1708316508": {
+   "kind": "text",
+   "parent": 1413562755,
+   "children": [
+    -1604273583
+   ],
+   "actor": null,
+   "text": "How do you know it’s male? It MUST be female.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1246959239": {
+   "kind": "text",
+   "parent": 1413562755,
+   "children": [
+    41123545
+   ],
+   "actor": null,
+   "text": "Yeah, sure... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1604273583": {
+   "kind": "choice",
+   "parent": -1708316508,
+   "children": [
+    -1581783236,
+    2075724217
+   ],
+   "actor": "S_CrazyOldMan",
+   "expressionName": "neutral",
+   "text": "A female werewolf? You spent too much time on the internet, boy... Don't make a fool of yourself!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "41123545": {
+   "kind": "text",
+   "parent": 1246959239,
+   "actor": "S_CrazyOldMan",
+   "expressionName": "neutral",
+   "text": "The wolf doesn’t care if you believe—it only cares if you’re alone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "808297412": {
+   "kind": "text",
+   "parent": -1040756046,
+   "actor": "S_CrazyOldMan",
+   "expressionName": "neutral",
+   "text": "Remember. If you see it... run.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_CrazyOldMan/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "180489479": {
+   "kind": "choice",
+   "parent": -1040756046,
+   "children": [
+    825873974,
+    1430530982,
+    111298950,
+    350720845
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "W-well... that was... unexpected.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "825873974": {
+   "kind": "text",
+   "parent": 180489479,
+   "children": [
+    678244348
+   ],
+   "actor": null,
+   "text": "Just a crazy old man.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "111298950": {
+   "kind": "text",
+   "parent": 180489479,
+   "children": [
+    1684721463
+   ],
+   "actor": null,
+   "text": "(Athletic) If we see the werewolf, I’ll scare it off for you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Athletic] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Athletic",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "350720845": {
+   "kind": "text",
+   "parent": 180489479,
+   "children": [
+    -1584737132
+   ],
+   "actor": null,
+   "text": "Maybe he’s onto something. Want to go werewolf hunting later?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "678244348": {
+   "kind": "text",
+   "parent": 825873974,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-you’re probably right.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1684721463": {
+   "kind": "text",
+   "parent": 111298950,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You’re not helping! This is scary...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1584737132": {
+   "kind": "text",
+   "parent": 350720845,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "T-that’s not funny!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-446814214": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    602260860,
+    -1410710146,
+    1477585844,
+    -1198774056,
+    -1188764170
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "So, what should we do first?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "602260860": {
+   "kind": "text",
+   "parent": -446814214,
+   "children": [
+    -1003955606,
+    -1440873075,
+    63451326
+   ],
+   "actor": null,
+   "text": "Let’s take a walk through the town.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1410710146": {
+   "kind": "text",
+   "parent": -446814214,
+   "children": [
+    652047278,
+    434977215,
+    780804492
+   ],
+   "actor": null,
+   "text": "I’ve heard the chocolate in this country is really good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1477585844": {
+   "kind": "text",
+   "parent": -446814214,
+   "children": [
+    -155947921,
+    -2002733843,
+    -682163763
+   ],
+   "actor": null,
+   "text": "Wanna go clothes shopping?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1198774056": {
+   "kind": "text",
+   "parent": -446814214,
+   "children": [
+    1536353075,
+    2081329330,
+    197150789
+   ],
+   "actor": null,
+   "text": "Let’s build a snowman.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1536353075": {
+   "kind": "text",
+   "parent": -1198774056,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A snowman? Alright, but only if you help me with the hard parts!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-155947921": {
+   "kind": "text",
+   "parent": 1477585844,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Clothes shopping? I guess we could... if you don’t mind waiting while I look around.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "652047278": {
+   "kind": "text",
+   "parent": -1410710146,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Really? Let’s find a place to try some. I could use something sweet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1003955606": {
+   "kind": "text",
+   "parent": 602260860,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That sounds nice. I’d love to see more of this beautiful place.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1440873075": {
+   "kind": "text",
+   "parent": 602260860,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "63451326": {
+   "kind": "text",
+   "parent": 602260860,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "This town feels so magical... I don’t think I’ll ever forget it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "434977215": {
+   "kind": "text",
+   "parent": -1410710146,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "780804492": {
+   "kind": "text",
+   "parent": -1410710146,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You were right—this chocolate is amazing. I’m going to need more before we leave.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2002733843": {
+   "kind": "text",
+   "parent": 1477585844,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "-682163763": {
+   "kind": "text",
+   "parent": 1477585844,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I think this sweater makes me look even cozier, don’t you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2081329330": {
+   "kind": "text",
+   "parent": -1198774056,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "197150789": {
+   "kind": "text",
+   "parent": -1198774056,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "He’s not perfect, but I think he’s got character!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-849304170": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    2011344108,
+    1964643796,
+    1022862992,
+    -299212531,
+    307235485
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.01,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "1682368146": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    -78124970,
+    1583249184,
+    -70562706,
+    265315138,
+    -720728975
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.01,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[crazyoldman-pro] ≥ 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "crazyoldman-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-78124970": {
+   "kind": "text",
+   "parent": 1682368146,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "This place is so charming... I feel like we’ve stepped into a postcard.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1583249184": {
+   "kind": "text",
+   "parent": 1682368146,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I can’t wait to see what we’ll discover here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-70562706": {
+   "kind": "text",
+   "parent": 1682368146,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "The snow makes everything look so magical, doesn’t it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "265315138": {
+   "kind": "text",
+   "parent": 1682368146,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I hope we have enough time to see it all. There’s so much to take in!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-720728975": {
+   "kind": "text",
+   "parent": 1682368146,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It’s even prettier than before. Look at this view!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2011344108": {
+   "kind": "text",
+   "parent": -849304170,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That was wonderful... I’m so glad we got to experience it together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1964643796": {
+   "kind": "text",
+   "parent": -849304170,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I’ll remember this for a long time. What a special day.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1022862992": {
+   "kind": "text",
+   "parent": -849304170,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That was fun! I wonder what else this town has in store for us.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-299212531": {
+   "kind": "text",
+   "parent": -849304170,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I don’t think I’ll forget this place anytime soon.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "307235485": {
+   "kind": "text",
+   "parent": -849304170,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let’s head back and warm up. It’s getting colder out here!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1581783236": {
+   "kind": "text",
+   "parent": -1604273583,
+   "children": [
+    1637085715
+   ],
+   "actor": null,
+   "text": "If there are male werewolves, there can be female ones too!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1637085715": {
+   "kind": "text",
+   "parent": -1581783236,
+   "actor": "S_CrazyOldMan",
+   "expressionName": "neutral",
+   "text": "People these days...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[werewolf-is-female] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "werewolf-is-female",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "2075724217": {
+   "kind": "text",
+   "parent": -1604273583,
+   "children": [
+    -89951850
+   ],
+   "actor": null,
+   "text": "Yeah, you're right. It must be male.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-89951850": {
+   "kind": "text",
+   "parent": 2075724217,
+   "actor": "S_CrazyOldMan",
+   "expressionName": "neutral",
+   "text": "Exactly!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[werewolf-is-female] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "werewolf-is-female",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1188764170": {
+   "kind": "text",
+   "parent": -446814214,
+   "children": [
+    -1425842893,
+    -2005615897,
+    -404866281,
+    543036219,
+    -620181327,
+    -648596479,
+    -1161355110,
+    1441147151,
+    1906998507,
+    1952881841
+   ],
+   "actor": null,
+   "text": "I NEED to talk to the crazy old man.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[crazyoldman-pro] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "crazyoldman-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1425842893": {
+   "kind": "text",
+   "parent": -1188764170,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Um, uh... Sure... I'll be checking out that store over there in the meantime... This man scares me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_WinterOutfit to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_WinterOutfit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_WinterOutfit"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_S_CrazyOldMan to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_S_CrazyOldMan",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_CrazyOldMan"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "-2005615897": {
+   "kind": "choice",
+   "parent": -1188764170,
+   "children": [
+    590776683,
+    1921668822
+   ],
+   "actor": "S_CrazyOldMan",
+   "expressionName": "neutral",
+   "text": "What do you want, kid? Come to laugh at me?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-404866281": {
+   "kind": "choice",
+   "parent": -1188764170,
+   "children": [
+    596305838,
+    1620942675,
+    1219095974
+   ],
+   "actor": "S_CrazyOldMan",
+   "expressionName": "neutral",
+   "text": "Yeah, right. You? Saw the werewolf?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "590776683": {
+   "kind": "text",
+   "parent": -2005615897,
+   "actor": null,
+   "text": "No, I saw it. I saw the werewolf!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1921668822": {
+   "kind": "text",
+   "parent": -2005615897,
+   "actor": null,
+   "text": "Yes, but I also saw it. I saw the werewolf.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "596305838": {
+   "kind": "text",
+   "parent": -404866281,
+   "children": [
+    -1037758982
+   ],
+   "actor": null,
+   "text": "I know what I saw. It wasn’t just some animal.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1620942675": {
+   "kind": "text",
+   "parent": -404866281,
+   "children": [
+    -847281575
+   ],
+   "actor": null,
+   "text": "Why would I lie about this? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1219095974": {
+   "kind": "text",
+   "parent": -404866281,
+   "children": [
+    -1009933813
+   ],
+   "actor": null,
+   "text": "You’re the only one who seems to know anything about it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1037758982": {
+   "kind": "text",
+   "parent": 596305838,
+   "actor": "S_CrazyOldMan",
+   "expressionName": "neutral",
+   "text": "Alright, fine. Say I believe you. What’d it do, huh? What’d it want?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-847281575": {
+   "kind": "text",
+   "parent": 1620942675,
+   "actor": "S_CrazyOldMan",
+   "expressionName": "neutral",
+   "text": "I don’t know. Maybe you’ve got too much time on your hands, or maybe you’re trying to make a fool out of me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1009933813": {
+   "kind": "text",
+   "parent": 1219095974,
+   "actor": "S_CrazyOldMan",
+   "expressionName": "neutral",
+   "text": "Alright... Maybe you’re not completely full of it. What exactly did you see?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "543036219": {
+   "kind": "text",
+   "parent": -1188764170,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "It didn’t attack me. It just... stood there. Grunted and growled. I think it was asking for food—meat, maybe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-620181327": {
+   "kind": "choice",
+   "parent": -1188764170,
+   "children": [
+    1519918169,
+    533712163
+   ],
+   "actor": "S_CrazyOldMan",
+   "expressionName": "neutral",
+   "text": "Meat? You’re sure?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1519918169": {
+   "kind": "text",
+   "parent": -620181327,
+   "actor": null,
+   "text": "Yes, it was able to speak a few worlds. \"Food\", and \"Meat\".",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "533712163": {
+   "kind": "text",
+   "parent": -620181327,
+   "actor": null,
+   "text": "It was right in front of me. Asking me for Food, for meat.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-648596479": {
+   "kind": "text",
+   "parent": -1188764170,
+   "actor": "S_CrazyOldMan",
+   "expressionName": "neutral",
+   "text": "Meat... That’s what it said. Whispering outside my farm, middle of the night. “Meat.” Thought I was losing it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1161355110": {
+   "kind": "text",
+   "parent": -1188764170,
+   "actor": "S_CrazyOldMan",
+   "expressionName": "neutral",
+   "text": "Then it’s true... The beast isn’t just hunting. It’s trying to communicate. God help us.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1441147151": {
+   "kind": "choice",
+   "parent": -1188764170,
+   "children": [
+    1066553932,
+    -393763580,
+    938941896
+   ],
+   "actor": "S_CrazyOldMan",
+   "expressionName": "neutral",
+   "text": "Stay away from it! And whatever you do, don't bring it meat! God knows what will happen!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1906998507": {
+   "kind": "text",
+   "parent": -1188764170,
+   "actor": "S_CrazyOldMan",
+   "expressionName": "neutral",
+   "text": "No, no... I'll have no part in this! Stay away from it! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1066553932": {
+   "kind": "text",
+   "parent": 1441147151,
+   "actor": null,
+   "text": "Maybe we can help it? Break the curse?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-393763580": {
+   "kind": "text",
+   "parent": 1441147151,
+   "actor": null,
+   "text": "Maybe we should bring it some meat? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "938941896": {
+   "kind": "text",
+   "parent": 1441147151,
+   "actor": null,
+   "text": "We could try to hunt it down. End it once and for all.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1952881841": {
+   "kind": "text",
+   "parent": -1188764170,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Vacation_Save[crazyoldman-pro] = 3",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "crazyoldman-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 3
+      }
+     }
+    }
+   ]
+  },
+  "-453666510": {
+   "kind": "text",
+   "parent": -2047497586,
+   "children": [
+    -934934829
+   ],
+   "actor": null,
+   "text": "(Smart) He's not lying, but maybe it was just a big wolf?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Smart] ≥ 7",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Smart",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 7
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-934934829": {
+   "kind": "text",
+   "parent": -453666510,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "S-Stop it, {PC}. You're scaring me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1430530982": {
+   "kind": "text",
+   "parent": 180489479,
+   "children": [
+    -358824234
+   ],
+   "actor": null,
+   "text": "Let's just forget about it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-358824234": {
+   "kind": "text",
+   "parent": 1430530982,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yes, no need to ruin our vacation over this. Right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Snowy_Town",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Default and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_WinterOutfit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_WinterOutfit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_WinterOutfit"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

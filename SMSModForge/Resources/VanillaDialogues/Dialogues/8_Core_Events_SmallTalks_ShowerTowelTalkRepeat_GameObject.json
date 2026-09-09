@@ -1,0 +1,911 @@
+{
+ "id": "8_Core_Events/SmallTalks/ShowerTowelTalkRepeat/GameObject",
+ "name": "GameObject",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna"
+ ],
+ "roots": [
+  957701803,
+  -1560872086
+ ],
+ "nodes": {
+  "957701803": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hey, sweetie, the shower’s free now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1560872086": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    803790163,
+    -1785960335,
+    459689550
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Hungry? I bet you are... Wanna play with {M}'s tits? They're all yours.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "803790163": {
+   "kind": "text",
+   "parent": -1560872086,
+   "children": [
+    -576306147,
+    2034043595,
+    517019628,
+    -889422713,
+    -1339542321,
+    510623490
+   ],
+   "actor": null,
+   "text": "[Suck her tits]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "459689550": {
+   "kind": "text",
+   "parent": -1560872086,
+   "children": [
+    -1222548468
+   ],
+   "actor": null,
+   "text": "I'm good, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1222548468": {
+   "kind": "text",
+   "parent": 459689550,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ph, I see. Well, then I should get dressed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-576306147": {
+   "kind": "text",
+   "parent": 803790163,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, sweetie... that's it... suck on them nice and slow for me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active bsuck to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "bsuck",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/bsuck"
+      }
+     }
+    }
+   ]
+  },
+  "2034043595": {
+   "kind": "text",
+   "parent": 803790163,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm... yes, just like that... you're so good with your mouth...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active bsuck (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "bsuck (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/bsuck (1)"
+      }
+     }
+    }
+   ]
+  },
+  "517019628": {
+   "kind": "text",
+   "parent": 803790163,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You like how they taste? Fresh out of the shower... all clean for you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-889422713": {
+   "kind": "text",
+   "parent": 803790163,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm... that's enough for now, sweetie. I'm all sensitive.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1339542321": {
+   "kind": "text",
+   "parent": 803790163,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "If we keep going, I'll need another shower... and I just got clean.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "510623490": {
+   "kind": "text",
+   "parent": 803790163,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "But I loved that. You're such a good boy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1785960335": {
+   "kind": "text",
+   "parent": -1560872086,
+   "children": [
+    -1386318392,
+    -1331961272,
+    402476059,
+    402742602,
+    -1441572916,
+    -441047298,
+    1324361215,
+    1442381732,
+    1827574851,
+    79151338,
+    896922802,
+    -1885770696,
+    -1648382076,
+    -291277341,
+    582036959
+   ],
+   "actor": null,
+   "text": "(Lewd) I want you, {M}. Right here, right now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Lewd] ≥ 6",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Lewd",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 6
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1386318392": {
+   "kind": "text",
+   "parent": -1785960335,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, sweetie... you want to...? Right here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_TowelSex (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_TowelSex (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Anna_TowelSex (0)"
+      }
+     }
+    }
+   ]
+  },
+  "-1331961272": {
+   "kind": "text",
+   "parent": -1785960335,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "But... you look so serious. And so... ready.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "402476059": {
+   "kind": "text",
+   "parent": -1785960335,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Okay. Yes. Just... be quick, baby. And quiet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_TowelSex (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_TowelSex (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Anna_TowelSex (1)"
+      }
+     }
+    }
+   ]
+  },
+  "402742602": {
+   "kind": "text",
+   "parent": -1785960335,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "W-What are you~",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1441572916": {
+   "kind": "text",
+   "parent": -1785960335,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm... that's it... just like that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_TowelSex (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_TowelSex (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Anna_TowelSex (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-441047298": {
+   "kind": "choice",
+   "parent": -1785960335,
+   "children": [
+    -389160359,
+    -99305547,
+    542897408
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Faster... but keep it quiet...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1324361215": {
+   "kind": "text",
+   "parent": -1785960335,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god... right there... don't stop...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1442381732": {
+   "kind": "choice",
+   "parent": -1785960335,
+   "children": [
+    -5157950,
+    626823398,
+    -1554666466
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm close... are you...?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1827574851": {
+   "kind": "text",
+   "parent": -1785960335,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Okay... inside me... it's okay... {PC}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "79151338": {
+   "kind": "text",
+   "parent": -1785960335,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes... Yes... Oh fuck... Oh~",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_TowelSex (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_TowelSex (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Anna_TowelSex (3)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_TowelSex (0) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_TowelSex (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Anna_TowelSex (0)"
+      }
+     }
+    }
+   ]
+  },
+  "896922802": {
+   "kind": "text",
+   "parent": -1785960335,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh... oh wow... you really filled me up, didn't you? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1885770696": {
+   "kind": "choice",
+   "parent": -1785960335,
+   "children": [
+    1026411435,
+    1322598988,
+    -171032661,
+    -796340326
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Look at that... dripping all over the floor... ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_TowelSex (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_TowelSex (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Anna_TowelSex (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_TowelSex (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_TowelSex (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Anna_TowelSex (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1648382076": {
+   "kind": "text",
+   "parent": -1785960335,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm... I can feel it leaking out... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-291277341": {
+   "kind": "text",
+   "parent": -1785960335,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Help me up, baby... my legs are shaking. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "582036959": {
+   "kind": "text",
+   "parent": -1785960335,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Okay, okay... I need to get dressed. You should... go to your room. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-5157950": {
+   "kind": "text",
+   "parent": 1442381732,
+   "actor": null,
+   "text": "Yes, {M}... I'm so close... You're milking me so well...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "626823398": {
+   "kind": "text",
+   "parent": 1442381732,
+   "children": [
+    -371656652
+   ],
+   "actor": null,
+   "text": "Y-Yes.. I'll fill you up, Anna. Inside you, all of it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1554666466": {
+   "kind": "text",
+   "parent": 1442381732,
+   "actor": null,
+   "text": "(Fill her pussy)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-371656652": {
+   "kind": "text",
+   "parent": 626823398,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes... do it... fill your mom up... claim me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-389160359": {
+   "kind": "text",
+   "parent": -441047298,
+   "children": [
+    -1547125995
+   ],
+   "actor": null,
+   "text": "You like getting fucked by your {S}?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1547125995": {
+   "kind": "text",
+   "parent": -389160359,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "God, yes... I love it... I'm such a bad {M}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-99305547": {
+   "kind": "text",
+   "parent": -441047298,
+   "children": [
+    -1320428182
+   ],
+   "actor": null,
+   "text": "Tell me who you belong to.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1320428182": {
+   "kind": "text",
+   "parent": -99305547,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You... I belong to you... only you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "542897408": {
+   "kind": "text",
+   "parent": -441047298,
+   "children": [
+    137866205
+   ],
+   "actor": null,
+   "text": "You're going to cum for me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "137866205": {
+   "kind": "text",
+   "parent": 542897408,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I am... I am... oh god, {PC}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1026411435": {
+   "kind": "text",
+   "parent": -1885770696,
+   "children": [
+    1078986623
+   ],
+   "actor": null,
+   "text": "It's so hot watching it leak out of you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1322598988": {
+   "kind": "text",
+   "parent": -1885770696,
+   "children": [
+    90817700
+   ],
+   "actor": null,
+   "text": "I'm not done yet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-171032661": {
+   "kind": "text",
+   "parent": -1885770696,
+   "children": [
+    1772638372
+   ],
+   "actor": null,
+   "text": "You're beautiful like this, Mom. All mine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1772638372": {
+   "kind": "text",
+   "parent": -171032661,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, baby… I feel so full. So loved.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "90817700": {
+   "kind": "text",
+   "parent": 1322598988,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Sweetie, I know... But I'm not twenty-three anymore. I need a... breather.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1078986623": {
+   "kind": "text",
+   "parent": 1026411435,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yeah? You like seeing your mess inside me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-796340326": {
+   "kind": "text",
+   "parent": -1885770696,
+   "children": [
+    -205473472
+   ],
+   "actor": null,
+   "text": "I'll always take care of you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-205473472": {
+   "kind": "text",
+   "parent": -796340326,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I know you will. Come here… let me hold you for a second.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/SmallTalks/ShowerTowelTalkRepeat",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play GameObject and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueStart'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueStart"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Towel to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Towel",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Towel"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Towel/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueEnd'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueEnd"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

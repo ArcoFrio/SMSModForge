@@ -73,9 +73,13 @@ namespace SMSModForge.PackPlugin
                 // so Contains is false and Count is 0 rather than throwing.
                 case "ListContains":
                     {
-                        string list = (string)p["list"];
+                        // The NAME can be built from a variable too, not just
+                        // the thing being looked for. Without this a list named
+                        // after whoever is being gifted resolved to nothing, and
+                        // a negated contains-check then passed every time.
+                        string list = DerefValue((string)p["list"] ?? "", p, vars);
                         if (string.IsNullOrEmpty(list) || vars == null) return false;
-                        string needle = DerefValue((string)p["value"] ?? "", vars);
+                        string needle = DerefValue((string)p["value"] ?? "", p, vars);
                         var items = vars.GetList(list);
                         for (int i = 0; i < items.Count; i++)
                             if (string.Equals(items[i], needle, System.StringComparison.Ordinal))
@@ -85,7 +89,7 @@ namespace SMSModForge.PackPlugin
 
                 case "ListCount":
                     {
-                        string list = (string)p["list"];
+                        string list = DerefValue((string)p["list"] ?? "", p, vars);
                         if (string.IsNullOrEmpty(list) || vars == null) return false;
                         int count = vars.GetList(list).Count;
                         if (!float.TryParse((string)p["value"] ?? "0", NumberStyles.Float,
@@ -119,7 +123,7 @@ namespace SMSModForge.PackPlugin
                     {
                         string name = (string)p["name"];
                         if (string.IsNullOrEmpty(name)) return false;
-                        string prefix = DerefValue((string)p["value"] ?? "", vars);
+                        string prefix = DerefValue((string)p["value"] ?? "", p, vars);
                         // An empty prefix matches everything, which is almost
                         // certainly an unfinished row rather than an intent.
                         if (prefix.Length == 0) return false;
@@ -164,15 +168,66 @@ namespace SMSModForge.PackPlugin
                 // ("pack" default | "vanilla"). Pack reads the per-pack store;
                 // vanilla reads the GC2 GlobalNameVariable through the bridge
                 // (the same path the legacy GameVariable* cases below use).
+                // One case for what used to be ten. The operator is a param
+                // now; the store still comes from 'source'. The ten old
+                // spellings are kept below because a pack works whether or not
+                // its author has re-saved since the merge.
+                case "VariableCompare":
+                    {
+                        string name = (string)p["name"];
+                        if (string.IsNullOrEmpty(name)) return false;
+
+                        string how = (string)p["comparison"] ?? "equals";
+                        if (how == "equals")
+                        {
+                            string value = DerefValue((string)p["value"] ?? "", p, vars);
+                            if (IsVanilla(p))
+                                return SMSModForge.Shared.VarCompare.Matches(
+                                    GameVariableBridge.Get(name), value);
+                            return vars.Compare(name, value) == 0;
+                        }
+
+                        if (IsVanilla(p))
+                        {
+                            switch (how)
+                            {
+                                case "greater than":     return CompareGameVarNumber(p, vars, (a, b) => a >  b);
+                                case "greater or equal": return CompareGameVarNumber(p, vars, (a, b) => a >= b);
+                                case "less than":        return CompareGameVarNumber(p, vars, (a, b) => a <  b);
+                                case "less or equal":    return CompareGameVarNumber(p, vars, (a, b) => a <= b);
+                            }
+                            return false;
+                        }
+
+                        int sign = vars.Compare(name, DerefValue((string)p["value"] ?? "0", p, vars));
+                        switch (how)
+                        {
+                            case "greater than":     return sign >  0;
+                            case "greater or equal": return sign >= 0;
+                            case "less than":        return sign <  0;
+                            case "less or equal":    return sign <= 0;
+                        }
+
+                        // An operator this build does not know is not a gate
+                        // that should quietly pass.
+                        log?.LogWarning("[SMSModForge.PackPlugin] VariableCompare: unknown "
+                                        + "comparison '" + how + "' on '" + name + "' - not met.");
+                        return false;
+                    }
+
                 case "VariableEquals":
                     {
                         string name = (string)p["name"];
-                        string value = DerefValue((string)p["value"] ?? "", vars);
+                        string value = DerefValue((string)p["value"] ?? "", p, vars);
                         if (string.IsNullOrEmpty(name)) return false;
                         if (IsVanilla(p))
                         {
-                            object g = GameVariableBridge.Get(name);
-                            return g != null && string.Equals(g.ToString(), value, System.StringComparison.Ordinal);
+                            // By type, not by text. A boxed bool prints
+                            // "True" and a number prints in the machine's own
+                            // culture, so comparing either as a string failed
+                            // against what a pack actually writes.
+                            return SMSModForge.Shared.VarCompare.Matches(
+                                GameVariableBridge.Get(name), value);
                         }
                         return vars.Compare(name, value) == 0;
                     }
@@ -180,29 +235,29 @@ namespace SMSModForge.PackPlugin
                     {
                         string name = (string)p["name"];
                         if (string.IsNullOrEmpty(name)) return false;
-                        if (IsVanilla(p)) return CompareGameVarNumber(p, (a, b) => a > b);
-                        return vars.Compare(name, (string)p["value"] ?? "0") > 0;
+                        if (IsVanilla(p)) return CompareGameVarNumber(p, vars, (a, b) => a > b);
+                        return vars.Compare(name, DerefValue((string)p["value"] ?? "0", p, vars)) > 0;
                     }
                 case "VariableLessThan":
                     {
                         string name = (string)p["name"];
                         if (string.IsNullOrEmpty(name)) return false;
-                        if (IsVanilla(p)) return CompareGameVarNumber(p, (a, b) => a < b);
-                        return vars.Compare(name, (string)p["value"] ?? "0") < 0;
+                        if (IsVanilla(p)) return CompareGameVarNumber(p, vars, (a, b) => a < b);
+                        return vars.Compare(name, DerefValue((string)p["value"] ?? "0", p, vars)) < 0;
                     }
                 case "VariableGreaterOrEqual":
                     {
                         string name = (string)p["name"];
                         if (string.IsNullOrEmpty(name)) return false;
-                        if (IsVanilla(p)) return CompareGameVarNumber(p, (a, b) => a >= b);
-                        return vars.Compare(name, (string)p["value"] ?? "0") >= 0;
+                        if (IsVanilla(p)) return CompareGameVarNumber(p, vars, (a, b) => a >= b);
+                        return vars.Compare(name, DerefValue((string)p["value"] ?? "0", p, vars)) >= 0;
                     }
                 case "VariableLessOrEqual":
                     {
                         string name = (string)p["name"];
                         if (string.IsNullOrEmpty(name)) return false;
-                        if (IsVanilla(p)) return CompareGameVarNumber(p, (a, b) => a <= b);
-                        return vars.Compare(name, (string)p["value"] ?? "0") <= 0;
+                        if (IsVanilla(p)) return CompareGameVarNumber(p, vars, (a, b) => a <= b);
+                        return vars.Compare(name, DerefValue((string)p["value"] ?? "0", p, vars)) <= 0;
                     }
                 case "VariableExists":
                     {
@@ -214,19 +269,20 @@ namespace SMSModForge.PackPlugin
                 case "GameVariableEquals":
                     {
                         string name = (string)p["name"];
-                        string value = DerefValue((string)p["value"] ?? "", vars);
-                        object got = GameVariableBridge.Get(name);
-                        if (got == null) return false;
-                        return string.Equals(got.ToString(), value, System.StringComparison.Ordinal);
+                        string value = DerefValue((string)p["value"] ?? "", p, vars);
+                        // Same typed comparison as VariableEquals above - this
+                        // is the older spelling of the same question.
+                        return SMSModForge.Shared.VarCompare.Matches(
+                            GameVariableBridge.Get(name), value);
                     }
                 case "GameVariableNumberGreaterThan":
-                    return CompareGameVarNumber(p, (a, b) => a >  b);
+                    return CompareGameVarNumber(p, vars, (a, b) => a >  b);
                 case "GameVariableNumberGreaterOrEqual":
-                    return CompareGameVarNumber(p, (a, b) => a >= b);
+                    return CompareGameVarNumber(p, vars, (a, b) => a >= b);
                 case "GameVariableNumberLessThan":
-                    return CompareGameVarNumber(p, (a, b) => a <  b);
+                    return CompareGameVarNumber(p, vars, (a, b) => a <  b);
                 case "GameVariableNumberLessOrEqual":
-                    return CompareGameVarNumber(p, (a, b) => a <= b);
+                    return CompareGameVarNumber(p, vars, (a, b) => a <= b);
                 case "LevelActive":
                     {
                         string token = (string)p["level"];
@@ -267,7 +323,7 @@ namespace SMSModForge.PackPlugin
                         string kind = (string)p["kind"] ?? "";
                         // $varName is accepted here as everywhere else, so a gate can ask
                         // about whichever object a variable currently names.
-                        string target = DerefValue((string)p["target"] ?? (string)p["path"] ?? "", vars);
+                        string target = DerefValue((string)p["target"] ?? (string)p["path"] ?? "", p, vars);
                         if (string.IsNullOrEmpty(target)) return false;
 
                         GameObject go;
@@ -288,7 +344,7 @@ namespace SMSModForge.PackPlugin
                             GameObject levelGo = null;
                             if (kind == "GameObjects" || kind == "Level Overlay")
                             {
-                                string overlayLevel = DerefValue((string)p["overlayLevel"] ?? "", vars);
+                                string overlayLevel = DerefValue((string)p["overlayLevel"] ?? "", p, vars);
                                 if (!string.IsNullOrEmpty(overlayLevel))
                                 {
                                     var level5 = GameObject.Find("5_Levels");
@@ -448,11 +504,13 @@ namespace SMSModForge.PackPlugin
         /// "missing = doesn't pass" semantic the rest of the
         /// evaluator uses).
         /// </summary>
-        private static bool CompareGameVarNumber(JObject p, System.Func<double, double, bool> op)
+        private static bool CompareGameVarNumber(JObject p, PackVariableStore vars,
+                                                 System.Func<double, double, bool> op)
         {
             string name = (string)p["name"];
             if (string.IsNullOrEmpty(name)) return false;
-            if (!double.TryParse((string)p["value"] ?? "0", NumberStyles.Float,
+            if (!double.TryParse(DerefValue((string)p["value"] ?? "0", p, vars),
+                                  NumberStyles.Float,
                                   CultureInfo.InvariantCulture, out var threshold))
                 threshold = 0d;
             double current = GameVariableBridge.GetNumber(name);
@@ -483,11 +541,21 @@ namespace SMSModForge.PackPlugin
         /// <c>$$</c> escapes a literal dollar; an unknown variable resolves to
         /// empty, matching the stores' own reads.
         /// </summary>
-        private static string DerefValue(string raw, PackVariableStore vars)
+        private static string DerefValue(string raw, JObject p, PackVariableStore vars)
         {
-            if (string.IsNullOrEmpty(raw) || raw[0] != '$') return raw;
-            if (raw.Length > 1 && raw[1] == '$') return raw.Substring(1);
-            return vars?.GetString(raw.Substring(1)) ?? "";
+            // Which store a $name on the VALUE side reads, the way 'source'
+            // already says which one the NAME side reads.
+            //
+            // Without it a pack could ask "is this variable equal to that one"
+            // only when the other one was its own, so a condition the game
+            // itself writes - "If Mainstory[MLove] > Mainstory[MCorruption]" -
+            // had no equivalent here at all.
+            bool vanilla = string.Equals((string)p["valueSource"], "vanilla",
+                                         System.StringComparison.OrdinalIgnoreCase);
+
+            return SMSModForge.Shared.VarText.Resolve(raw, name => vanilla
+                ? SMSModForge.Shared.VarCompare.Text(GameVariableBridge.Get(name))
+                : (vars == null ? "" : vars.GetString(name)));
         }
 
         // ── Author-facing diagnostics ────────────────────────────────────

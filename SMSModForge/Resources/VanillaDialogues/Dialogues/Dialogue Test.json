@@ -1,0 +1,189 @@
+{
+ "id": "Dialogue Test",
+ "name": "Dialogue Test",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [],
+ "roots": [
+  72167099,
+  -1685321444
+ ],
+ "nodes": {
+  "72167099": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    2061531818,
+    -2106194250,
+    -516180806
+   ],
+   "actor": null,
+   "text": "test",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromNode"
+   }
+  },
+  "2061531818": {
+   "kind": "text",
+   "parent": 72167099,
+   "actor": null,
+   "text": "(charm) uwu",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Charming] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Charming",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-2106194250": {
+   "kind": "text",
+   "parent": 72167099,
+   "actor": null,
+   "text": "(athletic) gaga",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-516180806": {
+   "kind": "text",
+   "parent": 72167099,
+   "actor": null,
+   "text": "(smart) baba",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1685321444": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    697122363,
+    -402236001,
+    2118037718,
+    -1271428651
+   ],
+   "actor": null,
+   "text": "uwu lina testina",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "697122363": {
+   "kind": "text",
+   "parent": -1685321444,
+   "actor": null,
+   "text": "gaga",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Charming] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Charming",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-402236001": {
+   "kind": "text",
+   "parent": -1685321444,
+   "actor": null,
+   "text": "gugu",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2118037718": {
+   "kind": "text",
+   "parent": -1685321444,
+   "actor": null,
+   "text": "gigi",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1271428651": {
+   "kind": "text",
+   "parent": -1685321444,
+   "actor": null,
+   "text": "wawa",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "Dialogue Test",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dialogue Test and wait",
+   "as": "Dialogue"
+  }
+ ]
+}

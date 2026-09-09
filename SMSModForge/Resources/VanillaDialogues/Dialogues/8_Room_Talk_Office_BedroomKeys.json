@@ -1,0 +1,519 @@
+{
+ "id": "8_Room_Talk/Office/BedroomKeys",
+ "name": "BedroomKeys",
+ "index": 5,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Josef"
+ ],
+ "roots": [
+  -870097564,
+  1236949748,
+  -989789615,
+  -157179656,
+  -1888429863,
+  -494742667
+ ],
+ "nodes": {
+  "-870097564": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You know, {PC}, there comes a time in every man’s life when he has to take a good look at where he's headed. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1236949748": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I think it’s about time we had a man to man talk.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-989789615": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You’re at that age now where you start making decisions that shape your future. It’s a big responsibility, but it’s also an exciting time. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-157179656": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1202459241,
+    1441012116,
+    350003583,
+    -1403696796
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "So I wonder, what are your plans for the future?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1202459241": {
+   "kind": "text",
+   "parent": -157179656,
+   "children": [
+    1443907832
+   ],
+   "actor": null,
+   "text": "There's this girl I really like.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1441012116": {
+   "kind": "text",
+   "parent": -157179656,
+   "children": [
+    271984826
+   ],
+   "actor": null,
+   "text": "I see myself more of a player than someone who settles down.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "350003583": {
+   "kind": "text",
+   "parent": -157179656,
+   "children": [
+    -1164601032,
+    -1771793262,
+    1239228730,
+    2036889321,
+    1532402705,
+    470834465,
+    1632688363
+   ],
+   "actor": null,
+   "text": "I want to be with you and {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1403696796": {
+   "kind": "text",
+   "parent": -157179656,
+   "children": [
+    650388689
+   ],
+   "actor": null,
+   "text": "I really don't know what I want from life.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1443907832": {
+   "kind": "text",
+   "parent": -1202459241,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "You've got this, {S}. I'm not here to tell you what to do. You've already fixed the mistakes I made, and you're going to do great.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "271984826": {
+   "kind": "text",
+   "parent": 1441012116,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "That's perfectly fine. I was the same way. Isabella, Elizabeth... There have been quite a few women in my life before I settled with Anna.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1164601032": {
+   "kind": "text",
+   "parent": 350003583,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I'm... I'm glad you think so.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "650388689": {
+   "kind": "text",
+   "parent": -1403696796,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "That's completly fine, there's even some wisdom in being able to recognize that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1888429863": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I also want you to have this. If you ever feel lonely, you are welcome to spend the night with me and your {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = Bedroom Key",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Bedroom Key"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-494742667": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Keep up the good work, {S}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2036889321": {
+   "kind": "text",
+   "parent": 350003583,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I want you to have this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = Bedroom Key",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Bedroom Key"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Mainstory[M-D-Bond] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-D-Bond",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1532402705": {
+   "kind": "text",
+   "parent": 350003583,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Anna is no longer mine, she is ours.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "470834465": {
+   "kind": "text",
+   "parent": 350003583,
+   "actor": "Josef",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "And I'm... I am looking forward to sharing her holes with you, my {S}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1632688363": {
+   "kind": "text",
+   "parent": 350003583,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Keep up the good work, {S}.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1771793262": {
+   "kind": "text",
+   "parent": 350003583,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "We both shared Isabella, giving her a proper {S} and {D} double-stuffing...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[isabelle-threesome] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "isabelle-threesome",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1239228730": {
+   "kind": "text",
+   "parent": 350003583,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Stretching River's ass together... I can feel myself growing hard just thinkin about it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[river-thr-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "river-thr-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Office",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play BedroomKeys and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Inventory[master-bedroom-key] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "master-bedroom-key",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Inventory[master-bedroom-key] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "master-bedroom-key",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

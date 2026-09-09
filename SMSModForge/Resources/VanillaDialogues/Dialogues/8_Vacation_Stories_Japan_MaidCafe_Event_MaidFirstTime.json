@@ -1,0 +1,477 @@
+{
+ "id": "8_Vacation_Stories/Japan_MaidCafe/Event_MaidFirstTime",
+ "name": "Event_MaidFirstTime",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "S_Manager",
+  "V_Riku"
+ ],
+ "roots": [
+  1544553148
+ ],
+ "nodes": {
+  "1544553148": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    9170940,
+    -1349733020,
+    1404386019,
+    51265640,
+    1595735337,
+    -778331026,
+    -2131616967,
+    11335134,
+    1103096518,
+    1908730524,
+    -753245758,
+    1315747190,
+    636756788,
+    -2090256016,
+    -558291437,
+    678732146
+   ],
+   "actor": "V_Riku",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Oh, great. Customers. Just what I needed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "9170940": {
+   "kind": "text",
+   "parent": 1544553148,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Uh... hi! Are you still open?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1349733020": {
+   "kind": "text",
+   "parent": 1544553148,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Yeah, yeah. You’re lucky. We close in fifty minutes. Sit down or whatever.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1404386019": {
+   "kind": "text",
+   "parent": 1544553148,
+   "actor": "S_Manager",
+   "expressionName": "neutral",
+   "text": "Riku! Nando ieba wakarunda? Okyakusan ni chanto aisatsu shinasai",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "51265640": {
+   "kind": "text",
+   "parent": 1544553148,
+   "actor": "V_Riku",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Hai hai… mou yarimasu yo",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1595735337": {
+   "kind": "text",
+   "parent": 1544553148,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Welcome, masters, to our humble café. I hope your time here is magical and unforgettable.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MaidFlash (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MaidFlash (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/MaidFlash (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-778331026": {
+   "kind": "choice",
+   "parent": 1544553148,
+   "children": [
+    270138724,
+    -1812072404,
+    -610679125
+   ],
+   "actor": "V_Riku",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "What do you want? And no, we’re out of half the stuff, so don’t get picky.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "270138724": {
+   "kind": "text",
+   "parent": -778331026,
+   "actor": null,
+   "text": "Just a curry rice for me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-610679125": {
+   "kind": "text",
+   "parent": -778331026,
+   "actor": null,
+   "text": "I'll take a cheeseburger...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1812072404": {
+   "kind": "text",
+   "parent": -778331026,
+   "actor": null,
+   "text": "Pancakes!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2131616967": {
+   "kind": "text",
+   "parent": 1544553148,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Uh, I’ll have the omurice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "11335134": {
+   "kind": "text",
+   "parent": 1544553148,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Got it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_RikuDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1103096518": {
+   "kind": "text",
+   "parent": 1544553148,
+   "actor": "Adrian",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "1908730524": {
+   "kind": "choice",
+   "parent": 1544553148,
+   "children": [
+    -874474068,
+    497390919,
+    -777331400
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I’ve got a feeling she’s only here for the paycheck... definitely not because she likes it.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-874474068": {
+   "kind": "text",
+   "parent": 1908730524,
+   "actor": null,
+   "text": "Yeah, she's quite rude...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "497390919": {
+   "kind": "text",
+   "parent": 1908730524,
+   "actor": null,
+   "text": "Maybe she's just having a bad day. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-777331400": {
+   "kind": "text",
+   "parent": 1908730524,
+   "actor": null,
+   "text": "No shit, Adrian. That's like ninety percent of all jobs.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-753245758": {
+   "kind": "text",
+   "parent": 1544553148,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "Here. Omurice for you, curry rice for you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_RikuDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_RikuDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_RikuDefault"
+      }
+     }
+    }
+   ]
+  },
+  "1315747190": {
+   "kind": "text",
+   "parent": 1544553148,
+   "actor": "V_Riku",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "And now I have to draw something on the omurice. What do you want? And don’t say anything complicated or I'll end you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "636756788": {
+   "kind": "text",
+   "parent": 1544553148,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Uh... a cat?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2090256016": {
+   "kind": "text",
+   "parent": 1544553148,
+   "actor": "V_Riku",
+   "expressionName": "neutral",
+   "text": "There. Good enough for you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-558291437": {
+   "kind": "text",
+   "parent": 1544553148,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Y-yeah, it’s great. Thanks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_RikuDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "678732146": {
+   "kind": "text",
+   "parent": 1544553148,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Alright, today was... something. Let’s head back and get some rest... I want to check out the animation museum tomorrow.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Japan_MaidCafe",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Event_MaidFirstTime and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_RikuDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_RikuDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_RikuDefault"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Vacation_Save[jpn-cafe-pro] = 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "jpn-cafe-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,312 @@
+{
+ "id": "8_Room_Talk/Office/Josef_PlayerBirthdayTalk",
+ "name": "Josef_PlayerBirthdayTalk",
+ "index": 6,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Josef"
+ ],
+ "roots": [
+  1070248893,
+  633504678
+ ],
+ "nodes": {
+  "1070248893": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1396628883
+   ],
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hey. Just wanted to say... happy birthday, {S}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1396628883": {
+   "kind": "choice",
+   "parent": 1070248893,
+   "children": [
+    -694251095,
+    246971144,
+    -664722582,
+    1828615676
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I know things haven't exactly been easy lately, but I’m proud of the person you’re becoming.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-694251095": {
+   "kind": "text",
+   "parent": 1396628883,
+   "children": [
+    2028991883
+   ],
+   "actor": null,
+   "text": "Thanks, {D}. That means a lot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "246971144": {
+   "kind": "text",
+   "parent": 1396628883,
+   "children": [
+    -1514388538
+   ],
+   "actor": null,
+   "text": "Appreciate it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-664722582": {
+   "kind": "text",
+   "parent": 1396628883,
+   "children": [
+    -369330720
+   ],
+   "actor": null,
+   "text": "You’re not getting soft on me, are you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1828615676": {
+   "kind": "text",
+   "parent": 1396628883,
+   "children": [
+    -1880735332
+   ],
+   "actor": null,
+   "text": "You sure you even know who I am anymore?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-369330720": {
+   "kind": "text",
+   "parent": -664722582,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Soft? Never. But I guess even I can say a kind word once a year.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1514388538": {
+   "kind": "text",
+   "parent": 246971144,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Good. Just... Try to make the most of today. We don't get many like it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2028991883": {
+   "kind": "text",
+   "parent": -694251095,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Heh. You’ve grown up a lot. More than I ever gave you credit for. I’m... trying, alright?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1880735332": {
+   "kind": "text",
+   "parent": 1828615676,
+   "actor": "Josef",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "...No. But I want to. I haven’t been the {D} you needed, and I know that. I’m not asking for forgiveness... just a chance to do better.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "633504678": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "And... I know I don’t say this enough, but—thank you. For stepping in with the debt. I should’ve handled it myself, but you... you saved us. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[DEBT-PAID-OFF] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DEBT-PAID-OFF",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Office",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Josef_PlayerBirthdayTalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Holidays[holiday-playerbd] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "holiday-playerbd",
+        "list": "Holidays",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Holidays[holiday-event-three-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "holiday-event-three-done",
+        "list": "Holidays",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Holidays[holiday-event-three-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "holiday-event-three-done",
+        "list": "Holidays",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

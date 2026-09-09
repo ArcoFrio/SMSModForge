@@ -1,0 +1,1951 @@
+{
+ "id": "8_Room_Talk/doctorroom/doctordefault",
+ "name": "doctordefault",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "DrFrost"
+ ],
+ "roots": [
+  1230974153
+ ],
+ "nodes": {
+  "1230974153": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1469486803,
+    1721477154,
+    -1303747724,
+    -2064996421,
+    -324026673,
+    -192872512,
+    -700796357
+   ],
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Welcome back. What brings you to my lab today—business or idle chatter?",
+   "tag": "nurseroot",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[DialogueVariation] = Random5[Random]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random5",
+        "pick": "random",
+        "type": "number"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1721477154": {
+   "kind": "text",
+   "parent": 1230974153,
+   "children": [
+    1288741576,
+    -829999189
+   ],
+   "actor": null,
+   "text": "Why did you become a doctor?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1303747724": {
+   "kind": "text",
+   "parent": 1230974153,
+   "children": [
+    958001817,
+    1799022807,
+    446945874,
+    1501547885,
+    -1281883854,
+    -1535228508
+   ],
+   "actor": null,
+   "text": "What new experiments are you working on?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_7[drfrost-feetdone] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "drfrost-feetdone",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[milking-mainstory] ≠ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milking-mainstory",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Different",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-2064996421": {
+   "kind": "text",
+   "parent": 1230974153,
+   "children": [
+    -713287314,
+    -1868127483,
+    40595055
+   ],
+   "actor": null,
+   "text": "What happened to your previous test subjects?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_7[drfrost-feetdone] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "drfrost-feetdone",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[milking-mainstory] ≠ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milking-mainstory",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Different",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-700796357": {
+   "kind": "text",
+   "parent": 1230974153,
+   "children": [
+    -1720583830,
+    -1902859437
+   ],
+   "actor": null,
+   "text": "I'll be seeing you, doc.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1720583830": {
+   "kind": "text",
+   "parent": -700796357,
+   "actor": "DrFrost",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "If you’re leaving, remember—my offer stands whenever you’re ready to push yourself further. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-713287314": {
+   "kind": "text",
+   "parent": -2064996421,
+   "actor": "DrFrost",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Some experienced accelerated improvements… others, not so much. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "958001817": {
+   "kind": "text",
+   "parent": -1303747724,
+   "actor": "DrFrost",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I’m currently working on something I call Project Catalyst. It involves combining the unique properties of sperm from two separate donors to create a synthetic ‘super cum.’",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1288741576": {
+   "kind": "text",
+   "parent": 1721477154,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "I suppose I was drawn to the pursuit of knowledge more than healing others. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1868127483": {
+   "kind": "text",
+   "parent": -2064996421,
+   "actor": "DrFrost",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "There were setbacks—some subjects rejected the treatments or suffered unforeseen side effects. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1799022807": {
+   "kind": "text",
+   "parent": -1303747724,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "In theory, this mixture could enhance the fertility to levels previously unseen.",
+   "jump": {
+    "mode": "Jump",
+    "to": "nurseroot"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-829999189": {
+   "kind": "text",
+   "parent": 1721477154,
+   "actor": "DrFrost",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "The human body is a complex machine. I want to understand it, control it… push it beyond its limits. I became a doctor to find answers, not to hold people’s hands.",
+   "jump": {
+    "mode": "Jump",
+    "to": "nurseroot"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1469486803": {
+   "kind": "text",
+   "parent": 1230974153,
+   "children": [
+    964067350
+   ],
+   "actor": null,
+   "text": "What kind of experiements are there?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "964067350": {
+   "kind": "text",
+   "parent": 1469486803,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Excellent. I’ve been waiting for someone with your… resilience.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[active-store] = 8",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "active-store",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 8
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ShopCore to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ShopCore",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/ShopCore"
+      }
+     }
+    }
+   ]
+  },
+  "-1902859437": {
+   "kind": "text",
+   "parent": -700796357,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "But don’t delay too long… progress waits for no one.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-324026673": {
+   "kind": "text",
+   "parent": 1230974153,
+   "children": [
+    -537368377,
+    998203995,
+    -1527101940,
+    -1974570935,
+    1073977246,
+    92297822,
+    783269586,
+    1945976588,
+    889597633,
+    -456060893,
+    -1304526835,
+    1403556786,
+    729943696,
+    1421115287,
+    1433110282,
+    -97977025
+   ],
+   "actor": null,
+   "text": "Can we test my strength?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[evelyn-pregnant-state] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "evelyn-pregnant-state",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-537368377": {
+   "kind": "text",
+   "parent": -324026673,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Hmm... It's not worth it now. You have to undergo a few experiements first....",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[extra-hp] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "extra-hp",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[extra-hp-2] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "extra-hp-2",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "998203995": {
+   "kind": "text",
+   "parent": -324026673,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Yes... Good thinking... Lie down. On the ground. I'll get my equipment.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1527101940": {
+   "kind": "text",
+   "parent": -324026673,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active doctorfrost_default to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "doctorfrost_default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/doctorfrost_default"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active doctorfrost_bdsm to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "doctorfrost_bdsm",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/doctorfrost_bdsm"
+      }
+     }
+    }
+   ]
+  },
+  "-1974570935": {
+   "kind": "choice",
+   "parent": -324026673,
+   "children": [
+    1341785028,
+    -423730582,
+    -1881959651
+   ],
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "First of all: How do you feel? Any discomfort?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1341785028": {
+   "kind": "text",
+   "parent": -1974570935,
+   "children": [
+    1748144805
+   ],
+   "actor": null,
+   "text": "Um, what are you wearing?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-423730582": {
+   "kind": "text",
+   "parent": -1974570935,
+   "children": [
+    -893788065
+   ],
+   "actor": null,
+   "text": "No, I feel great.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1881959651": {
+   "kind": "text",
+   "parent": -1974570935,
+   "children": [
+    -121735859
+   ],
+   "actor": null,
+   "text": "I can feel some \"discomfort\" growing in my pants...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-121735859": {
+   "kind": "text",
+   "parent": -1881959651,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "That's not a good sign. I need to see how much your body can handle post-experimentation",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-893788065": {
+   "kind": "text",
+   "parent": -423730582,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Good. I need to see how much your body can handle post-experimentation.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1748144805": {
+   "kind": "text",
+   "parent": 1341785028,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Don’t question my methods. I need to see how much your body can handle post-experimentation.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1073977246": {
+   "kind": "text",
+   "parent": -324026673,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Let's see... Yes... Healthy and big...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active DoctorFeet (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "DoctorFeet (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/DoctorFeet (1)"
+      }
+     }
+    }
+   ]
+  },
+  "92297822": {
+   "kind": "choice",
+   "parent": -324026673,
+   "children": [
+    -1397109580,
+    -2005772617,
+    -1681845782
+   ],
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "I will know apply gentle pressure. How do you feel?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1397109580": {
+   "kind": "text",
+   "parent": 92297822,
+   "actor": null,
+   "text": "T-This feels great... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2005772617": {
+   "kind": "text",
+   "parent": 92297822,
+   "actor": null,
+   "text": "Y-You are very skilled with your feet, doc...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1681845782": {
+   "kind": "text",
+   "parent": 92297822,
+   "actor": null,
+   "text": "I-I might cum if you continue that....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "783269586": {
+   "kind": "text",
+   "parent": -324026673,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Good. I will now start moving my feet up and down...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1945976588": {
+   "kind": "choice",
+   "parent": -324026673,
+   "children": [
+    -465545336,
+    -1946285126,
+    1401738630
+   ],
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "It's crucial that you tell me when you are about to ejaculate... Every second counts....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-465545336": {
+   "kind": "text",
+   "parent": 1945976588,
+   "actor": null,
+   "text": "Doc, I'm... I'm... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1946285126": {
+   "kind": "text",
+   "parent": 1945976588,
+   "actor": null,
+   "text": "My cock is... I'm about to blow... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1401738630": {
+   "kind": "text",
+   "parent": 1945976588,
+   "actor": null,
+   "text": "(Shoot your load)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "889597633": {
+   "kind": "text",
+   "parent": -324026673,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "The subject produces an extremely high volume of sperm. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active DoctorFeet (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "DoctorFeet (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/DoctorFeet (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-456060893": {
+   "kind": "text",
+   "parent": -324026673,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Even after ejaculation, his shaft remains firm. This is truly remarkable.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1304526835": {
+   "kind": "text",
+   "parent": -324026673,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Alright, {PC}. I'll try to extract more sperm... You have to tell me when you reach your limit.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1403556786": {
+   "kind": "text",
+   "parent": -324026673,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Your endurance is impressive...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active DoctorFeet (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "DoctorFeet (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/DoctorFeet (3)"
+      }
+     }
+    }
+   ]
+  },
+  "729943696": {
+   "kind": "text",
+   "parent": -324026673,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "And your penis... Your cock is quite the sight to behold....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1421115287": {
+   "kind": "choice",
+   "parent": -324026673,
+   "children": [
+    431983333,
+    1837613231,
+    -668320543
+   ],
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "I... I'm glad you decided to join me in the name of science....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1433110282": {
+   "kind": "text",
+   "parent": -324026673,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Very well... You did a great job today. I hope we can continue our experiments in the future...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_7[drfrost-feetdone] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "drfrost-feetdone",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Lewd to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Lewd",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Lewd"
+      }
+     }
+    }
+   ]
+  },
+  "431983333": {
+   "kind": "text",
+   "parent": 1421115287,
+   "actor": null,
+   "text": "I... I can't take it anymore...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1837613231": {
+   "kind": "text",
+   "parent": 1421115287,
+   "actor": null,
+   "text": "I... I need more... Please...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-668320543": {
+   "kind": "text",
+   "parent": 1421115287,
+   "actor": null,
+   "text": "My balls are empty, doc... Please...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-97977025": {
+   "kind": "text",
+   "parent": -324026673,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    }
+   ]
+  },
+  "40595055": {
+   "kind": "choice",
+   "parent": -2064996421,
+   "children": [
+    -1272915232,
+    -1497676578,
+    -1984998548
+   ],
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "But that’s the nature of progress. Results are only failures if you refuse to learn from them.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1272915232": {
+   "kind": "text",
+   "parent": 40595055,
+   "children": [
+    499128909,
+    -1949983107
+   ],
+   "actor": null,
+   "text": "Others? Who exactly did you test on?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1497676578": {
+   "kind": "text",
+   "parent": 40595055,
+   "children": [
+    -1158230518
+   ],
+   "actor": null,
+   "text": "That sounds like a lawsuit waiting to happen.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1984998548": {
+   "kind": "text",
+   "parent": 40595055,
+   "children": [
+    -965226142
+   ],
+   "actor": null,
+   "text": "(Smart) I hope you’ve resolved those side effects by now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Smart] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Smart",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "499128909": {
+   "kind": "text",
+   "parent": -1272915232,
+   "actor": "DrFrost",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "A former colleague, Dr. Muramasa. He had a… unique enthusiasm for pushing boundaries.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1158230518": {
+   "kind": "text",
+   "parent": -1497676578,
+   "actor": "DrFrost",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Laws? In Peak City? Here, power and ambition write the rulebook. And I’ve ensured the right people are invested in my success.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-965226142": {
+   "kind": "text",
+   "parent": -1984998548,
+   "actor": "DrFrost",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Side effects are inevitable in pioneering work. The only question is whether they’ll prove enlightening.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1949983107": {
+   "kind": "text",
+   "parent": -1272915232,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Unfortunately, our collaboration ended abruptly. Let’s just say I haven’t heard from him since his last experiment.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "446945874": {
+   "kind": "text",
+   "parent": -1303747724,
+   "actor": "DrFrost",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I’m researching methods to reverse aging. Do I believe it’ll work? Of course not. But wealthy fools can’t resist the promise of eternal youth—and their money funds my real work.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1501547885": {
+   "kind": "text",
+   "parent": -1303747724,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Cold Blood. Imagine it—your own enhanced AC, flowing through your veins. In a world where temperatures climb higher every year.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1281883854": {
+   "kind": "text",
+   "parent": -1303747724,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Right now, I’m researching methods to increase a woman’s breast size. Just imagine the possibilities...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1535228508": {
+   "kind": "text",
+   "parent": -1303747724,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "I’m developing a serum that erases the memory of bad movies. Imagine—no more sleepless nights haunted by Riley Cloudwalker.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-192872512": {
+   "kind": "text",
+   "parent": 1230974153,
+   "children": [
+    1220530553,
+    1690936360,
+    623556163,
+    -1898908868,
+    -1145264605,
+    1738204523
+   ],
+   "actor": null,
+   "text": "I need something… that makes women produce milk.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[milking-mainstory] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milking-mainstory",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1220530553": {
+   "kind": "text",
+   "parent": -192872512,
+   "actor": "DrFrost",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Hm. I wondered when someone would ask.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Figure out how to start milk production.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Moo! (Kirby)",
+        "of": "Quest"
+       },
+       "m_TaskId": 400938478
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "1690936360": {
+   "kind": "choice",
+   "parent": -192872512,
+   "children": [
+    1576016668,
+    1078131066,
+    1542664614
+   ],
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Since the ban, I anticipated a demand shift. The city is predictable that way.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1576016668": {
+   "kind": "text",
+   "parent": 1690936360,
+   "children": [
+    2096016650
+   ],
+   "actor": null,
+   "text": "So you’ve already been working on it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1078131066": {
+   "kind": "text",
+   "parent": 1690936360,
+   "children": [
+    907695415
+   ],
+   "actor": null,
+   "text": "What, you keep a “make women lactate” kit just lying around?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1542664614": {
+   "kind": "text",
+   "parent": 1690936360,
+   "children": [
+    694009981
+   ],
+   "actor": null,
+   "text": "(Smart) I bet you enjoyed working on this. Imagining the results.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Smart] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Smart",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "694009981": {
+   "kind": "text",
+   "parent": 1542664614,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Enjoyment is irrelevant. But… the results will be fascinating.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "907695415": {
+   "kind": "text",
+   "parent": 1078131066,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Hardly. I perfected a compound weeks ago. Efficiency is not a joke.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2096016650": {
+   "kind": "text",
+   "parent": 1576016668,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Of course. Preparation is the difference between a doctor and a fool.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "623556163": {
+   "kind": "text",
+   "parent": -192872512,
+   "actor": "DrFrost",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "The mixture is a hormonal inducer. Prolactin, oxytocin triggers, receptor sensitizers. It convinces the body it’s ready to nurse.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1898908868": {
+   "kind": "choice",
+   "parent": -192872512,
+   "children": [
+    -26554759,
+    -1954271175,
+    1842089756
+   ],
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Side effects include breast swelling, increased sensitivity, and a compulsive urge to release. Which I assume is… desirable.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-26554759": {
+   "kind": "text",
+   "parent": -1898908868,
+   "children": [
+    1729147691
+   ],
+   "actor": null,
+   "text": "I just need it to help the farm survive.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1954271175": {
+   "kind": "text",
+   "parent": -1898908868,
+   "children": [
+    -1560112707
+   ],
+   "actor": null,
+   "text": "So basically… cow mode unlocked.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1842089756": {
+   "kind": "text",
+   "parent": -1898908868,
+   "children": [
+    1162953183
+   ],
+   "actor": null,
+   "text": "The urge to release, huh? I like the sound of that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1162953183": {
+   "kind": "text",
+   "parent": 1842089756,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Then you’ll like this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1560112707": {
+   "kind": "text",
+   "parent": -1954271175,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "If your vocabulary is that limited, yes. Cow mode.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1729147691": {
+   "kind": "text",
+   "parent": -26554759,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Then you’ll find it… sufficient.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1145264605": {
+   "kind": "text",
+   "parent": -192872512,
+   "actor": "DrFrost",
+   "expressionName": "neutral",
+   "text": "Here. Take it. No charge.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Milking Save[milking-mainstory] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milking-mainstory",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = Lactation Inducer",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Lactation Inducer"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1738204523": {
+   "kind": "text",
+   "parent": -192872512,
+   "actor": "DrFrost",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Consider it an experiment. I want to see how far your… herd can go.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/doctorroom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play doctordefault and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Evelyn_bust_condition and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "Evelyn_bust_condition",
+       "of": "GetGameObjectConditions",
+       "path": "8_Room_Talk/doctorroom/Evelyn_bust_condition"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[doctorfrost-met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "doctorfrost-met",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "checkConditions",
+     "type": "InstructionLogicCheckConditions",
+     "title": "Check If Core[After-Talk-Transition] = False",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "compareBool",
+         "type": "ConditionMathCompareBooleans",
+         "title": "If Core[After-Talk-Transition] = False",
+         "fields": {
+          "m_Value": {
+           "kind": "variable",
+           "variable": {
+            "scope": "global",
+            "name": "After-Talk-Transition",
+            "list": "Core",
+            "type": "boolean"
+           }
+          },
+          "m_Comparison": "Equals",
+          "m_CompareTo": {
+           "kind": "value",
+           "value": false
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1850 @@
+{
+ "id": "8_Room_Talk/Kenhouseinside/DefaultdialogueKen",
+ "name": "DefaultdialogueKen",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Ken"
+ ],
+ "roots": [
+  1149788893,
+  1481319796,
+  -421178663,
+  -1998548154
+ ],
+ "nodes": {
+  "-1998548154": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1833746870,
+    1830289172,
+    716162233,
+    1835538472,
+    -1536816467,
+    630159059
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Hey, {PC}! What’s up?",
+   "tag": "root",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1833746870": {
+   "kind": "text",
+   "parent": -1998548154,
+   "children": [
+    -891089217
+   ],
+   "actor": null,
+   "text": "Where's Samantha?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1830289172": {
+   "kind": "text",
+   "parent": -1998548154,
+   "children": [
+    517500293
+   ],
+   "actor": null,
+   "text": "How are you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "716162233": {
+   "kind": "text",
+   "parent": -1998548154,
+   "children": [
+    -774932049
+   ],
+   "actor": null,
+   "text": "What have you been up to lately?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "630159059": {
+   "kind": "text",
+   "parent": -1998548154,
+   "children": [
+    279427752
+   ],
+   "actor": null,
+   "text": "See you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "517500293": {
+   "kind": "text",
+   "parent": 1830289172,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Uh, doing good. Though I hope summer will be over soon. The temperatures are killing me.",
+   "jump": {
+    "mode": "Jump",
+    "to": "root"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-891089217": {
+   "kind": "text",
+   "parent": -1833746870,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Huh? She's probably in her room playing some game or something.",
+   "jump": {
+    "mode": "Jump",
+    "to": "root"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-774932049": {
+   "kind": "text",
+   "parent": 716162233,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Oh, you know, the usual. I’ve been trying to get more into photography. Your work on Starmaker really inspired me.",
+   "jump": {
+    "mode": "Jump",
+    "to": "root"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "279427752": {
+   "kind": "text",
+   "parent": 630159059,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Let’s catch up again soon. Take care!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1149788893": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -477568387,
+    -1661155477
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Yo, {PC}... I've got a question...",
+   "values": [
+    {
+     "m_Value": {
+      "kind": "value",
+      "value": ""
+     },
+     "m_InBold": false,
+     "m_InItalic": false,
+     "m_UseColor": false,
+     "m_Color": {
+      "kind": "value",
+      "value": "Yellow",
+      "of": "GetColorColorsYellow"
+     }
+    }
+   ],
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[ken-talk] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-talk",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[ken-talk-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-talk-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-477568387": {
+   "kind": "choice",
+   "parent": 1149788893,
+   "children": [
+    1423597411,
+    114795291
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Is Anna your {M}?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[ken-talk] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-talk",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[ken-talk-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-talk-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1423597411": {
+   "kind": "text",
+   "parent": -477568387,
+   "children": [
+    1940432297
+   ],
+   "actor": null,
+   "text": "Yeah, she is.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "114795291": {
+   "kind": "text",
+   "parent": -477568387,
+   "children": [
+    673859858
+   ],
+   "actor": null,
+   "text": "No, she's not.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1661155477": {
+   "kind": "text",
+   "parent": 1149788893,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Well, uh, thanks for being honest. I was just curious, you know.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "673859858": {
+   "kind": "text",
+   "parent": 114795291,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Yeah, uh. Sorry for asking such a dumb question. It's just... You know...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1940432297": {
+   "kind": "text",
+   "parent": 1423597411,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I thought so... Damn, kinda weird... Not gonna lie... But you're also like... really lucky...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done_2[Ken-knows-about-M] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Ken-knows-about-M",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1481319796": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -810266490,
+    -1619237161
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Hey, you've been a great friend, the only one I've got to be honest...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[ken-talk] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-talk",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[ken-talk-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-talk-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-810266490": {
+   "kind": "text",
+   "parent": 1481319796,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I thought, how can I help you? I know your time is valuable, so...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[ken-talk] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-talk",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[ken-talk-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-talk-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1619237161": {
+   "kind": "choice",
+   "parent": 1481319796,
+   "children": [
+    1961932486,
+    -345200970
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I thought I could take care of your grocery shopping for you. I know it's not much, but it would save you some time.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1961932486": {
+   "kind": "text",
+   "parent": -1619237161,
+   "children": [
+    -2137554865
+   ],
+   "actor": null,
+   "text": "That would be great.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-345200970": {
+   "kind": "text",
+   "parent": -1619237161,
+   "children": [
+    -191607135
+   ],
+   "actor": null,
+   "text": "All good, Ken. I can do that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-191607135": {
+   "kind": "text",
+   "parent": -345200970,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Oh, alright. ",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2137554865": {
+   "kind": "text",
+   "parent": 1961932486,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Nice! Don't worry, boss. I'll take care of it!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done_2[Ken-does-grocery-shopping] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Ken-does-grocery-shopping",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-421178663": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1832943605,
+    935381307,
+    91344291
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Hey, {PC}, can we talk for a minute?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[ken-talk] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-talk",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[ken-talk-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-talk-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[samantha-fucked] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-fucked",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[ken-sharing-route-start] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-sharing-route-start",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1832943605": {
+   "kind": "text",
+   "parent": -421178663,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "So, um... You know, we're pretty much the same age... But you're like hanging around with hot chicks...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[ken-talk] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-talk",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[ken-talk-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-talk-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "935381307": {
+   "kind": "text",
+   "parent": -421178663,
+   "actor": "Ken",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "And I... Um...  I’m still a virgin. I’m 22 and I’ve never been with a woman. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "91344291": {
+   "kind": "choice",
+   "parent": -421178663,
+   "children": [
+    924904690,
+    1261084923,
+    355192457
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "It’s really bothering me, and I was wondering if you could help me... you know, change that.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "924904690": {
+   "kind": "text",
+   "parent": 91344291,
+   "children": [
+    -17906525,
+    -203377714,
+    1337399883
+   ],
+   "actor": null,
+   "text": "Sure, I could ask Samantha. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1261084923": {
+   "kind": "text",
+   "parent": 91344291,
+   "children": [
+    -1476340464,
+    -2084415820
+   ],
+   "actor": null,
+   "text": "Sure, I can ask Anna. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "355192457": {
+   "kind": "text",
+   "parent": 91344291,
+   "children": [
+    2103256928
+   ],
+   "actor": null,
+   "text": "Sorry, but that's something you have to figure out yourself.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-17906525": {
+   "kind": "text",
+   "parent": 924904690,
+   "actor": "Ken",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "W-What? But... But she's my {M}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[ken-samantha-route-start] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-samantha-route-start",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Lewd to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Lewd",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Lewd"
+      }
+     }
+    }
+   ]
+  },
+  "-1476340464": {
+   "kind": "text",
+   "parent": 1261084923,
+   "actor": "Ken",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Holy shit! You would do that!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[ken-anna-route-start] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-anna-route-start",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[lets-invite-someone-check] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "lets-invite-someone-check",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "2103256928": {
+   "kind": "text",
+   "parent": 355192457,
+   "actor": "Ken",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Yeah, I know... I gotta man up... Thanks though for listening.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2084415820": {
+   "kind": "text",
+   "parent": 1261084923,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "T-Thank you! I don't think she'll agree but oh my god, what if she does!?",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-203377714": {
+   "kind": "choice",
+   "parent": 924904690,
+   "children": [
+    1890443609,
+    1830843957
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "She's kind of old and not exactly sexy...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1337399883": {
+   "kind": "text",
+   "parent": 924904690,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Hey, if you're not down to help me out, that's cool. But, you know, don't try to pull a fast one on me...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1890443609": {
+   "kind": "text",
+   "parent": -203377714,
+   "children": [
+    1466593867
+   ],
+   "actor": null,
+   "text": "She's no Anna, but she's still very attractive.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1830843957": {
+   "kind": "text",
+   "parent": -203377714,
+   "children": [
+    -316206204
+   ],
+   "actor": null,
+   "text": "Are you blind? Your {M} is a total babe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1466593867": {
+   "kind": "text",
+   "parent": 1890443609,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "You're just pulling my leg, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-316206204": {
+   "kind": "text",
+   "parent": 1830843957,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Hah, good one... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1835538472": {
+   "kind": "text",
+   "parent": -1998548154,
+   "children": [
+    1904488145
+   ],
+   "actor": null,
+   "text": "I want you to look at something... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[ken-actually-convinced] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-actually-convinced",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[ken-samantha-route-start] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-samantha-route-start",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1904488145": {
+   "kind": "choice",
+   "parent": 1835538472,
+   "children": [
+    -1095336097,
+    -644964255,
+    -1248750390,
+    344852082
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Oh, what is it?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1095336097": {
+   "kind": "text",
+   "parent": 1904488145,
+   "children": [
+    441997600,
+    -990368013
+   ],
+   "actor": null,
+   "text": "[Show him the Samantha Beach Photo]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-644964255": {
+   "kind": "text",
+   "parent": 1904488145,
+   "children": [
+    257799776,
+    -1749822791
+   ],
+   "actor": null,
+   "text": "[Show him the Samantha Ass Photo]",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[samantha-ass-photo] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-ass-photo",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1248750390": {
+   "kind": "text",
+   "parent": 1904488145,
+   "children": [
+    -2065455340,
+    -1180089614,
+    1263621726
+   ],
+   "actor": null,
+   "text": "[Show him the Samantha Cock Photo]",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[samantha-cock-photo] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-cock-photo",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2065455340": {
+   "kind": "text",
+   "parent": -1248750390,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "W-Wait! You and {M} are f-fucking? I... I'm not mad or anything but I thought she... So she likes it when...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamanthaCockPhoto to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamanthaCockPhoto",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/SamanthaCockPhoto"
+      }
+     }
+    }
+   ]
+  },
+  "257799776": {
+   "kind": "text",
+   "parent": -644964255,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "H-Holy fuck... How did you manage to get this Photo? Her butt looks so... fuckable? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamanthaPosing (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamanthaPosing (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/SamanthaPosing (1)"
+      }
+     }
+    }
+   ]
+  },
+  "441997600": {
+   "kind": "text",
+   "parent": -1095336097,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Is that my {M}... She mentioned that you would go to the beach with her... She looks so different... So... Hot?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active samanthabeachphoto (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "samanthabeachphoto (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/samanthabeachphoto (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1180089614": {
+   "kind": "choice",
+   "parent": -1248750390,
+   "children": [
+    1057815179,
+    -1392842444
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "O-Okay... I'm in... Fuck... Will you talk to her?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-990368013": {
+   "kind": "text",
+   "parent": -1095336097,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I... I don't know, man. She's still my {M}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[ken-partly-convinced] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-partly-convinced",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1749822791": {
+   "kind": "text",
+   "parent": -644964255,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I... I don't know, man. She's still my {M}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[ken-partly-convinced] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-partly-convinced",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "344852082": {
+   "kind": "text",
+   "parent": 1904488145,
+   "actor": null,
+   "text": "Actually, nevermind me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1057815179": {
+   "kind": "text",
+   "parent": -1180089614,
+   "actor": null,
+   "text": "I will, don't worry.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1392842444": {
+   "kind": "text",
+   "parent": -1180089614,
+   "actor": null,
+   "text": "You won't regret it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1263621726": {
+   "kind": "text",
+   "parent": -1248750390,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Alrighty... I... I trust you... Shit...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[ken-actually-convinced] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-actually-convinced",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1536816467": {
+   "kind": "text",
+   "parent": -1998548154,
+   "children": [
+    262235369
+   ],
+   "actor": null,
+   "text": "I talked to Samantha.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[samantha-told-about-ken-interest] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-told-about-ken-interest",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[the-plan-was-declined] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "the-plan-was-declined",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[the-plan-is-ready] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "the-plan-is-ready",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "262235369": {
+   "kind": "choice",
+   "parent": -1536816467,
+   "children": [
+    625261426,
+    792941031
+   ],
+   "actor": "Ken",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "A-And? Did you tell her that I... I want it?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "625261426": {
+   "kind": "text",
+   "parent": 262235369,
+   "children": [
+    -1529665722,
+    957480350
+   ],
+   "actor": null,
+   "text": "No, but she mentioned that she thought about it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "792941031": {
+   "kind": "text",
+   "parent": 262235369,
+   "children": [
+    1463533004
+   ],
+   "actor": null,
+   "text": "No and I think we shouldn't do it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1463533004": {
+   "kind": "text",
+   "parent": 792941031,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Y-Yeah... Let's just forgot we ever talked about it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[the-plan-was-declined] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "the-plan-was-declined",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1529665722": {
+   "kind": "text",
+   "parent": 625261426,
+   "actor": "Ken",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "S-She thought about having s-sex with me!? Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "957480350": {
+   "kind": "choice",
+   "parent": 625261426,
+   "children": [
+    425219879,
+    1997940062
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "S-So... She's up for it?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "425219879": {
+   "kind": "text",
+   "parent": 957480350,
+   "children": [
+    -1024774574,
+    -2005195165
+   ],
+   "actor": null,
+   "text": "She needs a push. Next time I fuck her, just joinin.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1997940062": {
+   "kind": "text",
+   "parent": 957480350,
+   "children": [
+    519479036
+   ],
+   "actor": null,
+   "text": "No, you should forget about it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "519479036": {
+   "kind": "text",
+   "parent": 1997940062,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Y-Yeah... Let's just forgot we ever talked about it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[the-plan-was-declined] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "the-plan-was-declined",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1024774574": {
+   "kind": "text",
+   "parent": 425219879,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I should do what!? ... I... I don't know if I can do that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[the-plan-is-ready] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "the-plan-is-ready",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2005195165": {
+   "kind": "text",
+   "parent": 425219879,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "But I'll think about it... Shit, this is crazy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Kenhouseinside",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DefaultdialogueKen and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Ken to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Ken",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Ken"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

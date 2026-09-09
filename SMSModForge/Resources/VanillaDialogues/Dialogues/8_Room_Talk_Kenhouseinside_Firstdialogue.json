@@ -1,0 +1,782 @@
+{
+ "id": "8_Room_Talk/Kenhouseinside/Firstdialogue",
+ "name": "Firstdialogue",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Ken",
+  "Samantha"
+ ],
+ "roots": [
+  -1044244136,
+  -933311972,
+  1048405253,
+  811244267,
+  437172506,
+  816593860,
+  -455841453,
+  -779352072,
+  -1733891152,
+  -1333166437
+ ],
+ "nodes": {
+  "1048405253": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    997093364,
+    -1940847446,
+    1220396808
+   ],
+   "actor": "Samantha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Unique? Is that what they call awesome these days? Now tell me everything about your buddy!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-933311972": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "That’s my {M}, Samantha. She’s... Um... unique.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1044244136": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Wow! I didn't expect that – you'd made a friend! I'm so glad for you, Ken!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "997093364": {
+   "kind": "text",
+   "parent": 1048405253,
+   "children": [
+    1480348647
+   ],
+   "actor": null,
+   "text": "Hey, I'm {PC}. Nice to meet you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1940847446": {
+   "kind": "text",
+   "parent": 1048405253,
+   "children": [
+    -1197068212
+   ],
+   "actor": null,
+   "text": "I'm {PC}. I did not expect such a beauty to live here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1220396808": {
+   "kind": "text",
+   "parent": 1048405253,
+   "children": [
+    2053023883
+   ],
+   "actor": null,
+   "text": "Uh... My {PC} is name... [Stare at her boobs]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2053023883": {
+   "kind": "text",
+   "parent": 1220396808,
+   "actor": "Samantha",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Take your time, I know, the are HUGE.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1197068212": {
+   "kind": "text",
+   "parent": -1940847446,
+   "actor": "Samantha",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Maybe the two of us should go grab a drink, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1480348647": {
+   "kind": "text",
+   "parent": 997093364,
+   "actor": "Samantha",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Mhm... It's about time Ken brought me a cute one like you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "811244267": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Ken",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Jesus {M}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "437172506": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Relax, honey. I'm just joking... I'll leave you two noobs to it, have fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/SamanthaBust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "816593860": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I'm sorry... M-My {M}  is... She is...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-455841453": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1873559715,
+    1461797440,
+    1328596339,
+    1191040402
+   ],
+   "actor": "Ken",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "My {M} is a gamer...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1873559715": {
+   "kind": "text",
+   "parent": -455841453,
+   "actor": null,
+   "text": "She seems cool.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1461797440": {
+   "kind": "text",
+   "parent": -455841453,
+   "actor": null,
+   "text": "She's quite something. I like her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1328596339": {
+   "kind": "text",
+   "parent": -455841453,
+   "actor": null,
+   "text": "Oh god, I'm so sorry.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-779352072": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Hmmm... Well... You wanted to talk to me? You can ask me any question. I would give anything for a photo with Anna!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1733891152": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -499745307,
+    2069377227,
+    -867625775,
+    -1669931076,
+    323288142
+   ],
+   "actor": "Ken",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "So go ahead! Shoot me your questions!",
+   "tag": "root",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-499745307": {
+   "kind": "text",
+   "parent": -1733891152,
+   "children": [
+    1448641942
+   ],
+   "actor": null,
+   "text": "Why do you want this photo so badly?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2069377227": {
+   "kind": "text",
+   "parent": -1733891152,
+   "children": [
+    -1699316449
+   ],
+   "actor": null,
+   "text": "Tell me about you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-867625775": {
+   "kind": "text",
+   "parent": -1733891152,
+   "children": [
+    25098168
+   ],
+   "actor": null,
+   "text": "Why pay so much money?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1669931076": {
+   "kind": "text",
+   "parent": -1733891152,
+   "children": [
+    -1994259383
+   ],
+   "actor": null,
+   "text": "Are you interested in being with Anna?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "323288142": {
+   "kind": "text",
+   "parent": -1733891152,
+   "actor": null,
+   "text": "That's all I need to know. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1994259383": {
+   "kind": "text",
+   "parent": -1669931076,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Hah! No... Like... I know that she's way out of my league. I just want the photo.",
+   "jump": {
+    "mode": "Jump",
+    "to": "root"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "25098168": {
+   "kind": "text",
+   "parent": -867625775,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Why not? I got lucky with a lottery ticket and won a few grand. This seems like the perfect way to spend it!",
+   "jump": {
+    "mode": "Jump",
+    "to": "root"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1699316449": {
+   "kind": "text",
+   "parent": 2069377227,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Uh, I'm Ken. I'm like 22 years old and in training to become a car mechanic.",
+   "jump": {
+    "mode": "Jump",
+    "to": "root"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1448641942": {
+   "kind": "text",
+   "parent": -499745307,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Anna is like... The perfect woman. Her beauty, she's like a goddess from ancient tales or something. ",
+   "jump": {
+    "mode": "Jump",
+    "to": "root"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1333166437": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1053575833,
+    -1903256778,
+    -1540935715
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "So? Uhm... What do you say? ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1053575833": {
+   "kind": "text",
+   "parent": -1333166437,
+   "children": [
+    -1848905515
+   ],
+   "actor": null,
+   "text": "It's cool. We'll call you. Here's our address.  ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1903256778": {
+   "kind": "text",
+   "parent": -1333166437,
+   "children": [
+    579612160
+   ],
+   "actor": null,
+   "text": "Sure, but only one photo and then you're gone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1540935715": {
+   "kind": "text",
+   "parent": -1333166437,
+   "children": [
+    -1300034444
+   ],
+   "actor": null,
+   "text": "Sorry, but Anna is too busy. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "579612160": {
+   "kind": "text",
+   "parent": -1903256778,
+   "actor": "Ken",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "NICE! That's all I ever wanted! Thank you, thank you, thank you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[ken-only-photo-route] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-only-photo-route",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Go to the suburbs and meet Ken.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Fanboy (Ken)",
+        "of": "Quest"
+       },
+       "m_TaskId": -210829219
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + 2000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 2000
+      }
+     }
+    }
+   ]
+  },
+  "-1848905515": {
+   "kind": "text",
+   "parent": 1053575833,
+   "actor": "Ken",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Y-Y-Your address? AWESOME! I am SO EXCITED about taking that photo! I CAN'T WAIT!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[ken-only-photo-route] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-only-photo-route",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Go to the suburbs and meet Ken.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Fanboy (Ken)",
+        "of": "Quest"
+       },
+       "m_TaskId": -210829219
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-1300034444": {
+   "kind": "text",
+   "parent": -1540935715,
+   "actor": "Ken",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Aw, damn. Well, you can visit me anytime. Maybe you'll change your mind?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionQuestsTaskFail",
+     "title": "Fail Go to the suburbs and meet Ken.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Fanboy (Ken)",
+        "of": "Quest"
+       },
+       "m_TaskId": -210829219
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "1191040402": {
+   "kind": "text",
+   "parent": -455841453,
+   "children": [
+    -62070757
+   ],
+   "actor": null,
+   "text": "(Lewd) Yeah, I bet she can handle a joystick.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Lewd] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Lewd",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-62070757": {
+   "kind": "text",
+   "parent": 1191040402,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Dude! Gross! That’s my {M}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Kenhouseinside",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Firstdialogue and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[samantha-met] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-met",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Ken to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Ken",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Ken"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamanthaBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamanthaBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/SamanthaBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[samantha-met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-met",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

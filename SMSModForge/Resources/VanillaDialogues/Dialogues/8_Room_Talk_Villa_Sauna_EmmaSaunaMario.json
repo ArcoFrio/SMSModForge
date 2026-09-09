@@ -1,0 +1,720 @@
+{
+ "id": "8_Room_Talk/Villa_Sauna/EmmaSaunaMario",
+ "name": "EmmaSaunaMario",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Emma",
+  "Mario"
+ ],
+ "roots": [
+  1165091822,
+  -762891496,
+  859166308,
+  633465030,
+  -100369822,
+  -1760124718,
+  982343509,
+  562518754,
+  1290996041,
+  -12378154,
+  1631139200,
+  1646915288,
+  405005949,
+  -2056629475,
+  -2035363971,
+  -1530543254,
+  -1140272789,
+  -1351306101,
+  -2038794070,
+  -2102574931
+ ],
+ "nodes": {
+  "1165091822": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -573463546,
+    181705218,
+    1356511672
+   ],
+   "actor": "Emma",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hnggga.. Mhmm.. It's in... Your big cock is in....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[emma-first-time-sauna] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-first-time-sauna",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Emma (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Emma (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Emma (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-573463546": {
+   "kind": "text",
+   "parent": 1165091822,
+   "children": [
+    412574250
+   ],
+   "actor": null,
+   "text": "W-Wait.. Wrong hole...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "181705218": {
+   "kind": "text",
+   "parent": 1165091822,
+   "children": [
+    1133229654
+   ],
+   "actor": null,
+   "text": "Fuck... Somehow it's even tighter now...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1356511672": {
+   "kind": "text",
+   "parent": 1165091822,
+   "actor": null,
+   "text": "[Grope her ass]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-762891496": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Fuck... Pound me, {PC}... Give me your big, fat cock....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Mario_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Mario_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Mario_Nude"
+      }
+     }
+    }
+   ]
+  },
+  "412574250": {
+   "kind": "text",
+   "parent": -573463546,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "T-There's no such thing as a wrong hole... P-Pound my ass, {PC}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1133229654": {
+   "kind": "text",
+   "parent": 181705218,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Y-Your cock's inside my ass, dumbass... Hnggaahh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "633465030": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "D-{D}!? ... L-Look... I'm.. I'm taking his whole length up my ass... A-Are you proud of me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Lewd to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Lewd",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Lewd"
+      }
+     }
+    }
+   ]
+  },
+  "859166308": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Quite the view...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-100369822": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "I'm very proud of you, Emma... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1760124718": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Y-Your cock is so big, {D}... I... I want to feel iit! ... Please, {D}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "982343509": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Hngah... Y-You're so tight, Emma... My sweet girl....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Emma (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Emma (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Emma (5)"
+      }
+     }
+    }
+   ]
+  },
+  "562518754": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "HHnnaaaahhh!!! T-Two cocks... Oh fuck... My {D} is fucking me... My {D} is... Hngaaaah!!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1290996041": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Y-Your tits are perfect, honey.... So soft... So... Give me a kiss...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Corrupt Emma.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Bishop (Mario)",
+        "of": "Quest"
+       },
+       "m_TaskId": 1410719678
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-12378154": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1027738350,
+    -676815031
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Mwuaah! I want to taste your tongue, {D}! I... I want to kiss {PC} too!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1027738350": {
+   "kind": "text",
+   "parent": -12378154,
+   "children": [
+    793858037
+   ],
+   "actor": null,
+   "text": "[Make out with Emma]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-676815031": {
+   "kind": "text",
+   "parent": -12378154,
+   "children": [
+    1180552088
+   ],
+   "actor": null,
+   "text": "[Grope her tits]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1180552088": {
+   "kind": "text",
+   "parent": -676815031,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Squeeze them... My tits are all yours!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "793858037": {
+   "kind": "text",
+   "parent": 1027738350,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Mwuaahh... Ha... Ah....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1631139200": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I'm... I'm getting close... I want to cum... P-Please, make me cum... I ... I... Ahhhhaaannggg!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1646915288": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "T-Take our loads, you perfect slut...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "405005949": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "AHNggghaa!!! F-Fuaaachk!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Emma (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Emma (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Emma (6)"
+      }
+     }
+    }
+   ]
+  },
+  "-2056629475": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Oh fuck! Fuck! Fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2035363971": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I... I can't hold it in! I'm sorry! Hnaaaagh!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Emma (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Emma (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Emma (7)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Emma (4) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Emma (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Emma (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-1530543254": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "It's all good, my dear... Now be a good girl and clean our cocks...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1140272789": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Y-Yes...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Emma_Nude to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Emma_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Emma_Nude"
+      }
+     }
+    }
+   ]
+  },
+  "-1351306101": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1279790336,
+    -294295254,
+    -1452009116
+   ],
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Seems you’re full of surprises, {PC}. Well done.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[emma-corrupted] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-corrupted",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2038794070": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Consider your {D}'s debt paid. You've earned it... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[Debt] = 0",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Debt",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 0
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[debt-paid-off-talk-incoming-d-mario] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "debt-paid-off-talk-incoming-d-mario",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2102574931": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "While I have no other work for you at the moment, I hope you decide to check in from time to time. Emma seems quite fond of you, as am I.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1279790336": {
+   "kind": "text",
+   "parent": -1351306101,
+   "actor": null,
+   "text": "It was my pleasure.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-294295254": {
+   "kind": "text",
+   "parent": -1351306101,
+   "actor": null,
+   "text": "Emma is special, treat her well.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1452009116": {
+   "kind": "text",
+   "parent": -1351306101,
+   "actor": null,
+   "text": "The debt. Now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Villa_Sauna/EmmaSaunaNude",
+   "script": "Dialogue",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core[temp-stored-very-short-term] = EmmaSaunaMario",
+   "as": "GameObject"
+  }
+ ]
+}

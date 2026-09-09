@@ -1,0 +1,339 @@
+{
+ "id": "8_Room_Talk/Kitchen/Anna_Prisme_1",
+ "name": "Anna_Prisme_1",
+ "index": 20,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna"
+ ],
+ "roots": [
+  970555384,
+  -1517862595
+ ],
+ "nodes": {
+  "970555384": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    95258894,
+    -1642601325,
+    -583767047
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh my gosh, guess what? Prisme called me yesterday! You know, Prisme—the super exclusive magazine!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "95258894": {
+   "kind": "text",
+   "parent": 970555384,
+   "children": [
+    2033696494
+   ],
+   "actor": null,
+   "text": "That’s amazing! What did they want?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1642601325": {
+   "kind": "text",
+   "parent": 970555384,
+   "children": [
+    123696711
+   ],
+   "actor": null,
+   "text": "Prisme? That’s a big deal. What happened?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-583767047": {
+   "kind": "text",
+   "parent": 970555384,
+   "children": [
+    104514038
+   ],
+   "actor": null,
+   "text": "Prisme? Really? Are they sure they dialed the right number?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2033696494": {
+   "kind": "text",
+   "parent": 95258894,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "They said they’re writing an article on up-and-coming Starmaker talents, and they wanted to include me! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "123696711": {
+   "kind": "text",
+   "parent": -1642601325,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "They said they’re writing an article on up-and-coming Starmaker talents, and they wanted to include me! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "104514038": {
+   "kind": "text",
+   "parent": -583767047,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, ha-ha. Believe it or not, they called me specifically. I’ve been working hard, you should know that!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1517862595": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1084929006,
+    1041968081,
+    -1363237702
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Can you believe it? Me, in Prisme! I just… I can’t stop smiling.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1084929006": {
+   "kind": "text",
+   "parent": -1517862595,
+   "children": [
+    -1512987170
+   ],
+   "actor": null,
+   "text": "You’ve earned it. I can’t wait to see the article.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1041968081": {
+   "kind": "text",
+   "parent": -1517862595,
+   "children": [
+    -268250153
+   ],
+   "actor": null,
+   "text": "Don’t let it go to your head, superstar.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1363237702": {
+   "kind": "text",
+   "parent": -1517862595,
+   "children": [
+    -982878718
+   ],
+   "actor": null,
+   "text": "What if Josef or Adrian sees the magazine?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1512987170": {
+   "kind": "text",
+   "parent": 1084929006,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thanks, hun. You will be the first to know!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-268250153": {
+   "kind": "text",
+   "parent": 1041968081,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Maybe just a lit bittle? Still feels surreal!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-982878718": {
+   "kind": "text",
+   "parent": -1363237702,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh, relax! Josef wouldn’t even glance at something like Prisme. And Adrian? Please, he’s glued to his games.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Kitchen/Kitchen_Conditions_2",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Anna_Prisme_1 and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_7[prisme-story] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "prisme-story",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Mainstory[anna-heart-status] ≥ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-heart-status",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Core_NoSave[Anna-Default-Outfit] to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Anna-Default-Outfit",
+        "list": "Core_NoSave",
+        "type": "game-object"
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_7[prisme-story] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "prisme-story",
+        "list": "Events_7",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Condition-Split] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Condition-Split",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,846 @@
+{
+ "id": "8_Core_Events/Trips/ParkVisitM/Park_LoveDressDialogue",
+ "name": "Park_LoveDressDialogue",
+ "index": 6,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna"
+ ],
+ "roots": [
+  -1002039170,
+  -2056342379,
+  -2135653957,
+  -1474475101,
+  465673418,
+  -543088432,
+  1488749611,
+  -866567573
+ ],
+ "nodes": {
+  "-1002039170": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1945240433
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hey, would you... Would you like to take a little walk with me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[anna-lovepark-firsttime] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-lovepark-firsttime",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2056342379": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    451797990
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Hey… I was thinking… ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[anna-lovepark-firsttime] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-lovepark-firsttime",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "451797990": {
+   "kind": "choice",
+   "parent": -2056342379,
+   "children": [
+    -1879358069,
+    -1950678275,
+    -375470079,
+    1456821628
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Since we’re here, maybe we could take a little walk? Just the two of us?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1945240433": {
+   "kind": "choice",
+   "parent": -1002039170,
+   "children": [
+    -1225538811,
+    344797255,
+    874240741
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Not as {M} and {S} but as... {PC} and Anna...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1879358069": {
+   "kind": "text",
+   "parent": 451797990,
+   "children": [
+    1579177928
+   ],
+   "actor": null,
+   "text": "Of course, Anna. I’d love to.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1579177928": {
+   "kind": "text",
+   "parent": -1879358069,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Really? That makes me happy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1950678275": {
+   "kind": "text",
+   "parent": 451797990,
+   "children": [
+    486146630
+   ],
+   "actor": null,
+   "text": "You’re in a romantic mood today, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "486146630": {
+   "kind": "text",
+   "parent": -1950678275,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I guess so… Is that bad?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-375470079": {
+   "kind": "text",
+   "parent": 451797990,
+   "children": [
+    367305399
+   ],
+   "actor": null,
+   "text": "Trying to show off your cute sundress, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "367305399": {
+   "kind": "text",
+   "parent": -375470079,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Mmm, maybe~ But mostly, I just wanted an excuse to spend more time with you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1456821628": {
+   "kind": "text",
+   "parent": 451797990,
+   "children": [
+    1051567281
+   ],
+   "actor": null,
+   "text": "Oh? And what if I say no?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1051567281": {
+   "kind": "text",
+   "parent": 1456821628,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Then I guess I’ll just have to drag you along. No complaints allowed!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2135653957": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Let’s go, then. Just for a little while… I want to enjoy this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1225538811": {
+   "kind": "text",
+   "parent": -1945240433,
+   "actor": null,
+   "text": "I'd love to. You know.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "344797255": {
+   "kind": "text",
+   "parent": -1945240433,
+   "actor": null,
+   "text": "I love this dress of yours, {M}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "874240741": {
+   "kind": "text",
+   "parent": -1945240433,
+   "actor": null,
+   "text": "Let's go. (Take her hand)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1474475101": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    -1311516660,
+    1443371838,
+    -660857366
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You know… I’ve been thinking about us a lot lately.",
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaPark2025 (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaPark2025 (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaPark2025 (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1311516660": {
+   "kind": "text",
+   "parent": -1474475101,
+   "children": [
+    1707076464
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I never thought my life would turn out like this. I thought I had everything figured out—who I was, what I was supposed to do. But then… you happened.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1443371838": {
+   "kind": "text",
+   "parent": -1474475101,
+   "children": [
+    1508408240
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It’s funny… I don’t feel lost anymore. I used to, but now? Now I just feel… happy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-660857366": {
+   "kind": "text",
+   "parent": -1474475101,
+   "children": [
+    -1561207888
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I love the life we’ve built together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1707076464": {
+   "kind": "text",
+   "parent": -1311516660,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "And suddenly, everything changed. For the better.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1508408240": {
+   "kind": "text",
+   "parent": 1443371838,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "And I know things haven’t always been easy. But I wouldn’t trade any of it. Not a single moment.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1561207888": {
+   "kind": "text",
+   "parent": -660857366,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Even the messy parts. Even the things I never expected. As long as it’s with you… I don’t mind where we end up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "465673418": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1058304856,
+    778232116,
+    1248451028,
+    -1620589466
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Sorry, that was probably a little sappy, huh?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaPark2025 (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaPark2025 (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaPark2025 (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-1058304856": {
+   "kind": "text",
+   "parent": 465673418,
+   "children": [
+    1089268775
+   ],
+   "actor": null,
+   "text": "Being with you makes me happy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "778232116": {
+   "kind": "text",
+   "parent": 465673418,
+   "children": [
+    715306563,
+    1252360857
+   ],
+   "actor": null,
+   "text": "Do you ever wonder what’s next for us?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1248451028": {
+   "kind": "text",
+   "parent": 465673418,
+   "children": [
+    27061369
+   ],
+   "actor": null,
+   "text": "So you’re saying I ruined your ‘normal’ life?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1488749611": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "This was nice. Just walking, talking… being with you. Sometimes I forget how much I love simple moments like this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-866567573": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Can we do this again sometime? No pressure, no worries… just us?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1620589466": {
+   "kind": "text",
+   "parent": 465673418,
+   "children": [
+    430887743,
+    1664922404
+   ],
+   "actor": null,
+   "text": "Wow, so clingy. You’re basically obsessed with me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "430887743": {
+   "kind": "text",
+   "parent": -1620589466,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh no! You’ve figured out my secret!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "27061369": {
+   "kind": "text",
+   "parent": 1248451028,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm, completely. But I wouldn’t have it any other way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "715306563": {
+   "kind": "text",
+   "parent": 778232116,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "All the time. But you know what? I’m not scared of the future anymore.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1089268775": {
+   "kind": "text",
+   "parent": -1058304856,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That means everything to me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1664922404": {
+   "kind": "text",
+   "parent": -1620589466,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Guess you’re stuck with me now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1252360857": {
+   "kind": "text",
+   "parent": 778232116,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Because whatever happens… I know we’ll figure it out together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-543088432": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -782130183,
+    -1162467447,
+    -264224406
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "What I want to say is... You make me happy, {PC}...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-782130183": {
+   "kind": "text",
+   "parent": -543088432,
+   "children": [
+    -1184280340,
+    1632316060
+   ],
+   "actor": null,
+   "text": "I'm glad you feel this way... I was hoping this would happen...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1162467447": {
+   "kind": "text",
+   "parent": -543088432,
+   "children": [
+    1962472268,
+    737746458
+   ],
+   "actor": null,
+   "text": "That's what I'm here for... (Kiss her)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-264224406": {
+   "kind": "text",
+   "parent": -543088432,
+   "children": [
+    250100098,
+    -924851200,
+    -2116534873,
+    -2073038883
+   ],
+   "actor": null,
+   "text": "Why don't you show me how \"happy\" I am making you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "250100098": {
+   "kind": "text",
+   "parent": -264224406,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You're such a naughty boy... Here, take a look...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaPark2025 (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaPark2025 (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaPark2025 (6)"
+      }
+     }
+    }
+   ]
+  },
+  "1962472268": {
+   "kind": "text",
+   "parent": -1162467447,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You... Mwaahmmhmm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaPark2025 (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaPark2025 (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaPark2025 (5)"
+      }
+     }
+    }
+   ]
+  },
+  "-1184280340": {
+   "kind": "text",
+   "parent": -782130183,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Really? I wonder since when you were... Actually, nevermind me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1632316060": {
+   "kind": "text",
+   "parent": -782130183,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let's just enjoy this moment. Just you and me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "737746458": {
+   "kind": "text",
+   "parent": -1162467447,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "When did my {S} became such a good kisser...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-924851200": {
+   "kind": "text",
+   "parent": -264224406,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I can't help but get all wet and excited whenever I think about how much you like my special place...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2116534873": {
+   "kind": "text",
+   "parent": -264224406,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "L-Like a drooling mouth waiting for your big member to... to feed it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2073038883": {
+   "kind": "text",
+   "parent": -264224406,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "And I... I... I hope you visit me in my room tonight...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Trips/ParkVisitM/Park_DialogueCond",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Park_LoveDressDialogue and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Romanced] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Romanced",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave2[anna-car-reflection] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-car-reflection",
+        "list": "Core_NoSave2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

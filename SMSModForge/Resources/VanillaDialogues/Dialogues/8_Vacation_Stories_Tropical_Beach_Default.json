@@ -1,0 +1,339 @@
+{
+ "id": "8_Vacation_Stories/Tropical_Beach/Default",
+ "name": "Default",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  -474885660,
+  1584531344
+ ],
+ "nodes": {
+  "-474885660": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    -1063580750,
+    101048649,
+    -472052180,
+    1095902163
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1063580750": {
+   "kind": "text",
+   "parent": -474885660,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ah, the beach never gets old, does it? Just look at that water.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "101048649": {
+   "kind": "text",
+   "parent": -474885660,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You can practically feel the stress melt away the second you step onto the sand.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-472052180": {
+   "kind": "text",
+   "parent": -474885660,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "The waves are calling, but so is this lounge chair. Decisions, decisions.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1095902163": {
+   "kind": "text",
+   "parent": -474885660,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I’m starting to think I could live here... if only real life didn’t exist.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1584531344": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    764145165,
+    2121880786
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Alright, what’s the plan? Relax, explore, or maybe a bit of both?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[vacation-end-incoming] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vacation-end-incoming",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "764145165": {
+   "kind": "text",
+   "parent": 1584531344,
+   "children": [
+    623297771
+   ],
+   "actor": null,
+   "text": "How about we take some photos for Starmaker?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2121880786": {
+   "kind": "text",
+   "parent": 1584531344,
+   "children": [
+    836819003
+   ],
+   "actor": null,
+   "text": "How about we relax in the sun?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "836819003": {
+   "kind": "text",
+   "parent": 2121880786,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.01,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[annatropbeachrelax-inc] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "annatropbeachrelax-inc",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "623297771": {
+   "kind": "text",
+   "parent": 764145165,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.01,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[annatropbeachphotos-inc] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "annatropbeachphotos-inc",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Tropical_Beach",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Default and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play LiamFreyaFirstAppear and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "LiamFreyaFirstAppear",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Vacation_Stories/Tropical_Beach/LiamFreyaFirstAppear"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_WhiteSwimsuitTropical to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_WhiteSwimsuitTropical",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_WhiteSwimsuitTropical"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play AnnaTropBeachPhotoSession and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "AnnaTropBeachPhotoSession",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Vacation_Stories/Tropical_Beach/AnnaTropBeachPhotoSession"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play AnnaTropBeachRelax and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "AnnaTropBeachRelax",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Vacation_Stories/Tropical_Beach/AnnaTropBeachRelax"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[freyaliamfirsttalk] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "freyaliamfirsttalk",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 9_Vacation_Teleport_Tropical to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "9_Vacation_Teleport_Tropical",
+       "of": "GetGameObjectInstance",
+       "path": "9_Vacation_Teleport_Tropical"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

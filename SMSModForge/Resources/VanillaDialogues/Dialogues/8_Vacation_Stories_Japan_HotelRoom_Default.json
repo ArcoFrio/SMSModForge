@@ -1,0 +1,1016 @@
+{
+ "id": "8_Vacation_Stories/Japan_HotelRoom/Default",
+ "name": "Default",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian"
+ ],
+ "roots": [
+  1710946738,
+  313015032,
+  2100736870,
+  -734483885
+ ],
+ "nodes": {
+  "313015032": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    884994117,
+    -450054504,
+    1480107145
+   ],
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Dude, we’re actually here! Japan! I’ve been dreaming about this for years!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[first-time-japan] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "first-time-japan",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-Day-One-Done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-Day-One-Done",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1710946738": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1686758408
+   ],
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "We're actually back! Let's fucking go!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[first-time-japan] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "first-time-japan",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-Day-One-Done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-Day-One-Done",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "884994117": {
+   "kind": "text",
+   "parent": 313015032,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "It’s just one weekend, but I’ll take it! Even though it’s already evening, there’s still time to squeeze in one thing today!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1480107145": {
+   "kind": "choice",
+   "parent": 313015032,
+   "children": [
+    1642897230,
+    -310719760,
+    444285681,
+    -1182500563
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I’ve gotta see what that’s like! Oh, but what about those massages everyone talks about?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-734483885": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1083825506,
+    70123937,
+    760062417,
+    528251129,
+    -389024227
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "So what's the plan?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[first-time-japan] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "first-time-japan",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[mei-will-visit] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mei-will-visit",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1642897230": {
+   "kind": "text",
+   "parent": 1480107145,
+   "children": [
+    1651888689
+   ],
+   "actor": null,
+   "text": "It's great. It's so different from Peak City.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "444285681": {
+   "kind": "text",
+   "parent": 1480107145,
+   "children": [
+    -478513584
+   ],
+   "actor": null,
+   "text": "What would you like to do first?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-478513584": {
+   "kind": "text",
+   "parent": 444285681,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "The flight was pretty long... A massage sounds like the perfect way to relax and recharge for tomorrow.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1651888689": {
+   "kind": "text",
+   "parent": 1642897230,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I know, right? Everything's here so calm and tidy. I love it!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-310719760": {
+   "kind": "text",
+   "parent": 1480107145,
+   "children": [
+    -144292304
+   ],
+   "actor": null,
+   "text": "Calm down. We can always come back.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-144292304": {
+   "kind": "text",
+   "parent": -310719760,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "R-Really? That would be awesome!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-450054504": {
+   "kind": "text",
+   "parent": 313015032,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Okay, okay, what do we do first? Do we visit one of those amazing temples? Or—wait, a maid café!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1686758408": {
+   "kind": "text",
+   "parent": 1710946738,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Thanks, {B}... for paying and like being there for me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1083825506": {
+   "kind": "text",
+   "parent": -734483885,
+   "children": [
+    535104849
+   ],
+   "actor": null,
+   "text": "Let’s go to a maid café.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[cdw-winter-japan-gyaru] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cdw-winter-japan-gyaru",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "70123937": {
+   "kind": "text",
+   "parent": -734483885,
+   "children": [
+    -1447385236
+   ],
+   "actor": null,
+   "text": "Let’s get a Japanese massage.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[cdw-winter-japan-massage] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cdw-winter-japan-massage",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "760062417": {
+   "kind": "text",
+   "parent": -734483885,
+   "children": [
+    567616145
+   ],
+   "actor": null,
+   "text": "Let’s visit a Japanese temple.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[cdw-winter-japan-shrine] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cdw-winter-japan-shrine",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "567616145": {
+   "kind": "text",
+   "parent": 760062417,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "A temple, huh? Yeah, that sounds awesome. Let’s see some real culture while we’re here!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core_NoSave[incoming-vacation-map] = 3",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "incoming-vacation-map",
+        "list": "Core_NoSave",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 3
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[IMP-Day-One-Done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-Day-One-Done",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[cdw-winter-japan-shrine] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cdw-winter-japan-shrine",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1447385236": {
+   "kind": "text",
+   "parent": 70123937,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "A massage? Yeah, that sounds amazing! I’ve heard they’re supposed to be life-changing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core_NoSave[incoming-vacation-map] = 2",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "incoming-vacation-map",
+        "list": "Core_NoSave",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 2
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[IMP-Day-One-Done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-Day-One-Done",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[cdw-winter-japan-massage] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cdw-winter-japan-massage",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "535104849": {
+   "kind": "text",
+   "parent": -1083825506,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Yes! I’ve gotta see this for myself! Do you think they’ll call me “master”?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core_NoSave[incoming-vacation-map] = 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "incoming-vacation-map",
+        "list": "Core_NoSave",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[IMP-Day-One-Done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-Day-One-Done",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[cdw-winter-japan-gyaru] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cdw-winter-japan-gyaru",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "528251129": {
+   "kind": "text",
+   "parent": -734483885,
+   "children": [
+    -2101133282
+   ],
+   "actor": null,
+   "text": "Let's try to find this Hiroji fellow.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[jpn-shrine-pro] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "jpn-shrine-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-2101133282": {
+   "kind": "text",
+   "parent": 528251129,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "If you say so...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core_NoSave[incoming-vacation-map] = 4",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "incoming-vacation-map",
+        "list": "Core_NoSave",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 4
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[IMP-Day-One-Done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-Day-One-Done",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-389024227": {
+   "kind": "text",
+   "parent": -734483885,
+   "children": [
+    99442348
+   ],
+   "actor": null,
+   "text": "Let's call Mei.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[mei-subway-pro] ≥ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mei-subway-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[mei-declined] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mei-declined",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "99442348": {
+   "kind": "text",
+   "parent": -389024227,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "S-Sure! Why not!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[mei-will-visit] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mei-will-visit",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[IMP-Day-One-Done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-Day-One-Done",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "2100736870": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Sunday already... Man, a weekend is far too short for Japan.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-Day-One-Done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-Day-One-Done",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[IMP-First-Vacation-Event] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1182500563": {
+   "kind": "text",
+   "parent": 1480107145,
+   "children": [
+    195717936
+   ],
+   "actor": null,
+   "text": "(Athletic) If you don’t relax, I’ll fucking kill you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Athletic] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Athletic",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "195717936": {
+   "kind": "text",
+   "parent": -1182500563,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Whoa, whoa! Alright, alright.... Fine, I’ll chill!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Japan_HotelRoom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Default and wait",
+   "as": "Dialogue",
+   "after": [
+    {
+     "kind": "checkConditions",
+     "type": "InstructionLogicCheckConditions",
+     "title": "Check If Vacation_NoSave[mei-will-visit] = False",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "compareBool",
+         "type": "ConditionMathCompareBooleans",
+         "title": "If Vacation_NoSave[mei-will-visit] = False",
+         "fields": {
+          "m_Value": {
+           "kind": "variable",
+           "variable": {
+            "scope": "global",
+            "name": "mei-will-visit",
+            "list": "Vacation_NoSave",
+            "type": "boolean"
+           }
+          },
+          "m_Comparison": "Equals",
+          "m_CompareTo": {
+           "kind": "value",
+           "value": false
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 9_Vacation_Teleport_Japan_Subway to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "9_Vacation_Teleport_Japan_Subway",
+       "of": "GetGameObjectInstance",
+       "path": "9_Vacation_Teleport_Japan_Subway"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,584 @@
+{
+ "id": "8_Room_Talk/BRoom/MRiding",
+ "name": "MRiding",
+ "index": 5,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  1860410299,
+  190367804,
+  -566392505
+ ],
+ "nodes": {
+  "1860410299": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fuck me, Adrian. Fuck my needy pussy!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Adrian (1)"
+      }
+     }
+    }
+   ]
+  },
+  "190367804": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "M-{M}... Y-You are being too rough... If you keep that up I'll... I will...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-566392505": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -618427695,
+    -1754592160
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "No, no, no... {M} has to come first, remember?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-618427695": {
+   "kind": "text",
+   "parent": -566392505,
+   "children": [
+    1456504985,
+    -959656311,
+    1407914358,
+    1763264983,
+    1680012362,
+    1451010429,
+    -539031481,
+    1228894151
+   ],
+   "actor": null,
+   "text": "[Fuck {M}'s ass]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1456504985": {
+   "kind": "text",
+   "parent": -618427695,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "W-What... {PC}!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Adrian (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1754592160": {
+   "kind": "text",
+   "parent": -566392505,
+   "children": [
+    995989519,
+    -804482641,
+    -756465169
+   ],
+   "actor": null,
+   "text": "[Wait for them to finish]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "995989519": {
+   "kind": "text",
+   "parent": -1754592160,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Adrian (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-959656311": {
+   "kind": "text",
+   "parent": -618427695,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Fuck, {M}! Your pussy suddenly went really tight! ... Oh! H-Hey, {B}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1407914358": {
+   "kind": "text",
+   "parent": -618427695,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh fuck... Yes... Fuck me, boys. Your cocks make {M} feel so good!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1763264983": {
+   "kind": "text",
+   "parent": -618427695,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm cumming! I'm cumming from my {S}'s big cocks! Hnggaaaah!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1680012362": {
+   "kind": "text",
+   "parent": -618427695,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "F-Fuck... Take it.. Take my cum, {M}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1451010429": {
+   "kind": "text",
+   "parent": -618427695,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yessshh! Let it all out! Let it all aaaahhh!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-804482641": {
+   "kind": "text",
+   "parent": -1754592160,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Thanks. {M}. That was great!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-756465169": {
+   "kind": "text",
+   "parent": -1754592160,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh. Hey, hun. Have fun you two.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-539031481": {
+   "kind": "text",
+   "parent": -618427695,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "G-Great work, {M}. You're legit a five star waifu.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1228894151": {
+   "kind": "text",
+   "parent": -618427695,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-Thanks, hun... Even though I don't really know what means...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/BRoom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play MRiding and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-B-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-B-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Core_NoSave2[anna-at-flowerwork] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-at-flowerwork",
+        "list": "Core_NoSave2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[adrianmrandomhouseevent] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrianmrandomhouseevent",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] ≠ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Different",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "branches": [
+    "Not there"
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Nude"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_SemiNude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_SemiNude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_SemiNude"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Nude/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_SemiNude/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[adrianmrandomhouseevent] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrianmrandomhouseevent",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

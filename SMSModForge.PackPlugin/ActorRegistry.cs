@@ -1,4 +1,4 @@
-using BepInEx.Logging;
+﻿using BepInEx.Logging;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using UnityEngine;
@@ -129,7 +129,74 @@ namespace SMSModForge.PackPlugin
             _focusedBusts.Clear();
         }
 
-        public ActorEntry GetOrNull(string key) => _byKey.TryGetValue(key, out var a) ? a : null;
+        /// <summary>
+        /// A speaker the pack declared, or one of the game's own characters
+        /// under the same key, or null.
+        /// <para/>
+        /// The fallback is what lets a manifest leave the game's cast out. A
+        /// pack that adds one line spoken by Anna used to have to carry Anna -
+        /// her name and all sixty-four of her outfits - purely so this lookup
+        /// would find something, and every pack that touched a vanilla
+        /// conversation shipped a copy of people it had not changed. The list
+        /// is compiled in now (see <c>VanillaCastData</c>), so a pack writes a
+        /// vanilla character down only when it has changed one.
+        /// <para/>
+        /// The pack is asked FIRST and always wins: an author who edited Anna
+        /// gets their Anna, and this only answers for the ones they left alone.
+        /// </summary>
+        public ActorEntry GetOrNull(string key)
+        {
+            ActorEntry declared;
+            if (_byKey.TryGetValue(key, out declared)) return declared;
+            if (string.IsNullOrEmpty(key)) return null;
+
+            ActorEntry cast = VanillaSpeaker(key);
+            if (cast != null) _byKey[key] = cast;      // built once, then declared
+            return cast;
+        }
+
+        /// <summary>
+        /// One of the game's own characters as a speaker, or null for a key
+        /// that is nobody.
+        /// <para/>
+        /// Assembled from the shared cast rather than from the manifest: the
+        /// key an author picked in the editor is derived from the character's
+        /// name, so the same derivation finds them again here.
+        /// </summary>
+        private ActorEntry VanillaSpeaker(string key)
+        {
+            string wanted = key.Trim();
+            string name = null;
+
+            var outfits = new List<string>();
+            foreach (var bust in SMSModForge.Shared.VanillaCastData.Busts)
+            {
+                string said = SMSModForge.Shared.VanillaCastData.SpokenName(bust.Character);
+                if (!string.Equals(SMSModForge.Shared.VanillaCastData.KeyFor(said), wanted,
+                                   System.StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                name = said;
+                outfits.Add(bust.GoName);
+            }
+            if (name == null) return null;
+
+            var entry = new ActorEntry
+            {
+                Key = key,
+                DisplayName = name,
+                // The plain one, which is the first for every character that
+                // has several - the same default the editor shows.
+                DefaultBustKey = outfits.Count > 0 ? outfits[0] : "",
+            };
+            foreach (string o in outfits) entry.OutfitNames.Add(o);
+            entry.CurrentBustKey = entry.DefaultBustKey;
+
+            _log?.LogInfo("[SMSModForge.PackPlugin] Speaker '" + key + "' is the game's "
+                          + name + " (" + outfits.Count + " outfits), taken from the "
+                          + "built-in cast rather than the manifest.");
+            return entry;
+        }
 
 
         /// <summary>

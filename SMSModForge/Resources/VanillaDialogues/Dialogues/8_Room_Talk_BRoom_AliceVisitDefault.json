@@ -1,0 +1,1474 @@
+{
+ "id": "8_Room_Talk/BRoom/AliceVisitDefault",
+ "name": "AliceVisitDefault",
+ "index": 8,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Alice"
+ ],
+ "roots": [
+  1391436963,
+  803236639,
+  -785006290,
+  -565438568
+ ],
+ "nodes": {
+  "803236639": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1063874294,
+    -780958991,
+    1547897840
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Hey, {B}",
+   "tag": "heyb",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1391436963": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Oh... Hello, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1063874294": {
+   "kind": "text",
+   "parent": 803236639,
+   "children": [
+    -1111751389,
+    -494023825,
+    137663271,
+    1254233096,
+    -1724137721
+   ],
+   "actor": null,
+   "text": "What are you two up to?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-780958991": {
+   "kind": "text",
+   "parent": 803236639,
+   "children": [
+    -865222869
+   ],
+   "actor": null,
+   "text": "How are you Alice?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1547897840": {
+   "kind": "text",
+   "parent": 803236639,
+   "children": [
+    -1573839122,
+    1807836045
+   ],
+   "actor": null,
+   "text": "Can I hang with you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1573839122": {
+   "kind": "text",
+   "parent": 1547897840,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Of course, sit down.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1807836045": {
+   "kind": "text",
+   "parent": 1547897840,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Sit next to me, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-865222869": {
+   "kind": "text",
+   "parent": -780958991,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "I'm.. fine. A little bit tense though... Been a while since I had some \"good\" fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1111751389": {
+   "kind": "choice",
+   "parent": -1063874294,
+   "children": [
+    -430108600,
+    1142764347
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "We're about to watch Fateful Findings. It's a classic.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-494023825": {
+   "kind": "choice",
+   "parent": -1063874294,
+   "children": [
+    1449957091,
+    1547602359
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Just some gaming. You can join if you want to.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "137663271": {
+   "kind": "choice",
+   "parent": -1063874294,
+   "children": [
+    -1159457849,
+    1958604148
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Just vibing... Though I think we should order a pizza. I'm getting hungry...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1254233096": {
+   "kind": "choice",
+   "parent": -1063874294,
+   "children": [
+    -1403956039,
+    1192251616
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I was about to show Alice my Sorcery The Assembly card collection...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1724137721": {
+   "kind": "choice",
+   "parent": -1063874294,
+   "children": [
+    485710965,
+    719657857
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "I brought some weed but Adrian isn't really keen on trying...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "485710965": {
+   "kind": "text",
+   "parent": -1724137721,
+   "actor": null,
+   "text": "Let me try.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "719657857": {
+   "kind": "text",
+   "parent": -1724137721,
+   "children": [
+    1134166250
+   ],
+   "actor": null,
+   "text": "I don't smoke.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1134166250": {
+   "kind": "text",
+   "parent": 719657857,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Boring...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1403956039": {
+   "kind": "text",
+   "parent": 1254233096,
+   "actor": null,
+   "text": "Uh, I wanna see them too.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1192251616": {
+   "kind": "text",
+   "parent": 1254233096,
+   "children": [
+    -2076559975
+   ],
+   "actor": null,
+   "text": "Phew, good luck Alice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2076559975": {
+   "kind": "text",
+   "parent": 1192251616,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Thanks...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1159457849": {
+   "kind": "text",
+   "parent": 137663271,
+   "actor": null,
+   "text": "Pizza sounds great, make some room for me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1958604148": {
+   "kind": "text",
+   "parent": 137663271,
+   "children": [
+    1584736854
+   ],
+   "actor": null,
+   "text": "Well, enjoy the food you two.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1584736854": {
+   "kind": "text",
+   "parent": 1958604148,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Thanks...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1449957091": {
+   "kind": "text",
+   "parent": -494023825,
+   "actor": null,
+   "text": "Sounds fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1547602359": {
+   "kind": "text",
+   "parent": -494023825,
+   "children": [
+    -1171207334
+   ],
+   "actor": null,
+   "text": "Nah. Not in the mood.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1171207334": {
+   "kind": "text",
+   "parent": 1547602359,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Coward!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-430108600": {
+   "kind": "text",
+   "parent": -1111751389,
+   "actor": null,
+   "text": "I am here now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1142764347": {
+   "kind": "text",
+   "parent": -1111751389,
+   "children": [
+    1817167960
+   ],
+   "actor": null,
+   "text": "Well, have fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1817167960": {
+   "kind": "text",
+   "parent": 1142764347,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "I need some booze for this...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-785006290": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1169052779,
+    1642637581,
+    -573450861,
+    -11486445,
+    1615372780,
+    1900263417,
+    -576389001,
+    209708089,
+    -1619277291
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Hey, Adrian... Would you be so nice to fetch me some of that lemon beer? I really enjoyed the taste of it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[alice-solo-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-solo-done",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1169052779": {
+   "kind": "text",
+   "parent": -785006290,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Of course! I'll be right back!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1642637581": {
+   "kind": "choice",
+   "parent": -785006290,
+   "children": [
+    -236381607,
+    1730526289
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Pants down, {PC}... Let's do it... Before Adrian returns...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-573450861": {
+   "kind": "text",
+   "parent": -785006290,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "F-Fuck... Yes... Finally... Some good fucking cock...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceBed (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceBed (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AliceBed (1)"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_7[racalice-unlocked] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "racalice-unlocked",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-11486445": {
+   "kind": "choice",
+   "parent": -785006290,
+   "children": [
+    -681739447,
+    -1477692225,
+    -177237485
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "T-That's it... Yes... Faster.. Make me cum, {PC}! Make me... I'm... HAAAAAAH!!!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1615372780": {
+   "kind": "text",
+   "parent": -785006290,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Oh fuck! S-So much cum! Y-Yes! .... Fill me ... Use my pussy ... Hngaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceBed (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceBed (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AliceBed (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1900263417": {
+   "kind": "text",
+   "parent": -785006290,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "H-He's back... Quickly... Dress up...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-576389001": {
+   "kind": "text",
+   "parent": -785006290,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I'm back! They had no lemo beer. I hope this one's fine too... Huh? Everything alright, Alice? You look out of breath?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    }
+   ]
+  },
+  "-565438568": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    2022859586,
+    1169764734,
+    -1923267951,
+    442688511,
+    265291358,
+    -459105258,
+    -1673773111,
+    271961943
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Hey, Adrian. Would it be cool if I ride your {B} for a while?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[alice-shared-with-adrian] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-shared-with-adrian",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "2022859586": {
+   "kind": "text",
+   "parent": -565438568,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "S-Sure... Can I join?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1169764734": {
+   "kind": "choice",
+   "parent": -565438568,
+   "children": [
+    46033210,
+    -750363256
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Hmm... Not today. No.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1923267951": {
+   "kind": "text",
+   "parent": -565438568,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Mmaah.... Fuck, that's just what I needed. Today was such a drag... Until now!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceBed (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceBed (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AliceBed (1)"
+      }
+     }
+    }
+   ]
+  },
+  "442688511": {
+   "kind": "text",
+   "parent": -565438568,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "I love your fat cock, {PC}... Give it to me... Faster...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_7[racalice-unlocked] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "racalice-unlocked",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "265291358": {
+   "kind": "choice",
+   "parent": -565438568,
+   "children": [
+    -404799290,
+    1900907486,
+    -1437997487
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Y-Your butt looks really sexy, Alice...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-459105258": {
+   "kind": "text",
+   "parent": -565438568,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "F-F-Fuck! I'm... I'm... Coommaaaaaahnnggg!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceBed (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceBed (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AliceBed (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-236381607": {
+   "kind": "text",
+   "parent": 1642637581,
+   "actor": null,
+   "text": "Hell yeah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1730526289": {
+   "kind": "text",
+   "parent": 1642637581,
+   "children": [
+    960385413
+   ],
+   "actor": null,
+   "text": "Not feeling it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "960385413": {
+   "kind": "text",
+   "parent": 1730526289,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Ahhh... Why is god punishing me....",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "46033210": {
+   "kind": "text",
+   "parent": 1169764734,
+   "actor": null,
+   "text": "Get on my dick, Alice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-750363256": {
+   "kind": "text",
+   "parent": 1169764734,
+   "children": [
+    689154188
+   ],
+   "actor": null,
+   "text": "Another time maybe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "689154188": {
+   "kind": "text",
+   "parent": -750363256,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Pity...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "209708089": {
+   "kind": "text",
+   "parent": -785006290,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Heh... Y-Yes... Thanks for the beer, cutie.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1619277291": {
+   "kind": "text",
+   "parent": -785006290,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Of course!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-681739447": {
+   "kind": "text",
+   "parent": -11486445,
+   "actor": null,
+   "text": "Y-Yes... Move that ass, Alice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1477692225": {
+   "kind": "text",
+   "parent": -11486445,
+   "actor": null,
+   "text": "Take my cock, you fucking slut....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-177237485": {
+   "kind": "text",
+   "parent": -11486445,
+   "actor": null,
+   "text": "(Fill her up)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1673773111": {
+   "kind": "text",
+   "parent": -565438568,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Y-Yes... So much cockmilk... Keep blowing... Fill up my womb...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "271961943": {
+   "kind": "text",
+   "parent": -565438568,
+   "actor": "Alice",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Whew... My mood's already like a lot better... I should dash now... Don't wanna miss the bus.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-404799290": {
+   "kind": "text",
+   "parent": 265291358,
+   "actor": null,
+   "text": "Move your hips, Alice. My cock wants to cum!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1900907486": {
+   "kind": "text",
+   "parent": 265291358,
+   "actor": null,
+   "text": "Your tits are so soft... I love playing with them...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1437997487": {
+   "kind": "text",
+   "parent": 265291358,
+   "children": [
+    -1829783132,
+    138674873,
+    1350094090
+   ],
+   "actor": null,
+   "text": "Play with her ass, {B}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1829783132": {
+   "kind": "text",
+   "parent": -1437997487,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "L-Like this?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceBed (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceBed (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AliceBed (3)"
+      }
+     }
+    }
+   ]
+  },
+  "138674873": {
+   "kind": "text",
+   "parent": -1437997487,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Ah! F-Fuck... Oh god... god, god, god!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1350094090": {
+   "kind": "text",
+   "parent": -1437997487,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "It's so soft and warm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/BRoom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AliceVisitDefault and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[alice-sex-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-sex-done",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[Alice-visit-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Alice-visit-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AliceBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AliceBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[Alice-visit-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Alice-visit-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

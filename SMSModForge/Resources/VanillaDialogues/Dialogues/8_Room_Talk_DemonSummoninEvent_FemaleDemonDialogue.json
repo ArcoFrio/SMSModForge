@@ -1,0 +1,759 @@
+{
+ "id": "8_Room_Talk/DemonSummoninEvent/FemaleDemonDialogue",
+ "name": "FemaleDemonDialogue",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "S_Succubus"
+ ],
+ "roots": [
+  -132571938,
+  -1254101365,
+  479982509,
+  95783158,
+  -701759520,
+  630327809,
+  295360376,
+  -794332527,
+  -166555424,
+  376151978,
+  -513267445,
+  311725390,
+  1793013277,
+  1619928550,
+  1040970170
+ ],
+ "nodes": {
+  "-132571938": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "It appears my human toy summoned me again... It's been a while.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[femaledemonfirsttime] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "femaledemonfirsttime",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1254101365": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1458010971,
+    1081164166
+   ],
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "Finally. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[femaledemonfirsttime] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "femaledemonfirsttime",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1458010971": {
+   "kind": "choice",
+   "parent": -1254101365,
+   "children": [
+    -452382251,
+    1926325389
+   ],
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "A mortal with enough spine to open the veil.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-452382251": {
+   "kind": "text",
+   "parent": 1458010971,
+   "actor": null,
+   "text": "And you are...?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1926325389": {
+   "kind": "text",
+   "parent": 1458010971,
+   "children": [
+    832512898
+   ],
+   "actor": null,
+   "text": "AAAAAAAAAAH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "832512898": {
+   "kind": "text",
+   "parent": 1926325389,
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "Or maybe not...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1081164166": {
+   "kind": "choice",
+   "parent": -1254101365,
+   "children": [
+    1766734569,
+    -1736662426,
+    -1541651804
+   ],
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "I'm Zazia. Princess of the Second Flame. Your mirror begs for my reflection. And you? You're trembling.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1766734569": {
+   "kind": "text",
+   "parent": 1081164166,
+   "children": [
+    999433788
+   ],
+   "actor": null,
+   "text": "{PC}. And maybe. Or maybe I like a girl who bites.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1736662426": {
+   "kind": "text",
+   "parent": 1081164166,
+   "children": [
+    -1753953414
+   ],
+   "actor": null,
+   "text": "I'm Kazun'Etak, mighty summoner and master of the seven hells!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1541651804": {
+   "kind": "text",
+   "parent": 1081164166,
+   "children": [
+    -1648292649
+   ],
+   "actor": null,
+   "text": "{PC} and don't worry. My blood's just leaving my brain right now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1753953414": {
+   "kind": "text",
+   "parent": -1736662426,
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "Oh hells, you're one of those...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1648292649": {
+   "kind": "text",
+   "parent": -1541651804,
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "Mhm. I can see that. Not bad.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "999433788": {
+   "kind": "text",
+   "parent": 1766734569,
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "Careful. I bite deep. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "479982509": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "I own you for the next hour.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "95783158": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1314131737,
+    -864595566,
+    1310353779
+   ],
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "Let’s see if you’re worth keeping longer.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SuccubusPortalVFX to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SuccubusPortalVFX",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/5_MyRoom/SuccubusPortalVFX"
+      }
+     }
+    }
+   ]
+  },
+  "1314131737": {
+   "kind": "text",
+   "parent": 95783158,
+   "children": [
+    1539282099
+   ],
+   "actor": null,
+   "text": "What do you want me to do?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-864595566": {
+   "kind": "text",
+   "parent": 95783158,
+   "children": [
+    975041936
+   ],
+   "actor": null,
+   "text": "Oh, no! Please don't! No! (Remove your clothes)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1310353779": {
+   "kind": "text",
+   "parent": 95783158,
+   "children": [
+    1113226815
+   ],
+   "actor": null,
+   "text": "God! Protect me from this thirsty demon! By the power of the lord!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1113226815": {
+   "kind": "text",
+   "parent": 1310353779,
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "AAHHHHHH!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "975041936": {
+   "kind": "text",
+   "parent": -864595566,
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "Good little human...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1539282099": {
+   "kind": "text",
+   "parent": 1314131737,
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "Show it to me... Your shaft. I want to see if you're worthy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-701759520": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "Oh, I like this!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Halloween_Succubus (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Halloween_Succubus (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Halloween_Succubus (1)"
+      }
+     }
+    }
+   ]
+  },
+  "630327809": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "Fat and juicy... And you're actually a human, huh? Not bad...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "295360376": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "Most mortals are all talk and zero girth.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-794332527": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -114234486,
+    -276713367,
+    -124046143
+   ],
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "Now... I know a good place for you to store it....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-114234486": {
+   "kind": "text",
+   "parent": -794332527,
+   "children": [
+    -565069185
+   ],
+   "actor": null,
+   "text": "Where could that be?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-276713367": {
+   "kind": "text",
+   "parent": -794332527,
+   "children": [
+    -1826868440
+   ],
+   "actor": null,
+   "text": "I'll do whatever you want!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-124046143": {
+   "kind": "text",
+   "parent": -794332527,
+   "children": [
+    599596459,
+    -1548068511,
+    -543162291
+   ],
+   "actor": null,
+   "text": "I'm not sure if you deserve my cock...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1826868440": {
+   "kind": "text",
+   "parent": -276713367,
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "Good human, now then...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "599596459": {
+   "kind": "text",
+   "parent": -124046143,
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "Wait—what the hell?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Halloween_Succubus (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Halloween_Succubus (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Halloween_Succubus (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-565069185": {
+   "kind": "text",
+   "parent": -114234486,
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "My warm, hellish slit...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1548068511": {
+   "kind": "text",
+   "parent": -124046143,
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "You little beast... Hngahh... Come on, put it in...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-543162291": {
+   "kind": "text",
+   "parent": -124046143,
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "F-Fine... I'll ask nicely... Please, fuck me already! Hells!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-166555424": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "Hngaah! Hells... Fuck! That's it... Pound me! Harder!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Halloween_Succubus (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Halloween_Succubus (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Halloween_Succubus (3)"
+      }
+     }
+    }
+   ]
+  },
+  "376151978": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "Fhuuuck! Harder! Yes! T-This might be the best mortal cock I've ever had!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-513267445": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -914372132,
+    598611792,
+    -1723888993
+   ],
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "I love how... It's so hard and cold! I... Hngaah! I'm...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "311725390": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "CUMMING! HYAAANGHHAAA!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Halloween_Succubus (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Halloween_Succubus (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Halloween_Succubus (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Halloween_Succubus (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Halloween_Succubus (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Halloween_Succubus (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1793013277": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "F-Filthy human seed... defiling my pussy... How deep I've fallen...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1619928550": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "My {D} would be proud of me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1040970170": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Succubus",
+   "expressionName": "neutral",
+   "text": "Well, that was quite something... Next time? Try candles that don’t smell like cinnamon.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-914372132": {
+   "kind": "text",
+   "parent": -513267445,
+   "actor": null,
+   "text": "F-Fuck... I'm gonna flood your pussy with my... Hngaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "598611792": {
+   "kind": "text",
+   "parent": -513267445,
+   "actor": null,
+   "text": "Y-You like that? My human seed claiming your demon womb?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1723888993": {
+   "kind": "text",
+   "parent": -513267445,
+   "actor": null,
+   "text": "(Cum inside her)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/DemonSummoninEvent",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play FemaleDemonDialogue and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Eve_NoSave1[demontype] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "demontype",
+        "list": "Eve_NoSave1",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

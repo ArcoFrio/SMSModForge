@@ -1,0 +1,630 @@
+{
+ "id": "8_Core_Events/SmallTalks/WardrobeNetorare/GameObject",
+ "name": "GameObject",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "Josef"
+ ],
+ "roots": [
+  -479837361,
+  957701803,
+  -1578647345,
+  1274686823,
+  1057718191,
+  518459187,
+  2072580963,
+  1320265160,
+  1896867338,
+  -1740536266,
+  -992378568,
+  -1859077348,
+  -1067513850,
+  -1128047161
+ ],
+ "nodes": {
+  "957701803": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Uh... Um... Oh, {PC}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1057718191": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It's fine, my love. If you excuse us, there's something important I have to discuss with our {S}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1320265160": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    }
+   ]
+  },
+  "-479837361": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Mmmm... You look amazing, love.... Let's spend some quality time together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1578647345": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "{S}? Y-You shouldn't see your {M} wearing something like this....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "2072580963": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Uh... Um... Sure....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1896867338": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1991939623,
+    442459434
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Finally... He's gone... Make sure the door's closed. I need you, hun....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1991939623": {
+   "kind": "text",
+   "parent": 1896867338,
+   "actor": null,
+   "text": "(Show her your cock)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "442459434": {
+   "kind": "text",
+   "parent": 1896867338,
+   "children": [
+    235695704
+   ],
+   "actor": null,
+   "text": "That's not what I'm here for.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "235695704": {
+   "kind": "text",
+   "parent": 442459434,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Aww... Well... Maybe next time...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1740536266": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So fucking big... I always thought your {D} was well endowed... But you... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaWardrobeLove (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaWardrobeLove (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaWardrobeLove (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-992378568": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Your cock is just... Better... Bigger... The manly scent... The taste...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1859077348": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Your huge, cum-filled balls are filled to the brim with babybatter, just waiting for me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaWardrobeLove (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaWardrobeLove (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaWardrobeLove (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1067513850": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1977066606,
+    168506174
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let me stroke you... Let me help you release your thick fertile seed....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1977066606": {
+   "kind": "text",
+   "parent": -1067513850,
+   "children": [
+    -838764971,
+    -1239479918
+   ],
+   "actor": null,
+   "text": "I'll cover your face, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "168506174": {
+   "kind": "text",
+   "parent": -1067513850,
+   "children": [
+    1602719918,
+    -180211533,
+    -1191799367
+   ],
+   "actor": null,
+   "text": "Y-You should drink it, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1602719918": {
+   "kind": "text",
+   "parent": 168506174,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes... We shouldn't waste a single drop... It belongs to me... It belongs in my holes...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-180211533": {
+   "kind": "text",
+   "parent": 168506174,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mgghmmm... Mgmm... Ghmmm.. Mmm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaWardrobeLove (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaWardrobeLove (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaWardrobeLove (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-1239479918": {
+   "kind": "text",
+   "parent": 1977066606,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mhaaaa.... Such a big load.... God, you are so... Being near your fat cock makes me feel young again....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1128047161": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm in love with your cock... I want you to be at my side... Forever....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1191799367": {
+   "kind": "text",
+   "parent": 168506174,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Smooo tasthmyyyy.... Mmmooorree.... Mmmm......",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-838764971": {
+   "kind": "text",
+   "parent": 1977066606,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Cover me... Paint my face white with your heavy load....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaWardrobeLove (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaWardrobeLove (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaWardrobeLove (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1274686823": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Hey, {S}. I was just about to make some love to your {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "518459187": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm sorry, babe, but I'm craving {PC}'s young cock right now... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/SmallTalks/WardrobeNetorare",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play GameObject and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueStart'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueStart"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_White_Lingerie to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_White_Lingerie",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_White_Lingerie"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueEnd'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueEnd"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

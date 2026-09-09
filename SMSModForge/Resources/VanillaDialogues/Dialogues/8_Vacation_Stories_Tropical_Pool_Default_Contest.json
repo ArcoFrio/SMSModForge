@@ -1,0 +1,583 @@
+{
+ "id": "8_Vacation_Stories/Tropical_Pool/Default_Contest",
+ "name": "Default_Contest",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "V_Clara",
+  "V_Judge",
+  "V_Leilani"
+ ],
+ "roots": [
+  -1336847609
+ ],
+ "nodes": {
+  "-1336847609": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1355255096,
+    1571140457,
+    -1189253282,
+    1719349001,
+    564995014,
+    1852061004,
+    -626919960,
+    -967361384,
+    1291644078,
+    -932156213,
+    817395902,
+    -1287146978,
+    1568521754,
+    -439229688,
+    347772602,
+    -846155006,
+    730006288,
+    -173807701,
+    -1990290078
+   ],
+   "actor": "V_Judge",
+   "text": "Ladies and gentlemen, welcome to the Annual Paradise Resort Beauty Contest! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[tropcontest-firsttime] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tropcontest-firsttime",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1355255096": {
+   "kind": "text",
+   "parent": -1336847609,
+   "actor": "V_Judge",
+   "text": "Tonight’s theme: Swimwear! Elegance, charm, and a splash of tropical fun!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_JudgeBenjamin/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1571140457": {
+   "kind": "text",
+   "parent": -1336847609,
+   "actor": "V_Judge",
+   "text": "And here we have Clara! Don’t let her shyness fool you, folks—sometimes, elegance speaks softly.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_S_Clara to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_S_Clara",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Clara"
+      }
+     }
+    }
+   ]
+  },
+  "-1189253282": {
+   "kind": "text",
+   "parent": -1336847609,
+   "actor": "V_Clara",
+   "expressionName": "my-expression",
+   "text": "H-Hey...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1719349001": {
+   "kind": "text",
+   "parent": -1336847609,
+   "actor": "V_Judge",
+   "text": "A true display of quiet grace. Let’s hear it for Clara, everyone!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Clara/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "564995014": {
+   "kind": "text",
+   "parent": -1336847609,
+   "actor": "V_Judge",
+   "text": "Next, we have Anna! A vision of classic beauty and elegance under the tropical sun!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_WhiteSwimsuitTropical to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_WhiteSwimsuitTropical",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_WhiteSwimsuitTropical"
+      }
+     }
+    }
+   ]
+  },
+  "1852061004": {
+   "kind": "text",
+   "parent": -1336847609,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hey everyone!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-626919960": {
+   "kind": "text",
+   "parent": -1336847609,
+   "actor": "V_Judge",
+   "text": "Truly, a timeless presence. Anna reminds us that beauty isn’t just what you wear—it’s how you wear it!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_WhiteSwimsuitTropical/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-967361384": {
+   "kind": "text",
+   "parent": -1336847609,
+   "actor": "V_Judge",
+   "text": "And finally, the radiant Leilani! A true tropical goddess, gracing us with her presence!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_LeilaniBikiniBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_LeilaniBikiniBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_LeilaniBikiniBust"
+      }
+     }
+    }
+   ]
+  },
+  "1291644078": {
+   "kind": "text",
+   "parent": -1336847609,
+   "actor": "V_Leilani",
+   "expressionName": "neutral",
+   "text": "I hope all of you enjoy the view...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-932156213": {
+   "kind": "text",
+   "parent": -1336847609,
+   "actor": "V_Judge",
+   "text": "If the beach could speak, it would surely say, “This is what dreams are made of!”",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_LeilaniBikiniBust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "817395902": {
+   "kind": "text",
+   "parent": -1336847609,
+   "actor": "V_Judge",
+   "text": "And now, the moment you’ve all been waiting for! The winners of tonight’s contest!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1287146978": {
+   "kind": "text",
+   "parent": -1336847609,
+   "actor": "V_Judge",
+   "text": "In third place, with a quiet yet undeniable charm... Clara!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1568521754": {
+   "kind": "text",
+   "parent": -1336847609,
+   "actor": "V_Judge",
+   "text": "A well-deserved recognition for a beauty that speaks softly but shines brightly.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_S_Clara to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_S_Clara",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Clara"
+      }
+     }
+    }
+   ]
+  },
+  "-439229688": {
+   "kind": "text",
+   "parent": -1336847609,
+   "actor": "V_Judge",
+   "text": "In second place, a true embodiment of elegance and grace... Anna!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_WhiteSwimsuitTropical to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_WhiteSwimsuitTropical",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_WhiteSwimsuitTropical"
+      }
+     }
+    }
+   ]
+  },
+  "347772602": {
+   "kind": "text",
+   "parent": -1336847609,
+   "actor": "V_Judge",
+   "text": "Proof that beauty isn’t just in youth but in confidence and timeless poise. Bravo, Anna!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-846155006": {
+   "kind": "text",
+   "parent": -1336847609,
+   "actor": "V_Judge",
+   "text": "And now, our champion for tonight, a woman who truly dazzled us all... Leilani!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_LeilaniBikiniBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_LeilaniBikiniBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_LeilaniBikiniBust"
+      }
+     }
+    }
+   ]
+  },
+  "-173807701": {
+   "kind": "text",
+   "parent": -1336847609,
+   "actor": "V_Judge",
+   "text": "A performance worthy of the top spot! Leilani, you’ve captured the essence of paradise itself.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1990290078": {
+   "kind": "text",
+   "parent": -1336847609,
+   "actor": "V_Judge",
+   "text": "Thank you, ladies and gentlemen, for joining us tonight. Until next time—may your days be as dazzling as our contestants!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "730006288": {
+   "kind": "text",
+   "parent": -1336847609,
+   "actor": "V_Leilani",
+   "expressionName": "neutral",
+   "text": "Thanks everyone! It fills me with joy to win this prize again!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Tropical_Pool",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Default_Contest and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_S_JudgeBenjamin to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_S_JudgeBenjamin",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_JudgeBenjamin"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_WhiteSwimsuitTropical to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_WhiteSwimsuitTropical",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_WhiteSwimsuitTropical"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_LeilaniBikiniBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_LeilaniBikiniBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_LeilaniBikiniBust"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Leilani_Aftertalk and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Leilani_Aftertalk",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Vacation_Stories/Tropical_Pool/Leilani_Aftertalk"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ]
+  }
+ ]
+}

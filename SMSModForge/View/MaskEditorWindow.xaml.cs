@@ -143,11 +143,28 @@ public partial class MaskEditorWindow : Window
         CanvasHost.Focus();
     }
 
+    /// <summary>
+    /// True while this window is closing, so anything it puts on screen is
+    /// parented to the MAIN window instead of to a window that is about to
+    /// stop existing. See <see cref="WindowOwnership"/>.
+    /// </summary>
+    private bool _closing;
+
+    /// <summary>Whichever window a prompt from here should belong to.</summary>
+    private Window PromptOwner => View.WindowOwnership.ModalOwner(this, _closing);
+
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+        _closing = true;
+        try { ConfirmAndTidy(e); }
+        finally { if (e.Cancel) _closing = false; }
+    }
+
+    private void ConfirmAndTidy(System.ComponentModel.CancelEventArgs e)
     {
         if (_dirty)
         {
-            var r = MessageBox.Show(this,
+            var r = MessageBox.Show(PromptOwner,
                 "You have unsaved mask changes. Save before closing?",
                 "Mask Editor",
                 MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
@@ -672,7 +689,7 @@ public partial class MaskEditorWindow : Window
             }
             catch
             {
-                MessageBox.Show(this, "Mask must be saved inside the pack folder.",
+                MessageBox.Show(PromptOwner, "Mask must be saved inside the pack folder.",
                                 "Save failed", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
@@ -690,7 +707,7 @@ public partial class MaskEditorWindow : Window
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, ex.Message, "Save failed",
+            MessageBox.Show(PromptOwner, ex.Message, "Save failed",
                             MessageBoxButton.OK, MessageBoxImage.Error);
             return false;
         }

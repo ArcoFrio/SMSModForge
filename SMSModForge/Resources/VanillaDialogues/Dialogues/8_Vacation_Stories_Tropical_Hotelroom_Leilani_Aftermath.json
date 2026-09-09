@@ -1,0 +1,534 @@
+{
+ "id": "8_Vacation_Stories/Tropical_Hotelroom/Leilani_Aftermath",
+ "name": "Leilani_Aftermath",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  -1408923195,
+  227019009,
+  2125482789,
+  962205871,
+  -1341420979,
+  -1569911020,
+  -1982595570
+ ],
+ "nodes": {
+  "227019009": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I... I’m sorry. I shouldn’t have barged in like that. I just...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[leilanisexdone] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "leilanisexdone",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "2125482789": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You’re an adult. You can make your own decisions and... You deserve to have fun and love in your life...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "962205871": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    933128822,
+    -1266802728,
+    -418250731
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It's just... I don't like her, {PC}. I don't like that woman. She's not the right one for you.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "933128822": {
+   "kind": "text",
+   "parent": 962205871,
+   "children": [
+    -71300873
+   ],
+   "actor": null,
+   "text": "I'm sorry that you had to see that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1266802728": {
+   "kind": "text",
+   "parent": 962205871,
+   "children": [
+    -236761412
+   ],
+   "actor": null,
+   "text": "You don't get to decide who I like.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-418250731": {
+   "kind": "text",
+   "parent": 962205871,
+   "children": [
+    -1657309371
+   ],
+   "actor": null,
+   "text": "The right one for me? What's that supposed to mean.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1569911020": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let's... Let's just try enjoy the rest of our vacation, yes? I don't want this to taint our little trip...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Vacation_Save[leilani-pro] = 3",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "leilani-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 3
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Vacation_NoSave[vacation-defaultretrigger] = Tropical_Hotelroom",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vacation-defaultretrigger",
+        "list": "Vacation_NoSave",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "Tropical_Hotelroom",
+       "of": "GetGameObjectInstance",
+       "path": "8_Vacation_Stories/Tropical_Hotelroom"
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Vacation_Default_Retrigger to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Vacation_Default_Retrigger",
+       "of": "GetGameObjectInstance",
+       "path": "Vacation_Default_Retrigger"
+      }
+     }
+    }
+   ]
+  },
+  "-1657309371": {
+   "kind": "text",
+   "parent": -418250731,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You deserve someone who truly cares about you. Someone who... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-236761412": {
+   "kind": "text",
+   "parent": -1266802728,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I know and... Fuck, that's not what I meant...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-71300873": {
+   "kind": "text",
+   "parent": 933128822,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "N-No, please don't apologize..  It's me who's at fault...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1341420979": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    447349098,
+    -1175801885,
+    23574311
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I'm sorry, {PC}. I truly am. I... I should have waited outside. I... I ruined our vacation...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "447349098": {
+   "kind": "text",
+   "parent": -1341420979,
+   "children": [
+    996084849
+   ],
+   "actor": null,
+   "text": "It's alright, {M}. We both share this room. You don't have to apologize.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1175801885": {
+   "kind": "text",
+   "parent": -1341420979,
+   "children": [
+    2119704466
+   ],
+   "actor": null,
+   "text": "Please don't cry, {M}. If you don't like her, I won't be seeing her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "23574311": {
+   "kind": "text",
+   "parent": -1341420979,
+   "children": [
+    -124799225
+   ],
+   "actor": null,
+   "text": "Yes, you did.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "996084849": {
+   "kind": "text",
+   "parent": 447349098,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "O-Okay... Yes.. Thank you, hun. You've grown into such a gentleman...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2119704466": {
+   "kind": "text",
+   "parent": -1175801885,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-Thank you... There is something seriously off about her...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-124799225": {
+   "kind": "text",
+   "parent": 23574311,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm sorry... I'll try to make up for it... Tomorrow we can do whatever you want.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1408923195": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[leilanisexdone] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "leilanisexdone",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1982595570": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let us... Let's just try to enjoy the rest of the day... We'll be flying back home tomorrow morning and I don't want this to ruin our vacation...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Vacation_Save[leilani-pro] = 3",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "leilani-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 3
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Return_Home_Vacation to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Return_Home_Vacation",
+       "of": "GetGameObjectInstance",
+       "path": "Return_Home_Vacation"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Tropical_Hotelroom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Leilani_Aftermath and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[leilani-pro] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "leilani-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "branches": [
+    "leilani"
+   ],
+   "before": [
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Leilani_Appears and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Leilani_Appears",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Vacation_Stories/Tropical_Hotelroom/Leilani_Appears"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Vacation_Save[leilani-pro] = 2",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "leilani-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 2
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

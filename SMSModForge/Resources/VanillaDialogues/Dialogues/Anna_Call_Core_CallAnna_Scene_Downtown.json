@@ -1,0 +1,399 @@
+{
+ "id": "Anna_Call_Core/CallAnna_Scene_Downtown",
+ "name": "CallAnna_Scene_Downtown",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  -1920444640,
+  442301497,
+  104968728,
+  -1592274142,
+  2026577856,
+  -1081353488,
+  1730325802
+ ],
+ "nodes": {
+  "-1920444640": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I hope your camera’s ready… because I’m not staying in this coat forever.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Trenchcoat to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Trenchcoat",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Trenchcoat"
+      }
+     }
+    }
+   ]
+  },
+  "442301497": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Trenchcoat to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Trenchcoat",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Trenchcoat"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_CoolOutfit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_CoolOutfit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_CoolOutfit"
+      }
+     }
+    }
+   ]
+  },
+  "104968728": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "This outfit's not too bad... I think I would be okay wearing this in public outside a photoshoot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1592274142": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1124583858,
+    580516791,
+    476801372
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Alright… so, how do you want me to stand for this one?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1124583858": {
+   "kind": "text",
+   "parent": -1592274142,
+   "children": [
+    1632979889
+   ],
+   "actor": null,
+   "text": "Get on the ground, show me who you belong to.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "580516791": {
+   "kind": "text",
+   "parent": -1592274142,
+   "children": [
+    1997186720
+   ],
+   "actor": null,
+   "text": "Turn around, show us your warm holes...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "476801372": {
+   "kind": "text",
+   "parent": -1592274142,
+   "children": [
+    1763088913
+   ],
+   "actor": null,
+   "text": "Time to flash those boobs, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1763088913": {
+   "kind": "text",
+   "parent": 476801372,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "My pleasure... Here! Oh, I think there's some people over there staring at us...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active B3_AnnaDowntown (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "B3_AnnaDowntown (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/B3_AnnaDowntown (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1997186720": {
+   "kind": "text",
+   "parent": 580516791,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "My butt is getting all wet from the rain... I hope this shot is worth it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active B2_AnnaDowntown (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "B2_AnnaDowntown (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/B2_AnnaDowntown (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1632979889": {
+   "kind": "text",
+   "parent": 1124583858,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You enjoy this, don't you? Having me spread my legs for you in public...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active B1_AnnaDowntown (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "B1_AnnaDowntown (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/B1_AnnaDowntown (1)"
+      }
+     }
+    }
+   ]
+  },
+  "2026577856": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "If I get sick from standing half-naked in the rain, you’re making me soup for a week.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1081353488": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "My heart’s racing already… Do you ever get used to this feeling?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1730325802": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You’ll call me again, won’t you? I don’t think I could resist",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "Anna_Call_Core/CallIcon_Condition_Check",
+   "script": "Conditions",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core_NoSave2[call-anna-dialogue] = CallAnna_Scene_Downtown",
+   "as": "GameObject",
+   "when": [
+    {
+     "kind": "gameObjectActive",
+     "type": "ConditionGameObjectActive",
+     "title": "If is Active 26_Downtown",
+     "fields": {
+      "m_GameObject": {
+       "kind": "object",
+       "name": "26_Downtown",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/26_Downtown"
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Inventory[cool-outfit] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cool-outfit",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CanCallAnnaIndicator to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CanCallAnnaIndicator",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator/Buttone/CallAnnaButton/CanCallAnnaIndicator"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

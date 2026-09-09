@@ -67,6 +67,7 @@ namespace SMSModForge.PackPlugin
         {
             _sprites = null;
             _fonts = null;
+            _sounds = null;
         }
 
         // ── The scans ────────────────────────────────────────────────
@@ -83,6 +84,46 @@ namespace SMSModForge.PackPlugin
                 if (!found.ContainsKey(sprite.name)) found[sprite.name] = sprite;
             }
             _sprites = found;
+        }
+
+        /// <summary>
+        /// One of the game's own sounds, by name - the same first-wins scan the
+        /// sprites and fonts use. A pack reaches these when it wants a button to
+        /// sound like the game's buttons instead of shipping a copy of a sound
+        /// the player already has.
+        /// </summary>
+        public static AudioClip Sound(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return null;
+            EnsureSounds();
+            AudioClip found;
+            return _sounds.TryGetValue(name, out found) ? found : null;
+        }
+
+        /// <summary>Every sound the game has loaded, by name. For saying what
+        /// IS there when a pack asks for something that is not.</summary>
+        public static IEnumerable<string> SoundNames
+        {
+            get
+            {
+                EnsureSounds();
+                return _sounds.Keys;
+            }
+        }
+
+        private static Dictionary<string, AudioClip> _sounds;
+
+        private static void EnsureSounds()
+        {
+            if (_sounds != null) return;
+            var found = new Dictionary<string, AudioClip>(StringComparer.OrdinalIgnoreCase);
+            foreach (var clip in Resources.FindObjectsOfTypeAll<AudioClip>())
+            {
+                if (clip == null || string.IsNullOrEmpty(clip.name)) continue;
+                if (!found.ContainsKey(clip.name)) found[clip.name] = clip;
+            }
+            _sounds = found;
+            return;
         }
 
         private static void EnsureFonts()

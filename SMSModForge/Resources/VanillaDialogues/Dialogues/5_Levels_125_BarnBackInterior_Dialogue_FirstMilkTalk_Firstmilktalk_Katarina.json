@@ -1,0 +1,168 @@
+{
+ "id": "5_Levels/125_BarnBackInterior/Dialogue_FirstMilkTalk/Firstmilktalk_Katarina",
+ "name": "Firstmilktalk_Katarina",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Katarina"
+ ],
+ "roots": [
+  313716706,
+  11219743,
+  -480372496,
+  654363692,
+  2072081639,
+  -1663469229
+ ],
+ "nodes": {
+  "313716706": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.2,
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[milk-katarina] > 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milk-katarina",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Greater",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "11219743": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "So. This is what it’s come to.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Milking Save[milk-katarina] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milk-katarina",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-480372496": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I took your pills. I let you touch me. And now… now I wake up aching for it. My breasts feel swollen. Hot. Like they’re begging.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "654363692": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I hate it. I hate how badly I want you to fix it. I keep telling myself I’m still in control, but the moment I hear your voice…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2072081639": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "My body starts leaking. So come on, then.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1663469229": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Make it worse. Make it better. I don’t even care anymore. Just don’t leave me like this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "5_Levels/125_BarnBackInterior/Dialogue_WhoToMilk",
+   "script": "Dialogue",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core_NoSave2[2025-shortgo-saveONE] = Firstmilktalk_Katarina",
+   "as": "GameObject",
+   "after": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core_NoSave2[2025-shortgo-saveTWO] = Defaultmilktalk_Katarina",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2025-shortgo-saveTWO",
+        "list": "Core_NoSave2",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "Defaultmilktalk_Katarina",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/125_BarnBackInterior/Dialogue_MilkDefaulttalk/Defaultmilktalk_Katarina"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

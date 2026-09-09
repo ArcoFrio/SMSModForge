@@ -1198,7 +1198,7 @@ internal static class TutorialsPart2
         {
             Id = "remembering",
             // Rewritten since authors first ran it: list variables.
-            Revision = 2,
+            Revision = 3,
             Group = "Logic",
             Title = "Remembering things",
             Summary = "Give the pack a memory, and use it to gate what players can see.",
@@ -1279,9 +1279,10 @@ internal static class TutorialsPart2
                     Title = "Give them something to unlock",
                     Body = "Now something the variable can gate. Press + Wallpaper and set its " +
                            "Sprite to TutorialArt/Wallpapers/DummyWPP.png. Then press " +
-                           "+ Add condition and fill that row in: Type is VariableEquals, " +
-                           "Variable is the one you named, and tick is true. That is the whole " +
-                           "mechanism — one place writes the value, another asks what it says.",
+                           "+ Add condition and fill that row in: Type is Variable, Source is " +
+                           "Pack, Variable is the one you named, and the value is True. That is " +
+                           "the whole mechanism — one place writes the value, another asks what " +
+                           "it says.",
                     Kind = StepKind.Do,
                     Tab = TabWallpapers,
                     Anchor = "btn:addWallpaper",
@@ -1294,7 +1295,7 @@ internal static class TutorialsPart2
                                         vm.SelectedWallpaper is { } w &&
                                         w.SpritePath.Trim().Length > 0 &&
                                         w.UnlockConditions.Count > 0,
-                    Hint = "+ Wallpaper, set Sprite, then + Add condition with Type = VariableEquals.",
+                    Hint = "+ Wallpaper, set Sprite, then + Add condition with Type = Variable.",
                 },
                 new TutorialStep
                 {

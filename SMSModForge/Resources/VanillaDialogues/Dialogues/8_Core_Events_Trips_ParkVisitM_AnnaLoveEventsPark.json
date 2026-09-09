@@ -1,0 +1,1013 @@
+{
+ "id": "8_Core_Events/Trips/ParkVisitM/AnnaLoveEventsPark",
+ "name": "AnnaLoveEventsPark",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "S_Jeff",
+  "Stranger"
+ ],
+ "roots": [
+  -1412903081,
+  -1481902551,
+  1759894454
+ ],
+ "nodes": {
+  "-1412903081": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -754558192,
+    249091891,
+    -259267282,
+    1198285585,
+    -925990284,
+    -37722812,
+    -579290171,
+    -1459023195
+   ],
+   "actor": "S_Jeff",
+   "expressionName": "neutral",
+   "text": "Anna? Is that you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-754558192": {
+   "kind": "text",
+   "parent": -1412903081,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Jeff? Wow, it’s been forever. How’ve you been?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "249091891": {
+   "kind": "text",
+   "parent": -1412903081,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I’ve been… you know, same old. But you—wow, you look amazing! I almost didn’t recognize you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-259267282": {
+   "kind": "text",
+   "parent": -1412903081,
+   "actor": "S_Jeff",
+   "expressionName": "neutral",
+   "text": "Hey, um… it’s been a long time, and I was thinking… maybe we could grab a coffee sometime? Catch up a little?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1198285585": {
+   "kind": "text",
+   "parent": -1412903081,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Jeff, are you seriously asking me out right now? In front of my… {S}?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-925990284": {
+   "kind": "text",
+   "parent": -1412903081,
+   "actor": "S_Jeff",
+   "expressionName": "neutral",
+   "text": "Oh, no—I just thought… I didn’t mean it like that—",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-37722812": {
+   "kind": "text",
+   "parent": -1412903081,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I think you did. But let me make this clear—I’m not interested, Jeff. Not even a little. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-579290171": {
+   "kind": "choice",
+   "parent": -1412903081,
+   "children": [
+    -1163172489,
+    1710010804,
+    1799739975
+   ],
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I’m happy with who I’m with, so don’t embarrass yourself.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1163172489": {
+   "kind": "text",
+   "parent": -579290171,
+   "actor": null,
+   "text": "Sorry, pal. You better go now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1710010804": {
+   "kind": "text",
+   "parent": -579290171,
+   "actor": null,
+   "text": "She's way above your league.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1799739975": {
+   "kind": "text",
+   "parent": -579290171,
+   "children": [
+    774731739,
+    1653320486
+   ],
+   "actor": null,
+   "text": "You heard her. Time to leave, buddy. (Grope Anna)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "774731739": {
+   "kind": "text",
+   "parent": 1799739975,
+   "actor": "S_Jeff",
+   "expressionName": "neutral",
+   "text": "W-Wait, isn't he your... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ParkGropeLove (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ParkGropeLove (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/ParkGropeLove (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1653320486": {
+   "kind": "text",
+   "parent": 1799739975,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "He's everything you will never be.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1459023195": {
+   "kind": "text",
+   "parent": -1412903081,
+   "actor": "S_Jeff",
+   "expressionName": "neutral",
+   "text": "R-right… got it. Sorry, I didn’t mean to bother you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1481902551": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1657749175,
+    537688923,
+    227099307,
+    1446147436,
+    -489792742,
+    1573194125,
+    456070046
+   ],
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Hey there, handsome. You look like you could use some company. Mind if I join you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1657749175": {
+   "kind": "text",
+   "parent": -1481902551,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "So… what’s a good-looking guy like you doing out here? Want to grab a coffee or something? Just the two of us?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "537688923": {
+   "kind": "text",
+   "parent": -1481902551,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Excuse me? Do you not see that he’s with someone?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "227099307": {
+   "kind": "text",
+   "parent": -1481902551,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Oh, is she your… Grandma or something? I’m sure she won’t mind if we chat a bit.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1446147436": {
+   "kind": "text",
+   "parent": -1481902551,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Grandma? Grandma!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-489792742": {
+   "kind": "text",
+   "parent": -1481902551,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I’m his girlfriend, you brat. And if you think I’m going to let you get away with this, you’ve got another thing coming.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1573194125": {
+   "kind": "text",
+   "parent": -1481902551,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Oh, really? Girlfriend or not, he can do a lot better.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "456070046": {
+   "kind": "choice",
+   "parent": -1481902551,
+   "children": [
+    738866782,
+    -113670461,
+    -1554650669,
+    1633280044
+   ],
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You want to fight? Because I’m more than happy to throw down right here, right now.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "738866782": {
+   "kind": "text",
+   "parent": 456070046,
+   "children": [
+    -537444631,
+    -1106748397
+   ],
+   "actor": null,
+   "text": "Whoa, calm down, Anna. Let’s just leave.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-537444631": {
+   "kind": "text",
+   "parent": 738866782,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Fine. But only because I don’t want to spend the day at the police station.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-113670461": {
+   "kind": "text",
+   "parent": 456070046,
+   "children": [
+    -941251739,
+    -1943835684
+   ],
+   "actor": null,
+   "text": "Yeah, you heard her. Back off.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-941251739": {
+   "kind": "text",
+   "parent": -113670461,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Fine, fine. No need to get so territorial. Geez.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1554650669": {
+   "kind": "text",
+   "parent": 456070046,
+   "children": [
+    33651168
+   ],
+   "actor": null,
+   "text": "Easy, tiger. You know I only have eyes for you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "33651168": {
+   "kind": "text",
+   "parent": -1554650669,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yeah, well…  Let’s get out of here before I really lose my temper.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1633280044": {
+   "kind": "text",
+   "parent": 456070046,
+   "children": [
+    -1173836002,
+    82027896,
+    1338802021,
+    1499962353
+   ],
+   "actor": null,
+   "text": "I think she’s just being friendly, Anna…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1173836002": {
+   "kind": "text",
+   "parent": 1633280044,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Friendly?! Is that what you call it?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1106748397": {
+   "kind": "text",
+   "parent": 738866782,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Stay away from him. Next time, you won’t get off so easy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1943835684": {
+   "kind": "text",
+   "parent": -113670461,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thanks. But I could’ve handled her myself.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "82027896": {
+   "kind": "text",
+   "parent": 1633280044,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "If you’re interested in her ‘friendliness,’ then maybe I’ll just leave you two alone!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1338802021": {
+   "kind": "text",
+   "parent": 1633280044,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Uh… yeah, I think I’ll just… go.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1499962353": {
+   "kind": "text",
+   "parent": 1633280044,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "You better make it up to me",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1759894454": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1925068022,
+    -425709503,
+    -766862047
+   ],
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Wow, I couldn’t help but notice you from across the street. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1925068022": {
+   "kind": "text",
+   "parent": 1759894454,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "You have such an incredible sense of style—and that smile? Absolutely stunning.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-425709503": {
+   "kind": "text",
+   "parent": 1759894454,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Uh, thanks… I guess?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-766862047": {
+   "kind": "choice",
+   "parent": 1759894454,
+   "children": [
+    2007222884,
+    1871099126
+   ],
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "No need to be modest. I know beauty when I see it.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2007222884": {
+   "kind": "text",
+   "parent": -766862047,
+   "children": [
+    1879645397,
+    1983716952
+   ],
+   "actor": null,
+   "text": "Fuck off, dude. She's mine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1871099126": {
+   "kind": "text",
+   "parent": -766862047,
+   "children": [
+    1436735054,
+    93910733,
+    -1880999512,
+    -768732836,
+    548494497,
+    640249198
+   ],
+   "actor": null,
+   "text": "(Wait for Anna's reaction)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1879645397": {
+   "kind": "text",
+   "parent": 2007222884,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "R-Relax... I'm going...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1983716952": {
+   "kind": "text",
+   "parent": 2007222884,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thanks, hun. He gave me the creeps...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1436735054": {
+   "kind": "text",
+   "parent": 1871099126,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let me stop you right there—",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "93910733": {
+   "kind": "text",
+   "parent": 1871099126,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I’m not interested, okay? So you can save the card and your lines for someone else.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1880999512": {
+   "kind": "text",
+   "parent": 1871099126,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Ah, playing hard to get, are we? I get it—",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-768732836": {
+   "kind": "text",
+   "parent": 1871099126,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "No, you don’t get it. I said I’m not interested. So how about you ‘get’ that and move along?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "548494497": {
+   "kind": "text",
+   "parent": 1871099126,
+   "actor": "Stranger",
+   "expressionName": "neutral",
+   "text": "Alright, alright. No need to be so harsh. Just thought I’d try my luck.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "640249198": {
+   "kind": "text",
+   "parent": 1871099126,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Seriously, what’s with these guys today? You’d think a ‘no’ would be enough.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Trips/ParkVisitM/Conditions",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AnnaLoveEventsPark and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Romanced] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Romanced",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "branches": [
+    "1"
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_FanJeff to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_FanJeff",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_FanJeff"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_FanJeff/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Core_Events/Trips/ParkVisitM/Conditions",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AnnaLoveEventsPark and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Romanced] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Romanced",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "branches": [
+    "2"
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_ParkWoman1 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_ParkWoman1",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_ParkWoman1"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_ParkWoman1/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Core_Events/Trips/ParkVisitM/Conditions",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AnnaLoveEventsPark and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Romanced] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Romanced",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "branches": [
+    "3"
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_ParkMan to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_ParkMan",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_ParkMan"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_ParkMan/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

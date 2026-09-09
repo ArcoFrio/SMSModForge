@@ -1,0 +1,628 @@
+{
+ "id": "8_Core_Events/SmallTalks/CharlotteAgentQuestFinale/GameObject",
+ "name": "GameObject",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Charlotte"
+ ],
+ "roots": [
+  -713503101,
+  -125919455,
+  -1538851890,
+  -650853014,
+  1004265528,
+  -1754981602,
+  229416618,
+  -1445366918,
+  1801515892,
+  1516777399,
+  -866063769,
+  891836633,
+  2017982364,
+  -909473476,
+  1206135536,
+  -440242937,
+  -968650264,
+  -582856989,
+  -1878473351,
+  -1211542737,
+  -16149253,
+  -645861342,
+  1078339060,
+  -1220656195,
+  1104659206,
+  1059739661,
+  -2077075724
+ ],
+ "nodes": {
+  "-713503101": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, great. Here we go again. What is it this time, Charlotte? Another lecture? A PowerPoint presentation on \"friendship\"?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-125919455": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "No lectures. Just… this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1538851890": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "…Seriously? Where did you even find this old thing?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaBear (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaBear (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaBear (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-650853014": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Do you remember him?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1004265528": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Of course, I remember. It’s a stuffed bear, not a long-lost sibling.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1754981602": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Then why’d you keep him?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "229416618": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1445366918": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "You could’ve thrown him out years ago. But you didn’t. Because deep down, you know what he means.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1801515892": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, come on, Charlotte. You think a ratty old plush is gonna make me—",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1516777399": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Back in college, whenever things got bad, you held onto him like your life depended on it. When people treated you like shit, when you felt lost—he was there.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "891836633": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That’s not—",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2017982364": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Yes, it is. You got so caught up in this new world, in all the attention, that you started acting like you don’t need anyone anymore. But we’re still here, Anna. I’m still here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-909473476": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "…I didn’t mean to—",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-866063769": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "And now? You act like none of that mattered. Like none of us mattered.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1206135536": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "I know. But you did.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-440242937": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I’m sorry.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaBear (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaBear (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaBear (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-968650264": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "I just want my best friend back.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-582856989": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I thought marrying Josef would be the start of something good. Then he changed, and I… I had to pretend everything was fine, even when it wasn’t.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1878473351": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Then I found Starmaker, and it gave me power. For the first time, I wasn’t just someone’s wife or someone’s problem—I was wanted. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1211542737": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "But that won’t last forever. Soon, I’ll be too old, and people will move on.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-16149253": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "And then there’s… him.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-645861342": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -39137573,
+    678219204
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I got close to you. Closer than I should have. And I know—I know—you’ll leave one day. Everyone does.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1078339060": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So if I act like I don’t care, if I pretend none of it matters… maybe it won’t hurt so much when it all falls apart.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1220656195": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Anna… not everyone is going to leave you. But if you keep pushing people away before they even get the chance to stay… you’re the one making that choice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1104659206": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I'm sorry, Charlotte. I don't want that. You're my best friend, my sister.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "1059739661": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Hey. Relax, hun. How about you get your make up cleaned up and we'll go out for some drinks?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2077075724": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-That sounds fun... Thank you, Charlotte. And you, my {S}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-39137573": {
+   "kind": "text",
+   "parent": -645861342,
+   "actor": null,
+   "text": "I won't leave you, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "678219204": {
+   "kind": "text",
+   "parent": -645861342,
+   "actor": null,
+   "text": "(Say nothing)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/SmallTalks/CharlotteAgentQuestFinale",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play GameObject and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueStart'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueStart"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CharlotteBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CharlotteBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/CharlotteBust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play GameObject (1) and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "GameObject (1)",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Core_Events/SmallTalks/CharlotteAgentQuestFinale/GameObject (1)"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/CharlotteBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_8[cheeseburger-quest] = 5",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cheeseburger-quest",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 5
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_8[cheeseburger-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cheeseburger-done",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueEnd'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueEnd"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

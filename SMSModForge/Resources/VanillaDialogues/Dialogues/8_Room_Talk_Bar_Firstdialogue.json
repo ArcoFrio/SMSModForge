@@ -1,0 +1,390 @@
+{
+ "id": "8_Room_Talk/Bar/Firstdialogue",
+ "name": "Firstdialogue",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Liz"
+ ],
+ "roots": [
+  -1852695410,
+  -471851570,
+  -1749109633,
+  -487688230
+ ],
+ "nodes": {
+  "-1852695410": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "Hey... Um.. I'm Liz...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-471851570": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    419518448,
+    -541122467,
+    818453373
+   ],
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "I'm the bartender here...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "419518448": {
+   "kind": "text",
+   "parent": -471851570,
+   "children": [
+    -22283916
+   ],
+   "actor": null,
+   "text": "I'm {PC}. Nice to meet you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-541122467": {
+   "kind": "text",
+   "parent": -471851570,
+   "children": [
+    -581273041
+   ],
+   "actor": null,
+   "text": "I'm {PC}. You look tired.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "818453373": {
+   "kind": "text",
+   "parent": -471851570,
+   "actor": null,
+   "text": "I'm {PC} and I want to get wasted.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-581273041": {
+   "kind": "text",
+   "parent": -541122467,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "Um... I'm sorry...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-22283916": {
+   "kind": "text",
+   "parent": 419518448,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "Yeah...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1749109633": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2020452582,
+    714559518,
+    -87798395,
+    487596211,
+    -1830703706
+   ],
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "I... I would need to see your ID...",
+   "tag": "IDroot",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2020452582": {
+   "kind": "text",
+   "parent": -1749109633,
+   "children": [
+    -1367067182
+   ],
+   "actor": null,
+   "text": "Really? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "714559518": {
+   "kind": "text",
+   "parent": -1749109633,
+   "children": [
+    -2098586956
+   ],
+   "actor": null,
+   "text": "Is there any other way?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-87798395": {
+   "kind": "text",
+   "parent": -1749109633,
+   "children": [
+    1613539111
+   ],
+   "actor": null,
+   "text": "How about $20 instead?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "487596211": {
+   "kind": "text",
+   "parent": -1749109633,
+   "children": [
+    1257569350
+   ],
+   "actor": null,
+   "text": "Would my driver's license also work?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1830703706": {
+   "kind": "text",
+   "parent": -1749109633,
+   "actor": null,
+   "text": "[Show her your ID]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1367067182": {
+   "kind": "text",
+   "parent": -2020452582,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "Yes...",
+   "jump": {
+    "mode": "Jump",
+    "to": "IDroot"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2098586956": {
+   "kind": "text",
+   "parent": 714559518,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "No...",
+   "jump": {
+    "mode": "Jump",
+    "to": "IDroot"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1613539111": {
+   "kind": "text",
+   "parent": -87798395,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "No...",
+   "jump": {
+    "mode": "Jump",
+    "to": "IDroot"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1257569350": {
+   "kind": "text",
+   "parent": 487596211,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "Yes...",
+   "jump": {
+    "mode": "Jump",
+    "to": "IDroot"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-487688230": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "T-Thanks... Let me know if you want a drink or something... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Bar",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Firstdialogue and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[bar-visited] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bar-visited",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LizBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LizBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/LizBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[bar-visited] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bar-visited",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,722 @@
+{
+ "id": "8_Room_Talk/ClubRestroom/Solo",
+ "name": "Solo",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Alice"
+ ],
+ "roots": [
+  -2033962978,
+  517074036,
+  -1994739929,
+  1602898100,
+  81615621,
+  96090685,
+  -379573116,
+  1043337650,
+  -846638719,
+  -663788796,
+  1539742387,
+  1615320328,
+  -248494169
+ ],
+ "nodes": {
+  "-2033962978": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "There you are...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1994739929": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1039992958,
+    -1130511155,
+    -1985678330
+   ],
+   "actor": "Alice",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Gotta say, feeling your body against mine on the dance floor got me REALLY worked  up.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1039992958": {
+   "kind": "text",
+   "parent": -1994739929,
+   "children": [
+    22097217
+   ],
+   "actor": null,
+   "text": "What's with that outfit...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1130511155": {
+   "kind": "text",
+   "parent": -1994739929,
+   "children": [
+    -1056066773
+   ],
+   "actor": null,
+   "text": "Wow, you look really fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1985678330": {
+   "kind": "text",
+   "parent": -1994739929,
+   "children": [
+    382652983
+   ],
+   "actor": null,
+   "text": "There's a lot more for you in store.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "22097217": {
+   "kind": "text",
+   "parent": -1039992958,
+   "actor": "Alice",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Always wanted to show it to someone... Hope you like it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1056066773": {
+   "kind": "text",
+   "parent": -1130511155,
+   "actor": "Alice",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I'll show you how much fun I can be...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "382652983": {
+   "kind": "text",
+   "parent": -1985678330,
+   "actor": "Alice",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Yesss....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1602898100": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "C'mon.. Let me see what you're packing...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "81615621": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Oh my god, you're fucking huge! Awesome!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active gothsolo to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "gothsolo",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/gothsolo"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set CoreFinalStates[Alice-SexOn] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Alice-SexOn",
+        "list": "CoreFinalStates",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "96090685": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Let me get a good taste of it....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-379573116": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Fuck! I want it inside me! Please!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1043337650": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Yesss! Fuck, fuck, fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active gothsolo (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "gothsolo (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/gothsolo (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-663788796": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Harder, daddy! I'm gettin clooseeeee!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1539742387": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "GOD! I'm... I'M... Cooaaaahmmngg!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active gothsolo (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "gothsolo (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/gothsolo (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1615320328": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Fuck, legit the best cock I ever had!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[alice-solo-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-solo-done",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set CoreFinalStates[Alice-SexOn] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Alice-SexOn",
+        "list": "CoreFinalStates",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-248494169": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -918196054,
+    339505438,
+    -1254235498
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "I REALLY hope you will come here more often.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-846638719": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "I'm so GLAD I chose you! No way Adrian's as big as you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "517074036": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1510992936,
+    2019382172,
+    1611215137
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Where's Adrian? Hmm... ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[adrian-left-behind] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-left-behind",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1510992936": {
+   "kind": "text",
+   "parent": 517074036,
+   "children": [
+    -1590536284
+   ],
+   "actor": null,
+   "text": "He got cold feet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2019382172": {
+   "kind": "text",
+   "parent": 517074036,
+   "children": [
+    1516986356
+   ],
+   "actor": null,
+   "text": "You're mine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1611215137": {
+   "kind": "text",
+   "parent": 517074036,
+   "children": [
+    1225923292
+   ],
+   "actor": null,
+   "text": "He's too good for a slut like you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1225923292": {
+   "kind": "text",
+   "parent": 1611215137,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "It's kinda cute how Adrian wasn't able to see me for who I am...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1516986356": {
+   "kind": "text",
+   "parent": 2019382172,
+   "actor": "Alice",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh, is that so?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1590536284": {
+   "kind": "text",
+   "parent": -1510992936,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "A shame... Looks like it's just the two of us then...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-918196054": {
+   "kind": "text",
+   "parent": -248494169,
+   "children": [
+    593982850
+   ],
+   "actor": null,
+   "text": "You can count on it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "339505438": {
+   "kind": "text",
+   "parent": -248494169,
+   "children": [
+    1137428910
+   ],
+   "actor": null,
+   "text": "Of course, your pussy' mine now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1254235498": {
+   "kind": "text",
+   "parent": -248494169,
+   "children": [
+    1939567833
+   ],
+   "actor": null,
+   "text": "Eh, maybe. We'll see.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "593982850": {
+   "kind": "text",
+   "parent": -918196054,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Nice!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1939567833": {
+   "kind": "text",
+   "parent": -1254235498,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Aw, come on...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1137428910": {
+   "kind": "text",
+   "parent": 339505438,
+   "actor": "Alice",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Yes, daddy. It's ALL yours...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/ClubRestroom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Solo and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[alice-stealing-start] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-stealing-start",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceSexy to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceSexy",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AliceSexy"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[alice-sex-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-sex-done",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set CoreFinalStates[Alice-SexOn] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Alice-SexOn",
+        "list": "CoreFinalStates",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

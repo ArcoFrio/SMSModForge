@@ -45,8 +45,9 @@ public static class TutorialCatalog
             Id = "first-steps",
             Group = "Getting started",
             Title = "First steps",
-            Summary = "Make a pack, put a character in it, and send it to the game.",
+            Summary = "Make a pack, put a character in it, and give it to somebody.",
             Level = 1,
+            Revision = 2,
             Steps = new[]
             {
                 new TutorialStep
@@ -191,13 +192,48 @@ public static class TutorialCatalog
                 new TutorialStep
                 {
                     Title = "That is a pack",
-                    Body = "Save it, and File then Export bundles the folder into a single " +
-                           ".smspack — the file the game loads, which goes in " +
-                           "BepInEx/plugins/SMSModForge/ModPacks/. There is nothing to see in " +
-                           "the game yet, because a character only appears once something gives " +
-                           "them a line. A place of your own is next: it builds a room and puts " +
-                           "a door to it in the bedroom you wake up in, and every tutorial after " +
-                           "that goes through the same door.",
+                    Body = "Save it, and File then Export pack bundles the folder into a single " +
+                           ".smspack — the file the game loads. Drop that into the Mods folder " +
+                           "in your game folder, beside the game's .exe, and it is installed.\n\n" +
+                           "Export is the quick loop, for trying your own work in the game. Use " +
+                           "it as often as you like: it changes nothing about the pack itself.\n\n" +
+                           "There is nothing to see in the game yet, because a character only " +
+                           "appears once something gives them a line.",
+                    Kind = StepKind.Read,
+                    Tab = TabModForge,
+                    Anchor = "menu:file",
+                },
+                new TutorialStep
+                {
+                    Title = "Giving it to somebody else",
+                    Body = "File then Publish for players is the other end of that. It checks " +
+                           "the pack over first and says so if anything is broken, then writes a " +
+                           "zip holding one thing: your pack, already sitting in a Mods folder. " +
+                           "Whoever downloads it extracts that into their game folder and is " +
+                           "finished — there is no step left for them to get wrong, which is " +
+                           "where most mods are lost. Nothing else is in the archive, so " +
+                           "installing two packs never asks anybody to overwrite anything.\n\n" +
+                           "It opens the folder it wrote to afterwards, so the file is never " +
+                           "somewhere you have to go looking for.",
+                    Kind = StepKind.Read,
+                    Tab = TabModForge,
+                    Anchor = "menu:file",
+                },
+                new TutorialStep
+                {
+                    Title = "The number beside your pack",
+                    Body = "Publishing also moves the pack's version, and only publishing does. " +
+                           "Saving does not, and neither does exporting: a version says what " +
+                           "players were given, and an afternoon of saving gives them nothing.\n\n" +
+                           "It moves on its own, by what actually changed since your last " +
+                           "release. Something new — a character, a room, a conversation — moves " +
+                           "the middle number. A change to something that was already there " +
+                           "moves the last one. The first is yours alone: type it into the " +
+                           "Version box when you decide a release is a new thing rather than " +
+                           "more of the old one.\n\n" +
+                           "A place of your own is next: it builds a room and puts a door to it " +
+                           "in the bedroom you wake up in, and every tutorial after that goes " +
+                           "through the same door.",
                     Kind = StepKind.Read,
                     Tab = TabModForge,
                     Anchor = "menu:file",
@@ -755,14 +791,22 @@ public static class TutorialCatalog
     /// concatenating null. That throws inside the static constructor, and the
     /// binding layer swallows the failure — the list simply renders empty, with
     /// nothing to say why.
+    /// <para/>
+    /// ONE expression, with the conditional around the diagnostics alone. It
+    /// used to be two whole lists, one per configuration, and a tutorial added
+    /// to the Debug one never reached anybody: the tests all run in Debug, so
+    /// nothing could see the Release list was short. The author-facing ladder
+    /// is now impossible to state twice, which is the only way that stays
+    /// fixed.
     /// </summary>
+    public static IReadOnlyList<TutorialDef> All { get; } =
+        _first
+            .Concat(TutorialsPart2.All)
+            .Concat(TutorialsUi.All)
 #if DEBUG
-    public static IReadOnlyList<TutorialDef> All { get; } =
-        _first.Concat(TutorialsPart2.All).Concat(_smoke).ToArray();
-#else
-    public static IReadOnlyList<TutorialDef> All { get; } =
-        _first.Concat(TutorialsPart2.All).ToArray();
+            .Concat(_smoke)
 #endif
+            .ToArray();
 
     /// <summary>The vanilla bedroom every save starts in.</summary>
     private const string BedroomToken = "vanilla:5_MyRoom";

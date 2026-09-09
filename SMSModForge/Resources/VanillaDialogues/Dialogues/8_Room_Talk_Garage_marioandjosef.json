@@ -1,0 +1,860 @@
+{
+ "id": "8_Room_Talk/Garage/marioandjosef",
+ "name": "marioandjosef",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Josef",
+  "Mario"
+ ],
+ "roots": [
+  -281460457,
+  177873075,
+  272902866,
+  -500954960,
+  -2006893428,
+  494476921,
+  -1548710067,
+  -111094522,
+  27599610,
+  -1068044769,
+  247021972,
+  -1897906501,
+  504343651
+ ],
+ "nodes": {
+  "-281460457": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Josef, you know how this works. A head had to roll, and unfortunately, it was yours. I’m sorry, but it’s final.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Mafia to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Mafia",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Mafia"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Music to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Music",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Music"
+      }
+     }
+    }
+   ]
+  },
+  "177873075": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Mario, please. You know I’ve always been loyal. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "272902866": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Just give me another chance—put me up as CEO at any company, any position. I’ll take whatever you can give.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-500954960": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Loyalty only goes so far, my friend. I’m sorry, but there’s nothing more I can do. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2006893428": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "This was decided by those higher up than me. You’re out, and it’s done.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "494476921": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Well then, I guess we have nothing left to discuss.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1548710067": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2086428011,
+    -579773839,
+    -153803470
+   ],
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "You’re Josef’s {S}, right?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.5 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.5
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "-2086428011": {
+   "kind": "text",
+   "parent": -1548710067,
+   "actor": null,
+   "text": "Yeah, that's right.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-579773839": {
+   "kind": "text",
+   "parent": -1548710067,
+   "actor": null,
+   "text": "Should I know you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "27599610": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Your {D}’s in a tight spot, isn’t he? It’s a shame, really. But it’s not the end of the world.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1068044769": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    601016258,
+    -654129601
+   ],
+   "actor": "Mario",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "The real problem isn’t just his job, is it? It’s the debt. Debt can crush a man, but it can also be… removed, under the right circumstances.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "247021972": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1486996588,
+    -684825263,
+    1149129561
+   ],
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I’m saying that I could cleanse your {D}’s debt, make it disappear like it never existed. But, of course, I don’t do favors for free.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "601016258": {
+   "kind": "text",
+   "parent": -1068044769,
+   "actor": null,
+   "text": "What are you saying?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-654129601": {
+   "kind": "text",
+   "parent": -1068044769,
+   "actor": null,
+   "text": "Get to the point.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1486996588": {
+   "kind": "text",
+   "parent": 247021972,
+   "actor": null,
+   "text": "What would you want in return?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-684825263": {
+   "kind": "text",
+   "parent": 247021972,
+   "children": [
+    -544534022
+   ],
+   "actor": null,
+   "text": "Nothing is ever free.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-544534022": {
+   "kind": "text",
+   "parent": -684825263,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Indeed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1897906501": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Just a few tasks, things that are better discussed in private. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "504343651": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    776665011,
+    -2067423651
+   ],
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Come to my villa, and we’ll talk more. Don’t worry, nothing too difficult… for someone with your potential.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "776665011": {
+   "kind": "text",
+   "parent": 504343651,
+   "children": [
+    8587817
+   ],
+   "actor": null,
+   "text": "Alright, I’ll come to your villa.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2067423651": {
+   "kind": "text",
+   "parent": 504343651,
+   "children": [
+    1198566500
+   ],
+   "actor": null,
+   "text": "I’m not sure I want to get involved in this, Mario.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "8587817": {
+   "kind": "text",
+   "parent": 776665011,
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Smart choice, kid. I’ll see you soon.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[mario-villa-unlocked] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mario-villa-unlocked",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Mafia to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Mafia",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Mafia"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Music to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Music",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Music"
+      }
+     }
+    }
+   ]
+  },
+  "1198566500": {
+   "kind": "text",
+   "parent": -2067423651,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "That’s your choice. But remember, opportunities like this don’t come often.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Mafia to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Mafia",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Mafia"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Music to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Music",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Music"
+      }
+     }
+    }
+   ]
+  },
+  "-111094522": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "Name's Mario Di Luca, Governor of PeakCity—not that you’d miss it, with my face all over the city",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1149129561": {
+   "kind": "text",
+   "parent": 247021972,
+   "children": [
+    -381169714
+   ],
+   "actor": null,
+   "text": "(Smart) You need someone off the books, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Smart] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Smart",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-381169714": {
+   "kind": "text",
+   "parent": 1149129561,
+   "actor": "Mario",
+   "expressionName": "neutral",
+   "text": "…Clever. Exactly what I need.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-153803470": {
+   "kind": "text",
+   "parent": -1548710067,
+   "children": [
+    1385477275
+   ],
+   "actor": null,
+   "text": "(Charming) Yeah. And you're the governor of this city.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Charming] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Charming",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1385477275": {
+   "kind": "text",
+   "parent": -153803470,
+   "actor": "Mario",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hah… so you do pay attention. Good. I prefer dealing with people who know exactly who they’re talking to.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Garage",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play marioandjosef and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DaysPassed] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DaysPassed",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_4[mario-storyline] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mario-storyline",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Mario_Normal to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Mario_Normal",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Mario_Normal"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Mario_Normal/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_4[mario-storyline] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mario-storyline",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

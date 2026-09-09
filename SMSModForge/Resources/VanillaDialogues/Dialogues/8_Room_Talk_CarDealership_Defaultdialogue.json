@@ -1,0 +1,1811 @@
+{
+ "id": "8_Room_Talk/CarDealership/Defaultdialogue",
+ "name": "Defaultdialogue",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Himari"
+ ],
+ "roots": [
+  1820700699,
+  1683281160,
+  -2084252203,
+  -883572327
+ ],
+ "nodes": {
+  "1820700699": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    942903572,
+    -1862665101,
+    1827278231
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Well, well, look who decided to come back. You look a bit different this time. ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[himari-first-dialogue-when-rich] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "himari-first-dialogue-when-rich",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "942903572": {
+   "kind": "text",
+   "parent": 1820700699,
+   "actor": null,
+   "text": "I would like to buy a car.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1862665101": {
+   "kind": "text",
+   "parent": 1820700699,
+   "actor": null,
+   "text": "I'm rich as fuck now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1827278231": {
+   "kind": "text",
+   "parent": 1820700699,
+   "actor": null,
+   "text": "I'm a different person now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1683281160": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Hmph. We’ll see about that. Just because you look the part doesn’t mean you can afford what we have here. Prove it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[himari-first-dialogue-when-rich] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "himari-first-dialogue-when-rich",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[himari-first-dialogue-when-rich] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "himari-first-dialogue-when-rich",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-883572327": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    2059167859,
+    1609050623,
+    -1987230658,
+    -942030671,
+    1137700885
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": {
+    "kind": "variable",
+    "variable": {
+     "scope": "global",
+     "name": "himari-default-line",
+     "list": "Events_2",
+     "type": "string"
+    }
+   },
+   "tag": "root",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2059167859": {
+   "kind": "text",
+   "parent": -883572327,
+   "children": [
+    411737211
+   ],
+   "actor": null,
+   "text": "I would like to see the cars.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1137700885": {
+   "kind": "text",
+   "parent": -883572327,
+   "children": [
+    586855880,
+    -1516549904
+   ],
+   "actor": null,
+   "text": "I'm good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "586855880": {
+   "kind": "text",
+   "parent": 1137700885,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Hmpf...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[Himari-Converted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Himari-Converted",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "411737211": {
+   "kind": "text",
+   "parent": 2059167859,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Behold, my best models.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[active-store] = 4",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "active-store",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 4
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ShopCore to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ShopCore",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/ShopCore"
+      }
+     }
+    }
+   ]
+  },
+  "1609050623": {
+   "kind": "text",
+   "parent": -883572327,
+   "children": [
+    -1290838575,
+    -925682615,
+    1691186986,
+    165147889,
+    -1809018605,
+    447561911,
+    -604073354
+   ],
+   "actor": null,
+   "text": "[Heavenly Husband] Listen.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[heavenly-husband-5] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "heavenly-husband-5",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[Himari-Converted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Himari-Converted",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1987230658": {
+   "kind": "text",
+   "parent": -883572327,
+   "children": [
+    167570123,
+    -677195411
+   ],
+   "actor": null,
+   "text": "How did you end up owning this place?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-942030671": {
+   "kind": "text",
+   "parent": -883572327,
+   "children": [
+    -1611424356,
+    772689347
+   ],
+   "actor": null,
+   "text": "You gotta stop bullying people.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "167570123": {
+   "kind": "text",
+   "parent": -1987230658,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "That's none of your buisness.",
+   "jump": {
+    "mode": "Jump",
+    "to": "root"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[Himari-Converted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Himari-Converted",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1611424356": {
+   "kind": "text",
+   "parent": -942030671,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I don't \"bully\" anyone, I'm just being honest.",
+   "jump": {
+    "mode": "Jump",
+    "to": "root"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[Himari-Converted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Himari-Converted",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1290838575": {
+   "kind": "choice",
+   "parent": 1609050623,
+   "children": [
+    -1412377651,
+    1396193086,
+    35308416
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "W-What?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Gong Hit",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Gong Hit",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1.4,
+        "y": 1.4
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 0.7
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectInstantiate",
+     "title": "Instantiate HeavenlyHusband",
+     "fields": {
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HeavenlyHusband",
+       "of": "GetGameObjectInstance"
+      },
+      "m_Position": {
+       "kind": "raw",
+       "type": "GetPositionGameObject",
+       "data": {
+        "m_GameObject": {
+         "$type": "PropertyGetGameObject",
+         "m_Property": {
+          "$type": "GetGameObjectInstance",
+          "m_GameObject": {
+           "$unity": "HimariBust",
+           "$type": "GameObject",
+           "$path": "2_Bust_Manager/HimariBust"
+          }
+         }
+        }
+       }
+      },
+      "m_Rotation": {
+       "kind": "raw",
+       "type": "GetRotationGameObject",
+       "data": {
+        "m_GameObject": {
+         "$type": "PropertyGetGameObject",
+         "m_Property": {
+          "$type": "GetGameObjectInstance",
+          "m_GameObject": {
+           "$unity": "HimariBust",
+           "$type": "GameObject",
+           "$path": "2_Bust_Manager/HimariBust"
+          }
+         }
+        },
+        "m_Space": "Global"
+       }
+      },
+      "m_Parent": {
+       "kind": "none"
+      },
+      "m_Save": {
+       "kind": "none"
+      }
+     }
+    }
+   ]
+  },
+  "-1412377651": {
+   "kind": "text",
+   "parent": -1290838575,
+   "actor": null,
+   "text": "[Heavenly Husband] Just listen.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1396193086": {
+   "kind": "text",
+   "parent": -1290838575,
+   "children": [
+    998311650
+   ],
+   "actor": null,
+   "text": "If you keep being mean, you will end up alone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "35308416": {
+   "kind": "text",
+   "parent": -1290838575,
+   "children": [
+    -163795868
+   ],
+   "actor": null,
+   "text": "You act like a child. It's time to grow up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "998311650": {
+   "kind": "text",
+   "parent": 1396193086,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "That's exactly what I want.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-163795868": {
+   "kind": "text",
+   "parent": 35308416,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Yeah. Fuck you.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-925682615": {
+   "kind": "choice",
+   "parent": 1609050623,
+   "children": [
+    -1395362402,
+    388358980,
+    1407860191
+   ],
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "S-Stop it! Whatever you're trying to achieve... I-It doesn't work!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Gong Hit",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Gong Hit",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1.4,
+        "y": 1.4
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 0.7
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectInstantiate",
+     "title": "Instantiate HeavenlyHusband",
+     "fields": {
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HeavenlyHusband",
+       "of": "GetGameObjectInstance"
+      },
+      "m_Position": {
+       "kind": "raw",
+       "type": "GetPositionGameObject",
+       "data": {
+        "m_GameObject": {
+         "$type": "PropertyGetGameObject",
+         "m_Property": {
+          "$type": "GetGameObjectInstance",
+          "m_GameObject": {
+           "$unity": "HimariBust",
+           "$type": "GameObject",
+           "$path": "2_Bust_Manager/HimariBust"
+          }
+         }
+        }
+       }
+      },
+      "m_Rotation": {
+       "kind": "raw",
+       "type": "GetRotationGameObject",
+       "data": {
+        "m_GameObject": {
+         "$type": "PropertyGetGameObject",
+         "m_Property": {
+          "$type": "GetGameObjectInstance",
+          "m_GameObject": {
+           "$unity": "HimariBust",
+           "$type": "GameObject",
+           "$path": "2_Bust_Manager/HimariBust"
+          }
+         }
+        },
+        "m_Space": "Global"
+       }
+      },
+      "m_Parent": {
+       "kind": "none"
+      },
+      "m_Save": {
+       "kind": "none"
+      }
+     }
+    }
+   ]
+  },
+  "-1395362402": {
+   "kind": "text",
+   "parent": -925682615,
+   "actor": null,
+   "text": "[Heavenly Husband] Hey.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "388358980": {
+   "kind": "text",
+   "parent": -925682615,
+   "children": [
+    -1570154339
+   ],
+   "actor": null,
+   "text": "You can still change. It's never too late.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1407860191": {
+   "kind": "text",
+   "parent": -925682615,
+   "children": [
+    1318181220
+   ],
+   "actor": null,
+   "text": "Did your parents raised you to be like this?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1318181220": {
+   "kind": "text",
+   "parent": 1407860191,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I-In fact, they did. You can't make it to the top by being a pussy... And now leave me alone!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1570154339": {
+   "kind": "text",
+   "parent": 388358980,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "W-Why would I!? There is no reason for me, my life is going great!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1691186986": {
+   "kind": "text",
+   "parent": 1609050623,
+   "actor": "Himari",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "H-Hey...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Gong Hit",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Gong Hit",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1.4,
+        "y": 1.4
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 0.7
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectInstantiate",
+     "title": "Instantiate HeavenlyHusband",
+     "fields": {
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HeavenlyHusband",
+       "of": "GetGameObjectInstance"
+      },
+      "m_Position": {
+       "kind": "raw",
+       "type": "GetPositionGameObject",
+       "data": {
+        "m_GameObject": {
+         "$type": "PropertyGetGameObject",
+         "m_Property": {
+          "$type": "GetGameObjectInstance",
+          "m_GameObject": {
+           "$unity": "HimariBust",
+           "$type": "GameObject",
+           "$path": "2_Bust_Manager/HimariBust"
+          }
+         }
+        }
+       }
+      },
+      "m_Rotation": {
+       "kind": "raw",
+       "type": "GetRotationGameObject",
+       "data": {
+        "m_GameObject": {
+         "$type": "PropertyGetGameObject",
+         "m_Property": {
+          "$type": "GetGameObjectInstance",
+          "m_GameObject": {
+           "$unity": "HimariBust",
+           "$type": "GameObject",
+           "$path": "2_Bust_Manager/HimariBust"
+          }
+         }
+        },
+        "m_Space": "Global"
+       }
+      },
+      "m_Parent": {
+       "kind": "none"
+      },
+      "m_Save": {
+       "kind": "none"
+      }
+     }
+    }
+   ]
+  },
+  "165147889": {
+   "kind": "text",
+   "parent": 1609050623,
+   "actor": "Himari",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Oh god.. I get it now... I get it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[Himari-Converted] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Himari-Converted",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Events_2[himari-default-line] = I'm so glad you've decided to visit... Please, what can I do for you?",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "I'm so glad you've decided to visit... Please, what can I do for you?"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "himari-default-line",
+        "list": "Events_2",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1809018605": {
+   "kind": "text",
+   "parent": 1609050623,
+   "actor": "Himari",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "It's meant to be! You are my perfect match, my heavenly husband™...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "447561911": {
+   "kind": "text",
+   "parent": 1609050623,
+   "actor": "Himari",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I'm so sorry for being such a bitch to you, my sweet, sweet heavenly husband™.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Become a heavenly husband and confront Himari",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Heavenly Husband (Himari) OUTDATED",
+        "of": "Quest"
+       },
+       "m_TaskId": -989935106
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-677195411": {
+   "kind": "text",
+   "parent": -1987230658,
+   "actor": "Himari",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I've always had a passion for luxury cars and money. Why not combine the two? And my parents are very supportive.",
+   "jump": {
+    "mode": "Jump",
+    "to": "root"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[Himari-Converted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Himari-Converted",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "772689347": {
+   "kind": "text",
+   "parent": -942030671,
+   "actor": "Himari",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I promise, I will try... But people don't change overnight... Please, give me some time, my heavenly husband™.",
+   "jump": {
+    "mode": "Jump",
+    "to": "root"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[Himari-Converted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Himari-Converted",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1516549904": {
+   "kind": "text",
+   "parent": 1137700885,
+   "actor": "Himari",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Let me know if you need anything!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[Himari-Converted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Himari-Converted",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-604073354": {
+   "kind": "choice",
+   "parent": 1609050623,
+   "children": [
+    793453706,
+    -237983431
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "P-Please, accept my apology!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active tsundere to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "tsundere",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/tsundere"
+      }
+     }
+    }
+   ]
+  },
+  "793453706": {
+   "kind": "text",
+   "parent": -604073354,
+   "children": [
+    -1037848214,
+    1441981063,
+    -1902116105,
+    -1926928470,
+    -2033010337,
+    628156138,
+    2091987285,
+    2146589597
+   ],
+   "actor": null,
+   "text": "So be it. [Fuck her tits]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-237983431": {
+   "kind": "text",
+   "parent": -604073354,
+   "children": [
+    -1979971305,
+    -64856722
+   ],
+   "actor": null,
+   "text": "I'm not attracted to you, I just want you to be nicer.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1979971305": {
+   "kind": "text",
+   "parent": -237983431,
+   "actor": "Himari",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I... No! I won't accept that! I will conquer your heart, even if it will take years!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-64856722": {
+   "kind": "text",
+   "parent": -237983431,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I can be nice! I can change... Just wait, and you'll see! I will show you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1037848214": {
+   "kind": "text",
+   "parent": 793453706,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "I'm truly grateful that you've given me another chance, my heavenly husband™!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1441981063": {
+   "kind": "text",
+   "parent": 793453706,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "My goodness, if I'd known you were this big, I could have realized sooner! How in the world did I make such a big mistake!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1902116105": {
+   "kind": "text",
+   "parent": 793453706,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Please, go ahead and enjoy yourself! My heavenly husband™ deserves all the pleasure in the world.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active tsundere (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "tsundere (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/tsundere (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1926928470": {
+   "kind": "text",
+   "parent": 793453706,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "My boobs are yours to do with as you please. Please, give them a good, deep massage with your dick!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2033010337": {
+   "kind": "text",
+   "parent": 793453706,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "I can feel your cock pulsating. My heavenly husband™ is about to cover my tits in his heavenly cum™!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "628156138": {
+   "kind": "text",
+   "parent": 793453706,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Oh my goodness, what a sight to behold! I'm so grateful for this experience.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active tsundere (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "tsundere (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/tsundere (2)"
+      }
+     }
+    }
+   ]
+  },
+  "2091987285": {
+   "kind": "text",
+   "parent": 793453706,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "T- Thank you so much for blessing my boobs with your warm milk. It's truly an honor!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2146589597": {
+   "kind": "text",
+   "parent": 793453706,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "I promise I’ll change and show you that I’m worthy to be yours, my heavenly husband™!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-2084252203": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1063198749,
+    -437669536,
+    -1272512779,
+    1314868407
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "You live in the rooftop apartment with the private pool, right? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[himari-questdone] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "himari-questdone",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[Himari-Pool-Invited] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Himari-Pool-Invited",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1063198749": {
+   "kind": "text",
+   "parent": -2084252203,
+   "actor": "Himari",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I was thinking… since public pools are loud and full of people who don’t understand personal space… maybe I could use yours sometimes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_11[Himari-Pool-Invited] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Himari-Pool-Invited",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-437669536": {
+   "kind": "choice",
+   "parent": -2084252203,
+   "children": [
+    -1100665803,
+    755369943,
+    518016580
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Don’t misunderstand, it’s not like I want to spend time with you. It’s just the most convenient option.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1100665803": {
+   "kind": "text",
+   "parent": -437669536,
+   "children": [
+    -833952510,
+    1321978200
+   ],
+   "actor": null,
+   "text": "Of course. You can use it whenever you want.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-833952510": {
+   "kind": "text",
+   "parent": -1100665803,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Good. I expected you to say yes after everything we’ve already done together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "755369943": {
+   "kind": "text",
+   "parent": -437669536,
+   "children": [
+    780949098,
+    -326936599
+   ],
+   "actor": null,
+   "text": "Wow, asking nicely? I should mark this day on the calendar.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "780949098": {
+   "kind": "text",
+   "parent": 755369943,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Don’t get used to it. I am not “asking nicely,” I am simply choosing the most efficient solution available.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "518016580": {
+   "kind": "text",
+   "parent": -437669536,
+   "children": [
+    1798377172,
+    -1605213297
+   ],
+   "actor": null,
+   "text": "Planning to show off a swimsuit?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1798377172": {
+   "kind": "text",
+   "parent": 518016580,
+   "actor": "Himari",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You really only think about one thing, don’t you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1272512779": {
+   "kind": "text",
+   "parent": -2084252203,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "I’ll probably come by tomorrow evening after work. The rooftop should be quiet then, and I don’t want to run into your people or anyone who might start asking questions.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1314868407": {
+   "kind": "choice",
+   "parent": -2084252203,
+   "children": [
+    208334050,
+    -1032261799,
+    -931445189
+   ],
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "This arrangement only works if it stays between us.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "208334050": {
+   "kind": "text",
+   "parent": 1314868407,
+   "children": [
+    196664390
+   ],
+   "actor": null,
+   "text": "That makes sense.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "196664390": {
+   "kind": "text",
+   "parent": 208334050,
+   "actor": "Himari",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Good. I prefer when things are simple and understood without unnecessary drama.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1032261799": {
+   "kind": "text",
+   "parent": 1314868407,
+   "children": [
+    253545546
+   ],
+   "actor": null,
+   "text": "Sounds like a private date.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "253545546": {
+   "kind": "text",
+   "parent": -1032261799,
+   "actor": "Himari",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "It is not a date. It’s swimming. If you happen to be there, that’s just coincidence… so don’t get any strange ideas.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-931445189": {
+   "kind": "text",
+   "parent": 1314868407,
+   "children": [
+    391162283
+   ],
+   "actor": null,
+   "text": "(Charming) I’ll make sure everything’s ready for you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Charming] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Charming",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "391162283": {
+   "kind": "text",
+   "parent": -931445189,
+   "actor": "Himari",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hmph. You’re unusually reliable sometimes. Don’t make me regret depending on you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1321978200": {
+   "kind": "text",
+   "parent": -1100665803,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "It would be strange if you suddenly became difficult now… and it’s not like I trust anyone else with privacy like that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-326936599": {
+   "kind": "text",
+   "parent": 755369943,
+   "actor": "Himari",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "You just happen to be part of that solution, so try not to let it inflate your ego.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1605213297": {
+   "kind": "text",
+   "parent": 518016580,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Still… if someone is going to see me in a swimsuit, it might as well be the person who already knows what I look like without one.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/CarDealership",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Defaultdialogue and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1195 @@
+{
+ "id": "8_Room_Talk/Basement/Group/KenScnee",
+ "name": "KenScnee",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "Ken"
+ ],
+ "roots": [
+  1903887002,
+  -1186683688,
+  139101012,
+  -321693613
+ ],
+ "nodes": {
+  "1903887002": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Ken to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Ken",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Ken"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Nude"
+      }
+     }
+    }
+   ]
+  },
+  "-1186683688": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Hey, um... G-Glad to be here again... Thanks for inviting me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[ken-first-studio-visit] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-first-studio-visit",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "139101012": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    208199569,
+    1582918809,
+    285847956
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Hey, {PC}. Hey, An~ Oh my god, you're... You're...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[ken-first-studio-visit] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-first-studio-visit",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "208199569": {
+   "kind": "text",
+   "parent": 139101012,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Relax, honey. Don’t worry, I won’t bite! It’s not like you haven’t seen me naked before.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1582918809": {
+   "kind": "text",
+   "parent": 139101012,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Y-Yes, but never in person. They look huge, Holy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "285847956": {
+   "kind": "text",
+   "parent": 139101012,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Aw, thanks! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-321693613": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -926056151,
+    1231868479,
+    181847145
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Sooo... What should we do today?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[ken-first-studio-visit] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-first-studio-visit",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-926056151": {
+   "kind": "text",
+   "parent": -321693613,
+   "children": [
+    1489303370,
+    1620246112,
+    1680483325,
+    -1166072442,
+    1952189789,
+    36025153,
+    2021040916,
+    1882632236,
+    257975424,
+    641369284,
+    -1777880636,
+    -1814509930,
+    -1772455933,
+    1730501903,
+    -1114022163,
+    -1614530355,
+    1397527712,
+    344509189,
+    735900151,
+    1821505872
+   ],
+   "actor": null,
+   "text": "How about some sex?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1231868479": {
+   "kind": "text",
+   "parent": -321693613,
+   "children": [
+    -2079855170,
+    1280135813,
+    -1255387315,
+    -913394740,
+    -60087849,
+    -1165356434,
+    -84160512,
+    808516052,
+    1207670079,
+    1004420940
+   ],
+   "actor": null,
+   "text": "Let's cover your face in cum.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-Everything-but-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-Everything-but-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "181847145": {
+   "kind": "text",
+   "parent": -321693613,
+   "children": [
+    631492999,
+    14165509,
+    -519594989
+   ],
+   "actor": null,
+   "text": "Let's just take a photo.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "631492999": {
+   "kind": "text",
+   "parent": 181847145,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "How's this... Do you like the view, Ken?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 92_nude3 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "92_nude3",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/92_nude3"
+      }
+     }
+    }
+   ]
+  },
+  "14165509": {
+   "kind": "text",
+   "parent": 181847145,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Legit best day of my life...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-519594989": {
+   "kind": "text",
+   "parent": 181847145,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hah... I'm glad you say so... Visit us again, yes?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2079855170": {
+   "kind": "text",
+   "parent": 1231868479,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That sounds fun! Come on, boys. Time to show me your goods!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 94_Kensoftcore to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "94_Kensoftcore",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/94_Kensoftcore"
+      }
+     }
+    }
+   ]
+  },
+  "1280135813": {
+   "kind": "text",
+   "parent": 1231868479,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I-I can't believe this is happening...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1255387315": {
+   "kind": "text",
+   "parent": 1231868479,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Aw, so cute. Come on, Ken, I'll let you fuck my tits.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-913394740": {
+   "kind": "text",
+   "parent": 1231868479,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "H-Holy fuck... Best day ever... Your breasts feel so good, Anna!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 85_Kensoftcore (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "85_Kensoftcore (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/85_Kensoftcore (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-60087849": {
+   "kind": "text",
+   "parent": 1231868479,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Just relax and let me do the work...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1165356434": {
+   "kind": "text",
+   "parent": 1231868479,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Come on, {PC}. Stroke your big cock for me... I want both of you to cover me... in cum...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-84160512": {
+   "kind": "choice",
+   "parent": 1231868479,
+   "children": [
+    -996102555,
+    1124809246,
+    -482797098
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I can feel it building up... F-Fuck, I'm about to...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "808516052": {
+   "kind": "text",
+   "parent": 1231868479,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes! Let it all out! Haha!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 86_Kensoftcore (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "86_Kensoftcore (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/86_Kensoftcore (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1489303370": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes! Let's have some fun together!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1620246112": {
+   "kind": "text",
+   "parent": -926056151,
+   "children": [
+    250608172,
+    -187629984,
+    -1614424051
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I'm, uh... I'm still a virgin, Anna.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[ken-anna-hardcore-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-anna-hardcore-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1680483325": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Lie down Ken, all you have to do is keep your cock all nice and hard while I ride it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1166072442": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Oh fuck... It's in... So this is what it feels like...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 87_Kenhardcore to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "87_Kenhardcore",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/87_Kenhardcore"
+      }
+     }
+    }
+   ]
+  },
+  "1952189789": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmm... It feels so nice...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "36025153": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Going straight for my tits, huh? You must really like them.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2021040916": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I love your boobs! They are the best boobs in the world. Legit...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1882632236": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm... My biggest fan is pounding my pussy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "257975424": {
+   "kind": "choice",
+   "parent": -926056151,
+   "children": [
+    783851008,
+    161345440,
+    2061915916
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A-Alright... {PC}... Come over here... I need you... now...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1207670079": {
+   "kind": "text",
+   "parent": 1231868479,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "M-My cock feels so good! Thank you so much, Anna!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1004420940": {
+   "kind": "text",
+   "parent": 1231868479,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Aw, it's my pleasure... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[ken-anna-softcore-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-anna-softcore-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "250608172": {
+   "kind": "text",
+   "parent": 1620246112,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Awwww! Really!? That's so cute... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-187629984": {
+   "kind": "text",
+   "parent": 1620246112,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Then let's make this extra special! Usually I woud let {PC} decide, but today you'll get my pussy!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1614424051": {
+   "kind": "text",
+   "parent": 1620246112,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "T-That sounds great...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "641369284": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "F-Fuck... I'm sorry! I'm already coming! This... This sensation is... Too Muaaachh!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 88_Kenhardcore (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "88_Kenhardcore (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/88_Kenhardcore (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1777880636": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "D-Don't stop, I can keep going... Fuck my holes... Fuck me! FUCK!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1814509930": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "F-Fuck, this feels like a dream... Your pussy is soaking wet, Anna!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1772455933": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Less talking... More fucking! Suck my tits.... Yes....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1614530355": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Please... Unload your babybutter into me! I want it inside of me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1730501903": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Mhpphmm! Mmhmmm!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 89_Kenhardcore (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "89_Kenhardcore (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/89_Kenhardcore (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1397527712": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That's it... I can feel it... My ass and pussy feel so warm... Oh god...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "344509189": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "MMhhhh lmmoveehhh it!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "735900151": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "G-God... This was fantastic, boys. Both of you did such a great job and making me cum!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1821505872": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "L-Let's relax for a while... My legs are pudding...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[ken-anna-hardcore-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-anna-hardcore-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1114022163": {
+   "kind": "text",
+   "parent": -926056151,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I can feel it! Ken is blasting his virgin cum deep inside my pussy!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[ken-anna-hardcore-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-anna-hardcore-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-996102555": {
+   "kind": "text",
+   "parent": -84160512,
+   "actor": null,
+   "text": "A-Aim for her face... We need some good shots.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1124809246": {
+   "kind": "text",
+   "parent": -84160512,
+   "actor": null,
+   "text": "Fuck... We'll cover your whole face in our cum!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-482797098": {
+   "kind": "text",
+   "parent": -84160512,
+   "actor": null,
+   "text": "Don't be shy, Ken. Anna's tits can take it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "783851008": {
+   "kind": "text",
+   "parent": 257975424,
+   "children": [
+    1598883101
+   ],
+   "actor": null,
+   "text": "What do you want me to do?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "161345440": {
+   "kind": "text",
+   "parent": 257975424,
+   "children": [
+    702787898
+   ],
+   "actor": null,
+   "text": "Beg for it, slut.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2061915916": {
+   "kind": "text",
+   "parent": 257975424,
+   "actor": null,
+   "text": "[Just fuck her ass]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1598883101": {
+   "kind": "text",
+   "parent": 783851008,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "F-Fuck my ass... I want both of you... at the same time... I need it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "702787898": {
+   "kind": "text",
+   "parent": 161345440,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Please, {PC}... I need your cock... I want to cum and I need your cock to cum! Pleaseeee!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "Studio_Canvas/Invite/UI_Invite_Ken",
+   "script": "ButtonInstructions",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core[temp-stored-very-short-term] = KenScnee",
+   "as": "GameObject",
+   "before": [
+    {
+     "type": "InstructionCommonDebugText",
+     "title": "Log: Click!",
+     "fields": {
+      "m_Message": {
+       "kind": "value",
+       "value": "Click!"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Button-1",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Button-1",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "type": "InstructionUICanvasGroupInteractable",
+     "title": "Studio_Canvas Interactable = False",
+     "fields": {
+      "m_CanvasGroup": {
+       "kind": "object",
+       "name": "Studio_Canvas",
+       "of": "GetGameObjectInstance",
+       "path": "Studio_Canvas"
+      },
+      "m_Interactable": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "type": "InstructionUICanvasGroupAlpha",
+     "title": "Studio_Canvas alpha = 0",
+     "fields": {
+      "m_CanvasGroup": {
+       "kind": "object",
+       "name": "Studio_Canvas",
+       "of": "GetGameObjectInstance",
+       "path": "Studio_Canvas"
+      },
+      "m_Alpha": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "value",
+        "value": 0
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 1,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Basement to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Basement",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Basement"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Studio_Canvas to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Studio_Canvas",
+       "of": "GetGameObjectInstance",
+       "path": "Studio_Canvas"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

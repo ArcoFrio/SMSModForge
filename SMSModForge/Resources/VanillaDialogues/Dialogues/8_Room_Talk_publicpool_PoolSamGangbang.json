@@ -1,0 +1,958 @@
+{
+ "id": "8_Room_Talk/publicpool/PoolSamGangbang",
+ "name": "PoolSamGangbang",
+ "index": 5,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Ken",
+  "Samantha"
+ ],
+ "roots": [
+  1246079644,
+  177450756,
+  531615245,
+  845836535,
+  -162770191,
+  -1987501923,
+  1234409821,
+  -485918589,
+  396305784,
+  -1861458482,
+  -907308600,
+  944966422,
+  -659820720,
+  -789303344,
+  752378532,
+  -1323451087,
+  144880071,
+  1615749467,
+  1379726513,
+  1745430025,
+  -193677992,
+  -754680942,
+  1900592527,
+  -619556715,
+  -1335003231
+ ],
+ "nodes": {
+  "1246079644": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "T-The gang's back together... Don't make me wait... I want cocks. Now...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[sam-gangbang-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sam-gangbang-done",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "177450756": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    105173950,
+    1953471758,
+    -1436905152,
+    -203310989,
+    919477672,
+    238182331,
+    -1430562852,
+    151316198,
+    -169275531
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Hey everyone, nice to... Woah... Sam....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[sam-gangbang-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sam-gangbang-done",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "105173950": {
+   "kind": "text",
+   "parent": 177450756,
+   "actor": "Samantha",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "D-Do you like it? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[sam-gangbang-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sam-gangbang-done",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1953471758": {
+   "kind": "text",
+   "parent": 177450756,
+   "actor": "Adrian",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "It... It suits you really well...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1436905152": {
+   "kind": "text",
+   "parent": 177450756,
+   "actor": "Ken",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hey man, nice to meet you. I'm Ken.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-203310989": {
+   "kind": "text",
+   "parent": 177450756,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "A-Adrian...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "919477672": {
+   "kind": "text",
+   "parent": 177450756,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "You know, this reminds me of that one raid we did last month.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (1)"
+      }
+     }
+    }
+   ]
+  },
+  "238182331": {
+   "kind": "text",
+   "parent": 177450756,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "We had three healers but only two tanks... So two healers had to... focus on keeping one tank alive...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1430562852": {
+   "kind": "text",
+   "parent": 177450756,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Do you get what I'm saying? ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (2)"
+      }
+     }
+    }
+   ]
+  },
+  "151316198": {
+   "kind": "text",
+   "parent": 177450756,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Y-Yes...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "531615245": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "S-So many cocks... I'm in heaven...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (9) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (9)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (9)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (2)"
+      }
+     }
+    }
+   ]
+  },
+  "845836535": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Only the best for you, {M}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-169275531": {
+   "kind": "text",
+   "parent": 177450756,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Good... Then show me your cocks, boys....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Lewd to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Lewd",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Lewd"
+      }
+     }
+    }
+   ]
+  },
+  "-162770191": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "F-Fuck, your tits are massive...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1987501923": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Don't be shy... Give them a squeeze!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1234409821": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Woah...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-485918589": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1249724500,
+    -73292473,
+    -201540322
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "I... I want to ride {PC}... Let's... Let's make a party!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "396305784": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "F-Fuck... It's in... I... I will never grow tired of this... Yesshhh!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (10) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (10)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (10)"
+      }
+     }
+    }
+   ]
+  },
+  "-1861458482": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "Move your hips, {M}! Milk that cock!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-907308600": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I... I can see your pussy... It looks so smooth... and wet....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "944966422": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "S-Stuff your cock in it... Y-You'll love it! P-Please!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-659820720": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Hnaaah... It's.. I... Fuck... Sam... I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (11) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (11)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (11)"
+      }
+     }
+    }
+   ]
+  },
+  "-789303344": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "My {M} is taking cocks like a real pro... I do feel a bit left out though....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "752378532": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    817063988,
+    -1267383383,
+    1009336391
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "D-Don't worry... You'll... Haaahhh... Get your tuaaaaaahrrrrnnn!!!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1323451087": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Yes! Yes... Fuck me! Cocks! I... FUCK!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "144880071": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "I... I'm sorry but I don't want to wait... S-Sorry {PC}... I... I'll... Make some room for me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1615749467": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "No, no, no! W-Waitaaaah! HAAA! OH GOD! FHAA!!! MHAAAAAHHH!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (12) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (12)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (12)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (9) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (9)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (9)"
+      }
+     }
+    }
+   ]
+  },
+  "1379726513": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -19687616,
+    -2026224838,
+    260499522
+   ],
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "F-Finally... Y-Yes... Take it, {M}... F-Fuck... It's so tight... My cock is...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1745430025": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I.. I don't know if I can... I'm getting close... Sam... I'll... I'll cum inside your pussy....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-193677992": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Yessh... L-Let it all out... Please... Use my holes... Let it all... Let it all... Haaaahhhh!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-754680942": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "God... {M}... You're such a... Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (13) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (13)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (13)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KenSwim (10) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KenSwim (10)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/KenSwim (10)"
+      }
+     }
+    }
+   ]
+  },
+  "1900592527": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "L-Let me... Clean all of you.... Mhaaaw... Mmmmhmm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-619556715": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "B-Best raid ever... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1335003231": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "I... Muaaah... I hope this won't be our last raid... Muaaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[adrian-swim-invitation-active] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-swim-invitation-active",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1249724500": {
+   "kind": "text",
+   "parent": -485918589,
+   "actor": null,
+   "text": "My cock is all yours.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-73292473": {
+   "kind": "text",
+   "parent": -485918589,
+   "actor": null,
+   "text": "I can't wait to fill your tight ass again...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-201540322": {
+   "kind": "text",
+   "parent": -485918589,
+   "actor": null,
+   "text": "Get on top of me, Samantha.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "817063988": {
+   "kind": "text",
+   "parent": 752378532,
+   "actor": null,
+   "text": "Y-Yes... Move your hips... Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1267383383": {
+   "kind": "text",
+   "parent": 752378532,
+   "actor": null,
+   "text": "Y-Youre such a hot slut, Samantha...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1009336391": {
+   "kind": "text",
+   "parent": 752378532,
+   "actor": null,
+   "text": "(Pound her faster)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-19687616": {
+   "kind": "text",
+   "parent": 1379726513,
+   "actor": null,
+   "text": "F-Fuck... It's too tight.. I'm... I'm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2026224838": {
+   "kind": "text",
+   "parent": 1379726513,
+   "children": [
+    -104159095
+   ],
+   "actor": null,
+   "text": "K-Ken... Did you already cum... I can feel your...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "260499522": {
+   "kind": "text",
+   "parent": 1379726513,
+   "actor": null,
+   "text": "(Cum inside her ass)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-104159095": {
+   "kind": "text",
+   "parent": -2026224838,
+   "actor": "Ken",
+   "expressionName": "neutral",
+   "text": "S-Sorry... It was just too tight with your cock in there too.... Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/publicpool/Conditions",
+   "script": "Conditions",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core[temp-stored-very-short-term] = PoolSamGangbang",
+   "as": "GameObject",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[adrian-swim-invitation-active] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-swim-invitation-active",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Samantha_SwimsuitSlutty to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Samantha_SwimsuitSlutty",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Samantha_SwimsuitSlutty"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Ken_Swimsuit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Ken_Swimsuit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Ken_Swimsuit"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_Sport to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_Sport",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_Sport"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

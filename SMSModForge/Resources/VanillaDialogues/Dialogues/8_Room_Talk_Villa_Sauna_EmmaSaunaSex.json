@@ -1,0 +1,1027 @@
+{
+ "id": "8_Room_Talk/Villa_Sauna/EmmaSaunaSex",
+ "name": "EmmaSaunaSex",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Emma"
+ ],
+ "roots": [
+  561159366,
+  2077898278,
+  -1899890150,
+  -586383444,
+  223415743,
+  -1932483244,
+  785869431,
+  1073057672,
+  932392928,
+  -24058079
+ ],
+ "nodes": {
+  "561159366": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "W-Why does it feel so good... I couldn't stop thinking about riding it again all week....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[emma-sex-first-time] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-sex-first-time",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaSaunaSolo (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaSaunaSolo (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/EmmaSaunaSolo (1)"
+      }
+     }
+    }
+   ]
+  },
+  "2077898278": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -779338541,
+    -2061264836
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Let me just sit down on it... Hngghaah... Mhmm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[emma-sex-first-time] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-sex-first-time",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaSaunaSolo (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaSaunaSolo (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/EmmaSaunaSolo (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-779338541": {
+   "kind": "text",
+   "parent": 2077898278,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Oh fuck... This feels better than any toy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[emma-sex-first-time] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-sex-first-time",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2061264836": {
+   "kind": "text",
+   "parent": 2077898278,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Oh god... I... I can't believe this is my first time... What am I doing... Hngaahh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1899890150": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1464736920,
+    -246899311,
+    -342098252
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Oh fuck... fuck... What am I doing... I can't stop moving my hips...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Emma_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Emma_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Emma_Nude"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Emma_Towel to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Emma_Towel",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Emma_Towel"
+      }
+     }
+    }
+   ]
+  },
+  "1464736920": {
+   "kind": "text",
+   "parent": -1899890150,
+   "actor": null,
+   "text": "You're doing great, Emma.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-246899311": {
+   "kind": "text",
+   "parent": -1899890150,
+   "actor": null,
+   "text": "Yes, move that ass... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-342098252": {
+   "kind": "text",
+   "parent": -1899890150,
+   "actor": null,
+   "text": "You're so tight, Emma...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-586383444": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "N-No... Don't move... Don't... I... I want to ride it... Just hold still...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaSaunaSolo (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaSaunaSolo (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/EmmaSaunaSolo (2)"
+      }
+     }
+    }
+   ]
+  },
+  "223415743": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Y-Yes... That's it... I'm getting there... I'm ... Oh god... Oh.. Ahhh... Hnaaaghh....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1932483244": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -264591112,
+    -1310516619,
+    -286843527
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Oh god.. I'm... I'm... HAAAAAHHH!!!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-264591112": {
+   "kind": "text",
+   "parent": -1932483244,
+   "actor": null,
+   "text": "F-Fuck... Take it all!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1310516619": {
+   "kind": "text",
+   "parent": -1932483244,
+   "actor": null,
+   "text": "L-Let's cum together!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-286843527": {
+   "kind": "text",
+   "parent": -1932483244,
+   "actor": null,
+   "text": "(Fill her up without a warning)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "785869431": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "YES! YES! HNGAAAHHH! I'm... You are making me... HNAAAGHHH!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaSaunaSolo (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaSaunaSolo (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/EmmaSaunaSolo (3)"
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[emma-sex-first-time] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-sex-first-time",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1073057672": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Ha.... He.... Oh god... Fuck... I... I really needed that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-24058079": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    187031246,
+    -1426319578
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "It's just too much... Living in this hell... Being surrounded by greed and lust...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[Mario-Plan-Agreed] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-Plan-Agreed",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Mario-In-Prison] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-In-Prison",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_4[detective-minigame-stage] ≥ 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "detective-minigame-stage",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_5[emma-c-progress] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-c-progress",
+        "list": "Events_5",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "932392928": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1087030481,
+    -1745398401,
+    -1618557158
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Why does it feel SO good...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[Mario-Plan-Agreed] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-Plan-Agreed",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Mario-In-Prison] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-In-Prison",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_5[emma-c-progress] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-c-progress",
+        "list": "Events_5",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "187031246": {
+   "kind": "choice",
+   "parent": -24058079,
+   "children": [
+    912507705,
+    504323859
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I'm not strong enough... I... I want it too!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "912507705": {
+   "kind": "text",
+   "parent": 187031246,
+   "children": [
+    -1705957459
+   ],
+   "actor": null,
+   "text": "Does your {D} fuck a lot of sluts? (Start sharing route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Emma-Betrays-Mario-Route] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Emma-Betrays-Mario-Route",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1705957459": {
+   "kind": "text",
+   "parent": 912507705,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Y-Yes... {M} doesn't know I think... But whenever she's not around there's some one of his slut secretaries over...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_5[emma-c-progress] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-c-progress",
+        "list": "Events_5",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "504323859": {
+   "kind": "text",
+   "parent": 187031246,
+   "children": [
+    -814341174
+   ],
+   "actor": null,
+   "text": "You should fight it... There's more to life.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-814341174": {
+   "kind": "text",
+   "parent": 504323859,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I know... It's just... Y-You could help me... Just visit me from time to time? I... I need relief...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_5[emma-c-progress] + -5",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-c-progress",
+        "list": "Events_5",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -5
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[emma-player-friends] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-player-friends",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[emma-corrupted] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-corrupted",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1426319578": {
+   "kind": "text",
+   "parent": -24058079,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "F-Fuck... I can't think straight... I should get out of here...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1087030481": {
+   "kind": "text",
+   "parent": 932392928,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "My pussy it... It begs for cock... I can't stop thinking about yours..",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1745398401": {
+   "kind": "choice",
+   "parent": 932392928,
+   "children": [
+    -30869699,
+    -86491103,
+    993084809
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I want more... I NEED more... ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-30869699": {
+   "kind": "text",
+   "parent": -1745398401,
+   "children": [
+    1446951748
+   ],
+   "actor": null,
+   "text": "I'll give you everything you need.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1446951748": {
+   "kind": "text",
+   "parent": -30869699,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "T-Thanks... That's what I wanted to hear...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-86491103": {
+   "kind": "text",
+   "parent": -1745398401,
+   "children": [
+    1053185696
+   ],
+   "actor": null,
+   "text": "Beg for it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1053185696": {
+   "kind": "text",
+   "parent": -86491103,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "P-Please... I beg you... I want your cock... Please don't stop visiting me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "993084809": {
+   "kind": "text",
+   "parent": -1745398401,
+   "children": [
+    -861611824
+   ],
+   "actor": null,
+   "text": "You know that your {D} lusts after you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[Mario-Plan-Agreed] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-Plan-Agreed",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Mario-In-Prison] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-In-Prison",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-861611824": {
+   "kind": "text",
+   "parent": 993084809,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "H-He does? Does he have a big cock? Does he... God...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1618557158": {
+   "kind": "text",
+   "parent": 932392928,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Fuck... This is too much... E-Excuse me, I.. I need a break...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_5[emma-c-progress] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-c-progress",
+        "list": "Events_5",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Villa_Sauna/EmmaSaunaDefault",
+   "script": "Dialogue",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core[temp-stored-very-short-term] = EmmaSaunaSex",
+   "as": "GameObject"
+  },
+  {
+   "by": "8_Room_Talk/Villa_Sauna/EmmaSaunaNude",
+   "script": "Dialogue",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core[temp-stored-very-short-term] = EmmaSaunaSex",
+   "as": "GameObject"
+  }
+ ]
+}

@@ -1,0 +1,79 @@
+{
+ "id": "8_Core_Events/Trips/Hiking/ACtualEndDialogue",
+ "name": "ACtualEndDialogue",
+ "index": 9,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Anna",
+  "Josef"
+ ],
+ "roots": [
+  -1414366397,
+  -1248163435,
+  1524538684,
+  407241307,
+  478973629
+ ],
+ "nodes": {
+  "-1414366397": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "It's great that we're all getting together like this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1524538684": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Of course, sweetie. Just make sure you're ready when we start grilling.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "478973629": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "This actually reminds me of back then when we...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1248163435": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I was wondering if it would be okay if I played a little bit on my phone. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "407241307": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Yes, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Trips/Hiking/Gangbangcondition",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play ACtualEndDialogue and wait",
+   "as": "Dialogue"
+  }
+ ]
+}

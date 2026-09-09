@@ -25,6 +25,42 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
+        // Clicking the picture selects what is under the pointer. Without it a
+        // full-screen object's box covers the pane and nothing beneath it can
+        // be reached at all.
+        UiScreenPreview.NodePicked += node =>
+        {
+            if (DataContext is not MainViewModel vm || vm.SelectedUi is null) return;
+
+            var row = FindUiRow(vm.SelectedUi.Nodes, node);
+            if (row == null) return;
+
+            vm.SelectedUi.SelectedNode = row;
+
+            // Open the branch down to it and put the tree's own highlight
+            // there, or the tree and the picture disagree about what is
+            // selected.
+            for (var up = row.Parent; up != null; up = up.Parent) up.IsExpanded = true;
+            row.IsSelected = true;
+        };
+
+        // A drag is neither a command nor a text field, so it is checkpointed
+        // here or not at all - see UiPreview.EditBeginning. Before the first
+        // pixel moves, so the stored step is where the object started.
+        UiScreenPreview.EditBeginning += () =>
+        {
+            if (DataContext is MainViewModel vm) vm.Undo.Checkpoint();
+        };
+
+        // Dragging the gizmo changes the model directly, which nothing is
+        // watching - so the boxes showing those same numbers, and the marker
+        // saying the object has been changed, are told to re-read them.
+        UiScreenPreview.RectEdited += _ =>
+        {
+            if (DataContext is MainViewModel vm)
+                vm.SelectedUi?.SelectedNode?.RefreshAll();
+        };
+
         // The tutorial overlay draws itself from the runner and reuses the same
         // amber flash that jumping to a validation issue uses, so "look here"
         // means one thing throughout the editor.
@@ -541,6 +577,27 @@ public partial class MainWindow : Window
         NodeList.InputBindings.Add(new KeyBinding(vm.CopyNodeCommand, Key.C, ModifierKeys.Control));
         NodeList.InputBindings.Add(new KeyBinding(vm.PasteNodeSiblingCommand, Key.V, ModifierKeys.Control));
         NodeList.InputBindings.Add(new KeyBinding(vm.RemoveDialogueNodeCommand, Key.Delete, ModifierKeys.None));
+
+        // The UI tree is a third clipboard scope, for the same reason: Ctrl+C
+        // here means a UI OBJECT. Bound through the window's DataContext rather
+        // than to a command object, because the commands belong to whichever
+        // screen is selected and that changes as the author moves about - a
+        // binding captured once would go on talking to the screen they were on
+        // when the window opened.
+        void OnTree(Func<UiViewModel, RelayCommand> pick, Key key, ModifierKeys mods)
+            => UiTree.InputBindings.Add(new KeyBinding(
+                new PassThroughCommand(
+                    () => { var ui = vm.SelectedUi; if (ui != null) pick(ui).Execute(null); },
+                    () => vm.SelectedUi != null && pick(vm.SelectedUi).CanExecute(null)),
+                key, mods));
+
+        OnTree(u => u.CopyNodeCommand,      Key.C,      ModifierKeys.Control);
+        OnTree(u => u.PasteNodeCommand,     Key.V,      ModifierKeys.Control);
+        OnTree(u => u.DuplicateNodeCommand, Key.D,      ModifierKeys.Control);
+        OnTree(u => u.RemoveNodeCommand,    Key.Delete, ModifierKeys.None);
+        OnTree(u => u.AddChildCommand,      Key.Insert, ModifierKeys.None);
+
+        UiTree.ToolTip ??= "Ins: add object • Del: remove • Ctrl+C/V: copy/paste • Ctrl+D: duplicate";
     }
 
     /// <summary>
@@ -775,6 +832,12 @@ public partial class MainWindow : Window
     /// </summary>
     private void OnPackSaved(object? sender, EventArgs e)
     {
+        // Read at flash time rather than bound, because the toast is a snapshot
+        // of one save rather than a live view of the field.
+        SaveToastVersion.Text = DataContext is MainViewModel vm
+                                && !string.IsNullOrEmpty(vm.Pack.Version)
+            ? "v" + vm.Pack.Version : "";
+
         var fade = new DoubleAnimationUsingKeyFrames();
         fade.KeyFrames.Add(new LinearDoubleKeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.Zero)));
         fade.KeyFrames.Add(new LinearDoubleKeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0.12))));
@@ -888,6 +951,20 @@ public partial class MainWindow : Window
             if (item is UIElement el) el.InvalidateMeasure();
     }
 
+    /// <summary>The row standing for a particular object, anywhere in the
+    /// tree. By identity: names repeat, and the picture picked one object.</summary>
+    private static UiNodeViewModel? FindUiRow(
+        System.Collections.Generic.IEnumerable<UiNodeViewModel> rows, SMSModForge.Model.UiNodeDef node)
+    {
+        foreach (var row in rows)
+        {
+            if (ReferenceEquals(row.Model, node)) return row;
+            var deeper = FindUiRow(row.Children, node);
+            if (deeper != null) return deeper;
+        }
+        return null;
+    }
+
     /// <summary>The UI tab's tree. TreeView.SelectedItem is read-only, so the
     /// selection has to be pushed to the view model from here - it is what the
     /// property panel edits and what the preview outlines.</summary>
@@ -896,6 +973,86 @@ public partial class MainWindow : Window
         if (DataContext is not MainViewModel vm) return;
         if (vm.SelectedUi != null)
             vm.SelectedUi.SelectedNode = e.NewValue as UiNodeViewModel;
+    }
+
+    // ── Dragging a row to reorder it ────────────────────────────
+    //
+    // Among siblings only. A row's place in the tree is not decoration: for an
+    // object the game owns it is also the path the pack finds it by, so
+    // dropping one into a different parent would say "change that object over
+    // there" while looking like "move this one here". Reordering is the part
+    // that means something on a canvas, and it is the part this does.
+
+    private Point _uiDragFrom;
+    private UiNodeViewModel? _uiDragging;
+
+    private void UiTree_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+        _uiDragFrom = e.GetPosition(null);
+        _uiDragging = RowAt(e.OriginalSource as DependencyObject);
+    }
+
+    private void UiTree_MouseMove(object sender, MouseEventArgs e)
+    {
+        if (e.LeftButton != MouseButtonState.Pressed || _uiDragging == null) return;
+
+        // The system's own threshold, so a click with a shaky hand stays a
+        // click rather than becoming a drag that moves something.
+        var moved = e.GetPosition(null) - _uiDragFrom;
+        if (Math.Abs(moved.X) < SystemParameters.MinimumHorizontalDragDistance &&
+            Math.Abs(moved.Y) < SystemParameters.MinimumVerticalDragDistance) return;
+
+        var dragged = _uiDragging;
+        _uiDragging = null;
+        DragDrop.DoDragDrop(UiTree, dragged, DragDropEffects.Move);
+    }
+
+    private void UiTree_DragOver(object sender, DragEventArgs e)
+    {
+        e.Effects = Landing(e) == null ? DragDropEffects.None : DragDropEffects.Move;
+        e.Handled = true;
+    }
+
+    private void UiTree_Drop(object sender, DragEventArgs e)
+    {
+        var landing = Landing(e);
+        e.Handled = true;
+        if (landing == null) return;
+
+        var (parent, moving, onto) = landing.Value;
+        // Same as a gizmo drag: a drop is neither a command nor a field, so
+        // without this the reorder never becomes a step of its own.
+        (DataContext as MainViewModel)?.Undo.Checkpoint();
+
+        // The move itself tells the preview: reordering raises the same change
+        // that every other edit does, and what covers what has just changed.
+        parent.MoveTo(moving, parent.Children.IndexOf(onto));
+    }
+
+    /// <summary>What a drop here would do, or null when it would do nothing:
+    /// the shared parent, the row being moved, and the row it lands on.</summary>
+    private (UiNodeViewModel Parent, UiNodeViewModel Moving, UiNodeViewModel Onto)? Landing(DragEventArgs e)
+    {
+        if (!e.Data.GetDataPresent(typeof(UiNodeViewModel))) return null;
+        if (e.Data.GetData(typeof(UiNodeViewModel)) is not UiNodeViewModel moving) return null;
+
+        var onto = RowAt(e.OriginalSource as DependencyObject);
+        if (onto == null || ReferenceEquals(onto, moving)) return null;
+
+        var parent = moving.Parent;
+        if (parent == null || !ReferenceEquals(parent, onto.Parent)) return null;
+
+        return (parent, moving, onto);
+    }
+
+    /// <summary>The row under a point in the tree, found by walking up from
+    /// whatever bit of the template was actually hit.</summary>
+    private static UiNodeViewModel? RowAt(DependencyObject? from)
+    {
+        while (from != null && from is not TreeViewItem)
+            from = from is System.Windows.Media.Visual or System.Windows.Media.Media3D.Visual3D
+                 ? System.Windows.Media.VisualTreeHelper.GetParent(from) : null;
+        return (from as TreeViewItem)?.DataContext as UiNodeViewModel;
     }
 
     private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -1007,10 +1164,29 @@ public partial class MainWindow : Window
         }
 
         var win = new MaskEditorWindow(outfit, vm.PackRoot) { Owner = this };
+        View.WindowOwnership.ReturnFocusToOwner(win);
         _maskEditors[outfit] = win;
         win.Closed += (_, _) => _maskEditors.Remove(outfit);
         win.Show();
     }
+
+    /// <summary>
+    /// Put the breathing depth back to what it started at.
+    /// <para/>
+    /// The number an author saw when the tab opened, so a calibration they
+    /// dragged about can be put back without guessing at it.
+    /// </summary>
+    private void ResetBreathingDepth_Click(object sender, RoutedEventArgs e)
+    {
+        var slider = BreathingDepth;
+        if (slider == null) return;
+
+        slider.Value = BreathingDepthDefault;
+    }
+
+    /// <summary>The depth a freshly opened preview breathes at. Matches the
+    /// slider's Value in MainWindow.xaml.</summary>
+    private const double BreathingDepthDefault = 4;
 
     private void EditPlaceMask_Click(object sender, RoutedEventArgs e) => OpenPlaceMask(secondary: false);
 
@@ -1045,6 +1221,7 @@ public partial class MainWindow : Window
 
         var host = secondary ? place.SecondaryMaskHost : place.BaseMaskHost;
         var win = new MaskEditorWindow(host, vm.PackRoot) { Owner = this };
+        View.WindowOwnership.ReturnFocusToOwner(win);
         _placeMaskEditors[key] = win;
         win.Closed += (_, _) => _placeMaskEditors.Remove(key);
         win.Show();
@@ -1073,6 +1250,7 @@ public partial class MainWindow : Window
         }
 
         var win = new MaskEditorWindow(npc, vm.PackRoot) { Owner = this };
+        View.WindowOwnership.ReturnFocusToOwner(win);
         _npcMaskEditors[npc] = win;
         win.Closed += (_, _) => _npcMaskEditors.Remove(npc);
         win.Show();
@@ -1102,7 +1280,8 @@ public partial class MainWindow : Window
     private void PickActorColor_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not System.Windows.Controls.Button { DataContext: ActorViewModel actor }) return;
-        if (PickColor(actor.NameColorValue) is { } picked) actor.NameColorValue = picked;
+        if (PickColor(actor.NameColorValue) is { } picked)
+            WithUndo(() => actor.NameColorValue = picked);
     }
 
     /// <summary>
@@ -1114,22 +1293,168 @@ public partial class MainWindow : Window
     {
         if (sender is not System.Windows.Controls.Button { DataContext: CharacterViewModel ch }) return;
         if (!ch.CanEditNameColor) return;
-        if (PickColor(ch.NameColorValue) is { } picked) ch.NameColorValue = picked;
+        if (PickColor(ch.NameColorValue) is { } picked)
+            WithUndo(() => ch.NameColorValue = picked);
+    }
+
+    /// <summary>The same wheel the Characters tab uses, for a UI object's
+    /// sprite tint. Most of this game's interface is a white shape recoloured,
+    /// so this is the field an author reaches for most.</summary>
+    private void PickUiTint_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not System.Windows.Controls.Button { DataContext: UiNodeViewModel node }) return;
+        if (PickHex(node.Tint) is { } picked) WithUndo(() => node.Tint = picked);
+    }
+
+    /// <summary>
+    /// The picture on a UI object.
+    /// <para/>
+    /// A dialog rather than a dropdown: 840 vanilla sprites is not a list
+    /// anybody scrolls, and a dropdown bound to the value writes as you move
+    /// through it - which is how looking at the list put sprites nobody chose
+    /// onto the undo stack.
+    /// </summary>
+    // -- Playing an arrival animation in the preview ---------------------
+    //
+    // Frames are handed to the preview, which puts them on for the length of
+    // one render and takes them straight off again. Nothing is written to the
+    // model at any point, so "it will be exactly as it was" is a property of
+    // how it is drawn rather than a cleanup step that has to be remembered.
+
+    private System.Windows.Threading.DispatcherTimer? _uiOpenPlayer;
+    private DateTime _uiOpenStarted;
+    private Model.UiOpenDef? _uiOpenPlaying;
+    private Model.UiNodeDef? _uiOpenTarget;
+    private bool _uiOpenClosing;
+
+    private void PlayUiOpenAnimation_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not System.Windows.Controls.Button { DataContext: UiOpenViewModel open }) return;
+
+        var def = open.Def;
+        var target = open.Target();
+        if (def == null || !def.DoesAnything || target == null) { StopUiOpenAnimation(); return; }
+
+        // Restarting cleanly rather than layering a second play over the first.
+        StopUiOpenAnimation();
+
+        _uiOpenPlaying = def.Clone();          // a copy, so editing mid-play cannot confuse it
+        _uiOpenClosing = open.Closing;
+        _uiOpenStarted = DateTime.UtcNow;
+        _uiOpenTarget = target;
+
+        _uiOpenPlayer = new System.Windows.Threading.DispatcherTimer(
+            System.Windows.Threading.DispatcherPriority.Render)
+        {
+            // About 60 a second. The picture itself is slower than that to
+            // draw, so this is an upper bound rather than a promise.
+            Interval = TimeSpan.FromMilliseconds(16),
+        };
+        _uiOpenPlayer.Tick += UiOpenTick;
+        _uiOpenPlayer.Start();
+        UiOpenTick(this, EventArgs.Empty);     // the first frame now, not in 16ms
+    }
+
+    private void UiOpenTick(object? sender, EventArgs e)
+    {
+        var def = _uiOpenPlaying;
+        if (def == null) { StopUiOpenAnimation(); return; }
+
+        double elapsed = (DateTime.UtcNow - _uiOpenStarted).TotalSeconds;
+        if (def.Duration <= 0 || elapsed >= def.Duration) { StopUiOpenAnimation(); return; }
+
+        double k = Model.UiOpenDef.Ease(elapsed / def.Duration, def.Easing);
+
+        // A closing runs the other way: the stored scale is where it ENDS
+        // rather than where it starts, and the fade goes down instead of up.
+        double towards = _uiOpenClosing ? 1 - k : k;
+
+        // One handover per frame: every property set redraws the whole
+        // composite, so three of them meant three draws for one moment.
+        UiScreenPreview.AnimationFrame = new View.Controls.UiAnimationFrame(
+            _uiOpenTarget!,
+            def.Fade ? towards : 1.0,
+            def.ScaleFrom == null ? null : new[]
+            {
+                (float)(def.ScaleFrom[0] + (1 - def.ScaleFrom[0]) * towards),
+                (float)(def.ScaleFrom[1] + (1 - def.ScaleFrom[1]) * towards),
+            });
+    }
+
+    /// <summary>
+    /// End the play and put the preview back to drawing the screen as authored.
+    /// <para/>
+    /// Safe to call at any time and more than once - which is why everything
+    /// that could interrupt a play just calls it.
+    /// </summary>
+    private void StopUiOpenAnimation()
+    {
+        if (_uiOpenPlayer != null)
+        {
+            _uiOpenPlayer.Stop();
+            _uiOpenPlayer.Tick -= UiOpenTick;
+            _uiOpenPlayer = null;
+        }
+        _uiOpenPlaying = null;
+
+        _uiOpenTarget = null;
+        UiScreenPreview.AnimationFrame = null;
+    }
+
+    private void PickUiSprite_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not System.Windows.Controls.Button { DataContext: UiNodeViewModel node }) return;
+        if (DataContext is not MainViewModel vm) return;
+
+        string? picked = View.SpritePickerWindow.Pick(this, vm.PackRoot, node.Sprite);
+        if (picked == null) return;          // cancelled: leave it exactly as it was
+
+        vm.EditWithUndo(() => node.Sprite = picked);   // one step for the choice
+    }
+
+    /// <summary>Hover tint.</summary>
+    private void PickUiHoverTint_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not System.Windows.Controls.Button { DataContext: UiNodeViewModel node }) return;
+
+        // White when there is none: an unset hover parses as transparent black
+        // and would open the picker on a colour nobody chose.
+        string seed = string.IsNullOrEmpty(node.HoverTint) ? "#FFFFFFFF" : node.HoverTint;
+        if (PickHex(seed) is { } picked) WithUndo(() => node.HoverTint = picked);
+    }
+
+    private void PickUiTextColor_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not System.Windows.Controls.Button { DataContext: UiNodeViewModel node }) return;
+        if (PickHex(node.TextColor) is { } picked) WithUndo(() => node.TextColor = picked);
     }
 
     /// <summary>Win32 RGB picker seeded with <paramref name="current"/>; null on cancel.</summary>
-    private static System.Windows.Media.Color? PickColor(System.Windows.Media.Color current)
+    private System.Windows.Media.Color? PickColor(System.Windows.Media.Color current)
     {
-        var dlg = new System.Windows.Forms.ColorDialog
-        {
-            FullOpen = true,          // opens straight onto the RGB panel
-            AnyColor = true,
-            SolidColorOnly = false,
-            Color = System.Drawing.Color.FromArgb(current.A, current.R, current.G, current.B),
-        };
-        if (dlg.ShowDialog() != System.Windows.Forms.DialogResult.OK) return null;
-        var p = dlg.Color;
-        return System.Windows.Media.Color.FromArgb(p.A, p.R, p.G, p.B);
+        string? picked = View.ColorPickerWindow.Pick(
+            this, SMSModForge.Services.ColorMath.ToHex(current.R, current.G, current.B, current.A));
+
+        if (picked == null) return null;
+        if (!SMSModForge.Services.ColorMath.TryParse(picked, out byte r, out byte g, out byte b, out byte a))
+            return null;
+
+        return System.Windows.Media.Color.FromArgb(a, r, g, b);
+    }
+
+    /// <summary>Open the picker on a hex string and hand back a new one, or
+    /// null if it was cancelled. The alpha comes from the picker now rather
+    /// than being carried over, since it can finally be chosen.</summary>
+    private string? PickHex(string? current)
+        => View.ColorPickerWindow.Pick(this, current);
+
+    /// <summary>Apply an edit made by a dialog as one undo step. Every colour
+    /// button goes through this - without it a picked colour was not a step at
+    /// all, and Ctrl+Z skipped straight past it.</summary>
+    private void WithUndo(Action change)
+    {
+        if (DataContext is MainViewModel vm) vm.EditWithUndo(change);
+        else change();
     }
 
     /// <summary>
@@ -1273,6 +1598,29 @@ public partial class MainWindow : Window
         while (src != null && src is not System.Windows.Controls.TreeViewItem)
             src = System.Windows.Media.VisualTreeHelper.GetParent(src);
         return (src as System.Windows.Controls.TreeViewItem)?.DataContext as DialogueTreeItem;
+    }
+
+    /// <summary>
+    /// Put a whole vanilla conversation back the way the game has it.
+    /// <para/>
+    /// Confirmed first, and not undoable by accident: it discards every change
+    /// in the conversation at once, including lines the author removed, which
+    /// is a great deal more than the button next to it does.
+    /// </summary>
+    private void ResetVanillaDialogue_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is not MainViewModel vm) return;
+        var dialogue = vm.SelectedDialogue;
+        if (dialogue == null || !dialogue.IsVanillaBased) return;
+
+        if (MessageBox.Show(this,
+                "Put every line of this conversation back the way the game has it?" + Environment.NewLine + Environment.NewLine
+                + dialogue.ChangeSummary + " will be discarded.",
+                "Reset conversation", MessageBoxButton.OKCancel, MessageBoxImage.Question)
+            != MessageBoxResult.OK)
+            return;
+
+        vm.EditWithUndo(dialogue.ResetAll);
     }
 
     private void RenameFolder_Click(object sender, RoutedEventArgs e)

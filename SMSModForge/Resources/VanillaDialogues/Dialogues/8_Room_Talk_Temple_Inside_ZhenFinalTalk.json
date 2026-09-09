@@ -1,0 +1,1173 @@
+{
+ "id": "8_Room_Talk/Temple_Inside/ZhenFinalTalk",
+ "name": "ZhenFinalTalk",
+ "index": 5,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Master Zhen",
+  "You"
+ ],
+ "roots": [
+  1244344430,
+  58281359
+ ],
+ "nodes": {
+  "1244344430": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1596448684,
+    -492955574,
+    1737003153,
+    -1232120026,
+    -911625792,
+    626533148,
+    1110932712
+   ],
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "What have you done?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[nyxara-free] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxara-free",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "58281359": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1210947048,
+    -133073855,
+    -1577225589,
+    -617916454,
+    29849771,
+    -1605608758,
+    374466922,
+    709353726,
+    -1893188789,
+    -1951946913,
+    -922077086,
+    513613388,
+    1439652403
+   ],
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "You resisted her. I wasn’t sure you would.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[nyxara-trapped] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxara-trapped",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Charm to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Charm",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Charm"
+      }
+     }
+    }
+   ]
+  },
+  "-1596448684": {
+   "kind": "text",
+   "parent": 1244344430,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "You freed her. You released that monster back into the world!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-492955574": {
+   "kind": "text",
+   "parent": 1244344430,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "I told you to be careful. I warned you, and yet… you fell for her tricks. Do you have any idea what you’ve unleashed?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1737003153": {
+   "kind": "text",
+   "parent": 1244344430,
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Nyxara destroyed my home once before. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1232120026": {
+   "kind": "text",
+   "parent": 1244344430,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "I tracked her here to keep others safe… but now, because of you, she’s loose again. I won’t let her wreak havoc on this city.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "626533148": {
+   "kind": "text",
+   "parent": 1244344430,
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I can’t stay here. I’m going after her, and I’ll destroy her myself… even if it kills me. You’re on your own now. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1110932712": {
+   "kind": "text",
+   "parent": 1244344430,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Consider this my final lesson: never trust a spirit’s word. Not even once.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1210947048": {
+   "kind": "text",
+   "parent": 58281359,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "When I first encountered Nyxara… she looked the same—weak, innocent, pleading for mercy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-133073855": {
+   "kind": "text",
+   "parent": 58281359,
+   "actor": "Master Zhen",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "And like a fool, I believed her. I thought I could help her. That maybe, she was different from the other spirits.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1577225589": {
+   "kind": "text",
+   "parent": 58281359,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "I let her into my village, welcomed her… shared my bed with her. And because of my stupidity, she turned on us. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-617916454": {
+   "kind": "choice",
+   "parent": 58281359,
+   "children": [
+    1268916009,
+    1249253209,
+    -1554324129
+   ],
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "She unleashed horrors upon my people, and I was powerless to stop it.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "29849771": {
+   "kind": "text",
+   "parent": 58281359,
+   "actor": "Master Zhen",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "My wife… my son… they died because of me. I gave that monster a home. Invited evil into our lives.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1605608758": {
+   "kind": "text",
+   "parent": 58281359,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "The main threat is over now. Because you denied her entrance to the real world, she’ll remain trapped in the spirit realm… for at least a thousand years.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "374466922": {
+   "kind": "text",
+   "parent": 58281359,
+   "actor": "Master Zhen",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You’ve done what I couldn’t—saved this place without losing yourself.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "709353726": {
+   "kind": "text",
+   "parent": 58281359,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "The spirits will still linger, and you can continue hunting them if you wish, but their power will be nothing compared to Nyxara’s. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1893188789": {
+   "kind": "choice",
+   "parent": 58281359,
+   "children": [
+    1413124489,
+    2092040869,
+    634456544
+   ],
+   "actor": "Master Zhen",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You have my respect. And more than that… my gratitude.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Traits[Living-Weapon] = 5",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Living-Weapon",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 5
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[new-trait] = Living Weapon",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Living Weapon"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "new-trait",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_NewTrait_GO to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_NewTrait_GO",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Stat_Increase_Canvas/Layout/Raise_NewTrait_GO"
+      }
+     }
+    }
+   ]
+  },
+  "1268916009": {
+   "kind": "text",
+   "parent": -617916454,
+   "actor": null,
+   "text": "It's not your fault, no one can prepare for that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1249253209": {
+   "kind": "text",
+   "parent": -617916454,
+   "actor": null,
+   "text": "Well, you are lucky that I was stronger.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1554324129": {
+   "kind": "text",
+   "parent": -617916454,
+   "actor": null,
+   "text": "(Say nothing)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1413124489": {
+   "kind": "text",
+   "parent": -1893188789,
+   "children": [
+    -1919045805,
+    1741944918
+   ],
+   "actor": null,
+   "text": "I only did what you trained me to do.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2092040869": {
+   "kind": "text",
+   "parent": -1893188789,
+   "children": [
+    -726881739,
+    1186316436
+   ],
+   "actor": null,
+   "text": "You don’t have to carry this guilt alone, Master.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "634456544": {
+   "kind": "text",
+   "parent": -1893188789,
+   "children": [
+    118873125,
+    2121351404
+   ],
+   "actor": null,
+   "text": "I told you I’d be strong enough to face her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1919045805": {
+   "kind": "text",
+   "parent": 1413124489,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Hmph. It’s not easy to see through a demon’s deceit. But you did it. That shows strength of mind and spirit. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-726881739": {
+   "kind": "text",
+   "parent": 2092040869,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Hmph. I appreciate that… but it’s not that simple. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "118873125": {
+   "kind": "text",
+   "parent": 634456544,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Heh, so you did. I thought it was just bravado, but… you’ve proven me wrong.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2121351404": {
+   "kind": "text",
+   "parent": 634456544,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "You’re stronger than I ever was at your age. And smarter, too. Maybe there’s hope for this world after all.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1186316436": {
+   "kind": "text",
+   "parent": 2092040869,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "But… knowing that someone understands, someone stood where I once stood and made the right choice… it makes the weight a little easier to bear.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1741944918": {
+   "kind": "text",
+   "parent": 1413124489,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "You’ve exceeded my expectations.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1951946913": {
+   "kind": "text",
+   "parent": 58281359,
+   "actor": "Master Zhen",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I’ve spent so long guarding this place, driven only by anger and regret… but maybe it’s time for something else.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-922077086": {
+   "kind": "text",
+   "parent": 58281359,
+   "actor": "Master Zhen",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I think I’ll stay. Not as a warrior, but as a caretaker. I want to turn this temple into a place of peace, where others can come to rest and find some solace.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "513613388": {
+   "kind": "choice",
+   "parent": 58281359,
+   "children": [
+    283794603,
+    -280382715,
+    -1062397321
+   ],
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": " I’ve already started planning a garden.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1439652403": {
+   "kind": "text",
+   "parent": 58281359,
+   "actor": "Master Zhen",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thank you… for helping an old man find peace again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "283794603": {
+   "kind": "text",
+   "parent": 513613388,
+   "children": [
+    -1368065852
+   ],
+   "actor": null,
+   "text": "That sounds fantastic.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-280382715": {
+   "kind": "text",
+   "parent": 513613388,
+   "children": [
+    53388998
+   ],
+   "actor": null,
+   "text": "A gardener? A man of your talents?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1062397321": {
+   "kind": "text",
+   "parent": 513613388,
+   "children": [
+    -93169298
+   ],
+   "actor": null,
+   "text": "Where's my reward?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-93169298": {
+   "kind": "text",
+   "parent": -1062397321,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Of course. You may keep my blade, may it serve you well.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "53388998": {
+   "kind": "text",
+   "parent": -280382715,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "My talents are no longer needed. The spirits have calmed down.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1368065852": {
+   "kind": "text",
+   "parent": 283794603,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Yes. A bit of peace. If I deserve it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-911625792": {
+   "kind": "text",
+   "parent": 1244344430,
+   "children": [
+    1173750267,
+    -1269942408,
+    -713192070,
+    312728549,
+    -971970336,
+    67048734,
+    -1447462878,
+    1797731328,
+    288176303,
+    2064914766,
+    450778395,
+    -190705340
+   ],
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "You got it wrong. I bound her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[nyxara-perfectending] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "nyxara-perfectending",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1173750267": {
+   "kind": "text",
+   "parent": -911625792,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "...wait.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1269942408": {
+   "kind": "choice",
+   "parent": -911625792,
+   "children": [
+    587889674,
+    -609028646,
+    1637090474
+   ],
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "…She’s bound. Her power… restrained? What did you do?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Charm to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Charm",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Charm"
+      }
+     }
+    }
+   ]
+  },
+  "-713192070": {
+   "kind": "text",
+   "parent": -911625792,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "…Impossible. For centuries I hunted her, prayed for her death… and you… you chained her with words.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "312728549": {
+   "kind": "text",
+   "parent": -911625792,
+   "actor": "Master Zhen",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I don’t know whether to strangle you or fall to my knees in gratitude.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-971970336": {
+   "kind": "text",
+   "parent": -911625792,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "No.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "587889674": {
+   "kind": "text",
+   "parent": -1269942408,
+   "actor": null,
+   "text": "I forced her to swear off evil. She can’t harm anyone anymore.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-609028646": {
+   "kind": "text",
+   "parent": -1269942408,
+   "actor": null,
+   "text": "Turns out demons are terrible at negotiations. Who knew?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1637090474": {
+   "kind": "text",
+   "parent": -1269942408,
+   "actor": null,
+   "text": "Outplayed her. Easy peasy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1447462878": {
+   "kind": "text",
+   "parent": -911625792,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Perhaps… you are not the weapon I thought you were. Perhaps you are something greater.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Traits[Living-Weapon] = 5",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Living-Weapon",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 5
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[new-trait] = Living Weapon",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Living Weapon"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "new-trait",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_NewTrait_GO to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_NewTrait_GO",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Stat_Increase_Canvas/Layout/Raise_NewTrait_GO"
+      }
+     }
+    }
+   ]
+  },
+  "1797731328": {
+   "kind": "choice",
+   "parent": -911625792,
+   "children": [
+    -1762951874,
+    -1680826906,
+    222714956
+   ],
+   "actor": "Master Zhen",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You have my respect. And more than that… my gratitude.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "67048734": {
+   "kind": "text",
+   "parent": -911625792,
+   "actor": "Master Zhen",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Both worlds are safe. For the first time in a thousand years… the curse is broken. You have done what I could not.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "288176303": {
+   "kind": "text",
+   "parent": -911625792,
+   "actor": "Master Zhen",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I’ve spent so long guarding this place, driven only by anger and regret… but maybe it’s time for something else.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2064914766": {
+   "kind": "text",
+   "parent": -911625792,
+   "actor": "Master Zhen",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I think I’ll stay. Not as a warrior, but as a caretaker. I want to turn this temple into a place of peace, where others can come to rest and find some solace.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "450778395": {
+   "kind": "text",
+   "parent": -911625792,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": " I’ve already started planning a garden.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-190705340": {
+   "kind": "text",
+   "parent": -911625792,
+   "actor": "Master Zhen",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thank you… for helping an old man find peace again.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1762951874": {
+   "kind": "text",
+   "parent": 1797731328,
+   "children": [
+    -1543786692,
+    -1346144173
+   ],
+   "actor": null,
+   "text": "I only did what you trained me to do.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1680826906": {
+   "kind": "text",
+   "parent": 1797731328,
+   "actor": null,
+   "text": "You don’t have to carry this guilt alone, Master.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "222714956": {
+   "kind": "text",
+   "parent": 1797731328,
+   "children": [
+    -1416023682
+   ],
+   "actor": null,
+   "text": "I told you I’d be strong enough to face her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1416023682": {
+   "kind": "text",
+   "parent": 222714956,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "You did. And I was a fool not to believe you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1543786692": {
+   "kind": "text",
+   "parent": -1762951874,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Hmph. It’s not easy to see through a demon’s deceit. But you did it. That shows strength of mind and spirit. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1346144173": {
+   "kind": "text",
+   "parent": -1762951874,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "You’ve exceeded my expectations.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Temple_Inside",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play ZhenFinalTalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[zhen-finale-inc] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zhen-finale-inc",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[zhen-finale-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zhen-finale-done",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Master_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Master_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Master_Default"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[zhen-finale-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zhen-finale-done",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

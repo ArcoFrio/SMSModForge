@@ -1,0 +1,339 @@
+{
+ "id": "8_Vacation_Stories/Tropical_Pool/Leilani_Aftertalk",
+ "name": "Leilani_Aftertalk",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "V_Leilani"
+ ],
+ "roots": [
+  -643367997,
+  1874665458
+ ],
+ "nodes": {
+  "-643367997": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    894123985
+   ],
+   "actor": "V_Leilani",
+   "expressionName": "neutral",
+   "text": "Congratulations on the second place, I'm sure the judges had a hard time deciding!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[leilani-met] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "leilani-met",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "894123985": {
+   "kind": "text",
+   "parent": -643367997,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yeah, I'm sure...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1874665458": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1598197220,
+    1069405866,
+    645784018,
+    2084245159,
+    -1371983745,
+    976654386,
+    1748654834,
+    1463075295
+   ],
+   "actor": "V_Leilani",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Second place, huh? Not bad for someone who looks more like a PTA mom than a beauty queen.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[leilani-met] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "leilani-met",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1598197220": {
+   "kind": "text",
+   "parent": 1874665458,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Congratulations, Leilani. You earned it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1069405866": {
+   "kind": "text",
+   "parent": 1874665458,
+   "actor": "V_Leilani",
+   "expressionName": "neutral",
+   "text": "Oh, don’t get me wrong—it’s cute that you tried. Really. But honestly, did you actually think you had a shot at first place?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "645784018": {
+   "kind": "text",
+   "parent": 1874665458,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I wasn’t here to win. It was just for fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2084245159": {
+   "kind": "text",
+   "parent": 1874665458,
+   "actor": "V_Leilani",
+   "expressionName": "neutral",
+   "text": "Fun, huh? Well, good for you. Second place is still... respectable, I guess. I mean, considering the competition.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1371983745": {
+   "kind": "text",
+   "parent": 1874665458,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": " Enjoy your win, Leilani. It won't last forever.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "976654386": {
+   "kind": "text",
+   "parent": 1874665458,
+   "actor": "V_Leilani",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh, I plan to. But don’t worry—I’m sure second place feels like a win to someone like you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_LeilaniBikiniBust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1748654834": {
+   "kind": "text",
+   "parent": 1874665458,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1463075295": {
+   "kind": "text",
+   "parent": 1874665458,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I hate that bitch...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Tropical_Pool",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Leilani_Aftertalk and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_S_JudgeBenjamin to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_S_JudgeBenjamin",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_JudgeBenjamin"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Default_Contest and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Default_Contest",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Vacation_Stories/Tropical_Pool/Default_Contest"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_WhiteSwimsuitTropical to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_WhiteSwimsuitTropical",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_WhiteSwimsuitTropical"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_LeilaniBikiniBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_LeilaniBikiniBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_LeilaniBikiniBust"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

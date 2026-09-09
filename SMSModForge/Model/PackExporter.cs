@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -187,6 +187,17 @@ public static class PackExporter
         // Existing exports parked alongside the loose files.
         if (relPath.EndsWith(FileExtension, StringComparison.OrdinalIgnoreCase))
             return true;
+
+        // The copy kept of a pack's manifest before it was migrated. It is a
+        // safety net for the author and nobody else: shipping it would put a
+        // second, older manifest inside the archive the plugin reads.
+        if (PackMigration.IsBackup(relPath)) return true;
+
+        // The record of the last publish. It is the editor's memory of what
+        // players already have, not part of the pack, and it is a second copy
+        // of the manifest - shipping it would roughly double what a player
+        // downloads for nothing.
+        if (PublishRecord.Is(relPath)) return true;
 
         // Split on both Unix and Windows separators so the segment checks
         // catch nested matches regardless of where the relative path came

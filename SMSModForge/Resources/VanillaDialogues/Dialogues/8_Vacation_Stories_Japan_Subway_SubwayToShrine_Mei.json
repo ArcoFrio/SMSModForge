@@ -1,0 +1,1785 @@
+{
+ "id": "8_Vacation_Stories/Japan_Subway/SubwayToShrine_Mei",
+ "name": "SubwayToShrine_Mei",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "V_Mei",
+  "V_Sora"
+ ],
+ "roots": [
+  525332997,
+  -1766145100,
+  137668608,
+  -372298519,
+  -2071029166
+ ],
+ "nodes": {
+  "525332997": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -367421019,
+    -1811245241,
+    1524346785,
+    -2042611941,
+    1862059129,
+    1307372004
+   ],
+   "actor": "V_Mei",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "... Oh, hello.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[mei-subway-pro] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mei-subway-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-367421019": {
+   "kind": "text",
+   "parent": 525332997,
+   "actor": "V_Sora",
+   "expressionName": "my-expression",
+   "text": "Nande sonna gaikokujin-tachi to hanashiterun da?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1811245241": {
+   "kind": "text",
+   "parent": 525332997,
+   "actor": "V_Mei",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Karera wa shinsetsu sō ni mieru yo. Nande sonna ni okotteru no?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1524346785": {
+   "kind": "text",
+   "parent": 525332997,
+   "actor": "V_Sora",
+   "expressionName": "my-expression",
+   "text": "Ugh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Sora/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_MeiDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-2042611941": {
+   "kind": "choice",
+   "parent": 525332997,
+   "children": [
+    -1497246656,
+    1035831276,
+    1154953068
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "What a milf... Do you think she was trying to flirt with us?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1497246656": {
+   "kind": "text",
+   "parent": -2042611941,
+   "actor": null,
+   "text": "For sure, maybe she's got a thing for foreigners...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1035831276": {
+   "kind": "text",
+   "parent": -2042611941,
+   "actor": null,
+   "text": "Nah, she was just being friendly.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1154953068": {
+   "kind": "text",
+   "parent": -2042611941,
+   "actor": null,
+   "text": "Us? She was trying to flirt with me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1862059129": {
+   "kind": "text",
+   "parent": 525332997,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Well, that ass is digital deluxe edition content for sure...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SubwayMeiTease (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SubwayMeiTease (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SubwayMeiTease (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1307372004": {
+   "kind": "text",
+   "parent": 525332997,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Maybe we'll see her again? We should talk to her...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1766145100": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -100564237,
+    -80355784,
+    -965041955,
+    917508536,
+    -597144678,
+    -1846061850,
+    -1365919535,
+    1285281471,
+    1922029030,
+    -1794420420
+   ],
+   "actor": "V_Sora",
+   "expressionName": "my-expression",
+   "text": "Ittekuru yo, Kā-san. Amari shiranai hito to hanashi suginai de ne.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[mei-subway-pro] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mei-subway-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-100564237": {
+   "kind": "text",
+   "parent": -1766145100,
+   "actor": "V_Mei",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Daijōbu yo, Sora. Shikkari benkyō shite kite ne.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Sora/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-80355784": {
+   "kind": "text",
+   "parent": -1766145100,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "I’m sorry about him. My {S} is... Very protective.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-965041955": {
+   "kind": "text",
+   "parent": -1766145100,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": " No kidding. Felt like he was ready to interrogate us.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "917508536": {
+   "kind": "choice",
+   "parent": -1766145100,
+   "children": [
+    1575461850,
+    -2047264503,
+    1915051578,
+    1678314547
+   ],
+   "actor": "V_Mei",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "He means well. He just doesn’t like when I... Talk to strangers.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1575461850": {
+   "kind": "text",
+   "parent": 917508536,
+   "children": [
+    2054301687
+   ],
+   "actor": null,
+   "text": "That’s understandable. He just wants to make sure you’re safe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2054301687": {
+   "kind": "text",
+   "parent": 1575461850,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "Yes, but sometimes it feels like he forgets I’m an adult too...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2047264503": {
+   "kind": "text",
+   "parent": 917508536,
+   "children": [
+    673806151
+   ],
+   "actor": null,
+   "text": "Guess he’s not here to stop you now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "673806151": {
+   "kind": "text",
+   "parent": -2047264503,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "I... I suppose not. Unless he comes running back onto the train.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1915051578": {
+   "kind": "text",
+   "parent": 917508536,
+   "children": [
+    -186327507
+   ],
+   "actor": null,
+   "text": "A woman like you can handle yourself just fine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-186327507": {
+   "kind": "text",
+   "parent": 1915051578,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "Th-thank you. I suppose I can... But it’s rare to hear someone say that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-597144678": {
+   "kind": "text",
+   "parent": -1766145100,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "You’re not from here, are you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1846061850": {
+   "kind": "text",
+   "parent": -1766145100,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Uh... N-No. We're from Peak City. Overseas. I'm Adrian and this is {PC}. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1365919535": {
+   "kind": "text",
+   "parent": -1766145100,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "I'm Mei... It’s nice to meet people who bring something... Different.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1285281471": {
+   "kind": "text",
+   "parent": -1766145100,
+   "actor": "V_Mei",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Um… Excuse me, can I ask you something?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1922029030": {
+   "kind": "text",
+   "parent": -1766145100,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "If it’s okay… Could we meet up again sometime? I’d love to... Hear more about your culture.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1794420420": {
+   "kind": "choice",
+   "parent": -1766145100,
+   "children": [
+    654416224,
+    -1277819794
+   ],
+   "actor": "V_Mei",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Of course, only if you have the time! I wouldn’t want to bother you or anything… It’s just… If it’s possible.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "654416224": {
+   "kind": "text",
+   "parent": -1794420420,
+   "children": [
+    975221581,
+    1926221736,
+    -320851974
+   ],
+   "actor": null,
+   "text": "Of course. Adrian, give her our hotel adress.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1277819794": {
+   "kind": "text",
+   "parent": -1794420420,
+   "children": [
+    1230680684
+   ],
+   "actor": null,
+   "text": "I'm sorry but we're busy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1230680684": {
+   "kind": "text",
+   "parent": -1277819794,
+   "actor": "V_Mei",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Oh, um... Well, I'm sorry for having bothered you... Goodbye.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[mei-declined] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mei-declined",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "975221581": {
+   "kind": "text",
+   "parent": 654416224,
+   "actor": "V_Mei",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "T-Thank you... I'm looking forward to it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_MeiDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "137668608": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1855927486,
+    -269089740,
+    526273719,
+    310298514,
+    1236530597,
+    -273600194,
+    -1495531671,
+    -1442007947
+   ],
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "Oh! Hello! Um...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[mei-subway-pro] ≥ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mei-subway-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[mei-declined] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mei-declined",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[meifirstsubwayposttalkdone] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "meifirstsubwayposttalkdone",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-2071029166": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    372089847,
+    1482988562,
+    -1044229399
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "We're driving to the temple, the temple, the temple. I'm going to the temple with my {B}, with my {B}.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[mei-subway-pro] ≥ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mei-subway-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[mei-declined] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mei-declined",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "372089847": {
+   "kind": "text",
+   "parent": -2071029166,
+   "actor": null,
+   "text": "(Sing along)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1482988562": {
+   "kind": "text",
+   "parent": -2071029166,
+   "actor": null,
+   "text": "(Ignore him)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1044229399": {
+   "kind": "text",
+   "parent": -2071029166,
+   "actor": null,
+   "text": "Please, god, stop singing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1926221736": {
+   "kind": "text",
+   "parent": 654416224,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I mean, I’m happy to help and all, but… Isn’t it kinda weird? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-320851974": {
+   "kind": "choice",
+   "parent": 654416224,
+   "children": [
+    1531087037,
+    1281332527
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "A middle-aged woman wanting to meet up just to learn about our culture?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1531087037": {
+   "kind": "text",
+   "parent": -320851974,
+   "children": [
+    2058758312
+   ],
+   "actor": null,
+   "text": "Let's just see what happens.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1281332527": {
+   "kind": "text",
+   "parent": -320851974,
+   "children": [
+    -1739064912,
+    702756172
+   ],
+   "actor": null,
+   "text": "She wants us to fuck her, Adrian.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1739064912": {
+   "kind": "text",
+   "parent": 1281332527,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "What? ... OH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2058758312": {
+   "kind": "text",
+   "parent": 1531087037,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "True. Maybe she will bring us some homemade food... That would be awesome.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "702756172": {
+   "kind": "text",
+   "parent": 1281332527,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hell yeah! ... Wait, are you trying to troll me? No? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1855927486": {
+   "kind": "text",
+   "parent": 137668608,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Hey, Mei. Good to see you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-269089740": {
+   "kind": "text",
+   "parent": 137668608,
+   "actor": "V_Sora",
+   "expressionName": "my-expression",
+   "text": "Okāsan, ano hitotachi to mae ni atta no?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "526273719": {
+   "kind": "text",
+   "parent": 137668608,
+   "actor": "V_Mei",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "So, sore wa… sukoshi dake hanashita dake yo. Tokuni henna koto wa nai wa.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "310298514": {
+   "kind": "text",
+   "parent": 137668608,
+   "actor": "V_Sora",
+   "expressionName": "my-expression",
+   "text": "Okāsan, nande shiranai gaikokujin to attari suru no? Abunai desho!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1236530597": {
+   "kind": "choice",
+   "parent": 137668608,
+   "children": [
+    2090315481,
+    1302781886,
+    790562708,
+    767530607
+   ],
+   "actor": "V_Sora",
+   "expressionName": "my-expression",
+   "text": "Okāsan ni nani o hanashitan da?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-273600194": {
+   "kind": "text",
+   "parent": 137668608,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Uh... what’s he saying?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1495531671": {
+   "kind": "text",
+   "parent": 137668608,
+   "actor": "V_Sora",
+   "expressionName": "my-expression",
+   "text": "You NO talk to her!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1442007947": {
+   "kind": "text",
+   "parent": 137668608,
+   "actor": "V_Mei",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Sora, yamenasai!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[meifirstsubwayposttalkdone] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "meifirstsubwayposttalkdone",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "2090315481": {
+   "kind": "text",
+   "parent": 1236530597,
+   "actor": null,
+   "text": "We don't speak japanese, calm down.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1302781886": {
+   "kind": "text",
+   "parent": 1236530597,
+   "actor": null,
+   "text": "We can't understand you, dude.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "790562708": {
+   "kind": "text",
+   "parent": 1236530597,
+   "actor": null,
+   "text": "(Smile at him)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-372298519": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1930674793,
+    -674886259,
+    -2065471222,
+    -1792988496,
+    -341542866
+   ],
+   "actor": "V_Sora",
+   "expressionName": "my-expression",
+   "text": "Shinjirarenai na….",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[mei-subway-pro] ≥ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mei-subway-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[mei-declined] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mei-declined",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1930674793": {
+   "kind": "text",
+   "parent": -372298519,
+   "children": [
+    710324272,
+    -1526053880
+   ],
+   "actor": null,
+   "text": "So, where are you two off to?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-674886259": {
+   "kind": "text",
+   "parent": -372298519,
+   "children": [
+    -1421959237,
+    -943309156,
+    -920226492,
+    -25279175
+   ],
+   "actor": null,
+   "text": "(Stare at Mei's boobs)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2065471222": {
+   "kind": "text",
+   "parent": -372298519,
+   "children": [
+    489525861,
+    -1705610454,
+    -1064527724,
+    650366938,
+    -374846475,
+    524282756
+   ],
+   "actor": null,
+   "text": "(Grope Mei's boobs)",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[meisecondscene-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "meisecondscene-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[mei-corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mei-corrupted",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-341542866": {
+   "kind": "text",
+   "parent": -372298519,
+   "children": [
+    -1418789588
+   ],
+   "actor": null,
+   "text": "Well, we'll leave you alone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1418789588": {
+   "kind": "text",
+   "parent": -341542866,
+   "actor": "V_Mei",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "710324272": {
+   "kind": "text",
+   "parent": 1930674793,
+   "actor": "V_Mei",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "We’re going to visit my husband’s parents. Sora insists on coming along, even though he finds it boring.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1526053880": {
+   "kind": "text",
+   "parent": 1930674793,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Sounds like a fun family trip.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1421959237": {
+   "kind": "text",
+   "parent": -674886259,
+   "actor": "V_Mei",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SubwayMeiTease (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SubwayMeiTease (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SubwayMeiTease (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-943309156": {
+   "kind": "text",
+   "parent": -674886259,
+   "actor": "V_Sora",
+   "expressionName": "my-expression",
+   "text": "Okāsan o mitsumeru no o yamero yo!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-920226492": {
+   "kind": "text",
+   "parent": -674886259,
+   "actor": "V_Sora",
+   "expressionName": "my-expression",
+   "text": "NO LOOK! STOP!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-25279175": {
+   "kind": "text",
+   "parent": -674886259,
+   "actor": "V_Mei",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Sora! Konna no hazukashii yo!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1792988496": {
+   "kind": "text",
+   "parent": -372298519,
+   "children": [
+    -90906737,
+    1535535437,
+    466867154
+   ],
+   "actor": null,
+   "text": "(Hug Mei)",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[meisecondscene-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "meisecondscene-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "489525861": {
+   "kind": "text",
+   "parent": -2065471222,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "Mmm... Oh my... N-Not here...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SubwayMeiTease (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SubwayMeiTease (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SubwayMeiTease (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1705610454": {
+   "kind": "text",
+   "parent": -2065471222,
+   "actor": "V_Sora",
+   "expressionName": "my-expression",
+   "text": "Okāsan, iikagen ni shite kure! Konna koto, zettai yurusenai!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1064527724": {
+   "kind": "text",
+   "parent": -2065471222,
+   "actor": "V_Sora",
+   "expressionName": "my-expression",
+   "text": "Hanarero tte itteru daro! Nani yatterun da!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-90906737": {
+   "kind": "text",
+   "parent": -1792988496,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "Oh, a hug... How kind...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SubwayMeiTease (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SubwayMeiTease (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SubwayMeiTease (4)"
+      }
+     }
+    }
+   ]
+  },
+  "1535535437": {
+   "kind": "choice",
+   "parent": -1792988496,
+   "children": [
+    1130955790,
+    -1329488207,
+    -892608688
+   ],
+   "actor": "V_Sora",
+   "expressionName": "my-expression",
+   "text": "Nani shiterun da, okāsan! Hanarero yo! Ima sugu yamete kure!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "466867154": {
+   "kind": "text",
+   "parent": -1792988496,
+   "actor": "V_Sora",
+   "expressionName": "my-expression",
+   "text": "Konna no okashii daro!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "524282756": {
+   "kind": "text",
+   "parent": -2065471222,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "You really went for it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "650366938": {
+   "kind": "text",
+   "parent": -2065471222,
+   "actor": "V_Sora",
+   "expressionName": "my-expression",
+   "text": "Otōsan ni zenbu hanasu kara na! Zettai ni kōkai suru zo!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-374846475": {
+   "kind": "text",
+   "parent": -2065471222,
+   "actor": "V_Mei",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Fu~ Fu~ ... Sora, I don't care... {PC}'s hands feel so much better than his.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1130955790": {
+   "kind": "text",
+   "parent": 1535535437,
+   "actor": null,
+   "text": "(Hug her tightly)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1329488207": {
+   "kind": "text",
+   "parent": 1535535437,
+   "children": [
+    -945953184
+   ],
+   "actor": null,
+   "text": "(Grope her ass)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-892608688": {
+   "kind": "text",
+   "parent": 1535535437,
+   "children": [
+    -1279809601
+   ],
+   "actor": null,
+   "text": "(Slap her ass)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1279809601": {
+   "kind": "text",
+   "parent": -892608688,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "Wuah! Oh.... Hihi...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-945953184": {
+   "kind": "text",
+   "parent": -1329488207,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "Mmmm... S-Stop it... Please... Sora is right there...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "767530607": {
+   "kind": "text",
+   "parent": 1236530597,
+   "children": [
+    499690875
+   ],
+   "actor": null,
+   "text": "(Smart) Okaasan wa mou ore no mono da.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Smart] ≥ 7",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Smart",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 7
+       }
+      }
+     }
+    }
+   ]
+  },
+  "499690875": {
+   "kind": "text",
+   "parent": 767530607,
+   "actor": "V_Sora",
+   "expressionName": "my-expression",
+   "text": "I kill you! I kill you dead! DEAD!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1678314547": {
+   "kind": "text",
+   "parent": 917508536,
+   "children": [
+    -256226812
+   ],
+   "actor": null,
+   "text": "(Charming) Can’t blame him, you’re hard to ignore.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Charming] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Charming",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-256226812": {
+   "kind": "text",
+   "parent": 1678314547,
+   "actor": "V_Mei",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "O-oh… you really shouldn’t say such things. It’s… improper.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Japan_Subway",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play SubwayToShrine_Mei and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_NoSave[incoming-vacation-map] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "incoming-vacation-map",
+        "list": "Core_NoSave",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[mei-declined] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mei-declined",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Vacation_Stories/Japan_Subway",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play SubwayToShrine_Mei and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_NoSave[incoming-vacation-map] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "incoming-vacation-map",
+        "list": "Core_NoSave",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_S_Sora to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_S_Sora",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Sora"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_MeiDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_MeiDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_MeiDefault"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

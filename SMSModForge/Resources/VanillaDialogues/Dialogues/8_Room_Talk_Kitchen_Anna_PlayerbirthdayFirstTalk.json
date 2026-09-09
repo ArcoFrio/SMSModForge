@@ -1,0 +1,552 @@
+{
+ "id": "8_Room_Talk/Kitchen/Anna_PlayerbirthdayFirstTalk",
+ "name": "Anna_PlayerbirthdayFirstTalk",
+ "index": 26,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  84432427,
+  160842914,
+  -832456932
+ ],
+ "nodes": {
+  "84432427": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Happy birthday, sweetheart.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = None",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "none"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "160842914": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1828922304,
+    -62359353
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Can you come meet me by the wardrobe in a bit? There’s... something I want to give you. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1828922304": {
+   "kind": "choice",
+   "parent": 160842914,
+   "children": [
+    831538625,
+    1245216900,
+    966698414
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "It’s nothing huge, but I picked it out thinking of you...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[Anna-bdpresentwaiting] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Anna-bdpresentwaiting",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-832456932": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    775139897
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I made your favorite today—figured you deserved at least one day where everything’s just how you like it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "775139897": {
+   "kind": "choice",
+   "parent": -832456932,
+   "children": [
+    -1434914489,
+    -1544235693,
+    1338779930
+   ],
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "No big speeches, just... I’m glad you’re here. I hope it’s a good one.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1434914489": {
+   "kind": "text",
+   "parent": 775139897,
+   "children": [
+    1080038915
+   ],
+   "actor": null,
+   "text": "It already is, thanks to you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "831538625": {
+   "kind": "text",
+   "parent": 1828922304,
+   "children": [
+    -46784790
+   ],
+   "actor": null,
+   "text": "If it’s from you, I already know I’ll love it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1245216900": {
+   "kind": "text",
+   "parent": 1828922304,
+   "children": [
+    1282046708
+   ],
+   "actor": null,
+   "text": "Wardrobe rendezvous? Sounds a little suspicious.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "966698414": {
+   "kind": "text",
+   "parent": 1828922304,
+   "children": [
+    1121935515
+   ],
+   "actor": null,
+   "text": "Alright. What are you up to this time?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1544235693": {
+   "kind": "text",
+   "parent": 775139897,
+   "children": [
+    854425368
+   ],
+   "actor": null,
+   "text": "Thanks. Really. I needed this today.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1338779930": {
+   "kind": "text",
+   "parent": 775139897,
+   "children": [
+    297507634
+   ],
+   "actor": null,
+   "text": "You didn’t have to go through the trouble...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "297507634": {
+   "kind": "text",
+   "parent": 1338779930,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You’re worth every bit of it. Always have been.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "854425368": {
+   "kind": "text",
+   "parent": -1544235693,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Then I’m glad I did it. You deserve more days like this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1080038915": {
+   "kind": "text",
+   "parent": -1434914489,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That’s all I wanted to hear. Just relax today, okay?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1121935515": {
+   "kind": "text",
+   "parent": 966698414,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You’ll see soon enough. I just hope it makes you... smile.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1282046708": {
+   "kind": "text",
+   "parent": 1245216900,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Maybe it is. Maybe I’m feeling a little bold today. You’ll just have to come and find out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-46784790": {
+   "kind": "text",
+   "parent": 831538625,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You always know what to say, don’t you? Just... don’t keep me waiting too long, alright?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-62359353": {
+   "kind": "text",
+   "parent": 160842914,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Kitchen/Kitchen_Conditions_2",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Anna_PlayerbirthdayFirstTalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Holidays[holiday-event-two-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "holiday-event-two-done",
+        "list": "Holidays",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Holidays[holiday-playerbd] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "holiday-playerbd",
+        "list": "Holidays",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Core_NoSave[Anna-Default-Outfit] to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Anna-Default-Outfit",
+        "list": "Core_NoSave",
+        "type": "game-object"
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Condition-Split] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Condition-Split",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Holidays[holiday-event-two-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "holiday-event-two-done",
+        "list": "Holidays",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

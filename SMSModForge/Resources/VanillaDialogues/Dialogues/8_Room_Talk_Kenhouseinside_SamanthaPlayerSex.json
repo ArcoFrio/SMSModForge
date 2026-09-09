@@ -1,0 +1,1319 @@
+{
+ "id": "8_Room_Talk/Kenhouseinside/SamanthaPlayerSex",
+ "name": "SamanthaPlayerSex",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Samantha"
+ ],
+ "roots": [
+  571952989,
+  -120415402,
+  -1359056189,
+  1754012342,
+  1593127759,
+  1786528252,
+  1260313153,
+  525439121,
+  184871116
+ ],
+ "nodes": {
+  "571952989": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1720466138,
+    -842042249
+   ],
+   "actor": "Samantha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hey, maybe I’m imagining things… but I’m starting to think you might be a little into me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[samantha-fucked] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-fucked",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Charm to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Charm",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Charm"
+      }
+     }
+    }
+   ]
+  },
+  "-120415402": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Well? What are you waiting for? Let’s get undressed. I’m feeling more than ready.",
+   "tag": "samsexcontinue",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1359056189": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -330786476,
+    -375279320,
+    -953785169
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "So... What do you say...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamanthaNudePosing to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamanthaNudePosing",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/SamanthaNudePosing"
+      }
+     }
+    }
+   ]
+  },
+  "-330786476": {
+   "kind": "text",
+   "parent": -1359056189,
+   "children": [
+    -828531709
+   ],
+   "actor": null,
+   "text": "You're stunning, Samantha.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-375279320": {
+   "kind": "text",
+   "parent": -1359056189,
+   "children": [
+    -1473169822
+   ],
+   "actor": null,
+   "text": "Holy, what an ass. Dayum.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-953785169": {
+   "kind": "text",
+   "parent": -1359056189,
+   "children": [
+    -420430532
+   ],
+   "actor": null,
+   "text": "Are you sure you want this?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-828531709": {
+   "kind": "text",
+   "parent": -330786476,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Aww... I haven't been called that in... such a long time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1473169822": {
+   "kind": "text",
+   "parent": -375279320,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Hihi...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-420430532": {
+   "kind": "text",
+   "parent": -953785169,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Yes... I mean, we're having just some fun, right? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1754012342": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Now it's your turn! Come on!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Stop by Samantha’s house and spend time with her.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Lonely (Samantha)",
+        "of": "Quest"
+       },
+       "m_TaskId": -196740262
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "1593127759": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Christ in heaven... Look at that cock... A-And those massive balls of yours.... They look so.. warm and smooth...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamanthaPlayerBlowjob (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamanthaPlayerBlowjob (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/SamanthaPlayerBlowjob (1)"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[samantha-sex-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-sex-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1786528252": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1754629910,
+    807121383,
+    1951818900
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "I'm sorry, sweetie... But I just HAVE to give them a suck!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1754629910": {
+   "kind": "text",
+   "parent": 1786528252,
+   "children": [
+    1933359557
+   ],
+   "actor": null,
+   "text": "You're so good at this...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "807121383": {
+   "kind": "text",
+   "parent": 1786528252,
+   "children": [
+    1914191484
+   ],
+   "actor": null,
+   "text": "Fuck... Suck my balls, Samantha.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1951818900": {
+   "kind": "text",
+   "parent": 1786528252,
+   "children": [
+    1680472807,
+    961822102
+   ],
+   "actor": null,
+   "text": "[Take a photo]",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[ken-partly-convinced] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-partly-convinced",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1680472807": {
+   "kind": "text",
+   "parent": 1951818900,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Jesus, your balls are so... W-Wait, did you just took a photo?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamanthaCockPhoto to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamanthaCockPhoto",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/SamanthaCockPhoto"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 4_CG_Manager-Sexy to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "4_CG_Manager-Sexy",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[samantha-cock-photo] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-cock-photo",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "961822102": {
+   "kind": "text",
+   "parent": 1951818900,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "J-Just don't show that to anyone, alright? ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 4_CG_Manager-Sexy to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "4_CG_Manager-Sexy",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamanthaCockPhoto to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamanthaCockPhoto",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/SamanthaCockPhoto"
+      }
+     }
+    }
+   ]
+  },
+  "1914191484": {
+   "kind": "text",
+   "parent": 807121383,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Mmmhmm..... Smmooo bigg an smmoothm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1933359557": {
+   "kind": "text",
+   "parent": 1754629910,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Mmmhmm.... Lotss offf exprincmmmm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1260313153": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "It's been too long since I've had the pleasure of enjoying a cock like this. Mmm!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamanthaPlayerBlowjob (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamanthaPlayerBlowjob (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/SamanthaPlayerBlowjob (2)"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[samantha-sex-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-sex-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "525439121": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1795644917,
+    -492691833
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Mmmphmm... Smooo tasttyyy.....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[samantha-fucked] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-fucked",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1795644917": {
+   "kind": "text",
+   "parent": 525439121,
+   "children": [
+    1345384711,
+    1137573485,
+    -1595346222,
+    1545207307,
+    2072131716
+   ],
+   "actor": null,
+   "text": "Take all the time you need... [Blowjob]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-492691833": {
+   "kind": "text",
+   "parent": 525439121,
+   "children": [
+    -223081295,
+    -1214832784,
+    2078892736,
+    1680216215,
+    1385434582,
+    1584497598,
+    441503112
+   ],
+   "actor": null,
+   "text": "How about your other \"mouth\" gives it a try? [Sex]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1345384711": {
+   "kind": "text",
+   "parent": 1795644917,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Mphmm..... Fuck my mouth, {PC}... Mmmm.....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1545207307": {
+   "kind": "text",
+   "parent": 1795644917,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Y-Yes... You're getting close... I want to drink it... drink it all...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1137573485": {
+   "kind": "text",
+   "parent": 1795644917,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Smmooo mucchmmm! Mhmmmmm!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1595346222": {
+   "kind": "text",
+   "parent": 1795644917,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Mmmm... How I missed that taste... And it's soo much!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamanthaNudePosing to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamanthaNudePosing",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/SamanthaNudePosing"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamanthaPlayerBlowjob (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamanthaPlayerBlowjob (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/SamanthaPlayerBlowjob (3)"
+      }
+     }
+    }
+   ]
+  },
+  "2072131716": {
+   "kind": "choice",
+   "parent": 1795644917,
+   "children": [
+    371695114,
+    -272297240
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Come on... Give me a kiss, hihi...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamanthaPlayerBlowjob (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamanthaPlayerBlowjob (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/SamanthaPlayerBlowjob (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamanthaPlayerBlowjob (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamanthaPlayerBlowjob (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/SamanthaPlayerBlowjob (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-223081295": {
+   "kind": "text",
+   "parent": -492691833,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Yes... I think I would like that... I... Lie down, I want to ride your big member....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1214832784": {
+   "kind": "text",
+   "parent": -492691833,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Shit! It's in... I can't believe it... I'm riding my {S}'s best friend!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamanthaNudePosing to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamanthaNudePosing",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/SamanthaNudePosing"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamanthaPlayerSex to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamanthaPlayerSex",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/SamanthaPlayerSex"
+      }
+     }
+    }
+   ]
+  },
+  "2078892736": {
+   "kind": "text",
+   "parent": -492691833,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Yes... Harder... I need this... I want to cum, {PC}. Please help me to cum!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1680216215": {
+   "kind": "text",
+   "parent": -492691833,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Hwwaaaa! I'm.... Fuck, fuck, fuck... Cumming! I'm cumming!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamanthaPlayerSex (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamanthaPlayerSex (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/SamanthaPlayerSex (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamanthaPlayerBlowjob (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamanthaPlayerBlowjob (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/SamanthaPlayerBlowjob (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1385434582": {
+   "kind": "text",
+   "parent": -492691833,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Give it to me... I want you to creampie my pussy, {PC}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1584497598": {
+   "kind": "text",
+   "parent": -492691833,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Yessss!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "371695114": {
+   "kind": "text",
+   "parent": 2072131716,
+   "children": [
+    306916674
+   ],
+   "actor": null,
+   "text": "I'd rather not.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-272297240": {
+   "kind": "text",
+   "parent": 2072131716,
+   "children": [
+    -278438922
+   ],
+   "actor": null,
+   "text": "[Kiss her]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "184871116": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Jesus... That was so much fun... Um, if you ever want to do it again... You know where to find me....",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-278438922": {
+   "kind": "text",
+   "parent": -272297240,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Mwwuah.... F-Fuck, that was hot...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "306916674": {
+   "kind": "text",
+   "parent": 371695114,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Bwahaha... I'm just joking, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "441503112": {
+   "kind": "text",
+   "parent": -492691833,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Everything's spinning... I... I need a break... Shit... You're such a good fuck, {PC}. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1720466138": {
+   "kind": "text",
+   "parent": 571952989,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Look, I just want to be upfront—I’m not looking for anything serious. Especially not when you’re basically Ken’s only real friend.",
+   "tag": "ratatata",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-842042249": {
+   "kind": "choice",
+   "parent": 571952989,
+   "children": [
+    1322275293,
+    1695525048,
+    -1395044190,
+    1319599797
+   ],
+   "actor": "Samantha",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "But I’d absolutely love to have a little fun… if you’re up for it.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1322275293": {
+   "kind": "text",
+   "parent": -842042249,
+   "children": [
+    -909482652
+   ],
+   "actor": null,
+   "text": "Then let's have some fun!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1695525048": {
+   "kind": "text",
+   "parent": -842042249,
+   "children": [
+    746046854
+   ],
+   "actor": null,
+   "text": "What about Ken?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1395044190": {
+   "kind": "text",
+   "parent": -842042249,
+   "children": [
+    711360352
+   ],
+   "actor": null,
+   "text": "So you're into me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1319599797": {
+   "kind": "text",
+   "parent": -842042249,
+   "children": [
+    2092852310
+   ],
+   "actor": null,
+   "text": "I'm sorry, I'm not into you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "746046854": {
+   "kind": "text",
+   "parent": 1695525048,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "He's an adult and like, dude. This is between us.",
+   "jump": {
+    "mode": "Jump",
+    "to": "ratatata"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "711360352": {
+   "kind": "text",
+   "parent": -1395044190,
+   "actor": "Samantha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Of course! You’re young, hot, and honestly? You look like you stepped straight out of one of the RPGs I still play on the regular.",
+   "jump": {
+    "mode": "Jump",
+    "to": "ratatata"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-909482652": {
+   "kind": "text",
+   "parent": 1322275293,
+   "actor": "Samantha",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Nice... ",
+   "jump": {
+    "mode": "Jump",
+    "to": "samsexcontinue"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2092852310": {
+   "kind": "text",
+   "parent": 1319599797,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Hmm... Alright. That's a shame...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[samantha-declined] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-declined",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionQuestsTaskFail",
+     "title": "Fail Stop by Samantha’s house and spend time with her.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Lonely (Samantha)",
+        "of": "Quest"
+       },
+       "m_TaskId": -196740262
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Kenhouseinside",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play SamanthaPlayerSex and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Core_NoSave[ken-not-at-home] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ken-not-at-home",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[samantha-fucked] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-fucked",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[samantha-declined] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-declined",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[samantha-seduction] ≥ 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samantha-seduction",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ],
+   "branches": [
+    "samsex"
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamanthaBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamanthaBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/SamanthaBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Room_Talk/Kenhouseinside/DefaultdialogueSamantha",
+   "script": "Dialogue",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core[temp-stored-very-short-term] = SamanthaPlayerSex",
+   "as": "GameObject"
+  }
+ ]
+}

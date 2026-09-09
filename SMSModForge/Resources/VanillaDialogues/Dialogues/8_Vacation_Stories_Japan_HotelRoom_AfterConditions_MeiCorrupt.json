@@ -1,0 +1,1827 @@
+{
+ "id": "8_Vacation_Stories/Japan_HotelRoom/AfterConditions/MeiCorrupt",
+ "name": "MeiCorrupt",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Continue",
+  "V_Mei"
+ ],
+ "roots": [
+  385720664,
+  196120313,
+  950189103,
+  1573864237,
+  1622750852,
+  588401181,
+  82695701,
+  -1417396012,
+  193371976,
+  -1592476501,
+  1248943766,
+  -1638480169,
+  547143821
+ ],
+ "nodes": {
+  "385720664": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I've sent her a message, let's wait!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "196120313": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: door-knock",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "door-knock",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    }
+   ]
+  },
+  "950189103": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "That must be Mei!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_MeiRedDress to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_MeiRedDress",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_MeiRedDress"
+      }
+     }
+    }
+   ]
+  },
+  "1573864237": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "H-Hello...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1622750852": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1142443787,
+    430627682
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "W-Wow, did you come here dressed like that?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[meisecondscene-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "meisecondscene-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1142443787": {
+   "kind": "text",
+   "parent": 1622750852,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "Y-Yes... I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "430627682": {
+   "kind": "text",
+   "parent": 1622750852,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "I just want cocks.... Ever since last time, I've been thinking about nothing but cocks. I wish I hadn't left, I feel like I've missed out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "588401181": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1150964704,
+    -197509444
+   ],
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "P-Please... Give me your cocks... I need them...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1150964704": {
+   "kind": "text",
+   "parent": 588401181,
+   "actor": null,
+   "text": "Don't worry, Mei. You'll get what you want...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-197509444": {
+   "kind": "text",
+   "parent": 588401181,
+   "actor": null,
+   "text": "Why don't you show us your needy body?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "82695701": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_MeiNude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_MeiNude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_MeiNude"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_MeiRedDress to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_MeiRedDress",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_MeiRedDress"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_MeiDefault to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_MeiDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_MeiDefault"
+      }
+     }
+    }
+   ]
+  },
+  "-1417396012": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    464661610,
+    1980609230,
+    1350834169
+   ],
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "I've been holding back for so long... Please... I... I...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "464661610": {
+   "kind": "text",
+   "parent": -1417396012,
+   "children": [
+    -1040061467
+   ],
+   "actor": null,
+   "text": "Show us your pussy, Mei.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1980609230": {
+   "kind": "text",
+   "parent": -1417396012,
+   "children": [
+    -564055956,
+    -542425215
+   ],
+   "actor": null,
+   "text": "Turn around, I wanna see that ass.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1350834169": {
+   "kind": "text",
+   "parent": -1417396012,
+   "children": [
+    1000152798,
+    -211923998
+   ],
+   "actor": null,
+   "text": "Squat down, I want to see how much you want it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1040061467": {
+   "kind": "text",
+   "parent": 464661610,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "P-Please, look at my pussy...  It craves big cocks!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SubwayMeetingMei (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SubwayMeetingMei (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SubwayMeetingMei (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-564055956": {
+   "kind": "text",
+   "parent": 1980609230,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "I... I shaved just for you.. D-Do you like my ass?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SubwayMeetingMei (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SubwayMeetingMei (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SubwayMeetingMei (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1000152798": {
+   "kind": "text",
+   "parent": 1350834169,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "L-Like this? ... P-Please... I don't want to wait any longer!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SubwayMeetingMei (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SubwayMeetingMei (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SubwayMeetingMei (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-211923998": {
+   "kind": "text",
+   "parent": 1350834169,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Oh my god, her pussy is drippin` wet...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-542425215": {
+   "kind": "text",
+   "parent": 1980609230,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Her asshole looks so tight...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "193371976": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1497429546,
+    -1741861354
+   ],
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "I... I want it in my... I want to... Can you use my ass, please?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1497429546": {
+   "kind": "text",
+   "parent": 193371976,
+   "children": [
+    1244605446,
+    -365747321,
+    1411250120,
+    66635210
+   ],
+   "actor": null,
+   "text": "Of course...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1741861354": {
+   "kind": "text",
+   "parent": 193371976,
+   "children": [
+    2007285207,
+    1338683303,
+    -1149939187,
+    841291988,
+    461511599,
+    489680589
+   ],
+   "actor": null,
+   "text": "Adrian, do what she says.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2007285207": {
+   "kind": "text",
+   "parent": -1741861354,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "D-Don't lick there... Oh god...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SubwayMeetingMei (9) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SubwayMeetingMei (9)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SubwayMeetingMei (9)"
+      }
+     }
+    }
+   ]
+  },
+  "1338683303": {
+   "kind": "text",
+   "parent": -1741861354,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Mmwuaah... G-Gotta get it all wet...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1149939187": {
+   "kind": "text",
+   "parent": -1741861354,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "Oh.. Mmm... Y-Yes...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "461511599": {
+   "kind": "text",
+   "parent": -1741861354,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "Hnaaah.. T-Take it slow... Y-Yes... Oh god, I'm getting my ass fucked...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1244605446": {
+   "kind": "text",
+   "parent": -1497429546,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "HNGAAAH! OH!  ... Y-Your cock is so big... FHUUCKK!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SubwayMeetingMei (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SubwayMeetingMei (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SubwayMeetingMei (7)"
+      }
+     }
+    }
+   ]
+  },
+  "-365747321": {
+   "kind": "text",
+   "parent": -1497429546,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "Is... Is this what it feels like... To be truly taken? Hngagaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1411250120": {
+   "kind": "text",
+   "parent": -1497429546,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "More... I want more of this blessed feeling! Please!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "66635210": {
+   "kind": "text",
+   "parent": -1497429546,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "Oh fuck, fuck, fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1592476501": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    983145544,
+    2139544361
+   ],
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "I... I want more... Fuck me, fuck my pussy, please!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "983145544": {
+   "kind": "text",
+   "parent": -1592476501,
+   "children": [
+    2026424720,
+    -1571894894,
+    1851476131,
+    -1457485622,
+    -1117600037,
+    770291561,
+    1284046195
+   ],
+   "actor": null,
+   "text": "I'll fuck your pussy. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2139544361": {
+   "kind": "text",
+   "parent": -1592476501,
+   "children": [
+    1251123573,
+    1376175854,
+    -1201716839,
+    1211786749,
+    988288687,
+    -1235042142,
+    -546078402
+   ],
+   "actor": null,
+   "text": "I'll fuck your ass.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1251123573": {
+   "kind": "text",
+   "parent": 2139544361,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "Hngaah... Y-Yes... Two big cocks..... Mmmaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SubwayMeetingMei (11) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SubwayMeetingMei (11)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SubwayMeetingMei (11)"
+      }
+     }
+    }
+   ]
+  },
+  "2026424720": {
+   "kind": "text",
+   "parent": 983145544,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "Y-Yes! I love it... Oh god, oh god, oh god!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SubwayMeetingMei (12) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SubwayMeetingMei (12)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SubwayMeetingMei (12)"
+      }
+     }
+    }
+   ]
+  },
+  "1248943766": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "S-So much... It's been so long since I've felt like this... Allowing my body to fullfill its purpose...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1638480169": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "I love your cocks... They are so much better than anything I ever had before... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SubwayMeetingMei (15) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SubwayMeetingMei (15)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SubwayMeetingMei (15)"
+      }
+     }
+    }
+   ]
+  },
+  "547143821": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    515449557,
+    -1196532184,
+    -1193920160
+   ],
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "I... I need to go home now, or my husband will get suspicious...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[Mei-corrupted] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mei-corrupted",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[meisecondscene-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "meisecondscene-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "515449557": {
+   "kind": "text",
+   "parent": 547143821,
+   "children": [
+    -439098356,
+    -1483386836,
+    -310632398
+   ],
+   "actor": null,
+   "text": "You've been a good slut, we'll see you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1196532184": {
+   "kind": "text",
+   "parent": 547143821,
+   "children": [
+    1765655776,
+    1128882529,
+    967997152
+   ],
+   "actor": null,
+   "text": "Here's some cash for a taxi. ($50)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1193920160": {
+   "kind": "text",
+   "parent": 547143821,
+   "children": [
+    1827751439,
+    -2144925289,
+    -1719026775,
+    175091674,
+    2030634515,
+    -428180319,
+    -310550977,
+    -1290951839
+   ],
+   "actor": null,
+   "text": "You'll stay here tonight.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1827751439": {
+   "kind": "text",
+   "parent": -1193920160,
+   "actor": "V_Mei",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "B-But my husband will ask where I was...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1765655776": {
+   "kind": "text",
+   "parent": -1196532184,
+   "actor": "V_Mei",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Aw, thanks... This is very kind of you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -50",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -50
+      }
+     }
+    }
+   ]
+  },
+  "-439098356": {
+   "kind": "text",
+   "parent": 515449557,
+   "actor": "V_Mei",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "T-Thank you, I hope so...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2144925289": {
+   "kind": "text",
+   "parent": -1193920160,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You can just tell him a lie or something? Right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1128882529": {
+   "kind": "text",
+   "parent": -1196532184,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I hope we will see you again, Mei.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Return_Home_Vacation to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Return_Home_Vacation",
+       "of": "GetGameObjectInstance",
+       "path": "Return_Home_Vacation"
+      }
+     }
+    }
+   ]
+  },
+  "-1483386836": {
+   "kind": "text",
+   "parent": 515449557,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Thank you, Mei! This was really fun!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Return_Home_Vacation to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Return_Home_Vacation",
+       "of": "GetGameObjectInstance",
+       "path": "Return_Home_Vacation"
+      }
+     }
+    }
+   ]
+  },
+  "841291988": {
+   "kind": "text",
+   "parent": -1741861354,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Jesus, your ass is so tight... F-Fuck... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SubwayMeetingMei (8) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SubwayMeetingMei (8)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SubwayMeetingMei (8)"
+      }
+     }
+    }
+   ]
+  },
+  "489680589": {
+   "kind": "text",
+   "parent": -1741861354,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "Hnngaah... Y-Yes... Fuck me... Fuck my ass!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1376175854": {
+   "kind": "text",
+   "parent": 2139544361,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "I feel so blessed... To have to young, fit men... Use my holes... So goooooood!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1201716839": {
+   "kind": "choice",
+   "parent": 2139544361,
+   "children": [
+    1088814202,
+    503330916,
+    -405778070
+   ],
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "I'm... Your cocks are making me... I'm... Keep going... I'm... HNGAAAAAAAH!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "988288687": {
+   "kind": "text",
+   "parent": 2139544361,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "Y-Yes! Cum inside! I want your cum... Yes.. .Hnaaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SubwayMeetingMei (13) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SubwayMeetingMei (13)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SubwayMeetingMei (13)"
+      }
+     }
+    }
+   ]
+  },
+  "-1235042142": {
+   "kind": "text",
+   "parent": 2139544361,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "I love your cocks! I love your seed! Don't stop!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1571894894": {
+   "kind": "text",
+   "parent": 983145544,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "Don't stop! Take me! Claim me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1851476131": {
+   "kind": "choice",
+   "parent": 983145544,
+   "children": [
+    307608684,
+    -170774783,
+    -468273944
+   ],
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "Your cock is the best! The... The... Hngaaaaah! HAAAAAH!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1117600037": {
+   "kind": "text",
+   "parent": 983145544,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "I'm... I'm cumming! Your big cocks are making me cum!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SubwayMeetingMei (14) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SubwayMeetingMei (14)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SubwayMeetingMei (14)"
+      }
+     }
+    }
+   ]
+  },
+  "770291561": {
+   "kind": "text",
+   "parent": 983145544,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "Fhhaaaack! HNGAAAAAH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1284046195": {
+   "kind": "text",
+   "parent": 983145544,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Y-Your ass is milking me dry, jesus....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1719026775": {
+   "kind": "text",
+   "parent": -1193920160,
+   "actor": "V_Mei",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I... I think so, yes... Okay...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2030634515": {
+   "kind": "text",
+   "parent": -1193920160,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "MPFH! MPFH! MPFH! ... Mmmmmhhh!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-428180319": {
+   "kind": "text",
+   "parent": -1193920160,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Y-Yes! Suck my cock, Mei! I wanna cum! Suck it!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-310550977": {
+   "kind": "text",
+   "parent": -1193920160,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "MPFH! *Slurp* ... *Gulp* ... Y-You two are... So much endurance...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Return_Home_Vacation to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Return_Home_Vacation",
+       "of": "GetGameObjectInstance",
+       "path": "Return_Home_Vacation"
+      }
+     }
+    }
+   ]
+  },
+  "175091674": {
+   "kind": "text",
+   "parent": -1193920160,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SubwayMeetingMei (16) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SubwayMeetingMei (16)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SubwayMeetingMei (16)"
+      }
+     }
+    }
+   ]
+  },
+  "-1457485622": {
+   "kind": "text",
+   "parent": 983145544,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "F-Fuck... I'm... I'm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1211786749": {
+   "kind": "text",
+   "parent": 2139544361,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "S-Shit.. I'll... I'm... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-546078402": {
+   "kind": "text",
+   "parent": 2139544361,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "F-Fuck yeah, take our cum... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1088814202": {
+   "kind": "text",
+   "parent": -1201716839,
+   "actor": null,
+   "text": "I'm close, Mei... Your asshole is so fucking tight...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "503330916": {
+   "kind": "text",
+   "parent": -1201716839,
+   "actor": null,
+   "text": "I'm... This slut's ass is milking me so good... Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-405778070": {
+   "kind": "text",
+   "parent": -1201716839,
+   "actor": null,
+   "text": "(Fill her ass with cum)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "307608684": {
+   "kind": "text",
+   "parent": 1851476131,
+   "actor": null,
+   "text": "I'm close, Mei... Y-Your pussy feels so good...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-170774783": {
+   "kind": "text",
+   "parent": 1851476131,
+   "actor": null,
+   "text": "I... I'll breed your pussy, Mei... I'll fill you up...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-468273944": {
+   "kind": "text",
+   "parent": 1851476131,
+   "actor": null,
+   "text": "(Cum inside her)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1290951839": {
+   "kind": "text",
+   "parent": -1193920160,
+   "actor": "V_Mei",
+   "expressionName": "neutral",
+   "text": "MPFH! *Slurp* ... *Gulp* ... Y-You two are... So much endurance...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Vacation_Default_Retrigger to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Vacation_Default_Retrigger",
+       "of": "GetGameObjectInstance",
+       "path": "Vacation_Default_Retrigger"
+      }
+     }
+    }
+   ]
+  },
+  "967997152": {
+   "kind": "text",
+   "parent": -1196532184,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I hope we will see you again, Mei.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Vacation_Default_Retrigger to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Vacation_Default_Retrigger",
+       "of": "GetGameObjectInstance",
+       "path": "Vacation_Default_Retrigger"
+      }
+     }
+    }
+   ]
+  },
+  "-310632398": {
+   "kind": "text",
+   "parent": 515449557,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Thank you, Mei! This was really fun!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Vacation_Default_Retrigger to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Vacation_Default_Retrigger",
+       "of": "GetGameObjectInstance",
+       "path": "Vacation_Default_Retrigger"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Japan_HotelRoom/AfterConditions",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play MeiCorrupt and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[mei-will-visit] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mei-will-visit",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[mei-corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mei-corrupted",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[mei-subway-pro] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mei-subway-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

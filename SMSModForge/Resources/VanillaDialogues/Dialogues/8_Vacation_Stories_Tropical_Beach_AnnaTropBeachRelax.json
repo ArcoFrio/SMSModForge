@@ -1,0 +1,1198 @@
+{
+ "id": "8_Vacation_Stories/Tropical_Beach/AnnaTropBeachRelax",
+ "name": "AnnaTropBeachRelax",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  -1706011409
+ ],
+ "nodes": {
+  "-1706011409": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -8317515,
+    401870943,
+    1841825644
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.01,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[annatropbeachrelax-inc] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "annatropbeachrelax-inc",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-8317515": {
+   "kind": "choice",
+   "parent": -1706011409,
+   "children": [
+    1611908069,
+    -706915522,
+    -62850438
+   ],
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": " The sun’s pretty strong today... Would you mind helping me with the sun lotion?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1611908069": {
+   "kind": "text",
+   "parent": -8317515,
+   "children": [
+    1971547418
+   ],
+   "actor": null,
+   "text": "Sure, no problem.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-706915522": {
+   "kind": "text",
+   "parent": -8317515,
+   "children": [
+    640534274
+   ],
+   "actor": null,
+   "text": "Are you sure you need help? Can’t you handle it yourself?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-62850438": {
+   "kind": "text",
+   "parent": -8317515,
+   "children": [
+    841505373,
+    329256099
+   ],
+   "actor": null,
+   "text": "Of course, {M}. I can't wait to get my hands on you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1971547418": {
+   "kind": "text",
+   "parent": 1611908069,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thanks. I’d rather not spend the rest of this trip covered in aloe vera.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "640534274": {
+   "kind": "text",
+   "parent": -706915522,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I could, but the spots I can’t reach would probably say otherwise.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "841505373": {
+   "kind": "text",
+   "parent": -62850438,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm... That's what I like to hear...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "329256099": {
+   "kind": "text",
+   "parent": -62850438,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{PC}... D-Don't say things like that!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "401870943": {
+   "kind": "text",
+   "parent": -1706011409,
+   "children": [
+    -208130289,
+    -1550232879,
+    -1084172654,
+    -763793299,
+    709164846
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Here's the sun lotion... Have fun...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1841825644": {
+   "kind": "text",
+   "parent": -1706011409,
+   "children": [
+    1661831508,
+    -371069774
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Don't miss any spots... I don’t want to end up looking like a lobster.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaTropBeachMassage (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaTropBeachMassage (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaTropBeachMassage (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1661831508": {
+   "kind": "text",
+   "parent": 1841825644,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-This doesn't feel too bad...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-371069774": {
+   "kind": "choice",
+   "parent": 1841825644,
+   "children": [
+    1066073276,
+    -539269138,
+    -250299981
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "The sun feels so nice... I feel like I'm about to take a nap...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-208130289": {
+   "kind": "text",
+   "parent": 401870943,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fuck... I love how strong your hands feel on me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaTropBeachMassage (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaTropBeachMassage (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaTropBeachMassage (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1550232879": {
+   "kind": "text",
+   "parent": 401870943,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Don't be shy... Give my butt a rough massage...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1084172654": {
+   "kind": "text",
+   "parent": 401870943,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes... T-Thank you for not forgetting about my boobs...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaTropBeachMassage (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaTropBeachMassage (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaTropBeachMassage (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-763793299": {
+   "kind": "text",
+   "parent": 401870943,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Can't have them get sun burned, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "709164846": {
+   "kind": "choice",
+   "parent": 401870943,
+   "children": [
+    560916103,
+    -271265291,
+    1782863716
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "F-Fuck... I'm so horny... My head's spinning for you...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1066073276": {
+   "kind": "text",
+   "parent": -371069774,
+   "children": [
+    53708881
+   ],
+   "actor": null,
+   "text": "(Let her nap)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-539269138": {
+   "kind": "text",
+   "parent": -371069774,
+   "children": [
+    -1410865330,
+    -2064137212
+   ],
+   "actor": null,
+   "text": "(Slap her butt)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-250299981": {
+   "kind": "text",
+   "parent": -371069774,
+   "children": [
+    -577666871,
+    -111185925,
+    1553247364,
+    1759603805
+   ],
+   "actor": null,
+   "text": "Turn around, {M}. I need to get your front.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "53708881": {
+   "kind": "text",
+   "parent": 1066073276,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I... *ZZzzZZZzzZZZzzZ*",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[MLove] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MLove",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-1410865330": {
+   "kind": "text",
+   "parent": -539269138,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "H-Hey! That's not appropriate!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[MCorruption] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MCorruption",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-577666871": {
+   "kind": "text",
+   "parent": -250299981,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes... You're right.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-111185925": {
+   "kind": "text",
+   "parent": -250299981,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm... God... You're... Hnngg....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaTropBeachMassage (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaTropBeachMassage (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaTropBeachMassage (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1553247364": {
+   "kind": "text",
+   "parent": -250299981,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thank you so much for being so thorough....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1759603805": {
+   "kind": "text",
+   "parent": -250299981,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A-Alright... We...We should better stop now... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[annatrophorny-inc] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "annatrophorny-inc",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2064137212": {
+   "kind": "text",
+   "parent": -539269138,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I can lotion up the rest of my body, thanks. Your help was much appreciated...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "560916103": {
+   "kind": "text",
+   "parent": 709164846,
+   "children": [
+    1309502082,
+    -418108849,
+    -785026065
+   ],
+   "actor": null,
+   "text": "I want to take a photo of my horny {M}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-271265291": {
+   "kind": "text",
+   "parent": 709164846,
+   "children": [
+    -1060219912,
+    -1703646245,
+    -1993830185,
+    -1984166364,
+    -1845335181,
+    -623182375
+   ],
+   "actor": null,
+   "text": "Why don't you show me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1782863716": {
+   "kind": "text",
+   "parent": 709164846,
+   "children": [
+    -2114531109
+   ],
+   "actor": null,
+   "text": "We should stop, there's people here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2114531109": {
+   "kind": "text",
+   "parent": 1782863716,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A-Alright, of course... You... You got me quite worked up...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1060219912": {
+   "kind": "choice",
+   "parent": -271265291,
+   "children": [
+    1861949108,
+    1243011496,
+    -1916487298
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "L-Like this? ... I ... I don't care if people see us...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaTropBeachTitfuck (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaTropBeachTitfuck (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaTropBeachTitfuck (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaTropBeachMassage (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaTropBeachMassage (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaTropBeachMassage (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaTropBeachMassage (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaTropBeachMassage (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaTropBeachMassage (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1309502082": {
+   "kind": "text",
+   "parent": 560916103,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes, show our fans how wet I am for you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A51_Nudeaftermassage to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A51_Nudeaftermassage",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A51_Nudeaftermassage"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaTropBeachMassage (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaTropBeachMassage (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaTropBeachMassage (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaTropBeachMassage (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaTropBeachMassage (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaTropBeachMassage (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1703646245": {
+   "kind": "text",
+   "parent": -271265291,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Your cock is so hard and warm... I ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1993830185": {
+   "kind": "text",
+   "parent": -271265291,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I want to make you feel good... Really good... Mwuaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaTropBeachTitfuck (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaTropBeachTitfuck (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaTropBeachTitfuck (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1984166364": {
+   "kind": "choice",
+   "parent": -271265291,
+   "children": [
+    275041825,
+    -232975192,
+    410517216
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmghgmmm! Mghggmmm!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1845335181": {
+   "kind": "text",
+   "parent": -271265291,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmwwaahh! GPHF! GPFH! GPFH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaTropBeachTitfuck (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaTropBeachTitfuck (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaTropBeachTitfuck (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-418108849": {
+   "kind": "text",
+   "parent": 560916103,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Do I look hot? Fuck, I hope I do...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-785026065": {
+   "kind": "text",
+   "parent": 560916103,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A-Alright... I... I think I need to cool off now...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[annatrophorny-inc] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "annatrophorny-inc",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-623182375": {
+   "kind": "text",
+   "parent": -271265291,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I will.. I'll take a quick dip to get cleaned up... Hihi...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "275041825": {
+   "kind": "text",
+   "parent": -1984166364,
+   "actor": null,
+   "text": "F-Fuck, {M}... I'm close... I'll...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-232975192": {
+   "kind": "text",
+   "parent": -1984166364,
+   "actor": null,
+   "text": "Y-Yeah... Suck my cock... I'll blow my load for you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "410517216": {
+   "kind": "text",
+   "parent": -1984166364,
+   "actor": null,
+   "text": "(Fill her mouth without a warning)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1861949108": {
+   "kind": "text",
+   "parent": -1060219912,
+   "children": [
+    -745648255
+   ],
+   "actor": null,
+   "text": "Y-Yeah... You're doing great. Your tits feel so good...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1243011496": {
+   "kind": "text",
+   "parent": -1060219912,
+   "children": [
+    2140769537
+   ],
+   "actor": null,
+   "text": "W-Wait, there's people here!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1916487298": {
+   "kind": "text",
+   "parent": -1060219912,
+   "children": [
+    -446248469
+   ],
+   "actor": null,
+   "text": "You're such a good slut, {M}. I love how eager you are...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-745648255": {
+   "kind": "text",
+   "parent": 1861949108,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'll work them up and down your cock like any good {M} would...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2140769537": {
+   "kind": "text",
+   "parent": 1243011496,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So what? We're just having some fun...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-446248469": {
+   "kind": "text",
+   "parent": -1916487298,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I love being a slut for you... It's so fullfilling...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Tropical_Beach",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AnnaTropBeachRelax and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play LiamFreyaFirstAppear and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "LiamFreyaFirstAppear",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Vacation_Stories/Tropical_Beach/LiamFreyaFirstAppear"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_WhiteSwimsuitTropical to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_WhiteSwimsuitTropical",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_WhiteSwimsuitTropical"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Default and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Default",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Vacation_Stories/Tropical_Beach/Default"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play AnnaTropBeachPhotoSession and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "AnnaTropBeachPhotoSession",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Vacation_Stories/Tropical_Beach/AnnaTropBeachPhotoSession"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[freyaliamfirsttalk] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "freyaliamfirsttalk",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 9_Vacation_Teleport_Tropical to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "9_Vacation_Teleport_Tropical",
+       "of": "GetGameObjectInstance",
+       "path": "9_Vacation_Teleport_Tropical"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

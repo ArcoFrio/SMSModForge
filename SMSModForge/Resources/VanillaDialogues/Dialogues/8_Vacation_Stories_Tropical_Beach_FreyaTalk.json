@@ -1,0 +1,1206 @@
+{
+ "id": "8_Vacation_Stories/Tropical_Beach/FreyaTalk",
+ "name": "FreyaTalk",
+ "index": 5,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "V_Freya"
+ ],
+ "roots": [
+  97862538,
+  1456077779,
+  532807174
+ ],
+ "nodes": {
+  "97862538": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1712343420,
+    -491992220
+   ],
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "Hey, uhm, can I come over today?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[player-freya-sex-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "player-freya-sex-done",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_FreyaDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_FreyaDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_FreyaDefault"
+      }
+     }
+    }
+   ]
+  },
+  "1456077779": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1190283994,
+    1011319087,
+    -733976128,
+    137578550,
+    -1392845917,
+    -1334796353
+   ],
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "Uh... hi.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[tro-beach-pro] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tro-beach-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_FreyaDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_FreyaDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_FreyaDefault"
+      }
+     }
+    }
+   ]
+  },
+  "532807174": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1346725111,
+    1809752035,
+    -1363760554,
+    -64302628,
+    1296814645,
+    1801771784,
+    1804384118
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ugh, I can’t believe this. I forgot the sun lotion back at the room.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[tro-beach-pro] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tro-beach-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1346725111": {
+   "kind": "text",
+   "parent": 532807174,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You relax. I’ll go. Be back in a few minutes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_WhiteSwimsuitTropical/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1809752035": {
+   "kind": "text",
+   "parent": 532807174,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1363760554": {
+   "kind": "choice",
+   "parent": 532807174,
+   "children": [
+    -2023574953,
+    480009521,
+    679140402
+   ],
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "Hey.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_FreyaDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_FreyaDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_FreyaDefault"
+      }
+     }
+    }
+   ]
+  },
+  "-2023574953": {
+   "kind": "text",
+   "parent": -1363760554,
+   "actor": null,
+   "text": "Hey.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "480009521": {
+   "kind": "text",
+   "parent": -1363760554,
+   "actor": null,
+   "text": "Hi.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "679140402": {
+   "kind": "text",
+   "parent": -1363760554,
+   "actor": null,
+   "text": "Sup.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-64302628": {
+   "kind": "choice",
+   "parent": 532807174,
+   "children": [
+    2046437820,
+    972572207,
+    1154311021
+   ],
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "So... Was that your {M}?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2046437820": {
+   "kind": "text",
+   "parent": -64302628,
+   "actor": null,
+   "text": "Yes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "972572207": {
+   "kind": "text",
+   "parent": -64302628,
+   "actor": null,
+   "text": "Maybe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1154311021": {
+   "kind": "text",
+   "parent": -64302628,
+   "actor": null,
+   "text": "No.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1296814645": {
+   "kind": "text",
+   "parent": 532807174,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "Hmm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1801771784": {
+   "kind": "choice",
+   "parent": 532807174,
+   "children": [
+    -1809487275,
+    396674562,
+    1450923142
+   ],
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "She's hot.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1809487275": {
+   "kind": "text",
+   "parent": 1801771784,
+   "children": [
+    -448400662
+   ],
+   "actor": null,
+   "text": "Yep.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "396674562": {
+   "kind": "text",
+   "parent": 1801771784,
+   "children": [
+    1274632932
+   ],
+   "actor": null,
+   "text": "Really?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1450923142": {
+   "kind": "text",
+   "parent": 1801771784,
+   "children": [
+    -968327732
+   ],
+   "actor": null,
+   "text": "Eh... Not really. (End Freya Path)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1804384118": {
+   "kind": "text",
+   "parent": 532807174,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "Cool, cool.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_FreyaDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-968327732": {
+   "kind": "text",
+   "parent": 1450923142,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Vacation_Save[tro-beach-pro] + -1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tro-beach-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -1
+      }
+     }
+    }
+   ]
+  },
+  "1274632932": {
+   "kind": "text",
+   "parent": 396674562,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Vacation_Save[tro-beach-pro] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tro-beach-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-448400662": {
+   "kind": "text",
+   "parent": -1809487275,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Vacation_Save[tro-beach-pro] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tro-beach-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-1190283994": {
+   "kind": "text",
+   "parent": 1456077779,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hello. Can I help you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1011319087": {
+   "kind": "text",
+   "parent": 1456077779,
+   "actor": "V_Freya",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I... uh, I just wanted to say hi. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-733976128": {
+   "kind": "text",
+   "parent": 1456077779,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh, uhm. Hi! I’m Anna.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "137578550": {
+   "kind": "text",
+   "parent": 1456077779,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "I’m Freya. I... uh, saw you a while ago. You looked really... um... nice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1392845917": {
+   "kind": "text",
+   "parent": 1456077779,
+   "children": [
+    -1152304203,
+    -128536084
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Why, thank you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[leilanisexdone] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "leilanisexdone",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1152304203": {
+   "kind": "text",
+   "parent": -1392845917,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "You're welcome...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_FreyaDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-128536084": {
+   "kind": "text",
+   "parent": -1392845917,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hmmm...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1334796353": {
+   "kind": "text",
+   "parent": 1456077779,
+   "children": [
+    1076808976,
+    1407935519,
+    1931893534,
+    2006276819,
+    -1506420767,
+    -699753132,
+    -891194768,
+    -582876747
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hmmm... Say, do you want to come visit us later today?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[leilanisexdone] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "leilanisexdone",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1076808976": {
+   "kind": "text",
+   "parent": -1334796353,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "V-Visit you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1407935519": {
+   "kind": "text",
+   "parent": -1334796353,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Yes, the room's 149.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1931893534": {
+   "kind": "text",
+   "parent": -1334796353,
+   "actor": "V_Freya",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Okay. Sure.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[freya-thr-inc] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "freya-thr-inc",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_FreyaDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "2006276819": {
+   "kind": "text",
+   "parent": -1334796353,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1506420767": {
+   "kind": "choice",
+   "parent": -1334796353,
+   "children": [
+    -558083323,
+    707017159,
+    -751044228
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hmm...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-558083323": {
+   "kind": "text",
+   "parent": -1506420767,
+   "actor": null,
+   "text": "Why did you invite her?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "707017159": {
+   "kind": "text",
+   "parent": -1506420767,
+   "actor": null,
+   "text": "Are you sure about this?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-751044228": {
+   "kind": "text",
+   "parent": -1506420767,
+   "actor": null,
+   "text": "I didn't knew my {M} had a thing for young blondes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-699753132": {
+   "kind": "text",
+   "parent": -1334796353,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I'm sure you remember how I ruined your... session with Leilana.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-891194768": {
+   "kind": "text",
+   "parent": -1334796353,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I will make it up to you. Big promise.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-582876747": {
+   "kind": "text",
+   "parent": -1334796353,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "And she's definitely a nice young woman, far nicer than Leilana. She deserves some... Someone like you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Vacation_Save[tro-beach-pro] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tro-beach-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "1712343420": {
+   "kind": "text",
+   "parent": 97862538,
+   "actor": "V_Freya",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "This place is like really boring... Except for you two...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-491992220": {
+   "kind": "choice",
+   "parent": 97862538,
+   "children": [
+    -563794387,
+    -1272955103
+   ],
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "What do you say, {PC}? ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-563794387": {
+   "kind": "text",
+   "parent": -491992220,
+   "children": [
+    -1847231524
+   ],
+   "actor": null,
+   "text": "Of course.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1847231524": {
+   "kind": "text",
+   "parent": -563794387,
+   "actor": "V_Freya",
+   "expressionName": "neutral",
+   "text": "Nice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[freya-thr-inc] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "freya-thr-inc",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_FreyaDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1272955103": {
+   "kind": "text",
+   "parent": -491992220,
+   "children": [
+    -1735148044
+   ],
+   "actor": null,
+   "text": "Maybe another time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1735148044": {
+   "kind": "text",
+   "parent": -1272955103,
+   "actor": "V_Freya",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Damn. Alright...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_FreyaDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Tropical_Beach/Additional_Conditions",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play FreyaTalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Vacation_Save[tro-beach-pro] ≠ -1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tro-beach-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Different",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": -1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[freyaliamfirsttalk] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "freyaliamfirsttalk",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_WhiteSwimsuitTropical to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_WhiteSwimsuitTropical",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_WhiteSwimsuitTropical"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_FreyaDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

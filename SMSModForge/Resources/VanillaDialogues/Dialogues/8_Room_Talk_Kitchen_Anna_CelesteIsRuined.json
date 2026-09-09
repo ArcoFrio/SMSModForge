@@ -1,0 +1,400 @@
+{
+ "id": "8_Room_Talk/Kitchen/Anna_CelesteIsRuined",
+ "name": "Anna_CelesteIsRuined",
+ "index": 24,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna"
+ ],
+ "roots": [
+  84432427,
+  -1549140071,
+  1702422324,
+  1878605931
+ ],
+ "nodes": {
+  "84432427": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Did you see it?! I finally did it—I’m number one!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Creative to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Creative",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Creative"
+      }
+     }
+    }
+   ]
+  },
+  "-1549140071": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Celeste is done. All that smugness, all that superior crap—gone! And now? I’m the one on top!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1702422324": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "God, I can’t even explain how good this feels. After everything, after all the crap she pulled, I—",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1878605931": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -687177205,
+    238665456,
+    -262073907
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "She must be dying knowing I took her place.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-687177205": {
+   "kind": "text",
+   "parent": 1878605931,
+   "children": [
+    1772806627,
+    101103978,
+    -403162793
+   ],
+   "actor": null,
+   "text": "Damn right! You earned this, Anna.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "238665456": {
+   "kind": "text",
+   "parent": 1878605931,
+   "children": [
+    -910832754,
+    -403868756,
+    -1754156126,
+    -1389361059,
+    2131434898
+   ],
+   "actor": null,
+   "text": "Careful, you’re starting to sound like her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-262073907": {
+   "kind": "text",
+   "parent": 1878605931,
+   "children": [
+    1066747449,
+    1201229823,
+    -1806320126
+   ],
+   "actor": null,
+   "text": "And… does it feel as good as you thought it would?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1066747449": {
+   "kind": "text",
+   "parent": -262073907,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "…Yeah. Of course it does.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-910832754": {
+   "kind": "text",
+   "parent": 238665456,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh, please. There’s a huge difference between me and her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1772806627": {
+   "kind": "text",
+   "parent": -687177205,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I know, right?! I worked my ass off for this! And now, all those people—her people—they chose me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "101103978": {
+   "kind": "text",
+   "parent": -687177205,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I finally won. And no one—not even Celeste—can take this from me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-403162793": {
+   "kind": "text",
+   "parent": -687177205,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Damn, this feels good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-403868756": {
+   "kind": "text",
+   "parent": 238665456,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "…I mean, sure, maybe I’m enjoying this a little too much, but can you blame me? After everything she pulled?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1754156126": {
+   "kind": "text",
+   "parent": 238665456,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I think I deserve a little gloating.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1389361059": {
+   "kind": "text",
+   "parent": 238665456,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Don’t worry, I won’t start talking like I’m a goddess or anything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2131434898": {
+   "kind": "text",
+   "parent": 238665456,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Unless… that’d be hot?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1201229823": {
+   "kind": "text",
+   "parent": -262073907,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I mean… this is what I wanted. To beat her. To prove that I could do it. And I did. So… yeah. I feel great.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1806320126": {
+   "kind": "text",
+   "parent": -262073907,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "…Shouldn’t I?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Kitchen/Kitchen_Conditions_2",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Anna_CelesteIsRuined and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[anna-celestendtalkinc] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-celestendtalkinc",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[celeste-broken] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-broken",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Core_NoSave[Anna-Default-Outfit] to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Anna-Default-Outfit",
+        "list": "Core_NoSave",
+        "type": "game-object"
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Condition-Split] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Condition-Split",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_8[anna-celestendtalkinc] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-celestendtalkinc",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

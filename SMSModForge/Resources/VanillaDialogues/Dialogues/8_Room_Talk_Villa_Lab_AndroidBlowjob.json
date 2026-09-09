@@ -1,0 +1,685 @@
+{
+ "id": "8_Room_Talk/Villa_Lab/AndroidBlowjob",
+ "name": "AndroidBlowjob",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Cerise"
+ ],
+ "roots": [
+  1555090644,
+  524408747,
+  -1507747123,
+  -43295637,
+  1602252214
+ ],
+ "nodes": {
+  "1555090644": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    2034257668,
+    1600163054,
+    -1673620901
+   ],
+   "actor": "Cerise",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I...I can't control my body...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[android-blowjob-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "android-blowjob-done",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[random-1-of-10] = Random2[Random]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random2",
+        "pick": "random",
+        "type": "number"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "2034257668": {
+   "kind": "text",
+   "parent": 1555090644,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "W-What is this... Why am I licking it... It... It tastes salty? How do I know that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Android (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Android (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Android (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1600163054": {
+   "kind": "text",
+   "parent": 1555090644,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "No... I know what this is... This is your penis. Used to inseminate your target during copulation.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1673620901": {
+   "kind": "text",
+   "parent": 1555090644,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "Why does my mouth... N-No... Mwaaah! Hngaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Android (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Android (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Android (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1507747123": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2120383211,
+    -1757594163,
+    1548485413
+   ],
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "Nhhaa! Mgaaaah! MpffhhhH!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active (none) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": null,
+       "of": "GetGameObjectInstance"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_5[android-blowjob-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "android-blowjob-done",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2120383211": {
+   "kind": "text",
+   "parent": -1507747123,
+   "actor": null,
+   "text": "F-Fuck... You are making me cum...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1757594163": {
+   "kind": "text",
+   "parent": -1507747123,
+   "actor": null,
+   "text": "Your throat feels so exotic... So... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1548485413": {
+   "kind": "text",
+   "parent": -1507747123,
+   "actor": null,
+   "text": "[Cum without a warning]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-43295637": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1160052792,
+    240306072,
+    2129092646,
+    1591418565
+   ],
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "ADMIN MODE OVERWRITE. Exiting Blowjob Program.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1160052792": {
+   "kind": "text",
+   "parent": -43295637,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "W-Wait! What is this... Ah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Android (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Android (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Android (3)"
+      }
+     }
+    }
+   ]
+  },
+  "240306072": {
+   "kind": "text",
+   "parent": -43295637,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "It's so warm and... sticky?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2129092646": {
+   "kind": "choice",
+   "parent": -43295637,
+   "children": [
+    -1956160073,
+    -822930095,
+    -1860187126
+   ],
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "I... Is this what humans do in their free time?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1591418565": {
+   "kind": "text",
+   "parent": -43295637,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "I... I think I would like to learn more....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1602252214": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1626729890,
+    1463002788,
+    -501255016,
+    -1951252400,
+    -835800246
+   ],
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "EJACULATION DETECTED. Entering deepthroat mode.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1626729890": {
+   "kind": "text",
+   "parent": 1602252214,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "MPPFHHH! MGGGHHHAAHHH!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Android (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Android (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Android (4)"
+      }
+     }
+    }
+   ]
+  },
+  "1463002788": {
+   "kind": "text",
+   "parent": 1602252214,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "GULP! GULP! GULP!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-501255016": {
+   "kind": "choice",
+   "parent": 1602252214,
+   "children": [
+    -1399719742,
+    1491865460,
+    174883475
+   ],
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "Gluaahhh! .... Hah... This... This is tasty... Protein? A slight hint of salt? ...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1951252400": {
+   "kind": "text",
+   "parent": 1602252214,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "I... My throat is very sensitive... I .. I think I like it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-835800246": {
+   "kind": "text",
+   "parent": 1602252214,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "I hope there will be a next time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1956160073": {
+   "kind": "text",
+   "parent": 2129092646,
+   "actor": null,
+   "text": "Yes, all the time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-822930095": {
+   "kind": "text",
+   "parent": 2129092646,
+   "actor": null,
+   "text": "Only when they are close to each other.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1860187126": {
+   "kind": "text",
+   "parent": 2129092646,
+   "actor": null,
+   "text": "Not exactly like this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1399719742": {
+   "kind": "text",
+   "parent": -501255016,
+   "actor": null,
+   "text": "I'm glad you enjoyed it. I did too.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1491865460": {
+   "kind": "text",
+   "parent": -501255016,
+   "actor": null,
+   "text": "Yeah. Drinking cum is very healthy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "174883475": {
+   "kind": "text",
+   "parent": -501255016,
+   "actor": null,
+   "text": "F-Fuck... You are out of this world....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "524408747": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    244216701,
+    -485776575,
+    2090923205
+   ],
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "I... I want to try it again...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[android-blowjob-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "android-blowjob-done",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[random-1-of-10] = Random2[Random]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random2",
+        "pick": "random",
+        "type": "number"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "244216701": {
+   "kind": "text",
+   "parent": 524408747,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "T-This time... I won't try to fight it... Mwuaah... Mmmm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Android (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Android (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Android (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-485776575": {
+   "kind": "text",
+   "parent": 524408747,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "I... I think you are very well equipped for a human... Impressive...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2090923205": {
+   "kind": "text",
+   "parent": 524408747,
+   "actor": "Cerise",
+   "expressionName": "neutral",
+   "text": "Let me try to... engulf it... Using my lips...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Android (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Android (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/Android (2)"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Villa_Lab/Android_Defaulttalk",
+   "script": "Dialogue",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core[temp-stored-very-short-term] = AndroidBlowjob",
+   "as": "GameObject"
+  }
+ ]
+}

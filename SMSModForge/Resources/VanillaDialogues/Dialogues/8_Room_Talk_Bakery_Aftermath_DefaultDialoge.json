@@ -1,0 +1,314 @@
+{
+ "id": "8_Room_Talk/Bakery_Aftermath/DefaultDialoge",
+ "name": "DefaultDialoge",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Amelia"
+ ],
+ "roots": [
+  21160520
+ ],
+ "nodes": {
+  "21160520": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1134238619,
+    972193125,
+    -2068178212
+   ],
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Perfect timing! The coffee bean delivery just got here. Could you help move the packages into storage?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1134238619": {
+   "kind": "text",
+   "parent": 21160520,
+   "children": [
+    1084477445
+   ],
+   "actor": null,
+   "text": "Of course, boss.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2068178212": {
+   "kind": "text",
+   "parent": 21160520,
+   "children": [
+    982564442
+   ],
+   "actor": null,
+   "text": "Well, I'm here to make money.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "982564442": {
+   "kind": "text",
+   "parent": -2068178212,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "We all are, alrighty. Let's get to it then!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1084477445": {
+   "kind": "text",
+   "parent": 1134238619,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "Nice! Thanks !",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "972193125": {
+   "kind": "text",
+   "parent": 21160520,
+   "children": [
+    490813139,
+    -810749909,
+    -1529484037,
+    -1999726076
+   ],
+   "actor": null,
+   "text": "I want to be with you, Amelia. [Ending]",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[amelia-confession] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "amelia-confession",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[ameliawork-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "ameliawork-sex",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "490813139": {
+   "kind": "text",
+   "parent": 972193125,
+   "actor": "Amelia",
+   "expressionName": "neutral",
+   "text": "W-What... No... Don't say that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-810749909": {
+   "kind": "choice",
+   "parent": 972193125,
+   "children": [
+    965864111,
+    1620193782,
+    478434052
+   ],
+   "actor": "Amelia",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I'll let you down at some point and then you'll leave me.. like.. like..",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1529484037": {
+   "kind": "text",
+   "parent": 972193125,
+   "actor": "Amelia",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Think, Amelia... I... I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1999726076": {
+   "kind": "text",
+   "parent": 972193125,
+   "actor": "Amelia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Y-Yes... I want to be with you... I'm yours, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[Active-Ending] = 8",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Active-Ending",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 8
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 17_ending to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "17_ending",
+       "of": "GetGameObjectInstance",
+       "path": "17_ending"
+      }
+     }
+    }
+   ]
+  },
+  "965864111": {
+   "kind": "text",
+   "parent": -810749909,
+   "children": [
+    373679470
+   ],
+   "actor": null,
+   "text": "I'll never leave you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1620193782": {
+   "kind": "text",
+   "parent": -810749909,
+   "children": [
+    -2111852131
+   ],
+   "actor": null,
+   "text": "Amelia, you're the girl of my dreams.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "478434052": {
+   "kind": "text",
+   "parent": -810749909,
+   "children": [
+    1803800345
+   ],
+   "actor": null,
+   "text": "Isn't that a risk worth taking?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "373679470": {
+   "kind": "text",
+   "parent": 965864111,
+   "actor": "Amelia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "But what if you do... I... I couldn't take it... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2111852131": {
+   "kind": "text",
+   "parent": 1620193782,
+   "actor": "Amelia",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I'm the what... The girl of your... R-Really?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1803800345": {
+   "kind": "text",
+   "parent": 478434052,
+   "actor": "Amelia",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I... I don't know if I could recover when you....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ }
+}

@@ -1,0 +1,1686 @@
+{
+ "id": "8_Core_Events/Trips/ChurchVisit/NorahChurchAppears",
+ "name": "NorahChurchAppears",
+ "index": 6,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Alice",
+  "Continue",
+  "Norah"
+ ],
+ "roots": [
+  1370657904,
+  -764069928,
+  636665409,
+  -1989861371,
+  -418100337
+ ],
+ "nodes": {
+  "1370657904": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events[church-visits] ≤ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "church-visits",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Red_Pullover to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Red_Pullover",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Red_Pullover"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    }
+   ]
+  },
+  "636665409": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    489699163,
+    -1766019435,
+    -62617022,
+    211672450,
+    -1899628769,
+    -1354537797,
+    -857265459,
+    1660017777,
+    -1209724234,
+    2037607689
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Hey, you two... What's up...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[Norah-met] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Norah-met",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceDress to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceDress",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AliceDress"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_Suit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_Suit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_Suit"
+      }
+     }
+    }
+   ]
+  },
+  "489699163": {
+   "kind": "text",
+   "parent": 636665409,
+   "actor": "Norah",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Alice, sweetie… who are your new friends?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NorahDefault_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NorahDefault_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/NorahDefault_Bust"
+      }
+     }
+    }
+   ]
+  },
+  "-1766019435": {
+   "kind": "text",
+   "parent": 636665409,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "It’s so nice to see you talking to people.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-62617022": {
+   "kind": "text",
+   "parent": 636665409,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Mom. No.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "211672450": {
+   "kind": "text",
+   "parent": 636665409,
+   "actor": "Norah",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "No…?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1899628769": {
+   "kind": "text",
+   "parent": 636665409,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "No being weird, no acting all nice, and definitely no embarrassing me right now!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1354537797": {
+   "kind": "text",
+   "parent": 636665409,
+   "actor": "Norah",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I… I wasn’t trying to embarrass you, sweetheart. I just wanted to say hello.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-857265459": {
+   "kind": "text",
+   "parent": 636665409,
+   "actor": "Alice",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "God. Just—go sit down or something, I’ll be there in a second.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1660017777": {
+   "kind": "text",
+   "parent": 636665409,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "It was lovely meeting you both. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/NorahDefault_Bust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1209724234": {
+   "kind": "choice",
+   "parent": 636665409,
+   "children": [
+    -2040572830,
+    703502362,
+    -1038319933,
+    -1793496223
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Kill me. Right now.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2040572830": {
+   "kind": "text",
+   "parent": -1209724234,
+   "children": [
+    -267225135
+   ],
+   "actor": null,
+   "text": "Aww, I think your mom’s sweet. You’re the real menace here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-267225135": {
+   "kind": "text",
+   "parent": -2040572830,
+   "actor": "Alice",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Fuck you. Seriously.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "703502362": {
+   "kind": "text",
+   "parent": -1209724234,
+   "children": [
+    -273733923
+   ],
+   "actor": null,
+   "text": "She seems like a really kind person. Why are you so harsh on her?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-273733923": {
+   "kind": "text",
+   "parent": 703502362,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "She's so fucking cringe. I'm an adult, man. She needs to start treating me like one.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1038319933": {
+   "kind": "text",
+   "parent": -1209724234,
+   "children": [
+    1037552894
+   ],
+   "actor": null,
+   "text": "You know, I kinda see where you get your looks from…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1037552894": {
+   "kind": "text",
+   "parent": -1038319933,
+   "actor": "Alice",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Don't. Even. Think. About. It.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1793496223": {
+   "kind": "text",
+   "parent": -1209724234,
+   "children": [
+    -438497082
+   ],
+   "actor": null,
+   "text": "Wow, I’d be embarrassed too. She’s way too nice to be related to you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-438497082": {
+   "kind": "text",
+   "parent": -1793496223,
+   "actor": "Alice",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Yeah, man. You have noooo idea.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2037607689": {
+   "kind": "text",
+   "parent": 636665409,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Yeah, whatever. See you around I guess.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_8[Norah-met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Norah-met",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-418100337": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AliceDress/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Red_Pullover to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Red_Pullover",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Red_Pullover"
+      }
+     }
+    }
+   ]
+  },
+  "-764069928": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1503420800,
+    -1805396901,
+    -1038960099,
+    -373992355,
+    86341172
+   ],
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "A-Alice, can I talk to you for a second? I just want you to know...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[Norah-met] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Norah-met",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NorahDefault_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NorahDefault_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/NorahDefault_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceDress to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceDress",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AliceDress"
+      }
+     }
+    }
+   ]
+  },
+  "-1503420800": {
+   "kind": "text",
+   "parent": -764069928,
+   "actor": "Norah",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": {
+    "kind": "variable",
+    "variable": {
+     "scope": "localList",
+     "on": {
+      "kind": "object",
+      "name": "NorahTexts",
+      "of": "GetGameObjectInstance",
+      "path": "8_Core_Events/Trips/ChurchVisit/NorahChurchAppears/NorahTexts"
+     },
+     "pick": "random",
+     "type": "string"
+    }
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1805396901": {
+   "kind": "text",
+   "parent": -764069928,
+   "actor": "Alice",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": {
+    "kind": "variable",
+    "variable": {
+     "scope": "localList",
+     "on": {
+      "kind": "object",
+      "name": "AliceTexts",
+      "of": "GetGameObjectInstance",
+      "path": "8_Core_Events/Trips/ChurchVisit/NorahChurchAppears/AliceTexts"
+     },
+     "pick": "random",
+     "type": "string"
+    }
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-373992355": {
+   "kind": "text",
+   "parent": -764069928,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Just leave me alone, dude.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/NorahDefault_Bust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1038960099": {
+   "kind": "text",
+   "parent": -764069928,
+   "actor": "Norah",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I'm... I'm sorry...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1989861371": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.5,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    }
+   ]
+  },
+  "86341172": {
+   "kind": "text",
+   "parent": -764069928,
+   "children": [
+    -760753491,
+    438315958,
+    1983207643,
+    -717408800,
+    365986850,
+    1225809441,
+    -1995089632,
+    416097111,
+    1153222969,
+    1183019780,
+    -866395464,
+    -1230963845,
+    1039854203,
+    1638534766,
+    864353972
+   ],
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Oh, goodness—ah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "chance",
+     "type": "ConditionChance",
+     "title": "If 0.5 chance to pass",
+     "fields": {
+      "m_Threshold": {
+       "kind": "value",
+       "value": 0.5
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Norah_TripChurch (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Norah_TripChurch (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Norah_TripChurch (0)"
+      }
+     }
+    }
+   ]
+  },
+  "-760753491": {
+   "kind": "text",
+   "parent": 86341172,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "{M}, watch where you're going!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "438315958": {
+   "kind": "text",
+   "parent": 86341172,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "I'm sorry, I'm sorry! My ankle just—",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1983207643": {
+   "kind": "text",
+   "parent": 86341172,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "AhhHHHH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Norah_TripChurch (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Norah_TripChurch (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Norah_TripChurch (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-717408800": {
+   "kind": "text",
+   "parent": 86341172,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Oh, no—ah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "365986850": {
+   "kind": "choice",
+   "parent": 86341172,
+   "children": [
+    1913212460,
+    1301170372,
+    -747820812,
+    749843867
+   ],
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Oh my! I'm so sorry, sweetie, are you alright? Let me just... my foot seems to be caught.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Norah_TripChurch (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Norah_TripChurch (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Norah_TripChurch (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1225809441": {
+   "kind": "text",
+   "parent": 86341172,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "You're doing this on purpose, you stupid slut!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1995089632": {
+   "kind": "text",
+   "parent": 86341172,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Alice, please~ don't say things like that~ it was an accident!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1913212460": {
+   "kind": "text",
+   "parent": 365986850,
+   "actor": null,
+   "text": "Mmmmmhmmm!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1301170372": {
+   "kind": "text",
+   "parent": 365986850,
+   "actor": null,
+   "text": "Hmmhmm! Ghmm Offmm Mhmeee!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "749843867": {
+   "kind": "text",
+   "parent": 365986850,
+   "actor": null,
+   "text": "(Give up)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-747820812": {
+   "kind": "text",
+   "parent": 365986850,
+   "actor": null,
+   "text": "Hllmm Fhmmmk!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "416097111": {
+   "kind": "text",
+   "parent": 86341172,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "An accident? Your bare cunt is on his face! That's not an accident, you desperate whore!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1153222969": {
+   "kind": "text",
+   "parent": 86341172,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Oh... oh no... I didn't~ I can't control! oh God~",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Norah_TripChurch (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Norah_TripChurch (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Norah_TripChurch (3)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Norah_TripChurch (0) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Norah_TripChurch (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Norah_TripChurch (0)"
+      }
+     }
+    }
+   ]
+  },
+  "1183019780": {
+   "kind": "text",
+   "parent": 86341172,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Are you seriously...?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "864353972": {
+   "kind": "text",
+   "parent": 86341172,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Just get out of here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-866395464": {
+   "kind": "text",
+   "parent": 86341172,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Oh- oh my God... I'm so sorry~ I didn't mean to~ please forgive me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1230963845": {
+   "kind": "text",
+   "parent": 86341172,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Yeah, right. You couldn't get up, but you could cum all over him? You're a pathetic slut.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1039854203": {
+   "kind": "text",
+   "parent": 86341172,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Alice, please... don't...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1638534766": {
+   "kind": "text",
+   "parent": 86341172,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "I have to go... I'm so sorry, {PC}... I'm so, so sorry...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Trips/ChurchVisit",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play NorahChurchAppears and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events[church-visits] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "church-visits",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core_NoSave2[veryshortterm-numbervar] = Random3[Random]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "veryshortterm-numbervar",
+        "list": "Core_NoSave2",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random3",
+        "pick": "random",
+        "type": "number"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Red_Pullover to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Red_Pullover",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Red_Pullover"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_Suit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_Suit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_Suit"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NoChurch to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NoChurch",
+       "of": "GetGameObjectInstance",
+       "path": "8_Core_Events/Trips/ChurchVisit/NoChurch"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run D_therecheck and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "D_therecheck",
+       "of": "GetGameObjectConditions",
+       "path": "8_Core_Events/Trips/ChurchVisit/D_therecheck"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play StartDialogue and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "StartDialogue",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Core_Events/Trips/ChurchVisit/StartDialogue"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run No_Church_Cond and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "No_Church_Cond",
+       "of": "GetGameObjectConditions",
+       "path": "8_Core_Events/Trips/ChurchVisit/No_Church_Cond"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "checkConditions",
+     "type": "InstructionLogicCheckConditions",
+     "title": "Check Not is Active NoChurch",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "gameObjectActive",
+         "type": "ConditionGameObjectActive",
+         "title": "Not is Active NoChurch",
+         "fields": {
+          "m_GameObject": {
+           "kind": "object",
+           "name": "NoChurch",
+           "of": "GetGameObjectInstance",
+           "path": "8_Core_Events/Trips/ChurchVisit/NoChurch"
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeInBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeInBlack"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_Maps to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_Maps",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_Maps"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 23_Church to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "23_Church",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/23_Church"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Red_Pullover to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Red_Pullover",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Red_Pullover"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_Suit to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_Suit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_Suit"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ChurchMusic to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ChurchMusic",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/ChurchMusic"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Music to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Music",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Music"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.5 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.5
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Church_BeforeFappearsCon and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "Church_BeforeFappearsCon",
+       "of": "GetGameObjectConditions",
+       "path": "8_Core_Events/Trips/ChurchVisit/Church_BeforeFappearsCon"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_Suit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_Suit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_Suit"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Self and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.3 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.3
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run LookForVanessaCond and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "LookForVanessaCond",
+       "of": "GetGameObjectConditions",
+       "path": "8_Core_Events/Trips/ChurchVisit/LookForVanessaCond"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.3 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.3
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Return_Home to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Return_Home",
+       "of": "GetGameObjectInstance",
+       "path": "Return_Home"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Music to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Music",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Music"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ChurchMusic to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ChurchMusic",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/ChurchMusic"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

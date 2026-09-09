@@ -1,0 +1,252 @@
+{
+ "id": "8_Room_Talk/ChloeStart/Defaultttalk",
+ "name": "Defaultttalk",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Chloe"
+ ],
+ "roots": [
+  -1148790949
+ ],
+ "nodes": {
+  "-1148790949": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2140172043,
+    -611151102,
+    -1835526828,
+    1708205212
+   ],
+   "actor": "Chloe",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Hey, we've already done a shoot this week... You're too early.",
+   "tag": "1234",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2140172043": {
+   "kind": "text",
+   "parent": -1148790949,
+   "children": [
+    1289774918
+   ],
+   "actor": null,
+   "text": "Tell me something about you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1289774918": {
+   "kind": "text",
+   "parent": -2140172043,
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "Uh... I'm Chloe... I'm like 27 years old and I love coffee and plushies... ",
+   "jump": {
+    "mode": "Jump",
+    "to": "1234"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-611151102": {
+   "kind": "text",
+   "parent": -1148790949,
+   "children": [
+    1853387122
+   ],
+   "actor": null,
+   "text": "Why did you start a Starmaker Page?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1853387122": {
+   "kind": "text",
+   "parent": -611151102,
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "Huh? No idea. I was bored and like cash?",
+   "jump": {
+    "mode": "Jump",
+    "to": "1234"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1835526828": {
+   "kind": "text",
+   "parent": -1148790949,
+   "children": [
+    -2049589553
+   ],
+   "actor": null,
+   "text": "I don't think Anna likes you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2049589553": {
+   "kind": "text",
+   "parent": -1835526828,
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "You don't say, she's like so jealous... Well, I don't blame her. I'm pretty perfect.",
+   "jump": {
+    "mode": "Jump",
+    "to": "1234"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1708205212": {
+   "kind": "text",
+   "parent": -1148790949,
+   "children": [
+    1970410022
+   ],
+   "actor": null,
+   "text": "See you around.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1970410022": {
+   "kind": "text",
+   "parent": 1708205212,
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "Bye bye!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/ChloeStart",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Defaultttalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[chloe-declined] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "chloe-declined",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Choe_Base to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Choe_Base",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Choe_Base"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

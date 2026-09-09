@@ -1,0 +1,795 @@
+{
+ "id": "8_Room_Talk/Hotelroom24/LizAndAnna",
+ "name": "LizAndAnna",
+ "index": 4,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Liz"
+ ],
+ "roots": [
+  1964280717,
+  -1211970448,
+  1030108340,
+  1878261026,
+  1877637662,
+  -1581913405,
+  -1389839857,
+  1648376980,
+  353567679,
+  481960989,
+  786882135,
+  1603159105,
+  281452574,
+  -281190403,
+  -1732581894,
+  -995363903,
+  -1738572239,
+  1025469701,
+  -432897591,
+  1714833908,
+  2022459734,
+  -106846826,
+  -1780783675,
+  -426714327,
+  -486798140,
+  -1285940308,
+  -1928266799
+ ],
+ "nodes": {
+  "1964280717": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Alright, everyone! Let’s get this game started. I hope you're ready for some fun, Liz!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Head to the hotel.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Just A Drink (Liz)",
+        "of": "Quest"
+       },
+       "m_TaskId": -210829219
+      },
+      "m_WaitToComplete": false
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[achivement-unlocked] = Night Out",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Night Out"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "achivement-unlocked",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Achievements[anna-liz-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-liz-done",
+        "list": "Achievements",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1211970448": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -413405945,
+    338347112
+   ],
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "Y-yeah, I’m ready...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1030108340": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -133525165,
+    272797449,
+    58235345
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Exactly! It’s just sex, after all. No need to be so nervous. Now, who wants to get their cock sucked?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-413405945": {
+   "kind": "text",
+   "parent": -1211970448,
+   "actor": null,
+   "text": "It’s going to be great. Just relax and enjoy the sex, Liz.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "338347112": {
+   "kind": "text",
+   "parent": -1211970448,
+   "children": [
+    -691707306
+   ],
+   "actor": null,
+   "text": "No need to be shy, Liz. You're a goddess.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-133525165": {
+   "kind": "text",
+   "parent": 1030108340,
+   "actor": null,
+   "text": "I think that would be me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "272797449": {
+   "kind": "text",
+   "parent": 1030108340,
+   "actor": null,
+   "text": "Me! Here! Over here, please, pick me! ME! ME! ME!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "58235345": {
+   "kind": "text",
+   "parent": 1030108340,
+   "actor": null,
+   "text": "[Drop your pants]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-691707306": {
+   "kind": "text",
+   "parent": 338347112,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "I-I'm a what... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1878261026": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "I-I can't believe how big it is...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LizThreesome to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LizThreesome",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/LizThreesome"
+      }
+     }
+    }
+   ]
+  },
+  "1877637662": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Don't be shy, Liz. Give it a kiss.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1581913405": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "Muah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1389839857": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "The best cock deserves the best kisses! Muah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1648376980": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hmm... I think you should ride it, Liz. It would do you really well...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "353567679": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "W-What? ... B-But... But it's so big...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "481960989": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Don't worry, I'm here to support you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "786882135": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "O-Okay...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1603159105": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "Oh no... Oh no... Hnaaah.... Hnniiiih!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LizThreesome (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LizThreesome (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/LizThreesome (1)"
+      }
+     }
+    }
+   ]
+  },
+  "281452574": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    507391413,
+    2066633030
+   ],
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "D-Does it feel good? I'm sorry if it doesn't!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-281190403": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Liz, you have to relax. Just enjoy and start rocking that cock!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1732581894": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "Y-Yes... I... It's a great feeling. I've n-never had one this size before....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-995363903": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "Oh my, I really do need this... Mmhmmmm... Please... Please stretch me out.....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1738572239": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That's it, sweetheart. Keep it up. Show his cock what you can do with your pussy....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1025469701": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "I'm... Sorry, sorry, sorry! I can't fight it anymore... I'm... I'm... HNhaaaaHHHHH!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-432897591": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Good... Now let's help {PC} to feel the same!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1714833908": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Your boobs are really... big, Anna.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LizThreesome (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LizThreesome (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/LizThreesome (2)"
+      }
+     }
+    }
+   ]
+  },
+  "2022459734": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -564112921,
+    971791673,
+    -415822365
+   ],
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "Aw, thanks... I love your skin tone. It's so loverly!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-106846826": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes! Cover our tits with your cum! So much!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1780783675": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "I... I can feel his cock pulsate... Oh my god....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-426714327": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmhmmm.... Good job, Liz. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-486798140": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "T-Thanks... For h-having me....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1285940308": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let's relax a bit before we leave, okay? Maybe there's some fun snacks in the minibar.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1928266799": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "I want peanuts...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-564112921": {
+   "kind": "text",
+   "parent": 2022459734,
+   "actor": null,
+   "text": "I'm... I'm cumming!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "971791673": {
+   "kind": "text",
+   "parent": 2022459734,
+   "actor": null,
+   "text": "Fuck, that's too much... Both your tits are amazing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-415822365": {
+   "kind": "text",
+   "parent": 2022459734,
+   "actor": null,
+   "text": "[Blow your load]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "507391413": {
+   "kind": "text",
+   "parent": 281452574,
+   "actor": null,
+   "text": "You're doing great, Liz. Chill out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2066633030": {
+   "kind": "text",
+   "parent": 281452574,
+   "actor": null,
+   "text": "Fuck... Your pussy is so tight...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Hotelroom24",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play LizAndAnna and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[liz-agreed] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "liz-agreed",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LizBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LizBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/LizBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_YellowSexy to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_YellowSexy",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_YellowSexy"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_YellowSexy/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/LizBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[liz-threesome-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "liz-threesome-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

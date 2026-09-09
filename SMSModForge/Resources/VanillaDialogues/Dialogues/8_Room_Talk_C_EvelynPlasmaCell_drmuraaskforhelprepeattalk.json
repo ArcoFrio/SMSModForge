@@ -1,0 +1,311 @@
+{
+ "id": "8_Room_Talk/C_EvelynPlasmaCell/drmuraaskforhelprepeattalk",
+ "name": "drmuraaskforhelprepeattalk",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Mura"
+ ],
+ "roots": [
+  1948650504
+ ],
+ "nodes": {
+  "1948650504": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1032075342,
+    -715583072,
+    1315397873
+   ],
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "You come back to stare again? Either free me or fuck off before she hears us.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1032075342": {
+   "kind": "text",
+   "parent": 1948650504,
+   "children": [
+    1415695848,
+    -164340398
+   ],
+   "actor": null,
+   "text": "Alright, I’ve decided. I’ll get you out of here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-715583072": {
+   "kind": "text",
+   "parent": 1948650504,
+   "children": [
+    -2062121934
+   ],
+   "actor": null,
+   "text": "No. I’m not crossing her for you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2062121934": {
+   "kind": "text",
+   "parent": -715583072,
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "Then get the hell out of my sight.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1415695848": {
+   "kind": "text",
+   "parent": -1032075342,
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "Finally. I knew you weren’t just another one of her pets. Look for a terminal with a red bio-lock.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[agreedtohelp-drmura] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "agreedtohelp-drmura",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionQuestsActivate",
+     "title": "Activate Mura Quest",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Mura Quest",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "1315397873": {
+   "kind": "text",
+   "parent": 1948650504,
+   "children": [
+    1826583243
+   ],
+   "actor": null,
+   "text": "I'm sorry, but I can't betray Evelyn.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1826583243": {
+   "kind": "text",
+   "parent": 1315397873,
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "Then get the hell out of my sight.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-164340398": {
+   "kind": "text",
+   "parent": -1032075342,
+   "actor": "Mura",
+   "expressionName": "neutral",
+   "text": "Override that, and this cage dies with it. How? No idea, you have to figure that out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/C_EvelynPlasmaCell",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play drmuraaskforhelprepeattalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[drmura-met] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "drmura-met",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[agreedtohelp-drmura] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "agreedtohelp-drmura",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "branches": [
+    "muraasksagain"
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

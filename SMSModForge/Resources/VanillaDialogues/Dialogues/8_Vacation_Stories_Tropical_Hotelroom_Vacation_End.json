@@ -1,0 +1,914 @@
+{
+ "id": "8_Vacation_Stories/Tropical_Hotelroom/Vacation_End",
+ "name": "Vacation_End",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  -2070149534,
+  -618003004,
+  1037969959,
+  1598333781
+ ],
+ "nodes": {
+  "-2070149534": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    68748153,
+    -1483452083,
+    139501129,
+    841545856,
+    1566726603,
+    821276207,
+    969068297,
+    -1741774943,
+    1799977445,
+    -446904603
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "68748153": {
+   "kind": "text",
+   "parent": -2070149534,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Today was exactly what I needed. The sun, the waves... it was perfect.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1483452083": {
+   "kind": "text",
+   "parent": -2070149534,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I’m glad we came here. Spending time like this feels so rare these days.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "139501129": {
+   "kind": "text",
+   "parent": -2070149534,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Tomorrow, I was thinking we could explore the island a bit more before heading home.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "841545856": {
+   "kind": "text",
+   "parent": -2070149534,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It’s hard to believe the day flew by so fast. Good thing we made the most of it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1566726603": {
+   "kind": "text",
+   "parent": -2070149534,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You know, I wasn’t sure about this trip at first, but I’m so glad we did it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "821276207": {
+   "kind": "text",
+   "parent": -2070149534,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Maybe tomorrow we could try something different—something adventurous, perhaps?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "969068297": {
+   "kind": "text",
+   "parent": -2070149534,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "After today, I think I’ll sleep like a rock tonight. This place really wears you out in the best way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1741774943": {
+   "kind": "text",
+   "parent": -2070149534,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "One more day left... let’s make it count, alright?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1799977445": {
+   "kind": "text",
+   "parent": -2070149534,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It’s funny, but I think I’ll actually miss this place when we leave.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-446904603": {
+   "kind": "text",
+   "parent": -2070149534,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thanks for being here with me. It wouldn’t have been the same without you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-618003004": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1949200977,
+    449165185,
+    -669043936
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Do you... Do you want to make love to me before we...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1949200977": {
+   "kind": "text",
+   "parent": -618003004,
+   "children": [
+    -1849634983
+   ],
+   "actor": null,
+   "text": "Of course I want to...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "449165185": {
+   "kind": "text",
+   "parent": -618003004,
+   "children": [
+    559792600
+   ],
+   "actor": null,
+   "text": "Get on the bed, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-669043936": {
+   "kind": "text",
+   "parent": -618003004,
+   "children": [
+    -1393089407
+   ],
+   "actor": null,
+   "text": "Maybe another time?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1598333781": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    121894309,
+    79576808,
+    -1570545428,
+    1818242727,
+    -1182228226,
+    1953094174,
+    111137907,
+    1367468564,
+    -1657076869,
+    408501129
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ohhh yes baby! Your huge cock feels so good stretching me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaTropBedLove (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaTropBedLove (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaTropBedLove (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1037969959": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1924809213,
+    -1373049198,
+    1262984283
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hey, so... Do you want to fuck? The weather, the sun... I'm really worked up, {PC}...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1924809213": {
+   "kind": "text",
+   "parent": 1037969959,
+   "children": [
+    -920135247
+   ],
+   "actor": null,
+   "text": "I was hoping for you to say that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1373049198": {
+   "kind": "text",
+   "parent": 1037969959,
+   "children": [
+    -150936711
+   ],
+   "actor": null,
+   "text": "Get on the bed, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1262984283": {
+   "kind": "text",
+   "parent": 1037969959,
+   "children": [
+    -1078912920
+   ],
+   "actor": null,
+   "text": "Next time, alright?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1849634983": {
+   "kind": "text",
+   "parent": -1949200977,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I want it too...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "559792600": {
+   "kind": "text",
+   "parent": 449165185,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-1393089407": {
+   "kind": "text",
+   "parent": -669043936,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Of course, hun. No pressure, you're doing so much for me.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1078912920": {
+   "kind": "text",
+   "parent": 1262984283,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I know you'll keep your word....",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-150936711": {
+   "kind": "text",
+   "parent": -1373049198,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes, sir...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-920135247": {
+   "kind": "text",
+   "parent": -1924809213,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Well, I did... Now let's have some fun....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "121894309": {
+   "kind": "text",
+   "parent": 1598333781,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You... Hnggahh...  You know you can fuck anytime you want... I'm always ready for you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "79576808": {
+   "kind": "text",
+   "parent": 1598333781,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Your cock makes Mommy feel so good...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1570545428": {
+   "kind": "text",
+   "parent": 1598333781,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "L-Let me get on top of you... Let me make you feel good. Really good...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaTropBedLove (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaTropBedLove (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaTropBedLove (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1818242727": {
+   "kind": "choice",
+   "parent": 1598333781,
+   "children": [
+    2064485411,
+    -643920132,
+    889496079,
+    -1502419706
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fhuck... Hngah... T-Tell me, {PC}... W-What do you see? I want to know...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1182228226": {
+   "kind": "text",
+   "parent": 1598333781,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{PC}.. I'm... I'm... Let's come together.... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1953094174": {
+   "kind": "choice",
+   "parent": 1598333781,
+   "children": [
+    -620655918,
+    -721341564,
+    -734168394
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I need your huge cock pumping me full of hot, sticky cum!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "111137907": {
+   "kind": "text",
+   "parent": 1598333781,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I need it right now... I... I... HNGAAAAAHHHH!!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaTropBedLove (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaTropBedLove (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaTropBedLove (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1367468564": {
+   "kind": "text",
+   "parent": 1598333781,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fill up my hungry pussy until it's overflowing with your juice!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1657076869": {
+   "kind": "text",
+   "parent": 1598333781,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hngaah.... God.... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2064485411": {
+   "kind": "text",
+   "parent": 1818242727,
+   "children": [
+    858356349
+   ],
+   "actor": null,
+   "text": "The hottest woman on this island riding me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-643920132": {
+   "kind": "text",
+   "parent": 1818242727,
+   "children": [
+    196122000
+   ],
+   "actor": null,
+   "text": "The best {M} there is...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "889496079": {
+   "kind": "text",
+   "parent": 1818242727,
+   "children": [
+    -41313354
+   ],
+   "actor": null,
+   "text": "The woman I love...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1502419706": {
+   "kind": "text",
+   "parent": 1818242727,
+   "children": [
+    1043568417
+   ],
+   "actor": null,
+   "text": "My big cock stretching your warm slit...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "858356349": {
+   "kind": "text",
+   "parent": 2064485411,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "And I'm all yours... You are everything I'll ever need... Hngaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1043568417": {
+   "kind": "text",
+   "parent": -1502419706,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Look at it.. Look at where we are connected... Hngaaahh!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-41313354": {
+   "kind": "text",
+   "parent": 889496079,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... Hngaahh... I ... I love you too...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "196122000": {
+   "kind": "text",
+   "parent": -643920132,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Aww... Don't... Hngaaah... D-Don't make your {M} cry... I'm trying to milk your dick here!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "408501129": {
+   "kind": "text",
+   "parent": 1598333781,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... Thank you for being here with me... For really being there for me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-620655918": {
+   "kind": "text",
+   "parent": 1953094174,
+   "actor": null,
+   "text": "{M}... I'm close... I can feel it... I'm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-721341564": {
+   "kind": "text",
+   "parent": 1953094174,
+   "actor": null,
+   "text": "T-Take my cum, Anna. Take it all!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-734168394": {
+   "kind": "text",
+   "parent": 1953094174,
+   "actor": null,
+   "text": "(Fill her up)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Tropical_Hotelroom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Vacation_End and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[vacation-end-incoming] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vacation-end-incoming",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[IMP-First-Vacation-Event] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "IMP-First-Vacation-Event",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "branches": [
+    "vacationend"
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Return_Home_Vacation to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Return_Home_Vacation",
+       "of": "GetGameObjectInstance",
+       "path": "Return_Home_Vacation"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

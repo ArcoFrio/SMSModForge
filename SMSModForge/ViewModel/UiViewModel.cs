@@ -34,7 +34,7 @@ public sealed class UiViewModel : ObservableObject
     {
         Model = model;
         Nodes = new ObservableCollection<UiNodeViewModel>(
-            model.Nodes.Select(n => new UiNodeViewModel(n, null, HasChanges)));
+            model.Nodes.Select(n => new UiNodeViewModel(n, null, HasChanges, Reset)));
         foreach (var node in Nodes) node.Changed += Bubble;
 
         SeedCommand = new RelayCommand(Seed, () => CanSeed);
@@ -158,6 +158,61 @@ public sealed class UiViewModel : ObservableObject
 
     private RelayCommand? _addChild;
 
+    // ── Copying objects about ────────────────────────────────────────
+    //
+    // A whole object and everything under it, so a shop card built once can be
+    // laid out nine times. The clipboard clones on the way in AND on the way
+    // out, so a copy taken once can be pasted repeatedly and no two pastes
+    // share anything.
+
+    public RelayCommand CopyNodeCommand => _copyNode ??= new RelayCommand(() =>
+    {
+        if (SelectedNode != null) Services.EditorClipboard.SetItem(SelectedNode.Model);
+    }, () => SelectedNode != null);
+
+    private RelayCommand? _copyNode;
+
+    /// <summary>
+    /// Paste as a child of whatever is selected.
+    /// <para/>
+    /// A child rather than a sibling, because the tree's own selection is a
+    /// container as often as it is a leaf, and "inside the thing I am pointing
+    /// at" is the reading that needs no explaining. Pasting onto an object the
+    /// GAME owns is allowed: what lands is the pack's, and adding to one of the
+    /// game's objects is exactly what an extension does.
+    /// </summary>
+    public RelayCommand PasteNodeCommand => _pasteNode ??= new RelayCommand(() =>
+    {
+        var copied = Services.EditorClipboard.GetItem<UiNodeDef>();
+        if (copied == null) return;
+
+        var parent = SelectedNode ?? Nodes.FirstOrDefault();
+        if (parent == null) return;
+
+        SelectedNode = parent.AddChild(copied);
+    }, () => Services.EditorClipboard.Has<UiNodeDef>() && Nodes.Count > 0);
+
+    private RelayCommand? _pasteNode;
+
+    /// <summary>Copy and paste in one go, landing beside the original rather
+    /// than inside it - which is what "another one of these" means.</summary>
+    public RelayCommand DuplicateNodeCommand => _duplicateNode ??= new RelayCommand(() =>
+    {
+        var chosen = SelectedNode;
+        var parent = chosen?.Parent;
+        if (chosen == null || parent == null) return;    // the root has no beside
+
+        Services.EditorClipboard.SetItem(chosen.Model);
+        var copied = Services.EditorClipboard.GetItem<UiNodeDef>();
+        if (copied == null) return;
+
+        var made = parent.AddChild(copied);
+        parent.MoveTo(made, parent.Children.IndexOf(chosen) + 1);
+        SelectedNode = made;
+    }, () => SelectedNode?.Parent != null);
+
+    private RelayCommand? _duplicateNode;
+
     /// <summary>Remove the selected object, when it is the pack's to remove.</summary>
     public RelayCommand RemoveNodeCommand => _removeNode ??= new RelayCommand(() =>
     {
@@ -189,6 +244,7 @@ public sealed class UiViewModel : ObservableObject
             OnPropertyChanged();
             OnPropertyChanged(nameof(ShowsScreenPicker));
             OnPropertyChanged(nameof(ShowsOwnSettings));
+            OnPropertyChanged(nameof(ShowsSortingOrder));
             OnPropertyChanged(nameof(Display));
         }
     }
@@ -216,10 +272,177 @@ public sealed class UiViewModel : ObservableObject
             if (Model.IsVanillaBased || Model.HidesWithGameplayUi == value) return;
             Model.HidesWithGameplayUi = value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(ShowsSortingOrder));
         }
     }
 
     public bool CanChooseHiding => !Model.IsVanillaBased;
+
+    /// <summary>Whether it is up as soon as the game loads. Most are not: the
+    /// vanilla scene keeps 34 of its 49 canvases switched off and turns one on
+    /// when its moment arrives.</summary>
+    public bool StartsOpen
+    {
+        get => Model.StartsOpen;
+        set
+        {
+            if (Model.StartsOpen == value) return;
+            Model.StartsOpen = value;
+            OnPropertyChanged();
+        }
+    }
+
+    /// <summary>
+    /// What the checkbox binds to, which is the positive of what is stored.
+    /// <para/>
+    /// The manifest stores silence because that is the unusual answer and an
+    /// absent field should mean the ordinary one; the box in front of an author
+    /// reads the way they think about it, ticked for a screen whose buttons
+    /// click.
+    /// </summary>
+    public bool ButtonsMakeSound
+    {
+        get => !Model.SilentButtons;
+        set
+        {
+            if (Model.SilentButtons == !value) return;
+            Model.SilentButtons = !value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ButtonSoundInEffect));
+            OnPropertyChanged(nameof(ShowsDefaultButtonSound));
+        }
+    }
+
+    /// <summary>
+    /// What these buttons will actually sound like, said out loud.
+    /// <para/>
+    /// An empty field means the default, and a field that looks empty reads as
+    /// "nothing" to everyone who did not write the code. Rather than write the
+    /// default into every screen - which would put a line in every manifest and
+    /// pin a value nobody chose - the editor says what the blank will do.
+    /// </summary>
+    public string ButtonSoundInEffect
+        => !ButtonsMakeSound ? "" : $"using the game's own click: {UiDef.DefaultButtonSound}";
+
+    /// <summary>Whether to say it: only when the field is blank AND something
+    /// is going to play. A screen naming its own sound can be read off the
+    /// field itself.</summary>
+    public bool ShowsDefaultButtonSound
+        => ButtonsMakeSound && string.IsNullOrEmpty(Model.ButtonSound);
+
+    /// <summary>How this screen arrives when it is switched on.</summary>
+    public UiOpenViewModel Open => _open ??= new UiOpenViewModel(
+        () => Model.Open, v => Model.Open = v,
+        () => Model.Nodes.FirstOrDefault());
+
+    private UiOpenViewModel? _open;
+
+    /// <summary>How this screen leaves when an action switches it off.</summary>
+    public UiOpenViewModel Close => _close ??= new UiOpenViewModel(
+        () => Model.Close, v => Model.Close = v,
+        () => Model.Nodes.FirstOrDefault(), closing: true);
+
+    private UiOpenViewModel? _close;
+
+    /// <summary>What every button on this screen sounds like. See
+    /// <see cref="UiDef.ButtonSound"/>.</summary>
+    public string ButtonSound
+    {
+        get => Model.ButtonSound;
+        set
+        {
+            if (Model.ButtonSound == value) return;
+            Model.ButtonSound = value ?? "";
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ShowsDefaultButtonSound));
+        }
+    }
+
+    /// <summary>
+    /// Draw order against other independent UI - higher is nearer the front.
+    /// <para/>
+    /// Only means anything when this UI is NOT hidden with the game's
+    /// interface, because that is the only case where it gets a canvas of its
+    /// own. Inside the gameplay canvas it is one object among the game's, and
+    /// order there is position among siblings - the same thing the object tree
+    /// below already decides.
+    /// </summary>
+    public int SortingOrder
+    {
+        get => Model.SortingOrder;
+        set
+        {
+            if (Model.SortingOrder == value) return;
+            Model.SortingOrder = value;
+            OnPropertyChanged();
+        }
+    }
+
+    /// <summary>Whether a sorting order is worth offering - see the property.
+    /// Hidden rather than disabled, so nobody sets a number that does
+    /// nothing.</summary>
+    public bool ShowsSortingOrder => ShowsOwnSettings && !HidesWithGameplayUi;
+
+    /// <summary>The template this was started from, for the author's own
+    /// reference. Blank once it stops matching anything known.</summary>
+    public string TemplateName => UiTemplate.Find(Model.Template)?.Name ?? "";
+
+    /// <summary>
+    /// Bring a copy of one of the game's screens in as a child of whatever is
+    /// selected.
+    /// <para/>
+    /// Starting a whole UI as a copy replaces the tree, which is right when the
+    /// screen IS the copy. A screen assembled from several of the game's pieces
+    /// - which is how its own gift window is built, from two lists and a close
+    /// button - needs them brought in one at a time instead.
+    /// </summary>
+    public RelayCommand AddCopyChildCommand => _addCopyChild ??= new RelayCommand(arg =>
+    {
+        var entry = arg as VanillaUiCatalog.Base ?? VanillaUiCatalog.Find(arg as string);
+        var vanilla = entry == null ? null : VanillaUiLibrary.Node(entry);
+        if (vanilla == null) return;
+
+        var parent = SelectedNode ?? Nodes.FirstOrDefault();
+        if (parent == null) return;
+
+        var copied = VanillaUiSeed.CopyOf(vanilla, VanillaUiLibrary.Assets.NameForKey);
+        if (copied != null) SelectedNode = parent.AddChild(copied);
+    }, arg => Nodes.Count > 0
+           && (arg is VanillaUiCatalog.Base || VanillaUiCatalog.Find(arg as string) != null));
+
+    private RelayCommand? _addCopyChild;
+
+    /// <summary>Add an object inside whatever is selected, built from a
+    /// template rather than bare.</summary>
+    public RelayCommand AddChildTemplateCommand => _addChildTemplate ??= new RelayCommand(arg =>
+    {
+        if (arg is not UiTemplate template) return;
+        var parent = SelectedNode ?? Nodes.FirstOrDefault();
+        if (parent == null) return;
+        SelectedNode = parent.AddChild(template.Build());
+    }, arg => arg is UiTemplate && Nodes.Count > 0);
+
+    private RelayCommand? _addChildTemplate;
+
+    /// <summary>
+    /// Put one object back the way the game has it.
+    /// <para/>
+    /// Undo works on a step; this works on an object, which is what an author
+    /// wants after nudging one panel about and deciding they preferred it where
+    /// it was. Afterwards the node asserts nothing and drops out of the pack.
+    /// </summary>
+    public void Reset(UiNodeViewModel node)
+    {
+        if (node == null || !node.IsVanilla || !Model.IsVanillaBased) return;
+        var vanilla = VanillaUiLibrary.Node(Catalog);
+        var against = vanilla == null ? null : VanillaUiDelta.NodeAt(vanilla, node.Model.Bind);
+        if (against == null) return;
+
+        VanillaUiSeed.ResetTo(node.Model, against, VanillaUiLibrary.Assets.NameForKey);
+        node.RefreshAll();
+        OnPropertyChanged(nameof(Summary));
+        Changed?.Invoke();
+    }
 
     /// <summary>Whether a node asserts anything against the game. Handed to
     /// every row so a tree can mark what has actually been touched — an author
@@ -280,7 +503,7 @@ public sealed class UiViewModel : ObservableObject
         Nodes.Clear();
 
         Model.Nodes.Add(merged);
-        var vm = new UiNodeViewModel(merged, null, HasChanges);
+        var vm = new UiNodeViewModel(merged, null, HasChanges, Reset);
         vm.Changed += Bubble;
         Nodes.Add(vm);
 
@@ -327,10 +550,23 @@ public sealed class UiViewModel : ObservableObject
 
     private static int CountNodes(UiNodeDef n) => 1 + n.Children.Sum(CountNodes);
 
+    /// <summary>
+    /// Counts edits. The preview watches this rather than the tree itself.
+    /// <para/>
+    /// An edit changes what is INSIDE the tree without replacing it, and a
+    /// dependency property does not fire when it is set to the object it
+    /// already holds - so binding the preview to the root alone leaves it
+    /// showing the state the tree was in when it was last selected. A number
+    /// that is different every time is the signal a binding can actually carry.
+    /// </summary>
+    public int Revision { get; private set; }
+
     private void Bubble()
     {
+        Revision++;
         OnPropertyChanged(nameof(Summary));
         OnPropertyChanged(nameof(RootNode));
+        OnPropertyChanged(nameof(Revision));
         Changed?.Invoke();
     }
 }

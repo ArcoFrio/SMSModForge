@@ -1,0 +1,336 @@
+{
+ "id": "Holiday_Hallway_Conditions/NewYearsEve_Core/Dialogue_NewYearsKiss_Toni",
+ "name": "Dialogue_NewYearsKiss_Toni",
+ "index": 7,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Toni"
+ ],
+ "roots": [
+  -1760076591,
+  -1093188969,
+  917117619,
+  -1785477283,
+  910563221,
+  -773535400,
+  1219933158,
+  -1356002760,
+  -1039364658
+ ],
+ "nodes": {
+  "-1760076591": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "...Hell of a view, huh? And I don’t just mean the skyline.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1093188969": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Not gonna lie... Being here again, it brings back memories.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "917117619": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -561086977,
+    -1243699307,
+    1392327779
+   ],
+   "actor": "Toni",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "And don't think I didn’t catch you staring every ten seconds. Kinda cute, not gonna lie.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1785477283": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Oh snap, already? I think I can hear them counting... We almost missed the big boom.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "910563221": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Still time for a cliché.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-773535400": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1032391524,
+    -72649396
+   ],
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "You asking for a kiss or waiting to be surprised?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NewYearsFireworkPool to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NewYearsFireworkPool",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/8_Pool/NewYearsFireworkPool"
+      }
+     }
+    }
+   ]
+  },
+  "-1356002760": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Happy New Year, babe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1039364658": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "You make it real easy to stay, you know?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1219933158": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Mwuaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NewYearsKiss_Toni to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NewYearsKiss_Toni",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/NewYearsKiss_Toni"
+      }
+     }
+    }
+   ]
+  },
+  "-1032391524": {
+   "kind": "text",
+   "parent": -773535400,
+   "actor": null,
+   "text": "(Kiss her)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-72649396": {
+   "kind": "text",
+   "parent": -773535400,
+   "actor": null,
+   "text": "(Wait and see what happens)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-561086977": {
+   "kind": "text",
+   "parent": 917117619,
+   "children": [
+    1418299642,
+    -592601010
+   ],
+   "actor": null,
+   "text": "That dress should be illegal.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1243699307": {
+   "kind": "text",
+   "parent": 917117619,
+   "children": [
+    -1888680532
+   ],
+   "actor": null,
+   "text": "It’s a good look.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1392327779": {
+   "kind": "text",
+   "parent": 917117619,
+   "children": [
+    -1132772943
+   ],
+   "actor": null,
+   "text": "It's alright.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1132772943": {
+   "kind": "text",
+   "parent": 1392327779,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yeah, sure. I can see the tent in your pants, buddy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1888680532": {
+   "kind": "text",
+   "parent": -1243699307,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yeah. I noticed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1418299642": {
+   "kind": "text",
+   "parent": -561086977,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "This old thing?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-592601010": {
+   "kind": "text",
+   "parent": -561086977,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": " It’s not even practical. Not a single fucking pocket! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "Holiday_Hallway_Conditions/NewYearsEve_Core/newyearskisscondition",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dialogue_NewYearsKiss_Toni and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Eve_NoSave1[newyearseveguest] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newyearseveguest",
+        "list": "Eve_NoSave1",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active TomboyToni_Newyearsdressbust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "TomboyToni_Newyearsdressbust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/TomboyToni_Newyearsdressbust"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

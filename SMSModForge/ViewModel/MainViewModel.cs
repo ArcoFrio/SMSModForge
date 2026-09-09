@@ -32,7 +32,11 @@ public sealed class MainViewModel : ObservableObject
 
     /// <summary>Records the current pack state as "saved". Called after New,
     /// Open, and a successful Save.</summary>
-    private void MarkSaved() => _savedSnapshot = PackRepository.SerializeAsSaved(Pack);
+    private void MarkSaved()
+    {
+        _savedSnapshot = PackRepository.SerializeAsSaved(Pack);
+        _versionOnDisk = Pack.PackVersion;
+    }
 
     /// <summary>
     /// True when the in-memory pack differs from the last saved snapshot.
@@ -71,6 +75,16 @@ public sealed class MainViewModel : ObservableObject
         // restored, so an undo made while editing an extension put the place
         // editor back on screen and moved the user to a different level entirely.
         string? extSource = SelectedVanillaExtension?.Source;
+        // And the UI tab, for the same reason as all of the above: RebindUis
+        // clears the selection outright, so an undo emptied the list, the tree
+        // and the preview at once and left nothing on screen to say whether the
+        // change had been undone or the editor had simply broken.
+        //
+        // By name rather than by index: an undo may be undoing the add or the
+        // removal of a UI, so the position of the one being edited is exactly
+        // the thing that cannot be relied on.
+        string? uiName = SelectedUi?.Model.Name;
+        string? uiNodeName = SelectedUi?.SelectedNode?.Model.Name;
 
         Undo.Suspended = true;
         try
@@ -115,6 +129,50 @@ public sealed class MainViewModel : ObservableObject
             var e = VanillaExtensions.FirstOrDefault(x => x.Source == extSource);
             if (e != null) SelectedVanillaExtension = e;
         }
+
+        if (uiName != null)
+        {
+            var u = Uis.FirstOrDefault(x => x.Model.Name == uiName);
+            if (u != null)
+            {
+                SelectedUi = u;
+
+                // And the object inside it, so an undo of a nudge leaves the
+                // handles on the thing that was nudged.
+                if (uiNodeName != null)
+                {
+                    var row = FindNode(u.Nodes, uiNodeName);
+                    u.SelectedNode = row;
+
+                    // The tree keeps its own highlight, and setting the view
+                    // model's selection does not move it. Without this the
+                    // property panel comes back filled in while the tree shows
+                    // nothing selected - which reads as the undo having lost
+                    // the object.
+                    if (row != null)
+                    {
+                        for (var up = row.Parent; up != null; up = up.Parent) up.IsExpanded = true;
+                        row.IsSelected = true;
+                    }
+                }
+            }
+        }
+    }
+
+    /// <summary>The first row with this name, anywhere in a UI's tree. Names
+    /// repeat across branches, so this can land on a sibling of the one that
+    /// was selected - which is still the right neighbourhood, and far better
+    /// than nothing selected at all.</summary>
+    private static UiNodeViewModel? FindNode(
+        System.Collections.Generic.IEnumerable<UiNodeViewModel> rows, string name)
+    {
+        foreach (var row in rows)
+        {
+            if (row.Model.Name == name) return row;
+            var deeper = FindNode(row.Children, name);
+            if (deeper != null) return deeper;
+        }
+        return null;
     }
 
     public ObservableCollection<CharacterViewModel> Characters { get; } = new();
@@ -188,6 +246,72 @@ public sealed class MainViewModel : ObservableObject
     /// for a session, so a plain list is fine for the picker's ItemsSource.</summary>
     public System.Collections.Generic.IReadOnlyList<string> VanillaGameVariableOptions
         => Model.VanillaGameVariables.AllNames;
+
+    /// <summary>
+    /// The same names under the list each belongs to.
+    /// <para/>
+    /// 1,924 of them flat is a scroll bar with no landmarks; under their 64
+    /// owning lists - Gallery, Events, Inventory, Cooldown - it is somewhere to
+    /// look. A name that appears in more than one list is filed under the first,
+    /// which is the same rule the catalog itself documents.
+    /// </summary>
+    public System.ComponentModel.ICollectionView VanillaGameVariableOptionsGrouped
+        => _vanillaVariablesGrouped ??= GroupUnder(
+            Model.VanillaGameVariables.AllNames,
+            v => Model.VanillaGameVariables.ListOf(v as string) is { Length: > 0 } list
+                 ? list : "Other");
+    private System.ComponentModel.ICollectionView? _vanillaVariablesGrouped;
+
+    /// <summary>
+    /// The pack's own variables, under the folders their author filed them in.
+    /// <para/>
+    /// Mirrors the Variables tab: somebody who put their flags in folders has
+    /// already said how they think about them, and a picker that ignores that
+    /// makes them think about it twice. Anything not in a folder sits under a
+    /// heading of its own rather than vanishing.
+    /// </summary>
+    public System.ComponentModel.ICollectionView VariableNameOptionsGrouped
+        => _variableNamesGrouped ??= GroupUnder(
+            VariableNameOptions, v => FolderOf(v as string));
+    private System.ComponentModel.ICollectionView? _variableNamesGrouped;
+
+    /// <summary>Which of the author's folders holds a variable, or "Ungrouped".</summary>
+    private string FolderOf(string? name)
+    {
+        if (string.IsNullOrEmpty(name)) return "Ungrouped";
+
+        string? Search(System.Collections.Generic.IEnumerable<Model.VariableFolderDef> folders,
+                       string trail)
+        {
+            foreach (var folder in folders)
+            {
+                string here = string.IsNullOrEmpty(trail) ? folder.Name : trail + " / " + folder.Name;
+                if (folder.Variables.Contains(name!, System.StringComparer.OrdinalIgnoreCase))
+                    return here;
+
+                string? deeper = Search(folder.Folders, here);
+                if (deeper != null) return deeper;
+            }
+            return null;
+        }
+
+        return Search(Pack.VariableFolders ?? new System.Collections.Generic.List<Model.VariableFolderDef>(), "")
+               ?? "Ungrouped";
+    }
+
+    /// <summary>
+    /// Levels, split into the pack's own and the game's.
+    /// <para/>
+    /// The labels already begin "This pack — " / "Vanilla — ", so the heading
+    /// is saying out loud what every row was repeating.
+    /// </summary>
+    public System.ComponentModel.ICollectionView LevelOptionsGrouped
+        => _levelOptionsGrouped ??= GroupUnder(
+            LevelOptions,
+            o => o is NavigatorTargetOption nav
+                 && nav.Token.StartsWith("place:", System.StringComparison.Ordinal)
+                 ? "This pack" : "The game's own");
+    private System.ComponentModel.ICollectionView? _levelOptionsGrouped;
 
     /// <summary>
     /// Levels available to a <see cref="NodeConditionTypes.LevelActive"/>
@@ -264,6 +388,23 @@ public sealed class MainViewModel : ObservableObject
     /// which is used by the older typed SceneRef editor).
     /// </summary>
     public ObservableCollection<string> SceneKeyOptions { get; } = new();
+
+    /// <summary>
+    /// The pack's own screens AND everything inside them, for the "UI" category
+    /// of the unified Set-Active action.
+    /// <para/>
+    /// A screen's token is its id, which is what the runtime looks up - the
+    /// built object is called "Pack_&lt;id&gt;" and an author should not have to
+    /// know that. An object inside one is "id/path/to/it", so a button can
+    /// switch a single panel of a screen rather than the whole screen: showing
+    /// one tab and hiding another is the same action twice, not a special kind
+    /// of its own.
+    /// <para/>
+    /// Screens the game already has are left out: they exist whether a pack
+    /// says so or not, and switching one off from an action is not something
+    /// this category can do.
+    /// </summary>
+    public ObservableCollection<NavigatorTargetOption> UiIdOptions { get; } = new();
 
     /// <summary>
     /// Overlay GameObject names for the "Level Overlay" category of the unified
@@ -400,6 +541,7 @@ public sealed class MainViewModel : ObservableObject
             // memory only) and enabled (saved to disk).
             ExportPackCommand?.Raise();
             ExportPackAsCommand?.Raise();
+            PublishPackCommand?.Raise();
         }
     }
 
@@ -502,7 +644,9 @@ public sealed class MainViewModel : ObservableObject
         {
             _selectedPlace = value;
             // Mutually exclusive with vanilla-extension selection — picking
-            // a place hides the extension editor.
+            // a place hides the extension editor. The list clears itself
+            // through its own two-way binding, which is why only the tree
+            // needs telling in the other direction.
             if (value != null && _selectedVanillaExtension != null)
             {
                 _selectedVanillaExtension = null;
@@ -544,14 +688,27 @@ public sealed class MainViewModel : ObservableObject
 
             OnPropertyChanged();
             OnPropertyChanged(nameof(SelectedUiPreviewToken));
+            // The offered list depends on which row is asking - its own choice
+            // has to stay in its own dropdown.
+            OnPropertyChanged(nameof(AvailableUiScreens));
             RemoveUiCommand?.Raise();
         }
+    }
+
+    /// <summary>A screen's name is half of what its entry in the action
+    /// dropdown reads as, so the list follows it.</summary>
+    private void UiRenamed(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(UiViewModel.Name)) RebuildUiOptions();
     }
 
     private void UiExtensionChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(UiViewModel.Source))
+        {
             OnPropertyChanged(nameof(SelectedUiPreviewToken));
+            OnPropertyChanged(nameof(AvailableUiScreens));
+        }
     }
 
     /// <summary>What the UI tab's preview should draw. Empty when nothing is
@@ -562,6 +719,25 @@ public sealed class MainViewModel : ObservableObject
     public RelayCommand AddOwnUiCommand { get; private set; } = null!;
     public RelayCommand RemoveUiCommand { get; private set; } = null!;
 
+    /// <summary>
+    /// The vanilla UI screens still on offer: everything this pack does not
+    /// already have a row for, plus whichever the current row is using so its
+    /// own choice does not disappear from its own dropdown.
+    /// <para/>
+    /// Two rows on one screen would be two sets of instructions for it, applied
+    /// in an order an author cannot see or control.
+    /// </summary>
+    public IEnumerable<VanillaUiCatalog.Base> AvailableUiScreens
+    {
+        get
+        {
+            var taken = Uis.Where(u => u != SelectedUi && u.IsVanillaBased)
+                           .Select(u => u.Source)
+                           .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            return VanillaUiCatalog.UsableBases.Where(b => !taken.Contains(b.Token));
+        }
+    }
+
     /// <summary>A change to a screen the game already has. Starts with none
     /// chosen: guessing would seed thousands of objects for a decision the
     /// author has not made, and every vanilla screen is as plausible a starting
@@ -570,32 +746,60 @@ public sealed class MainViewModel : ObservableObject
     {
         var vm = AddUi(new UiDef());
         vm.WantsVanilla = true;
+        OnPropertyChanged(nameof(AvailableUiScreens));
     }
 
-    /// <summary>A screen of the pack's own. Starts with one panel, because an
-    /// empty tree gives an author nothing to click and nothing to see.</summary>
-    private void AddOwnUi()
+    /// <summary>
+    /// A screen of the pack's own, started from a template.
+    /// <para/>
+    /// Never empty: an empty tree gives an author nothing to click and nothing
+    /// to see, and the first thing anyone needs is a shape on the screen they
+    /// can push about. Without a template named, the plainest one.
+    /// </summary>
+    private void AddOwnUi(object? arg)
     {
+        var template = arg as UiTemplate ?? UiTemplate.Find("panel");
+
         var def = new UiDef
         {
-            Name = UniqueUiName("New UI"),
+            Name = UniqueUiName(template?.Name ?? "New UI"),
             Id = Guid.NewGuid().ToString("N")[..8],
+            Template = template?.Key ?? "",
         };
-        def.Nodes.Add(new UiNodeDef
-        {
-            Name = "Panel",
-            Rect = new UiRectDef { Size = new[] { 600f, 400f } },
-            Image = new UiImageDef { Sprite = "Semi Rounded", Type = "Sliced", Tint = "#FFFFFFFF" },
-        });
+
+        if (template != null) def.Nodes.Add(template.Build());
+
+        // Animated on arrival unless the author says otherwise. Set when the
+        // screen is MADE rather than defaulted in the format: an absent "open"
+        // still means no animation, so opening a pack written before this
+        // cannot start animating screens underneath its author.
+        def.Open = UiOpenDef.LikeTheGame();
+
         AddUi(def);
     }
+
+    /// <summary>Every screen that can be copied. Unfiltered, unlike the
+    /// extension picker: copying one does not use it up, because a copy does
+    /// not touch it.</summary>
+    public IEnumerable<VanillaUiCatalog.Base> CopyableUiScreens => VanillaUiCatalog.UsableBases;
+
+    /// <summary>The shapes offered when starting a UI. A property rather than
+    /// the static list directly, so the menu binds to the window's own
+    /// DataContext like everything else on the tab.</summary>
+    public IEnumerable<UiTemplate> UiTemplates => UiTemplate.Screens;
+
+    /// <summary>The shapes offered when adding an object inside one.</summary>
+    public IEnumerable<UiTemplate> UiPieces => UiTemplate.Pieces;
 
     private UiViewModel AddUi(UiDef def)
     {
         Pack.Uis.Add(def);
         var vm = new UiViewModel(def);
+        vm.PropertyChanged += UiRenamed;
         Uis.Add(vm);
         SelectedUi = vm;
+        RebuildUiOptions();
+        OnPropertyChanged(nameof(AvailableUiScreens));
         return vm;
     }
 
@@ -608,17 +812,69 @@ public sealed class MainViewModel : ObservableObject
             if (!taken.Contains($"{wanted} {n}")) return $"{wanted} {n}";
     }
 
+    /// <summary>
+    /// Make a change the way a command would, for the edits that are not
+    /// commands - the ones a dialog makes when it closes.
+    /// <para/>
+    /// Both edges, for the same reason RelayCommand uses both: the first marks
+    /// off anything half-typed that has not been committed, and the second is
+    /// what actually turns this change into a step. With only the first, a
+    /// colour picked before anything else had been touched left the undo stack
+    /// empty and could not be undone at all.
+    /// </summary>
+    public void EditWithUndo(Action change)
+    {
+        if (change == null) return;
+        Undo.Checkpoint();
+        change();
+        Undo.Checkpoint();
+    }
+
     private void RemoveUi()
     {
         var chosen = SelectedUi;
         if (chosen == null) return;
+        chosen.PropertyChanged -= UiRenamed;
         Pack.Uis.Remove(chosen.Model);
         Uis.Remove(chosen);
         SelectedUi = Uis.FirstOrDefault();
+        RebuildUiOptions();
+        OnPropertyChanged(nameof(AvailableUiScreens));
+    }
+
+    /// <summary>
+    /// Teach the preview what a [PV:name] label should draw as: the variable's
+    /// declared default, which is what it holds the first time a player sees
+    /// the screen.
+    /// <para/>
+    /// Re-pointed at the current pack rather than captured once, so opening a
+    /// different pack does not leave labels showing the last one's values.
+    /// </summary>
+    private void BindPreviewVariables()
+    {
+        // Where the pack's own art lives, so the preview can draw it. Without
+        // this a pack-shipped picture is absent from the preview while being
+        // perfectly correct in the game.
+        if (Rendering.VanillaUiLibrary.IsAvailable)
+            Rendering.VanillaUiLibrary.Assets.PackRoot = PackRoot;
+
+        Rendering.UiTextTokens.Lookup = name =>
+        {
+            foreach (var v in Pack.Variables)
+                if (string.Equals(v.Name, name, StringComparison.OrdinalIgnoreCase))
+                    return v.DefaultValue ?? "";
+
+            // Not declared: leave the token visible. A label reading
+            // "[PV:Coims]" is a typo an author can see, and one reading "" is
+            // a typo they cannot.
+            return null;
+        };
     }
 
     private void RebindUis()
     {
+        BindPreviewVariables();
+
         // Packs written while UI extensions were a list of their own fold in
         // here, before anything reads Pack.Uis.
         Pack.MigrateUi();
@@ -627,8 +883,14 @@ public sealed class MainViewModel : ObservableObject
         // extension that holds three nodes on disk opens as the whole screen.
         // The delta pass prunes it back on save, so this cannot grow a manifest.
         foreach (var u in Pack.Uis)
-            Uis.Add(new UiViewModel(u));
+        {
+            var row = new UiViewModel(u);
+            row.PropertyChanged += UiRenamed;
+            Uis.Add(row);
+        }
         SelectedUi = null;
+        RebuildUiOptions();
+        OnPropertyChanged(nameof(AvailableUiScreens));
     }
 
     private VanillaPlaceExtensionViewModel? _selectedVanillaExtension;
@@ -642,12 +904,20 @@ public sealed class MainViewModel : ObservableObject
             {
                 _selectedPlace = null;
                 OnPropertyChanged(nameof(SelectedPlace));
+
+                // And the tree lets go of its highlighted row. Clearing only
+                // the view model left the row selected in the control, so
+                // clicking it again raised nothing and - with one item in each
+                // list - there was no way back to it.
+                PlaceTree.Deselect();
             }
             OnPropertyChanged();
             // Moving off an extension is the natural moment to re-evaluate
             // whether it still changes anything, so the sidebar markers track
             // edits without every node in every tree notifying the list.
             foreach (var ext in VanillaExtensions) ext.RefreshChangeIndicator();
+            // The offered list depends on which row is asking.
+            RebuildVanillaSourceOptions();
         }
     }
 
@@ -710,6 +980,7 @@ public sealed class MainViewModel : ObservableObject
                     RebuildSelectedNodeOutfitOptions();
                 }
                 OnPropertyChanged(nameof(SelectedNodeActorIsPlayer));
+                OnPropertyChanged(nameof(SelectedNodeShowsSpeaker));
                 // Tag list is per-dialogue but excludes the selected node, so it
                 // rebuilds on every node change rather than only on actor changes.
                 RebuildSelectedNodeJumpTagOptions();
@@ -752,6 +1023,7 @@ public sealed class MainViewModel : ObservableObject
         {
             OnPropertyChanged(nameof(SelectedNodeActorBustKey));
             OnPropertyChanged(nameof(SelectedNodeActorIsPlayer));
+                OnPropertyChanged(nameof(SelectedNodeShowsSpeaker));
             RebuildSelectedNodeExpressionOptions();
             RebuildSelectedNodeOutfitOptions();
             ApplyDefaultOutfitForActorChange();
@@ -865,6 +1137,21 @@ public sealed class MainViewModel : ObservableObject
     /// </summary>
     public bool SelectedNodeActorIsPlayer =>
         SpeakerFor(SelectedNode?.Actor ?? "")?.IsPlayer == true;
+
+    /// <summary>
+    /// Whether the selected node has a speaker worth asking about.
+    /// <para/>
+    /// Two nodes do not. The PLAYER's bust belongs to the game, so a pack has
+    /// no expressions or outfits to offer for it. And an option on a Choice is
+    /// a button rather than a line: whatever actor, expression or outfit it
+    /// carries changes nothing, because the option is drawn as text in a menu
+    /// and the scene behind it is still showing whoever spoke the prompt.
+    /// <para/>
+    /// Offering the fields anyway invites an author to set them and wonder why
+    /// nothing happens, which is worse than not offering them.
+    /// </summary>
+    public bool SelectedNodeShowsSpeaker
+        => !SelectedNodeActorIsPlayer && SelectedNode?.IsChoiceChild != true;
 
     /// <summary>
     /// Every tag in the selected node's dialogue — the destinations a Jump can
@@ -1257,8 +1544,10 @@ public sealed class MainViewModel : ObservableObject
     /// </summary>
     public RelayCommand ExportPackCommand { get; }
     public RelayCommand ExportPackAsCommand { get; }
+
+    /// <summary>Package the pack for players. See <see cref="PublishPack"/>.</summary>
+    public RelayCommand PublishPackCommand { get; }
     public RelayCommand AddCharacterCommand { get; }
-    public RelayCommand AddVanillaCharacterCommand { get; }
     public RelayCommand AddVoiceCharacterCommand { get; }
     public RelayCommand AddVanillaOutfitCommand { get; }
     public RelayCommand AddCharacterExpressionCommand { get; }
@@ -1360,6 +1649,8 @@ public sealed class MainViewModel : ObservableObject
     public RelayCommand AddMapButtonCommand { get; }
     public RelayCommand RemoveMapButtonCommand { get; }
     public RelayCommand AddDialogueCommand { get; }
+    public RelayCommand AddVanillaDialogueCommand { get; }
+    public RelayCommand RemoveVanillaDialogueCommand { get; }
     public RelayCommand AddDialogueFolderCommand { get; }
     public RelayCommand RemoveDialogueCommand { get; }
     public RelayCommand AddDialogueRootNodeCommand { get; }
@@ -1578,6 +1869,9 @@ public sealed class MainViewModel : ObservableObject
         // so each add/remove/toggle is its own undo step (text-field edits are
         // checkpointed separately on focus-loss by the window).
         RelayCommand.Executing += () => Undo.Checkpoint();
+        // And after, so a command's own change becomes a step even when it is
+        // the first change since the pack was opened - see RelayCommand.Executed.
+        RelayCommand.Executed += () => Undo.Checkpoint();
 
         // Keep the variable pickers live as variables are edited. Adding a
         // variable already rebuilt them, but editing an existing one's Name or
@@ -1587,6 +1881,15 @@ public sealed class MainViewModel : ObservableObject
         // appeared after a reload. Subscribing through the collection covers
         // every construction path (add, paste, duplicate, rebind) at one site.
         Variables.CollectionChanged += OnVariablesChanged;
+
+        // Renames have to reach the lists that NAME a record, not just the
+        // tab it lives on. Watching the collections rather than each creation
+        // site is what makes that reliable: a record can arrive by Add, by
+        // paste, by duplicate or by loading a pack, and a subscription hung on
+        // one of those paths is a rename that silently does not propagate.
+        WatchIdentities(Places, RebuildPlaceNameOptions);
+        WatchIdentities(Scenes, RebuildSceneOptions);
+        WatchIdentities(Npcs, RebuildNpcOptions);
         // RelayCommand.Executing checkpoints just before these run, so the most
         // recent change is captured before we step back/forward.
         UndoCommand = new RelayCommand(() => Undo.Undo(), () => Undo.CanUndo);
@@ -1601,8 +1904,8 @@ public sealed class MainViewModel : ObservableObject
         // only pack has nothing to bundle.
         ExportPackCommand   = new RelayCommand(ExportPack, () => PackRoot != null);
         ExportPackAsCommand = new RelayCommand(ExportPackAs, () => PackRoot != null);
+        PublishPackCommand  = new RelayCommand(PublishPack, () => PackRoot != null);
         AddCharacterCommand = new RelayCommand(AddCharacter);
-        AddVanillaCharacterCommand = new RelayCommand(() => AddCharacter(BustSource.Vanilla));
         AddVoiceCharacterCommand   = new RelayCommand(() => AddCharacter(BustSource.None));
         // A vanilla character adds outfits the same way a pack one does; the
         // editor just offers a bust picker instead of sprite fields.
@@ -1646,6 +1949,9 @@ public sealed class MainViewModel : ObservableObject
         AddVanillaExtensionCommand    = new RelayCommand(AddVanillaExtension);
         RemoveVanillaExtensionCommand = new RelayCommand(RemoveVanillaExtension, () => SelectedVanillaExtension != null);
         AddVanillaUiCommand = new RelayCommand(AddVanillaUi);
+        // Parameterised: the menu passes the template the author picked, and
+        // going through the command rather than a click handler is what puts
+        // the new UI on the undo stack.
         AddOwnUiCommand = new RelayCommand(AddOwnUi);
         RemoveUiCommand = new RelayCommand(RemoveUi, () => SelectedUi != null);
         AddVanillaExtensionButtonCommand = new RelayCommand(AddVanillaExtensionButton, () => SelectedVanillaExtension != null);
@@ -1655,6 +1961,10 @@ public sealed class MainViewModel : ObservableObject
         RemoveMapButtonCommand        = new RelayCommand(RemoveMapButton, () => SelectedMapButton != null);
 
         AddDialogueCommand            = new RelayCommand(AddDialogue);
+        AddVanillaDialogueCommand     = new RelayCommand(AddVanillaDialogue,
+                                                         () => VanillaDialogueCatalog.IsAvailable);
+        RemoveVanillaDialogueCommand  = new RelayCommand(RemoveVanillaDialogue,
+                                                         () => SelectedVanillaDialogue != null);
         AddDialogueFolderCommand      = new RelayCommand(AddDialogueFolder);
         DuplicateItemCommand          = new RelayCommand(DuplicateActiveItem);
         CopyItemCommand               = new RelayCommand(CopyActiveItem);
@@ -1662,10 +1972,10 @@ public sealed class MainViewModel : ObservableObject
         RenameItemCommand             = new RelayCommand(RenameActiveItem);
         DeleteItemCommand             = new RelayCommand(DeleteActiveItem);
         RemoveDialogueCommand         = new RelayCommand(RemoveDialogue, () => SelectedDialogue != null);
-        AddDialogueRootNodeCommand    = new RelayCommand(AddDialogueRootNode, () => SelectedDialogue != null);
-        AddDialogueChildNodeCommand   = new RelayCommand(AddDialogueChildNode, () => SelectedDialogue != null && SelectedNode != null);
-        AddDialogueSiblingNodeCommand = new RelayCommand(AddDialogueSiblingNode, () => SelectedDialogue != null && SelectedNode != null);
-        RemoveDialogueNodeCommand     = new RelayCommand(RemoveDialogueNode, () => SelectedDialogue != null && SelectedNode != null);
+        AddDialogueRootNodeCommand    = new RelayCommand(AddDialogueRootNode, () => CanEditDialogue);
+        AddDialogueChildNodeCommand   = new RelayCommand(AddDialogueChildNode, () => CanEditDialogue && SelectedNode != null);
+        AddDialogueSiblingNodeCommand = new RelayCommand(AddDialogueSiblingNode, () => CanEditDialogue && SelectedNode != null);
+        RemoveDialogueNodeCommand     = new RelayCommand(RemoveDialogueNode, () => CanEditDialogue && SelectedNode != null);
         // Paste selects what it pasted. Without this the subtree lands somewhere
         // in the list with the ORIGINAL still selected, which reads as "nothing
         // happened" on a long dialogue where the new rows are off-screen.
@@ -1676,13 +1986,13 @@ public sealed class MainViewModel : ObservableObject
         }
         CopyNodeCommand               = new RelayCommand(() => SelectedDialogue?.CopyNode(SelectedNode), () => SelectedNode != null);
         PasteNodeSiblingCommand       = new RelayCommand(() => PasteNodesAt(SelectedNode, NodePastePosition.Sibling),
-                                                         () => SelectedDialogue != null && SelectedNode != null && Services.EditorClipboard.HasNodes);
+                                                         () => CanEditDialogue && SelectedNode != null && Services.EditorClipboard.HasNodes);
         PasteNodeChildCommand         = new RelayCommand(() => PasteNodesAt(SelectedNode, NodePastePosition.Child),
-                                                         () => SelectedDialogue != null && SelectedNode != null && Services.EditorClipboard.HasNodes);
+                                                         () => CanEditDialogue && SelectedNode != null && Services.EditorClipboard.HasNodes);
         PasteNodeRootCommand          = new RelayCommand(() => PasteNodesAt(null, NodePastePosition.Root),
-                                                         () => SelectedDialogue != null && Services.EditorClipboard.HasNodes);
-        AddDialogueStartConditionCommand = new RelayCommand(AddDialogueStartCondition, () => SelectedDialogue != null);
-        AddDialogueStartConditionGroupCommand = new RelayCommand(() => SelectedDialogue?.AddStartConditionGroup(), () => SelectedDialogue != null);
+                                                         () => CanEditDialogue && Services.EditorClipboard.HasNodes);
+        AddDialogueStartConditionCommand = new RelayCommand(AddDialogueStartCondition, () => CanEditDialogue);
+        AddDialogueStartConditionGroupCommand = new RelayCommand(() => SelectedDialogue?.AddStartConditionGroup(), () => CanEditDialogue);
         AddNodeActionOnStartCommand   = new RelayCommand(AddNodeActionOnStart, () => SelectedNode != null);
         AddNodeActionOnFinishCommand  = new RelayCommand(AddNodeActionOnFinish, () => SelectedNode != null);
         AddNodeConditionCommand       = new RelayCommand(AddNodeCondition, () => SelectedNode != null);
@@ -1866,15 +2176,38 @@ public sealed class MainViewModel : ObservableObject
                 DisplayLabel: d.DisplayName));
     }
 
-    /// <summary>Builds the vanilla-source picker list once at construction
-    /// time. The vanilla catalog never changes during a session.</summary>
+    /// <summary>
+    /// The vanilla places this pack may still extend: everything it does not
+    /// already have an extension for, plus whichever the selected one is using
+    /// so its own choice does not disappear from its own dropdown.
+    /// <para/>
+    /// Two extensions of one place are two sets of instructions for one level,
+    /// applied in an order an author can neither see nor control. Taking the
+    /// used ones off the list is cheaper than explaining that afterwards.
+    /// <para/>
+    /// In-place sync, never Clear — see <see cref="SyncOptions"/>. This used to
+    /// run once at construction, where a Clear was harmless; now that it reruns
+    /// whenever a source changes, a Clear empties the bound combo, which hands
+    /// null back through the two-way binding and wipes the very Source that was
+    /// just set.
+    /// </summary>
     private void RebuildVanillaSourceOptions()
     {
-        VanillaSourceOptions.Clear();
+        var taken = VanillaExtensions
+            .Where(v => v != SelectedVanillaExtension)
+            .Select(v => v.Source)
+            .ToHashSet(System.StringComparer.OrdinalIgnoreCase);
+
+        var desired = new System.Collections.Generic.List<NavigatorTargetOption>();
         foreach (var v in VanillaPlaces.All.OrderBy(v => v.DisplayName, System.StringComparer.OrdinalIgnoreCase))
-            VanillaSourceOptions.Add(new NavigatorTargetOption(
-                Token: $"vanilla:{v.GoName}",
+        {
+            string token = $"vanilla:{v.GoName}";
+            if (taken.Contains(token)) continue;
+            desired.Add(new NavigatorTargetOption(
+                Token: token,
                 DisplayLabel: $"{v.DisplayName} ({v.GoName})"));
+        }
+        SyncOptions(VanillaSourceOptions, desired);
     }
 
     /// <summary>
@@ -1918,9 +2251,12 @@ public sealed class MainViewModel : ObservableObject
     {
         if (!HasUnsavedChanges) return true;
 
-        var choice = MessageBox.Show(
+        // Cancel under the harness: a test that has edited a pack must not be
+        // able to lose it to a prompt nobody answered.
+        var choice = Ask(
             "You have unsaved changes. Save before " + whatFollows + "?",
-            "Unsaved changes", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+            "Unsaved changes", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning,
+            MessageBoxResult.Cancel);
 
         switch (choice)
         {
@@ -1983,6 +2319,28 @@ public sealed class MainViewModel : ObservableObject
         // Seed the overlay list (no node selected yet → all-overlays fallback) so
         // the Set-Active row's Overlay category isn't empty before a node is picked.
         RebuildSelectedNodeOverlayOptions();
+
+        // Anything read straight off the pack rather than through a child view
+        // model. The version is the one that showed: a pack given 0.1.0 by the
+        // migration still displayed whatever the box had, so the field and the
+        // file disagreed the moment a pack was opened.
+        RefreshPackVersionDisplay();
+    }
+
+    /// <summary>
+    /// Re-read the pack's version into the field.
+    /// <para/>
+    /// Called wherever the version can move without the author typing it -
+    /// loading a pack the migration numbered, and a save that bumped it. The
+    /// field is the source of truth an author reads, so it has to follow the
+    /// pack rather than the other way round.
+    /// </summary>
+    private void RefreshPackVersionDisplay()
+    {
+        OnPropertyChanged(nameof(PackVersionText));
+        OnPropertyChanged(nameof(PackVersionIsValid));
+        OnPropertyChanged(nameof(HasPack));
+        OnPropertyChanged(nameof(AutoVersionNote));
     }
 
     private void OpenPack()
@@ -1997,13 +2355,21 @@ public sealed class MainViewModel : ObservableObject
         var lastOpen = Services.DialogFoldersService.Get(Services.DialogFoldersService.Key.Open);
         if (lastOpen != null) dialog.InitialDirectory = lastOpen;
 
+        if (Services.TestMode.Active) return;   // no picker, and nobody to use it
         if (dialog.ShowDialog() != true) return;
         var dir = Path.GetDirectoryName(dialog.FileName)!;
         Services.DialogFoldersService.Set(Services.DialogFoldersService.Key.Open, dir);
         OpenPackFromPath(dir);
     }
 
-    private void OpenPackFromPath(string dir)
+    /// <summary>
+    /// Open the pack in <paramref name="dir"/>.
+    /// <para/>
+    /// Internal rather than private so the harness can open a real pack from a
+    /// real folder - which is the only way to test what an author sees when a
+    /// migration changes something on the way in.
+    /// </summary>
+    internal void OpenPackFromPath(string dir)
     {
         // Guarded HERE rather than in each caller: the Open dialog and the
         // recent list both land here, and so will anything added later.
@@ -2012,17 +2378,34 @@ public sealed class MainViewModel : ObservableObject
         try
         {
             Pack = PackRepository.Load(dir);
-            PackRepository.ActivePack = Pack;
+            var migration = PackRepository.LastMigration;
+
+            // PackRoot first: the active root is read by anything that has to
+            // look at a FILE the pack names, and setting it before PackRoot
+            // moved published the folder we were leaving.
             PackRoot = dir;
+            PackRepository.ActivePack = Pack;
+            PackRepository.ActivePackRoot = PackRoot;
+
             RecordRecentFile(dir);
             RebindAll();
             Validate();
             MarkSaved();
             Undo.Reset();
+
+            // Said after the pack is on screen, so the author reads it with
+            // the thing it describes in front of them. Nothing has been
+            // written at this point - the file is still exactly as they left
+            // it until they choose to save.
+            // Not under the harness: this is a modal, and a modal raised by a
+            // test stops the whole suite dead on somebody's screen waiting for
+            // a click nobody is there to give. See Services.TestMode.
+            if (migration != null && migration.Migrated && !Services.TestMode.Active)
+                Tell(migration.Describe(), "Pack updated", MessageBoxImage.Information);
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.Message, "Open failed", MessageBoxButton.OK, MessageBoxImage.Error);
+            Tell(ex.Message, "Open failed", MessageBoxImage.Error);
         }
     }
 
@@ -2030,7 +2413,7 @@ public sealed class MainViewModel : ObservableObject
     {
         if (!Directory.Exists(path))
         {
-            MessageBox.Show($"Folder no longer exists:\n{path}", "Open failed", MessageBoxButton.OK, MessageBoxImage.Warning);
+            Tell($"Folder no longer exists:\n{path}", "Open failed", MessageBoxImage.Warning);
             return;
         }
         OpenPackFromPath(path);
@@ -2058,6 +2441,127 @@ public sealed class MainViewModel : ObservableObject
     /// <summary>Save to <see cref="PackRoot"/>. Returns false when the save
     /// didn't happen (failed, or the user cancelled the Save-as it fell back
     /// to) so callers that chain off a save — Export — can bail.</summary>
+    /// <summary>
+    /// Decide what version this save carries, and stop if the author is going
+    /// backwards without meaning to.
+    /// <para/>
+    /// The bump is worked out from the manifest about to be written against the
+    /// one written last time, so it describes what actually lands on disk
+    /// rather than what the editor happens to be holding. Nothing is written
+    /// here; returning false leaves the pack exactly as it was.
+    /// </summary>
+    private bool SettleVersionBeforeWriting()
+    {
+        var current = Pack.PackVersion;
+
+        // Going backwards is nearly always a typo, and it is the one version
+        // mistake a player will actually notice - their copy claims to be
+        // newer than the one being shipped.
+        if (Services.EditorPrefs.WarnOnLowerVersion && !Services.TestMode.Active
+            && _versionOnDisk != null && current < _versionOnDisk.Value)
+        {
+            var answer = Ask(
+                $"This pack is saved as {_versionOnDisk}, and you are about to save "
+                + $"it as {current} - a lower version.\n\n"
+                + "Players comparing version numbers will read the new copy as "
+                + "older than the one they already have.\n\n"
+                + $"Save it as {current} anyway?",
+                "Version goes backwards", MessageBoxButton.YesNo, MessageBoxImage.Warning,
+                MessageBoxResult.Yes);
+            if (answer != MessageBoxResult.Yes) return false;
+        }
+
+        // A save does not move the version, and no arrangement of saves does.
+        // A version identifies a RELEASE - what players got - and saving is
+        // something an author does forty times an afternoon while nothing has
+        // been released at all. Publishing is the event that moves it; see
+        // PublishPack and PublishRecord.
+        return true;
+    }
+
+    /// <summary>What the manifest on disk says, so a hand-typed change can be
+    /// told from the version this session started with.</summary>
+    private Model.PackVersion? _versionOnDisk;
+
+    /// <summary>
+    /// The pack's version, as the author types it.
+    /// <para/>
+    /// Kept as text rather than as three boxes: a version is one thing an
+    /// author thinks of as "1.2.0", and typing it is faster than three
+    /// spinners. Anything that is not three numbers is simply not stored,
+    /// so a half-typed "1." on the way to "1.3.0" does not blank the field.
+    /// </summary>
+    public string PackVersionText
+    {
+        get => Pack.Version;
+        set
+        {
+            if (Pack.Version == value) return;
+            Pack.Version = value ?? "";
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(PackVersionIsValid));
+            OnPropertyChanged(nameof(HasUnsavedChanges));
+        }
+    }
+
+    /// <summary>Whether what is typed is a version at all — drives the field's
+    /// warning, rather than refusing the keystroke.</summary>
+    public bool PackVersionIsValid => Model.PackVersion.Parse(Pack.Version) != null;
+
+    /// <summary>Whether there is a pack to have a version. The field is hidden
+    /// otherwise: an empty editor has nothing to number.</summary>
+    /// <summary>Whether saves move the version on their own — shown beside the
+    /// field so the author knows why the number changed.</summary>
+    public bool AutoVersionOn => Services.EditorPrefs.AutoVersion;
+
+    /// <summary>
+    /// The line under the version field explaining what saving will do to it.
+    /// <para/>
+    /// It changes once the allowance is used up, because "moved for you on
+    /// save" stops being true at that point, and an author watching a number
+    /// not move would reasonably conclude the feature was broken rather than
+    /// finished for the day.
+    /// </summary>
+    public string AutoVersionNote =>
+        "Moved when you publish, not when you save - a version is what players "
+        + "got. Type one here to set it yourself.";
+
+    public bool HasPack => PackRoot != null || Pack.Characters.Count > 0
+                           || Pack.Dialogues.Count > 0 || Pack.Places.Count > 0;
+
+    /// <summary>
+    /// Say something to the author — and say nothing at all when there is no
+    /// author, only the test harness.
+    /// <para/>
+    /// A modal raised from a test does not fail the run, it STOPS it: the box
+    /// sits on the screen of whoever is running the suite, waiting for a click,
+    /// and the whole thing looks like a hang. Every notice in this view model
+    /// goes through here so that cannot happen again. See Services.TestMode,
+    /// and the rule in CLAUDE.md.
+    /// </summary>
+    private static void Tell(string message, string title, MessageBoxImage icon)
+    {
+        if (Services.TestMode.Active) return;
+        MessageBox.Show(message, title, MessageBoxButton.OK, icon);
+    }
+
+    /// <summary>
+    /// Ask the author something, answering <paramref name="whenNobodyIsThere"/>
+    /// under the harness.
+    /// <para/>
+    /// The default is chosen per question rather than globally: some of these
+    /// should carry on unattended (a save proceeds) and some should not (an
+    /// unsaved-changes discard is refused, so a test cannot lose a pack it was
+    /// told to keep).
+    /// </summary>
+    private static MessageBoxResult Ask(string message, string title,
+                                        MessageBoxButton buttons, MessageBoxImage icon,
+                                        MessageBoxResult whenNobodyIsThere)
+    {
+        if (Services.TestMode.Active) return whenNobodyIsThere;
+        return MessageBox.Show(message, title, buttons, icon);
+    }
+
     private bool SavePack()
     {
         // Any in-progress variable rename becomes real here: saving is a
@@ -2076,6 +2580,7 @@ public sealed class MainViewModel : ObservableObject
         // cancelled dialog leaves it null.
         if (PackRoot is null) { SavePackAs(); return PackRoot != null; }
         if (!ConfirmChangesBeforeWriting()) return false;
+        if (!SettleVersionBeforeWriting()) return false;
         try
         {
             PackRepository.Save(Pack, PackRoot);
@@ -2087,7 +2592,7 @@ public sealed class MainViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.Message, "Save failed", MessageBoxButton.OK, MessageBoxImage.Error);
+            Tell(ex.Message, "Save failed", MessageBoxImage.Error);
             return false;
         }
     }
@@ -2108,6 +2613,10 @@ public sealed class MainViewModel : ObservableObject
     /// </summary>
     private bool ConfirmChangesBeforeWriting()
     {
+        // A window, not a message box - but it blocks a test run just the same,
+        // and it was still doing so after the MessageBox sweep. Under the
+        // harness a save simply goes ahead: the test asked for one.
+        if (Services.TestMode.Active) return true;
         if (!ConfirmOnSave || ConfirmSave == null) return true;
 
         var changes = PackDiff.Compute(_savedSnapshot, PackRepository.SerializeAsSaved(Pack));
@@ -2123,6 +2632,50 @@ public sealed class MainViewModel : ObservableObject
     /// author in the local editor prefs (never in the pack); toggled from the
     /// Options menu or by the dialog's own "Don't ask again".
     /// </summary>
+    /// <summary>Whether saves move the version on their own. See
+    /// <see cref="Services.EditorPrefs.AutoVersion"/>.</summary>
+    public bool AutoVersion
+    {
+        get => Services.EditorPrefs.AutoVersion;
+        set
+        {
+            if (Services.EditorPrefs.AutoVersion == value) return;
+            Services.EditorPrefs.AutoVersion = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(AutoVersionOn));
+        }
+    }
+
+    /// <summary>Whether saving a lower version asks first.</summary>
+    public bool WarnOnLowerVersion
+    {
+        get => Services.EditorPrefs.WarnOnLowerVersion;
+        set
+        {
+            if (Services.EditorPrefs.WarnOnLowerVersion == value) return;
+            Services.EditorPrefs.WarnOnLowerVersion = value;
+            OnPropertyChanged();
+        }
+    }
+
+    /// <summary>
+    /// Whether a large export asks first.
+    /// <para/>
+    /// Turning it back ON also clears this pack's "don't warn again", because
+    /// otherwise an author who set that from the prompt would tick the option
+    /// here and see nothing change - the per-pack answer would still be
+    /// suppressing it, invisibly.
+    /// </summary>
+    public bool WarnOnLargeExport
+    {
+        get => !Services.EditorPrefs.IsQuietOnExportSize(Pack.PackId);
+        set
+        {
+            Services.EditorPrefs.SetQuietOnExportSize(Pack.PackId, !value);
+            OnPropertyChanged();
+        }
+    }
+
     public bool ConfirmOnSave
     {
         get => Services.EditorPrefs.ConfirmOnSave;
@@ -2162,6 +2715,7 @@ public sealed class MainViewModel : ObservableObject
             Filter = "Mod pack manifest (modpack.json)|modpack.json",
             Title = "Save pack to folder",
         };
+        if (Services.TestMode.Active) return;   // no picker, and nobody to use it
         if (dialog.ShowDialog() != true) return;
         var dir = Path.GetDirectoryName(dialog.FileName)!;
 
@@ -2172,13 +2726,16 @@ public sealed class MainViewModel : ObservableObject
         if (Services.PackFolderSafety.RiskOf(dir) is string risk)
         {
             string suggested = Services.PackFolderSafety.SuggestSubfolder(dir, Pack.PackId);
-            var answer = MessageBox.Show(
+            var answer = Ask(
                 $"That is {risk}.\n\n" +
                 "A pack owns its whole folder: everything inside it, including " +
                 "every subfolder, is bundled into the .smspack when you export. " +
                 "Saving here would make all of it part of the pack.\n\n" +
                 $"Create a folder for the pack instead?\n{suggested}",
-                "Save pack", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                "Save pack", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning,
+                // Yes under the harness: make the subfolder rather than
+                // saving into whatever folder a test happened to point at.
+                MessageBoxResult.Yes);
 
             if (answer == MessageBoxResult.Cancel) return;
             if (answer == MessageBoxResult.Yes)
@@ -2186,8 +2743,7 @@ public sealed class MainViewModel : ObservableObject
                 try { Directory.CreateDirectory(suggested); dir = suggested; }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Could not create the folder",
-                                    MessageBoxButton.OK, MessageBoxImage.Error);
+                    Tell(ex.Message, "Could not create the folder", MessageBoxImage.Error);
                     return;
                 }
             }
@@ -2247,6 +2803,7 @@ public sealed class MainViewModel : ObservableObject
                 ?? Services.DialogFoldersService.Get(Services.DialogFoldersService.Key.Export)
                 ?? PackRoot,
         };
+        if (Services.TestMode.Active) return;   // no picker, and nobody to use it
         if (dialog.ShowDialog() != true) return;
         Services.DialogFoldersService.Set(
             Services.DialogFoldersService.Key.Export, Path.GetDirectoryName(dialog.FileName));
@@ -2285,13 +2842,18 @@ public sealed class MainViewModel : ObservableObject
 
         if (files <= SuspiciousExportFileCount && bytes <= SuspiciousExportBytes) return true;
 
+        // A pack that is legitimately big is big every time, so an author who
+        // has looked once can say so - for THIS pack, leaving the warning in
+        // place for the others they open.
+        if (Services.EditorPrefs.IsQuietOnExportSize(Pack.PackId)) return true;
+        if (Services.TestMode.Active) return true;
+
         double mb = bytes / 1024.0 / 1024.0;
-        return MessageBox.Show(
-            $"This pack folder holds at least {files} files ({mb:N0} MB):\n{PackRoot}\n\n" +
-            "Everything in it goes into the .smspack, including anything that is " +
-            $"not part of the pack.\n\nExport anyway?",
-            "Export pack", MessageBoxButton.YesNo, MessageBoxImage.Warning)
-            == MessageBoxResult.Yes;
+        var answer = View.ExportSizeWindow.Ask(
+            System.Windows.Application.Current?.MainWindow, files, mb, PackRoot!);
+
+        if (answer.Quiet) Services.EditorPrefs.SetQuietOnExportSize(Pack.PackId, true);
+        return answer.Export;
     }
 
     private bool EnsureSavedForExport()
@@ -2300,10 +2862,10 @@ public sealed class MainViewModel : ObservableObject
         // PackRoot, but the user might dock-disable the menu state cache.
         if (PackRoot is null)
         {
-            MessageBox.Show(
+            Tell(
                 "Save the pack to disk before exporting — the .smspack zip " +
                 "is built from the on-disk folder.",
-                "Export pack", MessageBoxButton.OK, MessageBoxImage.Information);
+                "Export pack", MessageBoxImage.Information);
             return false;
         }
         return SavePack();   // SavePack already reported any failure
@@ -2315,6 +2877,165 @@ public sealed class MainViewModel : ObservableObject
 
     /// <summary>Likewise for size.</summary>
     private const long SuspiciousExportBytes = 512L * 1024 * 1024;
+
+    /// <summary>
+    /// The version publishing would give the pack, and whether it is moving.
+    /// <para/>
+    /// A version the author typed is left exactly as typed: it outranks
+    /// anything worked out from a diff, because declaring a release is a
+    /// judgement about the work and no amount of counting records can make it.
+    /// "Typed" means different from what the last publish wrote, which is the
+    /// only definition that survives the editor closing and reopening.
+    /// </summary>
+    internal (Model.PackVersion Version, Model.VersionBump.Change Change) VersionForPublish()
+    {
+        var current = Pack.PackVersion;
+
+        var published = Model.PublishRecord.PublishedVersion(PackRoot);
+        if (published != null && current != published.Value)
+            return (current, Model.VersionBump.Change.None);
+
+        var change = Model.VersionBump.Classify(
+            Model.PublishRecord.Read(PackRoot), PackRepository.SerializeAsSaved(Pack));
+
+        return (Model.VersionBump.Next(current, change), change);
+    }
+
+    /// <summary>
+    /// Package the pack the way a player should receive it, and put the version
+    /// on it.
+    /// <para/>
+    /// This is the release, and it is the only thing that moves the version.
+    /// Everything else about it follows from that:
+    /// <list type="bullet">
+    ///   <item>It validates first, and an error stops it unless the author
+    ///   overrules. Broken references are ordinary while you work, and are the
+    ///   one thing that should not leave the building.</item>
+    ///   <item>It shows the number before writing it, because a version is a
+    ///   claim about the work and the author is the one making it.</item>
+    ///   <item>It opens the folder afterwards. An archive an author cannot find
+    ///   is an archive they build again.</item>
+    /// </list>
+    /// </summary>
+    private void PublishPack()
+    {
+        if (PackRoot == null) return;
+        if (!EnsureSavedForExport()) return;
+
+        // 1. Nothing broken ships without the author being told.
+        Validate();
+        int errors = Issues.Count(i => i.Severity == Validation.Severity.Error);
+        if (errors > 0)
+        {
+            var carryOn = Ask(
+                $"{Pack.PackId} has {errors} validation error(s).\n\n"
+                + "Errors are things the runtime cannot resolve - a missing sprite, a "
+                + "dialogue pointing at a character that is not there - so players would "
+                + "meet them as the pack half-working.\n\n"
+                + "Publish anyway?",
+                "Publish with errors", MessageBoxButton.YesNo, MessageBoxImage.Warning,
+                MessageBoxResult.No);
+            if (carryOn != MessageBoxResult.Yes) return;
+        }
+
+        // 2. The version this release carries.
+        var (version, change) = VersionForPublish();
+        string moving = change == Model.VersionBump.Change.None
+            ? $"version {version}"
+            : $"version {Pack.Version} to {version}";
+
+        var remembered = Services.PublishPathService.Get(PackRoot);
+        var dialog = new SaveFileDialog
+        {
+            FileName = Model.PackPublisher.ArchiveNameFor(Pack.PackId, version),
+            Filter = "Player download (*.zip)|*.zip",
+            Title = "Publish " + Pack.PackId + " - " + moving,
+            InitialDirectory = (remembered != null ? Path.GetDirectoryName(remembered) : null)
+                ?? Services.DialogFoldersService.Get(Services.DialogFoldersService.Key.Export)
+                ?? PackRoot,
+        };
+        if (Services.TestMode.Active) return;   // no picker, and nobody to use it
+        if (dialog.ShowDialog() != true) return;
+
+        Services.PublishPathService.Set(PackRoot, dialog.FileName);
+        RunPublish(dialog.FileName, version);
+    }
+
+    /// <summary>
+    /// Write the archive, record what was published, and show the author where
+    /// it went.
+    /// <para/>
+    /// Split from the asking so a test can publish without a file dialog.
+    /// </summary>
+    internal Model.PackPublisher.Result? RunPublish(string outputZip, Model.PackVersion version)
+    {
+        if (PackRoot == null) return null;
+        if (!ConfirmExportScale()) return null;
+
+        // The number goes into the manifest BEFORE the pack is packaged, or the
+        // archive is named for a version the pack inside it does not claim.
+        var was = Pack.PackVersion;
+        Pack.PackVersion = version;
+
+        try
+        {
+            PackRepository.Save(Pack, PackRoot);
+            MarkSaved();
+            RefreshPackVersionDisplay();
+
+            var made = Model.PackPublisher.Publish(PackRoot, outputZip, Pack.PackId);
+
+            // Only now, and only on success. A failed publish that moved the
+            // record would make the NEXT release under-report what changed,
+            // by comparing against a release nobody ever got.
+            Model.PublishRecord.Write(PackRoot, PackRepository.SerializeAsSaved(Pack));
+
+            Tell($"Published {Pack.PackId} v{version}.\n\n"
+                 + $"{made.OutputPath}\n"
+                 + $"{made.Bytes / 1024.0 / 1024.0:N1} MB, containing {made.EntryPath}\n\n"
+                 + "Tell players to extract it into their game folder - the one with the "
+                 + "game's .exe in it. That is the whole installation.",
+                 "Published", MessageBoxImage.Information);
+
+            ShowInFolder(made.OutputPath);
+            return made;
+        }
+        catch (Exception ex)
+        {
+            // Put the version back. Nothing shipped, so nothing claims it.
+            Pack.PackVersion = was;
+            RefreshPackVersionDisplay();
+            Tell(ex.Message, "Publish failed", MessageBoxImage.Error);
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Open the folder holding a file, with the file selected.
+    /// <para/>
+    /// Guarded like everything else the editor does for a person rather than
+    /// for the pack: a window opening on somebody desktop during a test run is
+    /// the same failure as a modal, minus the hang.
+    /// </summary>
+    private static void ShowInFolder(string path)
+    {
+        if (Services.TestMode.Active) return;
+
+        try
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "explorer.exe",
+                Arguments = "/select,\"" + path + "\"",
+                UseShellExecute = true,
+            });
+        }
+        catch (Exception)
+        {
+            // Not being shown the folder is a smaller problem than a dialog
+            // about not being shown the folder.
+        }
+    }
 
     private void RunExport(string outputFile)
     {
@@ -2329,13 +3050,14 @@ public sealed class MainViewModel : ObservableObject
             var result = PackExporter.Export(PackRoot!, outputFile);
             double srcMb = result.SourceBytes / 1024.0 / 1024.0;
             double outMb = result.CompressedBytes / 1024.0 / 1024.0;
-            MessageBox.Show(
-                $"Exported {result.FileCount} file(s) — {srcMb:N1} MB source → {outMb:N1} MB packed:\n{result.OutputPath}",
-                "Export complete", MessageBoxButton.OK, MessageBoxImage.Information);
+            Tell(
+                $"Exported {Pack.PackId} v{Pack.Version} - {result.FileCount} file(s), "
+                + $"{srcMb:N1} MB source, {outMb:N1} MB packed:\n{result.OutputPath}",
+                "Export complete", MessageBoxImage.Information);
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.Message, "Export failed", MessageBoxButton.OK, MessageBoxImage.Error);
+            Tell(ex.Message, "Export failed", MessageBoxImage.Error);
         }
     }
 
@@ -2374,12 +3096,12 @@ public sealed class MainViewModel : ObservableObject
     {
         var ch = SelectedCharacter;
         if (ch == null) return;
-        if (System.Windows.MessageBox.Show(
-                $"Delete '{ch.Display}' and its {ch.Outfits.Count} outfit(s)?" +
+        // OK under the harness: a test that asked for a delete meant it.
+        if (Ask($"Delete '{ch.Display}' and its {ch.Outfits.Count} outfit(s)?" +
                 System.Environment.NewLine + System.Environment.NewLine +
                 "Dialogue lines that name it as the speaker are left as they are.",
-                "Delete character", System.Windows.MessageBoxButton.OKCancel,
-                System.Windows.MessageBoxImage.Warning) != System.Windows.MessageBoxResult.OK)
+                "Delete character", MessageBoxButton.OKCancel,
+                MessageBoxImage.Warning, MessageBoxResult.OK) != MessageBoxResult.OK)
             return;
         Undo.Checkpoint();
         Pack.Characters.Remove(ch.Model);
@@ -2394,10 +3116,9 @@ public sealed class MainViewModel : ObservableObject
         var ch = SelectedCharacter;
         var o = SelectedOutfit;
         if (ch == null || o == null) return;
-        if (System.Windows.MessageBox.Show(
-                $"Delete outfit '{o.Display}'?", "Delete outfit",
-                System.Windows.MessageBoxButton.OKCancel,
-                System.Windows.MessageBoxImage.Warning) != System.Windows.MessageBoxResult.OK)
+        if (Ask($"Delete outfit '{o.Display}'?", "Delete outfit",
+                MessageBoxButton.OKCancel, MessageBoxImage.Warning,
+                MessageBoxResult.OK) != MessageBoxResult.OK)
             return;
         Undo.Checkpoint();
         ch.RemoveOutfit(o);
@@ -2471,17 +3192,38 @@ public sealed class MainViewModel : ObservableObject
 
     private void AddVanillaExtension()
     {
-        // Default to the first vanilla source (Beach is index 14 — a sensible
-        // common case — but anything is fine; the user will pick the real
-        // source in the editor).
+        // Beach is the sensible common case, but only while it is still free.
+        // Two extensions of the same place are two sets of instructions for one
+        // level, and which of them wins is not something an author can see or
+        // control - so the default steps along to the next unused place rather
+        // than handing out a conflict on the second click.
         var def = new VanillaPlaceExtensionDef
         {
-            Source = $"vanilla:{VanillaPlaces.All[14].GoName}",
+            Source = $"vanilla:{FirstFreeVanillaPlace().GoName}",
         };
         Pack.VanillaExtensions.Add(def);
         var vm = new VanillaPlaceExtensionViewModel(def);
         VanillaExtensions.Add(vm);
         SelectedVanillaExtension = vm;
+        RebuildVanillaSourceOptions();
+    }
+
+    /// <summary>The first vanilla place this pack does not already extend,
+    /// starting from Beach. Falls back to Beach when every one is taken, which
+    /// needs 100-odd extensions and is not worth a different answer.</summary>
+    private VanillaPlaces.VanillaPlace FirstFreeVanillaPlace()
+    {
+        var taken = VanillaExtensions
+            .Select(v => v.Source)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        int count = VanillaPlaces.All.Count;
+        for (int i = 0; i < count; i++)
+        {
+            var entry = VanillaPlaces.All[(14 + i) % count];
+            if (!taken.Contains($"vanilla:{entry.GoName}")) return entry;
+        }
+        return VanillaPlaces.All[14];
     }
 
     private void RemoveVanillaExtension()
@@ -2550,7 +3292,8 @@ public sealed class MainViewModel : ObservableObject
         foreach (var d in Pack.Dialogues)
             Dialogues.Add(HookDebugTracking(new DialogueViewModel(d)));
         BuildDialogueTree();
-        SelectedDialogue = Dialogues.FirstOrDefault();
+        RefreshVanillaDialogues();
+        SelectedDialogue = Dialogues.FirstOrDefault(d => !d.IsVanillaBased) ?? Dialogues.FirstOrDefault();
         RefreshDebuggedDialogues();
     }
 
@@ -2563,6 +3306,69 @@ public sealed class MainViewModel : ObservableObject
     // SyncFoldersToModel writes it back.
 
     public ObservableCollection<DialogueTreeItem> DialogueTree { get; } = new();
+
+    /// <summary>
+    /// Changes to the game's own conversations, listed apart from the pack's.
+    /// <para/>
+    /// Kept separate because they are a different kind of thing: a pack's
+    /// dialogue is one it wrote and can name, group and rename, while these are
+    /// the game's, identified by where they sit in the scene. Folders and
+    /// renaming mean nothing to them, and mixed into one tree the two read as
+    /// the same.
+    /// <para/>
+    /// Still in <see cref="Dialogues"/> as well, which stays the whole list -
+    /// key checks, validation and saving all want every conversation.
+    /// </summary>
+    public ObservableCollection<DialogueViewModel> VanillaDialogues { get; } = new();
+
+    /// <summary>Rebuild the vanilla list from the whole one.</summary>
+    public void RefreshVanillaDialogues()
+    {
+        var wanted = Dialogues.Where(d => d.IsVanillaBased || d.WantsVanilla).ToList();
+        VanillaDialogues.Clear();
+        foreach (var d in wanted) VanillaDialogues.Add(d);
+        OnPropertyChanged(nameof(AvailableVanillaDialogues));
+    }
+
+    /// <summary>The conversation picked in the vanilla list. Shares the detail
+    /// pane with the tree, since both edit the same kind of thing.</summary>
+    public DialogueViewModel? SelectedVanillaDialogue
+    {
+        get => _selectedVanillaDialogue;
+        set
+        {
+            _selectedVanillaDialogue = value;
+            OnPropertyChanged();
+            if (value != null)
+            {
+                SelectedDialogue = value;
+
+                // The tree lets go, so coming back to a pack dialogue is a
+                // real change rather than a click on a row the control still
+                // thinks is selected.
+                DeselectDialogueTree();
+            }
+        }
+    }
+
+    /// <summary>Release the Dialogues tree's highlighted row, leaving the
+    /// detail pane on whatever the vanilla list picked.</summary>
+    private void DeselectDialogueTree()
+    {
+        if (_selectedDialogueTreeItem == null) return;
+        _selectedDialogueTreeItem.IsSelected = false;
+        _selectedDialogueTreeItem = null;
+        OnPropertyChanged(nameof(SelectedDialogueTreeItem));
+    }
+
+    /// <summary>
+    /// Whether there is a dialogue that can actually hold what a control would
+    /// add. See <see cref="DialogueViewModel.IsEditable"/>: a "+ Vanilla" row
+    /// with no conversation chosen yet is not one.
+    /// </summary>
+    private bool CanEditDialogue => SelectedDialogue?.IsEditable == true;
+
+    private DialogueViewModel? _selectedVanillaDialogue;
 
     /// <summary>Backs the Dialogues sidebar search box.</summary>
     public TreeFilterViewModel DialogueTreeFilter { get; }
@@ -2579,9 +3385,27 @@ public sealed class MainViewModel : ObservableObject
         get => _selectedDialogueTreeItem;
         set
         {
+            if (_selectedDialogueTreeItem != null
+                && !ReferenceEquals(_selectedDialogueTreeItem, value))
+                _selectedDialogueTreeItem.IsSelected = false;
+
             _selectedDialogueTreeItem = value;
+            if (value != null) value.IsSelected = true;
             OnPropertyChanged();
-            if (value is DialogueLeafNode leaf) SelectedDialogue = leaf.Dialogue;
+
+            if (value is DialogueLeafNode leaf)
+            {
+                SelectedDialogue = leaf.Dialogue;
+
+                // And the vanilla list lets go. It clears its own highlight
+                // through the two-way binding; this is what stops the pane
+                // from following a row nobody is pointing at any more.
+                if (_selectedVanillaDialogue != null)
+                {
+                    _selectedVanillaDialogue = null;
+                    OnPropertyChanged(nameof(SelectedVanillaDialogue));
+                }
+            }
         }
     }
 
@@ -2592,7 +3416,7 @@ public sealed class MainViewModel : ObservableObject
         foreach (var f in Pack.DialogueFolders)
             DialogueTree.Add(BuildFolderNode(f, placed));
         foreach (var d in Dialogues)
-            if (!placed.Contains(d.Key))
+            if (!placed.Contains(d.Key) && !d.IsVanillaBased && !d.WantsVanilla)
                 DialogueTree.Add(new DialogueLeafNode(d));
         SortTree(DialogueTree);
         // A rebuild replaces every node, so re-apply any live search.
@@ -3012,8 +3836,22 @@ public sealed class MainViewModel : ObservableObject
     private CharacterViewModel? SpeakerFor(string actorKey)
     {
         if (string.IsNullOrWhiteSpace(actorKey)) return null;
-        return Characters.FirstOrDefault(
+
+        var own = Characters.FirstOrDefault(
             c => string.Equals(c.Key, actorKey, StringComparison.OrdinalIgnoreCase));
+        if (own != null) return own;
+
+        // A vanilla line names the actor ASSET, which for 69 of the game's
+        // actors is not what the game calls them: the one filed as "DrFrost"
+        // speaks as Doctor Frost, and the cast is keyed by the second. Without
+        // this the speaker simply is not found, and a vanilla line shows a file
+        // name over an empty outfit picker.
+        //
+        // The pack's own key is tried first and wins, so nothing here can take
+        // a name an author has already claimed.
+        var cast = VanillaCharacters.Find(VanillaDialogueCatalog.SpokenActorName(actorKey));
+        return cast == null ? null : Characters.FirstOrDefault(
+            c => string.Equals(c.Key, cast.Key, StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>The colour authored for a speaker key, or null when the speaker
@@ -3434,18 +4272,56 @@ public sealed class MainViewModel : ObservableObject
     /// <para/>
     /// Items are matched by value equality (records / strings), so re-created
     /// but equal entries count as surviving.
+    /// <para/>
+    /// Repeats in <paramref name="desired"/> are handled rather than assumed
+    /// away. The first version searched from the start of the collection every
+    /// time, so a value wanted twice kept finding the copy already placed:
+    /// nothing was ever inserted for the second one, the collection stayed
+    /// shorter than the list being applied, and the walk eventually ran off the
+    /// end - "Index must be within the bounds of the List", thrown while opening
+    /// a pack. Counting what is wanted and searching only from the position
+    /// being filled keeps every copy.
     /// </summary>
     private static void SyncOptions<T>(ObservableCollection<T> target, System.Collections.Generic.IList<T> desired)
     {
+        // How many of each value the new list wants, so a collection holding
+        // two of something the list wants twice keeps both.
+        var wanted = new System.Collections.Generic.Dictionary<T, int>();
+        foreach (var item in desired)
+        {
+            if (item == null) continue;
+            int held;
+            wanted.TryGetValue(item, out held);
+            wanted[item] = held + 1;
+        }
+
         for (int i = target.Count - 1; i >= 0; i--)
-            if (!desired.Contains(target[i])) target.RemoveAt(i);
+        {
+            var item = target[i];
+            int spare;
+            if (item != null && wanted.TryGetValue(item, out spare) && spare > 0) wanted[item] = spare - 1;
+            else target.RemoveAt(i);
+        }
 
         for (int i = 0; i < desired.Count; i++)
         {
-            int cur = target.IndexOf(desired[i]);
+            // From i, not from 0: everything before it is already in its final
+            // place, and searching over it would keep matching an earlier copy
+            // of a repeated value instead of placing this one.
+            int cur = IndexOfFrom(target, desired[i], i);
             if (cur < 0) target.Insert(i, desired[i]);
             else if (cur != i) target.Move(cur, i);
         }
+    }
+
+    /// <summary>First index at or after <paramref name="from"/> holding
+    /// <paramref name="value"/>, or -1.</summary>
+    private static int IndexOfFrom<T>(ObservableCollection<T> list, T value, int from)
+    {
+        var same = System.Collections.Generic.EqualityComparer<T>.Default;
+        for (int i = from; i < list.Count; i++)
+            if (same.Equals(list[i], value)) return i;
+        return -1;
     }
 
     public void RebuildDialogueRoomTalkOptions()
@@ -3532,6 +4408,62 @@ public sealed class MainViewModel : ObservableObject
         SyncFoldersToModel();
         SelectedDialogueTreeItem = leaf;
         SelectedDialogue = vm;
+    }
+
+    /// <summary>
+    /// A change to a conversation the game already has.
+    /// <para/>
+    /// Starts with none chosen, the same as a vanilla screen: guessing would
+    /// seed a hundred lines for a decision the author has not made, and every
+    /// one of the game's 722 conversations is as plausible a starting point as
+    /// any other.
+    /// </summary>
+    private void AddVanillaDialogue()
+    {
+        var def = new DialogueDef { Key = $"dialogue{Pack.Dialogues.Count + 1}" };
+        Pack.Dialogues.Add(def);
+
+        var vm = HookDebugTracking(new DialogueViewModel(def)) as DialogueViewModel;
+        if (vm == null) return;
+        vm.WantsVanilla = true;
+        Dialogues.Add(vm);
+
+        RefreshVanillaDialogues();
+        SelectedVanillaDialogue = vm;
+    }
+
+    /// <summary>
+    /// The conversations still available to extend.
+    /// <para/>
+    /// Filtered like the UI extension picker: two extensions of one
+    /// conversation would both write into the same lines, and the second to
+    /// load would win silently.
+    /// </summary>
+    public IEnumerable<VanillaDialogueCatalog.Entry> AvailableVanillaDialogues
+    {
+        get
+        {
+            var taken = VanillaDialogues
+                .Where(d => d != SelectedDialogue)
+                .Select(d => d.Model.Source)
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            return VanillaDialogueCatalog.All.Where(e => !taken.Contains(e.Token));
+        }
+    }
+
+    /// <summary>Drop a change to one of the game's own conversations. The
+    /// conversation itself is untouched — it was never the pack's.</summary>
+    private void RemoveVanillaDialogue()
+    {
+        var doomed = SelectedVanillaDialogue;
+        if (doomed == null) return;
+
+        Pack.Dialogues.Remove(doomed.Model);
+        Dialogues.Remove(doomed);
+        RefreshVanillaDialogues();
+        SelectedVanillaDialogue = VanillaDialogues.FirstOrDefault();
+        if (SelectedVanillaDialogue == null)
+            SelectedDialogue = Dialogues.FirstOrDefault();
     }
 
     private void RemoveDialogue()
@@ -3650,9 +4582,38 @@ public sealed class MainViewModel : ObservableObject
         // Speakers come from Characters — the actor list is emptied by
         // CharacterMerge once it has folded them in, so sourcing this from
         // Actors left the node speaker dropdown permanently blank.
-        SyncOptions(ActorOptions,
-            Characters.OrderBy(c => c.Key, System.StringComparer.OrdinalIgnoreCase)
-                      .Select(c => c.Key).ToList());
+        // The pack's own cast, plus the game's for whichever of the game's
+        // conversations is open.
+        //
+        // A change to one of those speaks with the game's actors - Anna and
+        // Adrian are never going to be characters of this pack - so offering
+        // only the pack's left the speaker of every seeded line looking like a
+        // mistake, and gave an author no way to hand a new line to somebody
+        // already in the scene.
+        var speakers = Characters
+            .OrderBy(c => c.Key, System.StringComparer.OrdinalIgnoreCase)
+            .Select(c => c.Key)
+            .ToList();
+
+        var conversation = SelectedDialogue;
+        if (conversation != null && conversation.IsVanillaBased)
+        {
+            var vanilla = VanillaDialogueCatalog.Open(conversation.Model.Source);
+            if (vanilla != null)
+            {
+                var theirs = new SortedSet<string>(System.StringComparer.OrdinalIgnoreCase);
+                foreach (string role in vanilla.Roles)
+                    if (!string.IsNullOrEmpty(role)) theirs.Add(role);
+                foreach (var node in vanilla.Nodes.Values)
+                    if (!string.IsNullOrEmpty(node.Actor)) theirs.Add(node.Actor!);
+
+                foreach (string one in theirs)
+                    if (!speakers.Contains(one, System.StringComparer.OrdinalIgnoreCase))
+                        speakers.Add(one);
+            }
+        }
+
+        SyncOptions(ActorOptions, speakers);
 
         var bustOpts = new System.Collections.Generic.List<NavigatorTargetOption>();
         foreach (var v in VanillaBusts.All)
@@ -3747,6 +4708,50 @@ public sealed class MainViewModel : ObservableObject
         SelectedVariable = Variables.FirstOrDefault();
     }
 
+    /// <summary>
+    /// Keep the option lists in step with a collection's records, however they
+    /// arrive and whatever is renamed.
+    /// <para/>
+    /// Two halves, and both are needed: the collection changing (a record added
+    /// or dropped) and a record's own identity changing (renamed). The second
+    /// was missing everywhere, which is why renaming a Place left "place1" in a
+    /// dialogue's start conditions until something unrelated refreshed it.
+    /// <para/>
+    /// "Identity" means whatever a list shows: a key, a name, a display name.
+    /// Matched by name rather than by type so one helper serves every kind.
+    /// </summary>
+    private void WatchIdentities<T>(ObservableCollection<T> collection, System.Action rebuild)
+        where T : ObservableObject
+    {
+        void OnItemChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName is "Key" or "Name" or "DisplayName" or "Display") rebuild();
+        }
+
+        foreach (var item in collection) item.PropertyChanged += OnItemChanged;
+
+        collection.CollectionChanged += (_, e) =>
+        {
+            if (e.OldItems != null)
+                foreach (T item in e.OldItems) item.PropertyChanged -= OnItemChanged;
+            if (e.NewItems != null)
+                foreach (T item in e.NewItems) item.PropertyChanged += OnItemChanged;
+
+            // A Reset reports no OldItems, so dropped view models keep their
+            // handler. Harmless: the publisher is the dead one and the
+            // subscriber is this long-lived view model, so nothing is held.
+            rebuild();
+        };
+    }
+
+    /// <summary>Every list that shows a place's name.</summary>
+    private void RebuildPlaceNameOptions()
+    {
+        RebuildLevelOptions();
+        RebuildTargetOptions();
+        RebuildDialogueRoomTalkOptions();
+    }
+
     private void OnVariablesChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
         if (e.OldItems != null)
@@ -3833,6 +4838,28 @@ public sealed class MainViewModel : ObservableObject
     /// <summary>A grouped view over a music name list. The group description
     /// takes a null property name, which hands the converter the string itself
     /// rather than a property of it.</summary>
+    /// <summary>
+    /// A dropdown's items under headings, from whatever question suits that
+    /// list.
+    /// <para/>
+    /// Grouping is not a nicety on the longest of these: the game's variables
+    /// are 1,924 names in one flat list, which is a scroll bar with no
+    /// landmarks. Under their 64 owning lists it is a place to look rather than
+    /// a place to hunt.
+    /// <para/>
+    /// The view stays live over the source collection, so a heading appears the
+    /// moment the first thing that belongs under it does.
+    /// </summary>
+    private static System.ComponentModel.ICollectionView GroupUnder<T>(
+        System.Collections.Generic.IEnumerable<T> source,
+        System.Func<object?, string> heading)
+    {
+        var made = new System.Windows.Data.CollectionViewSource { Source = source };
+        made.GroupDescriptions.Add(new System.Windows.Data.PropertyGroupDescription(
+            null, new View.Converters.HeadingConverter(heading)));
+        return made.View;
+    }
+
     private static System.ComponentModel.ICollectionView GroupByOrigin(
         ObservableCollection<string> source)
     {
@@ -3842,12 +4869,29 @@ public sealed class MainViewModel : ObservableObject
         return src.View;
     }
 
+    /// <summary>
+    /// Every sound a button could make: the pack's own first, then the game's.
+    /// <para/>
+    /// One list rather than two pickers, because from where an author stands
+    /// there is one question - what does this sound like - and the answer comes
+    /// from whichever place happens to have it. The pack's own lead because
+    /// they are the ones being authored, and because a name in both places
+    /// resolves to the pack's.
+    /// </summary>
+    public ObservableCollection<string> ButtonSoundOptions { get; } = new();
+
     /// <summary>Rebuilds <see cref="SfxKeyOptions"/> from the SFX tab.</summary>
     public void RebuildSfxKeyOptions()
     {
         // In-place sync, never Clear — see SyncOptions.
-        SyncOptions(SfxKeyOptions,
-            Sfx.OrderBy(s => s.Key, System.StringComparer.OrdinalIgnoreCase).Select(s => s.Key).ToList());
+        var keys = Sfx.OrderBy(s => s.Key, System.StringComparer.OrdinalIgnoreCase)
+                      .Select(s => s.Key).ToList();
+        SyncOptions(SfxKeyOptions, keys);
+
+        var both = new System.Collections.Generic.List<string>(keys);
+        foreach (var name in Rendering.VanillaUiLibrary.SoundNames)
+            if (!both.Contains(name, System.StringComparer.OrdinalIgnoreCase)) both.Add(name);
+        SyncOptions(ButtonSoundOptions, both);
     }
 
     /// <summary>
@@ -3952,6 +4996,60 @@ public sealed class MainViewModel : ObservableObject
     /// scene keys — the runtime looks them up in its per-pack scene
     /// registry.
     /// </summary>
+    /// <summary>
+    /// Rebuilds <see cref="UiIdOptions"/> from the pack's own screens. Called
+    /// whenever the list of screens changes, and when one is renamed - the id
+    /// is what an action stores, so a rename that did not reach here would
+    /// leave actions pointing at a screen that no longer answers to that name.
+    /// </summary>
+    public void RebuildUiOptions()
+    {
+        var options = new System.Collections.Generic.List<NavigatorTargetOption>();
+        foreach (var u in Uis.Where(u => !u.IsVanillaBased)
+                             .OrderBy(u => string.IsNullOrWhiteSpace(u.Name) ? u.Model.Id : u.Name,
+                                      System.StringComparer.OrdinalIgnoreCase))
+        {
+            string id = u.Model.Id;
+            if (string.IsNullOrWhiteSpace(id)) continue;
+
+            string screen = string.IsNullOrWhiteSpace(u.Name) ? id : u.Name;
+            options.Add(new NavigatorTargetOption(id, $"{screen} ({id})"));
+
+            // In tree order under their screen, not alphabetically: the list is
+            // read as a hierarchy, and a child three lines under its parent is
+            // how an author finds it.
+            foreach (var node in u.Model.Nodes) AddUiTargets(options, id, screen, node, "");
+        }
+        SyncOptions(UiIdOptions, options);
+    }
+
+    /// <summary>
+    /// One entry per object inside a screen, addressed the way the runtime
+    /// reads it: the screen's id, a slash, then the path down from the screen's
+    /// root. The whole path rather than the object's bare name, because names
+    /// repeat - a screen copied from the game's own has several objects called
+    /// "Image" - and a bare name would resolve to whichever the walk met first.
+    /// </summary>
+    private static void AddUiTargets(System.Collections.Generic.List<NavigatorTargetOption> into,
+                                     string id, string screen, UiNodeDef node, string prefix)
+    {
+        if (node == null || string.IsNullOrWhiteSpace(node.Name)) return;
+
+        string path = string.IsNullOrEmpty(prefix) ? node.Name : prefix + "/" + node.Name;
+        string token = $"{id}/{path}";
+
+        // Two children of one object can share a name - a card copied from the
+        // game's own screen carries two called "Image" - and then both have the
+        // same address. Offered once, because that is how many of them the
+        // address can actually reach: the runtime walks direct children by name
+        // and stops at the first. Listing it twice would promise something the
+        // second one cannot do.
+        if (!into.Any(o => string.Equals(o.Token, token, StringComparison.Ordinal)))
+            into.Add(new NavigatorTargetOption(token, $"{screen} \u2014 {path}"));
+
+        foreach (var child in node.Children) AddUiTargets(into, id, screen, child, path);
+    }
+
     public void RebuildSceneOptions()
     {
         // In-place sync, never Clear — see SyncOptions.
@@ -4597,5 +5695,6 @@ public sealed class MainViewModel : ObservableObject
     internal void SetActivePack(ModPack pack)
     {
         PackRepository.ActivePack = pack;
+        PackRepository.ActivePackRoot = PackRoot;
     }
 }

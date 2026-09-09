@@ -31,6 +31,12 @@ namespace SMSModForge.PackPlugin
         public const float BustPixels = 256f;
         public const float BustPpu = 100f;
 
+        /// <summary>A scene's art: 256x256 at 100 pixels per unit — the size
+        /// the prototype's Core/Art is cut for, and what every scene in this
+        /// game is drawn at.</summary>
+        public const float ScenePixels = 256f;
+        public const float ScenePpu = 100f;
+
         /// <summary>A level layer: 2048x1136 at the game's own 70.32.</summary>
         public const float LevelWidth = 2048f;
         public const float LevelHeight = 1136f;
@@ -69,5 +75,17 @@ namespace SMSModForge.PackPlugin
 
         public static Sprite CreateLevel(Texture2D tex)
             => Create(tex, LevelWidth, LevelHeight, LevelPpu);
+
+        /// <summary>
+        /// A scene's art, at the size a 256x256 scene occupies.
+        /// <para/>
+        /// Scene art went through a bare Sprite.Create with no
+        /// pixels-per-unit at all, so it took Unity's default of 100 whatever
+        /// the file's dimensions were - and a 512x512 scene drew at twice the
+        /// size of a 256x256 one. At 256 this is the identical sprite it
+        /// always made, which is why no existing pack moves.
+        /// </summary>
+        public static Sprite CreateScene(Texture2D tex)
+            => Create(tex, ScenePixels, ScenePixels, ScenePpu);
     }
 }

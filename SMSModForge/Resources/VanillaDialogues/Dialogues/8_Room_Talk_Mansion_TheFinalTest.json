@@ -1,0 +1,1852 @@
+{
+ "id": "8_Room_Talk/Mansion/TheFinalTest",
+ "name": "TheFinalTest",
+ "index": 7,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Gabriel",
+  "Haniya"
+ ],
+ "roots": [
+  1217169616,
+  -1433514064,
+  -308241791
+ ],
+ "nodes": {
+  "1217169616": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    670877700,
+    998124286,
+    639603665,
+    -1197290109,
+    -260522278
+   ],
+   "actor": "Gabriel",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Well, {PC}, you've come a long way since we first started. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[choose-final-test] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "choose-final-test",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1433514064": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -121671774,
+    -1514836557,
+    -1956564494,
+    693058059,
+    387286740,
+    1368616169,
+    -2007868951,
+    -2114769743,
+    -724813300
+   ],
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Let us begin with the quiz. Take a deep breath and  try to remember what you learned.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[i-want-the-quiz] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "i-want-the-quiz",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-308241791": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    502367253,
+    1424540338,
+    -1545339592,
+    -519350850,
+    -745850148,
+    1318003378,
+    916893834,
+    109951473,
+    -1653704965,
+    -1216049015,
+    -1345790649,
+    -1475814580,
+    -843182517,
+    1274172651,
+    1462857382,
+    1163766744
+   ],
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "I won't be giving you instructions during the shot, but there's one piece of advice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[i-want-the-quiz] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "i-want-the-quiz",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "670877700": {
+   "kind": "text",
+   "parent": 1217169616,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "You've tackled every challenge and shown incredible growth as a photographer. Now, it’s time for the final test.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "998124286": {
+   "kind": "text",
+   "parent": 1217169616,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "This will be a quiz to test your knowledge and understanding of photography. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "639603665": {
+   "kind": "text",
+   "parent": 1217169616,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "A quiz? How terrible boring... Why don't we go with our initial idea, darling?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1197290109": {
+   "kind": "text",
+   "parent": 1217169616,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "I don't want to make {PC} uncomfortable....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-260522278": {
+   "kind": "choice",
+   "parent": 1217169616,
+   "children": [
+    1377316965,
+    1700917963
+   ],
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "He will have fun, trust me. Say, {PC}, what do you think of taking photos of me and Gabriel making love as your final test?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[choose-final-test] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "choose-final-test",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1377316965": {
+   "kind": "text",
+   "parent": -260522278,
+   "children": [
+    -1988244083
+   ],
+   "actor": null,
+   "text": "I'd rather do the quiz.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1700917963": {
+   "kind": "text",
+   "parent": -260522278,
+   "children": [
+    623712698
+   ],
+   "actor": null,
+   "text": "That sounds lovely. (Start Sharing Route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1988244083": {
+   "kind": "text",
+   "parent": 1377316965,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Great! Let's get started. And don't worry—if you fail, you can try again next week. You can't grow without failure.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[i-want-the-quiz] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "i-want-the-quiz",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "623712698": {
+   "kind": "text",
+   "parent": 1700917963,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Color me surprised...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-121671774": {
+   "kind": "choice",
+   "parent": -1433514064,
+   "children": [
+    -1690303079,
+    -244643307,
+    1687858018
+   ],
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "In low-light conditions, which setting is most important to adjust?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1514836557": {
+   "kind": "choice",
+   "parent": -1433514064,
+   "children": [
+    -1460949230,
+    -898636391,
+    -239102273
+   ],
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "When shooting in harsh sunlight, what is one technique to avoid harsh shadows on your subject's face?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1956564494": {
+   "kind": "choice",
+   "parent": -1433514064,
+   "children": [
+    -475649059,
+    -1117169072,
+    615268017
+   ],
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "What is bokeh, and how is it achieved?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1690303079": {
+   "kind": "text",
+   "parent": -121671774,
+   "children": [
+    1494512238
+   ],
+   "actor": null,
+   "text": "The aperture.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-244643307": {
+   "kind": "text",
+   "parent": -121671774,
+   "children": [
+    -374586283
+   ],
+   "actor": null,
+   "text": "The ISO.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1687858018": {
+   "kind": "text",
+   "parent": -121671774,
+   "children": [
+    1210585933
+   ],
+   "actor": null,
+   "text": "The white balance.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1460949230": {
+   "kind": "text",
+   "parent": -1514836557,
+   "children": [
+    -1134298364
+   ],
+   "actor": null,
+   "text": "Placing the subject directly in front of the sun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-898636391": {
+   "kind": "text",
+   "parent": -1514836557,
+   "children": [
+    -751876201
+   ],
+   "actor": null,
+   "text": "Increasing the shutter speed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-239102273": {
+   "kind": "text",
+   "parent": -1514836557,
+   "children": [
+    1278619927
+   ],
+   "actor": null,
+   "text": "Using a diffuser or reflector to soften the light.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-475649059": {
+   "kind": "text",
+   "parent": -1956564494,
+   "children": [
+    -1087992377
+   ],
+   "actor": null,
+   "text": "Bokeh is the aesthetic quality of the blur in out-of-focus areas, achieved by using a wide aperture.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1117169072": {
+   "kind": "text",
+   "parent": -1956564494,
+   "children": [
+    -1197256577
+   ],
+   "actor": null,
+   "text": "Bokeh is the brightness of a photo, achieved by increasing the ISO.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "615268017": {
+   "kind": "text",
+   "parent": -1956564494,
+   "children": [
+    -910100680
+   ],
+   "actor": null,
+   "text": "Bokeh is a type of lens flare, achieved by shooting directly into the light.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1494512238": {
+   "kind": "text",
+   "parent": -1690303079,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "I'm sorry, but that is not correct. But don't give up, try it next week again.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-374586283": {
+   "kind": "text",
+   "parent": -244643307,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Correct!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1210585933": {
+   "kind": "text",
+   "parent": 1687858018,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "I'm sorry, but that is not correct. But don't give up, try it next week again.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1134298364": {
+   "kind": "text",
+   "parent": -1460949230,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "I'm sorry, but that is not correct. But don't give up, try it next week again.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-751876201": {
+   "kind": "text",
+   "parent": -898636391,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "I'm sorry, but that is not correct. But don't give up, try it next week again.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1278619927": {
+   "kind": "text",
+   "parent": -239102273,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Correct!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1087992377": {
+   "kind": "text",
+   "parent": -475649059,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Correct!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1197256577": {
+   "kind": "text",
+   "parent": -1117169072,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "I'm sorry, but that is not correct. But don't give up, try it next week again.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-910100680": {
+   "kind": "text",
+   "parent": 615268017,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "I'm sorry, but that is not correct. But don't give up, try it next week again.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "693058059": {
+   "kind": "text",
+   "parent": -1433514064,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Congratulations, {PC}. You’ve passed with flying colors. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "387286740": {
+   "kind": "text",
+   "parent": -1433514064,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "You’ve shown not only technical prowess but also a deep understanding of what it means to be a photographer.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1368616169": {
+   "kind": "text",
+   "parent": -1433514064,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Congratulations, dear.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2007868951": {
+   "kind": "text",
+   "parent": -1433514064,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "You’ve proven yourself to be a true master of the craft. You have the skills, the creativity, and the passion needed to capture the world in ways most people can only dream of. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Creative to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Creative",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Creative"
+      }
+     }
+    }
+   ]
+  },
+  "-2114769743": {
+   "kind": "choice",
+   "parent": -1433514064,
+   "children": [
+    -1992582314,
+    -2142753737,
+    1503525665
+   ],
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "I’ve taught you everything I know, but remember, the journey of learning never truly ends",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1992582314": {
+   "kind": "text",
+   "parent": -2114769743,
+   "children": [
+    2038004628
+   ],
+   "actor": null,
+   "text": "You were a great teacher, Gabriel.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2142753737": {
+   "kind": "text",
+   "parent": -2114769743,
+   "children": [
+    1439447847
+   ],
+   "actor": null,
+   "text": "Finally, that took me long enough.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1503525665": {
+   "kind": "text",
+   "parent": -2114769743,
+   "children": [
+    -1273783494
+   ],
+   "actor": null,
+   "text": "I'm sure there is more you could teach me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1273783494": {
+   "kind": "text",
+   "parent": 1503525665,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Hah, I'm glad you think so. Maybe there a few tricks I could show you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1439447847": {
+   "kind": "text",
+   "parent": -2142753737,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Patience is a virtue, my friend.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2038004628": {
+   "kind": "text",
+   "parent": -1992582314,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Thank you, my friend.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-724813300": {
+   "kind": "text",
+   "parent": -1433514064,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "I’m incredibly proud of you. Now go out there and capture the magic of life through your lens. The world is waiting for your vision.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Traits[Professional-Photographer-5] = 5",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Professional-Photographer-5",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 5
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[new-trait] = Professional Photographer",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Professional Photographer"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "new-trait",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[gabriel-questline-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabriel-questline-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Pass Gabriel’s ultimate photography challenge.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Gabriel Training",
+        "of": "Quest"
+       },
+       "m_TaskId": 1270318540
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "502367253": {
+   "kind": "text",
+   "parent": -308241791,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "People have a way of making funny faces when they're sharing each other.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1545339592": {
+   "kind": "text",
+   "parent": -308241791,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "There will be many \"key moments\" for you to see, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1424540338": {
+   "kind": "text",
+   "parent": -308241791,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Your job is to find key moments when everyone involved looks sexy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-519350850": {
+   "kind": "text",
+   "parent": -308241791,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Oh, already hard, Gabriel? Does it arouse you that your student is watching us?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HinaFinal to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HinaFinal",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/HinaFinal"
+      }
+     }
+    }
+   ]
+  },
+  "-745850148": {
+   "kind": "text",
+   "parent": -308241791,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "This is a highly unusual situation, my flower.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1318003378": {
+   "kind": "text",
+   "parent": -308241791,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Then let us not waste any time, I want to ride my lion.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "916893834": {
+   "kind": "text",
+   "parent": -308241791,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "I... I can tell that you're in heat, Haniya. There's a river between your legs.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HinaFinal (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HinaFinal (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/HinaFinal (1)"
+      }
+     }
+    }
+   ]
+  },
+  "109951473": {
+   "kind": "text",
+   "parent": -308241791,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "He's... He's still taking photos, dear.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1653704965": {
+   "kind": "text",
+   "parent": -308241791,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Yallah, Gabriel, t-tell him what I want him to do...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HinaFinal (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HinaFinal (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/HinaFinal (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1216049015": {
+   "kind": "choice",
+   "parent": -308241791,
+   "children": [
+    740596895,
+    -1008098352
+   ],
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "{PC} ... Why don't you put the camera down and help me with my wife?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "740596895": {
+   "kind": "text",
+   "parent": -1216049015,
+   "children": [
+    1111751814,
+    -669916530,
+    -1707869813,
+    605351184,
+    -450293556,
+    1492685583,
+    1795810662
+   ],
+   "actor": null,
+   "text": "[Fuck Haniya's ass]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1008098352": {
+   "kind": "text",
+   "parent": -1216049015,
+   "children": [
+    490823781,
+    1136063256,
+    -888409408,
+    -1818054902,
+    1390992283
+   ],
+   "actor": null,
+   "text": "I want to take more photos instead.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "490823781": {
+   "kind": "text",
+   "parent": -1008098352,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Oh, you like to watch? Then take a good look at this...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1136063256": {
+   "kind": "text",
+   "parent": -1008098352,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Haniya.... I'm getting close, don't stop riding me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-888409408": {
+   "kind": "text",
+   "parent": -1008098352,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Fill my pussy, Gabriel. Do it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HinaFinal_Watchclimax to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HinaFinal_Watchclimax",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/HinaFinal_Watchclimax"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HinaFinal to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HinaFinal",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/HinaFinal"
+      }
+     }
+    }
+   ]
+  },
+  "1111751814": {
+   "kind": "text",
+   "parent": 740596895,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Yessss.... Your student is blessed with a fat cock, my dear....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HinaFinal_DPstart to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HinaFinal_DPstart",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/HinaFinal_DPstart"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HinaFinal to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HinaFinal",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/HinaFinal"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[gabriel-threesome-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabriel-threesome-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-669916530": {
+   "kind": "text",
+   "parent": 740596895,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "I can tell, you are a lot tighter now...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1707869813": {
+   "kind": "choice",
+   "parent": 740596895,
+   "children": [
+    -745940941,
+    -1411072012,
+    1767911646
+   ],
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "{PC}, fuck my ass. Don't hold back...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "605351184": {
+   "kind": "text",
+   "parent": 740596895,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "I can tell both of you are getting close, please bless my holes with your holy seed!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-450293556": {
+   "kind": "text",
+   "parent": 740596895,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Yessshhhh.... I'm cumming! God! Yessss!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HinaFinal_DP to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HinaFinal_DP",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/HinaFinal_DP"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HinaFinal (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HinaFinal (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/HinaFinal (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1492685583": {
+   "kind": "text",
+   "parent": 740596895,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Fuck. I've never seen your body shake like that, my sweaty flower...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1345790649": {
+   "kind": "text",
+   "parent": -308241791,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "I think it's safe to say that {PC} passed the test...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1475814580": {
+   "kind": "text",
+   "parent": -308241791,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "The photos are fantastic! Your rear looks like pure heaven in them!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-843182517": {
+   "kind": "text",
+   "parent": -308241791,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "We'll definitely want a copy of that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1818054902": {
+   "kind": "text",
+   "parent": -1008098352,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Fhhuuuckk.....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1390992283": {
+   "kind": "text",
+   "parent": -1008098352,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Mhmm.... Just like that....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-745940941": {
+   "kind": "text",
+   "parent": -1707869813,
+   "children": [
+    -1626362196
+   ],
+   "actor": null,
+   "text": "Your ass is so tight, Haniya.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1411072012": {
+   "kind": "text",
+   "parent": -1707869813,
+   "children": [
+    332890686
+   ],
+   "actor": null,
+   "text": "I'm getting close, where should I cum?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1767911646": {
+   "kind": "text",
+   "parent": -1707869813,
+   "children": [
+    481215943,
+    481716809
+   ],
+   "actor": null,
+   "text": "I was hoping this would happen...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1626362196": {
+   "kind": "text",
+   "parent": -745940941,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "And today it's all yours... Fuck, you are so big...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "332890686": {
+   "kind": "text",
+   "parent": -1411072012,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Inside my ass, {PC}. I want you to fill me up!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "481215943": {
+   "kind": "text",
+   "parent": 1767911646,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "See, Gabriel. He's into it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "481716809": {
+   "kind": "text",
+   "parent": 1767911646,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Then... Then let's give my wife's holes a good workout with our cocks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1795810662": {
+   "kind": "text",
+   "parent": 740596895,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Your student is a natural... I'm... God, that was great...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1274172651": {
+   "kind": "choice",
+   "parent": -308241791,
+   "children": [
+    1103151447,
+    -1545276928
+   ],
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "{PC}. I've taught you everything I know, but remember, the journey of learning never really ends.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Traits[Professional-Photographer-5] = 5",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Professional-Photographer-5",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 5
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[new-trait] = Professional Photographer",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Professional Photographer"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "new-trait",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[gabriel-questline-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabriel-questline-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Creative to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Creative",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Creative"
+      }
+     }
+    }
+   ]
+  },
+  "1462857382": {
+   "kind": "text",
+   "parent": -308241791,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "It was a real pleasure. Please feel free to visit us from time to time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Pass Gabriel’s ultimate photography challenge.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Gabriel Training",
+        "of": "Quest"
+       },
+       "m_TaskId": 1270318540
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "1103151447": {
+   "kind": "text",
+   "parent": 1274172651,
+   "actor": null,
+   "text": "Thanks for everything, to both of you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1545276928": {
+   "kind": "text",
+   "parent": 1274172651,
+   "actor": null,
+   "text": "It was a lot of fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1163766744": {
+   "kind": "text",
+   "parent": -308241791,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "I totally agree with my husband...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Mansion",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play TheFinalTest and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[gabriel-met] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabriel-met",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[perfect-photo-shown-gabriel] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "perfect-photo-shown-gabriel",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[gabriel-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabriel-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[gabriel-questline-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabriel-questline-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "branches": [
+    "bringmeaphoto"
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Gabriel_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Gabriel_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Gabriel_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Haniya to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Haniya",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Haniya"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[gabriel-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabriel-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

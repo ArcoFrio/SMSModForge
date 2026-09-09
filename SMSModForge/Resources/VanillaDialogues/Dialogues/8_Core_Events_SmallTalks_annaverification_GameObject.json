@@ -1,0 +1,765 @@
+{
+ "id": "8_Core_Events/SmallTalks/annaverification/GameObject",
+ "name": "GameObject",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna"
+ ],
+ "roots": [
+  957701803,
+  -1368905510,
+  -661526360,
+  -6224932,
+  -74671862,
+  -1211097063,
+  -84106698,
+  165625463,
+  -698355898,
+  2057237763,
+  1831541265
+ ],
+ "nodes": {
+  "957701803": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    962498214,
+    1708862036,
+    -1356482658
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Hey! I need help. Now. It's bad... really bad. They locked my Starmaker page! I can’t post anything unless I verify my age!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1368905510": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Okay, it says I have to take three selfies. Very specific poses. They’ll compare it to my profile and ID. Ugh, I feel like a camgirl doing a ritual.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "962498214": {
+   "kind": "text",
+   "parent": 957701803,
+   "children": [
+    -467232558
+   ],
+   "actor": null,
+   "text": "Breathe. We'll get through this together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1708862036": {
+   "kind": "text",
+   "parent": 957701803,
+   "children": [
+    411266535
+   ],
+   "actor": null,
+   "text": "Let me guess... they want a blood sample?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1356482658": {
+   "kind": "text",
+   "parent": 957701803,
+   "children": [
+    -1187525456
+   ],
+   "actor": null,
+   "text": "Looks like they want proof that you're a real MILF, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1187525456": {
+   "kind": "text",
+   "parent": -1356482658,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Don’t joke! This is serious! I can’t even gain new subscribers until it's done...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[MCorruption] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MCorruption",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "411266535": {
+   "kind": "text",
+   "parent": 1708862036,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Honestly? Would’ve been easier than this mess...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-467232558": {
+   "kind": "text",
+   "parent": 962498214,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I’m trying! I just... I didn’t expect it to happen now. There’s a guide but it’s ridiculous.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[MLove] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MLove",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-661526360": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    901855837,
+    -824010505
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "First one: Smile and thumbs up. Easy, right?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "901855837": {
+   "kind": "text",
+   "parent": -661526360,
+   "children": [
+    -1313973898
+   ],
+   "actor": null,
+   "text": "Just relax, we'll be done in five minutes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-824010505": {
+   "kind": "text",
+   "parent": -661526360,
+   "children": [
+    -210602490
+   ],
+   "actor": null,
+   "text": "Yep. Give me that good-girl grin.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-210602490": {
+   "kind": "text",
+   "parent": -824010505,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Like this?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_VerificationPhoto (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_VerificationPhoto (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/Anna_VerificationPhoto (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1313973898": {
+   "kind": "text",
+   "parent": 901855837,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes... You're right, hun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_VerificationPhoto (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_VerificationPhoto (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/Anna_VerificationPhoto (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-6224932": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1114971028,
+    -457032639,
+    407775104
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Second one... double peace signs with... with... tongue out!?I can’t believe I’m doing this.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-74671862": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Ugh. This feels illegal.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_VerificationPhoto (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_VerificationPhoto (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/Anna_VerificationPhoto (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1114971028": {
+   "kind": "text",
+   "parent": -6224932,
+   "actor": null,
+   "text": "Just do what it says, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-457032639": {
+   "kind": "text",
+   "parent": -6224932,
+   "actor": null,
+   "text": "Channel your inner influencer. Think ‘adorable but hot.’",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "407775104": {
+   "kind": "text",
+   "parent": -6224932,
+   "actor": null,
+   "text": "Well, they do love their data.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1211097063": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    955728592,
+    -800885957,
+    952678835
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Last one. Oh god. I have to pull my pullover up and align my boobs with these dumb verification circles!?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-84106698": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "If this bot rejects me after all this, I’m deleting everything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "955728592": {
+   "kind": "text",
+   "parent": -1211097063,
+   "children": [
+    847966321
+   ],
+   "actor": null,
+   "text": "I won’t peek, promise.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-800885957": {
+   "kind": "text",
+   "parent": -1211097063,
+   "actor": null,
+   "text": "Need me to hold a ruler for alignment?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "952678835": {
+   "kind": "text",
+   "parent": -1211097063,
+   "children": [
+    -1523866304
+   ],
+   "actor": null,
+   "text": "I could help adjust if you like…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "165625463": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "This is ridiculous… why can’t I get them both in the circles at the same time?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_VerificationPhoto (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_VerificationPhoto (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/Anna_VerificationPhoto (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-698355898": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh… it actually worked. They’re right in the middle now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2057237763": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1912006107,
+    5963154,
+    695279873
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Done! Oh my god. I never want to do that again.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "1831541265": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yeah… thanks. I couldn’t have done it alone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1912006107": {
+   "kind": "text",
+   "parent": 2057237763,
+   "actor": null,
+   "text": "Hey, you pulled it off. Now your account’s safe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "5963154": {
+   "kind": "text",
+   "parent": 2057237763,
+   "actor": null,
+   "text": "Well, you better get used to it. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "695279873": {
+   "kind": "text",
+   "parent": 2057237763,
+   "actor": null,
+   "text": "Whoever came up with this is insane.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1523866304": {
+   "kind": "text",
+   "parent": 952678835,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "N-No! Just focus on taking the photo...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[MCorruption] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MCorruption",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Lewd to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Lewd",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Lewd"
+      }
+     }
+    }
+   ]
+  },
+  "847966321": {
+   "kind": "text",
+   "parent": 955728592,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I... That's kind of you, but I need you to take the photo, hun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[MLove] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MLove",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/SmallTalks/annaverification",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play GameObject and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueStart'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueStart"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueEnd'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueEnd"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[verificationscene-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "verificationscene-done",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

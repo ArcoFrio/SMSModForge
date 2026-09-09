@@ -1,0 +1,245 @@
+{
+ "id": "8_Core_Events/Trips/Hiking/DefaultDialogue",
+ "name": "DefaultDialogue",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Anna",
+  "Josef"
+ ],
+ "roots": [
+  -1270996933,
+  1939158030,
+  -309056207,
+  813223371,
+  -1414366397,
+  -675416978
+ ],
+ "nodes": {
+  "-1270996933": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Wow, this place is perfect. Look at that view!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1939158030": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I knew you’d all like it. I came here earlier to scout the area and set up the tent.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-309056207": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Adrian, can you get the firewood?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "813223371": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I guess so, but if a bear mauls me to death, it'll be your fault.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-675416978": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1060942595,
+    1474652198,
+    452704374
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I brought some snacks for later. This is going to be so much fun.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1414366397": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "There aren't any bears around, so don't worry. But here, you can have my anti-bear spray just in case.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1060942595": {
+   "kind": "text",
+   "parent": -675416978,
+   "children": [
+    -696931029
+   ],
+   "actor": null,
+   "text": "[Spend time with Anna]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1474652198": {
+   "kind": "text",
+   "parent": -675416978,
+   "children": [
+    -1097957192
+   ],
+   "actor": null,
+   "text": "[Spend time with Josef]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "452704374": {
+   "kind": "text",
+   "parent": -675416978,
+   "children": [
+    1940185139
+   ],
+   "actor": null,
+   "text": "[Spend time with Adrian]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-696931029": {
+   "kind": "text",
+   "parent": 1060942595,
+   "actor": null,
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-1097957192": {
+   "kind": "text",
+   "parent": 1474652198,
+   "actor": null,
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[random-1-of-10] = 2",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 2
+      }
+     }
+    }
+   ]
+  },
+  "1940185139": {
+   "kind": "text",
+   "parent": 452704374,
+   "actor": null,
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[random-1-of-10] = 3",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 3
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Trips/Hiking",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DefaultDialogue and wait",
+   "as": "Dialogue"
+  }
+ ]
+}

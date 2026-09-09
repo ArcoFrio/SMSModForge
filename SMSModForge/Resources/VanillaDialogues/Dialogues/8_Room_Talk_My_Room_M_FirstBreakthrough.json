@@ -1,0 +1,1101 @@
+{
+ "id": "8_Room_Talk/My_Room/M_FirstBreakthrough",
+ "name": "M_FirstBreakthrough",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna"
+ ],
+ "roots": [
+  -1316364834,
+  956987275,
+  1414443923,
+  -795201264,
+  1715395187,
+  1203937915,
+  634693150,
+  995489253,
+  207186685,
+  -257969286,
+  1804212102,
+  1401574661,
+  176139176,
+  1447028444,
+  -210620296,
+  -2125482058,
+  -1027404438
+ ],
+ "nodes": {
+  "-1316364834": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{PC}? We need to talk...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Mainstory[M-Stage-3-touching] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-touching",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Reset_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Reset_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Reset_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "956987275": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "We've taken like what? 10 photos? 20 photos? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1414443923": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "We're not even making enough money to cover the rent.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-795201264": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "My friend Joanne made a good point: my photos aren't the kind that people on there are looking for.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[anna-heart-status] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-heart-status",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "1715395187": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1077031712,
+    -124962399,
+    -2105239591,
+    -1367187190
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Starmaker is for... sexual content.",
+   "tag": "isfor",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1077031712": {
+   "kind": "text",
+   "parent": 1715395187,
+   "children": [
+    235497364
+   ],
+   "actor": null,
+   "text": "So you want to stop?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-124962399": {
+   "kind": "text",
+   "parent": 1715395187,
+   "children": [
+    1531699864
+   ],
+   "actor": null,
+   "text": "Who is that Joanne? Have I ever met her?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2105239591": {
+   "kind": "text",
+   "parent": 1715395187,
+   "children": [
+    2082710194,
+    -948287632,
+    61650443
+   ],
+   "actor": null,
+   "text": "What do you want to do?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1367187190": {
+   "kind": "text",
+   "parent": 1715395187,
+   "children": [
+    -1881725115
+   ],
+   "actor": null,
+   "text": "We could produce sexual content.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1531699864": {
+   "kind": "text",
+   "parent": -124962399,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, she's... an old friend from my younger years. You've never met her.",
+   "jump": {
+    "mode": "Jump",
+    "to": "isfor"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "235497364": {
+   "kind": "text",
+   "parent": 1077031712,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "No... I mean, we can't stop. It's either this or... Josef needs our help.",
+   "jump": {
+    "mode": "Jump",
+    "to": "isfor"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2082710194": {
+   "kind": "text",
+   "parent": -2105239591,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1881725115": {
+   "kind": "text",
+   "parent": -1367187190,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-948287632": {
+   "kind": "text",
+   "parent": -2105239591,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm not sure...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "61650443": {
+   "kind": "text",
+   "parent": -2105239591,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "What should I do?",
+   "jump": {
+    "mode": "Jump",
+    "to": "isfor"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1203937915": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "We have no other choice, do we?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "634693150": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -496750494,
+    -1722698399,
+    -690761138
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "God, what am I doing. You are my {S} and I...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-496750494": {
+   "kind": "text",
+   "parent": 634693150,
+   "children": [
+    -1218329511
+   ],
+   "actor": null,
+   "text": "Hey, it's alright. We have no choice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1722698399": {
+   "kind": "text",
+   "parent": 634693150,
+   "children": [
+    1657584026
+   ],
+   "actor": null,
+   "text": "Yeah, it's kinda fucked up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-690761138": {
+   "kind": "text",
+   "parent": 634693150,
+   "children": [
+    2039709160,
+    83665300
+   ],
+   "actor": null,
+   "text": "I know, it's really exciting.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2039709160": {
+   "kind": "text",
+   "parent": -690761138,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "E-Exciting? ... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[MCorruption] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MCorruption",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "1657584026": {
+   "kind": "text",
+   "parent": -1722698399,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That's not really helping....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1218329511": {
+   "kind": "text",
+   "parent": -496750494,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Thanks, hun...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "83665300": {
+   "kind": "text",
+   "parent": -690761138,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Well... I guess... I guess that will make the next part a bit easier...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "995489253": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Because Joanne suggested I try uploading photos of myself....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "207186685": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Touching myself...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-257969286": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Like this...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 20_M1Touch1 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "20_M1Touch1",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/20_M1Touch1"
+      }
+     }
+    }
+   ]
+  },
+  "1804212102": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "To be less shy... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "1401574661": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "To \"show what I got\"...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 21_M1Touch2 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "21_M1Touch2",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/21_M1Touch2"
+      }
+     }
+    }
+   ]
+  },
+  "176139176": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "And to be more direct...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1447028444": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Take a good shot of my...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-210620296": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Tits...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 22_M1Touch3 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "22_M1Touch3",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/22_M1Touch3"
+      }
+     }
+    }
+   ]
+  },
+  "-2125482058": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -398491849,
+    -1493059198,
+    1319622619
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Do you... Do you think this is what people want?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-398491849": {
+   "kind": "text",
+   "parent": -2125482058,
+   "children": [
+    -144527445,
+    -1157777064
+   ],
+   "actor": null,
+   "text": "Yes, those are fantastic.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1493059198": {
+   "kind": "text",
+   "parent": -2125482058,
+   "children": [
+    636064183,
+    -2097295498
+   ],
+   "actor": null,
+   "text": "We'll see, I guess.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1319622619": {
+   "kind": "text",
+   "parent": -2125482058,
+   "children": [
+    -1840906678,
+    -628923725
+   ],
+   "actor": null,
+   "text": "Fuck yes, I'm like so hard now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-144527445": {
+   "kind": "text",
+   "parent": -398491849,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "If... if you say so...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "636064183": {
+   "kind": "text",
+   "parent": -1493059198,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I hope so...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1840906678": {
+   "kind": "text",
+   "parent": 1319622619,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-You are what!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[MCorruption] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MCorruption",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-628923725": {
+   "kind": "text",
+   "parent": 1319622619,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god, what have I done...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1027404438": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I need some fresh air.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-2097295498": {
+   "kind": "text",
+   "parent": -1493059198,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Or I tainted our relationship for nothing...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1157777064": {
+   "kind": "text",
+   "parent": -398491849,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "This must work out or I don't know what else to do.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/My_Room",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play M_FirstBreakthrough and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Subscriber] ≥ 300",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Subscriber",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 300
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-touching] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-touching",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PlayerRoom_ButtonCanvas to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PlayerRoom_ButtonCanvas",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Mainstory[M-Stage-3-touching] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-touching",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Mainstory[M-Stage-2-nude] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-2-nude",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Mainstory[M-Stage-1-teasing] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-1-teasing",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Mainstory[M-tits-shown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-tits-shown",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PlayerRoom_ButtonCanvas to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PlayerRoom_ButtonCanvas",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

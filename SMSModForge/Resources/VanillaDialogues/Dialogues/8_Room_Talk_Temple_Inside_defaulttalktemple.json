@@ -1,0 +1,974 @@
+{
+ "id": "8_Room_Talk/Temple_Inside/defaulttalktemple",
+ "name": "defaulttalktemple",
+ "index": 6,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Master Zhen"
+ ],
+ "roots": [
+  -321485343,
+  -1938415780
+ ],
+ "nodes": {
+  "-1938415780": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    2115077581,
+    -2019075659,
+    -1889382145,
+    -1600064811,
+    -1861829109
+   ],
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Back again, meiguo ren? Have you come to waste more of my time, or are you ready to face the spirits?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2115077581": {
+   "kind": "text",
+   "parent": -1938415780,
+   "children": [
+    1346056562
+   ],
+   "actor": null,
+   "text": "I need a better weapon.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2019075659": {
+   "kind": "text",
+   "parent": -1938415780,
+   "children": [
+    -1512517644
+   ],
+   "actor": null,
+   "text": "I have a few questions.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[zhen-finale-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zhen-finale-done",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1861829109": {
+   "kind": "text",
+   "parent": -1938415780,
+   "children": [
+    878410364
+   ],
+   "actor": null,
+   "text": "I’m leaving. See you around, Master Zhen.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1512517644": {
+   "kind": "choice",
+   "parent": -2019075659,
+   "children": [
+    -748239823,
+    -1300054030,
+    -2080885715,
+    -638672870
+   ],
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Ask your questions.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-748239823": {
+   "kind": "text",
+   "parent": -1512517644,
+   "children": [
+    1520633495,
+    1615005314
+   ],
+   "actor": null,
+   "text": "Why did you choose me for this?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1300054030": {
+   "kind": "text",
+   "parent": -1512517644,
+   "children": [
+    -1125703677,
+    1061553751
+   ],
+   "actor": null,
+   "text": "What’s with all these spirits anyway?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2080885715": {
+   "kind": "text",
+   "parent": -1512517644,
+   "children": [
+    -1445649678,
+    -624436911,
+    -1277339674
+   ],
+   "actor": null,
+   "text": "What happens if we fail?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1445649678": {
+   "kind": "text",
+   "parent": -2080885715,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "No one will notice at first. But then… misfortune will curse the land. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1125703677": {
+   "kind": "text",
+   "parent": -1300054030,
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "When the barrier between worlds is weak, spirits slip through like water through cracks. Some seek vengeance, others simply chaos. They’re not all evil, but corruption twists them. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1520633495": {
+   "kind": "text",
+   "parent": -748239823,
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I didn’t choose you, fool. The spirits did. The prophecy spoke of one who would come—a lost soul to wield the blade of balance.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-638672870": {
+   "kind": "text",
+   "parent": -1512517644,
+   "children": [
+    -160188175,
+    -1433439815,
+    157915828
+   ],
+   "actor": null,
+   "text": "Why can’t you just defeat them yourself?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-160188175": {
+   "kind": "text",
+   "parent": -638672870,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "If I were still the warrior I once was, this wouldn’t even be a conversation. But I’m old. Slower than I should be. My power wanes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1615005314": {
+   "kind": "text",
+   "parent": -748239823,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Maybe you’re just a pawn… or maybe you’re something more. Either way, fate has a twisted sense of humor.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1061553751": {
+   "kind": "text",
+   "parent": -1300054030,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "It’s why I’m here—to keep them in check.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-624436911": {
+   "kind": "text",
+   "parent": -2080885715,
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "People will fall ill without reason, accidents will become more frequent, and from time to time… someone will simply vanish.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1277339674": {
+   "kind": "text",
+   "parent": -2080885715,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "It’ll seem like bad luck, but make no mistake—it’s the spirits, feeding on this world’s suffering. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1433439815": {
+   "kind": "text",
+   "parent": -638672870,
+   "actor": "Master Zhen",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Back in my youth, I could cut down spirits like paper. I was stronger than you ever will be. But now… every fight takes its toll. Soon, I won’t even be able to hold a blade.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "157915828": {
+   "kind": "text",
+   "parent": -638672870,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "That’s why you must do it. You are my weapon.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "878410364": {
+   "kind": "text",
+   "parent": -1861829109,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Hmph. Go, then. But remember, every moment you delay, the spirits grow bolder. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1346056562": {
+   "kind": "text",
+   "parent": 2115077581,
+   "actor": "Master Zhen",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hmph. We could order artifacts from my homeland, but they do not come cheap.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[active-store] = 7",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "active-store",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 7
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[After-Talk-Transition] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "After-Talk-Transition",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ShopCore to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ShopCore",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/ShopCore"
+      }
+     }
+    }
+   ]
+  },
+  "-1889382145": {
+   "kind": "text",
+   "parent": -1938415780,
+   "children": [
+    -485176515
+   ],
+   "actor": null,
+   "text": "How are things, Master Zhen?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[zhen-finale-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zhen-finale-done",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1600064811": {
+   "kind": "text",
+   "parent": -1938415780,
+   "children": [
+    2135868369,
+    2086214009
+   ],
+   "actor": null,
+   "text": "How is your garden doing?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[zhen-finale-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zhen-finale-done",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_6[anna-garden] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-garden",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-485176515": {
+   "kind": "text",
+   "parent": -1889382145,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Peace returns to the forest. The scale is balanced as it should be.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2135868369": {
+   "kind": "text",
+   "parent": -1600064811,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Hmph. Could be better. My skills are more suited for cutting down spirits than tending to delicate plants. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2086214009": {
+   "kind": "choice",
+   "parent": -1600064811,
+   "children": [
+    1216098170,
+    727005194,
+    597073670
+   ],
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "But I’m not giving up. Just… lacking a bit of expertise.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1216098170": {
+   "kind": "text",
+   "parent": 2086214009,
+   "children": [
+    -1478622481
+   ],
+   "actor": null,
+   "text": "You’re doing fine, Master. It just takes time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1478622481": {
+   "kind": "text",
+   "parent": 1216098170,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "I am aware and I will use all the time i have left.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "597073670": {
+   "kind": "text",
+   "parent": 2086214009,
+   "children": [
+    1766706853,
+    -927836645,
+    839874330
+   ],
+   "actor": null,
+   "text": "My {M} works at a flower store. She could help. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1766706853": {
+   "kind": "text",
+   "parent": 597073670,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Your {M}, huh? Well… if she knows anything about making these stubborn plants flourish, I suppose I wouldn’t mind a little guidance.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_6[anna-garden] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-garden",
+        "list": "Events_6",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "type": "InstructionQuestsActivate",
+     "title": "Activate Flowers (Zhen)",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Flowers (Zhen)",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-927836645": {
+   "kind": "text",
+   "parent": 597073670,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Alright, if she’s willing, bring her by. But remember—no need to mention who I am or what we do here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "839874330": {
+   "kind": "text",
+   "parent": 597073670,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Just a humble old man trying to grow a garden.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "727005194": {
+   "kind": "text",
+   "parent": 2086214009,
+   "children": [
+    1475521233
+   ],
+   "actor": null,
+   "text": "Maybe your stern face scares the flowers away?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1475521233": {
+   "kind": "text",
+   "parent": 727005194,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Very funny.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-321485343": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1046859488,
+    248415959
+   ],
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "{PC}. I was wondering if your... If Anna would like to... visit the temple.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[zhen-s-active] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "zhen-s-active",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1046859488": {
+   "kind": "text",
+   "parent": -321485343,
+   "children": [
+    1778861439
+   ],
+   "actor": null,
+   "text": "I will call her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "248415959": {
+   "kind": "text",
+   "parent": -321485343,
+   "children": [
+    631452109
+   ],
+   "actor": null,
+   "text": "She's busy at the moment.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "631452109": {
+   "kind": "text",
+   "parent": 248415959,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "Ah, A shame...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1778861439": {
+   "kind": "text",
+   "parent": 1046859488,
+   "actor": "Master Zhen",
+   "expressionName": "neutral",
+   "text": "I... I look forward to her visit.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[temp-stored-very-short-term] = AnnaMasterDP",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "AnnaMasterDP",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Temple_Inside/AnnaMasterDP"
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Nude"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Temple_Inside",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play defaulttalktemple and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[masterzhen-accepted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "masterzhen-accepted",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Core_NoSave[talkbutton-signal] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talkbutton-signal",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Master_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Master_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Master_Default"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

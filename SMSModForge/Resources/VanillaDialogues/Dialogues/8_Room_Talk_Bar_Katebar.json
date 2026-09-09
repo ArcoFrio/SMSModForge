@@ -1,0 +1,898 @@
+{
+ "id": "8_Room_Talk/Bar/Katebar",
+ "name": "Katebar",
+ "index": 5,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Kate",
+  "Liz"
+ ],
+ "roots": [
+  -1669615187,
+  1028146230,
+  1576598491,
+  -1470352809,
+  -1847904585,
+  620960158,
+  793313176,
+  1573861158,
+  -1098377728,
+  1481867795
+ ],
+ "nodes": {
+  "-1669615187": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "H-Here's your strawberry cocktail... Please enjoy!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[Inside-Dialogue-Variable-Short] = 0",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Inside-Dialogue-Variable-Short",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 0
+      }
+     }
+    }
+   ]
+  },
+  "1028146230": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Thanks, Liz. Yummers!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1576598491": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "O-Oh! Hey, {PC}. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1470352809": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Liz",
+   "expressionName": "neutral",
+   "text": "I'll leave you two alone...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/LizBust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1847904585": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2131330888,
+    -1626820043,
+    -763374293
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "So... What are you doing here?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2131330888": {
+   "kind": "text",
+   "parent": -1847904585,
+   "children": [
+    1996212577,
+    -1186067974
+   ],
+   "actor": null,
+   "text": "I'm just here for a drink to be honest.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1626820043": {
+   "kind": "text",
+   "parent": -1847904585,
+   "children": [
+    -253193263
+   ],
+   "actor": null,
+   "text": "I was hoping to see you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-763374293": {
+   "kind": "text",
+   "parent": -1847904585,
+   "children": [
+    -1125906395
+   ],
+   "actor": null,
+   "text": "I'm here to seduce some lonely MILFs.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1996212577": {
+   "kind": "text",
+   "parent": -2131330888,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Same here! I don’t get to come by that often because my paycheck is on the low side...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-253193263": {
+   "kind": "text",
+   "parent": -1626820043,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Me? But why?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1125906395": {
+   "kind": "text",
+   "parent": -763374293,
+   "actor": "Kate",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Oh, I see. So you're into older women and stuff? Huh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "620960158": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1071685686,
+    1213335561,
+    -755297404
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Uhm... However... I kinda wonder, what's your favorite drink?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1186067974": {
+   "kind": "text",
+   "parent": -2131330888,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "But sometimes I just have to treat myself to a nice, refreshing cocktail!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Inside-Dialogue-Variable-Short] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Inside-Dialogue-Variable-Short",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-1071685686": {
+   "kind": "text",
+   "parent": 620960158,
+   "children": [
+    -2133329795
+   ],
+   "actor": null,
+   "text": "Depends on my mood.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1213335561": {
+   "kind": "text",
+   "parent": 620960158,
+   "children": [
+    -580589358
+   ],
+   "actor": null,
+   "text": "Water.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-755297404": {
+   "kind": "text",
+   "parent": 620960158,
+   "children": [
+    32063982
+   ],
+   "actor": null,
+   "text": "(Lewd) Armpit Sweat.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Lewd] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Lewd",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1098377728": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    25699509,
+    892128079,
+    137310979
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "What about your {F}? Tell me something about them.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "25699509": {
+   "kind": "text",
+   "parent": -1098377728,
+   "children": [
+    -497734217
+   ],
+   "actor": null,
+   "text": "They are very supportive of me. I'm lucky to have them.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "892128079": {
+   "kind": "text",
+   "parent": -1098377728,
+   "children": [
+    -589961899
+   ],
+   "actor": null,
+   "text": "I will introduce you to my {F} soon enough.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "137310979": {
+   "kind": "text",
+   "parent": -1098377728,
+   "children": [
+    128896872
+   ],
+   "actor": null,
+   "text": "My {M} is a total milf.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "128896872": {
+   "kind": "text",
+   "parent": 137310979,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Who talks about their {M} like that? Bwahaha!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-589961899": {
+   "kind": "text",
+   "parent": 892128079,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Huh? Sometimes you're talking nonsense, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-497734217": {
+   "kind": "text",
+   "parent": 25699509,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "T-That's good to hear! I'm glad that we both get to have  a healthy support network!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Inside-Dialogue-Variable-Short] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Inside-Dialogue-Variable-Short",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "32063982": {
+   "kind": "text",
+   "parent": -755297404,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh, hahaha. That's gross, {PC}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Inside-Dialogue-Variable-Short] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Inside-Dialogue-Variable-Short",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-580589358": {
+   "kind": "text",
+   "parent": 1213335561,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Kinda boring... But what I expected from Mr. Perfect....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2133329795": {
+   "kind": "text",
+   "parent": -1071685686,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "I totally get that! I usually love sour drinks more, but today I'm in the mood for something sweet!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Inside-Dialogue-Variable-Short] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Inside-Dialogue-Variable-Short",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "793313176": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "You know, my parents left me after I was born, which is why my grandparents took me in and brought me up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1573861158": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Don't ask me why I'm telling you... You know, sometimes I just wanna brag with how awesome my grandparents are?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1481867795": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    805433500,
+    636014049
+   ],
+   "actor": "Kate",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "805433500": {
+   "kind": "choice",
+   "parent": 1481867795,
+   "children": [
+    1374888215,
+    -75495832
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Gotta say, this was a lot of fun. I'm not the best at social situations, but you make me feel... normal?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "636014049": {
+   "kind": "text",
+   "parent": 1481867795,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Hey, I should be getting going. It's getting late. I hope to see you again soon.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done_2[kate-pub] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-pub",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_Only_Done_2[kate-romance-max-3] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-romance-max-3",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "type": "InstructionQuestTaskValue",
+     "title": "Earn Kate’s trust and make her feel safe. + 1",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Gabriel Training",
+        "of": "Quest"
+       },
+       "m_TaskId": -619506573
+      },
+      "m_Value": {
+       "m_Operation": "Add",
+       "m_Value": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1374888215": {
+   "kind": "text",
+   "parent": 805433500,
+   "actor": null,
+   "text": "Likewise, Kate.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-75495832": {
+   "kind": "text",
+   "parent": 805433500,
+   "actor": null,
+   "text": "Normal is boring, we're not normal.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Bar",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Katebar and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[kate-pub] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-pub",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[kate-free-day-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-free-day-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KatePullover to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KatePullover",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/KatePullover"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LizBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LizBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/LizBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/KatePullover/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done_2[kate-pub] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-pub",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[kate-free-day-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-free-day-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

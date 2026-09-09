@@ -1,0 +1,984 @@
+{
+ "id": "Holiday_Hallway_Conditions/Annas_Birthday_Core/Dialogue_RegularBreakfast",
+ "name": "Dialogue_RegularBreakfast",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Anna",
+  "Continue",
+  "Josef"
+ ],
+ "roots": [
+  907603748,
+  -30187094,
+  -264266386,
+  1676579875,
+  612270478,
+  -12346273,
+  1700929667,
+  945560891,
+  1474666819,
+  -991428022,
+  1161542727,
+  -1215203541,
+  936706272,
+  -1756699811,
+  1421849107,
+  636735624,
+  229324055,
+  1915412003,
+  -1091308365,
+  -1587646073,
+  -379415812
+ ],
+ "nodes": {
+  "907603748": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Adrian... you made breakfast?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-30187094": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    166848370
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Looks... edible.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "166848370": {
+   "kind": "text",
+   "parent": -30187094,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Hey, rude. I was trying to do something nice here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-264266386": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "It’s sweet. Really.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "1676579875": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1130006880,
+    514480781,
+    -2045419168
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Both of you.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1130006880": {
+   "kind": "text",
+   "parent": 1676579875,
+   "children": [
+    -372679111
+   ],
+   "actor": null,
+   "text": "We wanted to surprise you. Happy birthday, Mom.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "514480781": {
+   "kind": "text",
+   "parent": 1676579875,
+   "children": [
+    664641842
+   ],
+   "actor": null,
+   "text": "Guess we’re late to the party.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2045419168": {
+   "kind": "text",
+   "parent": 1676579875,
+   "children": [
+    -2080775199
+   ],
+   "actor": null,
+   "text": "Let's just eat, yeah?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-372679111": {
+   "kind": "text",
+   "parent": -1130006880,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That means a lot. Thank you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "664641842": {
+   "kind": "text",
+   "parent": 514480781,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Not too late. She hasn’t had any of my burnt toast yet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2080775199": {
+   "kind": "text",
+   "parent": -2045419168,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Don’t start. It’s her birthday.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "612270478": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Okay, not to brag, but that’s the best toast I’ve ever made.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-12346273": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1012966923
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "It’s toast, Adrian. Not a Michelin star.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1012966923": {
+   "kind": "text",
+   "parent": -12346273,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let him have his moment.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "945560891": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh— I dropped my fork...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1474666819": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Sorry. Butter fingers.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1700929667": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -937633922
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thank you all for being here with me... It really means a lot.. Really...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-937633922": {
+   "kind": "text",
+   "parent": 1700929667,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I love you guys.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-991428022": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I’ll get it—",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1161542727": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "No, it’s fine. I’ve got it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "type": "InstructionTransformChangePosition",
+     "title": "Move Dining_AnnaSitSprite = (7, -8, 0)",
+     "fields": {
+      "m_Space": "LocalPosition",
+      "m_Position": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "raw",
+        "type": "GetPositionVector3",
+        "data": {
+         "m_Position": {
+          "$type": "Vector3",
+          "x": 7,
+          "y": -8,
+          "z": 0
+         }
+        }
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 2,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": true
+      },
+      "m_Transform": {
+       "kind": "object",
+       "name": "Dining_AnnaSitSprite",
+       "of": "GetGameObjectTransform",
+       "path": "5_Levels/121_DiningRoomHome/Dining_Sprites/Dining_AnnaSitSprite"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Dining_AnnaSitSprite to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Dining_AnnaSitSprite",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/121_DiningRoomHome/Dining_Sprites/Dining_AnnaSitSprite"
+      }
+     }
+    }
+   ]
+  },
+  "-1215203541": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "936706272": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    571530151,
+    612191787,
+    -1158574034
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Psshh... Mmwuaah... Mmhmmm....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Birthday_UnderTable (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Birthday_UnderTable (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Anna_Birthday_UnderTable (1)"
+      }
+     }
+    }
+   ]
+  },
+  "571530151": {
+   "kind": "text",
+   "parent": 936706272,
+   "children": [
+    37987444
+   ],
+   "actor": null,
+   "text": "F-Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "37987444": {
+   "kind": "text",
+   "parent": 571530151,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "You good, bro?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "612191787": {
+   "kind": "text",
+   "parent": 936706272,
+   "children": [
+    1349476246
+   ],
+   "actor": null,
+   "text": "{M}?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1349476246": {
+   "kind": "text",
+   "parent": 612191787,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Do you need help down there, Anna?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1158574034": {
+   "kind": "text",
+   "parent": 936706272,
+   "actor": null,
+   "text": "(Keep it quiet)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1756699811": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mwwhaamm... Mhhhmmm... Glllphh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1421849107": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "*Sluuuurp* ... Mwuaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Birthday_UnderTable (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Birthday_UnderTable (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Anna_Birthday_UnderTable (2)"
+      }
+     }
+    }
+   ]
+  },
+  "636735624": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -521856782,
+    -2040040468,
+    709303933
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "...Anna? You need help down there?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-521856782": {
+   "kind": "text",
+   "parent": 636735624,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mwwahmm... N-No, I almost got it... Don't worry, hun!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2040040468": {
+   "kind": "text",
+   "parent": 636735624,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Want me to move the chair?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "709303933": {
+   "kind": "text",
+   "parent": 636735624,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "No—no. I’ve got it.... Mmhmmm... Mmmm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "229324055": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -728604413,
+    209369706,
+    -1399205586
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmaahmmm... *Sluuurp* ... Mwaah!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-728604413": {
+   "kind": "text",
+   "parent": 229324055,
+   "actor": null,
+   "text": "F-Fuck... Fuck, fuck, fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "209369706": {
+   "kind": "text",
+   "parent": 229324055,
+   "actor": null,
+   "text": "Hngaahh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1399205586": {
+   "kind": "text",
+   "parent": 229324055,
+   "actor": null,
+   "text": "(Cum inside her mouth)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1915412003": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "MMGHH! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Birthday_UnderTable (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Birthday_UnderTable (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Anna_Birthday_UnderTable (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1091308365": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "*Gulp* ... *Gulp* ... *Gulp* ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1587646073": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hah... Ha.... Victory. It rolled, but I was able to... to...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_DiningSit_RuinedMakeUp to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_DiningSit_RuinedMakeUp",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/121_DiningRoomHome/Dining_Sprites/Dining_AnnaSitSprite/Anna_DiningSit_RuinedMakeUp"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Dining_AnnaSitSprite to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Dining_AnnaSitSprite",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/121_DiningRoomHome/Dining_Sprites/Dining_AnnaSitSprite"
+      }
+     }
+    },
+    {
+     "type": "InstructionTransformChangePosition",
+     "title": "Move Dining_AnnaSitSprite = (7, -1, 0)",
+     "fields": {
+      "m_Space": "LocalPosition",
+      "m_Position": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "raw",
+        "type": "GetPositionVector3",
+        "data": {
+         "m_Position": {
+          "$type": "Vector3",
+          "x": 7,
+          "y": -1,
+          "z": 0
+         }
+        }
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 1,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": false
+      },
+      "m_Transform": {
+       "kind": "object",
+       "name": "Dining_AnnaSitSprite",
+       "of": "GetGameObjectTransform",
+       "path": "5_Levels/121_DiningRoomHome/Dining_Sprites/Dining_AnnaSitSprite"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-379415812": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    505827936,
+    854919803,
+    -1554705170,
+    362790573,
+    -127425453
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Anna… Your makeup. It’s a little—",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "505827936": {
+   "kind": "text",
+   "parent": -379415812,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "You okay?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "854919803": {
+   "kind": "text",
+   "parent": -379415812,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "What?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1554705170": {
+   "kind": "text",
+   "parent": -379415812,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "It’s smudged. Like you were crying or something.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "362790573": {
+   "kind": "text",
+   "parent": -379415812,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I wasn’t. Must’ve been when I leaned down. I hit the chair, maybe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-127425453": {
+   "kind": "text",
+   "parent": -379415812,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "...Maybe we should just eat.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "Holiday_Hallway_Conditions/Annas_Birthday_Core/Anna_Regular_Breakfast_DialogueStart",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dialogue_RegularBreakfast and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[WHOLE-F-INVOLVED] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "WHOLE-F-INVOLVED",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

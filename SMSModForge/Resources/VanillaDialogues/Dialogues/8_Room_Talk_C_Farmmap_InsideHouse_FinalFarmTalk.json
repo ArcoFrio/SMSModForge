@@ -1,0 +1,645 @@
+{
+ "id": "8_Room_Talk/C_Farmmap_InsideHouse/FinalFarmTalk",
+ "name": "FinalFarmTalk",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Clay",
+  "Kirby"
+ ],
+ "roots": [
+  -1015196123,
+  1833861905,
+  542479325
+ ],
+ "nodes": {
+  "-1015196123": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1872652288,
+    356590333,
+    -1990311314,
+    -1919315240,
+    -1761323811,
+    -1020718137,
+    1361513692
+   ],
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "One million a year… I never thought I’d see that kind of money. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[bafa-milkdeal-accepted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-milkdeal-accepted",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1833861905": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1309264087,
+    -1011405257,
+    448027700,
+    1954724567,
+    -956971138,
+    -93624987,
+    -663963122,
+    1006112691
+   ],
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yes! I knew you’d do the right thing! We don’t need her money, we’ll prove we can do this on our own!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[bafa-milkdeal-declined] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-milkdeal-declined",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "542479325": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1465357625,
+    520393068,
+    -429285771,
+    1545525832,
+    -23342068,
+    -885914438
+   ],
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "…Fifty-fifty?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[bafa-milkdeal-secretending] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-milkdeal-secretending",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1465357625": {
+   "kind": "text",
+   "parent": 542479325,
+   "actor": "Clay",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hah. That’s… brilliant. You gave her what she wanted without losing what’s ours. That’s balance.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "520393068": {
+   "kind": "text",
+   "parent": 542479325,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "You actually impressed me. And that doesn’t happen often.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-429285771": {
+   "kind": "text",
+   "parent": 542479325,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "Ohhh wow! You’re amazing! I thought for sure you’d either sell us out or say no, but you… you found a way to win both sides!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1545525832": {
+   "kind": "text",
+   "parent": 542479325,
+   "actor": "Kirby",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Moo-power AND brain-power! We’re unstoppable now!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-23342068": {
+   "kind": "text",
+   "parent": 542479325,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "Don’t say moo-power. But… she’s right. You did good. Better than I ever could’ve managed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1309264087": {
+   "kind": "text",
+   "parent": 1833861905,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "This is our farm, and it’s gonna shine brighter than ever!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1011405257": {
+   "kind": "text",
+   "parent": 1833861905,
+   "actor": "Clay",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Hah… shine? Without her money, we’re just back to scraping by.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "448027700": {
+   "kind": "text",
+   "parent": 1833861905,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "You turned down security, and for what? Pride? Hope? Both of those die faster than cows out here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1954724567": {
+   "kind": "text",
+   "parent": 1833861905,
+   "actor": "Kirby",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Can't you just be happy for once!? I trust {PC}! You should too!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-956971138": {
+   "kind": "text",
+   "parent": 1833861905,
+   "actor": "Clay",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "…We’ll see, sure. I’m not holding my breath.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1872652288": {
+   "kind": "text",
+   "parent": -1015196123,
+   "actor": "Clay",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "For the first time in years… I feel like we might actually be safe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "356590333": {
+   "kind": "text",
+   "parent": -1015196123,
+   "actor": "Kirby",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Safe?! This isn’t safe, it’s awful! You sold us out to that scary rich lady!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1990311314": {
+   "kind": "text",
+   "parent": -1015196123,
+   "actor": "Kirby",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "This was supposed to be our thing, not hers!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1919315240": {
+   "kind": "text",
+   "parent": -1015196123,
+   "actor": "Kirby",
+   "expressionName": "neutral",
+   "text": "I can’t do this. Not like this. If this is what the farm’s become, then it’s not my home anymore.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/KirbyBustDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1761323811": {
+   "kind": "text",
+   "parent": -1015196123,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "…Let her go. She’s always been stubborn, always chasing dreams that don’t exist.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1020718137": {
+   "kind": "text",
+   "parent": -1015196123,
+   "actor": "Clay",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "But me? I’m… grateful. You gave me something I thought I’d never see again: stability.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1361513692": {
+   "kind": "text",
+   "parent": -1015196123,
+   "actor": "Clay",
+   "expressionName": "neutral",
+   "text": "I'm sure Kirby will return in time, maybe she needs a year or two away from all this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-93624987": {
+   "kind": "text",
+   "parent": 1833861905,
+   "actor": "Kirby",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Shut up, Clay! You’ll never understand! We’ll make it work, even if we have to break our backs!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-663963122": {
+   "kind": "text",
+   "parent": 1833861905,
+   "actor": "Kirby",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "And if you can’t believe in this farm anymore… then maybe you don’t belong here either!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1006112691": {
+   "kind": "text",
+   "parent": 1833861905,
+   "actor": "Clay",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Maybe you're right...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Charm to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Charm",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Charm"
+      }
+     }
+    }
+   ]
+  },
+  "-885914438": {
+   "kind": "text",
+   "parent": 542479325,
+   "actor": "Kirby",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "And it’s thanks to you, {PC}. This is our farm, our family, our fight… and you made it real.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Charm to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Charm",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Charm"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/C_Farmmap_InsideHouse",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play FinalFarmTalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[milking-mainstory] = 10",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milking-mainstory",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 10
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KirbyBustDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KirbyBustDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/KirbyBustDefault"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_ClayDefaultBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_ClayDefaultBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_ClayDefaultBust"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Help Kirby get the dairy running successfully.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Moo! (Kirby)",
+        "of": "Quest"
+       },
+       "m_TaskId": 837760614
+      },
+      "m_WaitToComplete": false
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Milking Save[milking-mainstory] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milking-mainstory",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

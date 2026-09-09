@@ -1,0 +1,655 @@
+{
+ "id": "8_Core_Events/SmallTalks/WardrobeRobeReveal/GameObject",
+ "name": "GameObject",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  957701803,
+  1057718191,
+  -1690572489,
+  1320265160,
+  1950486034,
+  155058270,
+  1979221544,
+  1139171195,
+  -184128463,
+  1510193133,
+  1636065897
+ ],
+ "nodes": {
+  "957701803": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Close the door.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1057718191": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So, I got a call from Joanne today... She was really surprised that I only have 50 subscribers.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1320265160": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_White_Lingerie to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_White_Lingerie",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_White_Lingerie"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_BathrobeClosed to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_BathrobeClosed",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_BathrobeClosed"
+      }
+     }
+    }
+   ]
+  },
+  "-1690572489": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "She suggested that a new profile photo might help...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1950486034": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1984111173,
+    1138221514,
+    -45852420
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Not a word to anyone about this, okay? Just take the photo, please...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1984111173": {
+   "kind": "text",
+   "parent": 1950486034,
+   "children": [
+    -771453100
+   ],
+   "actor": null,
+   "text": "Of course.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1138221514": {
+   "kind": "text",
+   "parent": 1950486034,
+   "children": [
+    1929200756
+   ],
+   "actor": null,
+   "text": "Wow, you look absolutely stunning.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-45852420": {
+   "kind": "text",
+   "parent": 1950486034,
+   "children": [
+    507830877
+   ],
+   "actor": null,
+   "text": "[Stare a little longer]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1929200756": {
+   "kind": "text",
+   "parent": 1138221514,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... Thanks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-771453100": {
+   "kind": "text",
+   "parent": -1984111173,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Good...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "507830877": {
+   "kind": "text",
+   "parent": -45852420,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{PC}? Can you please take the photo?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "155058270": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'flash'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "flash"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 09_M1Wardrobe1 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "09_M1Wardrobe1",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/09_M1Wardrobe1"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Follower] + 132",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Follower",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 132
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Subscriber] + 52",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Subscriber",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 52
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Daily-Income] + 62",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Daily-Income",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 62
+      }
+     }
+    }
+   ]
+  },
+  "1979221544": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let me take a look...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1139171195": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -52795179,
+    400277062,
+    -943994695
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh my, I've really gained some weight. Do you remember how slim I used to be? I really should start jogging again.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-52795179": {
+   "kind": "text",
+   "parent": 1139171195,
+   "children": [
+    -2105170332,
+    557895938
+   ],
+   "actor": null,
+   "text": "You're like, really, really hot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "400277062": {
+   "kind": "text",
+   "parent": 1139171195,
+   "children": [
+    1474438868
+   ],
+   "actor": null,
+   "text": "You're completly healthy, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-943994695": {
+   "kind": "text",
+   "parent": 1139171195,
+   "children": [
+    -1059656456
+   ],
+   "actor": null,
+   "text": "You really should.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2105170332": {
+   "kind": "text",
+   "parent": -52795179,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "D-Did you just call your own {M} \"hot\"?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[MCorruption] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MCorruption",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Lewd to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Lewd",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Lewd"
+      }
+     }
+    }
+   ]
+  },
+  "1474438868": {
+   "kind": "text",
+   "parent": 400277062,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You’re right, but losing a few pounds wouldn't hurt...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[MLove] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MLove",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-1059656456": {
+   "kind": "text",
+   "parent": -943994695,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That's a subtle way of calling your own {M}  fat... Haha!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "557895938": {
+   "kind": "text",
+   "parent": -52795179,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I mean... Thanks, it's just so... It feels weird, you know?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1636065897": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You should probably go now; we've been in here long enough. Thank you for your help...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_White_Lingerie/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-184128463": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I was thinking, maybe we could do this again next Wednesday? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1510193133": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I won't be at the flower shop that day, so I'll have plenty of time to squeeze into this snug lingerie.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/SmallTalks/WardrobeRobeReveal",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play GameObject and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueStart'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueStart"
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete  Go to the wardrobe upstairs and meet Anna there.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Going Viral (Anna)",
+        "of": "Quest"
+       },
+       "m_TaskId": -210829219
+      },
+      "m_WaitToComplete": false
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_BathrobeClosed to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_BathrobeClosed",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_BathrobeClosed"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueEnd'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueEnd"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

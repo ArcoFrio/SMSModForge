@@ -1,0 +1,836 @@
+{
+ "id": "8_Room_Talk/Sexstore/Zero_candlestalk",
+ "name": "Zero_candlestalk",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Miss Zero",
+  "You"
+ ],
+ "roots": [
+  1865755685,
+  139309744,
+  279267696,
+  -1774686078,
+  -1026675994,
+  1802384205,
+  -1513716227,
+  -515214146,
+  778492121,
+  547130989,
+  1748380414,
+  396297595
+ ],
+ "nodes": {
+  "1865755685": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "You bought the last candles.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "139309744": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1478662499,
+    778820806,
+    -1950699110
+   ],
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "I did. And now you’re here... hoping I’ll just hand one over?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1478662499": {
+   "kind": "text",
+   "parent": 139309744,
+   "children": [
+    -1648329226
+   ],
+   "actor": null,
+   "text": "It’s not for me. Someone I care about. She needs it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "778820806": {
+   "kind": "text",
+   "parent": 139309744,
+   "children": [
+    1285486351
+   ],
+   "actor": null,
+   "text": "I'll buy them off you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1950699110": {
+   "kind": "text",
+   "parent": 139309744,
+   "children": [
+    -2146455834
+   ],
+   "actor": null,
+   "text": "Uhm, You want to put something on?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2146455834": {
+   "kind": "text",
+   "parent": -1950699110,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "I was about to take a bath, silly. You complaining... or enjoying the view?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1285486351": {
+   "kind": "text",
+   "parent": 778820806,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Nah, I think the candles right now are priceless.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1648329226": {
+   "kind": "text",
+   "parent": 1478662499,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Ohhh... doing it for love. Or guilt? Either way, cute.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "279267696": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Lucky for you… I’m in a generous mood.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1774686078": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1894529524,
+    2054387087
+   ],
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "You’re gonna pull my little toy out. Right here.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MissZeroChain (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MissZeroChain (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/MissZeroChain (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1894529524": {
+   "kind": "text",
+   "parent": -1774686078,
+   "actor": null,
+   "text": "Fine...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2054387087": {
+   "kind": "text",
+   "parent": -1774686078,
+   "children": [
+    -2093307139,
+    1479769736,
+    -2089112716
+   ],
+   "actor": null,
+   "text": "No way, please. Just let me have them!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2093307139": {
+   "kind": "text",
+   "parent": 2054387087,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Oh? Too shy to touch me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1479769736": {
+   "kind": "text",
+   "parent": 2054387087,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Tch. Boring.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2089112716": {
+   "kind": "text",
+   "parent": 2054387087,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Ugh. Fine. I’m a sucker for sad boy energy. But you owe me.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1026675994": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2088775221,
+    1766935985
+   ],
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Come on. Pull. If I don’t hear a pop, you’re doing it wrong.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1513716227": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Ah—",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MissZeroChain (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MissZeroChain (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/MissZeroChain (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-515214146": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1261933962,
+    1784504923,
+    128020580
+   ],
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "There it is. Holy shit. Keep pulling...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2088775221": {
+   "kind": "text",
+   "parent": -1026675994,
+   "actor": null,
+   "text": "(Pull gently)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1766935985": {
+   "kind": "text",
+   "parent": -1026675994,
+   "actor": null,
+   "text": "(Pull roughly)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1261933962": {
+   "kind": "text",
+   "parent": -515214146,
+   "actor": null,
+   "text": "(Pull harder)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1784504923": {
+   "kind": "text",
+   "parent": -515214146,
+   "children": [
+    1550853945
+   ],
+   "actor": null,
+   "text": "(Slap her butt and then pull)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "128020580": {
+   "kind": "text",
+   "parent": -515214146,
+   "children": [
+    1021081632
+   ],
+   "actor": null,
+   "text": "Try to relax, part of me believes you don't want them out...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1021081632": {
+   "kind": "text",
+   "parent": 128020580,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Do not talk. Just pull.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1550853945": {
+   "kind": "text",
+   "parent": 1784504923,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "AH! Ha- hah- ... Cheeky boy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Slaps In The Face 5",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Slaps In The Face 5",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 0.3
+      }
+     }
+    }
+   ]
+  },
+  "1802384205": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Pull. You’re not gonna break me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "778492121": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "F-F-Fhuuuckk... T-There it is... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MissZeroChain (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MissZeroChain (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/MissZeroChain (3)"
+      }
+     }
+    }
+   ]
+  },
+  "547130989": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "There. You’ve earned it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1748380414": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    640908170,
+    1721690884,
+    -1894851688
+   ],
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "You should wash your hands before you give them to your \"special someone.\"",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "640908170": {
+   "kind": "text",
+   "parent": 1748380414,
+   "actor": null,
+   "text": "I will. Thanks, Miss Zero.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1721690884": {
+   "kind": "text",
+   "parent": 1748380414,
+   "actor": null,
+   "text": "This city is crazy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1894851688": {
+   "kind": "text",
+   "parent": 1748380414,
+   "children": [
+    308120951
+   ],
+   "actor": null,
+   "text": "Unless you want me to stay a little longer?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "396297595": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Now hust, a bath is waiting for me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_ShadyVendor_BathrobeBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Lewd to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Lewd",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Lewd"
+      }
+     }
+    }
+   ]
+  },
+  "308120951": {
+   "kind": "text",
+   "parent": -1894851688,
+   "actor": "Miss Zero",
+   "expressionName": "neutral",
+   "text": "Hmm... Tempting, but I just came, so... I'm good. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Sexstore",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Zero_candlestalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_8[Scentedcandlesquest] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Scentedcandlesquest",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_ShadyVendor_BathrobeBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_ShadyVendor_BathrobeBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_ShadyVendor_BathrobeBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = Scented Candles",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Scented Candles"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Inventory[Scented-Candles] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Scented-Candles",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_8[Scentedcandlesquest] = 2",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Scentedcandlesquest",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 2
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_ShadyVendor_BathrobeBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

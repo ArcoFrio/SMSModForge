@@ -1,0 +1,523 @@
+{
+ "id": "8_Room_Talk/Basement/Unique/ToniFixesWifi",
+ "name": "ToniFixesWifi",
+ "index": 4,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "Toni"
+ ],
+ "roots": [
+  -938395628,
+  2003939998,
+  -1436445412,
+  792371644,
+  2061760525,
+  -470508307,
+  1300610738,
+  -1898900590,
+  -263448179,
+  -1673958548,
+  749714718,
+  -933955219,
+  1596171967,
+  -716457266
+ ],
+ "nodes": {
+  "-938395628": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Antonia?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Return to Anna.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Going Live (Anna)",
+        "of": "Quest"
+       },
+       "m_TaskId": 1569370815
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "2003939998": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "The one and only! Long time, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1436445412": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Wow… you really—",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "792371644": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "—grew into yourself.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2061760525": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Toni",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "That a nice way of sayin’ I look like I crawled out of an engine block? Don’t worry, I take it as a compliment.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-470508307": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "No, no! I just... You’ve changed a lot. But it’s good to see you again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1300610738": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Alright! We got a Wi-Fi problem, and I’m here to work my magic. Lemme see what I’m dealing with.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1898900590": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "-263448179": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": " Boom. Wi-Fi’s up, speeds are solid, and you shouldn’t have any more connection issues. You’re officially good to go.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1673958548": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh, this is perfect! I can finally start streaming",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "749714718": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    865565567,
+    -1051413231,
+    1174072419
+   ],
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Yeah, yeah, all in a day’s work. Speaking of… what exactly are you two doing down here?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "865565567": {
+   "kind": "text",
+   "parent": 749714718,
+   "children": [
+    -553854557
+   ],
+   "actor": null,
+   "text": "It’s just a little side project. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1051413231": {
+   "kind": "text",
+   "parent": 749714718,
+   "children": [
+    2066306883
+   ],
+   "actor": null,
+   "text": "Well, since you’re already here, wanna pose for a few shots?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2066306883": {
+   "kind": "text",
+   "parent": -1051413231,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Pfft—yeah, lemme just roll around in some engine grease first.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-553854557": {
+   "kind": "text",
+   "parent": 865565567,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Mmhmm. ‘Side project,’ sure. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1174072419": {
+   "kind": "text",
+   "parent": 749714718,
+   "children": [
+    -821384621
+   ],
+   "actor": null,
+   "text": "I'm helping my {M} with her Starmaker Page.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-821384621": {
+   "kind": "text",
+   "parent": 1174072419,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "Pwahaha, yeah. Good one.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-933955219": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Honestly, I don’t care what anyone thinks right now—this is exactly what I needed. Antonia, thank you. Really.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1596171967": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Toni",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hey, no problem. You needed it, I fixed it. Simple as that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-716457266": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Toni",
+   "expressionName": "neutral",
+   "text": "If you ever need a tech wizard again, you know where to find me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Raise_Stat_Creative to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Raise_Stat_Creative",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Raise_Stats/Raise_Stat_Creative"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Basement",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play ToniFixesWifi and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_7[toni-freed] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "toni-freed",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_7[LIVESTREAMS-ENABLED] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "LIVESTREAMS-ENABLED",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "branches": [
+    "technician"
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/TomboyToni_BustDefault/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.5 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.5
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active TomboyToni_BustDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "TomboyToni_BustDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/TomboyToni_BustDefault"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_7[LIVESTREAMS-ENABLED] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "LIVESTREAMS-ENABLED",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/TomboyToni_BustDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

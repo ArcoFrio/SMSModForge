@@ -227,18 +227,104 @@ public sealed class UiNodeDef
     [JsonProperty("startActive", Order = 9)]
     public bool StartActive { get; set; } = true;
 
-    /// <summary>Conditions that decide whether this object is shown, evaluated
-    /// the same way as everywhere else in a pack.</summary>
+    /// <summary>
+    /// Conditions that decide whether this object is shown, evaluated the same
+    /// way as everywhere else in a pack and re-checked every frame.
+    /// <para/>
+    /// This is how a list hides what it should not offer - a shop shelf drops
+    /// what has already been bought - without a rule per item saying so. The
+    /// object states its own condition, which is where an author looks for it.
+    /// </summary>
     [JsonProperty("activeConditions", Order = 10)]
     public List<NodeConditionDef> ActiveConditions { get; set; } = new();
+
+    /// <summary>
+    /// Conditions that decide whether a click does anything.
+    /// <para/>
+    /// Without these a click cannot ask a question, so anything conditional -
+    /// "buy it IF there is enough money" - had to be pushed into an
+    /// integration rule per item, with the click reduced to writing down what
+    /// was asked for. The question belongs on the button that asks it.
+    /// <para/>
+    /// A click that fails them does nothing at all: no actions run, and the
+    /// press still plays so the button does not feel broken.
+    /// </summary>
+    [JsonProperty("clickConditions", Order = 17)]
+    public List<NodeConditionDef> ClickConditions { get; set; } = new();
 
     /// <summary>Behaviour attached to this object — what a button does when it
     /// is clicked, and anything else with parameters.</summary>
     [JsonProperty("components", Order = 11)]
     public List<ComponentDef> Components { get; set; } = new();
 
-    [JsonProperty("children", Order = 12)]
+    /// <summary>
+    /// What happens when this object is clicked.
+    /// <para/>
+    /// The same actions the rest of the pack uses - set a variable, switch an
+    /// object on, emit a signal - rather than a vocabulary of its own. An
+    /// author who has written a dialogue already knows this list, and a button
+    /// that can only do button-shaped things is a button that stops being
+    /// useful the first time it needs to do anything else.
+    /// <para/>
+    /// A node with none of these is not clickable at all: the pointer passes
+    /// through it to whatever is behind, which is what decoration should do.
+    /// </summary>
+    [JsonProperty("onClick", Order = 13)]
+    public List<NodeActionDef> OnClick { get; set; } = new();
+
+    /// <summary>
+    /// Tint while the pointer is over this object, as "#RRGGBBAA". Empty means
+    /// no hover feedback at all.
+    /// <para/>
+    /// A declared colour, and the game does the same kind of thing: its own
+    /// buttons carry a Unity ColorBlock set to ColorTint, tinting to #F5F5F5
+    /// on hover and #C8C8C8 on press over a 0.1s fade. Measured from 756 of
+    /// them, so a pack that wants to look native has the numbers.
+    /// </summary>
+    [JsonProperty("hoverTint", Order = 14)]
+    public string HoverTint { get; set; } = "";
+
+    /// <summary>
+    /// What THIS object sounds like when clicked, overriding whatever the
+    /// screen says its buttons sound like. Empty means it uses the screen's.
+    /// </summary>
+    [JsonProperty("clickSound", Order = 15, NullValueHandling = NullValueHandling.Ignore)]
+    public string ClickSound { get; set; } = "";
+
+    /// <summary>
+    /// How this object arrives when it is switched on, or null to simply
+    /// appear.
+    /// <para/>
+    /// The same setting a whole screen has, because an object that a condition
+    /// or an action turns on is arriving exactly as a screen does - a panel
+    /// swapping for another inside one screen is the same moment, one level
+    /// down.
+    /// </summary>
+    [JsonProperty("open", Order = 16, NullValueHandling = NullValueHandling.Ignore)]
+    public UiOpenDef? Open { get; set; }
+
+    /// <summary>How this object leaves when an action switches it off, or null
+    /// to simply vanish. See <see cref="UiDef.Close"/>.</summary>
+    [JsonProperty("close", Order = 17, NullValueHandling = NullValueHandling.Ignore)]
+    public UiOpenDef? Close { get; set; }
+
+    /// <summary>
+    /// How this object arranges its children, or null to leave each child where
+    /// it was put.
+    /// <para/>
+    /// The reason to reach for one is a list that changes: hide an item from a
+    /// row of fixed positions and it leaves a hole, while a row that arranges
+    /// itself closes ranks. The game uses 380 of these across its own screens.
+    /// </summary>
+    [JsonProperty("layout", Order = 16, NullValueHandling = NullValueHandling.Ignore)]
+    public UiLayoutDef? Layout { get; set; }
+
+    [JsonProperty("children", Order = 15)]
     public List<UiNodeDef> Children { get; set; } = new();
+
+    /// <summary>Whether clicking this object does anything.</summary>
+    [JsonIgnore]
+    public bool IsClickable => OnClick.Count > 0;
 
     // ── Extending something that already exists ──────────────────────
     //
@@ -274,11 +360,32 @@ public sealed class UiNodeDef
     [JsonProperty("overrideActive", Order = 24)]
     public bool OverrideActive { get; set; }
 
+    /// <summary>
+    /// Where this object sits among its parent's children, or -1 for wherever
+    /// it naturally lands.
+    /// <para/>
+    /// Sibling order IS draw order on a canvas - there is no depth to sort by,
+    /// so a later sibling is simply in front. Left alone, an object the game
+    /// owns keeps the place the game gave it and one the pack adds goes on the
+    /// end, which is right almost always and is why this is normally -1. It is
+    /// written only when an author has actually rearranged a parent's children,
+    /// and then it is written on ALL of them: half an order is not an order.
+    /// </summary>
+    [JsonProperty("siblingIndex", Order = 25)]
+    public int SiblingIndex { get; set; } = -1;
+
     public bool IsBound => !string.IsNullOrEmpty(Bind);
 
     public bool ShouldSerializeActiveConditions() => ActiveConditions.Count > 0;
+    public bool ShouldSerializeClickConditions() => ClickConditions.Count > 0;
     public bool ShouldSerializeComponents() => Components.Count > 0;
     public bool ShouldSerializeChildren() => Children.Count > 0;
+    public bool ShouldSerializeOnClick() => OnClick.Count > 0;
+    public bool ShouldSerializeClickSound() => !string.IsNullOrEmpty(ClickSound);
+    public bool ShouldSerializeOpen() => Open != null && Open.DoesAnything;
+    public bool ShouldSerializeClose() => Close != null && Close.DoesAnything;
+    public bool ShouldSerializeHoverTint() => !string.IsNullOrEmpty(HoverTint);
+    public bool ShouldSerializeLayout() => Layout != null;
     public bool ShouldSerializeClipChildren() => ClipChildren;
     public bool ShouldSerializeStartActive() => !StartActive;
     public bool ShouldSerializeBind() => IsBound;
@@ -286,6 +393,7 @@ public sealed class UiNodeDef
     public bool ShouldSerializeOverrideImage() => OverrideImage;
     public bool ShouldSerializeOverrideText() => OverrideText;
     public bool ShouldSerializeOverrideActive() => OverrideActive;
+    public bool ShouldSerializeSiblingIndex() => SiblingIndex >= 0;
 }
 
 /// <summary>A shadow or an outline: a colour and how far it is offset.</summary>

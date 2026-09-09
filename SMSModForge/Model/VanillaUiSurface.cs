@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -102,6 +102,35 @@ public sealed class VanillaUiSurface
         [JsonProperty("blocksRaycasts")] public bool BlocksRaycasts { get; set; } = true;
     }
 
+    /// <summary>A horizontal or vertical group, as the extractor recorded
+    /// it.</summary>
+    public sealed class LayoutGroupInfo
+    {
+        [JsonProperty("kind")] public string Kind { get; set; } = "";
+        [JsonProperty("spacing")] public float Spacing { get; set; }
+        [JsonProperty("childAlignment")] public string ChildAlignment { get; set; } = "UpperLeft";
+        [JsonProperty("padding")] public float[] Padding { get; set; } = { 0, 0, 0, 0 };
+        [JsonProperty("childControlWidth")] public bool ChildControlWidth { get; set; }
+        [JsonProperty("childControlHeight")] public bool ChildControlHeight { get; set; }
+        [JsonProperty("childForceExpandWidth")] public bool ChildForceExpandWidth { get; set; }
+        [JsonProperty("childForceExpandHeight")] public bool ChildForceExpandHeight { get; set; }
+        [JsonProperty("reverseArrangement")] public bool ReverseArrangement { get; set; }
+
+        public bool IsVertical => Kind == "VerticalLayoutGroup";
+    }
+
+    public sealed class GridLayoutInfo
+    {
+        [JsonProperty("cellSize")] public float[] CellSize { get; set; } = { 100, 100 };
+        [JsonProperty("spacing")] public float[] Spacing { get; set; } = { 0, 0 };
+        [JsonProperty("startCorner")] public string StartCorner { get; set; } = "UpperLeft";
+        [JsonProperty("startAxis")] public string StartAxis { get; set; } = "Horizontal";
+        [JsonProperty("childAlignment")] public string ChildAlignment { get; set; } = "UpperLeft";
+        [JsonProperty("constraint")] public string Constraint { get; set; } = "Flexible";
+        [JsonProperty("constraintCount")] public int ConstraintCount { get; set; } = 2;
+        [JsonProperty("padding")] public float[] Padding { get; set; } = { 0, 0, 0, 0 };
+    }
+
     public sealed class Node
     {
         [JsonProperty("name")] public string Name { get; set; } = "";
@@ -118,6 +147,16 @@ public sealed class VanillaUiSurface
         [JsonProperty("canvasGroup")] public Group? CanvasGroup { get; set; }
         [JsonProperty("mask")] public object? Mask { get; set; }
         [JsonProperty("rectMask")] public object? RectMask { get; set; }
+        [JsonProperty("layoutGroup")] public LayoutGroupInfo? LayoutGroup { get; set; }
+        [JsonProperty("sizeFitter")] public object? SizeFitter { get; set; }
+        [JsonProperty("layoutElement")] public object? LayoutElement { get; set; }
+
+        /// <summary>Whether this object declares a size of its own for a layout
+        /// group to read - a LayoutElement, or a fitter sizing it to its
+        /// content. The authored model has neither, so a group whose children
+        /// do this is arranged from inputs the preview cannot see.</summary>
+        public bool DeclaresOwnSize => SizeFitter != null || LayoutElement != null;
+        [JsonProperty("gridLayout")] public GridLayoutInfo? GridLayout { get; set; }
         [JsonProperty("children")] public List<Node> Children { get; set; } = new();
 
         /// <summary>Whether this object clips what is drawn inside it. Mask and

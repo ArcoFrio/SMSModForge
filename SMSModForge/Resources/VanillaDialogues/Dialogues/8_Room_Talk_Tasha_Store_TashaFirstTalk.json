@@ -1,0 +1,297 @@
+{
+ "id": "8_Room_Talk/Tasha_Store/TashaFirstTalk",
+ "name": "TashaFirstTalk",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Tasha"
+ ],
+ "roots": [
+  561159366,
+  -2059784498,
+  -543912177
+ ],
+ "nodes": {
+  "561159366": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1145938092,
+    1311506549
+   ],
+   "actor": "Tasha",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Welcome to the shop. Let me know if you’re looking for something specific.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1145938092": {
+   "kind": "text",
+   "parent": 561159366,
+   "actor": null,
+   "text": "Hey, just checking the place out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1311506549": {
+   "kind": "text",
+   "parent": 561159366,
+   "actor": null,
+   "text": "Didn’t know a store like this was out here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2059784498": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1274176175,
+    1272695372,
+    -1921833789
+   ],
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Yeah, just opened. Kind of a mix of everything—comics, games, collectibles. ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1274176175": {
+   "kind": "text",
+   "parent": -2059784498,
+   "children": [
+    1891045618
+   ],
+   "actor": null,
+   "text": "You’ve got a unique style going on.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1272695372": {
+   "kind": "text",
+   "parent": -2059784498,
+   "children": [
+    -1553401824
+   ],
+   "actor": null,
+   "text": "Seems like a lot of work.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1921833789": {
+   "kind": "text",
+   "parent": -2059784498,
+   "children": [
+    523702715,
+    1660771034
+   ],
+   "actor": null,
+   "text": "(Wink) I think I’ve found what I’m looking for.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "523702715": {
+   "kind": "text",
+   "parent": -1921833789,
+   "actor": "Tasha",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Oh, you’re one of those guys. Here’s the deal—I’m here to run a business, not listen to your weak pickup lines.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1553401824": {
+   "kind": "text",
+   "parent": 1272695372,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "It is. But I’m not exactly the type to sit around waiting for things to happen. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1891045618": {
+   "kind": "text",
+   "parent": 1274176175,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Unique’s the goal. If you’re gonna be here, better appreciate what you’re looking at.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1660771034": {
+   "kind": "text",
+   "parent": -1921833789,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Got something worth saying, or are you done?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-543912177": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Tasha",
+   "expressionName": "neutral",
+   "text": "Well, I'm here if you decide to buy anything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Tasha_Store",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play TashaFirstTalk and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[Tasha-met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Tasha-met",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Tasha_Default to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Tasha_Default",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Tasha_Default"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,785 @@
+{
+ "id": "8_Room_Talk/Basement/Group/D_Scene1",
+ "name": "D_Scene1",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "Josef"
+ ],
+ "roots": [
+  1903887002,
+  1416029910,
+  952436864,
+  736228237,
+  -1747967759,
+  -1361160201,
+  181318817,
+  -1267593681,
+  -985331645,
+  921446940,
+  -1810133431,
+  1211557031,
+  -217950928,
+  -1365925222,
+  23638060,
+  -151892826,
+  1624897237,
+  905700552
+ ],
+ "nodes": {
+  "952436864": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Come on, I can't wait to see my two favorite cocks!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Mainstory[M-and-D-activated] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "736228237": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 70_dscene1 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "70_dscene1",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/70_dscene1"
+      }
+     }
+    }
+   ]
+  },
+  "-1747967759": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    330869064,
+    830892674,
+    204357105
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fuck, both of you are SO huge... Your cocks look SOOO tasty...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1361160201": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So much cock... I want... I....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-985331645": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 71_dscene2 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "71_dscene2",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/71_dscene2"
+      }
+     }
+    }
+   ]
+  },
+  "921446940": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fuck, that's it... Use {M}'s body as you like... Feel free to cum on me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Daily-Income] + 320",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Daily-Income",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 320
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Subscriber] + 320",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Subscriber",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 320
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Follower] + 820",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Follower",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 820
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Mainstory[really-horny-m] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "really-horny-m",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "23638060": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes! Cover me in your cum! So muaaaach......",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "330869064": {
+   "kind": "text",
+   "parent": -1747967759,
+   "children": [
+    670955252
+   ],
+   "actor": null,
+   "text": "These photos are going to be insane...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "830892674": {
+   "kind": "text",
+   "parent": -1747967759,
+   "children": [
+    1201265972
+   ],
+   "actor": null,
+   "text": "Come on, {M}. Let's start...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "204357105": {
+   "kind": "text",
+   "parent": -1747967759,
+   "children": [
+    1195565983,
+    1768264251
+   ],
+   "actor": null,
+   "text": "Two fat cocks for {M}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1195565983": {
+   "kind": "text",
+   "parent": 204357105,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes! Your {M} loves your cocks, they smell SOOO good...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1201265972": {
+   "kind": "text",
+   "parent": 830892674,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes, yes... Let me think...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "670955252": {
+   "kind": "text",
+   "parent": 330869064,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fuck, we'll make so much money...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "181318817": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I want {PC} to fuck my tits while I stroke you, does that sound good?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1365925222": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 72_dscene3 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "72_dscene3",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/72_dscene3"
+      }
+     }
+    }
+   ]
+  },
+  "1416029910": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -491281270,
+    381790834,
+    1229115447,
+    -583498332
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "W-Wait! Are you suggesting that we...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-491281270": {
+   "kind": "text",
+   "parent": 1416029910,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Come on, hubby, don't be shy! I love both your humongous cocks!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "381790834": {
+   "kind": "text",
+   "parent": 1416029910,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "\"C-Cocks!\" ... You never talked like that before!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-583498332": {
+   "kind": "text",
+   "parent": 1416029910,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Jesus, Anna.... I'm so hard...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1229115447": {
+   "kind": "text",
+   "parent": 1416029910,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, babe, do you like it? Do you want to cover me in cum with our {S}?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1267593681": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Y-Yes...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1810133431": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Fuck, Anna... You're so different... You're so... naughty...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1211557031": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1709649010,
+    -1488827884,
+    1315072193
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Guess what! {M} got hooked on cock and now she's got two to play with... It's so much fun!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-217950928": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I can't hold it in any longer... Hnggg....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1709649010": {
+   "kind": "text",
+   "parent": 1211557031,
+   "actor": null,
+   "text": "You look so hot, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1488827884": {
+   "kind": "text",
+   "parent": 1211557031,
+   "actor": null,
+   "text": "God, these tits are pure bliss...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1315072193": {
+   "kind": "text",
+   "parent": 1211557031,
+   "actor": null,
+   "text": "We'll cover you in cum, Anna.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1768264251": {
+   "kind": "text",
+   "parent": 204357105,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Fuck, Anna.... You're such a hot slut...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-151892826": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Fuck... Take it all... Hng...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1624897237": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That was the best! I'm so happy you decided to join us, Josef.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "905700552": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Of course, honey... Of course...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1903887002": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Nude"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "Studio_Canvas/Porn (Josef)/UI_Porn",
+   "script": "ButtonInstructions",
+   "how": "InstructionGameObjectSetGameObject",
+   "title": "Set Core[temp-stored-very-short-term] = D_Scene1",
+   "as": "GameObject",
+   "before": [
+    {
+     "type": "InstructionCommonDebugText",
+     "title": "Log: Click!",
+     "fields": {
+      "m_Message": {
+       "kind": "value",
+       "value": "Click!"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Button-1",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Button-1",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "type": "InstructionUICanvasGroupInteractable",
+     "title": "Studio_Canvas Interactable = False",
+     "fields": {
+      "m_CanvasGroup": {
+       "kind": "object",
+       "name": "Studio_Canvas",
+       "of": "GetGameObjectInstance",
+       "path": "Studio_Canvas"
+      },
+      "m_Interactable": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "type": "InstructionUICanvasGroupAlpha",
+     "title": "Studio_Canvas alpha = 0",
+     "fields": {
+      "m_CanvasGroup": {
+       "kind": "object",
+       "name": "Studio_Canvas",
+       "of": "GetGameObjectInstance",
+       "path": "Studio_Canvas"
+      },
+      "m_Alpha": {
+       "m_Operation": "Set",
+       "m_Value": {
+        "kind": "value",
+        "value": 0
+       }
+      },
+      "m_Transition": {
+       "m_Duration": 1,
+       "m_Easing": "QuadInOut",
+       "m_WaitToComplete": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Basement to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Basement",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Basement"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Studio_Canvas to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Studio_Canvas",
+       "of": "GetGameObjectInstance",
+       "path": "Studio_Canvas"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

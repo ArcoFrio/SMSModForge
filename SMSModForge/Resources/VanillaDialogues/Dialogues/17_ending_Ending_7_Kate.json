@@ -1,0 +1,240 @@
+{
+ "id": "17_ending/Ending_7_Kate",
+ "name": "Ending_7_Kate",
+ "index": 7,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "You"
+ ],
+ "roots": [
+  660064052,
+  449206811,
+  -899059071,
+  88952544,
+  -1146291439,
+  553319576,
+  259088967
+ ],
+ "nodes": {
+  "660064052": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "As I look back on the path that led us here, I realize how far we've come. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-899059071": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Kate, with her boundless energy and quirky charm, brought a light into my life that I never knew I needed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Endingshot (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Endingshot (5)",
+       "of": "GetGameObjectInstance",
+       "path": "5_CG_EndingArt/Endingshot (5)"
+      }
+     }
+    }
+   ]
+  },
+  "88952544": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "We've faced challenges, learned from each other, and grown together. Starting a family with Kate feels like the most natural and fulfilling chapter of my life. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "449206811": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "From our chance encounters and awkward beginnings to the deep bond we now share, every moment has shaped our story.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1146291439": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Our home is filled with love, laughter, and a sense of belonging that I’ve always dreamed of.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "553319576": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Her grandparents, who once worried about her future, now see her surrounded by happiness and stability. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "259088967": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "And as for us, we’ve created a life where dreams are nurtured and every day is an adventure.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "17_ending",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Ending_7_Kate and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Active-Ending] = 7",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Active-Ending",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 7
+       }
+      }
+     }
+    }
+   ],
+   "branches": [
+    "7"
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_Maps to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_Maps",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_Maps"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 47_EndingZero to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "47_EndingZero",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/47_EndingZero"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

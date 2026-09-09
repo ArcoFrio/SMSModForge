@@ -148,7 +148,15 @@ public static class VanillaUiDelta
     {
         dropped = false;
 
-        var children = Prune(node.Children, source, lookup);
+        // Order is decided before pruning, because it changes what pruning may
+        // throw away: once a parent's children are being placed explicitly,
+        // every one of them has to survive to carry its place.
+        var vanillaHere = node.IsBound ? lookup(source, node.Bind) : null;
+        bool ordered = vanillaHere != null && OrderAsserted(node, vanillaHere);
+
+        var children = ordered
+            ? KeepAllInOrder(node.Children, source, lookup)
+            : Prune(node.Children, source, lookup);
         bool childrenChanged = !ReferenceEquals(children, node.Children);
 
         // A node the pack created is its own assertion and is always kept, as
@@ -161,7 +169,7 @@ public static class VanillaUiDelta
             return copy;
         }
 
-        var vanilla = lookup(source, node.Bind);
+        var vanilla = vanillaHere;
         if (vanilla == null)
         {
             // No baseline to compare against — an editor without the
@@ -188,11 +196,12 @@ public static class VanillaUiDelta
         bool shadowDiffers = EffectDiffers(node.Shadow, vanilla.Shadow);
         bool outlineDiffers = EffectDiffers(node.Outline, vanilla.Outline);
 
-        bool asserts = made.OverrideRect || made.OverrideImage || made.OverrideText
-                       || made.OverrideActive
-                       || alphaDiffers || shadowDiffers || outlineDiffers
-                       || made.ActiveConditions.Count > 0
-                       || made.Components.Count > 0;
+        // One question, asked in one place. This used to be a second list of
+        // the same conditions, and it drifted the moment a new kind of change
+        // was added: a click attached to one of the game's objects was saved
+        // correctly and still shown in the tree as untouched, because only one
+        // of the two lists had heard of clicks.
+        bool asserts = Asserts(node, vanilla);
 
         if (!asserts && made.Children.Count == 0)
         {
@@ -233,7 +242,14 @@ public static class VanillaUiDelta
             || EffectDiffers(node.Shadow, vanilla.Shadow)
             || EffectDiffers(node.Outline, vanilla.Outline)
             || node.ActiveConditions.Count > 0
-            || node.Components.Count > 0;
+            || node.Components.Count > 0
+            // Behaviour and arrangement the game's object did not have. Nothing
+            // is compared against vanilla for these: vanilla has nothing of the
+            // kind to compare against, so having one at all IS the change.
+            || node.OnClick.Count > 0
+            || node.ClickConditions.Count > 0
+            || !string.IsNullOrEmpty(node.HoverTint)
+            || node.Layout != null;
     }
 
     // ── Comparisons ──────────────────────────────────────────────────
@@ -349,7 +365,99 @@ public static class VanillaUiDelta
         OverrideImage = from.OverrideImage,
         OverrideText = from.OverrideText,
         OverrideActive = from.OverrideActive,
+        SiblingIndex = from.SiblingIndex,
+        OnClick = from.OnClick,
+        ClickConditions = from.ClickConditions,
+        HoverTint = from.HoverTint,
+        Layout = from.Layout,
     };
+
+    // ── Order ─────────────────────────────────────────────────
+    //
+    // What the game does on its own, if nothing says otherwise: objects it
+    // already owns stay where they are, and objects the pack creates are added
+    // on the end. So an author who has not rearranged anything is describing
+    // exactly that, and it costs nothing to store.
+    //
+    // Anything else - a vanilla object moved in front of another, or one of the
+    // pack's own placed BETWEEN two vanilla ones rather than after them - is a
+    // decision, and has to be written down.
+
+    /// <summary>Whether this parent's children need their places recorded.</summary>
+    private static bool OrderAsserted(UiNodeDef node, VanillaUiSurface.Node vanilla)
+    {
+        int last = -1;
+        bool seenNew = false;
+
+        foreach (var child in node.Children)
+        {
+            if (!child.IsBound) { seenNew = true; continue; }
+
+            // A vanilla object sitting after one the pack added: left alone the
+            // added one would go on the end, behind it, not in front.
+            if (seenNew) return true;
+
+            int at = VanillaIndexOf(vanilla, LastSegment(child.Bind));
+            if (at < 0) continue;            // bound to something no longer there
+            if (at <= last) return true;     // two vanilla objects swapped over
+            last = at;
+        }
+        return false;
+    }
+
+    /// <summary>Prune a parent's children as usual, but keep every one of them
+    /// and stamp its place. An object that asserts nothing else is still
+    /// asserting where it goes.</summary>
+    private static List<UiNodeDef> KeepAllInOrder(List<UiNodeDef> nodes, string source,
+                                                  BaselineLookup lookup)
+    {
+        var kept = new List<UiNodeDef>();
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            var pruned = PruneOne(nodes[i], source, lookup, out bool dropped);
+
+            // Dropped means "identical to the game's own", so nothing but the
+            // name, the binding and the place needs to survive.
+            var copy = dropped
+                ? new UiNodeDef { Name = nodes[i].Name, Bind = nodes[i].Bind }
+                : ReferenceEquals(pruned, nodes[i]) ? Copy(nodes[i]) : pruned;
+
+            copy.SiblingIndex = i;
+            kept.Add(copy);
+        }
+        return kept;
+    }
+
+    /// <summary>Where a bind segment's object sits among the vanilla children,
+    /// or -1. The #n suffix counts repeats of a name, exactly as
+    /// <see cref="NodeAt"/> reads it.</summary>
+    private static int VanillaIndexOf(VanillaUiSurface.Node parent, string segment)
+    {
+        if (parent == null || string.IsNullOrEmpty(segment)) return -1;
+
+        string name = segment;
+        int nth = 1;
+        int at = segment.LastIndexOf('#');
+        if (at > 0 && int.TryParse(segment[(at + 1)..], out int parsed))
+        {
+            name = segment[..at];
+            nth = Math.Max(1, parsed);
+        }
+
+        int seen = 0;
+        for (int i = 0; i < parent.Children.Count; i++)
+            if (parent.Children[i].Name == name && ++seen == nth) return i;
+        return -1;
+    }
+
+    /// <summary>The part of a bind path that names the object within its own
+    /// parent.</summary>
+    private static string LastSegment(string bind)
+    {
+        if (string.IsNullOrEmpty(bind) || bind == ".") return "";
+        int slash = bind.LastIndexOf('/');
+        return slash < 0 ? bind : bind[(slash + 1)..];
+    }
 
     private static int Count(List<UiNodeDef>? nodes)
         => nodes == null ? 0 : nodes.Count + nodes.Sum(n => Count(n.Children));

@@ -1,0 +1,1762 @@
+{
+ "id": "8_Room_Talk/Gym/DefaultDialoge",
+ "name": "DefaultDialoge",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Charlotte",
+  "Phoenix",
+  "You"
+ ],
+ "roots": [
+  1496912619,
+  2080276421,
+  1991786878,
+  621710821,
+  -810834920,
+  1184461719
+ ],
+ "nodes": {
+  "1496912619": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1082498973,
+    1062788037,
+    1403209611,
+    -1473416181
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Hey, newbie! You lost or just looking for training?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[phoenix-first-meeting] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "phoenix-first-meeting",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "type": "InstructionQuestsActivate",
+     "title": "Activate Gains (Phoneix",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Gains (Phoneix",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "1082498973": {
+   "kind": "text",
+   "parent": 1496912619,
+   "children": [
+    1396491789
+   ],
+   "actor": null,
+   "text": "Uh, hi. I’m {PC}. Just checking out the gym.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1062788037": {
+   "kind": "text",
+   "parent": 1496912619,
+   "children": [
+    -1576665625
+   ],
+   "actor": null,
+   "text": "Do I look lost? I'm here to train.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1403209611": {
+   "kind": "text",
+   "parent": 1496912619,
+   "children": [
+    -2026110930
+   ],
+   "actor": null,
+   "text": "Aaaahhhhhh!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2026110930": {
+   "kind": "text",
+   "parent": 1403209611,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Yes! Scream for me! Bwahahaha!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1576665625": {
+   "kind": "text",
+   "parent": 1062788037,
+   "actor": "Phoenix",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "We'll see about that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1396491789": {
+   "kind": "text",
+   "parent": 1082498973,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Checking out the gym, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2080276421": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Name's Phoenix. This is my domain. You got guts walking in here. So, you want to train, huh? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[phoenix-first-meeting] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "phoenix-first-meeting",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "621710821": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1347037742,
+    -1125804112,
+    1586844398,
+    577568291,
+    -1536978129
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Let’s see if you can handle it. If you die or anything, don't come crying to me. I'm not responsible for wimps!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1347037742": {
+   "kind": "text",
+   "parent": 621710821,
+   "children": [
+    1434179645,
+    1845881720
+   ],
+   "actor": null,
+   "text": "Here. [$500]",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 500",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 500
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[Athlete-5] ≤ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Athlete-5",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1536978129": {
+   "kind": "text",
+   "parent": 621710821,
+   "children": [
+    -620176629
+   ],
+   "actor": null,
+   "text": "I'll come back later.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1991786878": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Returned for some more proper training?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[phoenix-first-meeting] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "phoenix-first-meeting",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1434179645": {
+   "kind": "text",
+   "parent": -1347037742,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Good. Now you’re in. But don’t think for a second that I’m going to go easy on you. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[temp-stored-very-short-term] = Gym_Aftermath",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "Gym_Aftermath",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Gym_Aftermath"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -500",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -500
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Minigame[hard-mode] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hard-mode",
+        "list": "Minigame",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1845881720": {
+   "kind": "choice",
+   "parent": -1347037742,
+   "children": [
+    297655050,
+    1569248505
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "You’ll sweat, you’ll ache, and you might even cry.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-810834920": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1669563147,
+    1213793915,
+    -1292397557,
+    -1096548501
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Watch closely, newbie. This is what you’re aiming for. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[phoenix-first-meeting] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "phoenix-first-meeting",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-620176629": {
+   "kind": "text",
+   "parent": -1536978129,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Yeah, sure.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1669563147": {
+   "kind": "text",
+   "parent": -810834920,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Count these reps!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active phoenixtraining1 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "phoenixtraining1",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/phoenixtraining1"
+      }
+     }
+    }
+   ]
+  },
+  "1213793915": {
+   "kind": "text",
+   "parent": -810834920,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "That’s just a warm-up. Next, let’s hit the floor. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active phoenixtraining1 (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "phoenixtraining1 (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/phoenixtraining1 (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1292397557": {
+   "kind": "text",
+   "parent": -810834920,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "And we’re not done yet! Time for some weightlifting. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active phoenixtraining1 (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "phoenixtraining1 (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/phoenixtraining1 (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1096548501": {
+   "kind": "text",
+   "parent": -810834920,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "This is what hard work gets you, newbie. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[phoenix-first-meeting] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "phoenix-first-meeting",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1184461719": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "I want to see what you can do. Lift up the weight and start pumping!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Weightlifting to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Weightlifting",
+       "of": "GetGameObjectInstance",
+       "path": "Sprite_Overlay/Weightlifting"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Hit_it to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Hit_it",
+       "of": "GetGameObjectInstance",
+       "path": "16_Minigames/Hit_it"
+      }
+     }
+    }
+   ]
+  },
+  "-1125804112": {
+   "kind": "text",
+   "parent": 621710821,
+   "children": [
+    137543988,
+    558559691
+   ],
+   "actor": null,
+   "text": "I want the special training. [$2,500]",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 2500",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2500
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[Fit-5] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Fit-5",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "137543988": {
+   "kind": "choice",
+   "parent": -1125804112,
+   "children": [
+    -1478983032,
+    -1171894306
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Very well! Let us see if you rise or fall!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -2500",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -2500
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[temp-stored-very-short-term] = Gym_Aftermath",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "temp-stored-very-short-term",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "Gym_Aftermath",
+       "of": "GetGameObjectInstance",
+       "path": "8_Room_Talk/Gym_Aftermath"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Minigame[hard-mode] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hard-mode",
+        "list": "Minigame",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "558559691": {
+   "kind": "text",
+   "parent": -1125804112,
+   "children": [
+    -757739668,
+    -7026460
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "It’s super hard, and not many can handle it. But if you manage to complete it, I’ll reward you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[phoenix-offered-it] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "phoenix-offered-it",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-757739668": {
+   "kind": "choice",
+   "parent": 558559691,
+   "children": [
+    1345778399,
+    -1851246278,
+    2053777498
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "If you can survive my special training, I’ll let you fuck me! But don’t think it’ll be easy! You’ll have to push yourself to the limit!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1345778399": {
+   "kind": "text",
+   "parent": -757739668,
+   "children": [
+    589449125
+   ],
+   "actor": null,
+   "text": "I'm sorry, what?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1851246278": {
+   "kind": "text",
+   "parent": -757739668,
+   "children": [
+    1341155173
+   ],
+   "actor": null,
+   "text": "I actually get to fuck you? Awesome!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2053777498": {
+   "kind": "text",
+   "parent": -757739668,
+   "children": [
+    1804304564
+   ],
+   "actor": null,
+   "text": "I'm not really into you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-7026460": {
+   "kind": "choice",
+   "parent": 558559691,
+   "children": [
+    1524276681,
+    -1545848758
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "SO? Make your DECISION!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1524276681": {
+   "kind": "text",
+   "parent": -7026460,
+   "children": [
+    -751201226
+   ],
+   "actor": null,
+   "text": "LETS' GO! (Phoenix sex route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1545848758": {
+   "kind": "text",
+   "parent": -7026460,
+   "children": [
+    -1678485992
+   ],
+   "actor": null,
+   "text": "I'll just take the training, thanks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-751201226": {
+   "kind": "text",
+   "parent": 1524276681,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "GOOOOO!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[phoenix-sex-path-start] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "phoenix-sex-path-start",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[phoenix-offered-it] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "phoenix-offered-it",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1678485992": {
+   "kind": "text",
+   "parent": -1545848758,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Then I will stop SHOUTING at you, if you succeed!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[phoenix-offered-it] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "phoenix-offered-it",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "589449125": {
+   "kind": "text",
+   "parent": 1345778399,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "SEX! Your COCK in my ASS! Are you dumb?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1341155173": {
+   "kind": "text",
+   "parent": -1851246278,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "YES! The highest possible REWARD!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1804304564": {
+   "kind": "text",
+   "parent": 2053777498,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "PAH! Then you are blind! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1478983032": {
+   "kind": "text",
+   "parent": 137543988,
+   "children": [
+    -890225037
+   ],
+   "actor": null,
+   "text": "Can you spot for me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1171894306": {
+   "kind": "text",
+   "parent": 137543988,
+   "children": [
+    448890061
+   ],
+   "actor": null,
+   "text": "I wanna train alone today.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "448890061": {
+   "kind": "text",
+   "parent": -1171894306,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "All good! Just don’t go dropping weights like a damn newbie.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_7[no-phoenix] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "no-phoenix",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-890225037": {
+   "kind": "text",
+   "parent": -1478983032,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Hell yeah! Let’s push some real weight. No slacking!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_7[no-phoenix] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "no-phoenix",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "297655050": {
+   "kind": "text",
+   "parent": 1845881720,
+   "children": [
+    615805884
+   ],
+   "actor": null,
+   "text": "Can you spot for me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "615805884": {
+   "kind": "text",
+   "parent": 297655050,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Hell yeah! Let’s push some real weight. No slacking!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_7[no-phoenix] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "no-phoenix",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1569248505": {
+   "kind": "text",
+   "parent": 1845881720,
+   "children": [
+    -836724182
+   ],
+   "actor": null,
+   "text": "I wanna train alone today.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-836724182": {
+   "kind": "text",
+   "parent": 1569248505,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "All good! Just don’t go dropping weights like a damn newbie.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_7[no-phoenix] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "no-phoenix",
+        "list": "Events_7",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1586844398": {
+   "kind": "text",
+   "parent": 621710821,
+   "children": [
+    -1995148645,
+    39750917,
+    1365888318,
+    -1090389943
+   ],
+   "actor": null,
+   "text": "Wanna help producing human milk?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[phoenix-sex-path-start] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "phoenix-sex-path-start",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[bafa-phoenixaccepted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-phoenixaccepted",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[milk-searchforcandidates] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milk-searchforcandidates",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1995148645": {
+   "kind": "text",
+   "parent": 1586844398,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Hah! Human milk, huh? You’re seriously asking me to do that?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "39750917": {
+   "kind": "text",
+   "parent": 1586844398,
+   "actor": "Phoenix",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You know what? I’m in. Sounds like a crazy challenge, and I don’t back down from those.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1365888318": {
+   "kind": "text",
+   "parent": 1586844398,
+   "actor": "Phoenix",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Let’s see if this body of mine can really pump out as much as the rest of your herd.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Milking Save[bafa-phoenixaccepted] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-phoenixaccepted",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1090389943": {
+   "kind": "text",
+   "parent": 1586844398,
+   "actor": "Phoenix",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Just don’t cry if I end up out-producing everyone else.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "577568291": {
+   "kind": "text",
+   "parent": 621710821,
+   "children": [
+    462337426,
+    53976083,
+    -416869301,
+    364756015,
+    1697501013,
+    1050604830
+   ],
+   "actor": null,
+   "text": "Interested in a side gig? As a bodyguard for Charlotte?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_9[CharlottePhoenixQuest] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "CharlottePhoenixQuest",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "462337426": {
+   "kind": "text",
+   "parent": 577568291,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Hah. Figures. Some rich girl with too much money. And you want me to babysit her? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "53976083": {
+   "kind": "choice",
+   "parent": 577568291,
+   "children": [
+    -1751407696,
+    1360195387,
+    1942267859
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Tch. Not my style.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1751407696": {
+   "kind": "text",
+   "parent": 53976083,
+   "children": [
+    753486394
+   ],
+   "actor": null,
+   "text": "She’s not spoiled. She just needs someone she can trust.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "753486394": {
+   "kind": "text",
+   "parent": -1751407696,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hm. You make it sound like she actually matters to you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1360195387": {
+   "kind": "text",
+   "parent": 53976083,
+   "children": [
+    1734519372
+   ],
+   "actor": null,
+   "text": "So you’re scared she’s too much for you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1734519372": {
+   "kind": "text",
+   "parent": 1360195387,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Me? Scared? Hah! Alright, fine. I’ll prove I can handle it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1942267859": {
+   "kind": "text",
+   "parent": 53976083,
+   "children": [
+    -1263309331,
+    144601196
+   ],
+   "actor": null,
+   "text": "She's a total MILF. You’d get to keep those hips safe every day.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1263309331": {
+   "kind": "text",
+   "parent": 1942267859,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "…Tch. Now you’re just tempting me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "144601196": {
+   "kind": "text",
+   "parent": 1942267859,
+   "actor": "Charlotte",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Babysitting a rich girl sounds boring… but babysitting a hot, curvy MILF? That’s… different.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-416869301": {
+   "kind": "text",
+   "parent": 577568291,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "…Alright, fine. I’ll give it a shot. Not because I care about some fashion princess, but because you asked. And hey, maybe tossing creeps around will be fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "364756015": {
+   "kind": "text",
+   "parent": 577568291,
+   "actor": "Charlotte",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "But if she turns out to be just another spoiled brat, I’m walking. Deal?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_9[CharlottePhoenixQuest] = 2",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "CharlottePhoenixQuest",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 2
+      }
+     }
+    }
+   ]
+  },
+  "1697501013": {
+   "kind": "text",
+   "parent": 577568291,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Good. Then it’s settled. Meet me and Charlotte in front of my place, downtown. We’ll see if you two hit it off.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1050604830": {
+   "kind": "text",
+   "parent": 577568291,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Downtown, huh? Alright. I’ll show up.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1473416181": {
+   "kind": "text",
+   "parent": 1496912619,
+   "children": [
+    907861066
+   ],
+   "actor": null,
+   "text": "(Athletic) Not lost. Just finished my own set.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Athletic] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Athletic",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "907861066": {
+   "kind": "text",
+   "parent": -1473416181,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Oh yeah? Huh… not bad. Guess you’re not as green as I thought.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Athletic] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Athletic",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Gym",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DefaultDialoge and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PhoenixBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PhoenixBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/PhoenixBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

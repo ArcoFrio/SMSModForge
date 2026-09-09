@@ -1,0 +1,166 @@
+{
+ "id": "8_Room_Talk/ConventionFans/CelesteMoments/CelesteConNormal (1)",
+ "name": "CelesteConNormal (1)",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Celeste"
+ ],
+ "roots": [
+  -1880583636,
+  1707282865,
+  446611443,
+  717026669,
+  -292285133,
+  -302420845,
+  1756881340
+ ],
+ "nodes": {
+  "-1880583636": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Ah, Anna. You made it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1707282865": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Of course I did. Why wouldn’t I?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "446611443": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Oh, no reason. I suppose I just wasn’t sure if you were… accustomed to events of this scale. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-292285133": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I can handle a crowd just fine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-302420845": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Of course. Confidence is essential. Just remember, dear—they don’t just look at you. They study you. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1756881340": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Celeste",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Every movement, every breath… if you can’t hold their gaze, they’ll forget you the moment you leave.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "717026669": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Celeste",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "The cameras, the pressure, the expectations. It takes a certain presence to command a stage like this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/ConventionFans/CelesteMoments",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play CelesteConNormal (1) and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active XXX_Celeste_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "XXX_Celeste_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/XXX_Celeste_Bust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/XXX_Celeste_Bust/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

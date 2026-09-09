@@ -78,7 +78,30 @@ public sealed class DialogueViewModel : ObservableObject
     public DialogueViewModel(DialogueDef model)
     {
         Model = model;
+
+        // An extension arrives holding only what its author changed, because
+        // that is all a manifest stores. Lay it back over the game's own
+        // conversation so they see the whole thing again - a saved pack would
+        // otherwise re-open as two lines out of a hundred and eighteen.
+        // SerializeAsSaved prunes it straight back down, so this costs nothing
+        // on disk and nothing in unsaved-change detection.
+        if (model.IsVanillaBased)
+            model.Nodes = VanillaDialogueSeed.Merge(
+                model.Source, model.Nodes, model.RemovedNodes, out _);
+
         Nodes = new ObservableCollection<DialogueNodeViewModel>(model.Nodes.Select(n => new DialogueNodeViewModel(n)));
+
+        // Every row, however it arrives - seeded here, added by a command, or
+        // pasted - is told which conversation it is part of. Subscribing beats
+        // setting it at each call site, which is the version that goes stale
+        // the next time somewhere else adds a line.
+        foreach (var row in Nodes) Adopt(row);
+        Nodes.CollectionChanged += (_, e) =>
+        {
+            if (e.NewItems != null)
+                foreach (DialogueNodeViewModel row in e.NewItems) Adopt(row);
+            Recount();
+        };
         StartConditions = new ObservableCollection<NodeConditionViewModel>();
 
         EnsureLevelActiveFirst();
@@ -101,6 +124,291 @@ public sealed class DialogueViewModel : ObservableObject
                                                            () => Services.EditorClipboard.HasConditions);
         OverwriteStartConditionsCommand = new RelayCommand(() => PasteStartConditions(overwrite: true),
                                                            () => Services.EditorClipboard.HasConditions);
+    }
+
+    // ── Extending a conversation the game already has ────────────────
+
+    /// <summary>Whether this changes one of the game's own conversations.</summary>
+    public bool IsVanillaBased => Model.IsVanillaBased;
+
+    /// <summary>
+    /// Whether the author has said they want to build on a vanilla
+    /// conversation but has not yet said which.
+    /// <para/>
+    /// Deliberately not on the model, for the same reason a UI extension keeps
+    /// it off theirs: a dialogue with no source IS one of the pack's own as far
+    /// as the manifest is concerned, and if the author never picks one that is
+    /// exactly what they get. Being wrong about this costs a wrong header
+    /// rather than a wrong pack.
+    /// </summary>
+    public bool WantsVanilla
+    {
+        get => _wantsVanilla;
+        set
+        {
+            if (_wantsVanilla == value) return;
+            _wantsVanilla = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ShowsSourcePicker));
+            OnPropertyChanged(nameof(NameIsEditable));
+            OnPropertyChanged(nameof(NameIsReadOnly));
+            OnPropertyChanged(nameof(Display));
+        }
+    }
+
+    private bool _wantsVanilla;
+
+    /// <summary>Whether the header offers a conversation to build on.</summary>
+    public bool ShowsSourcePicker => IsVanillaBased || WantsVanilla;
+
+    /// <summary>
+    /// Whether the name is the author's to type.
+    /// <para/>
+    /// A conversation the game owns keeps the game's name, and so does one on
+    /// its way to being a change to a conversation - the name is about to be
+    /// replaced by the game's the moment a conversation is picked, so letting
+    /// it be typed first only offers work that is thrown away.
+    /// </summary>
+    public bool NameIsEditable => !ShowsSourcePicker;
+
+    /// <summary>The same thing the way a TextBox asks it.</summary>
+    public bool NameIsReadOnly => ShowsSourcePicker;
+
+    /// <summary>
+    /// The conversation this extends. Setting it fills the dialogue in from
+    /// the game's own, so the author edits what is there rather than a blank
+    /// page.
+    /// </summary>
+    public VanillaDialogueCatalog.Entry? VanillaSource
+    {
+        get => VanillaDialogueCatalog.Find(Model.Source);
+        set
+        {
+            if (value == null || string.Equals(Model.Source, value.Token,
+                                               StringComparison.OrdinalIgnoreCase))
+                return;
+
+            var seeded = VanillaDialogueSeed.Seed(value.Token);
+            if (seeded == null) return;
+
+            Model.Source = seeded.Source;
+            Model.DisplayName = seeded.DisplayName;
+            Model.Key = seeded.Key;
+            Model.RootNodeIds = seeded.RootNodeIds;
+            Model.Nodes = seeded.Nodes;
+
+            // The pinned level condition goes with it: it was added while this
+            // was still going to be a dialogue of the pack's own.
+            Model.StartConditions.Clear();
+            StartConditions.Clear();
+
+            Nodes.Clear();
+            foreach (var node in Model.Nodes) Nodes.Add(new DialogueNodeViewModel(node));
+            RecomputeDepths();
+
+            OnPropertyChanged(nameof(VanillaSource));
+            OnPropertyChanged(nameof(IsVanillaBased));
+            OnPropertyChanged(nameof(IsEditable));
+            OnPropertyChanged(nameof(ShowsSourcePicker));
+            OnPropertyChanged(nameof(NameIsEditable));
+            OnPropertyChanged(nameof(NameIsReadOnly));
+            OnPropertyChanged(nameof(VanillaGates));
+            OnPropertyChanged(nameof(ChangeSummary));
+            OnPropertyChanged(nameof(Key));
+            OnPropertyChanged(nameof(DisplayName));
+            OnPropertyChanged(nameof(Display));
+        }
+    }
+
+    /// <summary>
+    /// What the game checks before it plays this, for reading beside the lines.
+    /// <para/>
+    /// Read-only on purpose: the gate belongs to the room, not the
+    /// conversation, and an extension has no say in it. Showing it is the point
+    /// — an author changing a line wants to know when it is even reached.
+    /// </summary>
+    /// <para/>
+    /// Wrapped as view models rather than handed over raw, because the row
+    /// template is chosen by type: a bare <see cref="NodeConditionDef"/> matches
+    /// nothing in the selector, so the whole panel drew empty rows and the gate
+    /// looked like it did not exist.
+    public IReadOnlyList<NodeConditionViewModel> VanillaGates
+        => IsVanillaBased
+            ? VanillaDialogueSeed.StartGates(Model.Source)
+                  .Select(c => new NodeConditionViewModel(c, isLocked: true))
+                  .ToList()
+            : (IReadOnlyList<NodeConditionViewModel>)System.Array.Empty<NodeConditionViewModel>();
+
+    /// <summary>
+    /// Whether this dialogue is far enough along to be edited.
+    /// <para/>
+    /// A row added with "+ Vanilla" is a placeholder until a conversation is
+    /// chosen for it: it has no lines, no name of its own, and nothing to
+    /// attach a change to. Adding a root node or a start condition to one
+    /// meant authoring against a dialogue that did not exist yet, and the
+    /// author found out when the source picker replaced everything they had
+    /// just typed.
+    /// <para/>
+    /// A dialogue of the pack's own is always editable — it IS the thing being
+    /// made, so there is nothing to wait for.
+    /// </summary>
+    public bool IsEditable => !WantsVanilla || IsVanillaBased;
+
+    /// <summary>The vanilla conversation underneath, or null.</summary>
+    private VanillaDialogueCatalog.Dialogue? Baseline
+        => IsVanillaBased ? VanillaDialogueCatalog.Open(Model.Source) : null;
+
+    /// <summary>
+    /// Which of a line's fields this pack changes.
+    /// <para/>
+    /// Worked out against the game rather than read off the node, so it is
+    /// right while the author is still typing — the stored Overrides list is
+    /// only computed at save.
+    /// </summary>
+    public IReadOnlyList<string> ChangedFields(DialogueNodeDef node)
+    {
+        var baseline = Baseline?.Node(node?.Id ?? 0);
+        if (node == null) return System.Array.Empty<string>();
+        if (baseline == null)
+            return IsVanillaBased ? new[] { "(new line)" } : System.Array.Empty<string>();
+        return VanillaDialogueDelta.ChangedFields(node, baseline);
+    }
+
+    /// <summary>Whether a line says anything the game does not. Handed to every
+    /// row so a tree can mark what has been touched — an author looking at 118
+    /// lines needs to see the one they changed.</summary>
+    public bool HasChanges(DialogueNodeDef node) => ChangedFields(node).Count > 0;
+
+    /// <summary>
+    /// Take a row on, and follow it.
+    /// <para/>
+    /// The summary is worked out from the model rather than kept as a running
+    /// count, because an edit can reach the model without passing through a
+    /// row - a paste, an undo, a test - and a tally that missed one of those
+    /// would be confidently wrong. Asking the whole conversation costs 1.7ms
+    /// for the beach's 118 lines, and the longest in the game is 129, so there
+    /// is nothing to save by being clever.
+    /// </summary>
+    private void Adopt(DialogueNodeViewModel row)
+    {
+        row.Owner = this;
+        row.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(DialogueNodeViewModel.IsChangedFromVanilla)
+                || e.PropertyName == nameof(DialogueNodeViewModel.ChangedFieldsText)) return;
+            Recount();
+        };
+    }
+
+    private void Recount()
+    {
+        OnPropertyChanged(nameof(ChangeSummary));
+        OnPropertyChanged(nameof(HasAnyChanges));
+    }
+
+    /// <summary>Whether this conversation changes anything at all.</summary>
+    public bool HasAnyChanges => IsVanillaBased && Model.Nodes.Any(HasChanges);
+
+    /// <summary>How much of this conversation the pack changes, for a header
+    /// that answers "what did I do here" without opening every line.</summary>
+    public string ChangeSummary
+    {
+        get
+        {
+            if (!IsVanillaBased) return "";
+            var baseline = Baseline;
+            if (baseline == null) return "the game has no such conversation";
+
+            // Added and changed counted apart. Adding one line under another
+            // changes that other line too - its list of children is different
+            // now - so "2 lines changed" was true and read as a miscount.
+            int added = Model.Nodes.Count(n => baseline.Node(n.Id) == null);
+            int changed = Model.Nodes.Count(n => baseline.Node(n.Id) != null && HasChanges(n));
+            int removed = VanillaDialogueDelta.RemovedNodes(Model.Nodes, baseline).Count;
+
+            if (added == 0 && changed == 0 && removed == 0) return "unchanged from the game";
+
+            var parts = new List<string>();
+            if (added > 0) parts.Add(added + " added");
+            if (changed > 0) parts.Add(changed + (changed == 1 ? " line changed" : " lines changed"));
+            if (removed > 0) parts.Add(removed + " removed");
+            return string.Join(", ", parts);
+        }
+    }
+
+    /// <summary>Put one field of one line back the way the game has it.</summary>
+    public void ResetField(DialogueNodeDef node, string field)
+        => Reset(node, field);
+
+    /// <summary>What a reset button should say for a field name.</summary>
+    public static string FieldLabel(string field) => field switch
+    {
+        "kind" => "kind",
+        "actor" => "speaker",
+        "expression" => "expression",
+        "outfit" => "outfit",
+        "text" => "line",
+        "tag" => "tag",
+        "children" => "what follows it",
+        "conditions" => "conditions",
+        "actionsOnStart" => "actions on start",
+        "actionsOnFinish" => "actions on finish",
+        "jump" => "what happens after",
+        "duration" => "how it advances",
+        "timeout" => "timeout",
+        _ => field,
+    };
+
+    /// <summary>Put one whole line back.</summary>
+    public void ResetNode(DialogueNodeDef node) => Reset(node, null);
+
+    private void Reset(DialogueNodeDef node, string? field)
+    {
+        if (node == null || !IsVanillaBased) return;
+
+        var baseline = Baseline?.Node(node.Id);
+        if (baseline == null)
+        {
+            // A line the pack added has no version in the game, so "put it back
+            // the way the game has it" means the game does not have it. Only
+            // for a whole-line reset: resetting one FIELD of a new line would
+            // silently delete the line, which is not what that button says.
+            if (field != null) return;
+
+            var own = Nodes.FirstOrDefault(n => ReferenceEquals(n.Model, node));
+            if (own != null) RemoveNode(own);
+            Recount();
+            return;
+        }
+
+        VanillaDialogueDelta.ResetTo(node, baseline, field);
+
+        var row = Nodes.FirstOrDefault(n => ReferenceEquals(n.Model, node));
+        row?.RefreshAll();
+        Recount();
+    }
+
+    /// <summary>
+    /// Put the whole conversation back, including lines that were deleted.
+    /// <para/>
+    /// Re-seeded rather than reset line by line, because a line the author
+    /// removed has nothing left to reset — and "put it back the way it was"
+    /// means all of it.
+    /// </summary>
+    public void ResetAll()
+    {
+        if (!IsVanillaBased) return;
+        var seeded = VanillaDialogueSeed.Seed(Model.Source);
+        if (seeded == null) return;
+
+        Model.Nodes = seeded.Nodes;
+        Model.RootNodeIds = seeded.RootNodeIds;
+
+        Nodes.Clear();
+        foreach (var node in Model.Nodes) Nodes.Add(new DialogueNodeViewModel(node));
+        RecomputeDepths();
+
+        Recount();
     }
 
     public RelayCommand CopyStartConditionsCommand { get; }
@@ -139,11 +447,20 @@ public sealed class DialogueViewModel : ObservableObject
         }
     }
 
+    /// <summary>
+    /// What this conversation is called.
+    /// <para/>
+    /// Read-only for a change to one of the game's own. Its name is the game's
+    /// - it is how the conversation is found in the scene and how the pack
+    /// refers back to it - and renaming it here would rename nothing in the
+    /// game while making the pack's own reference harder to recognise.
+    /// </summary>
     public string DisplayName
     {
         get => Model.DisplayName;
         set
         {
+            if (!NameIsEditable) return;
             Model.DisplayName = value;
             OnPropertyChanged();
             if (_keyFollowsDisplay) DeriveKey();
@@ -731,6 +1048,13 @@ public sealed class DialogueViewModel : ObservableObject
     /// </summary>
     private void EnsureLevelActiveFirst()
     {
+        // A conversation the game owns is not gated by a pack's level
+        // condition: the room decides whether it plays, and this dialogue is
+        // never scheduled by the pack at all. Pinning one here left an empty
+        // "LevelActive" in the manifest of every extension - an assertion that
+        // gates on nothing, which is worse than no assertion.
+        if (Model.IsVanillaBased) return;
+
         if (Model.StartConditions.Count == 0 ||
             Model.StartConditions[0].Type != NodeConditionTypes.LevelActive)
         {

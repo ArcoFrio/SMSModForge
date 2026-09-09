@@ -1,0 +1,1279 @@
+{
+ "id": "8_Room_Talk/Garage/CharlotteAgentWardrobe",
+ "name": "CharlotteAgentWardrobe",
+ "index": 8,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Charlotte",
+  "Continue",
+  "Josef"
+ ],
+ "roots": [
+  -1596878276,
+  -1241174377,
+  51126084,
+  771402420,
+  -1260165419,
+  329828127,
+  -87649478,
+  318143728,
+  -64911402,
+  368089989,
+  1072230367,
+  2006594728
+ ],
+ "nodes": {
+  "-1596878276": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1511517440,
+    -996770882
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Aha! Found him.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1511517440": {
+   "kind": "text",
+   "parent": -1596878276,
+   "children": [
+    -1050873435
+   ],
+   "actor": null,
+   "text": "Can’t believe she still has it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-996770882": {
+   "kind": "text",
+   "parent": -1596878276,
+   "children": [
+    -1942182416
+   ],
+   "actor": null,
+   "text": "This thing look ancient...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1241174377": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Wait! Quiet! I hear something!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1942182416": {
+   "kind": "text",
+   "parent": -996770882,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "It really is. You don’t just throw away something like this…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1050873435": {
+   "kind": "text",
+   "parent": 1511517440,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Of course she does. You don’t just throw away something like this…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "51126084": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ugh, this floor is filthy. I should polish it tomorrow… No, tonight. Can’t stand walking on dust.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1260165419": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Fuck. Looks like we'll be trapped in here for a while...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "771402420": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1580838239,
+    1347020267
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Please, honey, I got this Space Wars interlocking brick set, and I have to build it!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1580838239": {
+   "kind": "text",
+   "parent": 771402420,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fine, fine! But you’re doing it here in the hallway—and you better clean up after! If I step on one of those things, you’re sleeping on the couch.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1347020267": {
+   "kind": "text",
+   "parent": 771402420,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Woohoo!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-87649478": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1669923140,
+    -541465148
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Ugh. This is taking forever.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "329828127": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "1669923140": {
+   "kind": "text",
+   "parent": -87649478,
+   "children": [
+    579717149,
+    -560965583,
+    598832445
+   ],
+   "actor": null,
+   "text": "Need me to entertain you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-541465148": {
+   "kind": "text",
+   "parent": -87649478,
+   "children": [
+    -2008645510
+   ],
+   "actor": null,
+   "text": "Let's just wait it out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2008645510": {
+   "kind": "text",
+   "parent": -541465148,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Yeah, let's keep it quiet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "318143728": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-64911402": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Okay… I’ll do the rest in the morning.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1072230367": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Are they… gone?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2006594728": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Hurry up! Let's get out of here... And then it's time to save your {M}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "579717149": {
+   "kind": "text",
+   "parent": 1669923140,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Hmm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-560965583": {
+   "kind": "text",
+   "parent": 1669923140,
+   "actor": "Charlotte",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "I guess we can have a little bit of fun, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CharlotteAgentCG (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CharlotteAgentCG (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/CharlotteAgentCG (2)"
+      }
+     }
+    }
+   ]
+  },
+  "598832445": {
+   "kind": "choice",
+   "parent": 1669923140,
+   "children": [
+    15583572,
+    2053960097
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Use my ass, this way you'll blow quicker...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "15583572": {
+   "kind": "text",
+   "parent": 598832445,
+   "children": [
+    1394501341,
+    -972442626,
+    398673468,
+    -770537427,
+    -2114611846,
+    1479987986,
+    -1661822178
+   ],
+   "actor": null,
+   "text": "You don't have to ask me twice... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2053960097": {
+   "kind": "text",
+   "parent": 598832445,
+   "children": [
+    -1288022869
+   ],
+   "actor": null,
+   "text": "Maybe let's just play rock-paper-scissor instead...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1288022869": {
+   "kind": "text",
+   "parent": 2053960097,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Um... Sure... Why not...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1394501341": {
+   "kind": "text",
+   "parent": 15583572,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Yes... Hngaahh... Quiet... We have to keep it quiet... Just a quick load into my butt.... Mmhmmm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CharlotteAgentCG (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CharlotteAgentCG (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/CharlotteAgentCG (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-972442626": {
+   "kind": "text",
+   "parent": 15583572,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "That's it... Yes... Pound me, {PC}... Stretch me out... With your... Fhhuckk....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "398673468": {
+   "kind": "text",
+   "parent": 15583572,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "A bit rougher, {PC}... I want... I want to feel your balls slap against my pussy... I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-770537427": {
+   "kind": "text",
+   "parent": 15583572,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Y-Yes.... That's it... I'm.. You are... You are making me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2114611846": {
+   "kind": "text",
+   "parent": 15583572,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "CUM! Hnghhhhhmmmmm!!! Mmmhmmmmm!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CharlotteAgentCG (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CharlotteAgentCG (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/CharlotteAgentCG (4)"
+      }
+     }
+    }
+   ]
+  },
+  "1479987986": {
+   "kind": "text",
+   "parent": 15583572,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "J-Jesus... Alright, alright... Let's... Fuck, my butt's a mess now... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1661822178": {
+   "kind": "text",
+   "parent": 15583572,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Do you have any tissues on you? No? Oh boy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "368089989": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "And… done! Pew pew! Man, I love Space Wars. I gotta show this to Adrian and {PC}! They’re gonna love it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Garage",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play CharlotteAgentWardrobe and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_8[cheeseburger-quest] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cheeseburger-quest",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte_Agentbust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte_Agentbust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Charlotte_Agentbust"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Gallery-Active] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gallery-Active",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play CharlotteAgentVentStart and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "CharlotteAgentVentStart",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Room_Talk/Garage/CharlotteAgentVentStart"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 17_CarPark to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "17_CarPark",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/17_CarPark"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte_Agentbust to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte_Agentbust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Charlotte_Agentbust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 119_AirDuct to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "119_AirDuct",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/119_AirDuct"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play CharlotteAgentInsideVent and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "CharlotteAgentInsideVent",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Room_Talk/Garage/CharlotteAgentInsideVent"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Meet with Charlotte.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Old Friends (Charlotte)",
+        "of": "Quest"
+       },
+       "m_TaskId": 1813187919
+      },
+      "m_WaitToComplete": false
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 119_AirDuct to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "119_AirDuct",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/119_AirDuct"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte_Agentbust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte_Agentbust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Charlotte_Agentbust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 1_Master_Bedrooom to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "1_Master_Bedrooom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/1_Master_Bedrooom"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play CharlotteAgentBedroom and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "CharlotteAgentBedroom",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Room_Talk/Garage/CharlotteAgentBedroom"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 29_Wardrobe to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "29_Wardrobe",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/29_Wardrobe"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 1_Master_Bedrooom to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "1_Master_Bedrooom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/1_Master_Bedrooom"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte_Agentbust to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte_Agentbust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Charlotte_Agentbust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 17_CarPark to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "17_CarPark",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/17_CarPark"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 1_Master_Bedrooom to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "1_Master_Bedrooom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/1_Master_Bedrooom"
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Locate Cheeseburger.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Old Friends (Charlotte)",
+        "of": "Quest"
+       },
+       "m_TaskId": 400938478
+      },
+      "m_WaitToComplete": false
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_8[cheeseburger-quest] = 2",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "cheeseburger-quest",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 2
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Gallery-Active] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gallery-Active",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

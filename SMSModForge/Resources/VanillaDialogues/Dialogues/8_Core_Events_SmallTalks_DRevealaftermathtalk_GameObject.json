@@ -1,0 +1,1558 @@
+{
+ "id": "8_Core_Events/SmallTalks/DRevealaftermathtalk/GameObject",
+ "name": "GameObject",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "Josef"
+ ],
+ "roots": [
+  -476724197,
+  814315853,
+  1964410304
+ ],
+ "nodes": {
+  "-476724197": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1761766504,
+    -1728187322,
+    1190583057,
+    -81555979,
+    -1332437228,
+    -708732421,
+    -1813771414,
+    2096880337,
+    1899095087,
+    -665983996,
+    -689242013
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "{PC}... I'm willing to accept this change...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[m-d-alternatereveal] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "m-d-alternatereveal",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1728187322": {
+   "kind": "text",
+   "parent": -476724197,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "We had sex... For the first time in months.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-81555979": {
+   "kind": "text",
+   "parent": -476724197,
+   "actor": "Josef",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I'm not upset about what you both did. I'm upset that you didn't tell me earlier....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1332437228": {
+   "kind": "choice",
+   "parent": -476724197,
+   "children": [
+    -374636542,
+    -550365602,
+    1774286714,
+    -1786424163
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "But I understand why you didn't...",
+   "tag": "root",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-374636542": {
+   "kind": "text",
+   "parent": -1332437228,
+   "children": [
+    1500931701,
+    -1239582829
+   ],
+   "actor": null,
+   "text": "I'm just wondering why you're okay with it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-550365602": {
+   "kind": "text",
+   "parent": -1332437228,
+   "children": [
+    145301419,
+    1417123382
+   ],
+   "actor": null,
+   "text": "Anna and I have been doing some sexual things.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1774286714": {
+   "kind": "text",
+   "parent": -1332437228,
+   "children": [
+    -1547474756,
+    1833021018
+   ],
+   "actor": null,
+   "text": "Once you get a new job, do you want us to stop?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1786424163": {
+   "kind": "text",
+   "parent": -1332437228,
+   "actor": null,
+   "text": "So what now? (Continue)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1500931701": {
+   "kind": "text",
+   "parent": -374636542,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I don't want my old-fashioned thinking to get in the way of happiness, especially since you're my {S} and Anna is my wife.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "145301419": {
+   "kind": "text",
+   "parent": -550365602,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I... I know. I am fine with it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1547474756": {
+   "kind": "text",
+   "parent": 1774286714,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "That... That is not my decision to make.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1239582829": {
+   "kind": "text",
+   "parent": -374636542,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm proud of you, Josef. And I'm so glad that you are giving this a chance...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1417123382": {
+   "kind": "text",
+   "parent": -550365602,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You're such a good husband, dear.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1833021018": {
+   "kind": "text",
+   "parent": 1774286714,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes, it is mine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-708732421": {
+   "kind": "text",
+   "parent": -476724197,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I think we can finally breathe a little... maybe even be a bit more honest about everything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1813771414": {
+   "kind": "choice",
+   "parent": -476724197,
+   "children": [
+    -671788340,
+    1043571834,
+    1729422683
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "... And no more secrets.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-671788340": {
+   "kind": "text",
+   "parent": -1813771414,
+   "children": [
+    1066188328,
+    632870886,
+    1248509790
+   ],
+   "actor": null,
+   "text": "How about you join us for a photoshoot? (Start sharing route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1043571834": {
+   "kind": "text",
+   "parent": -1813771414,
+   "children": [
+    2095910187,
+    -1254197050
+   ],
+   "actor": null,
+   "text": "Sounds good to me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2095910187": {
+   "kind": "text",
+   "parent": 1043571834,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I feel like a weight has been lifted from my shoulders!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1066188328": {
+   "kind": "text",
+   "parent": -671788340,
+   "actor": "Josef",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Um, sure. I could take a look at your... work.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[d-invited-to-basement] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "d-invited-to-basement",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "632870886": {
+   "kind": "text",
+   "parent": -671788340,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That sounds fun!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1248509790": {
+   "kind": "text",
+   "parent": -671788340,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I'm glad you think so, honey.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1254197050": {
+   "kind": "text",
+   "parent": 1043571834,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I... I'm glad to hear that, honey.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2096880337": {
+   "kind": "text",
+   "parent": -476724197,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I need a drink now... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1899095087": {
+   "kind": "text",
+   "parent": -476724197,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "What the hell were YOU thinking?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-665983996": {
+   "kind": "choice",
+   "parent": -476724197,
+   "children": [
+    513350161,
+    1136817885,
+    -98634846
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "We're honestly lucky he took it so well...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1761766504": {
+   "kind": "text",
+   "parent": -476724197,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Your {M} and I had a... long talk...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1190583057": {
+   "kind": "text",
+   "parent": -476724197,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Uh, yes... It was quite... overdue...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "513350161": {
+   "kind": "text",
+   "parent": -665983996,
+   "children": [
+    -581660379
+   ],
+   "actor": null,
+   "text": "I'm sorry, but I just couldn't keep it a secret anymore.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1136817885": {
+   "kind": "text",
+   "parent": -665983996,
+   "children": [
+    -461336208
+   ],
+   "actor": null,
+   "text": "Everything went well, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-98634846": {
+   "kind": "text",
+   "parent": -665983996,
+   "children": [
+    1266712241
+   ],
+   "actor": null,
+   "text": "You'll soon have two cocks to play with.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[d-invited-to-basement] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "d-invited-to-basement",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1266712241": {
+   "kind": "text",
+   "parent": -98634846,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "T-Two cocks!? ...  Are you implying that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-461336208": {
+   "kind": "text",
+   "parent": 1136817885,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes, but... He could have run away or worse!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-581660379": {
+   "kind": "text",
+   "parent": 513350161,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-You are right... It was difficult for me too...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-689242013": {
+   "kind": "text",
+   "parent": -476724197,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I need a glass of wine. You really worked your {M}'’s nerves today.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "814315853": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    379434778,
+    -505965150,
+    -1129565409,
+    1683185939
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I... I'm sorry, Anna... You know how Isabella is...  She is~",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[m-d-alternatereveal] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "m-d-alternatereveal",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[m-d-alternatervar1] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "m-d-alternatervar1",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1964410304": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -584904447,
+    -1199117914,
+    -160562738,
+    597750717,
+    -1492525685,
+    -2105472167,
+    -1718157366,
+    747287955,
+    -301950051,
+    787650344,
+    225034591,
+    -1528898545,
+    -876184923,
+    1866256812,
+    129706677,
+    -704294755,
+    934717862,
+    1558635556
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Ah, {PC}... We were waiting for you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[m-d-alternatereveal] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "m-d-alternatereveal",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[m-d-alternatervar1] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "m-d-alternatervar1",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "379434778": {
+   "kind": "text",
+   "parent": 814315853,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Not. Another. Word.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-505965150": {
+   "kind": "text",
+   "parent": 814315853,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I want you to leave, Josef. I can't bare to see your face anymore.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1129565409": {
+   "kind": "text",
+   "parent": 814315853,
+   "actor": "Josef",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "But- I-I can...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1683185939": {
+   "kind": "text",
+   "parent": 814315853,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "LEAVE! NOW!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Mainstory[D-LEFT-FOREVER] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-584904447": {
+   "kind": "text",
+   "parent": 1964410304,
+   "actor": "Josef",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I... I told Anna about Isabella... And she...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1199117914": {
+   "kind": "text",
+   "parent": 1964410304,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I told your {D} everything about our little Starmaker Project.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-160562738": {
+   "kind": "text",
+   "parent": 1964410304,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So... You could say we are even...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "597750717": {
+   "kind": "text",
+   "parent": 1964410304,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Y-Yes... But...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1492525685": {
+   "kind": "text",
+   "parent": 1964410304,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "No, no... Not another word. You are lucky I'm not breaking up with you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2105472167": {
+   "kind": "text",
+   "parent": 1964410304,
+   "actor": "Josef",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "B-But you've slept with your {S}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "747287955": {
+   "kind": "text",
+   "parent": 1964410304,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Our {S}! You cheated on me with your ex, and you know how much I HATE that whore!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-301950051": {
+   "kind": "text",
+   "parent": 1964410304,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I know and I'm sorry... And I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "787650344": {
+   "kind": "text",
+   "parent": 1964410304,
+   "children": [
+    -144931778,
+    -1402251051,
+    1461784616
+   ],
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "And I wondered if I could join the fun... I want you, Anna. I always do.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1528898545": {
+   "kind": "text",
+   "parent": 1964410304,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "This is all so wrong... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[d-invited-to-basement] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "d-invited-to-basement",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-876184923": {
+   "kind": "text",
+   "parent": 1964410304,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1866256812": {
+   "kind": "text",
+   "parent": 1964410304,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That went a lot better than I expected...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "129706677": {
+   "kind": "text",
+   "parent": 1964410304,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Listen, {S}. I'm not angry at you for what you and {M} did in secret...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "934717862": {
+   "kind": "choice",
+   "parent": 1964410304,
+   "children": [
+    1475427950,
+    -770240601,
+    -1385933953
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "You told me, you would like to... share more women with me. I hope that Anna... Your {M} is the perfect fit.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-704294755": {
+   "kind": "text",
+   "parent": 1964410304,
+   "actor": "Josef",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I... I know you two tried to save this {F} from financial ruin and.. Anna is a very attractive woman.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1475427950": {
+   "kind": "text",
+   "parent": 934717862,
+   "children": [
+    -126199194
+   ],
+   "actor": null,
+   "text": "I'm happy we can all get along.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-770240601": {
+   "kind": "text",
+   "parent": 934717862,
+   "children": [
+    1970588574
+   ],
+   "actor": null,
+   "text": "Well, we'll see about that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1385933953": {
+   "kind": "text",
+   "parent": 934717862,
+   "children": [
+    1881274208,
+    -1689155447
+   ],
+   "actor": null,
+   "text": "I can't wait to double stuff {M} with you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1881274208": {
+   "kind": "text",
+   "parent": -1385933953,
+   "children": [
+    558072543
+   ],
+   "actor": "Josef",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Damn right... Me neither, bud...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1970588574": {
+   "kind": "text",
+   "parent": -770240601,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I guess we will...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-126199194": {
+   "kind": "text",
+   "parent": 1475427950,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Me too, bud. Me too... For a minute I thought our {F} would fall apart and now... Well, now things are different.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1558635556": {
+   "kind": "text",
+   "parent": 1964410304,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Now, um, your old {D} has to write a few job applications. See you around, bud.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "558072543": {
+   "kind": "text",
+   "parent": 1881274208,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Having our heavy balls pump thick cum into Isa was incredible. I can't wait to experience that again, only this time with your {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1729422683": {
+   "kind": "text",
+   "parent": -1813771414,
+   "children": [
+    -697658023
+   ],
+   "actor": null,
+   "text": "Don't worry, {D}. I'll take good care of {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-697658023": {
+   "kind": "text",
+   "parent": 1729422683,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "G-Great... Well, uh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1718157366": {
+   "kind": "text",
+   "parent": 1964410304,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "B-But you allowed your son to take nude photos of you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-144931778": {
+   "kind": "text",
+   "parent": 787650344,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Uh, what now?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1402251051": {
+   "kind": "text",
+   "parent": 787650344,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "You deserve the very best from us,  Anna. Just imagine how good we could make you feel... How good we could stretch you out...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1461784616": {
+   "kind": "text",
+   "parent": 787650344,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... Oh god, I'm getting wet, Josef... Studio. Tomorrow. {M} needs to prepare herself...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "225034591": {
+   "kind": "text",
+   "parent": 1964410304,
+   "children": [
+    -153176650,
+    -450610597
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I won't stand in your way... If you want {PC} to take these kinda photos of you... I'll support it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-153176650": {
+   "kind": "text",
+   "parent": 225034591,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Great, I'll keep going with it even if you wouldn't support it. Keep that in mind, Josef.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-450610597": {
+   "kind": "text",
+   "parent": 225034591,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Yes...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1689155447": {
+   "kind": "text",
+   "parent": -1385933953,
+   "children": [
+    -1529420612,
+    43325742
+   ],
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Y-You're planning to go all the way, huh? I... I'm not sure if your {M} would be up for having...  Well.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1529420612": {
+   "kind": "text",
+   "parent": -1689155447,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Well, {S}, you have my blessing. What we did to Isa was... Quite thrilling, but I don't love her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "43325742": {
+   "kind": "text",
+   "parent": -1689155447,
+   "actor": "Josef",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "But I do love your {M}, and I know you do too. Like Isa, she's got two holes down there just waiting to be used.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/SmallTalks/DRevealaftermathtalk",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play GameObject and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueStart'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueStart"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[post-d-reveal-talk-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "post-d-reveal-talk-done",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueEnd'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueEnd"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

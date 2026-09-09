@@ -1,0 +1,1596 @@
+{
+ "id": "8_Room_Talk/Livingroom/AnnaYogaEvent",
+ "name": "AnnaYogaEvent",
+ "index": 13,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna"
+ ],
+ "roots": [
+  1780800763,
+  -1996111536,
+  -1631745543
+ ],
+ "nodes": {
+  "1780800763": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh, {PC}. I was just about to do some stretching...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[first-time-yoga] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "first-time-yoga",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1996111536": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    179370885
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, hey. Didn’t think anyone else was up yet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[first-time-yoga] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "first-time-yoga",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "179370885": {
+   "kind": "text",
+   "parent": -1996111536,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I’ve been waking up with back pain lately, so I thought I’d give yoga a shot. Supposed to help, right? At least, that’s what CureTube says.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1631745543": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1948399941,
+    -65204990,
+    1115604426
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Maybe one day I'll be as fit as Charlotte!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_6[first-time-yoga] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "first-time-yoga",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1948399941": {
+   "kind": "text",
+   "parent": -1631745543,
+   "children": [
+    1237622365,
+    1466647190,
+    1524490236
+   ],
+   "actor": null,
+   "text": "Want me to take a photo of you for Starmaker?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1115604426": {
+   "kind": "text",
+   "parent": -1631745543,
+   "children": [
+    -1833597268
+   ],
+   "actor": null,
+   "text": "Good luck with that. I’ll leave you to it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1833597268": {
+   "kind": "text",
+   "parent": 1115604426,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Let’s just hope this helps. I’m too young to feel this creaky in the mornings.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1237622365": {
+   "kind": "text",
+   "parent": 1948399941,
+   "children": [
+    -1078345439
+   ],
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "A photo? For Starmaker?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-touching] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-touching",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1466647190": {
+   "kind": "text",
+   "parent": 1948399941,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Well thought out, {S}... This sort of thing is all the rage, isn't it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-touching] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-touching",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1078345439": {
+   "kind": "text",
+   "parent": 1237622365,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Well... I guess yoga could be a good theme. But I’m not exactly flexible yet, so don’t expect anything too graceful.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1524490236": {
+   "kind": "choice",
+   "parent": 1948399941,
+   "children": [
+    1793384833,
+    776382533,
+    -752088666
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So, what pose should I be going for?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1793384833": {
+   "kind": "text",
+   "parent": 1524490236,
+   "children": [
+    1193847095
+   ],
+   "actor": null,
+   "text": "Do some stretching.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "776382533": {
+   "kind": "text",
+   "parent": 1524490236,
+   "children": [
+    -215638919
+   ],
+   "actor": null,
+   "text": "How about some suggestive?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-752088666": {
+   "kind": "text",
+   "parent": 1524490236,
+   "children": [
+    565579460,
+    -751210282
+   ],
+   "actor": null,
+   "text": "What about a photo with my cock?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Mainstory[anna-heart-status] ≥ 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-heart-status",
+        "list": "Mainstory",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ]
+  },
+  "565579460": {
+   "kind": "text",
+   "parent": -752088666,
+   "children": [
+    1900203820,
+    809388809,
+    -1097331437,
+    -1654092133,
+    -1584778367
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes! Get that dick out, {PC}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-751210282": {
+   "kind": "text",
+   "parent": -752088666,
+   "children": [
+    -1907042750,
+    -1396048053,
+    -57496549,
+    1327025077
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... Um... I mean, sure. Yes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-4-sex] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-4-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1900203820": {
+   "kind": "text",
+   "parent": 565579460,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmm... That's a fun way to stretch in the morning...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaYogaCockJob (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaYogaCockJob (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaYogaCockJob (1)"
+      }
+     }
+    }
+   ]
+  },
+  "809388809": {
+   "kind": "text",
+   "parent": 565579460,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I can feel you pressing against my...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1097331437": {
+   "kind": "text",
+   "parent": 565579460,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmm... It's okay for you to cum, {PC}... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1654092133": {
+   "kind": "text",
+   "parent": 565579460,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes... I'm glad my butt makes you feel this good...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaYogaCockJob (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaYogaCockJob (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaYogaCockJob (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1584778367": {
+   "kind": "text",
+   "parent": 565579460,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Alright, I better get myself cleaned up. Hihi...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1907042750": {
+   "kind": "text",
+   "parent": -751210282,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A-Alright... Hold still, yes?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaYogaCockJob (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaYogaCockJob (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaYogaCockJob (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1396048053": {
+   "kind": "text",
+   "parent": -751210282,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Are you taking the photo?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-57496549": {
+   "kind": "text",
+   "parent": -751210282,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ah, okay... Um...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'flash'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "flash"
+      }
+     }
+    }
+   ]
+  },
+  "1327025077": {
+   "kind": "choice",
+   "parent": -751210282,
+   "children": [
+    509645891,
+    -725761740
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "509645891": {
+   "kind": "text",
+   "parent": 1327025077,
+   "children": [
+    -1067670064,
+    -1904080907,
+    -2003189823,
+    -653056287
+   ],
+   "actor": null,
+   "text": "J-Just a little bit longer, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-725761740": {
+   "kind": "text",
+   "parent": 1327025077,
+   "children": [
+    -387073539
+   ],
+   "actor": null,
+   "text": "Yeah, let's stop...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-387073539": {
+   "kind": "text",
+   "parent": -725761740,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A-Alright, um... Well, thanks for your help...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1067670064": {
+   "kind": "text",
+   "parent": 509645891,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A little bit longer? ... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1904080907": {
+   "kind": "text",
+   "parent": 509645891,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm... Um, {PC}? ... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2003189823": {
+   "kind": "text",
+   "parent": 509645891,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh.. Um... I... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaYogaCockJob (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaYogaCockJob (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaYogaCockJob (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-653056287": {
+   "kind": "text",
+   "parent": 509645891,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I need to use the bathroom, um... I will see you later...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-215638919": {
+   "kind": "random",
+   "parent": 776382533,
+   "children": [
+    -979830630,
+    -1246738182,
+    1386704893
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hmm...",
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "1193847095": {
+   "kind": "random",
+   "parent": 1793384833,
+   "children": [
+    1395324530,
+    541115086,
+    -1115348482
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Easy enough...",
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "1395324530": {
+   "kind": "text",
+   "parent": 1193847095,
+   "children": [
+    759940009
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A little bit of stretching...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A56_YogaStretching (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A56_YogaStretching (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A56_YogaStretching (4)"
+      }
+     }
+    }
+   ]
+  },
+  "541115086": {
+   "kind": "text",
+   "parent": 1193847095,
+   "children": [
+    -1187189133
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I hope our fans will like this...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A56_YogaStretching (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A56_YogaStretching (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A56_YogaStretching (5)"
+      }
+     }
+    }
+   ]
+  },
+  "-1115348482": {
+   "kind": "text",
+   "parent": 1193847095,
+   "children": [
+    1027048860
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "M-Maybe something like this? ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A62_YogaStretching (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A62_YogaStretching (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A62_YogaStretching (6)"
+      }
+     }
+    }
+   ]
+  },
+  "-979830630": {
+   "kind": "text",
+   "parent": -215638919,
+   "children": [
+    -1960343927
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "D-Does this make me look submissive?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A57_YogaStretching (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A57_YogaStretching (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A57_YogaStretching (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1246738182": {
+   "kind": "text",
+   "parent": -215638919,
+   "children": [
+    122388546
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "H-How about this?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A56_YogaStretching (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A56_YogaStretching (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A56_YogaStretching (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1386704893": {
+   "kind": "text",
+   "parent": -215638919,
+   "children": [
+    -835128793
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "What about this one...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A56_YogaStretching (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A56_YogaStretching (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A56_YogaStretching (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1960343927": {
+   "kind": "text",
+   "parent": -979830630,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let's hope we'll get some new followers!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "122388546": {
+   "kind": "text",
+   "parent": -1246738182,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I kinda feel like I'm wearing nothing...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-835128793": {
+   "kind": "text",
+   "parent": 1386704893,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I've seen this pose in... a magazine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1027048860": {
+   "kind": "text",
+   "parent": -1115348482,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh! That one turned out nicely!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1187189133": {
+   "kind": "text",
+   "parent": 541115086,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I have to say, this is quite motivating.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "759940009": {
+   "kind": "text",
+   "parent": 1395324530,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmah! I hope the photo turned out well!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-65204990": {
+   "kind": "text",
+   "parent": -1631745543,
+   "children": [
+    -722694266,
+    -49951885,
+    -978898741,
+    919406886,
+    -289856175,
+    2097383278,
+    -259967287,
+    -1889924270,
+    1479127243,
+    584296718,
+    1939646652,
+    1846387866
+   ],
+   "actor": null,
+   "text": "(Athletic) Let me help you, {M}. I'll give you a good workout.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Athletic] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Athletic",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-722694266": {
+   "kind": "text",
+   "parent": -65204990,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{PC}! What are you~ oh my god!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaYogaTrait (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaYogaTrait (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaYogaTrait (0)"
+      }
+     }
+    }
+   ]
+  },
+  "-49951885": {
+   "kind": "text",
+   "parent": -65204990,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Is… is that all you? Jesus, baby, when did you get so big?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-978898741": {
+   "kind": "text",
+   "parent": -65204990,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fuck… just like that. Don't you dare stop.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaYogaTrait (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaYogaTrait (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaYogaTrait (1)"
+      }
+     }
+    }
+   ]
+  },
+  "919406886": {
+   "kind": "text",
+   "parent": -65204990,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You're so deep… I can feel you in my stomach.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-289856175": {
+   "kind": "text",
+   "parent": -65204990,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "God, look at us… you're splitting me open. It's so perfect.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2097383278": {
+   "kind": "text",
+   "parent": -65204990,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You're hitting that spot... right there... oh, fuck, {PC}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-259967287": {
+   "kind": "choice",
+   "parent": -65204990,
+   "children": [
+    1963659870,
+    -1662764803,
+    785074368
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Are you close? Tell me when you're close... I want to feel you fill me up.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1889924270": {
+   "kind": "text",
+   "parent": -65204990,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god, {PC}... I'm cumming!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaYogaTrait (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaYogaTrait (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AnnaYogaTrait (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1479127243": {
+   "kind": "text",
+   "parent": -65204990,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes... yes... fill me up, baby... give it all to me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "584296718": {
+   "kind": "text",
+   "parent": -65204990,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Wow... just... wow.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1963659870": {
+   "kind": "text",
+   "parent": -259967287,
+   "actor": null,
+   "text": "(Fill her up)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1662764803": {
+   "kind": "text",
+   "parent": -259967287,
+   "actor": null,
+   "text": "Yes, {M}... I'm so fucking close, I'll... Fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "785074368": {
+   "kind": "text",
+   "parent": -259967287,
+   "actor": null,
+   "text": "Cum for me, Anna. I want us to cum together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1939646652": {
+   "kind": "text",
+   "parent": -65204990,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I've never had a yoga session end with that kind of... deep stretch before.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1846387866": {
+   "kind": "text",
+   "parent": -65204990,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I think I'm going to be sore in all the best places tomorrow. Thank you, hun...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Livingroom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AnnaYogaEvent and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[yogacooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "yogacooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "branches": [
+    "yoga"
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_YogaOutfit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_YogaOutfit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_YogaOutfit"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_YogaOutfit/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[yogacooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "yogacooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

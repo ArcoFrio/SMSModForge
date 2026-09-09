@@ -26,10 +26,11 @@ namespace SMSModForge.PackPlugin
     {
         public const string pluginGuid = "treboy.starmakerstory.smsmodforge.packplugin";
         public const string pluginName = "SMSModForge Pack Plugin";
-        // Matches the editor. The two ship together and a pack written by one
-        // is loaded by the other, so a reader comparing them should not have to
-        // work out which numbering applies to which half.
-        public const string pluginVersion = "1.1.0";
+        // Matches the editor, and now literally: one constant compiled into
+        // both. A pack records the ModForge that wrote it and this runtime
+        // judges whether it can honour that, so two copies of the number would
+        // make every one of those judgements wrong at once.
+        public const string pluginVersion = SMSModForge.Shared.ForgeVersion.Current;
 
         public static bool loaded;
         public static Scene currentScene;
@@ -599,7 +600,57 @@ namespace SMSModForge.PackPlugin
             }
         }
 
+        /// <summary>
+        /// The old home for packs: <c>ModPacks</c> beside the plugin DLL.
+        /// <para/>
+        /// Still read, and always will be - people have packs installed here
+        /// and an update that stopped seeing them would look like the packs
+        /// had broken. It is simply no longer the one anybody is told about.
+        /// </summary>
         public static string PacksRoot => Path.Combine(DataRoot, "ModPacks");
+
+        /// <summary>
+        /// Where packs live now: a <c>Mods</c> folder in the game's own folder,
+        /// beside the executable.
+        /// <para/>
+        /// The old location was four levels down inside BepInEx and invented by
+        /// us, which is a lot to ask of somebody who just wants to install a
+        /// mod - and getting it wrong produces a game that starts perfectly and
+        /// simply does not have the pack in it, which is the hardest kind of
+        /// failure to diagnose. One folder at the top means an install is a
+        /// drag and a drop.
+        /// </summary>
+        public static string ModsRoot
+            => Path.Combine(Paths.GameRootPath, SMSModForge.Shared.ModsFolder.Name);
+
+        /// <summary>
+        /// Every pack file on disk, in the order a duplicate is resolved:
+        /// <see cref="ModsRoot"/> first, then <see cref="PacksRoot"/>.
+        /// <para/>
+        /// Both are read so that nobody's existing install breaks, and the new
+        /// one wins so that moving a pack there takes effect even if the old
+        /// copy was left behind.
+        /// </summary>
+        internal static List<string> PackFiles()
+        {
+            var found = new List<string>();
+            foreach (string root in new[] { ModsRoot, PacksRoot })
+            {
+                try
+                {
+                    if (!Directory.Exists(root)) continue;
+                    found.AddRange(Directory.GetFiles(root, "*" + PackArchive.FileExtension));
+                }
+                catch (System.Exception ex)
+                {
+                    Log?.LogWarning("[SMSModForge.PackPlugin] Could not read " + root + ": " + ex.Message);
+                }
+            }
+            return found;
+        }
+
+        /// <summary>Both roots, for a message that has to name where it looked.</summary>
+        internal static string WhereWeLooked => ModsRoot + " or " + PacksRoot;
 
         /// <summary>
         /// Base directory pack saves write into. We park them next to the
@@ -641,6 +692,89 @@ namespace SMSModForge.PackPlugin
         /// <summary>Plugin log, exposed so sibling components
         /// (<see cref="PackManualSaveSync"/>) can route through the same source.</summary>
         internal static BepInEx.Logging.ManualLogSource Log => Instance != null ? Instance.Logger : null;
+
+        /// <summary>
+        /// Write down every script on every object that is switched on right
+        /// now, and where it lives.
+        /// <para/>
+        /// This is the only way to read what a Game Creator Trigger actually
+        /// does: its instructions live in a [SerializeReference] list, which a
+        /// ripped project does not carry, but the shipped build deserialises in
+        /// full - so the running game holds what the files do not. Open the
+        /// screen in question, press the key, and its instructions are in the
+        /// file with their durations and easings.
+        /// </summary>
+        /// <summary>
+        /// Write down every dialogue the game has loaded, whole.
+        /// <para/>
+        /// What a dialogue actually says lives in a node graph Unity does not
+        /// serialise field by field, so it cannot be read from a ripped project
+        /// at all - only from here.
+        /// </summary>
+        private void DumpDialogues()
+        {
+            try
+            {
+                string file = ScriptDump.WriteOnly<GameCreator.Runtime.Dialogue.Dialogue>(
+                    Logger, "dialogues");
+                Logger.LogInfo("[SMSModForge.PackPlugin] F10: dialogues written to " + file);
+
+                // And what starts them, in the same press.
+                //
+                // A dialogue holds only what it says. Whether it plays at all
+                // is decided somewhere else - a Trigger on the object the
+                // player clicks, carrying the conditions - and that is as much
+                // a part of the conversation as its lines. Two files from one
+                // key so they always come from the same session, which is what
+                // lets the second be matched to the first by path.
+                string starts = ScriptDump.WriteReferencing<GameCreator.Runtime.Dialogue.Dialogue>(
+                    Logger, "dialogue-starts");
+                Logger.LogInfo("[SMSModForge.PackPlugin] F10: what starts them written to " + starts);
+
+                // And what sits with them.
+                //
+                // The first pass found nothing at all, which says no script in
+                // this game holds a reference to a dialogue - so whatever
+                // starts one does it by being switched on beside it rather
+                // than by naming it. That is only visible from where it sits.
+                string around = ScriptDump.WriteAround<GameCreator.Runtime.Dialogue.Dialogue>(
+                    Logger, "dialogue-around");
+                Logger.LogInfo("[SMSModForge.PackPlugin] F10: what sits with them written to " + around);
+
+                // And who speaks them.
+                //
+                // A node names its actor and then picks an expression on it BY
+                // NUMBER - "Anna, expression 4". The actors are assets rather
+                // than anything in the scene, so no pass over the scene can
+                // reach them, and without them that 4 is a fact with no meaning
+                // attached.
+                string actors = ScriptDump.WriteAssets<GameCreator.Runtime.Dialogue.Actor>(
+                    Logger, "dialogue-actors");
+                Logger.LogInfo("[SMSModForge.PackPlugin] F10: the actors written to " + actors);
+            }
+            catch (System.Exception ex)
+            {
+                Logger.LogError("[SMSModForge.PackPlugin] F10 dialogue dump failed: " + ex);
+            }
+        }
+
+        private void DumpScriptsOnScreen()
+        {
+            try
+            {
+                var roots = new System.Collections.Generic.List<GameObject>();
+                var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+                foreach (var root in scene.GetRootGameObjects())
+                    if (root != null && root.activeInHierarchy) roots.Add(root);
+
+                string file = ScriptDump.Write(roots, Logger);
+                Logger.LogInfo("[SMSModForge.PackPlugin] F11: scripts on screen written to " + file);
+            }
+            catch (System.Exception ex)
+            {
+                Logger.LogError("[SMSModForge.PackPlugin] F11 script dump failed: " + ex);
+            }
+        }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
@@ -736,51 +870,67 @@ namespace SMSModForge.PackPlugin
                 packs.Sort((a, b) => string.Compare(a.DisplayLabel, b.DisplayLabel,
                                                     System.StringComparison.OrdinalIgnoreCase));
 
-                int rowCount = packs.Count == 0 ? 1 : packs.Count;
-
-                // Backdrop first (earlier sibling = drawn behind the text rows):
-                // a semi-transparent black panel spanning the header + all rows.
-                InjectMenuBackdrop(prototype, menuRoot, rowCount);
-
-                int row = 0;
-                // Header row — same cloned font as the vanilla menu text.
-                InjectMenuRow(prototype, menuRoot, row++, "Mods", Color.white, 40f);
+                // Every line the banner will hold, worked out BEFORE anything
+                // is placed: the backdrop has to be sized for the whole thing,
+                // and a pack can take more than one line now that its problems
+                // are listed under it rather than trailing off the side.
+                var lines = new List<KeyValuePair<string, Color>>();
 
                 if (packs.Count == 0)
                 {
-                    InjectMenuRow(prototype, menuRoot, row++,
-                                  "  (no packs detected)",
-                                  new Color(1f, 0.75f, 0.2f, 1f), 28f); // amber
+                    lines.Add(new KeyValuePair<string, Color>(
+                        "  (no packs detected)", MenuWarningColour));
                 }
                 else
                 {
-                    // Version gate, same trick as the classic mod headers: the
-                    // vanilla menu text ends in the game build ("Build 1.8E"),
-                    // and each pack carries the gameVersion the editor stamped
-                    // at save time. Mismatch → red row + explicit callout.
+                    // The vanilla menu text ends in the game build ("Build
+                    // 1.8E") and each pack carries the gameVersion the editor
+                    // stamped at save time, so the two can be compared.
                     string vanillaVersion = GetVanillaGameVersion(prototype);
 
                     foreach (var p in packs)
                     {
-                        bool incompatible = p.IsValid &&
-                            !string.IsNullOrEmpty(p.GameVersion) &&
-                            !string.IsNullOrEmpty(vanillaVersion) &&
-                            !string.Equals(p.GameVersion, vanillaVersion, System.StringComparison.OrdinalIgnoreCase);
+                        // What is wrong with this pack, and how loudly to say
+                        // it, decided by PackStatus - which the editor's test
+                        // project compiles, so the rule is checked rather than
+                        // merely compiled. All this does is paint it.
+                        var status = SMSModForge.Shared.PackStatus.Of(
+                            new SMSModForge.Shared.PackStatus.Facts
+                            {
+                                Readable = p.IsValid,
+                                GameVersion = p.GameVersion,
+                                RunningGameVersion = vanillaVersion,
+                                ForgeVersion = p.ForgeVersion,
+                                Folder = p.Folder,
+                                ShadowedIn = p.ShadowedIn,
+                            });
 
-                        // White when the manifest parsed clean, red when it
-                        // failed (broken JSON, missing packId, etc.) or when
-                        // the pack targets a different game version.
-                        Color colour = p.IsValid && !incompatible ? Color.white : Color.red;
-                        string label = "  • " + p.DisplayLabel +
-                                       (incompatible ? " -  Incompatible (" + p.GameVersion + ")" : "");
-                        InjectMenuRow(prototype, menuRoot, row++, label, colour, 28f);
+                        Color colour =
+                            status.Level == SMSModForge.Shared.PackStatus.Level.Error ? Color.red
+                          : status.Level == SMSModForge.Shared.PackStatus.Level.Warning ? MenuWarningColour
+                          : Color.white;
 
-                        if (incompatible)
-                            Logger.LogWarning("[SMSModForge.PackPlugin] Pack '" + p.DisplayLabel +
-                                              "' was authored for game version " + p.GameVersion +
-                                              " but this game is " + vanillaVersion + ".");
+                        foreach (var line in SMSModForge.Shared.PackStatus.Rows(
+                                     p.MenuLabel, status, MenuLineWidth))
+                            lines.Add(new KeyValuePair<string, Color>(line, colour));
+
+                        // The rows are short because they sit on a menu; the
+                        // log is where somebody is told what to DO about each.
+                        LogWhatIsWrong(p, vanillaVersion);
                     }
                 }
+
+                // Backdrop first (earlier sibling = drawn behind the text rows):
+                // a semi-transparent black panel spanning the header + all rows.
+                InjectMenuBackdrop(prototype, menuRoot, lines.Count);
+
+                int row = 0;
+                InjectMenuRow(prototype, menuRoot, row++, MenuHeader(),
+                              Color.white, MenuHeaderFontSize);
+
+                foreach (var line in lines)
+                    InjectMenuRow(prototype, menuRoot, row++, line.Key, line.Value,
+                                  MenuPackFontSize);
 
                 Logger.LogInfo("[SMSModForge.PackPlugin] Menu banner: " + row +
                                " row(s) injected (" + packs.Count + " pack(s)).");
@@ -793,10 +943,131 @@ namespace SMSModForge.PackPlugin
         }
 
         /// <summary>
+        /// Spell out, in the log, whatever the menu row could only hint at.
+        /// <para/>
+        /// A menu row has to stay short enough to read at a glance, which is
+        /// not enough room to say what to do about anything. Somebody who wants
+        /// to fix the problem goes to the log, so the log is where the fix is.
+        /// </summary>
+        private void LogWhatIsWrong(DiscoveredPack p, string vanillaVersion)
+        {
+            if (!p.IsValid)
+            {
+                Logger.LogError("[SMSModForge.PackPlugin] '" + p.DirName +
+                                "' could not be read as a pack. It may be an incomplete " +
+                                "download, or a file that is not a pack at all.");
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(p.GameVersion) && !string.IsNullOrEmpty(vanillaVersion) &&
+                !string.Equals(p.GameVersion, vanillaVersion, System.StringComparison.OrdinalIgnoreCase))
+                Logger.LogWarning("[SMSModForge.PackPlugin] Pack '" + p.DisplayLabel +
+                                  "' was authored for game version " + p.GameVersion +
+                                  " but this game is " + vanillaVersion + ".");
+
+            switch (p.Forge)
+            {
+                case SMSModForge.Shared.ForgeVersion.Standing.PackIsNewer:
+                    Logger.LogError("[SMSModForge.PackPlugin] Pack '" + p.DisplayLabel +
+                                    "' was made with ModForge " + p.ForgeVersion +
+                                    " and this runtime is " + SMSModForge.Shared.ForgeVersion.Current +
+                                    ". It is being loaded anyway, but anything it uses that " +
+                                    "arrived after " + SMSModForge.Shared.ForgeVersion.Current +
+                                    " will be missing. Update the ModForge runtime.");
+                    break;
+
+                case SMSModForge.Shared.ForgeVersion.Standing.PackIsOlder:
+                    Logger.LogWarning("[SMSModForge.PackPlugin] Pack '" + p.DisplayLabel +
+                                      "' was made with ModForge " + p.ForgeVersion +
+                                      " and this runtime is " + SMSModForge.Shared.ForgeVersion.Current +
+                                      ". It should load normally; open and save it in ModForge " +
+                                      "to bring it up to date.");
+                    break;
+
+                case SMSModForge.Shared.ForgeVersion.Standing.Unknown:
+                    Logger.LogWarning("[SMSModForge.PackPlugin] Pack '" + p.DisplayLabel +
+                                      "' does not record which ModForge built it, so nothing " +
+                                      "here can tell whether it matches this runtime (" +
+                                      SMSModForge.Shared.ForgeVersion.Current + "). It predates " +
+                                      "the stamp; open and save it in ModForge to add one.");
+                    break;
+            }
+
+            if (p.IsDuplicated)
+                Logger.LogWarning("[SMSModForge.PackPlugin] Pack '" + p.DisplayLabel +
+                                  "' is installed in both " + p.Folder + " and " + p.ShadowedIn +
+                                  ". The " + p.Folder + " copy is the one being loaded; delete " +
+                                  "the other to be sure which one you are editing.");
+        }
+
+        /// <summary>
+        /// Amber, for a row that works but is not what somebody expects. The
+        /// same colour the "no packs detected" row uses, because it is the same
+        /// message: nothing is broken, but look here.
+        /// </summary>
+        private static readonly Color MenuWarningColour = new Color(1f, 0.75f, 0.2f, 1f);
+
+        /// <summary>The heading font.</summary>
+        private const float MenuHeaderFontSize = 40f;
+
+        /// <summary>
+        /// The heading: the word, then the runtime doing the judging.
+        /// <para/>
+        /// Every verdict on the rows below is relative to that number - a pack
+        /// marked as needing a newer ModForge means nothing without it - but it
+        /// is reference material rather than a title, so it is set smaller and
+        /// greyer than the word it follows, and stood off from it. Rich text does both in one row;
+        /// two objects would have to be measured against each other to sit side
+        /// by side.
+        /// </summary>
+        private static string MenuHeader()
+        {
+            // Plain spaces rather than a <space> tag, and at full size because
+            // they sit outside the <size> below: they cost nothing if the text
+            // engine ever disagrees with us about rich text, where an
+            // unsupported tag would be shown to the player as itself.
+            return "Mods    <size=50%><color=#C8C8C8>ModForge "
+                 + SMSModForge.Shared.ForgeVersion.Current
+                 + "</color></size>";
+        }
+
+        /// <summary>
+        /// The longest a banner row is allowed to get before it is broken.
+        /// <para/>
+        /// Not a measurement of the panel, which rows are allowed to overrun:
+        /// this is a backstop against a row wide enough to leave the screen. At
+        /// <see cref="MenuPackFontSize"/> a character averages around half its
+        /// size in width, so eighty of them is roughly eight hundred units -
+        /// well past the panel, comfortably inside a menu.
+        /// </summary>
+        private const int MenuLineWidth = 80;
+
+        /// <summary>
+        /// One pack's row.
+        /// <para/>
+        /// Smaller than the heading, and smaller than it used to be: a row can
+        /// now carry several tags after the pack's name - a game-version
+        /// mismatch, a ModForge one, a duplicate install - and the whole line
+        /// has to stay on screen beside a menu that was not designed with it in
+        /// mind.
+        /// </summary>
+        private const float MenuPackFontSize = 20f;
+
+        /// <summary>
         /// Vertical stride between stacked banner rows, in anchored-position
         /// units (the units the menu text prototype uses).
+        /// <para/>
+        /// Derived from the font rather than set by hand, because it cannot go
+        /// below the height of a line without the rows landing on each other -
+        /// and a number typed in here would not follow the font if it changed
+        /// again.
+        /// <para/>
+        /// 1.1 measured rather than assumed: this face draws a good deal
+        /// shorter than its nominal size, so the 1.3 this started at left an
+        /// obvious gap between rows. The remaining margin is thin, so anything
+        /// below about 1.05 should be checked on screen before it is kept.
         /// </summary>
-        private const float MenuRowStride = 32f;
+        private const float MenuRowStride = MenuPackFontSize * 1.1f;
 
         /// <summary>Extra vertical room the larger "Mods" header row takes
         /// before the first pack row.</summary>
@@ -825,6 +1096,19 @@ namespace SMSModForge.PackPlugin
             var tmp = FindTmpText(banner);
             if (tmp != null)
             {
+                // Explicit rather than assumed: the header sets its own size
+                // and colour inline, and a component with rich text switched
+                // off would show the markup to the player.
+                tmp.GetType().GetProperty("richText")?.SetValue(tmp, true);
+
+                // And nothing folds a row to fit the panel behind it. A row is
+                // allowed to run past the backdrop's edge - the panel is there
+                // to make text readable over menu art, not to be a box the text
+                // lives inside. What breaks a line is PackStatus, which counts
+                // the lines it makes so the row below can be placed clear of
+                // them.
+                StopWrapping(tmp);
+
                 tmp.GetType().GetProperty("text")?.SetValue(tmp, text);
                 tmp.GetType().GetProperty("color")?.SetValue(tmp, colour);
                 tmp.GetType().GetProperty("fontSize")?.SetValue(tmp, size);
@@ -839,6 +1123,58 @@ namespace SMSModForge.PackPlugin
                 float y = rowIndex == 0 ? 0f : -(MenuHeaderStride + (rowIndex - 1) * MenuRowStride);
                 newRect.anchoredPosition = protoRect.anchoredPosition + MenuBaseOffset + new Vector2(0, y);
                 newRect.sizeDelta = new Vector2(420, rowIndex == 0 ? 50 : 36);
+            }
+        }
+
+        /// <summary>
+        /// Turn a text component's own word wrapping off.
+        /// <para/>
+        /// Two spellings, because the property was renamed between text-engine
+        /// versions and this plugin reaches it by reflection - it deliberately
+        /// carries no compile-time reference to the text assembly, which moves
+        /// between Unity versions. Neither name existing would leave wrapping
+        /// on, which is a smaller failure than not building at all, so both are
+        /// attempted and neither is required.
+        /// <para/>
+        /// The overflow mode goes with it. Switching wrapping off on a
+        /// component that truncates would clip the row at its box rather than
+        /// let it run past, which is the opposite of what is wanted here.
+        /// </summary>
+        private static void StopWrapping(Component tmp)
+        {
+            if (tmp == null) return;
+
+            try
+            {
+                var type = tmp.GetType();
+
+                // Overflow first, and it matters: with wrapping off, a
+                // component set to truncate would CLIP the row at the edge of
+                // its box instead of letting it run past. The row is meant to
+                // overrun. "Overflow" is the zero member of the mode enum,
+                // built from the property's own type so this needs no
+                // compile-time reference to it.
+                var overflow = type.GetProperty("overflowMode");
+                if (overflow != null && overflow.CanWrite && overflow.PropertyType.IsEnum)
+                    overflow.SetValue(tmp, System.Enum.ToObject(overflow.PropertyType, 0));
+
+                var older = type.GetProperty("enableWordWrapping");
+                if (older != null && older.CanWrite)
+                {
+                    older.SetValue(tmp, false);
+                    return;
+                }
+
+                // The newer spelling of the same setting, renamed between text
+                // engine versions. Same trick: its "no wrapping" member is zero.
+                var newer = type.GetProperty("textWrappingMode");
+                if (newer != null && newer.CanWrite && newer.PropertyType.IsEnum)
+                    newer.SetValue(tmp, System.Enum.ToObject(newer.PropertyType, 0));
+            }
+            catch (System.Exception ex)
+            {
+                Log?.LogWarning("[SMSModForge.PackPlugin] Could not switch off text "
+                                + "wrapping on a banner row: " + ex.Message);
             }
         }
 
@@ -864,13 +1200,17 @@ namespace SMSModForge.PackPlugin
             // Panel spans from just above the header to just below the last
             // row. Row centres: header at 0, pack row i at
             // -(MenuHeaderStride + i*MenuRowStride) — all relative to the base.
-            float top = 30f;                                                   // above header centre
-            float bottom = -(MenuHeaderStride + (packRows - 1) * MenuRowStride) - 24f; // below last row centre
+            float top = 36f;                                                   // above header centre
+            float bottom = -(MenuHeaderStride + (packRows - 1) * MenuRowStride) - 30f; // below last row centre
             float height = top - bottom;
             float centreY = (top + bottom) / 2f;
 
             rect.anchoredPosition = protoRect.anchoredPosition + MenuBaseOffset + new Vector2(0, centreY);
-            rect.sizeDelta = new Vector2(460, height);
+            // Wider than the rows are indented, not as wide as the longest of
+            // them: rows are allowed to run past this edge, so sizing the panel
+            // to the worst case would put a black bar across half the menu to
+            // sit behind one line.
+            rect.sizeDelta = new Vector2(500, height);
 
             var img = panelGo.GetComponent<UnityEngine.UI.Image>();
             img.color = new Color(0f, 0f, 0f, 0.55f);
@@ -904,53 +1244,116 @@ namespace SMSModForge.PackPlugin
             public string PackId;
             public bool IsValid;       // manifest parses + has packId
             public string GameVersion; // manifest's gameVersion stamp ("" on pre-stamp packs)
+
+            /// <summary>Which folder this copy was loaded from - "Mods" or the
+            /// older "ModPacks".</summary>
+            public string Folder;
+
+            /// <summary>Where another copy of the same pack sits, ignored, or
+            /// empty when there is only one. See PackInstallScan.</summary>
+            public string ShadowedIn;
+
+            /// <summary>Whether a second copy of this pack is installed.</summary>
+            public bool IsDuplicated { get { return !string.IsNullOrEmpty(ShadowedIn); } }
+
+            /// <summary>The ModForge that wrote the pack ("" before ModForge
+            /// recorded it).</summary>
+            public string ForgeVersion;
+
+            /// <summary>Where that puts it against this runtime.</summary>
+            public SMSModForge.Shared.ForgeVersion.Standing Forge
+            {
+                get { return SMSModForge.Shared.ForgeVersion.Judge(ForgeVersion); }
+            }
+
+            /// <summary>The pack's OWN version, as its author numbered it.
+            /// Empty on a pack written before versioning existed.</summary>
+            public string Version;
+
             public string DisplayLabel => string.IsNullOrEmpty(PackId) ? DirName : PackId;
+
+            /// <summary>
+            /// What the menu shows: the pack's name, and its version beside it.
+            /// <para/>
+            /// This is the whole point of numbering a pack - a player looking at
+            /// the menu can tell whether the copy they have is the one that was
+            /// announced. A pack with no version simply shows its name, rather
+            /// than a "v" with nothing after it.
+            /// </summary>
+            public string MenuLabel => string.IsNullOrEmpty(Version)
+                ? DisplayLabel : DisplayLabel + "  v" + Version;
         }
 
         /// <summary>
-        /// Walk every subdirectory of <see cref="PacksRoot"/>, look
-        /// for a <c>modpack.json</c>, and try to extract its
-        /// <c>packId</c>. Returns one entry per directory — folders
-        /// without a manifest are still reported (as invalid) so the
-        /// author sees that the folder exists but doesn't match the
-        /// expected layout.
+        /// Read every pack file in both pack folders and work out which of them
+        /// actually load.
+        /// <para/>
+        /// Archives that fail to open, or that carry no <c>packId</c>, are still
+        /// reported (as invalid) so somebody can see the file is there and
+        /// unrecognised rather than wondering where it went.
+        /// <para/>
+        /// Duplicates are reported rather than dropped. The same pack in both
+        /// folders is the normal shape of a half-finished move, and an author
+        /// who edited the copy that lost would otherwise spend an evening
+        /// wondering why their changes do nothing.
         /// </summary>
         private static System.Collections.Generic.List<DiscoveredPack> DiscoverPacks()
         {
             var result = new System.Collections.Generic.List<DiscoveredPack>();
             try
             {
-                if (!System.IO.Directory.Exists(PacksRoot)) return result;
-                // .smspack scan — every file in ModPacks/ with the right
-                // extension is a candidate. We peek the packId out of the
-                // archive's modpack.json (via PackArchive.TryOpen) to fill
-                // out the menu banner row; archives that fail to open or
-                // lack a manifest land in the list with IsValid=false so
-                // the author can see the file is there but unrecognised.
-                foreach (var smspack in System.IO.Directory.GetFiles(PacksRoot, "*" + PackArchive.FileExtension))
+                // Pass one: read what each file says about itself. We peek the
+                // packId out of the archive manifest via PackArchive.TryOpen.
+                var read = new Dictionary<string, DiscoveredPack>();
+                var candidates = new List<SMSModForge.Shared.PackInstallScan.Candidate>();
+
+                foreach (var smspack in PackFiles())
                 {
-                    var entry = new DiscoveredPack { DirName = System.IO.Path.GetFileNameWithoutExtension(smspack) };
-                    var archive = PackArchive.TryOpen(smspack, null);
-                    if (archive == null) { result.Add(entry); continue; }
-                    try
+                    var entry = new DiscoveredPack
                     {
-                        string text = archive.ReadText(PackArchive.ManifestEntryName);
-                        if (text != null)
+                        DirName = System.IO.Path.GetFileNameWithoutExtension(smspack),
+                        Folder = SMSModForge.Shared.PackInstallScan.FolderName(smspack),
+                    };
+
+                    var archive = PackArchive.TryOpen(smspack, null);
+                    if (archive != null)
+                    {
+                        try
                         {
-                            var json = Newtonsoft.Json.Linq.JObject.Parse(text);
-                            entry.PackId = (string)json["packId"] ?? entry.DirName;
-                            entry.GameVersion = (string)json["gameVersion"] ?? "";
-                            entry.IsValid = !string.IsNullOrEmpty(entry.PackId);
+                            string text = archive.ReadText(PackArchive.ManifestEntryName);
+                            if (text != null)
+                            {
+                                var json = Newtonsoft.Json.Linq.JObject.Parse(text);
+                                entry.PackId = (string)json["packId"] ?? entry.DirName;
+                                entry.GameVersion = (string)json["gameVersion"] ?? "";
+                                entry.Version = (string)json["version"] ?? "";
+                                entry.ForgeVersion = (string)json["forgeVersion"] ?? "";
+                                entry.IsValid = !string.IsNullOrEmpty(entry.PackId);
+                            }
+                        }
+                        catch
+                        {
+                            // Bad JSON inside the archive - IsValid stays false.
+                        }
+                        finally
+                        {
+                            archive.Dispose();
                         }
                     }
-                    catch
-                    {
-                        // Bad JSON inside the archive — IsValid stays false.
-                    }
-                    finally
-                    {
-                        archive.Dispose();
-                    }
+
+                    read[smspack] = entry;
+                    candidates.Add(new SMSModForge.Shared.PackInstallScan.Candidate(
+                        smspack, entry.IsValid ? entry.PackId : ""));
+                }
+
+                // Pass two: the same rule the loader uses, so the menu cannot
+                // say one thing while the game does another.
+                foreach (var live in SMSModForge.Shared.PackInstallScan.Resolve(candidates))
+                {
+                    var entry = read[live.Path];
+                    if (live.IsDuplicated)
+                        entry.ShadowedIn = SMSModForge.Shared.PackInstallScan.FolderName(
+                            live.Shadowed[0]);
                     result.Add(entry);
                 }
             }
@@ -1099,6 +1502,19 @@ namespace SMSModForge.PackPlugin
                         if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.F12))
                             for (int i = 0; i < _dispatchers.Count; i++)
                                 _dispatchers[i].DumpConditionDebug();
+
+                        // What the scripts on screen are actually holding. The
+                        // key rather than a path in a config file because the
+                        // point is to catch a screen while it is up: the answer
+                        // wanted is usually inside whatever is open right now,
+                        // and its path is the thing not known yet.
+                        if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.F11))
+                            DumpScriptsOnScreen();
+
+                        // Just the dialogues, active or not: the whole scene at
+                        // the depth a dialogue graph needs is mostly noise.
+                        if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.F10))
+                            DumpDialogues();
                     }
                     catch (System.Exception)
                     {
@@ -1511,23 +1927,51 @@ namespace SMSModForge.PackPlugin
 
         private void LoadAllPacks(Transform bustManager, GameObject baseBust)
         {
-            if (!Directory.Exists(PacksRoot))
+            var files = PackFiles();
+            if (files.Count == 0)
             {
-                Logger.LogInfo("[SMSModForge.PackPlugin] No ModPacks folder at " + PacksRoot + " — nothing to load.");
+                Logger.LogInfo("[SMSModForge.PackPlugin] No *" + PackArchive.FileExtension
+                               + " files in " + WhereWeLooked + " — nothing to load.");
                 return;
             }
 
             _sharedSkin = HarvestVanillaDialogueSkin();
 
-            var manifests = new List<PackManifest>();
-            foreach (var smspack in Directory.GetFiles(PacksRoot, "*" + PackArchive.FileExtension))
+            // One pack per id, decided by the same rule the menu banner shows -
+            // see PackInstallScan. The two disagreeing would be worse than
+            // either being wrong on its own, because the menu would be telling
+            // somebody which copy is live while the game loaded the other.
+            var read = new Dictionary<string, PackManifest>();
+            var candidates = new List<SMSModForge.Shared.PackInstallScan.Candidate>();
+
+            foreach (var smspack in files)
             {
                 var manifest = PackManifest.TryLoad(smspack, Logger);
-                if (manifest != null) manifests.Add(manifest);
+                if (manifest == null) continue;
+
+                read[smspack] = manifest;
+                candidates.Add(new SMSModForge.Shared.PackInstallScan.Candidate(
+                    smspack, manifest.PackId));
             }
+
+            var manifests = new List<PackManifest>();
+            foreach (var live in SMSModForge.Shared.PackInstallScan.Resolve(candidates))
+            {
+                manifests.Add(read[live.Path]);
+
+                // Named rather than silently dropped: a pack that does not load
+                // is the worst thing this can do to somebody, and a pack that
+                // loads from a file they are not editing is a close second.
+                foreach (var ignored in live.Shadowed)
+                    Logger.LogWarning("[SMSModForge.PackPlugin] '" + live.PackId
+                                      + "' is installed twice. Using " + live.Path
+                                      + " and ignoring " + ignored + ".");
+            }
+
             if (manifests.Count == 0)
             {
-                Logger.LogInfo("[SMSModForge.PackPlugin] No *" + PackArchive.FileExtension + " files in " + PacksRoot + " — nothing to load.");
+                Logger.LogInfo("[SMSModForge.PackPlugin] Nothing in " + WhereWeLooked
+                               + " could be loaded as a pack.");
                 return;
             }
 
@@ -1659,7 +2103,7 @@ namespace SMSModForge.PackPlugin
             // before integration rules, which can switch a screen on. Patching
             // a vanilla screen needs that screen to exist, and it does: this
             // runs against the loaded scene rather than against a prefab.
-            try { UiFactory.BuildAll(m, Logger); }
+            try { UiFactory.BuildAll(m, ctx, Logger); }
             catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] UI build failed in " + m.PackId + ": " + ex); }
 
             // Build integration rules (Integration tab in the editor).
@@ -1781,12 +2225,21 @@ namespace SMSModForge.PackPlugin
             var dialogues = m.Root["dialogues"] as Newtonsoft.Json.Linq.JArray;
             if (dialogues == null || dialogues.Count == 0) return;
 
+            // Extensions first, and not through the builder at all: a vanilla
+            // dialogue already exists in the scene, so it is edited in place
+            // rather than rebuilt. Building one would leave the game playing
+            // its own copy while the pack's sat beside it doing nothing.
+            VanillaDialogueInjector.ApplyAll(dialogues, ctx);
+
             var dispatcher = new DialogueDispatcher(ctx);
             var host = EnsureDialogueHost(ctx.PackId);
             int built = 0;
             foreach (var d in dialogues)
             {
                 var dj = (Newtonsoft.Json.Linq.JObject)d;
+                if (!string.IsNullOrEmpty((string)dj[SMSModForge.Shared.VanillaDialogueKeys.Source]))
+                    continue;              // already applied, in place
+
                 var b = DialogueBuilder.Build(dj, ctx, host, _sharedSkin);
                 if (b == null) continue;
 

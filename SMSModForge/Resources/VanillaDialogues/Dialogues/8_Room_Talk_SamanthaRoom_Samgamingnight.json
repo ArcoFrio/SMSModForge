@@ -1,0 +1,2044 @@
+{
+ "id": "8_Room_Talk/SamanthaRoom/Samgamingnight",
+ "name": "Samgamingnight",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Continue",
+  "Samantha"
+ ],
+ "roots": [
+  656921143,
+  -1510801607,
+  -1124905658,
+  1108448114,
+  1973837848,
+  -971312924,
+  1472657148,
+  1465808801,
+  -1992752783,
+  -2133814468,
+  499492382,
+  2058756400,
+  2088394544,
+  -239815800,
+  -1828019992
+ ],
+ "nodes": {
+  "656921143": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Right on time! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[adrian-gamingnight] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-gamingnight",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1510801607": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1183062971,
+    1114917604,
+    845749536,
+    -743734357
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Snacks on the desk, drinks on the nightstand, and the PC’s all set up for you. Hope you’re ready for some World of Roundscape.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[adrian-gamingnight] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-gamingnight",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1183062971": {
+   "kind": "text",
+   "parent": -1510801607,
+   "children": [
+    715027699
+   ],
+   "actor": null,
+   "text": "Hell yeah, let’s do this!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1114917604": {
+   "kind": "text",
+   "parent": -1510801607,
+   "children": [
+    1325369292
+   ],
+   "actor": null,
+   "text": "Haven’t played on a PC in a while.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "845749536": {
+   "kind": "text",
+   "parent": -1510801607,
+   "children": [
+    -1514671650
+   ],
+   "actor": null,
+   "text": "I’m still not convinced this game is worth the hype.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1514671650": {
+   "kind": "text",
+   "parent": 845749536,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Oh, you will be. Give it, like, ten minutes. Once you get into it, you won’t wanna stop.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1325369292": {
+   "kind": "text",
+   "parent": 1114917604,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "No worries, I got you. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "715027699": {
+   "kind": "text",
+   "parent": 1183062971,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "That’s the energy I like to hear! Get comfy, log in, and let’s dive in. I’ll party us up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1124905658": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1292854804,
+    -373595053,
+    -475102864,
+    -2048628937
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Alright, here we go. You’re gonna need to make a character. What are we thinking?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_8[sam-gamingnight] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sam-gamingnight",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1292854804": {
+   "kind": "text",
+   "parent": -1124905658,
+   "children": [
+    1234228261
+   ],
+   "actor": null,
+   "text": "I want something strong—what’s the best class?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1234228261": {
+   "kind": "text",
+   "parent": -1292854804,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Ooooh, min-maxing already? I respect it. Lemme break down the best options.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-373595053": {
+   "kind": "text",
+   "parent": -1124905658,
+   "children": [
+    964639788
+   ],
+   "actor": null,
+   "text": "What’s the weirdest build I can make?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "964639788": {
+   "kind": "text",
+   "parent": -373595053,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Oh, you’re one of those players. Alright, let’s make the weirdest, most broken build possible.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-475102864": {
+   "kind": "text",
+   "parent": -1124905658,
+   "children": [
+    -451165205
+   ],
+   "actor": null,
+   "text": "What class would you want me to be?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-451165205": {
+   "kind": "text",
+   "parent": -475102864,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Ha, trying to impress your party leader already? Alright, go DPS. Works well since I'm playing tank.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2048628937": {
+   "kind": "text",
+   "parent": -1124905658,
+   "children": [
+    1174571661
+   ],
+   "actor": null,
+   "text": "Eh, I’ll just pick whatever looks cool.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1174571661": {
+   "kind": "text",
+   "parent": -2048628937,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Fair enough. Just don’t come crying to me if you pick something awful.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1108448114": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Let's kill some slimes! We gotta level you up!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_8[sam-gamingnight] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sam-gamingnight",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1973837848": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sam_Gamingnight_Loading to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sam_Gamingnight_Loading",
+       "of": "GetGameObjectInstance",
+       "path": "Sprite_Overlay/Sam_Gamingnight_Loading"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 5 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 5
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sam_Gamingnight_Loading to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sam_Gamingnight_Loading",
+       "of": "GetGameObjectInstance",
+       "path": "Sprite_Overlay/Sam_Gamingnight_Loading"
+      }
+     }
+    }
+   ]
+  },
+  "1472657148": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1498041098,
+    2032849636,
+    -50730680
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Muaah... Mmm....",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamGaming (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamGaming (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SamGaming (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1498041098": {
+   "kind": "text",
+   "parent": 1472657148,
+   "actor": null,
+   "text": "Oh, hey...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2032849636": {
+   "kind": "text",
+   "parent": 1472657148,
+   "actor": null,
+   "text": "N-Next time warn me, we almost wiped...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-50730680": {
+   "kind": "text",
+   "parent": 1472657148,
+   "actor": null,
+   "text": "(Keep grinding slimes)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1465808801": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Muwaah... Don't worry, keep up the grind... While I play with your perfect cock... Muaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1992752783": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Smmooo big.... I-I love your fat cock....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamGaming (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamGaming (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SamGaming (5)"
+      }
+     }
+    }
+   ]
+  },
+  "-2133814468": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1727165374,
+    1561938738,
+    -1633483816
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Mwuaah... Mmm.... C-Cum for mmeeeuaah! Muaaah! I'll drink every... Glphh... Gplph! GlpH! Every last drop!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1727165374": {
+   "kind": "text",
+   "parent": -2133814468,
+   "actor": null,
+   "text": "F-Fuck, Sam... You're sucking so hard, I'm... Fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1561938738": {
+   "kind": "text",
+   "parent": -2133814468,
+   "actor": null,
+   "text": "Y-Yeah... Take it... Beg for my load, Samantha!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1633483816": {
+   "kind": "text",
+   "parent": -2133814468,
+   "actor": null,
+   "text": "(Feed her your cum)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "499492382": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "MWWWWUAAAH! MMMmmmm.... Gulp, gulp, gulp....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamGaming (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamGaming (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SamGaming (6)"
+      }
+     }
+    }
+   ]
+  },
+  "2058756400": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Huaaah... Mmm... I could get used to Lan Parties like this one. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2088394544": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Let's do a few more dungeons and then order some food, sounds good?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-239815800": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "-1828019992": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Samantha",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Phew! That was a blast. Three dungeons down—not too shabby! Hope you’re up for another round next week.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-743734357": {
+   "kind": "text",
+   "parent": -1510801607,
+   "children": [
+    642970091,
+    -997862418,
+    -1483727369,
+    -894386411,
+    -772172596,
+    -1256682105,
+    1845080940
+   ],
+   "actor": null,
+   "text": "Maybe we should invite Adrian too?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[sam-gangbang-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sam-gangbang-done",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_8[sam-gamingnight] ≥ 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sam-gamingnight",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "642970091": {
+   "kind": "text",
+   "parent": -743734357,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Ohh! That’s actually a great idea! Adrian would totally be down for this!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[adrian-gamingnight] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-gamingnight",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-997862418": {
+   "kind": "choice",
+   "parent": -743734357,
+   "children": [
+    1789928415,
+    -863643776,
+    -995762701
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "I mean, come on, the three of us gaming together? That sounds amazing! We could run dungeons, wreck some PvP, maybe even mess with some noobs for fun. Oh, this is gonna be so good.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1789928415": {
+   "kind": "text",
+   "parent": -997862418,
+   "children": [
+    -852034505
+   ],
+   "actor": null,
+   "text": "Hell yeah, let’s get him in here!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-863643776": {
+   "kind": "text",
+   "parent": -997862418,
+   "children": [
+    -1980972002
+   ],
+   "actor": null,
+   "text": "You just like having both of us around, don’t you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-995762701": {
+   "kind": "text",
+   "parent": -997862418,
+   "children": [
+    1352429432
+   ],
+   "actor": null,
+   "text": "Just don’t ignore me if he shows up, alright?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-852034505": {
+   "kind": "text",
+   "parent": 1789928415,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Right?! You get it! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1980972002": {
+   "kind": "text",
+   "parent": -863643776,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Maaaybe. What can I say? You two make a very fun duo. And now I get to have you both all night… in-game, of course.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1352429432": {
+   "kind": "text",
+   "parent": -995762701,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Aww, jealous already? Don’t worry, you’re still my number one... \"co-op\" partner. But let’s be real—I can handle both of you just fine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1483727369": {
+   "kind": "text",
+   "parent": -743734357,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    }
+   ]
+  },
+  "-894386411": {
+   "kind": "text",
+   "parent": -743734357,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "And there he is! Took you long enough. Get in here, we’ve got dungeons to clear!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    }
+   ]
+  },
+  "-772172596": {
+   "kind": "text",
+   "parent": -743734357,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Damn, you’re really hyped for this, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1256682105": {
+   "kind": "text",
+   "parent": -743734357,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "You know… I think we all know exactly how this LAN party’s gonna end.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamGaming (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamGaming (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SamGaming (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1845080940": {
+   "kind": "choice",
+   "parent": -743734357,
+   "children": [
+    1597509219,
+    341484089,
+    2048058887
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "But hey, let’s at least clear a few more dungeons first. Can’t have you two thinking I only invited you over for one kind of fun.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1597509219": {
+   "kind": "text",
+   "parent": 1845080940,
+   "children": [
+    -778077342
+   ],
+   "actor": null,
+   "text": "Oh? And how will it end?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "341484089": {
+   "kind": "text",
+   "parent": 1845080940,
+   "children": [
+    -848956233
+   ],
+   "actor": null,
+   "text": "So, dungeons first, sex next? Works for me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2048058887": {
+   "kind": "text",
+   "parent": 1845080940,
+   "children": [
+    533994217
+   ],
+   "actor": null,
+   "text": "I have no idea what you mean. This is clearly a wholesome gaming night.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "533994217": {
+   "kind": "text",
+   "parent": 2048058887,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Oh, absolutely. A totally innocent night of gaming between friends. No ulterior motives at all.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-848956233": {
+   "kind": "text",
+   "parent": 341484089,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Mmm, see, that’s what I like—commitment. But don’t get distracted just yet. We’ve got bosses to kill first.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-778077342": {
+   "kind": "text",
+   "parent": 1597509219,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Oh, don’t play dumb. You know. But fine, I’ll let you pretend we’re just here for the game. For now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-971312924": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1018505815,
+    -2077309750,
+    364697333,
+    -1220029937,
+    -555259259,
+    -1666303260,
+    116249968,
+    1811793679,
+    2107554175,
+    40567764,
+    -9276804,
+    297069612,
+    1666655021,
+    1566032852
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Okay boys, I think its time for a break...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Eve_NoSave1[adrian-gamingnight] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adrian-gamingnight",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1018505815": {
+   "kind": "text",
+   "parent": -971312924,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Mmm, look how wet your damage meters are making me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamGaming (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamGaming (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SamGaming (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-2077309750": {
+   "kind": "text",
+   "parent": -971312924,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Gulp...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "364697333": {
+   "kind": "text",
+   "parent": -971312924,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Oooh, I love how hard you both are for me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamGamingTeam (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamGamingTeam (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SamGamingTeam (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1220029937": {
+   "kind": "choice",
+   "parent": -971312924,
+   "children": [
+    204519426,
+    -1864607138,
+    -845167735
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "I think it's time for you two to raid my dungeons... What do you say?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-555259259": {
+   "kind": "text",
+   "parent": -971312924,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Oh God yes, fuck my tight little pussy! Stretch my ass, {PC}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamGamingTeam (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamGamingTeam (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SamGamingTeam (2)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamGaming (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamGaming (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SamGaming (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1666303260": {
+   "kind": "text",
+   "parent": -971312924,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Holy shit Samantha... You're even more wet than last time... Hngaah...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "116249968": {
+   "kind": "choice",
+   "parent": -971312924,
+   "children": [
+    1390641548,
+    1050163112,
+    -245920273
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "O-Of course... All I could think of while playing were both your fat cocks! Now fuck me!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1811793679": {
+   "kind": "text",
+   "parent": -971312924,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Ungh yeah, pound me with that young cock! Fuck, I want you both so bad.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2107554175": {
+   "kind": "text",
+   "parent": -971312924,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Oh fuck, oh fuck, I'm coming! Don't stop, keep going!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-9276804": {
+   "kind": "choice",
+   "parent": -971312924,
+   "children": [
+    -1022517379,
+    -882395655,
+    -1916132794
+   ],
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Hngaah... Y-Yessshh... YESAHAAAAAH!!!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamGamingTeam (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamGamingTeam (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SamGamingTeam (3)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamGaming (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamGaming (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SamGaming (2)"
+      }
+     }
+    }
+   ]
+  },
+  "40567764": {
+   "kind": "text",
+   "parent": -971312924,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Samantha! Fuck, I'm gonna cum!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "204519426": {
+   "kind": "text",
+   "parent": -1220029937,
+   "actor": null,
+   "text": "You know it, Sam. Let's have some fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1864607138": {
+   "kind": "text",
+   "parent": -1220029937,
+   "actor": null,
+   "text": "This is gonna be a long night...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-845167735": {
+   "kind": "text",
+   "parent": -1220029937,
+   "actor": null,
+   "text": "Let's get you filled up, babe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1022517379": {
+   "kind": "text",
+   "parent": -9276804,
+   "children": [
+    314267991,
+    23460151,
+    -229048689
+   ],
+   "actor": null,
+   "text": "I can go for another round... I'll pound that pussy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-882395655": {
+   "kind": "text",
+   "parent": -9276804,
+   "children": [
+    1845440881,
+    -142633211,
+    -151683421,
+    -492695355
+   ],
+   "actor": null,
+   "text": "How about a special party event involving your tits, sam?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1916132794": {
+   "kind": "text",
+   "parent": -9276804,
+   "actor": null,
+   "text": "F-Fuck, that was awesome.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1845440881": {
+   "kind": "text",
+   "parent": -882395655,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Fuck those big titties... D-Don't hold back!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamGamingTeam (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamGamingTeam (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SamGamingTeam (5)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamGamingTeam (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamGamingTeam (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SamGamingTeam (1)"
+      }
+     }
+    }
+   ]
+  },
+  "314267991": {
+   "kind": "text",
+   "parent": -1022517379,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Fuck me! Oh, fhuaaack! I'm... {PC}'s cock is making me cum! I'm... HGNAAAAH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamGamingTeam (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamGamingTeam (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SamGamingTeam (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamGamingTeam (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamGamingTeam (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/SamGamingTeam (1)"
+      }
+     }
+    }
+   ]
+  },
+  "23460151": {
+   "kind": "text",
+   "parent": -1022517379,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Damn... Again?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-229048689": {
+   "kind": "text",
+   "parent": -1022517379,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Hngah.. Ahhh... I... I can't believe how much fun I'm having... Hngaah...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-142633211": {
+   "kind": "text",
+   "parent": -882395655,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "F-Fuck... Jesus f-f-fuck... I'm... I'm coming... agaiaaahn.. Haaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-151683421": {
+   "kind": "text",
+   "parent": -882395655,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Yes! L-Let it all out... Mess up my titties! S-Show me how much you love them!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "297069612": {
+   "kind": "text",
+   "parent": -971312924,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "A-Alright, alright... Break... F-Fuck... I think I'm about to pass out...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1666655021": {
+   "kind": "text",
+   "parent": -971312924,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Y-Yeah... I'm all out of mana... Hah...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1566032852": {
+   "kind": "text",
+   "parent": -971312924,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "Then let's order some pizza and relax a bit, huh? We're far from done!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.5 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.5
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-492695355": {
+   "kind": "text",
+   "parent": -882395655,
+   "actor": "Samantha",
+   "expressionName": "neutral",
+   "text": "So much cum, I love it... Fuck... I love feeling both your dicks sliding between them.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1390641548": {
+   "kind": "text",
+   "parent": 116249968,
+   "actor": null,
+   "text": "T-Tell us how much you want this, Sam... I want to hear you say it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1050163112": {
+   "kind": "text",
+   "parent": 116249968,
+   "actor": null,
+   "text": "You're such a good slut, Sam... So eager... Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-245920273": {
+   "kind": "text",
+   "parent": 116249968,
+   "actor": null,
+   "text": "(Squeeze her big behind)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/SamanthaRoom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Samgamingnight and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[samgaming-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samgaming-cooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[sam-gamingnightunl] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "sam-gamingnightunl",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Samantha_Gaming to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Samantha_Gaming",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Samantha_Gaming"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[samgaming-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samgaming-cooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

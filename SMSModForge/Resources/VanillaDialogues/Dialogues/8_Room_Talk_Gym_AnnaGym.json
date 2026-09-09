@@ -1,0 +1,934 @@
+{
+ "id": "8_Room_Talk/Gym/AnnaGym",
+ "name": "AnnaGym",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Phoenix"
+ ],
+ "roots": [
+  523162710,
+  2080276421,
+  496447291,
+  -1281498065,
+  541372213,
+  389285193,
+  1815878920,
+  1597825600,
+  -603919307,
+  -211959245,
+  1954551191,
+  -1040779711,
+  -820349780,
+  -1560966185,
+  -1833521161,
+  773945868,
+  92213647,
+  986232820
+ ],
+ "nodes": {
+  "2080276421": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1713859016,
+    586901433,
+    1587256229
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Hey, {PC}! Good to... WOAH! Who's THAT!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[anna-gym-first-time] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-gym-first-time",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1713859016": {
+   "kind": "text",
+   "parent": 2080276421,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "H-Hey, Phoenix... I'm Anna. {PC}'s {M}... He told me you could get me in shape?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[anna-gym-first-time] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-gym-first-time",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "586901433": {
+   "kind": "text",
+   "parent": 2080276421,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Well, well, well! Welcome, Anna! You’re in good hands here. Ready to sweat and work those muscles?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1587256229": {
+   "kind": "text",
+   "parent": 2080276421,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I think so. I’ve heard you’re pretty intense...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "523162710": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "{PC}! Anna! I'm looking forward to making you two SWEAT!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[anna-gym-first-time] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-gym-first-time",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "496447291": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Let's start by stretching you out! ... NO! I mean... Let's kick off with a few stretches!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1281498065": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "O-Okay!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "541372213": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Y-You're a natural! Great posture! ... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MSports to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MSports",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/MSports"
+      }
+     }
+    }
+   ]
+  },
+  "389285193": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thank you, Phoenix!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1815878920": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "That's it... All the way down... You're doing great! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MSports (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MSports (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/MSports (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1597825600": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Phew... This is kinda tiring on the legs!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-603919307": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "We're almost done, don't you worry!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-211959245": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm sorry, but I'm already exhausted. It's been a while since I've had such a challenging workout.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active MSports (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "MSports (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/MSports (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1954551191": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "You've done FANTASTIC, Anna!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1040779711": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I could really use a shower now. I'm all sweaty, sorry!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-820349780": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "The showers are right there! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1560966185": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-Thank you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Gym/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1833521161": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1809146214,
+    -1261259050
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Your {M} got me ROCK HARD, {PC}... I need your cock. NOW!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1809146214": {
+   "kind": "text",
+   "parent": -1833521161,
+   "actor": null,
+   "text": "It's all yours. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1261259050": {
+   "kind": "text",
+   "parent": -1833521161,
+   "children": [
+    1699199818
+   ],
+   "actor": null,
+   "text": "Not feeling it, sorry.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1699199818": {
+   "kind": "text",
+   "parent": -1261259050,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "GAH! Then out of my way! I'll be at my office!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "773945868": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "YES! FUCK! THAT'S IT! FUCK ME!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active phoenixsex (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "phoenixsex (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/phoenixsex (1)"
+      }
+     }
+    }
+   ]
+  },
+  "92213647": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    644686185,
+    -1096882517,
+    1301349827,
+    -332083418,
+    1907980219,
+    1670230848,
+    -697763516,
+    -926493312,
+    -1358540032,
+    -601310897,
+    116544883,
+    1818972823,
+    396770420,
+    780283763,
+    -699561863,
+    1362288577
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Y-Your {M} is such a HOT BABE! Look at how hard I am for her!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "986232820": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    786847568,
+    332454521,
+    -566424766
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "So good... FUCK... POUND ME! YES!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "786847568": {
+   "kind": "text",
+   "parent": 986232820,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "I'm... IT'S COMING OUT! HGNAAGH!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active phoenixsex (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "phoenixsex (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/phoenixsex (2)"
+      }
+     }
+    }
+   ]
+  },
+  "332454521": {
+   "kind": "text",
+   "parent": 986232820,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm done with the shower, we can... OH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-566424766": {
+   "kind": "text",
+   "parent": 986232820,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm sorry! I... I'll be waiting at the car! Sorry, sorrry, sorry!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "644686185": {
+   "kind": "text",
+   "parent": 92213647,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Is that so?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1096882517": {
+   "kind": "text",
+   "parent": 92213647,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "A-Anna! I thought you were taking a shower!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1301349827": {
+   "kind": "text",
+   "parent": 92213647,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I forgot my towel... But I guess the shower has to wait now...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-332083418": {
+   "kind": "text",
+   "parent": 92213647,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "FUCK! Y-YES! ... Your lips are so soft!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PhoenixThreesome to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PhoenixThreesome",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/PhoenixThreesome"
+      }
+     }
+    }
+   ]
+  },
+  "1907980219": {
+   "kind": "text",
+   "parent": 92213647,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Such a huge fucking cock... MWUAAH! MHMMMmGHH!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1670230848": {
+   "kind": "text",
+   "parent": 92213647,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "YESSSHH! Keep working my cock, ANNA!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-697763516": {
+   "kind": "text",
+   "parent": 92213647,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "I... I think it's time we're giving your huge ass a special work out! Let's go, {PC}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-926493312": {
+   "kind": "text",
+   "parent": 92213647,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "OH GOD! Yes, Yes, Yesssss! Stretch me out! Fhhuaaackk!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PhoenixThreesome (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PhoenixThreesome (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/PhoenixThreesome (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1358540032": {
+   "kind": "text",
+   "parent": 92213647,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "BEST. WORKOUT. EVER. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-601310897": {
+   "kind": "text",
+   "parent": 92213647,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You two are so HUGE... I'm... I'm... HNGAAAGHHH!! AAAAHHH!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "116544883": {
+   "kind": "text",
+   "parent": 92213647,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Here we come! TAKE IT! HAAAAAAH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PhoenixThreesome (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PhoenixThreesome (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/PhoenixThreesome (2)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active phoenixsex (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "phoenixsex (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/phoenixsex (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1818972823": {
+   "kind": "text",
+   "parent": 92213647,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So much! Mmhmaaaah!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "396770420": {
+   "kind": "text",
+   "parent": 92213647,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Lots of protein for {PC}'s {M}! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "780283763": {
+   "kind": "text",
+   "parent": 92213647,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-Thank you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-699561863": {
+   "kind": "text",
+   "parent": 92213647,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Phew.. Let me get you a towel... I hope we get to repeat this awesome workout!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1362288577": {
+   "kind": "text",
+   "parent": 92213647,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "M-Me too...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Gym",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AnnaGym and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[anna-phoenix-path-start] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-phoenix-path-start",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PhoenixBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PhoenixBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/PhoenixBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Gym to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Gym",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Gym"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

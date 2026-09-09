@@ -1,0 +1,3373 @@
+{
+ "id": "8_Room_Talk/Hotelroom_Convention/Defaultdialogue",
+ "name": "Defaultdialogue",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Celeste",
+  "Continue",
+  "Fan_Cool",
+  "Fan_Nerdy",
+  "Fan_Shy"
+ ],
+ "roots": [
+  -797693448,
+  -586910581,
+  162494573,
+  641710447,
+  916437794,
+  1007869939
+ ],
+ "nodes": {
+  "-797693448": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    763123704,
+    -1800070051,
+    -15407427
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Wow, look at this room, {PC}! It's absolutely stunning. And the view... it's incredible!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[convention-mini-talk-start] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-mini-talk-start",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Go to Starcon with Anna during the weekend.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Starcon",
+        "of": "Quest"
+       },
+       "m_TaskId": -989935106
+      },
+      "m_WaitToComplete": false
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[achivement-unlocked] = Celebrity",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Celebrity"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "achivement-unlocked",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Achievements[Celebrity] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Celebrity",
+        "list": "Achievements",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1007869939": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -31594386,
+    -1831810582,
+    1569243835,
+    -1520515755,
+    375658568
+   ],
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I'm so excited! What should we do first?",
+   "tag": "root",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done_2[personality-chosen] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "personality-chosen",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-31594386": {
+   "kind": "text",
+   "parent": 1007869939,
+   "children": [
+    1398844463
+   ],
+   "actor": null,
+   "text": "Let's meet some fans.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[fans-event] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "fans-event",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1831810582": {
+   "kind": "text",
+   "parent": 1007869939,
+   "children": [
+    246609097
+   ],
+   "actor": null,
+   "text": "It's time for the big stage.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[stage-event] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stage-event",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "375658568": {
+   "kind": "text",
+   "parent": 1007869939,
+   "children": [
+    1835913682
+   ],
+   "actor": null,
+   "text": "Let's get some sleep. (End Trip)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1633037860": {
+   "kind": "text",
+   "parent": -890658950,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes. We have a long day behind us and my legs hurt a bit...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done_2[first-time-convention-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "first-time-convention-done",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Return_Home to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Return_Home",
+       "of": "GetGameObjectInstance",
+       "path": "Return_Home"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Follower] + Events_Only_Done_2[convention-follower-gain-incoming]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Follower",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-follower-gain-incoming",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Sleeping to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Sleeping",
+       "of": "GetGameObjectInstance",
+       "path": "10_Gameplay/Sleeping"
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectInstantiate",
+     "title": "Instantiate Save_game",
+     "fields": {
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Save_game",
+       "of": "GetGameObjectInstance"
+      },
+      "m_Position": {
+       "kind": "object",
+       "name": null,
+       "of": "GetPositionCharactersPlayer"
+      },
+      "m_Rotation": {
+       "kind": "object",
+       "name": null,
+       "of": "GetRotationCharactersPlayer"
+      },
+      "m_Parent": {
+       "kind": "none"
+      },
+      "m_Save": {
+       "kind": "none"
+      }
+     }
+    }
+   ]
+  },
+  "1835913682": {
+   "kind": "choice",
+   "parent": 375658568,
+   "children": [
+    -890658950,
+    1476483155
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Are you sure, hun?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-890658950": {
+   "kind": "text",
+   "parent": 1835913682,
+   "children": [
+    1633037860
+   ],
+   "actor": null,
+   "text": "Yes, I'm sure.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1476483155": {
+   "kind": "text",
+   "parent": 1835913682,
+   "children": [
+    824004196
+   ],
+   "actor": null,
+   "text": "Actually, no. Not yet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "824004196": {
+   "kind": "text",
+   "parent": 1476483155,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I thought so!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-586910581": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    270537931,
+    13664555,
+    600167286,
+    1146443226
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'd appreciate any advice you could give me on how I should behave around here.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[personality-chosen] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "personality-chosen",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[convention-gangbang] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-gangbang",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Events_Only_Done_2[convention-outfit-reference] = Anna_Bust",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-outfit-reference",
+        "list": "Events_Only_Done_2",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Eve_NoSave1[convention-outfit] = 0",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-outfit",
+        "list": "Eve_NoSave1",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 0
+      }
+     }
+    }
+   ]
+  },
+  "270537931": {
+   "kind": "text",
+   "parent": -586910581,
+   "children": [
+    -1368462025
+   ],
+   "actor": null,
+   "text": "Just be you. That’s what everyone loves about you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "13664555": {
+   "kind": "text",
+   "parent": -586910581,
+   "children": [
+    1314033370
+   ],
+   "actor": null,
+   "text": "Be flirty, but not too much. Give them a taste.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "600167286": {
+   "kind": "text",
+   "parent": -586910581,
+   "children": [
+    58122222
+   ],
+   "actor": null,
+   "text": "Be direct. Speak your mind.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1146443226": {
+   "kind": "text",
+   "parent": -586910581,
+   "children": [
+    -397552910
+   ],
+   "actor": null,
+   "text": "Be a total slut. Make every lens in that place fog up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1368462025": {
+   "kind": "text",
+   "parent": 270537931,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Heh… you always say that. Maybe you’re right. Guess I just need to breathe and be myself.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_Only_Done_2[convention-personality] = 0",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-personality",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 0
+      }
+     }
+    }
+   ]
+  },
+  "1314033370": {
+   "kind": "text",
+   "parent": 13664555,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Flirty, but not too much, huh? Alright… classy tease it is. Maybe they’ll still be able to form sentences.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_Only_Done_2[convention-personality] = 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-personality",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "58122222": {
+   "kind": "text",
+   "parent": 600167286,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I like that. No filters. No fake smiles. Just me, saying what I want. Maybe it’s time I stopped holding back.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_Only_Done_2[convention-personality] = 2",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-personality",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 2
+      }
+     }
+    }
+   ]
+  },
+  "-397552910": {
+   "kind": "text",
+   "parent": 1146443226,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You really think I should go full chaos? Heh… maybe I will. If they want a show, I’ll give them one.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_Only_Done_2[convention-personality] = 3",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-personality",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 3
+      }
+     }
+    }
+   ]
+  },
+  "246609097": {
+   "kind": "text",
+   "parent": -1831810582,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Alright... Wish me luck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 55_Conventionstage to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "55_Conventionstage",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator/MapButtons/55_Conventionstage"
+      }
+     }
+    }
+   ]
+  },
+  "1398844463": {
+   "kind": "text",
+   "parent": -31594386,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh! I'm excited to meet some of our fans!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 54_Conventionfloor to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "54_Conventionfloor",
+       "of": "GetGameObjectInstance",
+       "path": "9_MainCanvas/Navigator/MapButtons/54_Conventionfloor"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done_2[fans-event] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "fans-event",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "763123704": {
+   "kind": "text",
+   "parent": -797693448,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "This is my very first convention ever! I’ve never been to anything like it before. I’m so excited!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done_2[convention-mini-talk-start] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-mini-talk-start",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1800070051": {
+   "kind": "choice",
+   "parent": -797693448,
+   "children": [
+    1737115474,
+    -1241547985
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I've been to a few car shows with your {D}, but that's not quite the same, right?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1737115474": {
+   "kind": "text",
+   "parent": -1800070051,
+   "children": [
+    -1683875274
+   ],
+   "actor": null,
+   "text": "Yeah, it's very different. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1241547985": {
+   "kind": "text",
+   "parent": -1800070051,
+   "children": [
+    683909354
+   ],
+   "actor": null,
+   "text": "Actually, the difference is not that big.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1683875274": {
+   "kind": "text",
+   "parent": 1737115474,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I thought so, since its less centered around a single event!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "683909354": {
+   "kind": "text",
+   "parent": -1241547985,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That's good to hear! I'm a bit nervous as you may notice...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-15407427": {
+   "kind": "choice",
+   "parent": -797693448,
+   "children": [
+    -2040780217,
+    2019354172
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let's get started by unpacking the suitcases.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2040780217": {
+   "kind": "text",
+   "parent": -15407427,
+   "children": [
+    954787875,
+    177086783
+   ],
+   "actor": null,
+   "text": "Let's take a selfie first to remember this moment.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2019354172": {
+   "kind": "text",
+   "parent": -15407427,
+   "actor": null,
+   "text": "Sounds like a plan!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "954787875": {
+   "kind": "choice",
+   "parent": -2040780217,
+   "children": [
+    1634448851,
+    -900374565
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ah, yes! Good thinking.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1634448851": {
+   "kind": "text",
+   "parent": 954787875,
+   "children": [
+    -1851252461,
+    358742431
+   ],
+   "actor": null,
+   "text": "Say cheese.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-900374565": {
+   "kind": "text",
+   "parent": 954787875,
+   "children": [
+    -757515014,
+    -686541548
+   ],
+   "actor": null,
+   "text": "[Grope her tits]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-757515014": {
+   "kind": "text",
+   "parent": -900374565,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Hotelselfie2 to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Hotelselfie2",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/Hotelselfie2"
+      }
+     }
+    }
+   ]
+  },
+  "-1851252461": {
+   "kind": "text",
+   "parent": 1634448851,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Hotelselfie to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Hotelselfie",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/Hotelselfie"
+      }
+     }
+    }
+   ]
+  },
+  "358742431": {
+   "kind": "text",
+   "parent": 1634448851,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "What a lovely photo! We look so good together, don't we?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-686541548": {
+   "kind": "text",
+   "parent": -900374565,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, I knew you would do this!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "177086783": {
+   "kind": "text",
+   "parent": -2040780217,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hih... We should unpack now!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1520515755": {
+   "kind": "text",
+   "parent": 1007869939,
+   "children": [
+    1480127587,
+    -1908480058,
+    937225621,
+    401125161,
+    -1050794598,
+    -1307049500,
+    -196298851,
+    -453683226,
+    -1724387609,
+    -1266227832,
+    -1902783509,
+    -8623782,
+    -106793986,
+    1813493862,
+    382132968,
+    -2132018428,
+    1034715943,
+    -187652967,
+    1338010263,
+    579361841,
+    70825747,
+    -1535040795,
+    -735193304,
+    -349914685,
+    535890862,
+    -878025954,
+    1734573389,
+    677054192,
+    870042139,
+    1764224187,
+    1869399037,
+    -1008986719,
+    -468539042,
+    797610589,
+    -1564235148,
+    1811901815,
+    2015077398,
+    2085504688,
+    -1638906681,
+    388241131
+   ],
+   "actor": null,
+   "text": "Let's invite some fans for a gangbang.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_Only_Done_2[convention-personality] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-personality",
+        "list": "Events_Only_Done_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[convention-gangbang] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-gangbang",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-STAGE-8-NO-CONDOM] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-STAGE-8-NO-CONDOM",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1480127587": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes! That's a wonderful idea!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[convention-gangbang] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-gangbang",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1908480058": {
+   "kind": "choice",
+   "parent": -1520515755,
+   "children": [
+    710044983,
+    -495860374
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "But how are we supposed to do that?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "937225621": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeInBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeInBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Events_Only_Done_2[convention-outfit-reference] to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-outfit-reference",
+        "list": "Events_Only_Done_2",
+        "type": "game-object"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Nude"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    }
+   ]
+  },
+  "2085504688": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Events_Only_Done_2[convention-outfit-reference] to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-outfit-reference",
+        "list": "Events_Only_Done_2",
+        "type": "game-object"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Nude to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Nude"
+      }
+     }
+    }
+   ]
+  },
+  "710044983": {
+   "kind": "text",
+   "parent": -1908480058,
+   "children": [
+    1159512135
+   ],
+   "actor": null,
+   "text": "I'll make a post on our Starmaker page.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-495860374": {
+   "kind": "text",
+   "parent": -1908480058,
+   "children": [
+    321037683
+   ],
+   "actor": null,
+   "text": "I'll fetch ask some fans on the convention.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "321037683": {
+   "kind": "text",
+   "parent": -495860374,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "O-Okay! I'll be waiting here... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1159512135": {
+   "kind": "text",
+   "parent": 710044983,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ah! Yes, of course! I'm so excited!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "401125161": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Fan_Nerdy",
+   "expressionName": "neutral",
+   "text": "Oh my gosh, we’re really here!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1050794598": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Fan_Cool",
+   "expressionName": "neutral",
+   "text": "Anna, it’s such an honor to finally meet you! I’ve been following you since your very first post!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1307049500": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Fan_Shy",
+   "expressionName": "neutral",
+   "text": "H-Hey... Oh my god... She's not wearing  a-anything...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-196298851": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thank you all for coming. It’s wonderful to meet you in person.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-453683226": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Please, help yourselves to some refreshments, and we can start the gangbang in a bit.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1724387609": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Fan_Shy",
+   "expressionName": "neutral",
+   "text": "G-Gangbang!? I-I thought this was j-just a meet and... meet and greet....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1266227832": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Fan_Cool",
+   "expressionName": "neutral",
+   "text": "I can't believe this is happening... I'm already so fucking hard.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1902783509": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Fan_Nerdy",
+   "expressionName": "neutral",
+   "text": "Woah... Anna's tits look just like on the photos... She doesn't use any filters....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-106793986": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Alright, who’s ready to get their cock sucked!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1813493862": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Fan_Nerdy",
+   "expressionName": "neutral",
+   "text": "We are!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "382132968": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Wow... So many hard cocks! A-Are they all for me!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Conventiuon to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Conventiuon",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Conventiuon"
+      }
+     }
+    }
+   ]
+  },
+  "-2132018428": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Fan_Cool",
+   "expressionName": "neutral",
+   "text": "P-Please suck my cock, Anna!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1034715943": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Fan_Shy",
+   "expressionName": "neutral",
+   "text": "I... I think I'm close...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-187652967": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Fan_Cool",
+   "expressionName": "neutral",
+   "text": "Keep it together, we haven't even started yet!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1338010263": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let's change that!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-8623782": {
+   "kind": "choice",
+   "parent": -1520515755,
+   "children": [
+    1214237796,
+    -639310985
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hey, {PC}.... I hope you are joining us?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1214237796": {
+   "kind": "text",
+   "parent": -8623782,
+   "children": [
+    -2014262396
+   ],
+   "actor": null,
+   "text": "Of course.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-639310985": {
+   "kind": "text",
+   "parent": -8623782,
+   "children": [
+    -1309961654
+   ],
+   "actor": null,
+   "text": "I'll just watch.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1309961654": {
+   "kind": "text",
+   "parent": -639310985,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh... Okay....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2014262396": {
+   "kind": "text",
+   "parent": 1214237796,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "G-Great... I feel a lot more comfortable with you around...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "579361841": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Fan_Shy",
+   "expressionName": "neutral",
+   "text": "Oh god... Anna is riding me... I'm inside her butt! Oh god, god, god!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Conventiuon (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Conventiuon (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Conventiuon (1)"
+      }
+     }
+    }
+   ]
+  },
+  "70825747": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Fan_Nerdy",
+   "expressionName": "neutral",
+   "text": "Please stroke me, Anna!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1535040795": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Fan_Cool",
+   "expressionName": "neutral",
+   "text": "Don't forget about me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-735193304": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "C-Calm down, boys... There's enough of me for everyone!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-349914685": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Fan_Nerdy",
+   "expressionName": "neutral",
+   "text": "Fuck, your pussy is so tight!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Conventiuon (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Conventiuon (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Conventiuon (2)"
+      }
+     }
+    }
+   ]
+  },
+  "535890862": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Fan_Cool",
+   "expressionName": "neutral",
+   "text": "Legit... So good... Damn...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-878025954": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Fan_Shy",
+   "expressionName": "neutral",
+   "text": "M-may I grope your breasts, Ms. Anna?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1734573389": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes, of course! Please, everyone... Feel free to fondle my tits and ass!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "677054192": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Fan_Shy",
+   "expressionName": "neutral",
+   "text": "So big and soft!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "870042139": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Fan_Nerdy",
+   "expressionName": "neutral",
+   "text": "T-They are natural!? Wow....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1764224187": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "N-Now please... Stroke yourself and cover me in your cum!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1869399037": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Fan_Cool",
+   "expressionName": "neutral",
+   "text": "Here it comes!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Conventiuon (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Conventiuon (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Conventiuon (3)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Conventiuon to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Conventiuon",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Conventiuon"
+      }
+     }
+    }
+   ]
+  },
+  "-468539042": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Fan_Nerdy",
+   "expressionName": "neutral",
+   "text": "I'm cumming!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1008986719": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Fan_Shy",
+   "expressionName": "neutral",
+   "text": "Nyaaaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "797610589": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-Thank you all for your cum! This was a lot of fun...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1564235148": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "But I'm also not in my 20s anymore... so Anna needs some rest now...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1811901815": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Fan_Nerdy",
+   "expressionName": "neutral",
+   "text": "T-Thank you so much! THANKS!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2015077398": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Fan_Shy",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Thank you, Anna.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1638906681": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I'm going to be sore for days...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "388241131": {
+   "kind": "text",
+   "parent": -1520515755,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Worth it!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "916437794": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -805463685,
+    1720417429,
+    565031282,
+    -512741736,
+    -1107617793,
+    584947488,
+    655468720,
+    1270659068,
+    260632546,
+    -1426829817,
+    -907511917,
+    349130086,
+    1614707433,
+    691655118,
+    -1123732420,
+    938522978,
+    2078260254,
+    407694625
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "What is SHE doing here!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[celeste-partnerstart] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-partnerstart",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[celeste-starconfirsttime] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-starconfirsttime",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active XXX_Celeste_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "XXX_Celeste_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/XXX_Celeste_Bust"
+      }
+     }
+    }
+   ]
+  },
+  "-805463685": {
+   "kind": "text",
+   "parent": 916437794,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "You asked for my presence, and here I am. Though I do wonder...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1720417429": {
+   "kind": "text",
+   "parent": 916437794,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Do you actually want a partnership? Or just the pleasure of finally being in a room where you think you hold equal ground?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "565031282": {
+   "kind": "text",
+   "parent": 916437794,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Let’s not pretend this is about equality. You don’t do equality, Celeste. You do control.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-512741736": {
+   "kind": "text",
+   "parent": 916437794,
+   "actor": "Celeste",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Control is only an issue when one lacks the strength to hold it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1107617793": {
+   "kind": "text",
+   "parent": 916437794,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Oh, shove it with the goddess act. We both know you’re here because for once, you need this.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCelesteConfrontation (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCelesteConfrontation (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCelesteConfrontation (1)"
+      }
+     }
+    }
+   ]
+  },
+  "584947488": {
+   "kind": "text",
+   "parent": 916437794,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Need? No.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Arrange a meeting with Celeste.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Starborn (Celeste)",
+        "of": "Quest"
+       },
+       "m_TaskId": 547053281
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "655468720": {
+   "kind": "text",
+   "parent": 916437794,
+   "actor": "Celeste",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "But I do find it… useful.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1270659068": {
+   "kind": "text",
+   "parent": 916437794,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Right. That’s what I am to you. Useful.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "260632546": {
+   "kind": "choice",
+   "parent": 916437794,
+   "children": [
+    -546842189,
+    1384121744,
+    155583476
+   ],
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Would you prefer a lie?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-546842189": {
+   "kind": "text",
+   "parent": 260632546,
+   "actor": null,
+   "text": "Look, you two don’t have to like each other.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1384121744": {
+   "kind": "text",
+   "parent": 260632546,
+   "actor": null,
+   "text": "Admit it. Anna isn’t just useful—she’s competition.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "155583476": {
+   "kind": "text",
+   "parent": 260632546,
+   "actor": null,
+   "text": "We need her, {M}. Celeste doesn’t lose.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1426829817": {
+   "kind": "text",
+   "parent": 916437794,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Very well. Let’s talk terms.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-907511917": {
+   "kind": "text",
+   "parent": 916437794,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fine. But if you try to screw me over—",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "349130086": {
+   "kind": "text",
+   "parent": 916437794,
+   "actor": "Celeste",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "—you’ll what? Beat me? Take my throne?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_8[celeste-starconfirsttime] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-starconfirsttime",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1614707433": {
+   "kind": "text",
+   "parent": 916437794,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "You’d have to catch up first, dear.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "691655118": {
+   "kind": "text",
+   "parent": 916437794,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Then I guess I’ll be seeing a lot more of you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1123732420": {
+   "kind": "text",
+   "parent": 916437794,
+   "actor": "Celeste",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Indeed you will.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/XXX_Celeste_Bust/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "938522978": {
+   "kind": "text",
+   "parent": 916437794,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2078260254": {
+   "kind": "choice",
+   "parent": 916437794,
+   "children": [
+    1948019906,
+    1208121594
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I don't like her, {PC}. This is a bad idea, she will screw us over.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1948019906": {
+   "kind": "text",
+   "parent": 2078260254,
+   "children": [
+    -1418024152
+   ],
+   "actor": null,
+   "text": "Give it a try, {M}. She's just afraid.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1208121594": {
+   "kind": "text",
+   "parent": 2078260254,
+   "children": [
+    -1186108361
+   ],
+   "actor": null,
+   "text": "Don't worry, {M}. I will ruin her life.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1186108361": {
+   "kind": "text",
+   "parent": 1208121594,
+   "actor": "Anna",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "T-That doesn't sound like you, {PC}... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_8[celeste-ruinstart] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-ruinstart",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1418024152": {
+   "kind": "text",
+   "parent": 1948019906,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Gah! Okay, for you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "407694625": {
+   "kind": "text",
+   "parent": 916437794,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You know I trust you, but please be careful.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_8[celeste-starconfirsttime] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-starconfirsttime",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1569243835": {
+   "kind": "text",
+   "parent": 1007869939,
+   "children": [
+    746251625
+   ],
+   "actor": null,
+   "text": "Let's call Celeste.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[celeste-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-cooldown",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_8[celeste-broken] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "celeste-broken",
+        "list": "Events_8",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "746251625": {
+   "kind": "text",
+   "parent": 1569243835,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fine...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave2[adaptive-sex-inc] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adaptive-sex-inc",
+        "list": "Core_NoSave2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "162494573": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2010102474,
+    -943157189
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "was thinking maybe I should wear something a little different today. Something… cute, maybe? What do you think?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Romanced] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Romanced",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[personality-chosen] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "personality-chosen",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-2010102474": {
+   "kind": "text",
+   "parent": 162494573,
+   "children": [
+    1447329641,
+    -2024965789,
+    228242373
+   ],
+   "actor": null,
+   "text": "Yeah. It’s a big event, make an impression.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-943157189": {
+   "kind": "text",
+   "parent": 162494573,
+   "children": [
+    -1315877416
+   ],
+   "actor": null,
+   "text": "No need. You look perfect the way you are.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1315877416": {
+   "kind": "text",
+   "parent": -943157189,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Heh, you always say that. Maybe I worry too much.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Events_Only_Done_2[convention-outfit-reference] = Anna_Bust",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-outfit-reference",
+        "list": "Events_Only_Done_2",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Eve_NoSave1[convention-outfit] = 0",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-outfit",
+        "list": "Eve_NoSave1",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 0
+      }
+     }
+    }
+   ]
+  },
+  "1447329641": {
+   "kind": "text",
+   "parent": -2010102474,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Alright… I’ll see what I can find.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Eve_NoSave1[convention-outfit] = 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-outfit",
+        "list": "Eve_NoSave1",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-2024965789": {
+   "kind": "text",
+   "parent": -2010102474,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "228242373": {
+   "kind": "text",
+   "parent": -2010102474,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "This looks cute, right? I feel... comfortable.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaSunDressBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaSunDressBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AnnaSunDressBust"
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Events_Only_Done_2[convention-outfit-reference] = AnnaSunDressBust",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-outfit-reference",
+        "list": "Events_Only_Done_2",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "AnnaSunDressBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AnnaSunDressBust"
+      }
+     }
+    }
+   ]
+  },
+  "641710447": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -713585085,
+    374715660
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Think I should switch up the look? Something tighter, flashier… maybe a little skin to make the nerds forget their names?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[personality-chosen] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "personality-chosen",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-713585085": {
+   "kind": "text",
+   "parent": 641710447,
+   "children": [
+    2047410315,
+    -1786199270,
+    2047092000
+   ],
+   "actor": null,
+   "text": "Go for it. Turn some heads.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2047410315": {
+   "kind": "text",
+   "parent": -713585085,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmh, I thought you’d say that. Let’s give them a show they’ll remember.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Eve_NoSave1[convention-outfit] = 2",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-outfit",
+        "list": "Eve_NoSave1",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 2
+      }
+     }
+    }
+   ]
+  },
+  "374715660": {
+   "kind": "text",
+   "parent": 641710447,
+   "children": [
+    -656905273
+   ],
+   "actor": null,
+   "text": "No need. You look perfect the way you are.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-656905273": {
+   "kind": "text",
+   "parent": 374715660,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You’re no fun… fine, I’ll stick with the classics.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Events_Only_Done_2[convention-outfit-reference] = Anna_Bust",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-outfit-reference",
+        "list": "Events_Only_Done_2",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Eve_NoSave1[convention-outfit] = 0",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-outfit",
+        "list": "Eve_NoSave1",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 0
+      }
+     }
+    }
+   ]
+  },
+  "-1786199270": {
+   "kind": "text",
+   "parent": -713585085,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2047092000": {
+   "kind": "text",
+   "parent": -713585085,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "There we go... Time to make some new subs.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bimb to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bimb",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bimb"
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Events_Only_Done_2[convention-outfit-reference] = Anna_Bimb",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-outfit-reference",
+        "list": "Events_Only_Done_2",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "object",
+       "name": "Anna_Bimb",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bimb"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Hotelroom_Convention",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Defaultdialogue and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Elf/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Events_Only_Done_2[convention-outfit-reference] to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-outfit-reference",
+        "list": "Events_Only_Done_2",
+        "type": "game-object"
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Celeste_ConventionSex and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Celeste_ConventionSex",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Room_Talk/Hotelroom_Convention/Celeste_ConventionSex"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ]
+  }
+ ]
+}

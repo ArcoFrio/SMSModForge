@@ -29,6 +29,25 @@ public sealed class DialogueNodeViewModel : ObservableObject
     public DialogueNodeViewModel(DialogueNodeDef model)
     {
         Model = model;
+
+        // Whether this line differs from the game's is a question about every
+        // other property, so it is re-asked whenever any of them changes.
+        // Otherwise the marker would be right only until the author typed, and
+        // a stale "unchanged" on a line they just edited is worse than none.
+        PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(IsChangedFromVanilla)
+                || e.PropertyName == nameof(ChangedFieldsText)
+                || e.PropertyName == nameof(ResettableFields)
+                || e.PropertyName == nameof(IsAddedLine)
+                || e.PropertyName == nameof(ResetTooltip)) return;
+            OnPropertyChanged(nameof(IsChangedFromVanilla));
+            OnPropertyChanged(nameof(ChangedFieldsText));
+            OnPropertyChanged(nameof(ResettableFields));
+            OnPropertyChanged(nameof(IsAddedLine));
+            OnPropertyChanged(nameof(ResetTooltip));
+            _resetToVanilla?.Raise();
+        };
         // Hydrate the per-row VMs with callbacks pointing back at this VM's
         // collection-mutating methods — that's what lets the minus button in
         // each row remove itself without going through the parent dialogue
@@ -145,6 +164,102 @@ public sealed class DialogueNodeViewModel : ObservableObject
     /// <summary>Re-read the tint. Called by the MainViewModel when an actor's
     /// colour changes — pushed rather than a static event the nodes subscribe
     /// to, because node VMs churn and would leak into it.</summary>
+    // ── Against the game's own line ──────────────────────────────────
+
+    /// <summary>
+    /// The conversation this line belongs to, when it belongs to one.
+    /// <para/>
+    /// Set by the owner rather than looked up: a row cannot know where the
+    /// list lives, and the questions below are all "how does this differ from
+    /// the game's version", which only the conversation can answer.
+    /// </summary>
+    public DialogueViewModel? Owner { get; internal set; }
+
+    /// <summary>Whether this line belongs to a change to one of the game's own
+    /// conversations.</summary>
+    public bool IsVanillaLine => Owner?.IsVanillaBased ?? false;
+
+    /// <summary>Whether this line says anything the game does not — what a tree
+    /// of 118 lines marks so the three that were touched can be found.</summary>
+    public bool IsChangedFromVanilla => Owner?.HasChanges(Model) ?? false;
+
+    /// <summary>Which fields differ, for the row's tooltip.</summary>
+    public string ChangedFieldsText
+    {
+        get
+        {
+            var fields = Owner?.ChangedFields(Model);
+            return fields == null || fields.Count == 0
+                ? ""
+                : "Changed from the game: " + string.Join(", ", fields);
+        }
+    }
+
+    /// <summary>
+    /// Put this line back the way the game has it — or, for a line the pack
+    /// added, take it out, since the game has no version of it to go back to.
+    /// </summary>
+    public RelayCommand ResetToVanillaCommand => _resetToVanilla ??= new RelayCommand(
+        () => Owner?.ResetNode(Model),
+        () => IsChangedFromVanilla);
+
+    private RelayCommand? _resetToVanilla;
+
+    /// <summary>Whether this line is one the pack added rather than one of the
+    /// game's — which is what makes its reset a deletion.</summary>
+    public bool IsAddedLine
+        => IsVanillaLine && (Owner?.ChangedFields(Model).Contains("(new line)") ?? false);
+
+    /// <summary>What the whole-line reset does, said plainly on the button.</summary>
+    public string ResetTooltip => IsAddedLine
+        ? "Remove this line. The game has no version of it to go back to."
+        : "Put this line back the way the game has it.";
+
+    /// <summary>
+    /// One changed field, and a way to put just that one back.
+    /// <para/>
+    /// Only the fields that actually differ: thirteen buttons, twelve of them
+    /// greyed, is a worse answer to "what did I change here" than a short list
+    /// of what did.
+    /// </summary>
+    public sealed record ChangedField(string Field, string Label, RelayCommand Reset);
+
+    /// <summary>The fields of this line the pack changes, each with its own way
+    /// back. Empty for an unchanged line and for a line the pack added.</summary>
+    public System.Collections.Generic.IReadOnlyList<ChangedField> ResettableFields
+    {
+        get
+        {
+            var owner = Owner;
+            if (owner == null || IsAddedLine) return System.Array.Empty<ChangedField>();
+
+            var made = new System.Collections.Generic.List<ChangedField>();
+            foreach (string changed in owner.ChangedFields(Model))
+            {
+                string one = changed;
+                made.Add(new ChangedField(
+                    one,
+                    DialogueViewModel.FieldLabel(one),
+                    new RelayCommand(() => owner.ResetField(Model, one))));
+            }
+            return made;
+        }
+    }
+
+    /// <summary>
+    /// Tell the row everything about it may have changed.
+    /// <para/>
+    /// Used after a reset, which replaces several of the model's fields at once
+    /// from outside the row. Raising a null property name is WPF's own way of
+    /// saying "all of them", and is cheaper to get right than a list that would
+    /// go stale the next time a field is added.
+    /// </summary>
+    public void RefreshAll()
+    {
+        OnPropertyChanged(string.Empty);
+        RefreshActorTint();
+    }
+
     public void RefreshActorTint()
     {
         OnPropertyChanged(nameof(ActorTintBrush));

@@ -1,0 +1,914 @@
+{
+ "id": "8_Room_Talk/masterbedroom/DefaultDialoge",
+ "name": "DefaultDialoge",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Anna",
+  "Josef"
+ ],
+ "roots": [
+  -570755725,
+  -1182794021,
+  -1638231123,
+  749480913,
+  549808010,
+  1177885915,
+  -2129274819,
+  1874022055,
+  2025549817,
+  1784768417,
+  -386558452,
+  -301432691,
+  2021593084,
+  -175587356,
+  1378756249,
+  -339603393,
+  -175766625,
+  -436359223,
+  -552052967,
+  1002284336,
+  232535407,
+  -1412371804,
+  -2081820258,
+  53701674,
+  156413040,
+  -83440357,
+  1191676130,
+  1154670249,
+  -1987856690,
+  -1967276153,
+  -1384772074,
+  -364484040,
+  2065537268,
+  1356126811,
+  -618336655,
+  -2019281234,
+  -1928135530,
+  1431784535
+ ],
+ "nodes": {
+  "-570755725": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Ah, {PC}! There you are, make sure to get your cock all nice and ready. Your {M} should arrive any minute now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1182794021": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "T-There's some lube on the table.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1638231123": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Your {M} won't be the only one in for a surprise tonight... She'll be wearing something very special today.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaWedding to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaWedding",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AnnaWedding"
+      }
+     }
+    }
+   ]
+  },
+  "749480913": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hey, darling... Do you like my~ Huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "549808010": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{PC}? Adrian? Why are they...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1177885915": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh? OH! ... I see ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2129274819": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "You look incredible, darling. I hope you like your anniversary present.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1874022055": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -134198677,
+    -512654152
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I LOVE IT! Ahhhh.... W-What do you think?  I've gained a little weight since our wedding, but the dress still fits!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-134198677": {
+   "kind": "text",
+   "parent": 1874022055,
+   "children": [
+    975513360
+   ],
+   "actor": null,
+   "text": "You look beautiful, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-512654152": {
+   "kind": "text",
+   "parent": 1874022055,
+   "children": [
+    440068221
+   ],
+   "actor": null,
+   "text": "You're making me so hard, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "975513360": {
+   "kind": "text",
+   "parent": -134198677,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Y-Yeah, {M}! You look so hot!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "440068221": {
+   "kind": "text",
+   "parent": -512654152,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Y-Yeah! Look, {M}... My cock is so hard for you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2025549817": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Awww... My boys....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1784768417": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Get closer to your {M}. I want to take a {F} photo!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-301432691": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Cooocks!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Wedding to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Wedding",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Wedding"
+      }
+     }
+    }
+   ]
+  },
+  "-386558452": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Say cheese!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2021593084": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Perfect!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-175587356": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Now for some kisses... Muaah! Muaah! Muaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1378756249": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Kiss it, {M}... Kiss my dick...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-339603393": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Alright, boys.... Let's get to work. No one gets to leave until {M} is a trembling mess!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-175766625": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "F-Fuck... I love your pussy, {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Wedding (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Wedding (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Wedding (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-436359223": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Fuck her holes, boys... Don't forget to suck my cock, Anna...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-552052967": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "MMphaaaamm.... Mmmmhmmm....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1002284336": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I think it's time for the big finish.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "232535407": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Let's show her how much we love her... together...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1412371804": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "W-What!? ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2081820258": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "GOD! ... HNAAAHH!!! ... OH GOD.....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Wedding (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Wedding (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Wedding (2)"
+      }
+     }
+    }
+   ]
+  },
+  "53701674": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Oh, fuck, fuck, fuck... This is too much!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "156413040": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "J-Jesus... She's taking all three of us... Anna... I... I love you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-83440357": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god... Cum... Cum... Cumming!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1191676130": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "W-Who just came?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1154670249": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I-I'm sorry... I just couldn't handle it...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1987856690": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "It's fine.. Just... Just keep your cock inside her until she's done with her orgasm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1967276153": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fhaaack! HNGAAAH! ... I can... I can feel your cocks... In my pussy!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1384772074": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "CUMMING! CUM! AAHHHHH!!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-364484040": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "F-Fuck... I'm also... Hnggg...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2065537268": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Heh... Heh... Heh... Hngg.....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1356126811": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "T-That... That...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-618336655": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That was awesome!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-1928135530": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "L-Looks like we just came up with a new {F} tradition...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1431784535": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Now... I just need a quick break... Then I want more...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2019281234": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Hell yeah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/masterbedroom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DefaultDialoge and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[wedding-invitation-accepted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "wedding-invitation-accepted",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[wedding-gangbang-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "wedding-gangbang-done",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active JosefDout to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "JosefDout",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/JosefDout"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_SemiNude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_SemiNude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_SemiNude"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_2[wedding-gangbang-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "wedding-gangbang-done",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Room_Talk/masterbedroom/Annadefault",
+   "script": "Dialogue",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DefaultDialoge and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaBedroom to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaBedroom",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AnnaBedroom"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active JosefDout to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "JosefDout",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/JosefDout"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_SemiNude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_SemiNude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_SemiNude"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

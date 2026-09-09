@@ -1,0 +1,337 @@
+{
+ "id": "8_Core_Events/SmallTalks/CharlotteAgentQuestStart/GameObject (1)",
+ "name": "GameObject (1)",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Charlotte"
+ ],
+ "roots": [
+  -1550866049,
+  1811538778
+ ],
+ "nodes": {
+  "-1550866049": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    745484272,
+    1435714400,
+    352406838
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "There you are. Please tell me you see it too—she’s not the same.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "745484272": {
+   "kind": "text",
+   "parent": -1550866049,
+   "children": [
+    642968042,
+    2037346406
+   ],
+   "actor": null,
+   "text": "Yeah… she’s different.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1435714400": {
+   "kind": "text",
+   "parent": -1550866049,
+   "children": [
+    -380835246,
+    -265284477
+   ],
+   "actor": null,
+   "text": "She’s just doing what makes her happy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "352406838": {
+   "kind": "text",
+   "parent": -1550866049,
+   "children": [
+    -812253213,
+    -538329106
+   ],
+   "actor": null,
+   "text": "You sure you’re not just jealous?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-812253213": {
+   "kind": "text",
+   "parent": 352406838,
+   "actor": "Charlotte",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Oh, for—this isn’t about jealousy! This is about Anna!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-380835246": {
+   "kind": "text",
+   "parent": 1435714400,
+   "actor": "Charlotte",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Happy? You really think this is happiness? That’s not confidence, it’s a mask.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "642968042": {
+   "kind": "text",
+   "parent": 745484272,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Exactly! She’s losing herself in all of this. I don’t know if she even realizes it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-538329106": {
+   "kind": "text",
+   "parent": 352406838,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "You think I want to argue with her like this? That I like watching her turn into someone she’s not?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-265284477": {
+   "kind": "text",
+   "parent": 1435714400,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "I know Anna better than most. And this… this isn’t her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2037346406": {
+   "kind": "text",
+   "parent": 745484272,
+   "actor": "Charlotte",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "We have to do something. She needs a reminder of who she really is.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1811538778": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Just… meet me at the garage next Tuesday. Please.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/SmallTalks/CharlotteAgentQuestStart",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play GameObject (1) and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueStart'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueStart"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CharlotteBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CharlotteBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/CharlotteBust"
+      }
+     }
+    },
+    {
+     "type": "InstructionQuestsActivate",
+     "title": "Activate Old Friends (Charlotte)",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Old Friends (Charlotte)",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play GameObject and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "GameObject",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Core_Events/SmallTalks/CharlotteAgentQuestStart/GameObject"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/CharlotteBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueEnd'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueEnd"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

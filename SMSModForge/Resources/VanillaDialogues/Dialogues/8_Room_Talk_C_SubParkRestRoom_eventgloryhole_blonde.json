@@ -1,0 +1,689 @@
+{
+ "id": "8_Room_Talk/C_SubParkRestRoom/eventgloryhole_blonde",
+ "name": "eventgloryhole_blonde",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "S_StrangerFemale",
+  "You"
+ ],
+ "roots": [
+  -540808658
+ ],
+ "nodes": {
+  "-540808658": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1235802309,
+    -2057112867
+   ],
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Huh? Looks like someone's using a toilet...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1235802309": {
+   "kind": "text",
+   "parent": -540808658,
+   "children": [
+    -1168708710,
+    -211225170,
+    -1062355938,
+    -1510130900,
+    933761491,
+    -85467538,
+    418338242,
+    -611285609,
+    1843352471,
+    -1377290261,
+    978736487,
+    -906933048,
+    1252569383,
+    1359227699,
+    1124303177,
+    -1370876259
+   ],
+   "actor": null,
+   "text": "(Use the gloryhole)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2057112867": {
+   "kind": "text",
+   "parent": -540808658,
+   "children": [
+    1038061790
+   ],
+   "actor": null,
+   "text": "(Give them their privacy)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1038061790": {
+   "kind": "text",
+   "parent": -2057112867,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Yeah, I'm not in the mood for surprises.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1168708710": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ParkRestroom_GloryholeDoor_Closed to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ParkRestroom_GloryholeDoor_Closed",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/129_SubParkRestroom/ParkRestroom_GloryholeDoor_Closed"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Door Close",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Door Close",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    }
+   ]
+  },
+  "-211225170": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "S_StrangerFemale",
+   "expressionName": "neutral",
+   "text": "…Oh.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Gloryhole_blonde (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Gloryhole_blonde (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Gloryhole_blonde (0)"
+      }
+     }
+    }
+   ]
+  },
+  "-1062355938": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "S_StrangerFemale",
+   "expressionName": "neutral",
+   "text": "That’s… That’s not real.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1510130900": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "S_StrangerFemale",
+   "expressionName": "neutral",
+   "text": "Fuck... It’s too big. That’s the problem. If it was normal, I’d walk away.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-85467538": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "S_StrangerFemale",
+   "expressionName": "neutral",
+   "text": "God… it fills my mouth… I can feel it twitching…",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Gloryhole_blonde (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Gloryhole_blonde (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Gloryhole_blonde (1)"
+      }
+     }
+    }
+   ]
+  },
+  "418338242": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "S_StrangerFemale",
+   "expressionName": "neutral",
+   "text": "No wedding ring. No face. No names.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-611285609": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "S_StrangerFemale",
+   "expressionName": "neutral",
+   "text": "I’m really doing this. I’m really sucking a stranger’s cock instead of studying.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1843352471": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "S_StrangerFemale",
+   "expressionName": "neutral",
+   "text": "I’m an adult. I can make bad decisions if I want.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1377290261": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "S_StrangerFemale",
+   "expressionName": "neutral",
+   "text": "Oh— He’s close... Mwuaah! Ghllph!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "978736487": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "S_StrangerFemale",
+   "expressionName": "neutral",
+   "text": "Don’t pull away. If you start this… you finish it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-906933048": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "S_StrangerFemale",
+   "expressionName": "neutral",
+   "text": "Mwuaah... Gulp! Gulp~ I’m... I'm swallowing. All of it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Gloryhole_blonde (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Gloryhole_blonde (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/Gloryhole_blonde (2)"
+      }
+     }
+    }
+   ]
+  },
+  "1252569383": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "S_StrangerFemale",
+   "expressionName": "neutral",
+   "text": "Okay. That happened.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1359227699": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "S_StrangerFemale",
+   "expressionName": "neutral",
+   "text": "I’m still going to ace that exam. This doesn’t define me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1124303177": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "S_StrangerFemale",
+   "expressionName": "neutral",
+   "text": "But I’m definitely not forgetting it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1370876259": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ParkRestroom_GloryholeDoor_Closed to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ParkRestroom_GloryholeDoor_Closed",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/129_SubParkRestroom/ParkRestroom_GloryholeDoor_Closed"
+      }
+     }
+    },
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Door Open",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Door Open",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    }
+   ]
+  },
+  "933761491": {
+   "kind": "text",
+   "parent": -1235802309,
+   "actor": "S_StrangerFemale",
+   "expressionName": "neutral",
+   "text": "God, this is so stupid. I’m not this kind of girl.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/C_SubParkRestRoom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play eventgloryhole_blonde and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[gloryhole-cooldown25] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gloryhole-cooldown25",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "chance",
+     "type": "ConditionChance",
+     "title": "If 0.35 chance to pass",
+     "fields": {
+      "m_Threshold": {
+       "kind": "value",
+       "value": 0.35
+      }
+     }
+    }
+   ],
+   "branches": [
+    "gloryhole"
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ParkRestroom_GloryholeDoor_Closed to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ParkRestroom_GloryholeDoor_Closed",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/129_SubParkRestroom/ParkRestroom_GloryholeDoor_Closed"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core_NoSave2[2025-shortgo-saveONE] = None",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2025-shortgo-saveONE",
+        "list": "Core_NoSave2",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "none"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[gloryhole-cooldown25] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gloryhole-cooldown25",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

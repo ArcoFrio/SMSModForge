@@ -1,0 +1,506 @@
+{
+ "id": "8_Room_Talk/OutsideVilla/Katarinafirsttime",
+ "name": "Katarinafirsttime",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Katarina"
+ ],
+ "roots": [
+  -1077796747,
+  1283780274,
+  706904402,
+  1739824634,
+  720586671
+ ],
+ "nodes": {
+  "-1077796747": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1513563739,
+    126152168
+   ],
+   "actor": "Katarina",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You there! Who are you, and what are you doing here?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1513563739": {
+   "kind": "text",
+   "parent": -1077796747,
+   "actor": null,
+   "text": "I’m {PC}, I was just meeting with Mario.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "126152168": {
+   "kind": "text",
+   "parent": -1077796747,
+   "actor": null,
+   "text": "I'm {PC}. You must be Mario's stunning wife?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1283780274": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1546033156,
+    -1765140637,
+    1419337473,
+    1848618684
+   ],
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Mario? Oh, you must be the new gardener. About time someone showed up to deal with this mess.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1546033156": {
+   "kind": "text",
+   "parent": 1283780274,
+   "children": [
+    -1985042834
+   ],
+   "actor": null,
+   "text": "Actually, I’m not the...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1765140637": {
+   "kind": "text",
+   "parent": 1283780274,
+   "children": [
+    1471349429
+   ],
+   "actor": null,
+   "text": "But...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "706904402": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    97946459,
+    -1964941615
+   ],
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "And if you see that useless {DA} of mine, tell her she’s late for her piano lesson again.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "97946459": {
+   "kind": "text",
+   "parent": 706904402,
+   "actor": null,
+   "text": "I’m sorry, but I think you’re mistaking me for someone else.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1964941615": {
+   "kind": "text",
+   "parent": 706904402,
+   "actor": null,
+   "text": "Let me finish. I'm not the gardener.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1739824634": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "You think I care? Everyone who comes to this house is beneath me. Just do what you’re told and leave.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "720586671": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Katarina",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Now, get lost. I have more important things to deal with than some nobody loitering around.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1471349429": {
+   "kind": "text",
+   "parent": -1765140637,
+   "actor": "Katarina",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Don’t speak unless you’re spoken to! I don’t care who you are, just get out of my sight.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1985042834": {
+   "kind": "text",
+   "parent": 1546033156,
+   "actor": "Katarina",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Don’t speak unless you’re spoken to! I don’t care who you are, just get out of my sight.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1419337473": {
+   "kind": "text",
+   "parent": 1283780274,
+   "children": [
+    1555518447
+   ],
+   "actor": null,
+   "text": "(Charming) Just someone who appreciates beauty when he sees it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Charming] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Charming",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1555518447": {
+   "kind": "text",
+   "parent": 1419337473,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "Hmph. You might actually know how to speak to a woman of my name.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1848618684": {
+   "kind": "text",
+   "parent": 1283780274,
+   "children": [
+    -1533536678,
+    -2104536723
+   ],
+   "actor": null,
+   "text": "(Smart) I'm not, and judging by the state of this place, neither are you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Smart] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Smart",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1533536678": {
+   "kind": "text",
+   "parent": 1848618684,
+   "actor": "Katarina",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Excuse me? Watch your mouth, you arrogant little retard. You think you can walk in here and insult me?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2104536723": {
+   "kind": "text",
+   "parent": 1848618684,
+   "actor": "Katarina",
+   "expressionName": "neutral",
+   "text": "You’re lucky I don’t have security throw you into the compost.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/OutsideVilla",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Katarinafirsttime and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[katarina-first-meeting] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-first-meeting",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Katarina_Normal to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Katarina_Normal",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Katarina_Normal"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Katarina_Normal/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[katarina-first-meeting] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katarina-first-meeting",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

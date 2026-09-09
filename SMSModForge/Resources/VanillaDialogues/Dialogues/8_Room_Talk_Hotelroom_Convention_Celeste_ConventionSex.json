@@ -1,0 +1,958 @@
+{
+ "id": "8_Room_Talk/Hotelroom_Convention/Celeste_ConventionSex",
+ "name": "Celeste_ConventionSex",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Celeste",
+  "Continue"
+ ],
+ "roots": [
+  302905596,
+  -1392818598,
+  1306938078,
+  -1652441193,
+  -67710382,
+  -1317835208,
+  -432415599,
+  1159649871,
+  152721717,
+  -1700027285,
+  428632096,
+  -376776408,
+  1338301363
+ ],
+ "nodes": {
+  "302905596": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Core_NoSave2[adaptive-sex-inc] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "adaptive-sex-inc",
+        "list": "Core_NoSave2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1652441193": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Celeste",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Neither. Just… a place. Somewhere to exist. Even if it’s beneath you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active XXX_Celeste_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "XXX_Celeste_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/XXX_Celeste_Bust"
+      }
+     }
+    }
+   ]
+  },
+  "1306938078": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So what do you want from me now? Pity? Forgiveness?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1392818598": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "{PC}. Anna.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-67710382": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I know just the place for you then.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1317835208": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "That's it, Celeste... Work your tongue... Mmm... Get me~ Get me ready for {PC}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCelesteFun (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCelesteFun (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCelesteFun (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-432415599": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Why do I crave this so badly...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1159649871": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "How can this... this common slut's pussy be so intoxicating? So much better than my own?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "152721717": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, stop your blubbering...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1700027285": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Now, get your tongue up there and get me nice and wet for my {S}'s big, hard cock. And if you do a good job, maybe I'll let you have a taste.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "428632096": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Would you like that, you desperate slut?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-376776408": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1732850697,
+    -243228757
+   ],
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Yes, please... Let me show you how much I need it.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1732850697": {
+   "kind": "text",
+   "parent": -376776408,
+   "children": [
+    507741863,
+    -1773156880,
+    1350989421,
+    -246594629,
+    299215535,
+    1988892617,
+    227199957,
+    345420804,
+    2102262854,
+    1378576433,
+    1216130668,
+    -1863059798
+   ],
+   "actor": null,
+   "text": "That's enough. I think {M}'s slit is ready for me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-243228757": {
+   "kind": "text",
+   "parent": -376776408,
+   "children": [
+    179056524,
+    -371967266,
+    -1388192397,
+    1982175254,
+    -737308045,
+    -1674785279,
+    149459143,
+    938341417,
+    1902031761,
+    -1151249810,
+    232107202,
+    -945267315
+   ],
+   "actor": null,
+   "text": "Ass up, Celeste. You will get my cock.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "179056524": {
+   "kind": "text",
+   "parent": -243228757,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-You're lucky, Celeste... You get to feel my {S}'s cock...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCelesteFun (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCelesteFun (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCelesteFun (2)"
+      }
+     }
+    }
+   ]
+  },
+  "507741863": {
+   "kind": "text",
+   "parent": -1732850697,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Ohhh fuck, baby!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCelesteFun (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCelesteFun (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCelesteFun (5)"
+      }
+     }
+    }
+   ]
+  },
+  "1350989421": {
+   "kind": "text",
+   "parent": -1732850697,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "This is why I won, and you lost, bitch... Hngaah... Hnghh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "299215535": {
+   "kind": "choice",
+   "parent": -1732850697,
+   "children": [
+    98296502,
+    1676470014,
+    -1695122206
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "A strong... Hngaaah... Talented, handsome partner...  Hnnggahh... Something you'll never have.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1988892617": {
+   "kind": "text",
+   "parent": -1732850697,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes, baby! Give it to me! Pump me full of your hot cum! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCelesteFun (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCelesteFun (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCelesteFun (6)"
+      }
+     }
+    }
+   ]
+  },
+  "345420804": {
+   "kind": "text",
+   "parent": -1732850697,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Show this bitch what a real man can do!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2102262854": {
+   "kind": "text",
+   "parent": -1732850697,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Open wide, loser... It's your lucky day, you get to have a taste...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCelesteFun (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCelesteFun (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCelesteFun (7)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCelesteFun (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCelesteFun (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCelesteFun (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1378576433": {
+   "kind": "text",
+   "parent": -1732850697,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Look at you... Covered in my {S}'s cum. Now, what do we say?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-371967266": {
+   "kind": "text",
+   "parent": -243228757,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Or as you would say... \"Divine Destiny lead this cock into my slut hole\"....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1388192397": {
+   "kind": "text",
+   "parent": -243228757,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Dumb slut... Fuck her hard, {PC}... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1982175254": {
+   "kind": "text",
+   "parent": -243228757,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Hmmaahh... God... Fuck, I... I can't... It's... Hngahhh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-737308045": {
+   "kind": "text",
+   "parent": -243228757,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fill her up, baby. Pump that needy slut full of your hot cum. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "149459143": {
+   "kind": "choice",
+   "parent": -243228757,
+   "children": [
+    2031380442,
+    445057422,
+    -1446796784
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mark her as your property, like the cheap whore she is.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "938341417": {
+   "kind": "text",
+   "parent": -243228757,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Yes, yes, YES! Cum in me! Fill me with your superior spunk! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-945267315": {
+   "kind": "text",
+   "parent": -243228757,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Maybe if you're good, he'll let you serve him again sometime. But don't get your hopes up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1773156880": {
+   "kind": "text",
+   "parent": -1732850697,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Fill me up with that huge cock!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "98296502": {
+   "kind": "text",
+   "parent": 299215535,
+   "actor": null,
+   "text": "I'm close, {M}... I'll fill you up...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1676470014": {
+   "kind": "text",
+   "parent": 299215535,
+   "actor": null,
+   "text": "Take a good look, Celeste... I'm about to... I'm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1695122206": {
+   "kind": "text",
+   "parent": 299215535,
+   "actor": null,
+   "text": "(Fill Anna up)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1216130668": {
+   "kind": "text",
+   "parent": -1732850697,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "T-Thank you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1863059798": {
+   "kind": "text",
+   "parent": -1732850697,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Good girl, perhaps there's still a chance of redemption for you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-246594629": {
+   "kind": "text",
+   "parent": -1732850697,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "I... I want to feel him too... P-Please...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "227199957": {
+   "kind": "text",
+   "parent": -1732850697,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "<size=50%>What did she do to deserve such a perfect lover... Why her... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2031380442": {
+   "kind": "text",
+   "parent": 149459143,
+   "actor": null,
+   "text": "F-Fuck! I'm going to cum... I'll cum inside you, Celeste!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "445057422": {
+   "kind": "text",
+   "parent": 149459143,
+   "actor": null,
+   "text": "T-Time to breed this slut pussy... Hngaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1446796784": {
+   "kind": "text",
+   "parent": 149459143,
+   "actor": null,
+   "text": "(Fill her up)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1902031761": {
+   "kind": "text",
+   "parent": -243228757,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "I'm just a worthless hole for you to dump your loads in!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1151249810": {
+   "kind": "text",
+   "parent": -243228757,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm, looks like you enjoyed that, slut.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCelesteFun (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCelesteFun (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCelesteFun (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCelesteFun (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCelesteFun (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCelesteFun (1)"
+      }
+     }
+    }
+   ]
+  },
+  "232107202": {
+   "kind": "text",
+   "parent": -243228757,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Clean yourself up. And don't forget to thank my {S} for using you so well.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1674785279": {
+   "kind": "text",
+   "parent": -243228757,
+   "actor": "Celeste",
+   "expressionName": "neutral",
+   "text": "Fuck me harder! Pound my worthless pussy! I'm just a loser who needs your cock!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCelesteFun (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCelesteFun (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCelesteFun (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1338301363": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active XXX_Celeste_Bust to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "XXX_Celeste_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/XXX_Celeste_Bust"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Hotelroom_Convention",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Celeste_ConventionSex and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Elf/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Events_Only_Done_2[convention-outfit-reference] to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "convention-outfit-reference",
+        "list": "Events_Only_Done_2",
+        "type": "game-object"
+       }
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Defaultdialogue and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Defaultdialogue",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Room_Talk/Hotelroom_Convention/Defaultdialogue"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 0.2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 0.2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

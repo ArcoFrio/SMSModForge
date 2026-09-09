@@ -1,0 +1,910 @@
+{
+ "id": "8_Room_Talk/Garage/EmmaCryptidHuntStart",
+ "name": "EmmaCryptidHuntStart",
+ "index": 10,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Emma"
+ ],
+ "roots": [
+  -668886847,
+  -43598306,
+  -1872882932,
+  343050955,
+  -45405528,
+  -1598278140,
+  1626010516,
+  1201866398,
+  -694694298,
+  -395841074,
+  -279605352,
+  -1611216687,
+  1806413181
+ ],
+ "nodes": {
+  "-668886847": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh. Hi. Can I help you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-43598306": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I’m sorry, I know this is weird, but I really need to talk to your {S}. Right now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1872882932": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "…About what, exactly?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "343050955": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Something important. Private. It can’t wait.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-45405528": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    358695982,
+    -1421327336,
+    644828492
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Uh-huh. You know, because from my side, this sounds a lot like you showed up unannounced to see a boy you barely know.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "358695982": {
+   "kind": "text",
+   "parent": -45405528,
+   "children": [
+    -841829993
+   ],
+   "actor": null,
+   "text": "{M}, it’s okay. I know her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-841829993": {
+   "kind": "text",
+   "parent": 358695982,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You do?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1421327336": {
+   "kind": "text",
+   "parent": -45405528,
+   "children": [
+    -1352709730
+   ],
+   "actor": null,
+   "text": "Wow, already labeled a stalker. New record.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1352709730": {
+   "kind": "text",
+   "parent": -1421327336,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I am not calling her a stalker. I’m just… asking reasonable questions.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "644828492": {
+   "kind": "text",
+   "parent": -45405528,
+   "children": [
+    45554510
+   ],
+   "actor": null,
+   "text": "She’s not a fangirl, if that’s what you’re thinking.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "45554510": {
+   "kind": "text",
+   "parent": 644828492,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I was thinking it, yes. You have that effect on people lately.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1598278140": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I’m sorry about that, Emma. I’ll give you two some privacy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1626010516": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "{PC}. After Mario got arrested, I went through his private files. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1201866398": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2008180385,
+    -1062037434,
+    786635021
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "The ones even his lawyers didn’t know about. There was another person involved. Just an initial. E.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2008180385": {
+   "kind": "text",
+   "parent": 1201866398,
+   "children": [
+    -1785640005
+   ],
+   "actor": null,
+   "text": "That must’ve been rough. What did you find?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1785640005": {
+   "kind": "text",
+   "parent": -2008180385,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "It was. But I needed answers. And what I found matters more than my feelings right now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1062037434": {
+   "kind": "text",
+   "parent": 1201866398,
+   "children": [
+    -295636957
+   ],
+   "actor": null,
+   "text": "You sure this isn’t just paranoid nonsense?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-295636957": {
+   "kind": "text",
+   "parent": -1062037434,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I checked everything. Dates. Payments. Locations. This wasn’t paranoia. It was organized.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "786635021": {
+   "kind": "text",
+   "parent": 1201866398,
+   "children": [
+    1630102404
+   ],
+   "actor": null,
+   "text": "Let me guess. Mysterious letter, evil vibes, dramatic pause.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1630102404": {
+   "kind": "text",
+   "parent": 786635021,
+   "actor": "Emma",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I hate that you’re not wrong. But this isn’t a movie. These files were real. Detailed. Logged.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-694694298": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -204457702,
+    959154114,
+    951485044,
+    -94665023
+   ],
+   "actor": "Emma",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Mario was funding hybrid research. Human DNA mixed with... I don't even want to know. ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-204457702": {
+   "kind": "text",
+   "parent": -694694298,
+   "children": [
+    -16568542
+   ],
+   "actor": null,
+   "text": "Why didn’t he finish the project?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "959154114": {
+   "kind": "text",
+   "parent": -694694298,
+   "children": [
+    441332790
+   ],
+   "actor": null,
+   "text": "Bigfoot is real!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "951485044": {
+   "kind": "text",
+   "parent": -694694298,
+   "children": [
+    1415664546
+   ],
+   "actor": null,
+   "text": "(Smart) Gene-splicing with incomplete ethical oversight. Typical.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Smart] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Smart",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1415664546": {
+   "kind": "text",
+   "parent": 951485044,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Exactly. No safeguards. No exit plans. People weren’t volunteers. They were assets.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "441332790": {
+   "kind": "text",
+   "parent": 959154114,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I swear, if you say Bigfoot one more time, I’m revoking your help license. They’re not folklore.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-16568542": {
+   "kind": "text",
+   "parent": -204457702,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Because they escaped. Or were helped. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-395841074": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "The records stop suddenly. But sightings keep popping up. Off the grid. Isolated.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-279605352": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1003441839,
+    -545754313,
+    -295524337,
+    1877452281
+   ],
+   "actor": "Emma",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I want to find them and make sure they’re okay.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1003441839": {
+   "kind": "text",
+   "parent": -279605352,
+   "children": [
+    1514709043
+   ],
+   "actor": null,
+   "text": "I’m in. We’ll do this quietly.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1514709043": {
+   "kind": "text",
+   "parent": -1003441839,
+   "actor": "Emma",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Thank you. That actually means more than you know.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-545754313": {
+   "kind": "text",
+   "parent": -279605352,
+   "children": [
+    516618583
+   ],
+   "actor": null,
+   "text": "Okay. But if this spirals, we pull out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "516618583": {
+   "kind": "text",
+   "parent": -545754313,
+   "actor": "Emma",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Agreed. This is about helping. Not ruining lives.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-295524337": {
+   "kind": "text",
+   "parent": -279605352,
+   "children": [
+    1418069335
+   ],
+   "actor": null,
+   "text": "Let's hunt down some cryptids!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1418069335": {
+   "kind": "text",
+   "parent": -295524337,
+   "actor": "Emma",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You are impossible...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1611216687": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "We start with one lead. One location. And please. Try to keep the cryptid jokes to a minimum.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1806413181": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "If you want to help, I’d really like to meet you downtown on Tuesday. We can take it from there together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1877452281": {
+   "kind": "text",
+   "parent": -279605352,
+   "children": [
+    1814432640
+   ],
+   "actor": null,
+   "text": "Maybe. I can't make any promises.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1814432640": {
+   "kind": "text",
+   "parent": 1877452281,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Fine, I know you're busy. But please, {PC}. We're the only ones who can fix the mess Mario left behind.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-94665023": {
+   "kind": "text",
+   "parent": -694694298,
+   "children": [
+    2103776631
+   ],
+   "actor": null,
+   "text": "That explains Cerise, the android Mario kept in his basement.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[android-awoken] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "android-awoken",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "2103776631": {
+   "kind": "text",
+   "parent": -94665023,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "The what now? Uh... What?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Garage",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play EmmaCryptidHuntStart and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_10[emma-cryptidhuntquest] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-cryptidhuntquest",
+        "list": "Events_10",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_5[Mario-In-Prison] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Mario-In-Prison",
+        "list": "Events_5",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Milking Save[bafa-emmaaccepted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-emmaaccepted",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Emma_Normal to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Emma_Normal",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Emma_Normal"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "type": "InstructionQuestsActivate",
+     "title": "Activate Cryptids (Emma)",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Quest": {
+       "kind": "object",
+       "name": "Cryptids (Emma)",
+       "of": "GetQuestInstance"
+      },
+      "m_WaitToComplete": false
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_10[emma-cryptidhuntquest] = 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-cryptidhuntquest",
+        "list": "Events_10",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Emma_Normal/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[mall-drive-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "mall-drive-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

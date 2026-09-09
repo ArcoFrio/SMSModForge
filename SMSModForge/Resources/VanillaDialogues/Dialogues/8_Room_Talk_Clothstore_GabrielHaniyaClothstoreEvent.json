@@ -1,0 +1,847 @@
+{
+ "id": "8_Room_Talk/Clothstore/GabrielHaniyaClothstoreEvent",
+ "name": "GabrielHaniyaClothstoreEvent",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Gabriel",
+  "Haniya",
+  "Zuri"
+ ],
+ "roots": [
+  -422452795,
+  -834869194,
+  -2093926680,
+  -1204109862,
+  -1897775850,
+  645415977,
+  315157938,
+  786399266,
+  -1188886183,
+  -2063820551,
+  -1583420375,
+  -1412115439,
+  -1571678241,
+  -1840984148,
+  -1889572429,
+  -1402266940,
+  834778829,
+  1109095138,
+  195020548,
+  2129168987,
+  -473443257,
+  1398334918,
+  -1182766070,
+  286905844,
+  1453350398,
+  -991364410
+ ],
+ "nodes": {
+  "-422452795": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "You guys have one hour. Then I’m opening up and I don’t care if you’re mid-orgasm or mid-pose. Clock’s ticking.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-834869194": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "That’s more time than I need, but thanks for the generosity.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2093926680": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Ignore him. He thinks he's the main event.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1204109862": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Zuri",
+   "expressionName": "neutral",
+   "text": "Yeah...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Zuri/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1897775850": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh, {PC}. How lovely to see you here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "645415977": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    2103903045,
+    1354016523
+   ],
+   "actor": "Gabriel",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "We were just about to do small shoot, but I'm sure you gathered as much.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2103903045": {
+   "kind": "text",
+   "parent": 645415977,
+   "actor": null,
+   "text": "You two need any help?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1354016523": {
+   "kind": "text",
+   "parent": 645415977,
+   "children": [
+    -685341541
+   ],
+   "actor": null,
+   "text": "Well, have fun you two. See you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-685341541": {
+   "kind": "text",
+   "parent": 1354016523,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Don't be a stranger!",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "315157938": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Fantastic idea! Let's put your skill to the test, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "786399266": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yes!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1188886183": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "You know the position, my love. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2063820551": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Like this? So, how's the photo?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Haniya_BoobClothStore (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Haniya_BoobClothStore (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Haniya_BoobClothStore (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1583420375": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1365974199,
+    -1665417042
+   ],
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Perfect. Another one for our album.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1365974199": {
+   "kind": "text",
+   "parent": -1583420375,
+   "actor": null,
+   "text": "How about we glaze your breasts, Haniya? For some... fun shots?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1665417042": {
+   "kind": "text",
+   "parent": -1583420375,
+   "children": [
+    -646871170,
+    -1336883602
+   ],
+   "actor": null,
+   "text": "Well, that was fun. See you two around.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-646871170": {
+   "kind": "text",
+   "parent": -1665417042,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Would you like a copy?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1336883602": {
+   "kind": "text",
+   "parent": -1665417042,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "I'll send him one later today. ",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1412115439": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Now that's what I'm talking about! What do you think, my love? Wanna get all shiny and sticky for the camera?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1571678241": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "I like the sound of that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1840984148": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "But are you boys sure you're up for the challenge? After all, I've got a lot to cover.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1889572429": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Oh, we can handle it, can't we, {PC}?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Haniya_BoobClothStore (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Haniya_BoobClothStore (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Haniya_BoobClothStore (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1402266940": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Mmm, look at those big, thick cocks...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "834778829": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1087581163,
+    1847392703,
+    -1815268327
+   ],
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "You boys are going to make me so pretty and sticky.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1109095138": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Come on then, show me what you've got. I want to feel every hot drop on my skin.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "195020548": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Fuck, look at you. You're the sexiest damn canvas I've ever seen.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2129168987": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Don't just stand there, you studs, I want to see those cocks throbbing and pulsing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-473443257": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1457623247,
+    -1715603720,
+    -1209262344
+   ],
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Make me glisten, boys. Make me shine.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1398334918": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "That's it, paint me white! Cover me in your hot cum!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Haniya_BoobClothStore (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Haniya_BoobClothStore (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/Haniya_BoobClothStore (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1182766070": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Look how beautiful I am, all covered in your cum.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "286905844": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Damn, babe, you look absolutely edible. {PC} and I did good work on that canvas of yours.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1453350398": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "I feel like a goddess, all marked and claimed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-991364410": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "And {PC}... thanks for joining us today. You always know how to make things interesting.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1457623247": {
+   "kind": "text",
+   "parent": -473443257,
+   "actor": null,
+   "text": "F-Fuck, here it comes... Hold still! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1715603720": {
+   "kind": "text",
+   "parent": -473443257,
+   "actor": null,
+   "text": "(Cum on her tits)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1209262344": {
+   "kind": "text",
+   "parent": -473443257,
+   "actor": null,
+   "text": "A-Aim for her tits, Gabriel. We can't screw this up! Hngaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1087581163": {
+   "kind": "text",
+   "parent": 834778829,
+   "actor": null,
+   "text": "Fuck, I love your big, soft boobs.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1847392703": {
+   "kind": "text",
+   "parent": 834778829,
+   "actor": null,
+   "text": "(Stroke your cock faster)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1815268327": {
+   "kind": "text",
+   "parent": 834778829,
+   "children": [
+    1755307547
+   ],
+   "actor": null,
+   "text": "(Press your cock against her nipple)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1755307547": {
+   "kind": "text",
+   "parent": -1815268327,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Mmmm, Oh~ Someone's eager....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Clothstore",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play GabrielHaniyaClothstoreEvent and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[gabrielhaniyaworldevents] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabrielhaniyaworldevents",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[gabriel-threesome-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabriel-threesome-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "chance",
+     "type": "ConditionChance",
+     "title": "If 0.4 chance to pass",
+     "fields": {
+      "m_Threshold": {
+       "kind": "value",
+       "value": 0.4
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Haniya_CasualBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Haniya_CasualBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Haniya_CasualBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Gabriel_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Gabriel_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Gabriel_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Zuri to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Zuri",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Zuri"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[gabrielhaniyaworldevents] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabrielhaniyaworldevents",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

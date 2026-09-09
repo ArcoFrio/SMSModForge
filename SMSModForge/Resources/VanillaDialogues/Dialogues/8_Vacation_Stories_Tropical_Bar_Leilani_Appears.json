@@ -1,0 +1,696 @@
+{
+ "id": "8_Vacation_Stories/Tropical_Bar/Leilani_Appears",
+ "name": "Leilani_Appears",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue",
+  "V_Leilani"
+ ],
+ "roots": [
+  -1769790230,
+  185723903
+ ],
+ "nodes": {
+  "185723903": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1582987591,
+    242217630,
+    274227692,
+    -396301260,
+    1109192945,
+    -1929046548,
+    -1688747390
+   ],
+   "actor": "V_Leilani",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Well, aloha! I don’t think I’ve seen you two around before. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[leilani-met] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "leilani-met",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_LeilaniDefault to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_LeilaniDefault",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_LeilaniDefault"
+      }
+     }
+    }
+   ]
+  },
+  "-1582987591": {
+   "kind": "text",
+   "parent": 185723903,
+   "actor": "V_Leilani",
+   "expressionName": "neutral",
+   "text": "Visiting paradise for the first time?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "242217630": {
+   "kind": "text",
+   "parent": 185723903,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Something like that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "274227692": {
+   "kind": "choice",
+   "parent": 185723903,
+   "children": [
+    -1382499802,
+    474160901,
+    675283100
+   ],
+   "actor": "V_Leilani",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I see. And what about you? Are you enjoying yourself, or is this just another vacation for you?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1382499802": {
+   "kind": "text",
+   "parent": 274227692,
+   "children": [
+    1689683177
+   ],
+   "actor": null,
+   "text": "The island is amazing, and everyone’s been really welcoming.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "474160901": {
+   "kind": "text",
+   "parent": 274227692,
+   "children": [
+    -1406097600
+   ],
+   "actor": null,
+   "text": "Do you work here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "675283100": {
+   "kind": "text",
+   "parent": 274227692,
+   "children": [
+    2022589139
+   ],
+   "actor": null,
+   "text": "(Charming) It’s looking better now that you’re here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Charming] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Charming",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1689683177": {
+   "kind": "text",
+   "parent": -1382499802,
+   "actor": "V_Leilani",
+   "expressionName": "neutral",
+   "text": "That’s wonderful to hear. This place has a magic to it, don’t you think? Maybe I can help you discover some of its... secrets.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1406097600": {
+   "kind": "text",
+   "parent": 474160901,
+   "actor": "V_Leilani",
+   "expressionName": "neutral",
+   "text": "Oh no, I’m just someone who loves the island. I come here often... but maybe I could show you around sometime?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2022589139": {
+   "kind": "text",
+   "parent": 675283100,
+   "actor": "V_Leilani",
+   "expressionName": "neutral",
+   "text": "Oh, you’re smooth. I like that. I think we’ll get along just fine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-396301260": {
+   "kind": "text",
+   "parent": 185723903,
+   "actor": "V_Leilani",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "So, if you’re looking for someone to show you the real magic of this island, I’d be happy to help.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active LeilaniTease (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "LeilaniTease (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/LeilaniTease (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1109192945": {
+   "kind": "text",
+   "parent": 185723903,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Well, I hope you enjoy your evening, Leilani.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1929046548": {
+   "kind": "text",
+   "parent": 185723903,
+   "actor": "V_Leilani",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Oh, I plan to. And who knows? Maybe I’ll see you around, handsome.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_LeilaniDefault/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1688747390": {
+   "kind": "choice",
+   "parent": 185723903,
+   "children": [
+    271513786,
+    -747604741,
+    -1574752120,
+    -229265809
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "... Well... she certainly made an impression. What do you think?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[leilani-met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "leilani-met",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Vacation_Save[leilani-pro] = 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "leilani-pro",
+        "list": "Vacation_Save",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "271513786": {
+   "kind": "text",
+   "parent": -1688747390,
+   "children": [
+    -64510326
+   ],
+   "actor": null,
+   "text": "She’s nice, I guess.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-747604741": {
+   "kind": "text",
+   "parent": -1688747390,
+   "children": [
+    -617287284
+   ],
+   "actor": null,
+   "text": "She doesn’t matter. Today’s about us.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1574752120": {
+   "kind": "text",
+   "parent": -1688747390,
+   "children": [
+    1200266339
+   ],
+   "actor": null,
+   "text": "She’s like really hot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-229265809": {
+   "kind": "text",
+   "parent": -1688747390,
+   "children": [
+    1487051334
+   ],
+   "actor": null,
+   "text": "(Smart) Are you jealous?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[newtrait-Smart] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "newtrait-Smart",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-64510326": {
+   "kind": "text",
+   "parent": 271513786,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "“Nice,” huh? That’s one way to put it. She certainly knows how to make an entrance.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-617287284": {
+   "kind": "text",
+   "parent": -747604741,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "That’s sweet. I’m glad we’re on the same page—this trip is for us to enjoy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Increase_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Increase_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Increase_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "1200266339": {
+   "kind": "text",
+   "parent": -1574752120,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I can’t argue with that. She does have a certain... presence.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1487051334": {
+   "kind": "text",
+   "parent": -229265809,
+   "actor": "Anna",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Jealous? Of her? Hardly. But it’s cute that you think I might be.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "runActions",
+     "type": "InstructionLogicRunActions",
+     "title": "Run Anna_Decrease_Mood ",
+     "fields": {
+      "m_Actions": {
+       "kind": "object",
+       "name": "Anna_Decrease_Mood",
+       "of": "GetGameObjectActions",
+       "path": "10_Gameplay/Anna_Decrease_Mood"
+      },
+      "m_WaitToFinish": false
+     }
+    }
+   ]
+  },
+  "-1769790230": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.01,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_Save[leilani-met] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "leilani-met",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[vacation-end-incoming] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "vacation-end-incoming",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Tropical_Bar",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Leilani_Appears and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_TropicalDress to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_TropicalDress",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_TropicalDress"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active V_S_Diego to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "V_S_Diego",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/V_S_Diego"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Default and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Default",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Vacation_Stories/Tropical_Bar/Default"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[tropclub-firsttime] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tropclub-firsttime",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 9_Vacation_Teleport_Tropical to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "9_Vacation_Teleport_Tropical",
+       "of": "GetGameObjectInstance",
+       "path": "9_Vacation_Teleport_Tropical"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

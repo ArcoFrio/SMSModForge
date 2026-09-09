@@ -1,0 +1,265 @@
+{
+ "id": "8_Core_Events/Trips/ChurchVisit/Second",
+ "name": "Second",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Alice",
+  "Anna",
+  "Josef"
+ ],
+ "roots": [
+  -574895753,
+  99028207,
+  1128808086,
+  334462573,
+  -1357673619,
+  -731787190,
+  -697498868,
+  704311284,
+  441474114,
+  -1298799760,
+  402234927,
+  -568563581
+ ],
+ "nodes": {
+  "-574895753": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You two behaved well today.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "99028207": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Yeah. We’ll wait in the car.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Red_Pullover/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 3 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 3
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "334462573": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Not really...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1128808086": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "So, uh... Do you believe in god or something?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceDress to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceDress",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AliceDress"
+      }
+     }
+    }
+   ]
+  },
+  "-731787190": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "But like, you're an adult... Why come here?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1357673619": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Same... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-697498868": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "I could ask you the same.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "441474114": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "My parents insist I be here. If I don't, they'll cut me off, and I'd have to work two crappy jobs just to pay rent.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "704311284": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "True, heh.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1298799760": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "That makes sense...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "402234927": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Yeah...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-568563581": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "But yeah, see you around I guess.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Trips/ChurchVisit",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Second and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events[church-visits] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "church-visits",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

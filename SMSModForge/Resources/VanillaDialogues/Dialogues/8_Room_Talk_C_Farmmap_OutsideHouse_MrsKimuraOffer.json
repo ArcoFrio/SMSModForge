@@ -1,0 +1,868 @@
+{
+ "id": "8_Room_Talk/C_Farmmap_OutsideHouse/MrsKimuraOffer",
+ "name": "MrsKimuraOffer",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "HimariMom"
+ ],
+ "roots": [
+  -88397757,
+  -932665366,
+  -1805316440,
+  637566932,
+  -2113441400,
+  -303203621,
+  1087512967,
+  -958751246,
+  1537127909,
+  318347718
+ ],
+ "nodes": {
+  "-88397757": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    2031381646
+   ],
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "So this is the little farm causing such big waves. How charming.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_8[himari-homequest] ≤ 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "himari-homequest",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "LessOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-932665366": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1446251507
+   ],
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "Ah… my daughter’s beloved. I knew I’d find you at the center of something extraordinary.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_8[himari-homequest] ≥ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "himari-homequest",
+        "list": "Events_8",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "2031381646": {
+   "kind": "text",
+   "parent": -88397757,
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "You must be the one making all this happen. I’ve been waiting to meet you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1446251507": {
+   "kind": "text",
+   "parent": -932665366,
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "Himari chose well. I approve… more than you can imagine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1805316440": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "I won’t waste your time. I came here for business.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "637566932": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "Your little farm has reached the point where it can no longer be ignored. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2113441400": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "HimariMom",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "The numbers, the quality… it’s already being whispered about in the right circles.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-303203621": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "HimariMom",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Those circles are mine. Wealthy, powerful, very discreet. People who desire indulgences the average citizen will never touch.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1087512967": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "And your milk… is exactly the sort of indulgence they crave.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-958751246": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "HimariMom",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Here’s my proposal. One million dollars annually to Kirby and Clay to keep this place running at full capacity for my clients.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1537127909": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1059571093,
+    1983460027,
+    1802236452
+   ],
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "And for you personally… two hundred thousand upfront. Consider it a signing bonus, no questions asked.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1059571093": {
+   "kind": "text",
+   "parent": 1537127909,
+   "children": [
+    878641059
+   ],
+   "actor": null,
+   "text": "That’s… generous. You really believe the milk is worth that much?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1983460027": {
+   "kind": "text",
+   "parent": 1537127909,
+   "children": [
+    -885930422
+   ],
+   "actor": null,
+   "text": "Why should I trust you? This sounds too good to be true.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-885930422": {
+   "kind": "text",
+   "parent": 1983460027,
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "Because I don’t make promises I can’t keep. My wealth is proof enough.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "878641059": {
+   "kind": "text",
+   "parent": 1059571093,
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "Worth far more. But you’ll see in time just how valuable rarity is.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1802236452": {
+   "kind": "text",
+   "parent": 1537127909,
+   "children": [
+    1043706205,
+    -434755526,
+    -1463062673
+   ],
+   "actor": null,
+   "text": "And what if I asked for... more than just money?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1043706205": {
+   "kind": "text",
+   "parent": 1802236452,
+   "actor": "HimariMom",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Then perhaps I’d consider adding… personal bonuses. Himari isn’t the only one in my family who enjoys ambition.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1463062673": {
+   "kind": "choice",
+   "parent": 1802236452,
+   "children": [
+    -184638057,
+    -2098969938
+   ],
+   "actor": "HimariMom",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "A blowjob, at due time. Consider it a gesture of goodwill.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-184638057": {
+   "kind": "text",
+   "parent": -1463062673,
+   "children": [
+    -261009693
+   ],
+   "actor": null,
+   "text": "That does sound nice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2098969938": {
+   "kind": "text",
+   "parent": -1463062673,
+   "children": [
+    -423637301
+   ],
+   "actor": null,
+   "text": "You're way too old for me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-261009693": {
+   "kind": "text",
+   "parent": -184638057,
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "It does, doesn't it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Milking Save[bafa-mrskimura-blowjobinc] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-mrskimura-blowjobinc",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-423637301": {
+   "kind": "text",
+   "parent": -2098969938,
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "Aw, afraid of me shaking up your world?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "318347718": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1234186289,
+    -1828517305,
+    1842479224
+   ],
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "Think carefully before you answer, but don’t take too long. The elite don’t like waiting, and I don’t like being kept waiting either.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1234186289": {
+   "kind": "text",
+   "parent": 318347718,
+   "children": [
+    -572964030,
+    -1603143976
+   ],
+   "actor": null,
+   "text": "I’ll take the offer. One million for the farm, two hundred thousand for me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1828517305": {
+   "kind": "text",
+   "parent": 318347718,
+   "children": [
+    -1135267860
+   ],
+   "actor": null,
+   "text": "I’m not interested. This isn’t for sale.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1842479224": {
+   "kind": "text",
+   "parent": 318347718,
+   "children": [
+    -1170578965,
+    706452617
+   ],
+   "actor": null,
+   "text": "I need time to think before I decide.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1170578965": {
+   "kind": "text",
+   "parent": 1842479224,
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "Of course. Caution has its uses. But don’t keep me waiting too long. My patience is not infinite.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Milking Save[milking-mainstory] = 5",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milking-mainstory",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 5
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Milking Save[bafa-mrskimura-atmotelwaiting] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-mrskimura-atmotelwaiting",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1135267860": {
+   "kind": "text",
+   "parent": -1828517305,
+   "actor": "HimariMom",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Very well. I won’t press you… but don’t be surprised if others come knocking with less polite offers.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Milking Save[bafa-milkdeal-declined] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-milkdeal-declined",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Milking Save[milking-mainstory] = 10",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milking-mainstory",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 10
+      }
+     }
+    }
+   ]
+  },
+  "-572964030": {
+   "kind": "text",
+   "parent": -1234186289,
+   "actor": "HimariMom",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Sensible. You understand opportunity when it knocks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Milking Save[bafa-milkdeal-accepted] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-milkdeal-accepted",
+        "list": "Milking Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Milking Save[milking-mainstory] = 10",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milking-mainstory",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 10
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + 200000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 200000
+      }
+     }
+    }
+   ]
+  },
+  "-1603143976": {
+   "kind": "text",
+   "parent": -1234186289,
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "I’ll handle the contracts and deliveries. All you need to do is keep the milk flowing. Leave the rest to me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "706452617": {
+   "kind": "text",
+   "parent": 1842479224,
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "When your answer is ready, find me at that shabby little motel downtown.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-434755526": {
+   "kind": "text",
+   "parent": 1802236452,
+   "actor": "HimariMom",
+   "expressionName": "neutral",
+   "text": "I'll tell you what... If you manage to surprise me, I'll add a little something to our deal...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/C_Farmmap_OutsideHouse",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play MrsKimuraOffer and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[milking-mainstory] = 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "milking-mainstory",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Milking Save[bafa-totalmilksold] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bafa-totalmilksold",
+        "list": "Milking Save",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariMotherBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariMotherBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariMotherBust"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariMotherBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

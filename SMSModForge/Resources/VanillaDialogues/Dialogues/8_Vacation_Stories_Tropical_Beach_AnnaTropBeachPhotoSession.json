@@ -1,0 +1,841 @@
+{
+ "id": "8_Vacation_Stories/Tropical_Beach/AnnaTropBeachPhotoSession",
+ "name": "AnnaTropBeachPhotoSession",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Continue"
+ ],
+ "roots": [
+  -1706011409
+ ],
+ "nodes": {
+  "-1706011409": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    323092686,
+    -8317515,
+    -909608407,
+    2057723022
+   ],
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.01,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Vacation_NoSave[annatropbeachphotos-inc] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "annatropbeachphotos-inc",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "323092686": {
+   "kind": "text",
+   "parent": -1706011409,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Photos? Here? Well... I guess the setting is perfect. Just make sure they’re flattering!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-8317515": {
+   "kind": "text",
+   "parent": -1706011409,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm.... Sure. Let's give the people here a show.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-909608407": {
+   "kind": "choice",
+   "parent": -1706011409,
+   "children": [
+    785178330,
+    -1364671612,
+    500615730,
+    -499660359
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "How do you want me to pose?",
+   "tag": "howtopose",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "785178330": {
+   "kind": "text",
+   "parent": -909608407,
+   "children": [
+    -1924265244,
+    -1208070646
+   ],
+   "actor": null,
+   "text": "Get down. Show us your big behind.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1364671612": {
+   "kind": "text",
+   "parent": -909608407,
+   "children": [
+    1443760685,
+    -397315551
+   ],
+   "actor": null,
+   "text": "Get on all fours. Show how submissive you can be.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "500615730": {
+   "kind": "text",
+   "parent": -909608407,
+   "children": [
+    -1806517405
+   ],
+   "actor": null,
+   "text": "Let's get a nice full body shot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-499660359": {
+   "kind": "text",
+   "parent": -909608407,
+   "children": [
+    -940138541,
+    -1867460372,
+    1232735045
+   ],
+   "actor": null,
+   "text": "How about you go nude for this?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2057723022": {
+   "kind": "text",
+   "parent": -1706011409,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Before we head back, I think I’ll take a quick swim. The water looks way too inviting to pass up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1806517405": {
+   "kind": "text",
+   "parent": 500615730,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Easy enough... Do I look good?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A47_WhiteSwimsuitTropical (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A47_WhiteSwimsuitTropical (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A47_WhiteSwimsuitTropical (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1443760685": {
+   "kind": "text",
+   "parent": -1364671612,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmm... I love being told what to do by you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A45_WhiteSwimsuitTropical (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A45_WhiteSwimsuitTropical (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A45_WhiteSwimsuitTropical (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1924265244": {
+   "kind": "text",
+   "parent": 785178330,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Does this look good? Do you want me to twerk it a bit?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A45_WhiteSwimsuitTropical (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A45_WhiteSwimsuitTropical (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A45_WhiteSwimsuitTropical (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-940138541": {
+   "kind": "text",
+   "parent": -499660359,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "W-What? N-No... There's people here... I won't undress in public...",
+   "jump": {
+    "mode": "Jump",
+    "to": "howtopose"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1867460372": {
+   "kind": "text",
+   "parent": -499660359,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yeah, let's do that!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_WhiteSwimsuitTropical/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 3 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 3
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  "1232735045": {
+   "kind": "choice",
+   "parent": -499660359,
+   "children": [
+    -620456318,
+    -372496825,
+    -1346947337
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmm... i can feel everyone staring at my titties... So, how do you want {M} to pose?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Nude"
+      }
+     }
+    }
+   ]
+  },
+  "-620456318": {
+   "kind": "text",
+   "parent": 1232735045,
+   "children": [
+    -862484672
+   ],
+   "actor": null,
+   "text": "Lie down. Let's tease them.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-372496825": {
+   "kind": "text",
+   "parent": 1232735045,
+   "children": [
+    657531517
+   ],
+   "actor": null,
+   "text": "Let's get a nice full body shot from behind.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1346947337": {
+   "kind": "text",
+   "parent": 1232735045,
+   "children": [
+    -1913628664
+   ],
+   "actor": null,
+   "text": "I'll get down, let's show them your curves.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1913628664": {
+   "kind": "text",
+   "parent": -1346947337,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Get a good shot of my butt... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A50_NudeTropical (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A50_NudeTropical (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A50_NudeTropical (3)"
+      }
+     }
+    }
+   ]
+  },
+  "657531517": {
+   "kind": "text",
+   "parent": -372496825,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh, oh... Looks like some guy is getting fire from his wife for staring at me... Hihi...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A48_NudeTropical (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A48_NudeTropical (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A48_NudeTropical (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-862484672": {
+   "kind": "text",
+   "parent": -620456318,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmmm.... Does {M} look like a fun fuckable slut?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A48_NudeTropical (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A48_NudeTropical (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A48_NudeTropical (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1208070646": {
+   "kind": "text",
+   "parent": 785178330,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh god... I can feel people staring at me... B-Be quick...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A45_WhiteSwimsuitTropical (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A45_WhiteSwimsuitTropical (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A45_WhiteSwimsuitTropical (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-397315551": {
+   "kind": "text",
+   "parent": -1364671612,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I... I can try... D-Does this work?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-6A-Corrupted] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-6A-Corrupted",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active A45_WhiteSwimsuitTropical (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "A45_WhiteSwimsuitTropical (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Photos/A45_WhiteSwimsuitTropical (2)"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Tropical_Beach",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AnnaTropBeachPhotoSession and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play LiamFreyaFirstAppear and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "LiamFreyaFirstAppear",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Vacation_Stories/Tropical_Beach/LiamFreyaFirstAppear"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_WhiteSwimsuitTropical to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_WhiteSwimsuitTropical",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_WhiteSwimsuitTropical"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Default and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Default",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Vacation_Stories/Tropical_Beach/Default"
+      },
+      "m_WaitToFinish": true
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play AnnaTropBeachRelax and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "AnnaTropBeachRelax",
+       "of": "GetGameObjectDialogue",
+       "path": "8_Vacation_Stories/Tropical_Beach/AnnaTropBeachRelax"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_Save[freyaliamfirsttalk] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "freyaliamfirsttalk",
+        "list": "Vacation_Save",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 9_Vacation_Teleport_Tropical to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "9_Vacation_Teleport_Tropical",
+       "of": "GetGameObjectInstance",
+       "path": "9_Vacation_Teleport_Tropical"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

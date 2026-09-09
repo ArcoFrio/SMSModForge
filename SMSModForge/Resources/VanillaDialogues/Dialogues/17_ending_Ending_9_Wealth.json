@@ -1,0 +1,210 @@
+{
+ "id": "17_ending/Ending_9_Wealth",
+ "name": "Ending_9_Wealth",
+ "index": 9,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "You"
+ ],
+ "roots": [
+  660064052,
+  449206811,
+  -899059071,
+  88952544,
+  -1146291439,
+  553319576
+ ],
+ "nodes": {
+  "660064052": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Standing here at the apex of my achievements, I can hardly believe the journey that has brought me to this moment. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-899059071": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Today, I ascend to become the God of Wealth. A higher being, embodying the principles of abundance, prosperity, and growth. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "88952544": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "No longer bound by the limitations of human existence, I will be a beacon of hope for those who seek to rise above their circumstances.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "449206811": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "From humble beginnings, I amassed wealth beyond imagination, mastering the art of fortune and influence.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1146291439": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "My legacy will be etched in the annals of history, not just as a man who amassed wealth, but as a deity who understood its true purpose and power.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "553319576": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "For I have ascended.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "17_ending",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Ending_9_Wealth and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Active-Ending] = 9",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Active-Ending",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 9
+       }
+      }
+     }
+    }
+   ],
+   "branches": [
+    "9"
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_Maps to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_Maps",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_Maps"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 60_EndingAscend to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "60_EndingAscend",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/60_EndingAscend"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

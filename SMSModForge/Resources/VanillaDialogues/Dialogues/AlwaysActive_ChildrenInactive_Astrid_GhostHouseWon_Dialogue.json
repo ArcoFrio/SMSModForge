@@ -1,0 +1,1563 @@
+{
+ "id": "AlwaysActive_ChildrenInactive/Astrid_GhostHouseWon/Dialogue",
+ "name": "Dialogue",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Astrid"
+ ],
+ "roots": [
+  113621615,
+  835620861,
+  -1232073228,
+  -1742441314
+ ],
+ "nodes": {
+  "113621615": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    435360300,
+    645654912,
+    1670613775,
+    -1238144901,
+    1228947897,
+    -18320211
+   ],
+   "actor": "Astrid",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Nothing. Fucking nothing. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_9[Astrid-houseclears] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Astrid-houseclears",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "type": "InstructionQuestTaskValue",
+     "title": "Help Astrid find whatever she is looking for. + 1",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Astrid Quest",
+        "of": "Quest"
+       },
+       "m_TaskId": 1745766144
+      },
+      "m_Value": {
+       "m_Operation": "Add",
+       "m_Value": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "835620861": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1614118897
+   ],
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "I found a chest... locked, old as hell. I was so fucking close.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_9[Astrid-houseclears] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Astrid-houseclears",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "type": "InstructionQuestTaskValue",
+     "title": "Help Astrid find whatever she is looking for. + 1",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Astrid Quest",
+        "of": "Quest"
+       },
+       "m_TaskId": 1745766144
+      },
+      "m_Value": {
+       "m_Operation": "Add",
+       "m_Value": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1232073228": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1521318425,
+    -95060057,
+    -676486393,
+    55291398,
+    -978804357,
+    1180686048,
+    -1337054380,
+    953488567,
+    42744850
+   ],
+   "actor": "Astrid",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I found it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_9[Astrid-houseclears] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Astrid-houseclears",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "type": "InstructionQuestTaskValue",
+     "title": "Help Astrid find whatever she is looking for. + 1",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Astrid Quest",
+        "of": "Quest"
+       },
+       "m_TaskId": 1745766144
+      },
+      "m_Value": {
+       "m_Operation": "Add",
+       "m_Value": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1742441314": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -949996550,
+    -54869346,
+    47171625
+   ],
+   "actor": "Astrid",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "God, that was so fucking stupid.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_9[Astrid-houseclears] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Astrid-houseclears",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "435360300": {
+   "kind": "choice",
+   "parent": 113621615,
+   "children": [
+    205448486,
+    -1642646858,
+    -1347391096
+   ],
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Either she moved it… or she’s screwing with me.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "205448486": {
+   "kind": "text",
+   "parent": 435360300,
+   "children": [
+    1116275705
+   ],
+   "actor": null,
+   "text": "You okay?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1116275705": {
+   "kind": "text",
+   "parent": 205448486,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "No. Not even close.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1642646858": {
+   "kind": "text",
+   "parent": 435360300,
+   "children": [
+    -113859477
+   ],
+   "actor": null,
+   "text": "So we risked our asses for haunted dust bunnies?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-113859477": {
+   "kind": "text",
+   "parent": -1642646858,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Say that again and I’ll leave you in there next time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1347391096": {
+   "kind": "text",
+   "parent": 435360300,
+   "children": [
+    600386825
+   ],
+   "actor": null,
+   "text": "All that tension and no reward? You’re killing me here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "600386825": {
+   "kind": "text",
+   "parent": -1347391096,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "You’re lucky I don’t bite your throat out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "645654912": {
+   "kind": "text",
+   "parent": 113621615,
+   "actor": "Astrid",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Screw it. You deserve to know.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1670613775": {
+   "kind": "choice",
+   "parent": 113621615,
+   "children": [
+    -1921804574,
+    1516173822,
+    850961577
+   ],
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "I’m a vampire.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1238144901": {
+   "kind": "text",
+   "parent": 113621615,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Not the cape-wearing, Dracula-ass type. The real kind.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1228947897": {
+   "kind": "text",
+   "parent": 113621615,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "And that house? It’s death to people like me. Or it’s supposed to be.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-18320211": {
+   "kind": "choice",
+   "parent": 113621615,
+   "children": [
+    181730271,
+    487868638,
+    -1834056432
+   ],
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "I need your help, {PC}... I... I'll be here next week. Please. I hope you'll be there.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1921804574": {
+   "kind": "text",
+   "parent": 1670613775,
+   "actor": null,
+   "text": "What!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1516173822": {
+   "kind": "text",
+   "parent": 1670613775,
+   "children": [
+    -707975722
+   ],
+   "actor": null,
+   "text": "Yeah, I kinda knew.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "850961577": {
+   "kind": "text",
+   "parent": 1670613775,
+   "actor": null,
+   "text": "(Say nothing)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-707975722": {
+   "kind": "text",
+   "parent": 1516173822,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "That obvious, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "181730271": {
+   "kind": "text",
+   "parent": -18320211,
+   "children": [
+    -1159860686
+   ],
+   "actor": null,
+   "text": "I'll keep try to help you, Astrid.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "487868638": {
+   "kind": "text",
+   "parent": -18320211,
+   "children": [
+    709982980
+   ],
+   "actor": null,
+   "text": "No promises.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1834056432": {
+   "kind": "text",
+   "parent": -18320211,
+   "children": [
+    1067307584
+   ],
+   "actor": null,
+   "text": "What are we looking for in the first place?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1067307584": {
+   "kind": "text",
+   "parent": -1834056432,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "It's... Nothing you'd care about. Please, {PC}. It's important for me. Just be there, yeah?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "709982980": {
+   "kind": "text",
+   "parent": 487868638,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Yeah, of course... No promises.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1159860686": {
+   "kind": "text",
+   "parent": 181730271,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Thanks, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1614118897": {
+   "kind": "text",
+   "parent": 835620861,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Next time… I’m getting it. I swear.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1521318425": {
+   "kind": "choice",
+   "parent": -1232073228,
+   "children": [
+    4126853,
+    -1225874065,
+    -1695818890
+   ],
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Buried under the floorboards, inside that chest... like it was nothing.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "4126853": {
+   "kind": "text",
+   "parent": 1521318425,
+   "actor": null,
+   "text": "What is it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1225874065": {
+   "kind": "text",
+   "parent": 1521318425,
+   "children": [
+    375173791
+   ],
+   "actor": null,
+   "text": "She wanted you to chase it. To suffer for it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "375173791": {
+   "kind": "text",
+   "parent": -1225874065,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Yeah. That’s her game. Pain over time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1695818890": {
+   "kind": "text",
+   "parent": 1521318425,
+   "children": [
+    -1498918003
+   ],
+   "actor": null,
+   "text": "So… we finally won one.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1498918003": {
+   "kind": "text",
+   "parent": -1695818890,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Yeah. We did.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-95060057": {
+   "kind": "text",
+   "parent": -1232073228,
+   "actor": "Astrid",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "It's a photo. Of my...  My mother. The only real thing I had left of her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-676486393": {
+   "kind": "text",
+   "parent": -1232073228,
+   "actor": "Astrid",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Noire knew that. She took it just to hurt me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "55291398": {
+   "kind": "text",
+   "parent": -1232073228,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "I didn’t tell you because… I didn’t want it to be real. Losing it felt like losing her again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-978804357": {
+   "kind": "choice",
+   "parent": -1232073228,
+   "children": [
+    1848333612,
+    444405441,
+    773195343
+   ],
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "But you helped me get it back. That matters more than you know.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1180686048": {
+   "kind": "text",
+   "parent": -1232073228,
+   "actor": "Astrid",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Y’know… It’s kinda fun messing with Noire.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1337054380": {
+   "kind": "text",
+   "parent": -1232073228,
+   "actor": "Astrid",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Creeping through her freak-show mansion, dodging curses, stealing shit she forgot she even had...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "953488567": {
+   "kind": "text",
+   "parent": -1232073228,
+   "actor": "Astrid",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "We could keep doing it. Might find some cool shinies. Or maybe just fuck with her for the hell of it.\n",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[Astrid-VampireQuestDone] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Astrid-VampireQuestDone",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "42744850": {
+   "kind": "text",
+   "parent": -1232073228,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Not everything needs a reason, right? ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1848333612": {
+   "kind": "text",
+   "parent": -978804357,
+   "children": [
+    -1552489688
+   ],
+   "actor": null,
+   "text": "Noire turned you, didn’t she?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "444405441": {
+   "kind": "text",
+   "parent": -978804357,
+   "children": [
+    -619519547,
+    1337323524
+   ],
+   "actor": null,
+   "text": "You’re afraid of forgetting her face.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "773195343": {
+   "kind": "text",
+   "parent": -978804357,
+   "children": [
+    -597109365
+   ],
+   "actor": null,
+   "text": "You ever think about getting a digital copy made?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-597109365": {
+   "kind": "text",
+   "parent": 773195343,
+   "actor": "Astrid",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That's... genius. I... Oh my god... Why didn't I think of that?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-619519547": {
+   "kind": "text",
+   "parent": 444405441,
+   "actor": "Astrid",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Terrified.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1552489688": {
+   "kind": "text",
+   "parent": 1848333612,
+   "actor": "Astrid",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Yeah. She waited. Watched. Waited ‘til I had no one left… and then offered me eternity like it was a fucking gift.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1337323524": {
+   "kind": "text",
+   "parent": 444405441,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "It’s already blurry in my head some nights. That photo’s the only thing keeping her real.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-949996550": {
+   "kind": "text",
+   "parent": -1742441314,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "I haven’t had this much fun since I set her curtains on fire in ‘92.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-54869346": {
+   "kind": "text",
+   "parent": -1742441314,
+   "actor": "Astrid",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "...Shit. I’m actually wet right now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "47171625": {
+   "kind": "choice",
+   "parent": -1742441314,
+   "children": [
+    121856785,
+    142969386
+   ],
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "I feel like I'm about to make a mistake...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "121856785": {
+   "kind": "text",
+   "parent": 47171625,
+   "children": [
+    -1973574556,
+    360346714,
+    143884769,
+    -155772158,
+    312684332,
+    -1662112507,
+    -581236233,
+    323038028,
+    676843416,
+    -707636310,
+    -960813417,
+    -60553391
+   ],
+   "actor": null,
+   "text": "Then let’s make it together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "142969386": {
+   "kind": "text",
+   "parent": 47171625,
+   "children": [
+    190904358
+   ],
+   "actor": null,
+   "text": "Yeah, let's keep our heads focused.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1973574556": {
+   "kind": "text",
+   "parent": 121856785,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Fuck... All that blood... It's so big and throbbing...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AstridAnal (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AstridAnal (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AstridAnal (0)"
+      }
+     }
+    }
+   ]
+  },
+  "190904358": {
+   "kind": "text",
+   "parent": 142969386,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Yeah... Let's see how long until one of us breaks...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "143884769": {
+   "kind": "text",
+   "parent": 121856785,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Mmm...there it is. Feel how hungry I am already? Just from thinking about it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AstridAnal (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AstridAnal (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AstridAnal (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-155772158": {
+   "kind": "choice",
+   "parent": 121856785,
+   "children": [
+    -725955629,
+    1961779486,
+    1357837389
+   ],
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "I'll go slow at first, okay? I want to savor every inch.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "312684332": {
+   "kind": "text",
+   "parent": 121856785,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Ah...fuck...so big. You're stretching me so good. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AstridAnal (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AstridAnal (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AstridAnal (3)"
+      }
+     }
+    }
+   ]
+  },
+  "-1662112507": {
+   "kind": "text",
+   "parent": 121856785,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Don't stop moving...just like that...a little faster now. Mmm.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "676843416": {
+   "kind": "text",
+   "parent": 121856785,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "That's it, baby...fill me up...give me all that hot cum...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AstridAnal (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AstridAnal (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AstridAnal (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AstridAnal (0) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AstridAnal (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/AstridAnal (0)"
+      }
+     }
+    }
+   ]
+  },
+  "-60553391": {
+   "kind": "text",
+   "parent": 121856785,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "What we have... Right now, the way it is... Is perfect...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[astrid-analdone] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "astrid-analdone",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "360346714": {
+   "kind": "text",
+   "parent": 121856785,
+   "children": [
+    212743933,
+    -645989421
+   ],
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "You know, I was thinking...I'm not ready for any little vampire surprises just yet. So I had an idea.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[astrid-analdone] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "astrid-analdone",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "212743933": {
+   "kind": "text",
+   "parent": 360346714,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "How about you take me...somewhere a little tighter? A little more...private.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-645989421": {
+   "kind": "text",
+   "parent": 360346714,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Just you and me, and that beautiful cock of yours buried in my ass.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "323038028": {
+   "kind": "choice",
+   "parent": 121856785,
+   "children": [
+    1674188547,
+    -607415471,
+    1707671363
+   ],
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": " Ah! Right there...that's the spot.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-707636310": {
+   "kind": "text",
+   "parent": 121856785,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Ah... I'm coming too... I'm... Hngghha... Hngaah~ ... fuck... so good...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-960813417": {
+   "kind": "text",
+   "parent": 121856785,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "That was perfect...just what I needed...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1674188547": {
+   "kind": "text",
+   "parent": 323038028,
+   "actor": null,
+   "text": "(Fill her ass)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-607415471": {
+   "kind": "text",
+   "parent": 323038028,
+   "actor": null,
+   "text": "F-Fuck, Astrid... I'm close... I'll cum inside of your...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1707671363": {
+   "kind": "text",
+   "parent": 323038028,
+   "actor": null,
+   "text": "Fuck, it's soft and... I'll fill your ass up... Hngaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-725955629": {
+   "kind": "text",
+   "parent": -155772158,
+   "actor": null,
+   "text": "You have all the time in the world, Astrid.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1961779486": {
+   "kind": "text",
+   "parent": -155772158,
+   "actor": null,
+   "text": "Fuck, look at dat ass...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1357837389": {
+   "kind": "text",
+   "parent": -155772158,
+   "actor": null,
+   "text": "Astrid... I... This feels so good...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-581236233": {
+   "kind": "text",
+   "parent": 121856785,
+   "actor": "Astrid",
+   "expressionName": "neutral",
+   "text": "Kiss me, {PC}. I won't bite, I promise.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[inv-vampirespit] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "inv-vampirespit",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = Vampire Spit",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Vampire Spit"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[inv-vampirespit] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "inv-vampirespit",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "AlwaysActive_ChildrenInactive/Astrid_GhostHouseWon",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dialogue and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Astrid_CasualRed_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Astrid_CasualRed_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Astrid_CasualRed_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave3[scene-after-talk-tempbool] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "scene-after-talk-tempbool",
+        "list": "Core_NoSave3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core_NoSave2[2025-shortgo-saveONE] = None",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2025-shortgo-saveONE",
+        "list": "Core_NoSave2",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "none"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_9[Astrid-houseclears] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Astrid-houseclears",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

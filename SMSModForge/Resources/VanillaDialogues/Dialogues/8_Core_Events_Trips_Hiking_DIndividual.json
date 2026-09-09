@@ -1,0 +1,569 @@
+{
+ "id": "8_Core_Events/Trips/Hiking/DIndividual",
+ "name": "DIndividual",
+ "index": 4,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Josef",
+  "You"
+ ],
+ "roots": [
+  -1008694710,
+  1993322081,
+  -1436414309
+ ],
+ "nodes": {
+  "-1008694710": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Hey {D}, let’s chat for a bit.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1993322081": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -2146194675,
+    1008858734,
+    -1963669032,
+    1086959956
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Sure thing, {PC}. What’s on your mind?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2146194675": {
+   "kind": "text",
+   "parent": 1993322081,
+   "children": [
+    755258133
+   ],
+   "actor": null,
+   "text": "{D}, what’s the most important lesson life has taught you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1008858734": {
+   "kind": "text",
+   "parent": 1993322081,
+   "children": [
+    1382922952,
+    1025930738,
+    -1979350855,
+    -543265654,
+    918381206,
+    -500127952
+   ],
+   "actor": null,
+   "text": "Do you ever miss the way things used to be? ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1963669032": {
+   "kind": "text",
+   "parent": 1993322081,
+   "children": [
+    1030336074,
+    1853749611,
+    -1808571237,
+    -1632928628
+   ],
+   "actor": null,
+   "text": "What was your dream when you were my age?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1436414309": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Looks like Adrian is done collecting firewood. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "755258133": {
+   "kind": "text",
+   "parent": -2146194675,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Never take anything for granted. Life can change in an instant, and you have to appreciate what you have while you have it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1382922952": {
+   "kind": "text",
+   "parent": 1008858734,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I must admit that I do miss the days when I was able to think and talk about other things besides my struggles with finding a new job.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[DEBT-PAID-OFF] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DEBT-PAID-OFF",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1030336074": {
+   "kind": "text",
+   "parent": -1963669032,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I've always wanted to travel the world and experience different cultures and cuisines.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1632928628": {
+   "kind": "text",
+   "parent": -1963669032,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Life took a different turn, but I don’t regret it. We are very... privileged.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-543265654": {
+   "kind": "text",
+   "parent": 1008858734,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Sometimes. But I feel if things hadn't changed, we would have faced divorce sooner or later.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1086959956": {
+   "kind": "text",
+   "parent": 1993322081,
+   "actor": null,
+   "text": "[Just enjoy the silence]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1979350855": {
+   "kind": "text",
+   "parent": 1008858734,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Yes and no... I'm proud to see of how far you've come. You fixed my mistakes and have grown into a formidable man.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[DEBT-PAID-OFF] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DEBT-PAID-OFF",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1853749611": {
+   "kind": "text",
+   "parent": -1963669032,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "And then there’s all the different types of women. I always thought it would be fun to try it with an Asian lady.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1808571237": {
+   "kind": "text",
+   "parent": -1963669032,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Of course, no one comes close to the goddess that your {M} is.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1025930738": {
+   "kind": "text",
+   "parent": 1008858734,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "But that's just how things are now, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[DEBT-PAID-OFF] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DEBT-PAID-OFF",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "918381206": {
+   "kind": "text",
+   "parent": 1008858734,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Anna and I love each other, and you're our {S}, so of course we love you too. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-500127952": {
+   "kind": "text",
+   "parent": 1008858734,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I'm glad we all get to experience this without things falling apart... And Anna, she's so happy recently. She can't stop smiling.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/Trips/Hiking/Individualtime",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play DIndividual and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef_sprot to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef_sprot",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef_sprot"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

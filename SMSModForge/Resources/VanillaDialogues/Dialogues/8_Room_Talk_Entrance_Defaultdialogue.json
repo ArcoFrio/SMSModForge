@@ -1,0 +1,869 @@
+{
+ "id": "8_Room_Talk/Entrance/Defaultdialogue",
+ "name": "Defaultdialogue",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Josef"
+ ],
+ "roots": [
+  150309222
+ ],
+ "nodes": {
+  "150309222": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1921546724,
+    2136961072,
+    -1067868651,
+    -907942394,
+    2004539199
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I won't let {M}, Adrian or you down. I promise.",
+   "tag": "root",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1921546724": {
+   "kind": "text",
+   "parent": 150309222,
+   "children": [
+    28088277,
+    963945231
+   ],
+   "actor": null,
+   "text": "How about we share a beer? [Give Beer]",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Inventory[Beer] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Beer",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1067868651": {
+   "kind": "text",
+   "parent": 150309222,
+   "children": [
+    1489261888
+   ],
+   "actor": null,
+   "text": "What's going on in your mind?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-907942394": {
+   "kind": "text",
+   "parent": 150309222,
+   "children": [
+    -1646948673,
+    1741759373
+   ],
+   "actor": null,
+   "text": "How are you and {M} doing?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2004539199": {
+   "kind": "text",
+   "parent": 150309222,
+   "children": [
+    1522635947
+   ],
+   "actor": null,
+   "text": "See you around, {D}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1522635947": {
+   "kind": "text",
+   "parent": 2004539199,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Of course.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1646948673": {
+   "kind": "text",
+   "parent": -907942394,
+   "children": [
+    -1676717553
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Things have been... better.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[d-invited-to-basement] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "d-invited-to-basement",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1489261888": {
+   "kind": "text",
+   "parent": -1067868651,
+   "children": [
+    -1785816770,
+    693392316,
+    -271526156,
+    1270816554,
+    -1753750561
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Do you remember that trip we took to Paris way back then?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "963945231": {
+   "kind": "text",
+   "parent": -1921546724,
+   "children": [
+    -1584260059
+   ],
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "That sounds... great. Thanks, pal.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Inventory[Beer] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Beer",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[beer-given] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "beer-given",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[beer-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "beer-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[josefbeergiven2025] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "josefbeergiven2025",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1676717553": {
+   "kind": "choice",
+   "parent": -1646948673,
+   "children": [
+    -679349332,
+    1408310326,
+    -605851050
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I feel like your {M} is distancing herself from me... The bedroom has been awfully quiet recently if you catch my drift.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-679349332": {
+   "kind": "text",
+   "parent": -1676717553,
+   "children": [
+    -1796106967
+   ],
+   "actor": null,
+   "text": "Ew, gross!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1408310326": {
+   "kind": "text",
+   "parent": -1676717553,
+   "children": [
+    821000622
+   ],
+   "actor": null,
+   "text": "Things will get better, I'm sure of it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-605851050": {
+   "kind": "text",
+   "parent": -1676717553,
+   "children": [
+    -114496695
+   ],
+   "actor": null,
+   "text": "Maybe you two are just growing apart?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-114496695": {
+   "kind": "text",
+   "parent": -605851050,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Don't... Don't say that. I love your {M}. maybe I must tell her more often...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "821000622": {
+   "kind": "text",
+   "parent": 1408310326,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I hope so.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1796106967": {
+   "kind": "text",
+   "parent": -679349332,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Heh. Sorry, pal.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1785816770": {
+   "kind": "text",
+   "parent": 1489261888,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Well, halfway through our vacation, a deal I was counting on back home fell through. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "693392316": {
+   "kind": "text",
+   "parent": 1489261888,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Suddenly, we were short on cash, and I didn’t want to cut the trip short or worry you and your {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-271526156": {
+   "kind": "text",
+   "parent": 1489261888,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I ended up selling my watch and my laptop. It wasn’t easy, but it was enough to cover the remainder of our trip. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1270816554": {
+   "kind": "text",
+   "parent": 1489261888,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I wanted to make sure we could enjoy the rest of our time there without any worries.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1753750561": {
+   "kind": "text",
+   "parent": 1489261888,
+   "actor": "Josef",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "We've struggled before. But this time it's different. I feel like I'm losing everything...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1584260059": {
+   "kind": "text",
+   "parent": 963945231,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Ah, nice. It's even my favorite brand.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "28088277": {
+   "kind": "text",
+   "parent": -1921546724,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Thanks, {PC}. But one is more than enough for today.",
+   "jump": {
+    "mode": "Exit",
+    "to": "root"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[josefbeergiven2025] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "josefbeergiven2025",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1741759373": {
+   "kind": "text",
+   "parent": -907942394,
+   "children": [
+    -189044634
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I never expected for life to take such a turn...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[d-invited-to-basement] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "d-invited-to-basement",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-189044634": {
+   "kind": "text",
+   "parent": 1741759373,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "But I'm glad it did? Your {M} and I are talking again, having fun and she's... She's happy.",
+   "jump": {
+    "mode": "Jump",
+    "to": "root"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2136961072": {
+   "kind": "text",
+   "parent": 150309222,
+   "children": [
+    -1119493495,
+    768783804,
+    -86126928
+   ],
+   "actor": null,
+   "text": "You deserve this. [Give Whiskey]",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Inventory[Whiskey] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Whiskey",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-D-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-D-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1119493495": {
+   "kind": "text",
+   "parent": 2136961072,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Appreciate it, {S}, but I like to keep my liver functional so I have to pass on another bottle.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[josefbeergiven2025] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "josefbeergiven2025",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-86126928": {
+   "kind": "text",
+   "parent": 2136961072,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "That's just what I needed. Thank you, pal.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[D-omega-drunk] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-omega-drunk",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Inventory[Whiskey] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Whiskey",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[josefbeergiven2025] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "josefbeergiven2025",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "768783804": {
+   "kind": "text",
+   "parent": 2136961072,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "My, my... This is quite the expensive bottle....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Entrance",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Defaultdialogue and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[josef-smoke-catched] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "josef-smoke-catched",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active JosefSmoking to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "JosefSmoking",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/JosefSmoking"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

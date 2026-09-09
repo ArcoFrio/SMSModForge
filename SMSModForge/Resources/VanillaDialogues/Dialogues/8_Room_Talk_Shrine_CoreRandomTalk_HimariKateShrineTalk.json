@@ -1,0 +1,1039 @@
+{
+ "id": "8_Room_Talk/Shrine/CoreRandomTalk/HimariKateShrineTalk",
+ "name": "HimariKateShrineTalk",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Himari",
+  "Kate"
+ ],
+ "roots": [
+  -417485793,
+  975002162,
+  567717673,
+  1733759432,
+  -231963237,
+  1977977210,
+  608457330
+ ],
+ "nodes": {
+  "975002162": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1657589182,
+    -324761003
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Pfft. He let you swing a dagger?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_11[spirit-activecomp] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "spirit-activecomp",
+        "list": "Events_11",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1657589182": {
+   "kind": "text",
+   "parent": 975002162,
+   "actor": "Kate",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I swung it just fine!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-324761003": {
+   "kind": "text",
+   "parent": 975002162,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Sure. And next time, maybe he’ll give a sword to a houseplant too.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "567717673": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1152986625,
+    -1128234540
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "I stayed right by his side the whole time!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_11[spirit-activecomp] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "spirit-activecomp",
+        "list": "Events_11",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1152986625": {
+   "kind": "text",
+   "parent": 567717673,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "How brave. Clinging to him like a wet towel.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1128234540": {
+   "kind": "text",
+   "parent": 567717673,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "W-well… he didn’t seem to mind!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1733759432": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -779361933,
+    -706703381
+   ],
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "If he dies because you tripped, I’m haunting you first.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_11[spirit-activecomp] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "spirit-activecomp",
+        "list": "Events_11",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-779361933": {
+   "kind": "text",
+   "parent": 1733759432,
+   "actor": "Kate",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "You’ll have to fight me in the afterlife too, then!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-706703381": {
+   "kind": "text",
+   "parent": 1733759432,
+   "actor": "Himari",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh, I will. And I won’t hold back there either.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-417485793": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -50204570,
+    765469687,
+    -1456318899,
+    1790845857,
+    1175207579,
+    976494504,
+    -1787515435,
+    1692822102,
+    736564109,
+    -1756012334,
+    -1626443584
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "…Wait. You’re helping him too?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[katehimarispirit-firsttalk] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katehimarispirit-firsttalk",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-231963237": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1533861701,
+    -812765722
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "You were really close to him out there...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_11[spirit-activecomp] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "spirit-activecomp",
+        "list": "Events_11",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1977977210": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1291644660,
+    112486293
+   ],
+   "actor": "Kate",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I was just... worried. He looked tired.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_11[spirit-activecomp] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "spirit-activecomp",
+        "list": "Events_11",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "608457330": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    668203837,
+    958116098
+   ],
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Next time stay home and bake cookies or something.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_11[spirit-activecomp] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "spirit-activecomp",
+        "list": "Events_11",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "668203837": {
+   "kind": "text",
+   "parent": 608457330,
+   "actor": "Kate",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "M-maybe I will! He likes my cookies!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1291644660": {
+   "kind": "text",
+   "parent": 1977977210,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "He's strong. Unlike some people who panic when wind blows.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1533861701": {
+   "kind": "text",
+   "parent": -231963237,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "I was protecting his blind spots. Obviously.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-812765722": {
+   "kind": "text",
+   "parent": -231963237,
+   "actor": "Kate",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "R-really? Because it looked like you were aiming for his lips!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "112486293": {
+   "kind": "text",
+   "parent": 1977977210,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "That wind had a face and claws!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "958116098": {
+   "kind": "text",
+   "parent": 608457330,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Oh yeah? Bet he likes my blade work more.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-50204570": {
+   "kind": "text",
+   "parent": -417485793,
+   "actor": "Himari",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Tch. You say that like it’s a surprise. I don’t just sell cars, you know.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_11[katehimarispirit-firsttalk] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "katehimarispirit-firsttalk",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1456318899": {
+   "kind": "text",
+   "parent": -417485793,
+   "actor": "Kate",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Didn’t know you were into ghost hunting.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1790845857": {
+   "kind": "choice",
+   "parent": -417485793,
+   "children": [
+    -2011726299,
+    1231695079,
+    -373259996
+   ],
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Didn’t know grocery girls were into getting possessed.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "765469687": {
+   "kind": "text",
+   "parent": -417485793,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "I mean… I know you from the mall. I see you like once a week yelling at interns.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2011726299": {
+   "kind": "text",
+   "parent": 1790845857,
+   "actor": null,
+   "text": "Didn’t expect you two to run into each other.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1231695079": {
+   "kind": "text",
+   "parent": 1790845857,
+   "actor": null,
+   "text": "Wow. The mall girls have come to fight demons.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-373259996": {
+   "kind": "text",
+   "parent": 1790845857,
+   "actor": null,
+   "text": "Now this is a power duo I didn’t know I needed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1175207579": {
+   "kind": "text",
+   "parent": -417485793,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Don’t lump me in with her. I run a business. She scans cereal.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "976494504": {
+   "kind": "text",
+   "parent": -417485793,
+   "actor": "Kate",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "At least I don’t sell overpriced tires...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1787515435": {
+   "kind": "text",
+   "parent": -417485793,
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Say that again when you’re not hiding behind {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1692822102": {
+   "kind": "text",
+   "parent": -417485793,
+   "actor": "Kate",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Why didn’t you tell me she was helping too!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "736564109": {
+   "kind": "choice",
+   "parent": -417485793,
+   "children": [
+    -1664930173,
+    -1016533080,
+    2099426575
+   ],
+   "actor": "Himari",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "No. {PC} should have told me, you... ninja-themed marshmallow. ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1664930173": {
+   "kind": "text",
+   "parent": 736564109,
+   "children": [
+    38281996,
+    826869632
+   ],
+   "actor": null,
+   "text": "I don’t mind being the prize if you’re both fighting for me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "38281996": {
+   "kind": "text",
+   "parent": -1664930173,
+   "actor": "Kate",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "W-we are not fighting over you!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1016533080": {
+   "kind": "text",
+   "parent": 736564109,
+   "children": [
+    -293936681,
+    -176285805
+   ],
+   "actor": null,
+   "text": "You're both important to me. I didn’t want drama.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-293936681": {
+   "kind": "text",
+   "parent": -1016533080,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Okay… fair. Still kind of wish I knew.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2099426575": {
+   "kind": "text",
+   "parent": 736564109,
+   "children": [
+    127593124,
+    19767788
+   ],
+   "actor": null,
+   "text": "Guess I unlocked the “rival girls discover each other” event.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "127593124": {
+   "kind": "text",
+   "parent": 2099426575,
+   "actor": "Kate",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "If this were a game, I’d be the true route...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "826869632": {
+   "kind": "text",
+   "parent": -1664930173,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "...Yet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-176285805": {
+   "kind": "text",
+   "parent": -1016533080,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Next time? Tell me. I don’t like surprises I didn’t plan.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "19767788": {
+   "kind": "text",
+   "parent": 2099426575,
+   "actor": "Himari",
+   "expressionName": "neutral",
+   "text": "Don't test me, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1756012334": {
+   "kind": "text",
+   "parent": -417485793,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Great. Now I have to fight spirits and survive her too.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1626443584": {
+   "kind": "text",
+   "parent": -417485793,
+   "actor": "Himari",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Don’t worry. I’ll carry you if you trip.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Shrine/CoreRandomTalk",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play HimariKateShrineTalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[himari-spiritfightunlocked] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "himari-spiritfightunlocked",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_11[kate-spiritfightunlocked] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-spiritfightunlocked",
+        "list": "Events_11",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "chance",
+     "type": "ConditionChance",
+     "title": "If 0.5 chance to pass",
+     "fields": {
+      "m_Threshold": {
+       "kind": "value",
+       "value": 0.5
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HimariBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HimariBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Kateninjabust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Kateninjabust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Kateninjabust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/HimariBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Kateninjabust/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

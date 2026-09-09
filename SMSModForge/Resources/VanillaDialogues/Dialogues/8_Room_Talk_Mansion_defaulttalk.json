@@ -1,0 +1,798 @@
+{
+ "id": "8_Room_Talk/Mansion/defaulttalk",
+ "name": "defaulttalk",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Gabriel",
+  "Haniya"
+ ],
+ "roots": [
+  1158564504
+ ],
+ "nodes": {
+  "1158564504": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -801684138,
+    1270408850,
+    354056752,
+    1917417706,
+    490019374,
+    -182816597
+   ],
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "{PC}! Something on your mind?",
+   "tag": "star",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-801684138": {
+   "kind": "text",
+   "parent": 1158564504,
+   "children": [
+    2105977516,
+    1256439296,
+    -1675428606,
+    827452770
+   ],
+   "actor": null,
+   "text": "You two seem pretty wealthy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1270408850": {
+   "kind": "text",
+   "parent": 1158564504,
+   "children": [
+    -188145124,
+    2005223276,
+    2009407634,
+    -831031478,
+    695423920,
+    1168848667
+   ],
+   "actor": null,
+   "text": "How did you two meet?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "354056752": {
+   "kind": "text",
+   "parent": 1158564504,
+   "children": [
+    1963288893,
+    987735346,
+    -923945354,
+    1491914372
+   ],
+   "actor": null,
+   "text": "Are you guys religious?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1917417706": {
+   "kind": "text",
+   "parent": 1158564504,
+   "children": [
+    -900968269,
+    734496301,
+    -2006432887
+   ],
+   "actor": null,
+   "text": "Who else did you teach?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-182816597": {
+   "kind": "text",
+   "parent": 1158564504,
+   "children": [
+    -752022701
+   ],
+   "actor": null,
+   "text": "I should go.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-752022701": {
+   "kind": "text",
+   "parent": -182816597,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Have a safe drive home!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-900968269": {
+   "kind": "text",
+   "parent": 1917417706,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "You’re actually the first. I’ve always wanted to mentor someone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1963288893": {
+   "kind": "text",
+   "parent": 354056752,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "I am not, but my wife is. She...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-188145124": {
+   "kind": "text",
+   "parent": 1270408850,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Do you want to tell the story?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2105977516": {
+   "kind": "text",
+   "parent": -801684138,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Well, to be honest, most of the wealth comes from Haniya’s side of the family.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1256439296": {
+   "kind": "text",
+   "parent": -801684138,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Yes, my family has been very fortunate over the years.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "734496301": {
+   "kind": "text",
+   "parent": 1917417706,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Gabriel’s very selective. He sees something special in you, which is why he’s offering to mentor you. It’s a big deal.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2006432887": {
+   "kind": "text",
+   "parent": 1917417706,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "I’m excited to see where this journey takes us. I believe you have what it takes to go far.",
+   "jump": {
+    "mode": "Jump",
+    "to": "star"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "987735346": {
+   "kind": "text",
+   "parent": 354056752,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "I can speak for myself, Gabriel.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2005223276": {
+   "kind": "text",
+   "parent": 1270408850,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": " We met at a charity auction. I had donated a couple of my photographs to be auctioned off, and Haniya was there representing a local charity.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-923945354": {
+   "kind": "text",
+   "parent": 354056752,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "I’m a devout Muslim, and my faith guides me every day.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1491914372": {
+   "kind": "text",
+   "parent": 354056752,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "It’s a big part of who I am, and Gabriel has always been supportive of that.",
+   "jump": {
+    "mode": "Jump",
+    "to": "star"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2009407634": {
+   "kind": "text",
+   "parent": 1270408850,
+   "actor": "Haniya",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yes, and I was so determined to get one of his pieces. I ended up in a bidding war with another guest and won. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-831031478": {
+   "kind": "text",
+   "parent": 1270408850,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Afterwards, I went to thank him for the beautiful photo, and we got to talking.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "695423920": {
+   "kind": "text",
+   "parent": 1270408850,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "We spent the entire evening chatting about photography, our passions, and life in general. There was an instant connection.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1168848667": {
+   "kind": "text",
+   "parent": 1270408850,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "And he was kind enough to offer me a private tour of his studio the next day. ",
+   "jump": {
+    "mode": "Jump",
+    "to": "star"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1675428606": {
+   "kind": "text",
+   "parent": -801684138,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "I’ve made a decent living with my photography, but it’s Haniya’s family that’s provided a lot of our financial stability.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "827452770": {
+   "kind": "text",
+   "parent": -801684138,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "And Gabriel has contributed so much in other ways. His talent and passion are invaluable. ",
+   "jump": {
+    "mode": "Jump",
+    "to": "star"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "490019374": {
+   "kind": "text",
+   "parent": 1158564504,
+   "children": [
+    1133411882,
+    2069235014,
+    -797779865,
+    133799637,
+    1962095184,
+    545471774,
+    894910030,
+    735899099,
+    395716103,
+    1586091200,
+    1779184510,
+    -2056435138,
+    -1083188649,
+    -1064875834
+   ],
+   "actor": null,
+   "text": "You two want to have some fun?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[gabriel-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabriel-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[gabriel-threesome-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabriel-threesome-done",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1133411882": {
+   "kind": "text",
+   "parent": 490019374,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "I was hoping you would ask us... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2069235014": {
+   "kind": "text",
+   "parent": 490019374,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Careful, {PC}. She might won't let you leave if she gets used to this, haha.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-797779865": {
+   "kind": "text",
+   "parent": 490019374,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "God, yes. That's it... Wait a second, {PC}. Allow Gabriel to work my pussy for a bit... before you join in...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HinaFinal (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HinaFinal (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/HinaFinal (2)"
+      }
+     }
+    }
+   ]
+  },
+  "133799637": {
+   "kind": "text",
+   "parent": 490019374,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Take your time, my flower. Hngg... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1962095184": {
+   "kind": "text",
+   "parent": 490019374,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Alright, I think I'm ready. Yallah, {PC}, give me that white cock of yours...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "545471774": {
+   "kind": "text",
+   "parent": 490019374,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Fuck... That's it... Two fat cocks...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HinaFinal_DPstart to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HinaFinal_DPstart",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/HinaFinal_DPstart"
+      }
+     }
+    }
+   ]
+  },
+  "894910030": {
+   "kind": "text",
+   "parent": 490019374,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Do you want us to go slower this time, my flower?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "735899099": {
+   "kind": "text",
+   "parent": 490019374,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "N-No... Go hard. Go fast... I want my legs to be jelly afterwards..",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[gabriel-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabriel-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "395716103": {
+   "kind": "text",
+   "parent": 490019374,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "As you wish... Come on, {PC}. You heard my wife... Heh...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1586091200": {
+   "kind": "text",
+   "parent": 490019374,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "Yessshh... Yes... I'm getting there... Harder...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1779184510": {
+   "kind": "text",
+   "parent": 490019374,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "God, forgive me. I'm cumming! I'm cuming on two cocks!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HinaFinal_DP to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HinaFinal_DP",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/HinaFinal_DP"
+      }
+     }
+    }
+   ]
+  },
+  "-2056435138": {
+   "kind": "text",
+   "parent": 490019374,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Here it comes!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1083188649": {
+   "kind": "text",
+   "parent": 490019374,
+   "actor": "Haniya",
+   "expressionName": "neutral",
+   "text": "I'm... Out of... Breath... One... Second...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1064875834": {
+   "kind": "text",
+   "parent": 490019374,
+   "actor": "Gabriel",
+   "expressionName": "neutral",
+   "text": "Take all the time you need, Haniya.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Mansion",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play defaulttalk and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Haniya_dress to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Haniya_dress",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Haniya_dress"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Haniya_bunnysuit to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Haniya_bunnysuit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Haniya_bunnysuit"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Haniya_nude to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Haniya_nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Haniya_nude"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Haniya to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Haniya",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Haniya"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Gabriel_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Gabriel_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Gabriel_Bust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[gabriel-met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gabriel-met",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

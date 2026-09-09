@@ -1,0 +1,636 @@
+{
+ "id": "8_Room_Talk/BRoom/JosefLeftAdriantalk",
+ "name": "JosefLeftAdriantalk",
+ "index": 7,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian"
+ ],
+ "roots": [
+  -1142407864,
+  -1618551032
+ ],
+ "nodes": {
+  "-1142407864": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1038916358,
+    -1264333564
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "So, um... I spoke with {D} on the phone.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-B-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-B-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1038916358": {
+   "kind": "choice",
+   "parent": -1142407864,
+   "children": [
+    377380401,
+    146019027
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "He... He seems to be really angry at you and {M}... He told me I could move to his new place...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1264333564": {
+   "kind": "choice",
+   "parent": -1142407864,
+   "children": [
+    854694299,
+    693987619,
+    1272281259
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I... I gotta think about it... Jesus, man. What did you do?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "377380401": {
+   "kind": "text",
+   "parent": -1038916358,
+   "children": [
+    -425346312
+   ],
+   "actor": null,
+   "text": "Maybe you should. He could need some support.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-425346312": {
+   "kind": "text",
+   "parent": 377380401,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Y-Yeah, he's probably lonely as fuck right now...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "146019027": {
+   "kind": "text",
+   "parent": -1038916358,
+   "children": [
+    1030272027
+   ],
+   "actor": null,
+   "text": "Forget about {D}. He's a loser.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1030272027": {
+   "kind": "text",
+   "parent": 146019027,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "W-What? I can't... What's wrong with you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "854694299": {
+   "kind": "text",
+   "parent": -1264333564,
+   "children": [
+    853252059
+   ],
+   "actor": null,
+   "text": "We did nothing. I think the stress made him go crazy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "853252059": {
+   "kind": "text",
+   "parent": 854694299,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Y-Yeah... I thought so... Shit... I need to find a way to help him...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "693987619": {
+   "kind": "text",
+   "parent": -1264333564,
+   "children": [
+    -144066513,
+    -1576350770
+   ],
+   "actor": null,
+   "text": "He probably couldn't handle being an useless loser.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-144066513": {
+   "kind": "text",
+   "parent": 693987619,
+   "actor": "Adrian",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "H-He's our {D}, man... What are you talking about... Jesus.... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1272281259": {
+   "kind": "text",
+   "parent": -1264333564,
+   "children": [
+    -489623680,
+    -2048029332
+   ],
+   "actor": null,
+   "text": "I fucked {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-489623680": {
+   "kind": "choice",
+   "parent": 1272281259,
+   "children": [
+    -1104347733,
+    -719500794,
+    290914577
+   ],
+   "actor": "Adrian",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Y-You did WHAT? ... N-No... So it's you who... I... How could you do that to {D}!? H-How could {M} do that!?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_2[Adrian-is-angry] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Adrian-is-angry",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1576350770": {
+   "kind": "text",
+   "parent": 693987619,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "If you don't want to help him, then I will....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1618551032": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1272547459,
+    -842992157
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "So... Uh, looks like {D} left... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-B-activated] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-B-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1272547459": {
+   "kind": "choice",
+   "parent": -1618551032,
+   "children": [
+    -146885534,
+    196484473,
+    1672905548
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "That means it's now our job to keep {M} satisfied?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-842992157": {
+   "kind": "text",
+   "parent": -1618551032,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Gotta say though... It still kinda sucks, I hope he's not doing too bad....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-146885534": {
+   "kind": "text",
+   "parent": -1272547459,
+   "children": [
+    -1343369418
+   ],
+   "actor": null,
+   "text": "Yeah, he can't compete with us.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "196484473": {
+   "kind": "text",
+   "parent": -1272547459,
+   "children": [
+    1152178882
+   ],
+   "actor": null,
+   "text": "I'm sure we can keep her more than satisfied.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1672905548": {
+   "kind": "text",
+   "parent": -1272547459,
+   "children": [
+    -1821173588
+   ],
+   "actor": null,
+   "text": "I'm the new {D} of the house.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1821173588": {
+   "kind": "text",
+   "parent": 1672905548,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I see... B-But don't expect me to call you daddy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1152178882": {
+   "kind": "text",
+   "parent": 196484473,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "True... I don't think that {D} is rocking two dicks...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1343369418": {
+   "kind": "text",
+   "parent": -146885534,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Y-Yeah... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2048029332": {
+   "kind": "text",
+   "parent": 1272281259,
+   "actor": "Adrian",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "No, no, no... L-Leave me alone. I don't want to see your fucking face in my room.... Leave, man...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1104347733": {
+   "kind": "text",
+   "parent": -489623680,
+   "children": [
+    1320657082
+   ],
+   "actor": null,
+   "text": "She was lonely, Adrian... And {D} wasn't there for her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-719500794": {
+   "kind": "text",
+   "parent": -489623680,
+   "children": [
+    -64785939
+   ],
+   "actor": null,
+   "text": "We started a Starmaker page to deal with the debt and then... Well, you know the rest.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "290914577": {
+   "kind": "text",
+   "parent": -489623680,
+   "children": [
+    352719746
+   ],
+   "actor": null,
+   "text": "{M}'s mine now, Adrian. You better get used to it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "352719746": {
+   "kind": "text",
+   "parent": 290914577,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Y-You're joking, right? W-What's wrong with YOU!? I.. I...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-64785939": {
+   "kind": "text",
+   "parent": -719500794,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I-I don't care, I don't want to hear it, {PC}... I... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1320657082": {
+   "kind": "text",
+   "parent": -1104347733,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "S-So you decided you had to FUCK her!? A-Are you insane, and {M} is... Oh god...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/BRoom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play JosefLeftAdriantalk and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[josef-is-gone-talk-done-adrian] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "josef-is-gone-talk-done-adrian",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_2[josef-is-gone-talk-done-adrian] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "josef-is-gone-talk-done-adrian",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

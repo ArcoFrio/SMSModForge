@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Linq;
@@ -107,6 +108,49 @@ public static class PackValidator
     /// who is not their child is a legitimate line, which is exactly why this
     /// is a note the author can dismiss rather than a rule.
     /// </summary>
+    /// <summary>
+    /// The lines of a conversation that are the author's to answer for.
+    /// <para/>
+    /// All of them for a dialogue the pack wrote. For one that EXTENDS a
+    /// vanilla conversation, only the lines the author added or changed: the
+    /// rest are the game's, they shipped in it, and telling somebody their
+    /// pack has a problem because Game Creator wrote a Choice with no options
+    /// in 2019 is noise they cannot act on. Worse, it buries the one warning
+    /// in a hundred that is actually theirs.
+    /// <para/>
+    /// "Changed" is decided by the same comparison that draws the change
+    /// markers beside the lines, so what is validated and what is shown as
+    /// edited can never drift apart.
+    /// <para/>
+    /// This is about REPORTING only. Every check that builds a set to
+    /// cross-reference against — which ids exist, which tags are taken, which
+    /// nodes a Choice offers — still walks the whole conversation, because a
+    /// new line's parent and a new jump's target are usually vanilla ones.
+    /// </summary>
+    private static Func<DialogueNodeDef, bool> AuthorsOwn(DialogueDef dialogue)
+    {
+        if (dialogue == null || !dialogue.IsVanillaBased) return _ => true;
+
+        var vanilla = VanillaDialogueCatalog.Open(dialogue.Source);
+        if (vanilla == null) return _ => true;   // never heard of it: check it all
+
+        var decided = new Dictionary<int, bool>();
+        return node =>
+        {
+            if (node == null) return false;
+            if (decided.TryGetValue(node.Id, out bool owned)) return owned;
+
+            var baseline = vanilla.Node(node.Id);
+
+            // A line the game does not have is one the author added.
+            owned = baseline == null
+                 || VanillaDialogueDelta.ChangedFields(node, baseline).Count > 0;
+
+            decided[node.Id] = owned;
+            return owned;
+        };
+    }
+
     private static void CheckKinWordsInText(List<ValidationIssue> issues, ModPack pack)
     {
         // The word, and the token that should almost always replace it.
@@ -119,8 +163,10 @@ public static class PackValidator
 
         foreach (var d in pack.Dialogues)
         {
+            var mine = AuthorsOwn(d);
             foreach (var n in d.Nodes)
             {
+                if (!mine(n)) continue;
                 string text = n.Text;
                 if (string.IsNullOrWhiteSpace(text)) continue;
 
@@ -137,6 +183,32 @@ public static class PackValidator
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// Everyone the game's own version of a conversation has a part for.
+    /// <para/>
+    /// Its declared roles plus anybody a line is actually given to — the two
+    /// are usually the same, and where they differ it is a line spoken by
+    /// somebody the conversation never declared, who is still plainly in it.
+    /// <para/>
+    /// Empty for a dialogue of the pack's own, and for one whose conversation
+    /// this build has never heard of, so neither stops being checked.
+    /// </summary>
+    private static HashSet<string> VanillaActors(DialogueDef dialogue)
+    {
+        var found = new HashSet<string>(System.StringComparer.OrdinalIgnoreCase);
+        if (dialogue == null || !dialogue.IsVanillaBased) return found;
+
+        var vanilla = VanillaDialogueCatalog.Open(dialogue.Source);
+        if (vanilla == null) return found;
+
+        foreach (string role in vanilla.Roles)
+            if (!string.IsNullOrEmpty(role)) found.Add(role);
+        foreach (var node in vanilla.Nodes.Values)
+            if (!string.IsNullOrEmpty(node.Actor)) found.Add(node.Actor!);
+
+        return found;
     }
 
     /// <summary>Whole-word, case-insensitive. Matching anywhere would flag
@@ -183,8 +255,10 @@ public static class PackValidator
                     foreach (var childId in n.Children)
                         optionIds.Add(childId);
 
+            var mine = AuthorsOwn(d);
             foreach (var n in d.Nodes)
             {
+                if (!mine(n)) continue;
                 if (!optionIds.Contains(n.Id)) continue;
                 if (n.ActionsOnStart == null || n.ActionsOnStart.Count == 0) continue;
 
@@ -216,8 +290,11 @@ public static class PackValidator
     private static void CheckChoicesWithoutOptions(List<ValidationIssue> issues, ModPack pack)
     {
         foreach (var d in pack.Dialogues)
+        {
+            var mine = AuthorsOwn(d);
             foreach (var n in d.Nodes)
             {
+                if (!mine(n)) continue;
                 if (n.Kind != DialogueNodeKind.Choice) continue;
                 if (n.Children != null && n.Children.Count > 0) continue;
 
@@ -230,6 +307,7 @@ public static class PackValidator
                     "every option under a Choice was saved as a Choice as well.",
                     "dialogue.choiceWithoutOptions"));
             }
+        }
     }
 
     /// <summary>
@@ -284,8 +362,11 @@ public static class PackValidator
         }
 
         foreach (var d in pack.Dialogues)
+        {
+            var mine = AuthorsOwn(d);
             foreach (var n in d.Nodes)
-                Sweep(n.Text, $"dialogues[{d.Key}].nodes[{n.Id}].text");
+                if (mine(n)) Sweep(n.Text, $"dialogues[{d.Key}].nodes[{n.Id}].text");
+        }
 
         // Button labels resolve the same syntax, live, every tick.
         foreach (var b in pack.MapButtons)
@@ -375,20 +456,45 @@ public static class PackValidator
                 a.Params.TryGetValue("target", out var scene))
                 Ref(scene, scenes, "a scene", "action.unknownScene", aw);
 
+            // Animation is a Scenes-category feature, and saying so here is
+            // the whole point: the runtime refuses it elsewhere, and an author
+            // who only finds out by reading a log has already shipped.
+            //
+            // A bust or a level layer is drawn on a rig with its own materials,
+            // masks and overlays, and animating one would break it in ways
+            // nothing here could explain. "Not yet" is a much better answer
+            // than a scene that silently does not move.
+            if (a.Type == NodeActionTypes.SetSprite &&
+                a.Params.TryGetValue("sprite", out var art) &&
+                SMSModForge.Shared.MediaKinds.IsAnimated(art ?? ""))
+            {
+                a.Params.TryGetValue("kind", out var target);
+                if (!string.Equals(target, "Scene", System.StringComparison.OrdinalIgnoreCase))
+                    issues.Add(new(Severity.Error, $"{aw}.sprite",
+                        $"'{art}' is animated, and animation is only supported for the Scenes " +
+                        $"category — this action targets '{target ?? "nothing"}'. Point it at a " +
+                        "scene, or use a still image here.",
+                        "action.animatedSpriteCategory"));
+            }
+
             if (a.Branches != null)
                 for (int i = 0; i < a.Branches.Count; i++)
                     Action(a.Branches[i].Action, $"{aw}.branch[{i}]");
         }
 
         foreach (var d in pack.Dialogues)
+        {
+            var mine = AuthorsOwn(d);
             foreach (var n in d.Nodes)
             {
+                if (!mine(n)) continue;
                 string nw = $"dialogues[{d.Key}].nodes[{n.Id}]";
                 for (int i = 0; i < n.ActionsOnStart.Count; i++)
                     Action(n.ActionsOnStart[i], $"{nw}.actionsOnStart[{i}]");
                 for (int i = 0; i < n.ActionsOnFinish.Count; i++)
                     Action(n.ActionsOnFinish[i], $"{nw}.actionsOnFinish[{i}]");
             }
+        }
 
         foreach (var r in pack.IntegrationRules)
         {
@@ -749,10 +855,25 @@ public static class PackValidator
             else if (!seenDialogueKeys.Add(d.Key))
                 issues.Add(new(Severity.Error, dWhere, $"Duplicate dialogue key '{d.Key}'", "dialogue.duplicateKey"));
 
+            // Where and when a dialogue starts is only the pack's business
+            // when the pack is the one starting it.
+            //
+            // An extension of one of the game's own conversations is never
+            // scheduled by the plugin at all: the room plays it, on the game's
+            // own gate, and the pack has no level condition BECAUSE it has no
+            // say. Asking one for a level is asking a question with no answer -
+            // and it is unanswerable, so the error could not be cleared. Read
+            // the gate beside the lines instead; VanillaDialogueSeed.StartGates
+            // names the room's level where there is one.
+            //
             // The level is what a dialogue is anchored to now — the roomtalk is
             // derived from it and only used for "Prioritize over vanilla", so
             // there is nothing to validate about the roomtalk itself.
-            if (string.IsNullOrWhiteSpace(d.LevelToken))
+            if (d.IsVanillaBased)
+            {
+                // Nothing here is theirs to get wrong.
+            }
+            else if (string.IsNullOrWhiteSpace(d.LevelToken))
             {
                 issues.Add(new(Severity.Error, $"{dWhere}.startConditions",
                     "Pick a level — the required level condition decides where this dialogue can start", "dialogue.noStartLevel"));
@@ -771,14 +892,22 @@ public static class PackValidator
                                       packVarNames, issues);
 
             // Build node-id set + tag set so jumps/children can be cross-checked.
+            //
+            // Every node goes into the sets, including the game's own: a new
+            // line's parent and a new jump's target are usually vanilla ones,
+            // and a set built from the author's lines alone would call those
+            // missing. Only the COMPLAINT is held back - an id or a tag the
+            // game reused is not something a pack can fix.
+            var mine = AuthorsOwn(d);
             var nodeIds = new HashSet<int>();
             var tags = new HashSet<string>();
             foreach (var n in d.Nodes)
             {
-                if (!nodeIds.Add(n.Id))
+                bool ours = mine(n);
+                if (!nodeIds.Add(n.Id) && ours)
                     issues.Add(new(Severity.Error, $"{dWhere}.nodes[id={n.Id}]",
                         $"Duplicate node id {n.Id}", "dialogue.duplicateNodeId"));
-                if (!string.IsNullOrEmpty(n.Tag) && !tags.Add(n.Tag))
+                if (!string.IsNullOrEmpty(n.Tag) && !tags.Add(n.Tag) && ours)
                     issues.Add(new(Severity.Warning, $"{dWhere}.nodes[id={n.Id}].tag",
                         $"Tag '{n.Tag}' is used by multiple nodes — jumps target the first one found", "dialogue.duplicateTag"));
             }
@@ -802,6 +931,7 @@ public static class PackValidator
 
             foreach (var n in d.Nodes)
             {
+                if (!mine(n)) continue;
                 var nWhere = $"{dWhere}.nodes[id={n.Id}]";
 
                 // An empty line is the one thing that reaches the game looking
@@ -823,9 +953,20 @@ public static class PackValidator
                 }
 
                 // Actor + expression sanity.
-                if (!string.IsNullOrEmpty(n.Actor) && !actorKeysInPack.Contains(n.Actor))
+                //
+                // A change to one of the game's own conversations speaks with
+                // the game's own cast: Anna and Adrian are not this pack's
+                // actors and never will be, and a line the author has not
+                // touched would otherwise be reported as a problem for saying
+                // what it already said. The conversation's own roles are
+                // therefore as good as a declared actor - which is also what
+                // lets a NEW line be given to somebody already in the scene.
+                if (!string.IsNullOrEmpty(n.Actor)
+                    && !actorKeysInPack.Contains(n.Actor)
+                    && !VanillaActors(d).Contains(n.Actor))
                     issues.Add(new(Severity.Warning, $"{nWhere}.actor",
-                        $"Actor '{n.Actor}' isn't defined in this pack", "node.unknownActor"));
+                        $"Actor '{n.Actor}' isn't defined in this pack, and isn't in the "
+                        + "conversation this extends", "node.unknownActor"));
 
                 // Children must exist.
                 foreach (var cid in n.Children)
@@ -1000,8 +1141,10 @@ public static class PackValidator
             var dw = $"dialogues.{d.Key}";
             for (int i = 0; i < d.StartConditions.Count; i++)
                 WalkCondition(d.StartConditions[i], $"{dw}.startConditions[{i}]");
+            var mine = AuthorsOwn(d);
             foreach (var n in d.Nodes)
             {
+                if (!mine(n)) continue;
                 var nw = $"{dw}.nodes[{n.Id}]";
                 for (int i = 0; i < n.Conditions.Count; i++)
                     WalkCondition(n.Conditions[i], $"{nw}.conditions[{i}]");
@@ -1275,6 +1418,11 @@ public static class PackValidator
             issues.Add(new(Severity.Error, aWhere, "Action type is required", "action.typeMissing"));
             return;
         }
+        // A vanilla step is known but not offered: it is placed by seeding a
+        // vanilla extension, never by an author, so it is missing from All on
+        // purpose and must not read as a typo here.
+        if (a.Type == NodeActionTypes.VanillaStep) return;
+
         if (System.Array.IndexOf(NodeActionTypes.All, a.Type) < 0)
         {
             issues.Add(new(Severity.Error, aWhere, $"Unknown action type '{a.Type}'", "action.unknownType"));

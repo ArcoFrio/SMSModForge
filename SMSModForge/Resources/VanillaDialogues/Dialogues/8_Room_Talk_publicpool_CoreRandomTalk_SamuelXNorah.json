@@ -1,0 +1,728 @@
+{
+ "id": "8_Room_Talk/publicpool/CoreRandomTalk/SamuelXNorah",
+ "name": "SamuelXNorah",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Norah",
+  "V_Samuel"
+ ],
+ "roots": [
+  975002162,
+  567717673,
+  1733759432,
+  -1899687699
+ ],
+ "nodes": {
+  "975002162": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1657589182,
+    -324761003
+   ],
+   "actor": "Norah",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Alice said “ratio’d” the other day and walked out. Is that a math thing or… is she angry?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1657589182": {
+   "kind": "text",
+   "parent": 975002162,
+   "actor": "V_Samuel",
+   "expression": 2,
+   "text": "Probably both. She’s balancing rebellion and cleavage—chaos. I meant chaos.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-324761003": {
+   "kind": "text",
+   "parent": 975002162,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Hmm. Maybe she just needs a better calculator.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "567717673": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1152986625,
+    -1128234540
+   ],
+   "actor": "Norah",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Do you think I should’ve worn something less bright? I feel like I’m glowing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1152986625": {
+   "kind": "text",
+   "parent": 567717673,
+   "actor": "V_Samuel",
+   "expression": 2,
+   "text": "It’s not the color. It’s just… hard not to notice how... supported you look. Emotionally. Supported emotionally.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1128234540": {
+   "kind": "text",
+   "parent": 567717673,
+   "actor": "Norah",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Aww, that’s so nice of you. I do try to be uplifting!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1733759432": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -779361933,
+    -706703381
+   ],
+   "actor": "Norah",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "I told her no more eyeliner until she’s married. Is that unreasonable?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation-Subchoice] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation-Subchoice",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-779361933": {
+   "kind": "text",
+   "parent": 1733759432,
+   "actor": "V_Samuel",
+   "expressionName": "my-expression",
+   "text": "Only slightly. Like asking water not to ripple… or a swimsuit not to cling to... motherhood. To values. Cling to values.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-706703381": {
+   "kind": "text",
+   "parent": 1733759432,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "You’re acting strange today. Did you skip breakfast?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1899687699": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    791488925,
+    -1337116424,
+    600859804,
+    713731770
+   ],
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "Oh! Hello there. It’s nice to see you again.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[samuel-norah-poolchoicetalk] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samuel-norah-poolchoicetalk",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[norah-poolmet] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "norah-poolmet",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "791488925": {
+   "kind": "text",
+   "parent": -1899687699,
+   "actor": "V_Samuel",
+   "expressionName": "my-expression",
+   "text": "Figured you'd be at your fancy private pool, not slumming it with us common folk.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[samuel-norah-poolchoicetalk] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samuel-norah-poolchoicetalk",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1337116424": {
+   "kind": "choice",
+   "parent": -1899687699,
+   "children": [
+    -1798299928,
+    1116558689,
+    702077308
+   ],
+   "actor": "V_Samuel",
+   "expressionName": "my-expression",
+   "text": "I'm just pulling your leg, it's good to see you, {PC}. I hope your {D} is doing better.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1798299928": {
+   "kind": "text",
+   "parent": -1337116424,
+   "children": [
+    -1698159060,
+    -1295564341
+   ],
+   "actor": null,
+   "text": "Didn’t expect to see you two hanging out.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1698159060": {
+   "kind": "text",
+   "parent": -1798299928,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "I suppose it is. But we just ended up next to each other. It’s a small pool.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1116558689": {
+   "kind": "text",
+   "parent": -1337116424,
+   "children": [
+    -2141479016,
+    190936432
+   ],
+   "actor": null,
+   "text": "Samuel, aren’t you supposed to be praying or something?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2141479016": {
+   "kind": "text",
+   "parent": 1116558689,
+   "actor": "V_Samuel",
+   "expressionName": "my-expression",
+   "text": "Hey, even saints need vitamin D. Poolside repentance, alright?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "702077308": {
+   "kind": "text",
+   "parent": -1337116424,
+   "children": [
+    479959932,
+    1058997923
+   ],
+   "actor": null,
+   "text": "Are you two dating? (Start sharing Route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "479959932": {
+   "kind": "text",
+   "parent": 702077308,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "O-oh! No, don’t be silly. We’re just... Vibing? That's how Alice would call it, right? It’s not like… that.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[samuelnorah-dating] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samuelnorah-dating",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "190936432": {
+   "kind": "text",
+   "parent": 1116558689,
+   "actor": "Norah",
+   "expressionName": "neutral",
+   "text": "You should come back to service sometime, {PC}. We do miss you in the back row.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1295564341": {
+   "kind": "text",
+   "parent": -1798299928,
+   "actor": "V_Samuel",
+   "expressionName": "my-expression",
+   "text": "She brought snacks. That makes her the adult.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1058997923": {
+   "kind": "text",
+   "parent": 702077308,
+   "actor": "V_Samuel",
+   "expressionName": "my-expression",
+   "text": "Yeah, uh… just keeping each other company.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "600859804": {
+   "kind": "text",
+   "parent": -1899687699,
+   "actor": "Norah",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Stay cool, alright? And maybe… say hi to Alice for me if you see her?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "713731770": {
+   "kind": "text",
+   "parent": -1899687699,
+   "actor": "V_Samuel",
+   "expressionName": "my-expression",
+   "text": "Later, {PC}. And don’t read into anything too much.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/publicpool/CoreRandomTalk",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play SamuelXNorah and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamuelSwimBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamuelSwimBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/SamuelSwimBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NorahWhiteBikiniBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NorahWhiteBikiniBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/NorahWhiteBikiniBust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/NorahWhiteBikiniBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/SamuelSwimBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Room_Talk/publicpool/LookForNorah",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play SamuelXNorah and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Core_NoSave3[2026bool-veryshort] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2026bool-veryshort",
+        "list": "Core_NoSave3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[samuelnorah-dating] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "samuelnorah-dating",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "chance",
+     "type": "ConditionChance",
+     "title": "If 0.5 chance to pass",
+     "fields": {
+      "m_Threshold": {
+       "kind": "value",
+       "value": 0.5
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active NorahWhiteBikiniBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "NorahWhiteBikiniBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/NorahWhiteBikiniBust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active SamuelSwimBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "SamuelSwimBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/SamuelSwimBust"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/NorahWhiteBikiniBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/SamuelMalePastor_Bust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

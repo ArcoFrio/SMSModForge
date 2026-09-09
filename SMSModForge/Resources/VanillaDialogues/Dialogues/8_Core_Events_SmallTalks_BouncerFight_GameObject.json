@@ -1,0 +1,602 @@
+{
+ "id": "8_Core_Events/SmallTalks/BouncerFight/GameObject",
+ "name": "GameObject",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "S_Bouncer"
+ ],
+ "roots": [
+  957701803,
+  287318810,
+  -520890690
+ ],
+ "nodes": {
+  "957701803": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -844720370,
+    -2053090350,
+    1198537201
+   ],
+   "actor": "S_Bouncer",
+   "expressionName": "neutral",
+   "text": "Hold up. You think you can just waltz in here?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[bouncer-met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bouncer-met",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Head to the club on Friday.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Behind The Looking Glass (Alice)",
+        "of": "Quest"
+       },
+       "m_TaskId": -989935106
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-844720370": {
+   "kind": "text",
+   "parent": 957701803,
+   "actor": null,
+   "text": "Yeah, exactly.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2053090350": {
+   "kind": "text",
+   "parent": 957701803,
+   "actor": null,
+   "text": "What's the issue?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1198537201": {
+   "kind": "text",
+   "parent": 957701803,
+   "actor": null,
+   "text": "[Prepare for a fight]",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "287318810": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Bouncer",
+   "expressionName": "neutral",
+   "text": "Oh, you think you're slick? I need to see if you've got the rizz. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-520890690": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1808620632,
+    1054351445,
+    415298240,
+    717926934
+   ],
+   "actor": "S_Bouncer",
+   "expressionName": "neutral",
+   "text": "Show me what you got. Prove you're not just some wannabe.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1054351445": {
+   "kind": "text",
+   "parent": -520890690,
+   "children": [
+    867717238
+   ],
+   "actor": null,
+   "text": "I've got so much rizz, my friends call me the Rizzler.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "415298240": {
+   "kind": "text",
+   "parent": -520890690,
+   "children": [
+    -148436205
+   ],
+   "actor": null,
+   "text": "Yo, King {PC} is in the house. Let me through or i'll eat your mouse.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "717926934": {
+   "kind": "text",
+   "parent": -520890690,
+   "children": [
+    -622713172
+   ],
+   "actor": null,
+   "text": "I'll return and next time I'll be prepared.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "867717238": {
+   "kind": "text",
+   "parent": 1054351445,
+   "actor": "S_Bouncer",
+   "expressionName": "neutral",
+   "text": "Your rizz is weak, no cap. Go home, boy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-148436205": {
+   "kind": "text",
+   "parent": 415298240,
+   "actor": "S_Bouncer",
+   "expressionName": "neutral",
+   "text": "Impressive, you made me cringe.... but that is not enough. Leave.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-622713172": {
+   "kind": "text",
+   "parent": 717926934,
+   "actor": "S_Bouncer",
+   "expressionName": "neutral",
+   "text": "I commend you for your awareness, young warrior. Now go and return once you have the strength to best me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1808620632": {
+   "kind": "text",
+   "parent": -520890690,
+   "children": [
+    -1844738003
+   ],
+   "actor": null,
+   "text": "(Urban Linguist) Bet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[Urban-Linguist-5] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Urban-Linguist-5",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1844738003": {
+   "kind": "text",
+   "parent": -1808620632,
+   "actor": "S_Bouncer",
+   "expressionName": "neutral",
+   "text": "Impressive. You may enter.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Bouncer/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done[bouncer-defeated] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bouncer-defeated",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Maybe someone at the mall can teach me some slang.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Behind The Looking Glass (Alice)",
+        "of": "Quest"
+       },
+       "m_TaskId": -210829219
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/SmallTalks/BouncerFight",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play GameObject and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueStart'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueStart"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_Bouncer to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_Bouncer",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Bouncer"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "checkConditions",
+     "type": "InstructionLogicCheckConditions",
+     "title": "Check If Events_Only_Done[bouncer-defeated] = False",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "compareBool",
+         "type": "ConditionMathCompareBooleans",
+         "title": "If Events_Only_Done[bouncer-defeated] = False",
+         "fields": {
+          "m_Value": {
+           "kind": "variable",
+           "variable": {
+            "scope": "global",
+            "name": "bouncer-defeated",
+            "list": "Events_Only_Done",
+            "type": "boolean"
+           }
+          },
+          "m_Comparison": "Equals",
+          "m_CompareTo": {
+           "kind": "value",
+           "value": false
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueEnd'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueEnd"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "by": "8_Core_Events/SmallTalks/BouncerFight",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play GameObject and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done[bouncer-defeated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "bouncer-defeated",
+        "list": "Events_Only_Done",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_Bouncer to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_Bouncer",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Bouncer"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave3[2026bool-veryshort] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2026bool-veryshort",
+        "list": "Core_NoSave3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Bouncer/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "checkConditions",
+     "type": "InstructionLogicCheckConditions",
+     "title": "Check If Events_Only_Done[bouncer-defeated] = False",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "compareBool",
+         "type": "ConditionMathCompareBooleans",
+         "title": "If Events_Only_Done[bouncer-defeated] = False",
+         "fields": {
+          "m_Value": {
+           "kind": "variable",
+           "variable": {
+            "scope": "global",
+            "name": "bouncer-defeated",
+            "list": "Events_Only_Done",
+            "type": "boolean"
+           }
+          },
+          "m_Comparison": "Equals",
+          "m_CompareTo": {
+           "kind": "value",
+           "value": false
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

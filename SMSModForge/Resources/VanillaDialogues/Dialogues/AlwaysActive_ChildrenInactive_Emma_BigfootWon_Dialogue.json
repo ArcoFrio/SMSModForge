@@ -1,0 +1,916 @@
+{
+ "id": "AlwaysActive_ChildrenInactive/Emma_BigfootWon/Dialogue",
+ "name": "Dialogue",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Emma"
+ ],
+ "roots": [
+  -953669089,
+  -739517729
+ ],
+ "nodes": {
+  "-953669089": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I can hear something...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_10[emma-cryptidhuntquest] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-cryptidhuntquest",
+        "list": "Events_10",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_BigFootBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_BigFootBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_BigFootBust"
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_10[emma-cryptidhuntquest] = 2",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-cryptidhuntquest",
+        "list": "Events_10",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 2
+      }
+     }
+    }
+   ]
+  },
+  "-739517729": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1037287881,
+    -873470753
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "{PC}? Why are you looking at me like that? ... Oh no...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1037287881": {
+   "kind": "text",
+   "parent": -739517729,
+   "children": [
+    -1023427653,
+    -19874061,
+    1815639991,
+    1568220876,
+    -1280753282
+   ],
+   "actor": null,
+   "text": "(Take a Photo)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1023427653": {
+   "kind": "text",
+   "parent": -1037287881,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "…You got it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-873470753": {
+   "kind": "text",
+   "parent": -739517729,
+   "children": [
+    547539333,
+    1635540623,
+    1207479224,
+    -2025323555,
+    113295327,
+    254265017,
+    1922729395,
+    473208206,
+    -580276767,
+    -1146577315,
+    -1777282127,
+    -1017849224,
+    1397706382,
+    378200671,
+    -1548110222,
+    -1511256328
+   ],
+   "actor": null,
+   "text": "Don't move. Stay calm, Emma. (Start sharing route)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "547539333": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Oh god... what is that? It's... immense. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaXBigfoot (0) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaXBigfoot (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/EmmaXBigfoot (0)"
+      }
+     }
+    }
+   ]
+  },
+  "-19874061": {
+   "kind": "text",
+   "parent": -1037287881,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I can’t believe you actually got it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1815639991": {
+   "kind": "text",
+   "parent": -1037287881,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "If this really shows what I think it shows… Sofia won’t be able to dismiss it. Not this time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1568220876": {
+   "kind": "text",
+   "parent": -1037287881,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I have to show her. Thank you , {PC}. For your help.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1280753282": {
+   "kind": "text",
+   "parent": -1037287881,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "See you next week, our work is far from done.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1635540623": {
+   "kind": "choice",
+   "parent": -873470753,
+   "children": [
+    -487838427,
+    733583374,
+    333426880
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I can feel its heartbeat through my chest. This is insane... we're actually documenting a...",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1207479224": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Wait~ what are you~? Oh... oh my god. It's... pushing between... don't look, please. This is... scientifically unprecedented.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2025323555": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "It's so warm... and heavy. I can't believe this is happening. Its scent is everywhere. Musky... primal.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaXBigfoot (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaXBigfoot (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/EmmaXBigfoot (1)"
+      }
+     }
+    }
+   ]
+  },
+  "113295327": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Okay... okay, just breathe. It's not aggressive... it's just... curious.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "254265017": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "You're... trembling. Have you ever... has anyone ever...? It's okay. I've got you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "473208206": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Oh fuck!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaXBigfoot (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaXBigfoot (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/EmmaXBigfoot (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-580276767": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "H-He doesn't stop... It just keeps going~ Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1146577315": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "L-Let it all out... Just... relax. Let me help you. You're safe... we're safe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaXBigfoot (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaXBigfoot (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/EmmaXBigfoot (3)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaXBigfoot (0) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaXBigfoot (0)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/EmmaXBigfoot (0)"
+      }
+     }
+    }
+   ]
+  },
+  "-1777282127": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "That's it... Don't hold back... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1017849224": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I'm going to need about a thousand wipes. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaXBigfoot (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaXBigfoot (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/EmmaXBigfoot (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active EmmaXBigfoot (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "EmmaXBigfoot (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Four/EmmaXBigfoot (1)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_BigFootBust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1397706382": {
+   "kind": "choice",
+   "parent": -873470753,
+   "children": [
+    807759840,
+    -910135198,
+    42194399
+   ],
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Don't say a word. Not one single word.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "378200671": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I have... so much to process right now. And scrub. Mostly scrub.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[emma-bigfootscenedone] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-bigfootscenedone",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "1922729395": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "Oh wow... you're... responding... {PC}... I think he's close... Should I~",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1548110222": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I... I have to tell her. Sofia won’t be able to dismiss it. Not this time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1511256328": {
+   "kind": "text",
+   "parent": -873470753,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "See you next week, our work is far from done.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-487838427": {
+   "kind": "text",
+   "parent": 1635540623,
+   "children": [
+    780071533
+   ],
+   "actor": null,
+   "text": "Don't move, Emma. Just stay... still.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "733583374": {
+   "kind": "text",
+   "parent": 1635540623,
+   "children": [
+    -883566294
+   ],
+   "actor": null,
+   "text": "I guess now we know why he's called bigfoot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "333426880": {
+   "kind": "text",
+   "parent": 1635540623,
+   "children": [
+    1314623394
+   ],
+   "actor": null,
+   "text": "Do you want me to call the cops?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1314623394": {
+   "kind": "text",
+   "parent": 333426880,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "N-No! It's... I don't want to scare it... Him...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-883566294": {
+   "kind": "text",
+   "parent": 733583374,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "{PC}... Stop it!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "780071533": {
+   "kind": "text",
+   "parent": -487838427,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I know, I know... Fuck, I'm afraid but also...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "807759840": {
+   "kind": "text",
+   "parent": 1397706382,
+   "actor": null,
+   "text": "(Stay silent)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-910135198": {
+   "kind": "text",
+   "parent": 1397706382,
+   "children": [
+    -1319932793
+   ],
+   "actor": null,
+   "text": "Word.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1319932793": {
+   "kind": "text",
+   "parent": -910135198,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "42194399": {
+   "kind": "text",
+   "parent": 1397706382,
+   "children": [
+    1085636365
+   ],
+   "actor": null,
+   "text": "Come on, Emma. You did good, you really.. helped him.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1085636365": {
+   "kind": "text",
+   "parent": 42194399,
+   "actor": "Emma",
+   "expressionName": "neutral",
+   "text": "I... I did, didn't I? Thank you, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "AlwaysActive_ChildrenInactive/Emma_BigfootWon",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dialogue and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Emma_Normal to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Emma_Normal",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Emma_Normal"
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core_NoSave2[2025-shortgo-saveONE] = None",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2025-shortgo-saveONE",
+        "list": "Core_NoSave2",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "none"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Join Emma to look for signs of Bigfoot.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Cryptids (Emma)",
+        "of": "Quest"
+       },
+       "m_TaskId": 1813187919
+      },
+      "m_WaitToComplete": false
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Meet Emma in the city on Tuesday.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Cryptids (Emma)",
+        "of": "Quest"
+       },
+       "m_TaskId": -989935106
+      },
+      "m_WaitToComplete": false
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[emma-cryptidhuntactive] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "emma-cryptidhuntactive",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

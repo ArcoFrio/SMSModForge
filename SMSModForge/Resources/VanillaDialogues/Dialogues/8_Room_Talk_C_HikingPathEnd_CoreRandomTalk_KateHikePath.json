@@ -1,0 +1,463 @@
+{
+ "id": "8_Room_Talk/C_HikingPathEnd/CoreRandomTalk/KateHikePath",
+ "name": "KateHikePath",
+ "index": 1,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Continue",
+  "Kate"
+ ],
+ "roots": [
+  1733759432,
+  975002162
+ ],
+ "nodes": {
+  "975002162": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1657589182,
+    -324761003,
+    -563981796,
+    -1910677584,
+    -1587738478
+   ],
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Oh, great timing! You can help me not set myself on fire.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[hikepathoptalkdone-kate] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hikepathoptalkdone-kate",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_10[hikepathoptalkdone-kate] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hikepathoptalkdone-kate",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1657589182": {
+   "kind": "choice",
+   "parent": 975002162,
+   "children": [
+    -1267530331,
+    -613031588,
+    -1069248958
+   ],
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I’m testing my “wish lanterns.” You write something you want, set it afloat, and pray the wind doesn’t immediately ruin your dreams.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-324761003": {
+   "kind": "text",
+   "parent": 975002162,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "You can make one too if you want. Just… don’t wish for something lame like “world peace.” I’ll laugh.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1733759432": {
+   "kind": "random",
+   "parent": -1,
+   "children": [
+    -779361933,
+    -706703381,
+    -294890775
+   ],
+   "actor": "Continue",
+   "expression": 1,
+   "text": "I don’t really know how this works.",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_10[hikepathoptalkdone-kate] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "hikepathoptalkdone-kate",
+        "list": "Events_10",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-779361933": {
+   "kind": "text",
+   "parent": 1733759432,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "You again? Careful, keep showing up here and people will think we’re soul-searching together.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-706703381": {
+   "kind": "text",
+   "parent": 1733759432,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "I swear, the lake’s starting to recognize me. I’m one bad day away from naming it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-294890775": {
+   "kind": "text",
+   "parent": 1733759432,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Don’t mind me, just arguing with my reflection again. She’s winning today.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1267530331": {
+   "kind": "text",
+   "parent": -1657589182,
+   "children": [
+    -1080668795
+   ],
+   "actor": null,
+   "text": "That’s actually kind of sweet.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-613031588": {
+   "kind": "text",
+   "parent": -1657589182,
+   "children": [
+    1848509161
+   ],
+   "actor": null,
+   "text": "So… environmentally friendly fire hazards?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1069248958": {
+   "kind": "text",
+   "parent": -1657589182,
+   "children": [
+    1599535676
+   ],
+   "actor": null,
+   "text": "You really believe in that stuff?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1599535676": {
+   "kind": "text",
+   "parent": -1069248958,
+   "actor": "Kate",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "Believe? Nah. It’s just something to do when I’m bored and... Nevermind.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1848509161": {
+   "kind": "text",
+   "parent": -613031588,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Relax, I used biodegradable stuff this time.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1080668795": {
+   "kind": "text",
+   "parent": -1267530331,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Sweet? Maybe. Or just my excuse to play with fire and call it spiritual.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-563981796": {
+   "kind": "choice",
+   "parent": 975002162,
+   "children": [
+    -1919450187,
+    -1455359408,
+    -1451643493,
+    -299826271
+   ],
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I wrote, ‘Stop ghosting myself.’ Still trying to figure out what I meant.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1919450187": {
+   "kind": "text",
+   "parent": -563981796,
+   "actor": null,
+   "text": "I think it means you should stop running from your own good ideas.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1455359408": {
+   "kind": "text",
+   "parent": -563981796,
+   "actor": null,
+   "text": "Mine’s just gonna say ‘free pizza forever.’ Deep, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1451643493": {
+   "kind": "text",
+   "parent": -563981796,
+   "actor": null,
+   "text": "It means you’re changing faster than you can keep up.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-299826271": {
+   "kind": "text",
+   "parent": -563981796,
+   "actor": null,
+   "text": "Maybe you should stop wasting paper first.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1910677584": {
+   "kind": "text",
+   "parent": 975002162,
+   "actor": "Kate",
+   "expressionName": "neutral",
+   "text": "Heh, maybe. But hey, if one of these actually comes true, I’ll owe you a drink.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1587738478": {
+   "kind": "text",
+   "parent": 975002162,
+   "actor": "Kate",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Now help me light this one before I lose my courage.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/C_HikingPathEnd/CoreRandomTalk",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play KateHikePath and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DialogueVariation] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DialogueVariation",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[kate-hang-enabled] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "kate-hang-enabled",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active KateCasualShirtbust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "KateCasualShirtbust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/KateCasualShirtbust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/KateCasualShirtbust/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

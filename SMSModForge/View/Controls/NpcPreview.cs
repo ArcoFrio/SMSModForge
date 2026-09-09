@@ -107,6 +107,10 @@ public sealed class NpcPreview : Grid
 
     public NpcPreview()
     {
+        // A tooltip that outlived its owner sits over the one thing an
+        // author is trying to look at. See ToolTipDismisser.
+        View.ToolTipDismisser.KeepClearOf(this);
+
         Width = MinWidth = MaxWidth = BoxSize;
         Height = MinHeight = MaxHeight = BoxSize;
         HorizontalAlignment = HorizontalAlignment.Left;

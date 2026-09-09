@@ -1,0 +1,595 @@
+{
+ "id": "8_Room_Talk/Beach/AliceGothBeach",
+ "name": "AliceGothBeach",
+ "index": 6,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Alice"
+ ],
+ "roots": [
+  -1040795980,
+  -80605899
+ ],
+ "nodes": {
+  "-1040795980": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    79512047,
+    2104783676,
+    -381490316
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Fucking hell... I hate this place. The sun is unbearable.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[isabella-meeting-agreed] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "isabella-meeting-agreed",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "79512047": {
+   "kind": "text",
+   "parent": -1040795980,
+   "children": [
+    -1728116253
+   ],
+   "actor": null,
+   "text": "Why come here then?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2104783676": {
+   "kind": "text",
+   "parent": -1040795980,
+   "children": [
+    -798602997
+   ],
+   "actor": null,
+   "text": "You look great, Alice.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-381490316": {
+   "kind": "text",
+   "parent": -1040795980,
+   "children": [
+    451664349
+   ],
+   "actor": null,
+   "text": "You should smile more....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "451664349": {
+   "kind": "text",
+   "parent": -381490316,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Yeah, fuck you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-798602997": {
+   "kind": "text",
+   "parent": 2104783676,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "I know... But thanks.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1728116253": {
+   "kind": "text",
+   "parent": 79512047,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "The salt water is great for my hair... It really does wonders...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-80605899": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1423484350,
+    358669117
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "But I could ask you the same question. Why are you here?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1423484350": {
+   "kind": "text",
+   "parent": -80605899,
+   "children": [
+    653514656,
+    -1621346860,
+    -1005036433,
+    -547045259,
+    1968102305,
+    165663347,
+    680428742
+   ],
+   "actor": null,
+   "text": "I'm looking for some action.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "358669117": {
+   "kind": "text",
+   "parent": -80605899,
+   "children": [
+    1473111131
+   ],
+   "actor": null,
+   "text": "Just vibing.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1473111131": {
+   "kind": "text",
+   "parent": 358669117,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "I see. Well, have fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "653514656": {
+   "kind": "text",
+   "parent": 1423484350,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Hmm... I can do that. Let me suck you off.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1621346860": {
+   "kind": "text",
+   "parent": 1423484350,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Mwwuah... Lowkey funny how all the people are staring... As if the have never seen a cock before... Muaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceBeach (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceBeach (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AliceBeach (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1005036433": {
+   "kind": "text",
+   "parent": 1423484350,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Tho this one is quite special... quite big... Let me try to... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-547045259": {
+   "kind": "text",
+   "parent": 1423484350,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "GULP! Mhhhaaw! Hmmmphhh!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceBeach (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceBeach (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AliceBeach (3)"
+      }
+     }
+    }
+   ]
+  },
+  "1968102305": {
+   "kind": "choice",
+   "parent": 1423484350,
+   "children": [
+    -1882872589,
+    1067052464,
+    -1192517836
+   ],
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "MPFH! MPFH! MPFH! MPFH!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "165663347": {
+   "kind": "text",
+   "parent": 1423484350,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "Hah... Fuck, dude... What are they feeding you with... Such a fucking big load...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceBeach (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceBeach (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AliceBeach (5)"
+      }
+     }
+    }
+   ]
+  },
+  "680428742": {
+   "kind": "text",
+   "parent": 1423484350,
+   "actor": "Alice",
+   "expressionName": "neutral",
+   "text": "I.. I will take a quick dip to wash of your cum... Fuck... It's all over my face... See ya, {PC}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "-1882872589": {
+   "kind": "text",
+   "parent": 1968102305,
+   "actor": null,
+   "text": "A-Alice.... I'm... I'm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1067052464": {
+   "kind": "text",
+   "parent": 1968102305,
+   "actor": null,
+   "text": "Yeah... Work that cock.. Use your tongue...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1192517836": {
+   "kind": "text",
+   "parent": 1968102305,
+   "actor": null,
+   "text": "(Cum over her face)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Beach",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play AliceGothBeach and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[anna-beach] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-beach",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events[alice-solo-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "alice-solo-done",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AliceSwimwear to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AliceSwimwear",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AliceSwimwear"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/AliceSwimwear/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[anna-beach] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-beach",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

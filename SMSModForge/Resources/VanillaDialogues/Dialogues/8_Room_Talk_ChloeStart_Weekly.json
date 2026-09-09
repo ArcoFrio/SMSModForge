@@ -1,0 +1,1039 @@
+{
+ "id": "8_Room_Talk/ChloeStart/Weekly",
+ "name": "Weekly",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Chloe"
+ ],
+ "roots": [
+  -332717933,
+  -1148790949,
+  -1036826573,
+  -447303336,
+  1308594618,
+  677684146,
+  -865710194,
+  1574267890,
+  1402084359,
+  634032893,
+  -1996476127,
+  -811467964,
+  1250016614,
+  1743981776
+ ],
+ "nodes": {
+  "-332717933": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "Perfect timing, {PC}! I was just about to get ready for you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1148790949": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Chloe",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "And I'm glad that it's only the two of us this~",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_YellowSexy to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_YellowSexy",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_YellowSexy"
+      }
+     }
+    }
+   ]
+  },
+  "-1036826573": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hello Chloe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-447303336": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "Anna...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1308594618": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "Well... Let's just get to work... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Choe_Base/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Choe_Nude to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Choe_Nude",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Choe_Nude"
+      }
+     }
+    }
+   ]
+  },
+  "677684146": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1083968917,
+    2128507275,
+    1639775230
+   ],
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "Let me help you get hard... Take your time... No touching though!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ChloeSolo (10) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ChloeSolo (10)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/ChloeSolo (10)"
+      }
+     }
+    }
+   ]
+  },
+  "-1083968917": {
+   "kind": "text",
+   "parent": 677684146,
+   "children": [
+    2057974769,
+    -19807055
+   ],
+   "actor": null,
+   "text": "Nice ass, Chloe.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2128507275": {
+   "kind": "text",
+   "parent": 677684146,
+   "children": [
+    422044754,
+    715237606
+   ],
+   "actor": null,
+   "text": "Are you sure you don't want me to touch you?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "422044754": {
+   "kind": "text",
+   "parent": 2128507275,
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "Yep! ... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2057974769": {
+   "kind": "text",
+   "parent": -1083968917,
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "Thanks! I put a lot of time and effort into my appearance.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1639775230": {
+   "kind": "text",
+   "parent": 677684146,
+   "children": [
+    -1993008758
+   ],
+   "actor": null,
+   "text": "(Stroke yourself hard)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1993008758": {
+   "kind": "text",
+   "parent": 1639775230,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "... Fuck ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-865710194": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "There's no way I'm letting this beast ruin my pussy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1574267890": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": " We are going to take some good shots with it near my pussy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ChloeSolo (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ChloeSolo (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/ChloeSolo (6)"
+      }
+     }
+    }
+   ]
+  },
+  "1402084359": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Just keep it professional...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "634032893": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "Come on, press the tip against me. Don't you dare put it in though!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1996476127": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "T-That's it... My fans will love this...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ChloeSolo (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ChloeSolo (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/ChloeSolo (7)"
+      }
+     }
+    }
+   ]
+  },
+  "-811467964": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "Fuck, this could would ruin any woman... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1743981776": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1211647677,
+    -1887632492
+   ],
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "O-Okay... That's enough for today...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_4[chloe-progression] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "chloe-progression",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1211647677": {
+   "kind": "text",
+   "parent": 1743981776,
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "Yassss! I love the photos, so sexy!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_4[chloe-progression] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "chloe-progression",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "1250016614": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1448636956,
+    -1596054901,
+    -1024370877,
+    -1559119082,
+    -1023405718,
+    2079712765,
+    288475922,
+    902910178,
+    -780425234,
+    -761943210
+   ],
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "M-Maybe just a little bit? ... Just a little ....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_4[chloe-progression] ≥ 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "chloe-progression",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1887632492": {
+   "kind": "text",
+   "parent": 1743981776,
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "I hope I'll see you next week again...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Choe_Nude/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1448636956": {
+   "kind": "text",
+   "parent": 1250016614,
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "AH! F-FUCK! .... OH GOD!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ChloeSolo (8) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ChloeSolo (8)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/ChloeSolo (8)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ChloeSolo (10) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ChloeSolo (10)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/ChloeSolo (10)"
+      }
+     }
+    },
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_4[chloe-progression] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "chloe-progression",
+        "list": "Events_4",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "-1596054901": {
+   "kind": "text",
+   "parent": 1250016614,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{PC}! P-Pull it out! You'll get her pregnant!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1024370877": {
+   "kind": "text",
+   "parent": 1250016614,
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "N-No! It's fine.. I'm... I'm on the pill!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1559119082": {
+   "kind": "choice",
+   "parent": 1250016614,
+   "children": [
+    892726097,
+    512752939,
+    1912747840
+   ],
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "Y-Your cock is destroying my pussy, {PC}! D-Don't stop!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1023405718": {
+   "kind": "text",
+   "parent": 1250016614,
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "I'm... I'm... HNGAAAAAGHHH!!! YASSS!!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2079712765": {
+   "kind": "text",
+   "parent": 1250016614,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "288475922": {
+   "kind": "text",
+   "parent": 1250016614,
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "F-Fuck! My first.. My first creampie... My followers wil go crazy!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ChloeSolo (9) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ChloeSolo (9)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/ChloeSolo (9)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active ChloeSolo (6) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "ChloeSolo (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-PrivatePhotos/ChloeSolo (6)"
+      }
+     }
+    }
+   ]
+  },
+  "902910178": {
+   "kind": "text",
+   "parent": 1250016614,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Are you done now?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-780425234": {
+   "kind": "text",
+   "parent": 1250016614,
+   "children": [
+    431482973
+   ],
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Just a second... I just need one moment ... I ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-761943210": {
+   "kind": "text",
+   "parent": 1250016614,
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "Fuck... That was... Quite the shot... I... I need to clean myself...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Choe_Nude/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "892726097": {
+   "kind": "text",
+   "parent": -1559119082,
+   "children": [
+    1263939367
+   ],
+   "actor": null,
+   "text": "I'm sorry! I can't control it!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1263939367": {
+   "kind": "text",
+   "parent": 892726097,
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "It's fine... It's not your fault for being born with such a freaky monster cock!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "512752939": {
+   "kind": "text",
+   "parent": -1559119082,
+   "children": [
+    -2014109860
+   ],
+   "actor": null,
+   "text": "Your pussy is so fucking tight, chloe...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2014109860": {
+   "kind": "text",
+   "parent": 512752939,
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "N-No... It's your dick that's way too big! My pussy is... My pussy is perfectly fineeeaaaah!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1912747840": {
+   "kind": "text",
+   "parent": -1559119082,
+   "children": [
+    -1392272814
+   ],
+   "actor": null,
+   "text": "(Slap her ass)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1392272814": {
+   "kind": "text",
+   "parent": 1912747840,
+   "actor": "Chloe",
+   "expressionName": "neutral",
+   "text": "Ah! H-Hey, stop that!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "431482973": {
+   "kind": "text",
+   "parent": -780425234,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Amateur....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "715237606": {
+   "kind": "text",
+   "parent": 2128507275,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Don't push her, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-19807055": {
+   "kind": "text",
+   "parent": -1083968917,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mine's bigger....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/ChloeStart",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Weekly and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[chloe-week-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "chloe-week-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_4[chloe-declined] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "chloe-declined",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Choe_Base to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Choe_Base",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Choe_Base"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_YellowSexy/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_4[Chloe-first-talk] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Chloe-first-talk",
+        "list": "Events_4",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[chloe-week-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "chloe-week-cooldown",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -63,6 +63,50 @@ public sealed class ModPack
 
     public bool ShouldSerializeGameVersion() => !string.IsNullOrEmpty(GameVersion);
 
+    /// <summary>
+    /// The pack's OWN version — what a player sees beside its name, and what
+    /// tells them whether the copy they have is the current one.
+    /// <para/>
+    /// Distinct from <see cref="GameVersion"/>, which records the game this was
+    /// authored against. This one is the author's to move; see
+    /// <see cref="PackVersion"/> for what each part means.
+    /// <para/>
+    /// Always written once a pack has one, so a player is never shown a blank
+    /// where a version should be.
+    /// </summary>
+    [JsonProperty("version", Order = 3)]
+    public string Version { get; set; } = "";
+
+    public bool ShouldSerializeVersion() => !string.IsNullOrEmpty(Version);
+
+    /// <summary>
+    /// The version of ModForge that wrote this pack.
+    /// <para/>
+    /// Not the author's number and not the game's: this is the TOOL's, and it
+    /// exists so the runtime can say something useful when the two do not line
+    /// up. A pack written by a newer ModForge may use an action or a field this
+    /// runtime has never heard of, and the failure that produces - a pack that
+    /// loads and quietly does less than it should - is the one worth catching.
+    /// <para/>
+    /// Stamped on every save, so it always names the build that actually wrote
+    /// the file. Absent means a pack from before ModForge recorded it, and
+    /// nothing is claimed about those.
+    /// </summary>
+    [JsonProperty("forgeVersion", Order = 4)]
+    public string ForgeVersion { get; set; } = "";
+
+    public bool ShouldSerializeForgeVersion() => !string.IsNullOrEmpty(ForgeVersion);
+
+    /// <summary>The version as a number rather than as text. Unreadable or
+    /// absent reads as 0.0.0, which is what a pack that has never been
+    /// versioned is.</summary>
+    [JsonIgnore]
+    public PackVersion PackVersion
+    {
+        get => Model.PackVersion.Read(Version, Model.PackVersion.New);
+        set => Version = value.ToString();
+    }
+
     [JsonProperty("characters", Order = 2)]
     public List<CharacterDef> Characters { get; set; } = new();
 

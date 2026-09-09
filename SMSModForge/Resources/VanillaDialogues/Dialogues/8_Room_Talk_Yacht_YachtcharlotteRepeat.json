@@ -1,0 +1,2096 @@
+{
+ "id": "8_Room_Talk/Yacht/YachtcharlotteRepeat",
+ "name": "YachtcharlotteRepeat",
+ "index": 4,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna",
+  "Charlotte",
+  "Continue",
+  "Phoenix"
+ ],
+ "roots": [
+  -1537403806,
+  1998980742,
+  -756318207,
+  764779339,
+  1237017038,
+  -762960016
+ ],
+ "nodes": {
+  "-1537403806": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "I am so happy to spend the day with you, my gorgeous boyfriend!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[Charlotte-romanced] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Charlotte-romanced",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Meet Charlotte on her yacht each Monday.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Gold and Wine (Charlotte)",
+        "of": "Quest"
+       },
+       "m_TaskId": -989935106
+      },
+      "m_WaitToComplete": false
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set CoreFinalStates[CharlotteFinalStage] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "CharlotteFinalStage",
+        "list": "CoreFinalStates",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[random-1-of-10] = 2",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 2
+      }
+     }
+    }
+   ]
+  },
+  "-762960016": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -750724697,
+    95180909,
+    1030858681,
+    1439644650,
+    -634404270
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "So, how do you want to spend the day?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-750724697": {
+   "kind": "text",
+   "parent": -762960016,
+   "children": [
+    -727775801,
+    1490885893,
+    130514562,
+    598343197,
+    -307365080,
+    -1126141494
+   ],
+   "actor": null,
+   "text": "Can I fuck your tits?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "95180909": {
+   "kind": "text",
+   "parent": -762960016,
+   "children": [
+    924074056,
+    1063977431,
+    -539761414,
+    -886534578,
+    1305787324,
+    2015756221,
+    591512688
+   ],
+   "actor": null,
+   "text": "I would like to fuck your ass...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-727775801": {
+   "kind": "text",
+   "parent": -750724697,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Aw, of course you can! Come here!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "924074056": {
+   "kind": "text",
+   "parent": 95180909,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Mhmm... Of course... I already took a shower just in case...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1998980742": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Hey, {PC}. I'm glad you here. I hope we'll have a lot of fun together...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[Charlotte-romanced] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Charlotte-romanced",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Meet Charlotte on her yacht each Monday.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Gold and Wine (Charlotte)",
+        "of": "Quest"
+       },
+       "m_TaskId": -989935106
+      },
+      "m_WaitToComplete": false
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[random-1-of-10] = Random3[Random]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "variable",
+       "variable": {
+        "scope": "globalList",
+        "list": "Random3",
+        "pick": "random",
+        "type": "number"
+       }
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set CoreFinalStates[CharlotteFinalStage] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "CharlotteFinalStage",
+        "list": "CoreFinalStates",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-634404270": {
+   "kind": "text",
+   "parent": -762960016,
+   "children": [
+    1987707256
+   ],
+   "actor": null,
+   "text": "Let's just relax a bit...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1987707256": {
+   "kind": "text",
+   "parent": -634404270,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "That sounds lovely. Let me grab some drinks for us. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1030858681": {
+   "kind": "text",
+   "parent": -762960016,
+   "children": [
+    634420139,
+    -1722240217,
+    36225588,
+    -1322144865,
+    -1574382737,
+    1459525574
+   ],
+   "actor": null,
+   "text": "Let's make love.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[charlotte-romance-route] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "charlotte-romance-route",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "634420139": {
+   "kind": "text",
+   "parent": 1030858681,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "O-Of course! Yes!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1722240217": {
+   "kind": "text",
+   "parent": 1030858681,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "A-Ah! ... I'll never get tired of this feeling!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte1 (9) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte1 (9)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Charlotte1 (9)"
+      }
+     }
+    }
+   ]
+  },
+  "36225588": {
+   "kind": "text",
+   "parent": 1030858681,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "This is the only dick I'll ever need in my life! Hnnaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1063977431": {
+   "kind": "text",
+   "parent": 95180909,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "That's it... Push it deep into me...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte1 (11) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte1 (11)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Charlotte1 (11)"
+      }
+     }
+    }
+   ]
+  },
+  "-539761414": {
+   "kind": "text",
+   "parent": 95180909,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "You're so big... My ass.. My ass is at its limit...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1305787324": {
+   "kind": "text",
+   "parent": 95180909,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Y-Yes... Please, use my hole.... Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte1 (12) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte1 (12)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Charlotte1 (12)"
+      }
+     }
+    }
+   ]
+  },
+  "1490885893": {
+   "kind": "text",
+   "parent": -750724697,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "That's it... Just relax and let my huge boobs do all the work...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte1 (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte1 (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Charlotte1 (5)"
+      }
+     }
+    }
+   ]
+  },
+  "130514562": {
+   "kind": "text",
+   "parent": -750724697,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Mmmhmmm.... I love the smell of your dick...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "598343197": {
+   "kind": "text",
+   "parent": -750724697,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Oh my.. You are tensing up... My boobs are looking forward to your cum!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte1 (6) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte1 (6)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Charlotte1 (6)"
+      }
+     }
+    }
+   ]
+  },
+  "-307365080": {
+   "kind": "text",
+   "parent": -750724697,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Y-Yes! Don't hold back! Please!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1322144865": {
+   "kind": "text",
+   "parent": 1030858681,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Y-Yes! Fill me up! Feed my womb with your cum!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte1 (10) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte1 (10)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Charlotte1 (10)"
+      }
+     }
+    }
+   ]
+  },
+  "2015756221": {
+   "kind": "text",
+   "parent": 95180909,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "S-So much cum... I can feel it... So warm... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1574382737": {
+   "kind": "text",
+   "parent": 1030858681,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Oh god... My tits are... So much milk.. So much cum...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1459525574": {
+   "kind": "text",
+   "parent": 1030858681,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "T-That was lovely, {PC}... I... I can't wait to do it again!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "591512688": {
+   "kind": "text",
+   "parent": 95180909,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Heh... T-That was quite something... I loved every minute....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1126141494": {
+   "kind": "text",
+   "parent": -750724697,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "That was fun... I love the way your cocks massage my boobs...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-756318207": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -91180312
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Don't you forget about me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[charlotte-threesome] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "charlotte-threesome",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Swimwear to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Swimwear",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Swimwear"
+      }
+     }
+    }
+   ]
+  },
+  "-91180312": {
+   "kind": "text",
+   "parent": -756318207,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Pfff... As if, your tits are way too big. I can feel the gravitational pull from over here.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1439644650": {
+   "kind": "text",
+   "parent": -762960016,
+   "children": [
+    99133372,
+    -44045633,
+    -1227169159,
+    641033768,
+    603006876,
+    -391599213,
+    -1269719707,
+    1979225972,
+    323196010,
+    805595905,
+    351135999
+   ],
+   "actor": null,
+   "text": "I want you two to make me feel good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[charlotte-threesome] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "charlotte-threesome",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "99133372": {
+   "kind": "text",
+   "parent": 1439644650,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "So.... You first, Anna? Or do you want me to...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCharlotteNewYacht (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCharlotteNewYacht (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCharlotteNewYacht (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-44045633": {
+   "kind": "text",
+   "parent": 1439644650,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You can go first if you like.... I get to enjoy {PC}'s big cock whenever I want back at home...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1227169159": {
+   "kind": "choice",
+   "parent": 1439644650,
+   "children": [
+    1957425537,
+    -1390670195,
+    1711334209
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Hmm... How about we sandwich that big dick together? We could use our boobs!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "641033768": {
+   "kind": "text",
+   "parent": 1439644650,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I-Is this good, hun? Should we go faster? Tighter?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCharlotteNewYacht (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCharlotteNewYacht (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCharlotteNewYacht (3)"
+      }
+     }
+    }
+   ]
+  },
+  "603006876": {
+   "kind": "text",
+   "parent": 1439644650,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Relax, Anna. Just look at him, he can barely contain his joy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-391599213": {
+   "kind": "text",
+   "parent": 1439644650,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Younger men really do love big tits, do the?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1269719707": {
+   "kind": "text",
+   "parent": 1439644650,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "You have no idea... Now let's make him cum! Let's work those tits on his cock together!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1979225972": {
+   "kind": "choice",
+   "parent": 1439644650,
+   "children": [
+    -497279589,
+    1232410122,
+    -1552454843
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Are you close, {PC}? You can cum whenever you like!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1957425537": {
+   "kind": "text",
+   "parent": -1227169159,
+   "children": [
+    -901317921
+   ],
+   "actor": null,
+   "text": "Yes, please...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1390670195": {
+   "kind": "text",
+   "parent": -1227169159,
+   "children": [
+    -1038219433
+   ],
+   "actor": null,
+   "text": "Fuck, I'm in heaven...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1711334209": {
+   "kind": "text",
+   "parent": -1227169159,
+   "children": [
+    -465829871,
+    -201424798,
+    1196637320,
+    -962801069
+   ],
+   "actor": null,
+   "text": "I want to see those asses on top of each other...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1038219433": {
+   "kind": "text",
+   "parent": -1390670195,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Damn right you are, enjoy it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-901317921": {
+   "kind": "text",
+   "parent": 1957425537,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "He's so cute when he's horny...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-465829871": {
+   "kind": "text",
+   "parent": 1711334209,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "H-Hold still, Anna... F-Fhuckk... My slit is grinding against your... N-Not bad...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCharlotteNewYacht (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCharlotteNewYacht (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCharlotteNewYacht (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-201424798": {
+   "kind": "text",
+   "parent": 1711334209,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "H-Have you gained some weight, Charlotte? This isn't easy! I can barely see anything!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1196637320": {
+   "kind": "text",
+   "parent": 1711334209,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Just a bit longer, we want your {S} to take it all in, right?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-962801069": {
+   "kind": "text",
+   "parent": 1711334209,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Y-Yes...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCharlotteNewYacht (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCharlotteNewYacht (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCharlotteNewYacht (2)"
+      }
+     }
+    }
+   ]
+  },
+  "323196010": {
+   "kind": "text",
+   "parent": 1439644650,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Here it comes! Wow! ... It just doesn't stop! Mwuaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaCharlotteNewYacht (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaCharlotteNewYacht (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Two/AnnaCharlotteNewYacht (4)"
+      }
+     }
+    }
+   ]
+  },
+  "805595905": {
+   "kind": "choice",
+   "parent": 1439644650,
+   "children": [
+    -1799771531,
+    1588344231,
+    -1712191174
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "H-Hey, leave some for me! Mwuaaaaah!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "351135999": {
+   "kind": "text",
+   "parent": 1439644650,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Mwuaaah... Mmmm... So much... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-497279589": {
+   "kind": "text",
+   "parent": 1979225972,
+   "actor": null,
+   "text": "I'm sorry, {M}. I can't hold back any longer! I'm... Hngaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1232410122": {
+   "kind": "text",
+   "parent": 1979225972,
+   "actor": null,
+   "text": "F-Fuck, here it comes! Take my load you sluts!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1552454843": {
+   "kind": "text",
+   "parent": 1979225972,
+   "actor": null,
+   "text": "(Blow your load)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1799771531": {
+   "kind": "text",
+   "parent": 805595905,
+   "actor": null,
+   "text": "I wish this moment would last forever...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1588344231": {
+   "kind": "text",
+   "parent": 805595905,
+   "actor": null,
+   "text": "Y-Yeah, clean it up... Don't miss a spot...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1712191174": {
+   "kind": "text",
+   "parent": 805595905,
+   "actor": null,
+   "text": "(Close your eyes and enjoy the moment)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "764779339": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1016240168,
+    -1053876286
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Hey, boss. Is this idiot causing trouble? ... Kidding! Hey, {PC}!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[phoenixyacht-firstappear] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "phoenixyacht-firstappear",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_9[CharlottePhoenixQuest] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "CharlottePhoenixQuest",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] ≠ 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Different",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PhoenixBust_Swimsuit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PhoenixBust_Swimsuit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/PhoenixBust_Swimsuit"
+      }
+     }
+    }
+   ]
+  },
+  "1237017038": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1949395259,
+    1103431732,
+    707176983,
+    40070092,
+    392462795,
+    -136884659
+   ],
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Ugh… this thing’s cooking me alive. Who the hell wears a suit on a boat in the sun?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[phoenixyacht-firstappear] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "phoenixyacht-firstappear",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_9[CharlottePhoenixQuest] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "CharlottePhoenixQuest",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] ≠ 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Different",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PhoenixBust_Suit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PhoenixBust_Suit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/PhoenixBust_Suit"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[phoenixyacht-active] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "phoenixyacht-active",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1949395259": {
+   "kind": "text",
+   "parent": 1237017038,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "You are the one who insisted on looking “professional.” If you are that uncomfortable, go to the back and pick a swimsuit. I keep plenty on board.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1103431732": {
+   "kind": "text",
+   "parent": 1237017038,
+   "actor": "Phoenix",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Oh, really? Don’t mind if I do.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/PhoenixBust_Suit/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "707176983": {
+   "kind": "text",
+   "parent": 1237017038,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 3,
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "40070092": {
+   "kind": "text",
+   "parent": 1237017038,
+   "actor": "Phoenix",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "…You didn’t tell me they were all this tiny! This thing barely covers anything.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[phoenixyacht-firstappear] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "phoenixyacht-firstappear",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active PhoenixBust_Swimsuit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "PhoenixBust_Swimsuit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/PhoenixBust_Swimsuit"
+      }
+     }
+    }
+   ]
+  },
+  "392462795": {
+   "kind": "text",
+   "parent": 1237017038,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "It is a yacht, not a training camp. I don’t stock modest wear.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-136884659": {
+   "kind": "text",
+   "parent": 1237017038,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Great. Now I get to guard you with my tits out. Perfect.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1016240168": {
+   "kind": "text",
+   "parent": 764779339,
+   "children": [
+    1547846984
+   ],
+   "actor": null,
+   "text": "Hey, Phoenix. Why don't you stay around?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1053876286": {
+   "kind": "text",
+   "parent": 764779339,
+   "children": [
+    838510162
+   ],
+   "actor": null,
+   "text": "Hey, Phoenix. Work is going good?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "838510162": {
+   "kind": "text",
+   "parent": -1053876286,
+   "actor": null,
+   "text": "Yeah! You two have fun!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1547846984": {
+   "kind": "text",
+   "parent": -1016240168,
+   "actor": null,
+   "text": "Uh, Sure. Can do!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[phoenixyacht-active] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "phoenixyacht-active",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-886534578": {
+   "kind": "text",
+   "parent": 95180909,
+   "children": [
+    -1451487827,
+    674235119,
+    -1706227176,
+    635092176,
+    -960114866,
+    1241186100,
+    1284611892,
+    1757864306,
+    -348067913,
+    460536899,
+    -607312550,
+    585349175,
+    -681254530,
+    -1157937485,
+    102807514
+   ],
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Oh my... someone's enjoying the show a little too much, aren't you, Phoenix?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Eve_NoSave1[phoenixyacht-active] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "phoenixyacht-active",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CharlottePhoenix_Yacht (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CharlottePhoenix_Yacht (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/CharlottePhoenix_Yacht (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1451487827": {
+   "kind": "text",
+   "parent": -886534578,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Tch~ just doing my job. Vigilant... observation...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "674235119": {
+   "kind": "text",
+   "parent": -886534578,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Mmm, is that what we're calling that massive tent in your pants now? Come here, you sexy guard dog...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1706227176": {
+   "kind": "text",
+   "parent": -886534578,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Mmm... you taste wonderful... Such a sweaty fat cock...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CharlottePhoenix_Yacht (2A) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CharlottePhoenix_Yacht (2A)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/CharlottePhoenix_Yacht (2A)"
+      }
+     }
+    }
+   ]
+  },
+  "635092176": {
+   "kind": "text",
+   "parent": -886534578,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Fuck—thought you'd... ah!... talk less with your mouth full..",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-960114866": {
+   "kind": "text",
+   "parent": -886534578,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Darling, I multi-task. Now tell me: Do you prefer fast and sloppy or slow and thorough?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1241186100": {
+   "kind": "text",
+   "parent": -886534578,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Just... fuck... pick one before I shove your head down myself...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1284611892": {
+   "kind": "text",
+   "parent": -886534578,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Tsk. Fat cock these days... no patience for foreplay..",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1757864306": {
+   "kind": "text",
+   "parent": -886534578,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Mmm... these poor neglected things... so full and heavy...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CharlottePhoenix_Yacht (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CharlottePhoenix_Yacht (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/CharlottePhoenix_Yacht (3)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte1 (11) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte1 (11)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/Charlotte1 (11)"
+      }
+     }
+    }
+   ]
+  },
+  "-348067913": {
+   "kind": "text",
+   "parent": -886534578,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "The hell kind of... ah!~ ball-worshipping seminar did you take?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "460536899": {
+   "kind": "text",
+   "parent": -886534578,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Self-taught, darling. But I'll give private lessons if you stop squirming.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-607312550": {
+   "kind": "text",
+   "parent": -886534578,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "F-Fuck, I'm... Shit! FUCK! HNGAAAH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CharlottePhoenix_Yacht (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CharlottePhoenix_Yacht (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/CharlottePhoenix_Yacht (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active CharlottePhoenix_Yacht (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "CharlottePhoenix_Yacht (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy/CharlottePhoenix_Yacht (1)"
+      }
+     }
+    }
+   ]
+  },
+  "585349175": {
+   "kind": "text",
+   "parent": -886534578,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Now that's what I call synchronized swimming...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-681254530": {
+   "kind": "text",
+   "parent": -886534578,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Fuck~didn't think you'd actually... Swallow...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1157937485": {
+   "kind": "text",
+   "parent": -886534578,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Darling, I told you... multitasking. Next time we'll aim for a proper fountain.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "102807514": {
+   "kind": "text",
+   "parent": -886534578,
+   "actor": "Phoenix",
+   "expressionName": "neutral",
+   "text": "Next time? Fuck, what did I agree too...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[phoenixyacht-firstsex] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "phoenixyacht-firstsex",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Yacht",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play YachtcharlotteRepeat and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_2[yacht-talks] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "yacht-talks",
+        "list": "Events_2",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte_BNikini to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte_BNikini",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Charlotte_BNikini"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

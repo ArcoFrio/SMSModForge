@@ -1,0 +1,378 @@
+{
+ "id": "8_Core_Events/SmallTalks/BasementUnlocks/GameObject",
+ "name": "GameObject",
+ "index": 0,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Anna"
+ ],
+ "roots": [
+  -1031020152,
+  179034535,
+  957701803,
+  1964522655,
+  -869045531,
+  -1000578312
+ ],
+ "nodes": {
+  "957701803": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I also have a little surprise for you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Inventory[basement-key] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "basement-key",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setString",
+     "type": "InstructionTextSetString",
+     "title": "Set Core_NoSave[Item-Received] = Basement Key",
+     "fields": {
+      "m_Text": {
+       "kind": "value",
+       "value": "Basement Key"
+      },
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Item-Received",
+        "list": "Core_NoSave",
+        "type": "string"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1964522655": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "These are the keys to the basement. Only you and I have them. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Talk to Anna.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Going Viral (Anna)",
+        "of": "Quest"
+       },
+       "m_TaskId": 1187244151
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "179034535": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1795415959,
+    -374214044,
+    -462760346
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Our Starmaker page just reached 1,000 subscribers today!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Spend more time with Anna. Help her to open up.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Going Viral (Anna)",
+        "of": "Quest"
+       },
+       "m_TaskId": -1381768894
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-1031020152": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "{PC}!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1795415959": {
+   "kind": "text",
+   "parent": 179034535,
+   "children": [
+    -1176321009
+   ],
+   "actor": null,
+   "text": "That’s amazing, {M}! Congratulations!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-374214044": {
+   "kind": "text",
+   "parent": 179034535,
+   "children": [
+    -1621506648
+   ],
+   "actor": null,
+   "text": "We've done a good job!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-462760346": {
+   "kind": "text",
+   "parent": 179034535,
+   "children": [
+    -686668685
+   ],
+   "actor": null,
+   "text": "We're far from being done.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1176321009": {
+   "kind": "text",
+   "parent": -1795415959,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Thank you, dear. I couldn’t have done it without your support.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1621506648": {
+   "kind": "text",
+   "parent": -374214044,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "We did. I couldn’t have done it without your support.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-686668685": {
+   "kind": "text",
+   "parent": -462760346,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I know, I know... But we should also appreciate that we made it this far!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-869045531": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I’ve been working on something special down there, and I think you’re going to love it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1000578312": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Meet me there tomorrow morning...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Core_Events/SmallTalks/BasementUnlocks",
+   "script": "Trigger",
+   "event": "EventOnEnable",
+   "how": "InstructionDialoguePlay",
+   "title": "Play GameObject and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueStart'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueStart"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Take plenty of photos of Anna.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Going Viral (Anna)",
+        "of": "Quest"
+       },
+       "m_TaskId": -1720742330
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueEnd'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueEnd"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1512 @@
+{
+ "id": "8_Room_Talk/BRoom/Adrian_Anna_RouteStart",
+ "name": "Adrian_Anna_RouteStart",
+ "index": 12,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Anna"
+ ],
+ "roots": [
+  465933384,
+  1625965344,
+  1457380488
+ ],
+ "nodes": {
+  "465933384": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    1681148514,
+    -1248992841
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Hey, {B}. What's~ ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_9[MilfAdrian-Expansion] ≥ 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MilfAdrian-Expansion",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1625965344": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1400076415,
+    1084567149,
+    2068853170,
+    1336179971,
+    1808825727,
+    2139174133,
+    -1833671173
+   ],
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Hey, {B}. What's~ ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_9[MilfAdrian-Expansion] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MilfAdrian-Expansion",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "1457380488": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -921924717,
+    1373203000,
+    -1226520416
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "So... What will happen now?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1681148514": {
+   "kind": "text",
+   "parent": 465933384,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Hey there, boys...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_BlackBoxersBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_BlackBoxersBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_BlackBoxersBust"
+      }
+     }
+    }
+   ]
+  },
+  "-1248992841": {
+   "kind": "text",
+   "parent": 465933384,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "H-Hey~ Hi, M-{M}... Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1400076415": {
+   "kind": "text",
+   "parent": 1625965344,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "{PC}... Adrian...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_BlackBoxersBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_BlackBoxersBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_BlackBoxersBust"
+      }
+     }
+    }
+   ]
+  },
+  "1084567149": {
+   "kind": "choice",
+   "parent": 1625965344,
+   "children": [
+    1389911890,
+    502848213
+   ],
+   "actor": "Adrian",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "W-What!? Jesus, {M} Your tits are out!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1336179971": {
+   "kind": "text",
+   "parent": 1625965344,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Mmm, don't tease him too much... unless he likes that. Do you, Adrian?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events_9[MilfAdrian-Expansion] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MilfAdrian-Expansion",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    }
+   ]
+  },
+  "1389911890": {
+   "kind": "text",
+   "parent": 1084567149,
+   "actor": null,
+   "text": "You really gonna act like you don't recognize those tits?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "502848213": {
+   "kind": "text",
+   "parent": 1084567149,
+   "actor": null,
+   "text": "We both know about your Starmaker sub.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2068853170": {
+   "kind": "choice",
+   "parent": 1625965344,
+   "children": [
+    -5468256,
+    -209636352
+   ],
+   "actor": "Adrian",
+   "expression": 3,
+   "expressionName": "Sad",
+   "text": "That~ That was for research! I~",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-5468256": {
+   "kind": "text",
+   "parent": 2068853170,
+   "actor": null,
+   "text": "Come on, {B}. You've always been a bad liar.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-209636352": {
+   "kind": "text",
+   "parent": 2068853170,
+   "actor": null,
+   "text": "Research on how many times you jerked off to {M}'s tits?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1808825727": {
+   "kind": "text",
+   "parent": 1625965344,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Fuck~  Are you two serious right now?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2139174133": {
+   "kind": "text",
+   "parent": 1625965344,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Wait a fucking minute~ So you're the one behind the camera?! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1833671173": {
+   "kind": "text",
+   "parent": 1625965344,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Your {B} does have a talent for capturing my best... assets.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-921924717": {
+   "kind": "text",
+   "parent": 1457380488,
+   "children": [
+    -850345477,
+    -2096772913,
+    1442267489,
+    1147298957,
+    -1825960290,
+    -1601345195,
+    161220744,
+    1945991643
+   ],
+   "actor": null,
+   "text": "Come on, Adrian. Give it a try.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1373203000": {
+   "kind": "text",
+   "parent": 1457380488,
+   "children": [
+    2002329265,
+    -1802947430,
+    1601784786,
+    -1369026556,
+    459864192,
+    205815091,
+    1479272702,
+    -278443543,
+    951029831
+   ],
+   "actor": null,
+   "text": "Watch closely, {B}. I'll show you how it's done...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1226520416": {
+   "kind": "text",
+   "parent": 1457380488,
+   "children": [
+    2133162933
+   ],
+   "actor": null,
+   "text": "I think he wants to ask us a question.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-850345477": {
+   "kind": "text",
+   "parent": -921924717,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Yes~ Come on, hun... Here, all you have to do is put it inside... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2002329265": {
+   "kind": "text",
+   "parent": 1373203000,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Get your big, perfect dick over here, {S}... Aaaaaah...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[2025teachedadrian] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2025teachedadrian",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaAdrianFirstBJ (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaAdrianFirstBJ (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaAdrianFirstBJ (1)"
+      }
+     }
+    }
+   ]
+  },
+  "2133162933": {
+   "kind": "random",
+   "parent": -1226520416,
+   "children": [
+    463077368,
+    -1263932119
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh... I see, well~ Go ahead, hun. What's on your mind?",
+   "settings": {
+    "m_AllowRepeat": true,
+    "m_Options": "FromSkin"
+   }
+  },
+  "463077368": {
+   "kind": "text",
+   "parent": 2133162933,
+   "children": [
+    468360080,
+    2050657891,
+    -1528437836,
+    1857372225,
+    -382103632,
+    1884600087
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "So, uhm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[2025askadrian-m] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2025askadrian-m",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1263932119": {
+   "kind": "text",
+   "parent": 2133162933,
+   "children": [
+    -1357707256,
+    -1514758514,
+    708105578,
+    636281262,
+    1734775282,
+    269230606,
+    465757027
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "So, uhm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[2025askadrian-m] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2025askadrian-m",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-2096772913": {
+   "kind": "text",
+   "parent": -921924717,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "And I'll do the rest... Aaaaaaah...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaAdrianFirstBJ (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaAdrianFirstBJ (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaAdrianFirstBJ (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1442267489": {
+   "kind": "text",
+   "parent": -921924717,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Fuck, okay... Let me just get my dick out... I... Fuck...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1147298957": {
+   "kind": "text",
+   "parent": -921924717,
+   "children": [
+    422959996,
+    -198198960,
+    461576893,
+    455399892,
+    -2110054972,
+    1150478491,
+    -494358697,
+    -1857418208,
+    861023410,
+    1653424874,
+    -1871581141,
+    120424599,
+    1005488367,
+    -1363496652
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "H-Here I go... {M}... I'll stick it in... I'll...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[2025teachedadrian] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2025teachedadrian",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[2025askadrian-m] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2025askadrian-m",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_9[2025letadriantry] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2025letadriantry",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "422959996": {
+   "kind": "text",
+   "parent": 1147298957,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mwaah... Mmmm... Good boo~ Maaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaAdrianFirstBJ (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaAdrianFirstBJ (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaAdrianFirstBJ (3)"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[2025letadriantry] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2025letadriantry",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Check on Anna and Adrian.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Secrets (Adrian)",
+        "of": "Quest"
+       },
+       "m_TaskId": -1312943876
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-198198960": {
+   "kind": "text",
+   "parent": 1147298957,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Fuck~ {M}... your mouth feels even better than I imagined...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "455399892": {
+   "kind": "text",
+   "parent": 1147298957,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Shit~ don't talk, you'll make me~",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2110054972": {
+   "kind": "text",
+   "parent": 1147298957,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Already? And here I thought all that ‘research' taught you stamina.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1825960290": {
+   "kind": "text",
+   "parent": -921924717,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "F-Fuck, {M}... I... I'm... Hngaaaah!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaAdrianFirstBJ (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaAdrianFirstBJ (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaAdrianFirstBJ (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1802947430": {
+   "kind": "text",
+   "parent": 1373203000,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Jesus, {B}... Your thing is massive...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1601784786": {
+   "kind": "text",
+   "parent": 1373203000,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mwuaah~ Smooh big... Smoooh purrfect! Gllph! GLLPGH!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaAdrianFirstBJ (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaAdrianFirstBJ (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaAdrianFirstBJ (5)"
+      }
+     }
+    }
+   ]
+  },
+  "-1369026556": {
+   "kind": "text",
+   "parent": 1373203000,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "MMhhggg! Muaah... That's it, {PC}... Show your {B} how to handle my needy lips...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "459864192": {
+   "kind": "text",
+   "parent": 1373203000,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "F-Fuck, {M}~ You're so...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1601345195": {
+   "kind": "text",
+   "parent": -921924717,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Fuck~  I didn't... I swear that's never happened before~",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "161220744": {
+   "kind": "text",
+   "parent": -921924717,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Someone's a little too excited about finally getting the real thing instead of just watching, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1945991643": {
+   "kind": "text",
+   "parent": -921924717,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Don't worry, baby... I can work with enthusiasm. Let's try again... slower next time.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_9[2025letadriantry] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "2025letadriantry",
+        "list": "Events_9",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "468360080": {
+   "kind": "text",
+   "parent": 463077368,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "{M}... you and {PC}... I mean~ are you two really... like, actually doing all that stuff? Together?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1357707256": {
+   "kind": "text",
+   "parent": -1263932119,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "This isn't just some tease, right? You seriously want me here... like that?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1514758514": {
+   "kind": "text",
+   "parent": -1263932119,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Would I be this... exposed if I didn't? I don't share my body with just anyone...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "269230606": {
+   "kind": "text",
+   "parent": -1263932119,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I... I need some time to think about all of this... It's just...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2050657891": {
+   "kind": "text",
+   "parent": 463077368,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Oh sweetheart... why ask questions you already know the answer to? You've seen the photos.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-382103632": {
+   "kind": "text",
+   "parent": 463077368,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I... I need some time to think about all of this... It's just...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "465757027": {
+   "kind": "text",
+   "parent": -1263932119,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Take your time, hun. Your {B} and I will check in on you soon...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1884600087": {
+   "kind": "text",
+   "parent": 463077368,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Take your time, hun. Your {B} and I will check in on you soon...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1857372225": {
+   "kind": "text",
+   "parent": 463077368,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmm. Every moan, every touch, every inch of him inside me... all real.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1528437836": {
+   "kind": "text",
+   "parent": 463077368,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Yeah but... fuck, those could be staged! I just... need to hear you say it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "708105578": {
+   "kind": "text",
+   "parent": -1263932119,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "But~ Fuck~ I'm your {S}. Doesn't that freak you out even a little?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "636281262": {
+   "kind": "text",
+   "parent": -1263932119,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "And you're the one who subscribed, tipped, and left those... very detailed comments.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1734775282": {
+   "kind": "text",
+   "parent": -1263932119,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Tell me you don't want this. Say it clearly, and I'll walk away right now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-278443543": {
+   "kind": "text",
+   "parent": 1373203000,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "See Adrian? It's not that hard... Maybe next time you'll give my hungry lips a thick load too?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "951029831": {
+   "kind": "text",
+   "parent": 1373203000,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Y-Yeah... I'd like that...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1150478491": {
+   "kind": "text",
+   "parent": 1147298957,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "You're literally sucking me off while calling me ‘good boy'~ What did you expect?!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaAdrianFirstBJ (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaAdrianFirstBJ (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaAdrianFirstBJ (4)"
+      }
+     }
+    }
+   ]
+  },
+  "1653424874": {
+   "kind": "text",
+   "parent": 1147298957,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "G-Great job, hun! Look at the mess you made! You can be so, so, so proud of yourself!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Events_9[MilfAdrian-Expansion] = 5",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MilfAdrian-Expansion",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 5
+      }
+     }
+    }
+   ]
+  },
+  "1005488367": {
+   "kind": "text",
+   "parent": 1147298957,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Maybe you would like to take a shower with me and {PC}?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1363496652": {
+   "kind": "text",
+   "parent": 1147298957,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Y-Yeah, that sounds great...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "461576893": {
+   "kind": "text",
+   "parent": 1147298957,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Muaahhhh~ Mmmmm~ Mmm... just like my good boy dreamed about, hm?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1857418208": {
+   "kind": "text",
+   "parent": 1147298957,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Holy shit— {M}, I'm gonna—!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "861023410": {
+   "kind": "text",
+   "parent": 1147298957,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmph... that's it, baby, give it to me..",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaAdrianFirstBJ (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaAdrianFirstBJ (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaAdrianFirstBJ (4)"
+      }
+     }
+    }
+   ]
+  },
+  "-1871581141": {
+   "kind": "text",
+   "parent": 1147298957,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Fuckfuckfuck—!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "120424599": {
+   "kind": "text",
+   "parent": 1147298957,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Looks like I milked you dry, huh?... And you lasted almost a five minutes this time! I'm proud of you, hun!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "205815091": {
+   "kind": "text",
+   "parent": 1373203000,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Mmmmhh~ Mwuaaah! F-Fuck~ It's starting to throb... Look, Adrian. Your big {B} is about to mark me!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1479272702": {
+   "kind": "text",
+   "parent": 1373203000,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "MWaaaah! MMMMHHMMM! Smmm.... Guuuuulp! Gullp!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active AnnaAdrianFirstBJ (7) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "AnnaAdrianFirstBJ (7)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/AnnaAdrianFirstBJ (7)"
+      }
+     }
+    }
+   ]
+  },
+  "-494358697": {
+   "kind": "text",
+   "parent": 1147298957,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I-It's fine... Mwuaaah! Fine, hun... If you need to cum, just let it out... That's what your {M}'s lips are made for!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/BRoom",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Adrian_Anna_RouteStart and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-and-B-activated] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-and-B-activated",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Eve_NoSave1[AnnaAdrianCooldown2025] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "AnnaAdrianCooldown2025",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events_9[MilfAdrian-Expansion] ≥ 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "MilfAdrian-Expansion",
+        "list": "Events_9",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "type": "InstructionGameObjectSetGameObject",
+     "title": "Set Core[stored-talk] = Self",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "stored-talk",
+        "list": "Core",
+        "type": "game-object"
+       }
+      },
+      "m_From": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_bust"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_BlackBoxersBust/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[AnnaAdrianCooldown2025] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "AnnaAdrianCooldown2025",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

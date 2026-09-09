@@ -1,0 +1,1570 @@
+{
+ "id": "Holiday_Hallway_Conditions/Halloween_Party_Charlotte/Dialogue_3",
+ "name": "Dialogue_3",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian",
+  "Anna",
+  "Charlotte",
+  "Continue",
+  "Josef",
+  "You"
+ ],
+ "roots": [
+  -1865843077,
+  2001672798
+ ],
+ "nodes": {
+  "2001672798": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1506177170,
+    119429388,
+    -1335249576,
+    1357046452,
+    237100890
+   ],
+   "actor": "You",
+   "expression": 1,
+   "text": "Well, what to do now?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1506177170": {
+   "kind": "text",
+   "parent": 2001672798,
+   "children": [
+    -703174946,
+    214757216,
+    614257354
+   ],
+   "actor": null,
+   "text": "(Talk to Adrian)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "119429388": {
+   "kind": "text",
+   "parent": 2001672798,
+   "children": [
+    -346283374,
+    764153225,
+    1551741913
+   ],
+   "actor": null,
+   "text": "(Talk To Josef)",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[D-LEFT-FOREVER] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1335249576": {
+   "kind": "text",
+   "parent": 2001672798,
+   "children": [
+    1935814344,
+    -1327140542,
+    1589645239
+   ],
+   "actor": null,
+   "text": "(Talk To Anna)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1357046452": {
+   "kind": "text",
+   "parent": 2001672798,
+   "children": [
+    -1399245145,
+    1837038099,
+    1686414266
+   ],
+   "actor": null,
+   "text": "(Talk To Charlotte)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "237100890": {
+   "kind": "text",
+   "parent": 2001672798,
+   "actor": null,
+   "text": "I think I'll go home.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1865843077": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Continue",
+   "expressionName": "neutral",
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 2,
+   "tag": "halloweenroot",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-703174946": {
+   "kind": "text",
+   "parent": -1506177170,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Dude… is it just me, or is everyone here, like, forty.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Adrian_HalloweenBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Adrian_HalloweenBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_HalloweenBust"
+      }
+     }
+    }
+   ]
+  },
+  "214757216": {
+   "kind": "choice",
+   "parent": -1506177170,
+   "children": [
+    -1446743425,
+    -960213118,
+    -891583857
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I think I just got sized up by a woman who could be my school principal.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1446743425": {
+   "kind": "text",
+   "parent": 214757216,
+   "children": [
+    236135753
+   ],
+   "actor": null,
+   "text": "Yeah, the crowd’s... mature. But hey, we’re here for {M}. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-960213118": {
+   "kind": "text",
+   "parent": 214757216,
+   "children": [
+    -163324474
+   ],
+   "actor": null,
+   "text": "What did you expect? Charlotte's the same age as {M}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-891583857": {
+   "kind": "text",
+   "parent": 214757216,
+   "children": [
+    -34960015
+   ],
+   "actor": null,
+   "text": "Oh no, grownups at a grownup party? Truly tragic.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-34960015": {
+   "kind": "text",
+   "parent": -891583857,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Hey, at least I’m trying to be social. I could’ve stayed home and played three hours of garbage matchmaking.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-163324474": {
+   "kind": "text",
+   "parent": -960213118,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "I dunno. I thought there’d be more… I don’t know—less perfume and property tax talk?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "236135753": {
+   "kind": "text",
+   "parent": -1446743425,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Yeah… yeah, you’re right. Still weird, though. Like we crashed a PTA afterparty.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "614257354": {
+   "kind": "text",
+   "parent": -1506177170,
+   "actor": "Adrian",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Alright… I’m gonna grab a drink, pretend to blend in, and hope nobody calls me 'young man' unironically.",
+   "jump": {
+    "mode": "Jump",
+    "to": "halloweenroot"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Adrian_HalloweenBust/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1399245145": {
+   "kind": "text",
+   "parent": 1357046452,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Well, well. Decided to grace me with your presence? I was starting to think you were avoiding me.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte_PirateOutfit_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte_PirateOutfit_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Charlotte_PirateOutfit_Bust"
+      }
+     }
+    }
+   ]
+  },
+  "1837038099": {
+   "kind": "choice",
+   "parent": 1357046452,
+   "children": [
+    1468065455,
+    1213571012,
+    1142939786,
+    801003957
+   ],
+   "actor": "Charlotte",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Careful now. If you hover too long, people might start asking questions. ",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1468065455": {
+   "kind": "text",
+   "parent": 1837038099,
+   "children": [
+    -1647024228
+   ],
+   "actor": null,
+   "text": "Just making the rounds. Thought I’d check on the hostess.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1213571012": {
+   "kind": "text",
+   "parent": 1837038099,
+   "children": [
+    -1603523912
+   ],
+   "actor": null,
+   "text": "How are you not bored yet? You’ve been throwing the same party since ever.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1142939786": {
+   "kind": "text",
+   "parent": 1837038099,
+   "children": [
+    -631956463,
+    1529126812
+   ],
+   "actor": null,
+   "text": "That pirate outfit’s doing a lot of heavy lifting tonight.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1603523912": {
+   "kind": "text",
+   "parent": 1213571012,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "Bored? Please. Watching middle-aged people pretend they’re still sexy is performance art.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1647024228": {
+   "kind": "text",
+   "parent": 1468065455,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "How thoughtful. I’d say that earns you another drink... or a favor, depending on my mood.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-631956463": {
+   "kind": "text",
+   "parent": 1142939786,
+   "actor": "Charlotte",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "Good. Because someone around here needs to do some lifting... and I’m not talking about weights.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "801003957": {
+   "kind": "text",
+   "parent": 1837038099,
+   "children": [
+    -1421326767
+   ],
+   "actor": null,
+   "text": "You really built a whole personality around wine and themed outfits, huh?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1421326767": {
+   "kind": "text",
+   "parent": 801003957,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "And you’re still drawn to it. Imagine what that says about you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1529126812": {
+   "kind": "text",
+   "parent": 1142939786,
+   "actor": "Charlotte",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Just wait till you see what’s under it later.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[charlotte-sex-done] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "charlotte-sex-done",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1686414266": {
+   "kind": "text",
+   "parent": 1357046452,
+   "actor": "Charlotte",
+   "expressionName": "neutral",
+   "text": "\rGo mingle, handsome. I’ve got a party to run… and eyes everywhere.",
+   "jump": {
+    "mode": "Jump",
+    "to": "halloweenroot"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Charlotte_PirateOutfit_Bust/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-346283374": {
+   "kind": "text",
+   "parent": 119429388,
+   "actor": "Josef",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "This music’s too loud, the drinks are too sweet, and someone just called me 'Oldward\".",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Josef_HalloweenBust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Josef_HalloweenBust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef_HalloweenBust"
+      }
+     }
+    }
+   ]
+  },
+  "764153225": {
+   "kind": "choice",
+   "parent": 119429388,
+   "children": [
+    -1647281755,
+    459541653,
+    -994944817
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Remind me why I agreed to this again?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1647281755": {
+   "kind": "text",
+   "parent": 764153225,
+   "children": [
+    -25052254
+   ],
+   "actor": null,
+   "text": "Because {M} asked. And maybe… you needed a break.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "459541653": {
+   "kind": "text",
+   "parent": 764153225,
+   "children": [
+    -831554683
+   ],
+   "actor": null,
+   "text": "You’re the one who put on a cape. Don’t act like someone forced you into it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-994944817": {
+   "kind": "text",
+   "parent": 764153225,
+   "children": [
+    1765827982
+   ],
+   "actor": null,
+   "text": "Nothing says fun like watching a vampire sigh into his whiskey. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1765827982": {
+   "kind": "text",
+   "parent": -994944817,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Keep talking, wiseass. I can still ground you emotionally.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-831554683": {
+   "kind": "text",
+   "parent": 459541653,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "I figured if I have to suffer, I might as well suffer in polyester.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-25052254": {
+   "kind": "text",
+   "parent": -1647281755,
+   "actor": "Josef",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Yeah. Maybe I did. Feels strange, though. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1551741913": {
+   "kind": "text",
+   "parent": 119429388,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Anyway… go enjoy yourself. No point in all of us being miserable at once.",
+   "jump": {
+    "mode": "Jump",
+    "to": "halloweenroot"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Josef_HalloweenBust/D1Base/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "1935814344": {
+   "kind": "text",
+   "parent": -1335249576,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "\rSo… how bad is it?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_AnnaMummyOutfit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_AnnaMummyOutfit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_AnnaMummyOutfit"
+      }
+     }
+    }
+   ]
+  },
+  "-1327140542": {
+   "kind": "choice",
+   "parent": -1335249576,
+   "children": [
+    -1566288443,
+    -1126969206,
+    1314404776,
+    -282019681
+   ],
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I feel like I’m one sneeze away from public indecency.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1566288443": {
+   "kind": "text",
+   "parent": -1327140542,
+   "children": [
+    488353483
+   ],
+   "actor": null,
+   "text": "You look great, {M}. Seriously. Nothing to be embarrassed about.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1126969206": {
+   "kind": "text",
+   "parent": -1327140542,
+   "children": [
+    -1525228206
+   ],
+   "actor": null,
+   "text": "Let’s be honest—you knew exactly what you were doing with that costume.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1314404776": {
+   "kind": "text",
+   "parent": -1327140542,
+   "children": [
+    -1508030364
+   ],
+   "actor": null,
+   "text": "You’re getting a lot of looks, {M}. Bit much for a {F} party, don’t you think?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "488353483": {
+   "kind": "text",
+   "parent": -1566288443,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "You're sweet. I still feel like a teenage girl who overdressed for the school dance… ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1525228206": {
+   "kind": "text",
+   "parent": -1126969206,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Don’t you start… One more comment like that and I’m hiding behind a curtain the rest of the night.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1508030364": {
+   "kind": "text",
+   "parent": 1314404776,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "I know. I thought… maybe I could just have fun for once. Maybe that was stupid.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1589645239": {
+   "kind": "text",
+   "parent": -1335249576,
+   "actor": "Anna",
+   "expressionName": "neutral",
+   "text": "Anyway… I’m glad you came. I don’t think I could’ve handled this circus without you.",
+   "jump": {
+    "mode": "Jump",
+    "to": "halloweenroot"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_AnnaMummyOutfit/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-282019681": {
+   "kind": "text",
+   "parent": -1327140542,
+   "children": [
+    706924296,
+    43731007
+   ],
+   "actor": null,
+   "text": "Fuck, {M}. You're getting me hard...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-Everything-but-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-Everything-but-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "706924296": {
+   "kind": "text",
+   "parent": -282019681,
+   "actor": "Anna",
+   "expression": 4,
+   "expressionName": "Flirty",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[anna-halloweenbathinc] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-halloweenbathinc",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "43731007": {
+   "kind": "text",
+   "parent": -282019681,
+   "actor": "Anna",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Can you help me in the bathroom in a few? This costume’s coming apart again...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "Holiday_Hallway_Conditions/Halloween_Party_Charlotte",
+   "script": "Actions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dialogue_3 and wait",
+   "as": "Dialogue",
+   "before": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave2[holidayhallway-check] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "holidayhallway-check",
+        "list": "Core_NoSave2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Holidays[big-holiday-trip] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "big-holiday-trip",
+        "list": "Holidays",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Eve_NoSave1[anna-halloweenbathinc] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "anna-halloweenbathinc",
+        "list": "Eve_NoSave1",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueStart'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueStart"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Anna_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Anna_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Anna_Bust"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_At_StartCheck_If_Going to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_At_StartCheck_If_Going",
+       "of": "GetGameObjectInstance",
+       "path": "Holiday_Hallway_Conditions/Halloween_Party_Charlotte/Disable_At_StartCheck_If_Going"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Dialogue_1 and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Dialogue_1",
+       "of": "GetGameObjectDialogue",
+       "path": "Holiday_Hallway_Conditions/Halloween_Party_Charlotte/Dialogue_1"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Halloween_Party_Charlotte and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "Halloween_Party_Charlotte",
+       "of": "GetGameObjectConditions",
+       "path": "Holiday_Hallway_Conditions/Halloween_Party_Charlotte"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "checkConditions",
+     "type": "InstructionLogicCheckConditions",
+     "title": "Check If is Active Disable_At_StartCheck_If_Going",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "gameObjectActive",
+         "type": "ConditionGameObjectActive",
+         "title": "If is Active Disable_At_StartCheck_If_Going",
+         "fields": {
+          "m_GameObject": {
+           "kind": "object",
+           "name": "Disable_At_StartCheck_If_Going",
+           "of": "GetGameObjectInstance",
+           "path": "Holiday_Hallway_Conditions/Halloween_Party_Charlotte/Disable_At_StartCheck_If_Going"
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Gallery-Active] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gallery-Active",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeInBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeInBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 9_Hallway to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "9_Hallway",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/9_Hallway"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 123_CharlotteHalloweenHome to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "123_CharlotteHalloweenHome",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/123_CharlotteHalloweenHome"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Music to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Music",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Music"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HalloweenMusic to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HalloweenMusic",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/HalloweenMusic"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_AnnaMummyOutfit to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_AnnaMummyOutfit",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_AnnaMummyOutfit"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Charlotte_PirateOutfit_Bust to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Charlotte_PirateOutfit_Bust",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Charlotte_PirateOutfit_Bust"
+      }
+     }
+    },
+    {
+     "kind": "playDialogue",
+     "type": "InstructionDialoguePlay",
+     "title": "Play Dialogue_2 and wait",
+     "fields": {
+      "m_Dialogue": {
+       "kind": "object",
+       "name": "Dialogue_2",
+       "of": "GetGameObjectDialogue",
+       "path": "Holiday_Hallway_Conditions/Halloween_Party_Charlotte/Dialogue_2"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "runConditions",
+     "type": "InstructionLogicRunConditions",
+     "title": "Run Halloween_Bathroom_Cond and wait",
+     "fields": {
+      "m_Conditions": {
+       "kind": "object",
+       "name": "Halloween_Bathroom_Cond",
+       "of": "GetGameObjectConditions",
+       "path": "Holiday_Hallway_Conditions/Halloween_Party_Charlotte/Halloween_Bathroom_Cond"
+      },
+      "m_WaitToFinish": true
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeInBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeInBlack"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 9_Hallway to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "9_Hallway",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/9_Hallway"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 124_CharlotteHalloweenBathroom to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "124_CharlotteHalloweenBathroom",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/124_CharlotteHalloweenBathroom"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 123_CharlotteHalloweenHome to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "123_CharlotteHalloweenHome",
+       "of": "GetGameObjectInstance",
+       "path": "5_Levels/123_CharlotteHalloweenHome"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Music to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Music",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/Music"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active HalloweenMusic to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "HalloweenMusic",
+       "of": "GetGameObjectInstance",
+       "path": "12_AudioPlayer/HalloweenMusic"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeOutBlack'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeOutBlack"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core_NoSave[Gallery-Active] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Gallery-Active",
+        "list": "Core_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'DialogueEnd'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "DialogueEnd"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

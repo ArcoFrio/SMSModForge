@@ -1,0 +1,433 @@
+{
+ "id": "8_Room_Talk/Hotelroom24/Isapregnant",
+ "name": "Isapregnant",
+ "index": 2,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Isabella"
+ ],
+ "roots": [
+  1955723628,
+  322283429,
+  -699995327,
+  -787586620
+ ],
+ "nodes": {
+  "1955723628": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Isabella",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Alright. I'm pregnant. The job is done.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Keep showing up and fucking her every Thursday.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Virile (Isabella)",
+        "of": "Quest"
+       },
+       "m_TaskId": -210829219
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-699995327": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    2084881161,
+    337918973,
+    958962439
+   ],
+   "actor": "Isabella",
+   "expressionName": "neutral",
+   "text": "So yeah... I'm just here to share the good news and deliever the promised payment.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-787586620": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Isabella",
+   "expressionName": "neutral",
+   "text": "Here's your payment. Have a nice life or something... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + 5000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 5000
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_D_3[Iseballe-solo-fuck] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Iseballe-solo-fuck",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    }
+   ]
+  },
+  "2084881161": {
+   "kind": "text",
+   "parent": -699995327,
+   "children": [
+    998027445
+   ],
+   "actor": null,
+   "text": "Glad to be of service.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "337918973": {
+   "kind": "text",
+   "parent": -699995327,
+   "children": [
+    -309665911
+   ],
+   "actor": null,
+   "text": "Give me my money.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "958962439": {
+   "kind": "text",
+   "parent": -699995327,
+   "children": [
+    -1087360894
+   ],
+   "actor": null,
+   "text": "So, that's it then?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1087360894": {
+   "kind": "text",
+   "parent": 958962439,
+   "actor": "Isabella",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Yes, that's it... I won't repeat the same mistake as I did with Josef. You lot are too unreliable.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-309665911": {
+   "kind": "text",
+   "parent": 337918973,
+   "actor": "Isabella",
+   "expression": 2,
+   "expressionName": "Angry",
+   "text": "Yeah, yeah...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "998027445": {
+   "kind": "text",
+   "parent": 2084881161,
+   "actor": "Isabella",
+   "expression": 1,
+   "expressionName": "Happy",
+   "text": "Good boy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "322283429": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Isabella",
+   "expressionName": "neutral",
+   "text": "I'm not sure if it is yours or Josef's... But to frankly put, I don't really care.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_D_3[isabelle-threesome] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "isabelle-threesome",
+        "list": "Events_D_3",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Hotelroom24",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Isapregnant and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_2[isabella-done] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "isabella-done",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[isabella-sexy-times] ≥ 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "isabella-sexy-times",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Isabella_Lingerie/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Isabella to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Isabella",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Isabella"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Isabella/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_2[isabella-done] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "isabella-done",
+        "list": "Events_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

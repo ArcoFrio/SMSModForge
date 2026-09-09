@@ -1,0 +1,916 @@
+{
+ "id": "8_Room_Talk/Beach/GothMilfBeachScene",
+ "name": "GothMilfBeachScene",
+ "index": 9,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "S_Nightheart",
+  "S_PopPop",
+  "You"
+ ],
+ "roots": [
+  1029892234,
+  -692150281,
+  -887124567,
+  431642919,
+  1589963962,
+  -1866638096,
+  1238867466,
+  -1934163208,
+  -1244899035,
+  200756410,
+  189180628,
+  1466673813,
+  1934010564,
+  -1636041592,
+  725779090,
+  149925490,
+  -1744881321,
+  -2046451828,
+  325112339,
+  -916883498,
+  -771816098,
+  -1266505988,
+  -908882328,
+  -1474382833,
+  1397268223,
+  -1723312516,
+  -1656554284,
+  -1076715420
+ ],
+ "nodes": {
+  "1029892234": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_PopPop",
+   "expressionName": "neutral",
+   "text": "You know, sweetheart, if you dropped the weight and ditched that Nightheart crap, some poor bastard might’ve proposed by now.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-692150281": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Nightheart",
+   "expressionName": "neutral",
+   "text": "Aww, Pop Pop, that’s adorable. You still think women exist to be picked like produce at the market. How quaint.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-887124567": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_PopPop",
+   "expressionName": "neutral",
+   "text": "I’m serious! This goth phase of yours? It’s not cute anymore. You’re pushing forty, not fourteen.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "431642919": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Nightheart",
+   "expressionName": "neutral",
+   "text": "And you’re pushing the limits of my patience—and your life expectancy. Wanna keep going, or should I call your cardiologist now?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1589963962": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_PopPop",
+   "expressionName": "neutral",
+   "text": "Back in my day, girls didn’t talk like sailors.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1866638096": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Nightheart",
+   "expressionName": "neutral",
+   "text": "Back in your day, girls couldn’t open bank accounts. Forgive me if I don’t yearn for the golden age of polio and lead paint.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1238867466": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_PopPop",
+   "expressionName": "neutral",
+   "text": "Tch. No wonder you’re still single.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1934163208": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Nightheart",
+   "expressionName": "neutral",
+   "text": "And no wonder Grandma faked her death to escape you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1244899035": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Nightheart",
+   "expressionName": "neutral",
+   "text": "Just... Shut up and let's go somewhere private. So we can put the only good thing about you to use.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "200756410": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_PopPop",
+   "expressionName": "neutral",
+   "text": "Fine, but remember. I won't be always there for you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "189180628": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1985486365,
+    -1047947370
+   ],
+   "actor": "S_Nightheart",
+   "expressionName": "neutral",
+   "text": "Thank, god. And now try to keep up, old man.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1985486365": {
+   "kind": "text",
+   "parent": 189180628,
+   "actor": null,
+   "text": "(Follow them)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1047947370": {
+   "kind": "text",
+   "parent": 189180628,
+   "children": [
+    -74429558
+   ],
+   "actor": null,
+   "text": "(Leave them alone)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-74429558": {
+   "kind": "text",
+   "parent": -1047947370,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Sometimes I feel like this city is growing more insane with each month.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1466673813": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_PopPop",
+   "expressionName": "neutral",
+   "text": "That's it, Jess. Move those hips of yours... Hnggh~",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active BeachSecretScene (1) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "BeachSecretScene (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/BeachSecretScene (1)"
+      }
+     }
+    }
+   ]
+  },
+  "1934010564": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Nightheart",
+   "expressionName": "neutral",
+   "text": "Don't expect me to do all the work, old fuck! Gah~ Hngaaah....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1636041592": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_PopPop",
+   "expressionName": "neutral",
+   "text": "We both know you like it that way, sweetie. Now then, get to work.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "725779090": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Nightheart",
+   "expressionName": "neutral",
+   "text": "F-Fuck~ C-Could you at least move your hips a bit? I'm... I wanna come too~",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active BeachSecretScene (2) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "BeachSecretScene (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/BeachSecretScene (2)"
+      }
+     }
+    }
+   ]
+  },
+  "149925490": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_PopPop",
+   "expressionName": "neutral",
+   "text": "How? You're the size of a whale, sweetie. Maybe if you lose a few pounds I could.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1744881321": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1743483158,
+    326303728,
+    -4937215
+   ],
+   "actor": "S_Nightheart",
+   "expressionName": "neutral",
+   "text": "Fuck you! Mwwah~ Just hold still so I can ride this useless old cock~",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1743483158": {
+   "kind": "text",
+   "parent": -1744881321,
+   "actor": null,
+   "text": "[Pervert] Sneak a finger into her ass.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[Pervert-5] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Pervert-5",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "326303728": {
+   "kind": "text",
+   "parent": -1744881321,
+   "actor": null,
+   "text": "[Living Weapon] Use the ancient one finger ass blast technique.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Traits[Living-Weapon] ≥ 5",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Living-Weapon",
+        "list": "Traits",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-4937215": {
+   "kind": "text",
+   "parent": -1744881321,
+   "children": [
+    687819388
+   ],
+   "actor": null,
+   "text": "(Leave them be)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "687819388": {
+   "kind": "text",
+   "parent": -4937215,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "I should better go before they notice me.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2046451828": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Nightheart",
+   "expressionName": "neutral",
+   "text": "F-Fuck! You're getting naughty, old man. Finally, mmmmhmmm...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active BeachSecretScene (3) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "BeachSecretScene (3)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/BeachSecretScene (3)"
+      }
+     }
+    }
+   ]
+  },
+  "325112339": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_PopPop",
+   "expressionName": "neutral",
+   "text": "Told ya my dick was magic, Jess.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-916883498": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Nightheart",
+   "expressionName": "neutral",
+   "text": "N-Nightheart, my name is... Hngaa~ Keep doing that, yes! I love it! You're such a filfthy old man!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-771816098": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_PopPop",
+   "expressionName": "neutral",
+   "text": "D-Doing what? Mmm, keep riding me, sweetie. ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1266505988": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    856034734,
+    2103455139
+   ],
+   "actor": "S_Nightheart",
+   "expressionName": "neutral",
+   "text": "Don't play dumb, you~ Hngaah... Fuck, fuck, fuck!",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "856034734": {
+   "kind": "text",
+   "parent": -1266505988,
+   "actor": null,
+   "text": "(Shove your cock up her ass)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2103455139": {
+   "kind": "text",
+   "parent": -1266505988,
+   "children": [
+    1361829588
+   ],
+   "actor": null,
+   "text": "(Escape the scene)",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1361829588": {
+   "kind": "text",
+   "parent": 2103455139,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "My job here is done.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-908882328": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Nightheart",
+   "expressionName": "neutral",
+   "text": "OH GOD! OH FUCK, FUCK, FUCK~ Is that your whole fucking hand!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active BeachSecretScene (4) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "BeachSecretScene (4)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/BeachSecretScene (4)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active BeachSecretScene (1) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "BeachSecretScene (1)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/BeachSecretScene (1)"
+      }
+     }
+    }
+   ]
+  },
+  "-1474382833": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_PopPop",
+   "expressionName": "neutral",
+   "text": "Hngaah! Y-You're suddenly a lot tighter, keep doing whatever you do, Jess. My cock loves it!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1397268223": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Nightheart",
+   "expressionName": "neutral",
+   "text": "Y-Yes! I'm... Cumming! Finally! You disgusting old pig, you're making me... FHAAAAAAAACK!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1723312516": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_PopPop",
+   "expressionName": "neutral",
+   "text": "Fuuuuck! Hngaah~ Take it, sweetie! My cock's filling your tight slit!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active BeachSecretScene (5) to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "BeachSecretScene (5)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/BeachSecretScene (5)"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active BeachSecretScene (2) to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "BeachSecretScene (2)",
+       "of": "GetGameObjectInstance",
+       "path": "4_CG_Manager-Sexy_Three/BeachSecretScene (2)"
+      }
+     }
+    }
+   ]
+  },
+  "-1656554284": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_Nightheart",
+   "expressionName": "neutral",
+   "text": "Fuck, Hngaah~ Fuck... Pop pop. You old pervert... This was easily our fuck.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1076715420": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "S_PopPop",
+   "expressionName": "neutral",
+   "text": "Y-Yes, I gotta say, keep this up and you might find a husband who's not a weedhead or gamer.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Beach",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play GothMilfBeachScene and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[DaysPassed] ≥ 10",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DaysPassed",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 10
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[random-1-of-10] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "random-1-of-10",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown2[beachgothmilfcld] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "beachgothmilfcld",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "branches": [
+    "gothmilf"
+   ],
+   "before": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_Nightheart to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_Nightheart",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Nightheart"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_PopPop to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_PopPop",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_PopPop"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'Blink'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "Blink"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_chars to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_chars",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_chars"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Disable_All_CG to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Disable_All_CG",
+       "of": "GetGameObjectInstance",
+       "path": "Disable_All_CG"
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown2[beachgothmilfcld] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "beachgothmilfcld",
+        "list": "Cooldown2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,835 @@
+{
+ "id": "8_Room_Talk/Entrance/Dtalk3",
+ "name": "Dtalk3",
+ "index": 6,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Josef"
+ ],
+ "roots": [
+  862119521,
+  -1232768228,
+  -668663501,
+  254296842,
+  1965100072,
+  971808862,
+  -2143075526,
+  1380363539,
+  798309192
+ ],
+ "nodes": {
+  "1965100072": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -1322263769,
+    -651451739,
+    1925052782
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Please, {S}, tell me this is some kind of sick joke.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1322263769": {
+   "kind": "text",
+   "parent": 1965100072,
+   "children": [
+    -1929163042
+   ],
+   "actor": null,
+   "text": "We sell erotic photos of her. That's how she got the money.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-651451739": {
+   "kind": "text",
+   "parent": 1965100072,
+   "children": [
+    164667574
+   ],
+   "actor": null,
+   "text": "Starmaker is a platform where...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1925052782": {
+   "kind": "text",
+   "parent": 1965100072,
+   "children": [
+    -729778891
+   ],
+   "actor": null,
+   "text": "{M} is a total slut, she lets me play with her tits.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-729778891": {
+   "kind": "text",
+   "parent": 1925052782,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "S-She what? What is going on here, stop saying these things!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "164667574": {
+   "kind": "text",
+   "parent": -651451739,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I know what Starmaker is! God, stop saying these thing!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1929163042": {
+   "kind": "text",
+   "parent": -1322263769,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "You are what... You and anna are... God...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "971808862": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Now it all makes sense. The sudden money, the way she keeps pulling away from me....",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2143075526": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1352081666,
+    2043733824,
+    2094724643
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I... H-How could you do that to me? I'm your {D}, damn it. I trusted you.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "862119521": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I don’t know what’s changed lately. Your {M}'’s making more money than ever, and honestly, she’s starting to feel like a stranger.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Meet Josef at the door each Friday.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "The Moment of Truth (Josef)",
+        "of": "Quest"
+       },
+       "m_TaskId": 1813187919
+      },
+      "m_WaitToComplete": false
+     }
+    }
+   ]
+  },
+  "-668663501": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    1914209414,
+    -1620872256,
+    -1276534435
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Is everything alright? You’ve seem a little... off.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[important-decision] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "important-decision",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-1232768228": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I keep trying to talk to her, but she just pretends everything's fine. Like nothing's different.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1914209414": {
+   "kind": "text",
+   "parent": -668663501,
+   "children": [
+    215357625
+   ],
+   "actor": null,
+   "text": "{M} and I are running a Starmaker page... ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1620872256": {
+   "kind": "text",
+   "parent": -668663501,
+   "children": [
+    -1086017293
+   ],
+   "actor": null,
+   "text": "Oh, she's probably just stressed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1276534435": {
+   "kind": "text",
+   "parent": -668663501,
+   "children": [
+    -959571852
+   ],
+   "actor": null,
+   "text": "I mean... She's working while you're not.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-959571852": {
+   "kind": "text",
+   "parent": -1276534435,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I know, I know... I'm trying to find a job and... ugh... I need to think...",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1086017293": {
+   "kind": "text",
+   "parent": -1620872256,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Yeah... maybe that’s all it is. I guess I should just give her some space.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "215357625": {
+   "kind": "text",
+   "parent": 1914209414,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Y-You are what? ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1352081666": {
+   "kind": "text",
+   "parent": -2143075526,
+   "children": [
+    -686768073
+   ],
+   "actor": null,
+   "text": "She saved us from being homeless.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2043733824": {
+   "kind": "text",
+   "parent": -2143075526,
+   "children": [
+    2061704677
+   ],
+   "actor": null,
+   "text": "If you don't adapt, you might lose her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2094724643": {
+   "kind": "text",
+   "parent": -2143075526,
+   "children": [
+    -11939166,
+    689088918
+   ],
+   "actor": null,
+   "text": "You're a loser, {D}. It would be the best if you just leave.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-11939166": {
+   "kind": "text",
+   "parent": 2094724643,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Mainstory[DEBT-PAID-OFF] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "DEBT-PAID-OFF",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[Debt] = 0",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Debt",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 0
+      }
+     }
+    }
+   ]
+  },
+  "2061704677": {
+   "kind": "text",
+   "parent": 2043733824,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Adapt? What the hell do you mean by that? Why is it always me who has to change, who has to just accept everything!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-686768073": {
+   "kind": "text",
+   "parent": 1352081666,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Yes, but this is just wrong. She didn’t just lie, she cheated on me... with her own {S}. Do you even realize how fucked up that is?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "689088918": {
+   "kind": "text",
+   "parent": 2094724643,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "Goodbye, {PC}. I really hope the two of you find whatever twisted happiness you're chasing. Just don’t expect me to watch it happen.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "questTaskComplete",
+     "type": "InstructionQuestsTaskComplete",
+     "title": "Complete Or find a way to push Josef out.",
+     "fields": {
+      "m_Journal": {
+       "kind": "object",
+       "name": "11_PlayerData",
+       "of": "GetGameObjectInstance",
+       "path": "11_PlayerData"
+      },
+      "m_Task": {
+       "m_Quest": {
+        "kind": "object",
+        "name": "Debt",
+        "of": "Quest"
+       },
+       "m_TaskId": -1675646997
+      },
+      "m_WaitToComplete": false
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/JosefSmoking/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Mainstory[D-LEFT-FOREVER] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-LEFT-FOREVER",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1380363539": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    -830953357,
+    1555418148,
+    3300773
+   ],
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I get why she felt lost, why she turned to something else... but you? I need to know why you did it, {S}. Why would you cross that line with her?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-830953357": {
+   "kind": "text",
+   "parent": 1380363539,
+   "children": [
+    1855644704
+   ],
+   "actor": null,
+   "text": "Like her, I wanted to help.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1555418148": {
+   "kind": "text",
+   "parent": 1380363539,
+   "children": [
+    -1548403566
+   ],
+   "actor": null,
+   "text": "I thought it would be fun.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "3300773": {
+   "kind": "text",
+   "parent": 1380363539,
+   "children": [
+    -816197190
+   ],
+   "actor": null,
+   "text": "Because {M} is really fucking hot.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "798309192": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "I... I need to talk to Anna...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events[pc-told-d-about-starmaker] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "pc-told-d-about-starmaker",
+        "list": "Events",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/JosefSmoking/D1Base/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[talk-button] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "talk-button",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "1855644704": {
+   "kind": "text",
+   "parent": -830953357,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "H-Help? You really thought this would help us?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1548403566": {
+   "kind": "text",
+   "parent": 1555418148,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "F-Fun? You thought sleeping with my wife, your {M}, would be fun!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-816197190": {
+   "kind": "text",
+   "parent": 3300773,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "H-Hot? She’s your {M}, {S}. How can you even say that out loud?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "254296842": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Josef",
+   "expressionName": "neutral",
+   "text": "W-What do you mean you run a Starmaker page with her? Are you serious right now? That’s a site for…",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Entrance/dtalkcond",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Dtalk3 and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Cooldown[beer-given] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "beer-given",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Mainstory[M-Stage-3-Everything-but-sex] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "M-Stage-3-Everything-but-sex",
+        "list": "Mainstory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_6[m-d-alternatereveal] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "m-d-alternatereveal",
+        "list": "Events_6",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Events[D-talks-beer] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-talks-beer",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Events[D-talks-beer] + 1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "D-talks-beer",
+        "list": "Events",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": 1
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Cooldown[beer-given] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "beer-given",
+        "list": "Cooldown",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

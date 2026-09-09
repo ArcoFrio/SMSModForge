@@ -1,0 +1,220 @@
+{
+ "id": "8_Vacation_Stories/Japan_Subway/SubwayToPlaza",
+ "name": "SubwayToPlaza",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "Adrian"
+ ],
+ "roots": [
+  -2112903464,
+  315758082
+ ],
+ "nodes": {
+  "-2112903464": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    2141858328,
+    -109967108,
+    -943031187,
+    -57960544,
+    -490520662
+   ],
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "What are your thoughts on Chihiro? What's her super big secret?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "2141858328": {
+   "kind": "text",
+   "parent": -2112903464,
+   "children": [
+    -344088354
+   ],
+   "actor": null,
+   "text": "She’s secretly a ninja protecting some ancient treasure.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-109967108": {
+   "kind": "text",
+   "parent": -2112903464,
+   "children": [
+    -859912895
+   ],
+   "actor": null,
+   "text": "Probably something boring, like unpaid taxes.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-943031187": {
+   "kind": "text",
+   "parent": -2112903464,
+   "children": [
+    303874163
+   ],
+   "actor": null,
+   "text": "I bet she’s hoarding a massive collection of anime body pillows.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-57960544": {
+   "kind": "text",
+   "parent": -2112903464,
+   "children": [
+    1699256798
+   ],
+   "actor": null,
+   "text": "She’s running some secret underground organization. Maybe she's a crime boss.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-490520662": {
+   "kind": "text",
+   "parent": -2112903464,
+   "children": [
+    942126381
+   ],
+   "actor": null,
+   "text": "She's probably like a super slut who loves sex.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "303874163": {
+   "kind": "text",
+   "parent": -943031187,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Imagine.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-859912895": {
+   "kind": "text",
+   "parent": -109967108,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Yeah, that's probably it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-344088354": {
+   "kind": "text",
+   "parent": 2141858328,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "A ninja? Seriously? ... I don't think so, {PC}...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "942126381": {
+   "kind": "text",
+   "parent": -490520662,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "No way, she's a maiden of the shrine. She must be pure!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Vacation_NoSave[pc-called-chihiro-twist] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "pc-called-chihiro-twist",
+        "list": "Vacation_NoSave",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1699256798": {
+   "kind": "text",
+   "parent": -57960544,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Then what are we doing here!? I mean... No way.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "315758082": {
+   "kind": "text",
+   "parent": -1,
+   "actor": "Adrian",
+   "expressionName": "neutral",
+   "text": "Well, gotta say. It's kinda thrilling, like an adventure or something.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Vacation_Stories/Japan_Subway",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play SubwayToPlaza and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core_NoSave[incoming-vacation-map] = 4",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "incoming-vacation-map",
+        "list": "Core_NoSave",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 4
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1680 @@
+{
+ "id": "8_Room_Talk/Garage/Elbandito",
+ "name": "Elbandito",
+ "index": 3,
+ "skin": "Default_Dialogue",
+ "roles": [
+  "S_Elbandito",
+  "S_Tristan",
+  "You"
+ ],
+ "roots": [
+  1785303716,
+  1473887336
+ ],
+ "nodes": {
+  "129846979": {
+   "kind": "choice",
+   "parent": 1785303716,
+   "children": [
+    -1764557883,
+    -2147400522,
+    926349581,
+    -1996757679
+   ],
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "Do you have any idea who I am, boy?",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1764557883": {
+   "kind": "text",
+   "parent": 129846979,
+   "actor": null,
+   "text": "A hitman?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-2147400522": {
+   "kind": "text",
+   "parent": 129846979,
+   "actor": null,
+   "text": "A bounty hunter?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "926349581": {
+   "kind": "text",
+   "parent": 129846979,
+   "actor": null,
+   "text": "A cowboy?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1996757679": {
+   "kind": "text",
+   "parent": 129846979,
+   "actor": null,
+   "text": "An assassin?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-433239138": {
+   "kind": "choice",
+   "parent": 1785303716,
+   "children": [
+    1582074694,
+    -1639141151,
+    -1001753390
+   ],
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "I'm an official of your {M}'s health insurance company.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1582074694": {
+   "kind": "text",
+   "parent": -433239138,
+   "children": [
+    -1169032648
+   ],
+   "actor": null,
+   "text": "Why carry a gun then!?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1639141151": {
+   "kind": "text",
+   "parent": -433239138,
+   "children": [
+    992402013,
+    -518774099
+   ],
+   "actor": null,
+   "text": "I don't believe you...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1001753390": {
+   "kind": "text",
+   "parent": -433239138,
+   "children": [
+    708815051
+   ],
+   "actor": null,
+   "text": "You look like a cowboy.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "708815051": {
+   "kind": "text",
+   "parent": -1001753390,
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "Listen, kid. I don't have all day.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "992402013": {
+   "kind": "text",
+   "parent": -1639141151,
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "Your social security number is Z24-A29-441-3B/1.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1169032648": {
+   "kind": "text",
+   "parent": 1582074694,
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "Oh, this? This is just to make sure that you will pay.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-518774099": {
+   "kind": "text",
+   "parent": -1639141151,
+   "actor": "You",
+   "expressionName": "neutral",
+   "text": "Fuck, that's correct.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1785303716": {
+   "kind": "text",
+   "parent": -1,
+   "children": [
+    -1948173731,
+    129846979,
+    -433239138,
+    924505833,
+    1159059265,
+    2122600874,
+    1593955938
+   ],
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "Look who we got here..",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[elbandito-met] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "elbandito-met",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ]
+  },
+  "-1948173731": {
+   "kind": "text",
+   "parent": 1785303716,
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "I've been looking for you, {PC}.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Events_Only_Done_2[elbandito-met] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "elbandito-met",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "924505833": {
+   "kind": "text",
+   "parent": 1785303716,
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "It's simple, every monday you come down here and hand me five grand.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1159059265": {
+   "kind": "text",
+   "parent": 1785303716,
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "Every week you miss, i'll count down one number, startin at three...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2122600874": {
+   "kind": "choice",
+   "parent": 1785303716,
+   "children": [
+    918450127,
+    -1304566697,
+    1056347205
+   ],
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "If I reach zero... Well, you don't want to know what happens.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "918450127": {
+   "kind": "text",
+   "parent": 2122600874,
+   "children": [
+    2117998100
+   ],
+   "actor": null,
+   "text": "Alright, alright. I get it.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1304566697": {
+   "kind": "text",
+   "parent": 2122600874,
+   "children": [
+    -1340414910
+   ],
+   "actor": null,
+   "text": "Is there any way to make you go away?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1056347205": {
+   "kind": "text",
+   "parent": 2122600874,
+   "children": [
+    -157370853
+   ],
+   "actor": null,
+   "text": "I'll call the cops!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1340414910": {
+   "kind": "text",
+   "parent": -1304566697,
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "No.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-157370853": {
+   "kind": "text",
+   "parent": 1056347205,
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "Hah, try it, kid. I'm an official and I'm allowed to use force to retreive what is owed.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "2117998100": {
+   "kind": "text",
+   "parent": 918450127,
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "Good.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1593955938": {
+   "kind": "text",
+   "parent": 1785303716,
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "I'm in a good mood, so this week i'll let you pass for free. See you next monday.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1473887336": {
+   "kind": "choice",
+   "parent": -1,
+   "children": [
+    476141655,
+    -353502791,
+    -716495070,
+    -315375180
+   ],
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "Here we are, I hope for your sake that you got the money.",
+   "tag": "root",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "476141655": {
+   "kind": "text",
+   "parent": 1473887336,
+   "children": [
+    -845944459,
+    959406468
+   ],
+   "actor": null,
+   "text": "Yeah, here it is. [${frankmoney}]",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ Core_2[frankmoneyrequest]",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "variable",
+        "variable": {
+         "scope": "global",
+         "name": "frankmoneyrequest",
+         "list": "Core_2",
+         "type": "number"
+        }
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-315375180": {
+   "kind": "text",
+   "parent": 1473887336,
+   "children": [
+    533679472,
+    -1402832196,
+    -971981795,
+    -710334794,
+    -1617416442
+   ],
+   "actor": null,
+   "text": "I don't have the money.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "533679472": {
+   "kind": "text",
+   "parent": -315375180,
+   "actor": null,
+   "text": "",
+   "duration": "Timeout",
+   "timeout": 0.1,
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[frank-count] + -1",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "frank-count",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -1
+      }
+     }
+    }
+   ]
+  },
+  "959406468": {
+   "kind": "text",
+   "parent": 476141655,
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "Good job, kid. See you next week.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "type": "InstructionArithmeticSubtractNumbers",
+     "title": "Set Core[Cash] = Core[Cash] - Core_2[frankmoneyrequest]",
+     "fields": {
+      "Title": "Set Core[Cash] = Core[Cash] - Core_2[frankmoneyrequest]",
+      "BaseType": {
+       "$meta": "GameCreator.Runtime.VisualScripting.Instruction"
+      },
+      "FullType": {
+       "$meta": "GameCreator.Runtime.VisualScripting.InstructionArithmeticSubtractNumbers"
+      },
+      "Breakpoint": false,
+      "IsEnabled": true,
+      "Color": {
+       "r": 0.03529412,
+       "g": 0.03529412,
+       "b": 0.03529412,
+       "a": 1
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core_2[frankmoneyrequest] + Core_2[frankmoneyrequest]",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "frankmoneyrequest",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "frankmoneyrequest",
+        "list": "Core_2",
+        "type": "number"
+       }
+      }
+     }
+    },
+    {
+     "kind": "checkConditions",
+     "type": "InstructionLogicCheckConditions",
+     "title": "Check If Core_2[frankmoneyrequest] > 100000",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "compareNumber",
+         "type": "ConditionMathCompareIntegers",
+         "title": "If Core_2[frankmoneyrequest] > 100000",
+         "fields": {
+          "m_Value": {
+           "kind": "variable",
+           "variable": {
+            "scope": "global",
+            "name": "frankmoneyrequest",
+            "list": "Core_2",
+            "type": "number"
+           }
+          },
+          "m_CompareTo": {
+           "m_Comparison": "Greater",
+           "m_CompareTo": {
+            "kind": "value",
+            "value": 100000
+           }
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core_2[frankmoneyrequest] = 100000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "frankmoneyrequest",
+        "list": "Core_2",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 100000
+      }
+     }
+    }
+   ]
+  },
+  "-1402832196": {
+   "kind": "text",
+   "parent": -315375180,
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "Three...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[frank-count] = 3",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "frank-count",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 3
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-971981795": {
+   "kind": "text",
+   "parent": -315375180,
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "Two....",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[frank-count] = 2",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "frank-count",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 2
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-710334794": {
+   "kind": "text",
+   "parent": -315375180,
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "One...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[frank-count] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "frank-count",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1617416442": {
+   "kind": "text",
+   "parent": -315375180,
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "Zero...",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[frank-count] = 0",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "frank-count",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 0
+       }
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setNumber",
+     "type": "InstructionArithmeticSetNumber",
+     "title": "Set Core[Active-Ending] = 5",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Active-Ending",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": 5
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active 17_ending to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "17_ending",
+       "of": "GetGameObjectInstance",
+       "path": "17_ending"
+      }
+     }
+    }
+   ]
+  },
+  "-845944459": {
+   "kind": "text",
+   "parent": 476141655,
+   "children": [
+    -2139431974,
+    -1115419457,
+    782778232,
+    -1401930706,
+    23376075,
+    2003254931,
+    1234215211,
+    266311607
+   ],
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "You'd better leave, bro. I just juiced up on roids and I'm ready to finish you off.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Events_Only_Done_2[tristan-helped] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "tristan-helped",
+        "list": "Events_Only_Done_2",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onStart": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Richguy to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Richguy",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Richguy"
+      }
+     }
+    }
+   ]
+  },
+  "-2139431974": {
+   "kind": "text",
+   "parent": -845944459,
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "W-What? ...",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1115419457": {
+   "kind": "text",
+   "parent": -845944459,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "Do you think you can shoot faster than I can rearrange your jawline?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "782778232": {
+   "kind": "text",
+   "parent": -845944459,
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "Grrr... You're lucky, {PC}. Very lucky.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Elbandito/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "-1401930706": {
+   "kind": "choice",
+   "parent": -845944459,
+   "children": [
+    -1338923643,
+    -73265566
+   ],
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "Yeah! Run away, pissboy.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1338923643": {
+   "kind": "text",
+   "parent": -1401930706,
+   "children": [
+    383846964
+   ],
+   "actor": null,
+   "text": "Thanks, Tristan.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-73265566": {
+   "kind": "text",
+   "parent": -1401930706,
+   "children": [
+    1206068777
+   ],
+   "actor": null,
+   "text": "I could have handled it myelf.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "383846964": {
+   "kind": "text",
+   "parent": -1338923643,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "No problem, bro.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1206068777": {
+   "kind": "text",
+   "parent": -73265566,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "I know what you mean, but you have a lot more to lose than I do.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "23376075": {
+   "kind": "text",
+   "parent": -845944459,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "I just thought I'd say hi and let you know that things are looking up – you're the reason why! ",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "266311607": {
+   "kind": "text",
+   "parent": -845944459,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "So yeah, Thanks again... Tristan out.",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[no-more-shark-guy] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "no-more-shark-guy",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/Richguy/MBase1/Leave"
+      }
+     }
+    }
+   ]
+  },
+  "2003254931": {
+   "kind": "text",
+   "parent": -845944459,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "I even made a real friend recently, a gal who works at a gas station. She doesn't speak very often, but I'm enjoying getting to know her.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-716495070": {
+   "kind": "text",
+   "parent": 1473887336,
+   "children": [
+    1758078441
+   ],
+   "actor": null,
+   "text": "Fuck you! [Use Le Gun]",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Inventory[gun] = True",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "gun",
+        "list": "Inventory",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1758078441": {
+   "kind": "text",
+   "parent": -716495070,
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "W-What!? Arghh!!!!",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "playSfx",
+     "type": "InstructionCommonAudioSFXPlay",
+     "title": "Play SFX: Pistol Gun Shot",
+     "fields": {
+      "m_AudioClip": {
+       "kind": "object",
+       "name": "Pistol Gun Shot",
+       "of": "GetAudioClip"
+      },
+      "m_WaitToComplete": false,
+      "m_Config": {
+       "m_Pitch": {
+        "x": 1,
+        "y": 1
+       },
+       "m_TransitionIn": 0,
+       "m_UpdateMode": "GameTime",
+       "m_SpatialBlend": "None",
+       "m_Target": {
+        "kind": "none"
+       },
+       "m_Volume": 1
+      }
+     }
+    }
+   ],
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Elbandito/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[no-more-shark-guy] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "no-more-shark-guy",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "-353502791": {
+   "kind": "text",
+   "parent": 1473887336,
+   "children": [
+    -1148172953,
+    92713555
+   ],
+   "actor": null,
+   "text": "I'm sick of you.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "-1148172953": {
+   "kind": "text",
+   "parent": -353502791,
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "Oh, really? Well, neither of us wrote the rules, did we?",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "92713555": {
+   "kind": "choice",
+   "parent": -353502791,
+   "children": [
+    1038183282,
+    -1052431160
+   ],
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "But here’s the deal—you can pay off your {M}’s entire debt, plus interest. Just a simple $200k, and we’re both out of each other’s hair for good.",
+   "settings": {
+    "m_HideUnavailable": false,
+    "m_HideVisited": false,
+    "m_SkipChoice": false,
+    "m_ShuffleChoices": false,
+    "m_TimedChoice": {
+     "m_TimedChoice": false,
+     "m_Duration": {
+      "kind": "value",
+      "value": 10
+     },
+     "m_Timeout": "ChooseRandom"
+    },
+    "m_Options": "FromSkin"
+   }
+  },
+  "1038183282": {
+   "kind": "text",
+   "parent": 92713555,
+   "children": [
+    1690142091,
+    -736613097
+   ],
+   "actor": null,
+   "text": "Fine, here’s the money.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "conditions": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Cash] ≥ 200000",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 200000
+       }
+      }
+     }
+    }
+   ]
+  },
+  "-1052431160": {
+   "kind": "text",
+   "parent": 92713555,
+   "children": [
+    605914849
+   ],
+   "actor": null,
+   "text": "I don’t have that kind of money.",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "605914849": {
+   "kind": "text",
+   "parent": -1052431160,
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "Yeah, I figured as much. That’s why I’m willing to settle for a measly $5k.",
+   "jump": {
+    "mode": "Jump",
+    "to": "root"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  },
+  "1690142091": {
+   "kind": "text",
+   "parent": 1038183282,
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "Well, look at that! I honestly didn’t think you’d pull it off.",
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onStart": [
+    {
+     "kind": "incrementNumber",
+     "type": "InstructionArithmeticIncrementNumber",
+     "title": "Increment Core[Cash] + -200000",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Cash",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_Value": {
+       "kind": "value",
+       "value": -200000
+      }
+     }
+    }
+   ]
+  },
+  "-736613097": {
+   "kind": "text",
+   "parent": 1038183282,
+   "actor": "S_Elbandito",
+   "expressionName": "neutral",
+   "text": "Guess this means we’re finally done here. Tell your {M} she’s lucky to have such a generous little helper… ",
+   "jump": {
+    "mode": "Exit"
+   },
+   "settings": {
+    "m_Options": "FromSkin"
+   },
+   "onFinish": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Elbandito/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[no-more-shark-guy] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "no-more-shark-guy",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    }
+   ]
+  },
+  "1234215211": {
+   "kind": "text",
+   "parent": -845944459,
+   "actor": "S_Tristan",
+   "expressionName": "neutral",
+   "text": "She’s nice! Gives me apple juice for free! Then I take a little nap, wake up all dizzy, and my neck’s kinda leaky… but, uh… free juice!",
+   "settings": {
+    "m_Options": "FromSkin"
+   }
+  }
+ },
+ "starts": [
+  {
+   "by": "8_Room_Talk/Garage",
+   "script": "Conditions",
+   "how": "InstructionDialoguePlay",
+   "title": "Play Elbandito and wait",
+   "as": "Dialogue",
+   "when": [
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Day] = 1",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Day",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "Equals",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 1
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareNumber",
+     "type": "ConditionMathCompareIntegers",
+     "title": "If Core[Daily-Income] ≥ 5000",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Daily-Income",
+        "list": "Core",
+        "type": "number"
+       }
+      },
+      "m_CompareTo": {
+       "m_Comparison": "GreaterOrEqual",
+       "m_CompareTo": {
+        "kind": "value",
+        "value": 5000
+       }
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Core[health-insurance-shark-cooldown] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "health-insurance-shark-cooldown",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "compareBool",
+     "type": "ConditionMathCompareBooleans",
+     "title": "If Core[no-more-shark-guy] = False",
+     "fields": {
+      "m_Value": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "no-more-shark-guy",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_Comparison": "Equals",
+      "m_CompareTo": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    }
+   ],
+   "before": [
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Elbandito/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active S_Elbandito to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "S_Elbandito",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Elbandito"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 1 second",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 1
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    }
+   ],
+   "after": [
+    {
+     "kind": "checkConditions",
+     "type": "InstructionLogicCheckConditions",
+     "title": "Check Not is Active 17_ending",
+     "fields": {
+      "m_Conditions": {
+       "conditions": [
+        {
+         "kind": "gameObjectActive",
+         "type": "ConditionGameObjectActive",
+         "title": "Not is Active 17_ending",
+         "fields": {
+          "m_GameObject": {
+           "kind": "object",
+           "name": "17_ending",
+           "of": "GetGameObjectInstance",
+           "path": "17_ending"
+          }
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Leave to True",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": true
+      },
+      "m_GameObject": {
+       "kind": "object",
+       "name": "Leave",
+       "of": "GetGameObjectInstance",
+       "path": "2_Bust_Manager/S_Elbandito/MBase1/Leave"
+      }
+     }
+    },
+    {
+     "kind": "wait",
+     "type": "InstructionCommonTimeWait",
+     "title": "Wait 2 seconds",
+     "fields": {
+      "m_Seconds": {
+       "kind": "value",
+       "value": 2
+      },
+      "m_Mode": {
+       "m_UpdateTime": "GameTime"
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[Lock-Game] = False",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "Lock-Game",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": false
+      }
+     }
+    },
+    {
+     "kind": "setBool",
+     "type": "InstructionBooleanSetBool",
+     "title": "Set Core[health-insurance-shark-cooldown] = True",
+     "fields": {
+      "m_Set": {
+       "kind": "variable",
+       "variable": {
+        "scope": "global",
+        "name": "health-insurance-shark-cooldown",
+        "list": "Core",
+        "type": "boolean"
+       }
+      },
+      "m_From": {
+       "kind": "value",
+       "value": true
+      }
+     }
+    },
+    {
+     "kind": "raiseSignal",
+     "type": "InstructionLogicRaiseSignal",
+     "title": "Signal 'FadeUI'",
+     "fields": {
+      "m_Signal": {
+       "m_String": "FadeUI"
+      }
+     }
+    },
+    {
+     "kind": "setActive",
+     "type": "InstructionGameObjectSetActive",
+     "title": "Set Active Self to False",
+     "fields": {
+      "m_Active": {
+       "kind": "value",
+       "value": false
+      },
+      "m_GameObject": {
+       "kind": "raw",
+       "type": "GetGameObjectSelf",
+       "data": {
+        "String": "Self",
+        "EditorValue": null
+       }
+      }
+     }
+    }
+   ]
+  }
+ ]
+}
