@@ -53,21 +53,35 @@ SOURCES = ["VanillaBustArt", "VanillaLevelArt"]
 # lost -- point-sampling on the way back up cannot recover what a smoothing
 # filter discarded.
 #
-#   busts   NEAREST. A bust is upscaled again for display, so it wants hard
-#           pixels: visibly low resolution rather than softened. A smooth
-#           downscale followed by a point upscale gives the worst of both --
-#           blurred art with blocky edges.
+#   busts   BICUBIC. This used to be NEAREST, on the reasoning that a bust is
+#           upscaled again for display and so wants hard pixels. That was
+#           wrong, and looking at the result is what settled it: the ratio is
+#           1.5, not an integer, so point-sampling drops every third row at
+#           uneven intervals. It does not read as "low resolution art" -- it
+#           deforms faces. Eyes end up different sizes.
+#
+#           The argument against smoothing was that a soft downscale followed
+#           by a point upscale gives the worst of both. That was a fair
+#           objection, and the answer is that the upscale no longer point-
+#           samples either: VanillaArtSizes interpolates on the way back up,
+#           so both halves of the pipeline agree.
 #   levels  LANCZOS. A level is only ever viewed SMALLER than the thumbnail, so
 #           it is never upscaled and never shows its pixels. Point-sampling a
 #           4x reduction of detailed art throws away fifteen pixels in sixteen
 #           and shimmers; a proper filter keeps it clean at the size it is
 #           actually seen.
-FILTERS = {"VanillaBustArt": "nearest", "VanillaLevelArt": "lanczos"}
+FILTERS = {"VanillaBustArt": "bicubic", "VanillaLevelArt": "lanczos"}
 OUT = "VanillaArtThumbs"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 RES = os.path.normpath(os.path.join(HERE, "..", "Resources"))
-CATALOG = os.path.normpath(os.path.join(HERE, "..", "Model", "VanillaBusts.cs"))
+# The names live in Shared/, compiled into the runtime plugin as well.
+# They used to be in Model/VanillaBusts.cs, which now only projects them --
+# so this pointed at a file with no names in it and the guard below would
+# have refused to run. That is the right way round for a guard to fail, but
+# it does mean nobody had re-run this since the move.
+CATALOG = os.path.normpath(
+    os.path.join(HERE, "..", "..", "Shared", "VanillaCastData.cs"))
 
 
 def catalogued_busts():
@@ -84,7 +98,7 @@ def catalogued_busts():
     Drop a bust from VanillaBusts.cs and its art stops shipping on the next run.
     """
     src = io.open(CATALOG, encoding="utf-8-sig").read()
-    names = set(re.findall(r'new\("([^"]+)"', src))
+    names = set(re.findall(r'new VanillaBust\("([^"]+)"', src))
     if not names:
         sys.exit("could not read any bust names from %s -- refusing to ship "
                  "art with no catalog to check it against" % CATALOG)
@@ -99,23 +113,34 @@ def main():
     # is drawn into a fixed 256x256 frame, so it is upscaled again on load and
     # every halving is visible, while a level is only ever shown small. Busts
     # are also a tenth of the bytes, so buying quality there is cheap.
-    ap.add_argument("--scale-bust", type=float, default=None,
-                    help="override --scale for VanillaBustArt")
+    # Defaulted rather than left to whoever runs this. The bust scale was
+    # being passed on the command line, which meant the number lived in
+    # somebody's shell history: a re-run without it would have quietly shipped
+    # quarter-scale busts. 1.25 is gentle enough that a face survives the round
+    # trip and back, and busts are a tenth of the bytes of the level art, so
+    # buying quality here is cheap.
+    ap.add_argument("--scale-bust", type=float, default=1.25,
+                    help="override --scale for VanillaBustArt (default 1.25)")
     ap.add_argument("--scale-level", type=float, default=None,
                     help="override --scale for VanillaLevelArt")
-    ap.add_argument("--filter", choices=("nearest", "lanczos"), default=None,
+    ap.add_argument("--filter", choices=("nearest", "bicubic", "lanczos"), default=None,
                     help="override the per-folder resampling filter for both sets")
+    ap.add_argument("--only", choices=tuple(SOURCES), default=None,
+                    help="rescale just this set, leaving the other one on disk "
+                         "as it is (sizes.json is merged, not replaced)")
     ap.add_argument("--check", action="store_true",
                     help="report what would happen, write nothing")
     args = ap.parse_args()
     per_source = {
-        "VanillaBustArt": args.scale_bust or args.scale,
+        "VanillaBustArt": args.scale_bust,
         "VanillaLevelArt": args.scale_level or args.scale,
     }
     if any(v < 1 for v in per_source.values()):
         sys.exit("scales must be 1 or more")
     filters = {n: (args.filter or FILTERS[n]) for n in SOURCES}
-    RESAMPLE = {"nearest": Image.NEAREST, "lanczos": Image.LANCZOS}
+    RESAMPLE = {"nearest": Image.NEAREST,
+                "bicubic": Image.BICUBIC,
+                "lanczos": Image.LANCZOS}
 
     out_root = os.path.join(RES, OUT)
     sizes = {}
@@ -126,6 +151,10 @@ def main():
     excluded = 0
 
     for src_name in SOURCES:
+        if args.only and src_name != args.only:
+            print("  (left as it is) %s" % src_name)
+            continue
+
         src_root = os.path.join(RES, src_name)
         if not os.path.isdir(src_root):
             print("  (missing, skipped) %s" % src_name)
@@ -181,9 +210,28 @@ def main():
                     stats["copied"] += 1
 
     if not args.check:
+        manifest = {"scale": dict(per_source), "filter": dict(filters),
+                    "originals": sizes}
+
+        # Rescaling one set must not wipe the other set's recorded sizes: the
+        # preview restores every thumbnail through this file, and a missing
+        # entry means art drawn at a quarter of its size with nothing to say
+        # why.
+        if args.only:
+            existing = os.path.join(out_root, "sizes.json")
+            if os.path.exists(existing):
+                with open(existing, encoding="utf-8") as f:
+                    was = json.load(f)
+                merged = dict(was.get("originals", {}))
+                merged.update(sizes)
+                manifest["originals"] = merged
+                for key in ("scale", "filter"):
+                    kept = dict(was.get(key, {}))
+                    kept[args.only] = manifest[key][args.only]
+                    manifest[key] = kept
+
         with open(os.path.join(out_root, "sizes.json"), "w", encoding="utf-8") as f:
-            json.dump({"scale": per_source, "filter": filters, "originals": sizes},
-                      f, indent=0, sort_keys=True)
+            json.dump(manifest, f, indent=0, sort_keys=True)
 
     if excluded:
         print("excluded %d bust folder(s) absent from the catalog" % excluded)

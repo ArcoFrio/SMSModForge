@@ -105,23 +105,32 @@ internal static class VanillaArtSizes
         if (w <= 0 || h <= 0) return img;
         if (img.PixelWidth == w && img.PixelHeight == h) return img;
 
-        return PointUpscale(img, w, h);
+        return SmoothUpscale(img, w, h);
     }
 
     /// <summary>
-    /// Nearest-neighbour resize to <paramref name="w"/>x<paramref name="h"/>.
+    /// Interpolated resize to <paramref name="w"/>x<paramref name="h"/>.
     /// <para/>
-    /// <c>TransformedBitmap</c> would be less code, but it interpolates, and a
-    /// four-times upscale of a thumbnail through a smoothing filter looks like
-    /// a blurred photograph rather than like art shown at low resolution. Point
-    /// sampling is honest about what it is: blocky, obviously a preview, and
-    /// never mistakable for the real asset.
+    /// This used to point-sample, on the reasoning that a thumbnail blown back
+    /// up through a smoothing filter looks like a blurred photograph, while
+    /// blocky is at least honest about being a preview. Looking at the result
+    /// settled it the other way: the shipped busts are reduced by 1.5, not by
+    /// an integer, so point-sampling either half of that trip drops rows at
+    /// uneven intervals. It does not read as low-resolution art — it deforms
+    /// faces, and gives a character one eye larger than the other.
     /// <para/>
-    /// The previews already set <c>BitmapScalingMode.NearestNeighbor</c> for
-    /// their on-screen scaling, so this keeps the two halves of the pipeline
-    /// agreeing rather than smoothing here and point-sampling a step later.
+    /// Bilinear rather than anything cleverer, for two reasons. The trip back
+    /// up is about 1.5x, where the difference between this and a bicubic
+    /// kernel is not visible — compared side by side at five times
+    /// magnification, they are the same picture. And it is plain arithmetic on
+    /// a byte array: no dispatcher, no render target, safe to call from
+    /// whatever thread happens to be loading art.
+    /// <para/>
+    /// The downscale is smooth too (see <c>Tools/MakeArtThumbnails.py</c>), so
+    /// both halves of the pipeline agree rather than one smoothing and the
+    /// other point-sampling a step later.
     /// </summary>
-    private static BitmapSource PointUpscale(BitmapSource img, int w, int h)
+    private static BitmapSource SmoothUpscale(BitmapSource img, int w, int h)
     {
         var conv = new FormatConvertedBitmap(img, PixelFormats.Bgra32, null, 0);
         int sw = conv.PixelWidth, sh = conv.PixelHeight;
@@ -133,19 +142,39 @@ internal static class VanillaArtSizes
 
         int dstStride = w * 4;
         var dst = new byte[dstStride * h];
+
+        // Sample from the CENTRE of each destination pixel, which is what puts
+        // the picture back where it came from. Sampling from the corner shifts
+        // everything half a pixel up and left - invisible on one hop, and
+        // exactly the kind of drift that accumulates into a misaligned overlay.
         for (int y = 0; y < h; y++)
         {
-            int sy = (int)((long)y * sh / h);
-            int srcRow = sy * srcStride;
+            double fy = (y + 0.5) * sh / h - 0.5;
+            int y0 = (int)System.Math.Floor(fy);
+            double wy = fy - y0;
+
+            int y1 = Clamp(y0 + 1, sh - 1);
+            y0 = Clamp(y0, sh - 1);
+
+            int row0 = y0 * srcStride, row1 = y1 * srcStride;
             int dstRow = y * dstStride;
+
             for (int x = 0; x < w; x++)
             {
-                int si = srcRow + (int)((long)x * sw / w) * 4;
+                double fx = (x + 0.5) * sw / w - 0.5;
+                int x0 = (int)System.Math.Floor(fx);
+                double wx = fx - x0;
+
+                int x1 = Clamp(x0 + 1, sw - 1) * 4;
+                x0 = Clamp(x0, sw - 1) * 4;
+
                 int di = dstRow + x * 4;
-                dst[di]     = src[si];
-                dst[di + 1] = src[si + 1];
-                dst[di + 2] = src[si + 2];
-                dst[di + 3] = src[si + 3];
+                for (int c = 0; c < 4; c++)
+                {
+                    double top = src[row0 + x0 + c] + (src[row0 + x1 + c] - src[row0 + x0 + c]) * wx;
+                    double bottom = src[row1 + x0 + c] + (src[row1 + x1 + c] - src[row1 + x0 + c]) * wx;
+                    dst[di + c] = (byte)(top + (bottom - top) * wy + 0.5);
+                }
             }
         }
 
@@ -153,4 +182,9 @@ internal static class VanillaArtSizes
         outBmp.Freeze();
         return outBmp;
     }
+
+    /// <summary>Keep a sample inside the picture. The edge row is repeated
+    /// rather than wrapped, so nothing bleeds in from the far side.</summary>
+    private static int Clamp(int value, int max)
+        => value < 0 ? 0 : value > max ? max : value;
 }
