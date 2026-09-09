@@ -120,11 +120,11 @@ internal static class VanillaArtSizes
     /// faces, and gives a character one eye larger than the other.
     /// <para/>
     /// Bilinear rather than anything cleverer, for two reasons. The trip back
-    /// up is about 1.5x, where the difference between this and a bicubic
+    /// up is about 1.25x, where the difference between this and a bicubic
     /// kernel is not visible — compared side by side at five times
     /// magnification, they are the same picture. And it is plain arithmetic on
-    /// a byte array: no dispatcher, no render target, safe to call from
-    /// whatever thread happens to be loading art.
+    /// a byte array, so it needs no dispatcher and no render target; see
+    /// <see cref="PixelResample"/>, which the UI sprite restore shares.
     /// <para/>
     /// The downscale is smooth too (see <c>Tools/MakeArtThumbnails.py</c>), so
     /// both halves of the pipeline agree rather than one smoothing and the
@@ -141,50 +141,11 @@ internal static class VanillaArtSizes
         conv.CopyPixels(src, srcStride, 0);
 
         int dstStride = w * 4;
-        var dst = new byte[dstStride * h];
-
-        // Sample from the CENTRE of each destination pixel, which is what puts
-        // the picture back where it came from. Sampling from the corner shifts
-        // everything half a pixel up and left - invisible on one hop, and
-        // exactly the kind of drift that accumulates into a misaligned overlay.
-        for (int y = 0; y < h; y++)
-        {
-            double fy = (y + 0.5) * sh / h - 0.5;
-            int y0 = (int)System.Math.Floor(fy);
-            double wy = fy - y0;
-
-            int y1 = Clamp(y0 + 1, sh - 1);
-            y0 = Clamp(y0, sh - 1);
-
-            int row0 = y0 * srcStride, row1 = y1 * srcStride;
-            int dstRow = y * dstStride;
-
-            for (int x = 0; x < w; x++)
-            {
-                double fx = (x + 0.5) * sw / w - 0.5;
-                int x0 = (int)System.Math.Floor(fx);
-                double wx = fx - x0;
-
-                int x1 = Clamp(x0 + 1, sw - 1) * 4;
-                x0 = Clamp(x0, sw - 1) * 4;
-
-                int di = dstRow + x * 4;
-                for (int c = 0; c < 4; c++)
-                {
-                    double top = src[row0 + x0 + c] + (src[row0 + x1 + c] - src[row0 + x0 + c]) * wx;
-                    double bottom = src[row1 + x0 + c] + (src[row1 + x1 + c] - src[row1 + x0 + c]) * wx;
-                    dst[di + c] = (byte)(top + (bottom - top) * wy + 0.5);
-                }
-            }
-        }
+        var dst = PixelResample.Bilinear(src, sw, sh, w, h);
 
         var outBmp = BitmapSource.Create(w, h, 96, 96, PixelFormats.Bgra32, null, dst, dstStride);
         outBmp.Freeze();
         return outBmp;
     }
 
-    /// <summary>Keep a sample inside the picture. The edge row is repeated
-    /// rather than wrapped, so nothing bleeds in from the far side.</summary>
-    private static int Clamp(int value, int max)
-        => value < 0 ? 0 : value > max ? max : value;
 }

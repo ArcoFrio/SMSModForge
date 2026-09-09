@@ -72,6 +72,16 @@ public sealed class VanillaUiAssets : IUiAssets
             {
                 if (string.IsNullOrEmpty(e.Key) || string.IsNullOrEmpty(e.File)) continue;
                 _spriteFiles[e.Key] = e.File;
+
+                // The size the sprite was extracted at, which is the size
+                // everything else is expressed in: a sliced image's border, and
+                // the pixels-per-unit the renderer divides by. The PNG on disk
+                // may be smaller than this - see the note on Sprite - and is
+                // brought back to it on the way in, so nothing downstream has
+                // to know that happened.
+                int w = (int)System.Math.Round(At(e.TextureRect, 2));
+                int h = (int)System.Math.Round(At(e.TextureRect, 3));
+                if (w > 0 && h > 0) _spriteSizes[e.Key] = (w, h);
                 if (!byName.TryGetValue(e.Sprite, out var sharing))
                     byName[e.Sprite] = sharing = new List<SpriteEntry>();
                 sharing.Add(e);
@@ -169,6 +179,11 @@ public sealed class VanillaUiAssets : IUiAssets
         => !string.IsNullOrEmpty(name)
         && (name.IndexOf('/') >= 0 || name.IndexOf(System.IO.Path.DirectorySeparatorChar) >= 0 || name.IndexOf('.') >= 0);
 
+    /// <summary>What each sprite measured when it was extracted, from the
+    /// index. See <see cref="Sprite"/>.</summary>
+    private readonly Dictionary<string, (int Width, int Height)> _spriteSizes =
+        new(StringComparer.Ordinal);
+
     private readonly Dictionary<string, UiSprite?> _packSprites = new(StringComparer.OrdinalIgnoreCase);
 
     private UiSprite? PackSprite(string name)
@@ -240,7 +255,25 @@ public sealed class VanillaUiAssets : IUiAssets
 
         UiSprite? made = null;
         if (_spriteFiles.TryGetValue(key, out string? file))
+        {
             made = DecodePremultiplied(Path.Combine(_root, "Sprites", file));
+
+            // The shipped PNGs are reduced - a screen full of 2048-pixel
+            // wallpapers is half the editor download - and are brought back
+            // here to what the extraction measured. That size is not a
+            // nicety: a sliced image's border is expressed in it, and so is
+            // the pixels-per-unit the renderer divides by, both of them
+            // recorded in surfaces this loader never sees. Restore it and
+            // nothing downstream needs to know the file got smaller; skip it
+            // and every nine-sliced panel draws its corners at the wrong
+            // scale.
+            if (made != null && _spriteSizes.TryGetValue(key, out var was)
+                && (made.Width != was.Width || made.Height != was.Height))
+                made = new UiSprite(
+                    Rendering.PixelResample.Bilinear(made.Pixels, made.Width, made.Height,
+                                                     was.Width, was.Height),
+                    was.Width, was.Height);
+        }
 
         // Cached even when it failed. A missing sprite is reported once per
         // render rather than retried for every one of the hundreds of objects

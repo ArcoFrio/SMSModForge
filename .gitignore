@@ -49,15 +49,20 @@ SMSModForge.Tests/obj/
 # ── The vanilla UI extraction ────────────────────────────────────────
 #
 # About 100 MB: the per-surface trees, every distinct sprite crop, and the
-# TextMeshPro font atlases. The editor SHIPS these — they are what makes the UI
-# preview show the game rather than an impression of it — but whether they
-# belong in git history is a separate question and an open one. Committing them
-# puts 100 MB in every clone forever, and re-running the extraction adds another
-# 100 MB rather than replacing it; Git LFS is the other answer.
+# TextMeshPro font atlases and the extracted UI art. The editor SHIPS these —
+# they are what makes the UI preview show the game rather than an impression of
+# it — and they are TRACKED now. That was an open question and it is settled:
+# leaving them out cost a fresh clone the UI preview, which is half of what the
+# UI tab is for, and a release could only be built on the one machine that had
+# run the extraction.
 #
-# Until that is decided they stay out, which costs a fresh clone the UI preview
-# and nothing else: the build succeeds with the folders absent, the tests that
-# need them skip and say so, and the preview control explains what to run.
+# The cost is known and accepted: about 100 MB in every clone, and a
+# re-extraction ADDS another 100 MB rather than replacing it, because git keeps
+# both. If that becomes a problem the answer is Git LFS, not un-tracking them
+# again.
+#
+# report.txt and fonts.json stay out — they are extraction diagnostics, not
+# something the build reads.
 #
 # To regenerate, in the game's Unity project with the Game view at 1920x1080:
 #   Tools > SMSModForge > Extract Vanilla UI Surfaces (resolve dormant)
@@ -67,9 +72,5 @@ SMSModForge.Tests/obj/
 #          -o SMSModForge/Resources/VanillaUi/vanilla_ui_bases.json
 # The catalog IS tracked — it is 79 KB and it is what the tab needs to list
 # what a pack can extend, so the tab works on a fresh clone even unpreviewed.
-SMSModForge/Resources/VanillaOverlays/index.json
 SMSModForge/Resources/VanillaOverlays/report.txt
 SMSModForge/Resources/VanillaOverlays/fonts.json
-SMSModForge/Resources/VanillaOverlays/Surfaces/
-SMSModForge/Resources/VanillaOverlays/Sprites/
-SMSModForge/Resources/VanillaOverlays/Fonts/

@@ -71,6 +71,28 @@ SOURCES = ["VanillaBustArt", "VanillaLevelArt"]
 #           and shimmers; a proper filter keeps it clean at the size it is
 #           actually seen.
 FILTERS = {"VanillaBustArt": "bicubic", "VanillaLevelArt": "lanczos"}
+
+# Which sets are reduced to a 256-colour palette on the way out, and which are
+# not. This is the one lossy step here that is not about size on screen -- it is
+# about size on disk, and it buys a lot: a level layer comes out between a sixth
+# and a half of its 24-bit weight.
+#
+#   levels  YES. Flat, illustrated backgrounds with large areas of one colour,
+#           which is what a palette is good at. Compared side by side the two
+#           are hard to tell apart; what suffers is smooth gradients, and the
+#           worst of those is a sky reading as bands rather than a wash.
+#   busts   NO. A character's face is the thing an author looks at most closely,
+#           the art is already the smallest of the three sets, and banding on
+#           skin is exactly where 256 colours shows.
+#
+# NPCs are excluded too, wherever they sit: they are people drawn at the same
+# scrutiny as a bust, and they live inside the level folders rather than beside
+# them. See NPC_FOLDER.
+QUANTIZE = {"VanillaBustArt": False, "VanillaLevelArt": True}
+
+# Anything under a folder starting with this, or a file starting with it, is
+# somebody rather than somewhere.
+NPC_PREFIX = "npc"
 OUT = "VanillaArtThumbs"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -186,6 +208,10 @@ def main():
                 if fn.lower().endswith(".png"):
                     try:
                         im = Image.open(abs_in)
+                        # A person, not a place: left in full colour wherever
+                        # the extraction happened to put them.
+                        parts = os.path.relpath(abs_in, src_root).replace("\\", "/").split("/")
+                        is_npc = any(part.lower().startswith(NPC_PREFIX) for part in parts)
                         w, h = im.size
                         # Recorded before resizing: the preview restores the
                         # image to this, and it cannot be recovered from the
@@ -194,8 +220,14 @@ def main():
                         nw, nh = max(1, int(round(w / k))), max(1, int(round(h / k)))
                         if not args.check:
                             im = im.convert("RGBA")
-                            im.resize((nw, nh), resample).save(
-                                abs_out, "PNG", optimize=True)
+                            made = im.resize((nw, nh), resample)
+                            if QUANTIZE.get(src_name) and not is_npc:
+                                # FASTOCTREE because it is the only method
+                                # Pillow will apply to an image with an alpha
+                                # channel, and these have one.
+                                made = made.quantize(colors=256,
+                                                     method=Image.FASTOCTREE)
+                            made.save(abs_out, "PNG", optimize=True)
                             stats["out_bytes"] += os.path.getsize(abs_out)
                         stats["png"] += 1
                     except Exception as ex:
@@ -211,6 +243,7 @@ def main():
 
     if not args.check:
         manifest = {"scale": dict(per_source), "filter": dict(filters),
+                    "palette": {n: bool(QUANTIZE.get(n)) for n in SOURCES},
                     "originals": sizes}
 
         # Rescaling one set must not wipe the other set's recorded sizes: the
@@ -225,7 +258,7 @@ def main():
                 merged = dict(was.get("originals", {}))
                 merged.update(sizes)
                 manifest["originals"] = merged
-                for key in ("scale", "filter"):
+                for key in ("scale", "filter", "palette"):
                     kept = dict(was.get(key, {}))
                     kept[args.only] = manifest[key][args.only]
                     manifest[key] = kept
