@@ -9,19 +9,35 @@ namespace SMSModForge.PackPlugin
 {
     /// <summary>
     /// Pushes a pack's actor name colours into the vanilla
-    /// <c>TMPWordColorizer</c> on the currently-active <see cref="SpeechUI"/>.
-    /// The colorizer drives the colour of the speaker label text by matching
-    /// the rendered name against its private <c>wordColors</c> list
-    /// — the host mod uses the same pattern in
-    /// <c>Dialogues.AddActorColorToSpeechUI</c>. The list is private and
-    /// has no add-API so we reflect to it.
+    /// <c>TMPWordColorizer</c>. The colorizer drives the colour of the speaker
+    /// label text by matching the rendered name against its private
+    /// <c>wordColors</c> list — the host mod uses the same pattern in
+    /// <c>Dialogues.AddActorColorToSpeechUI</c>. The list is private and has no
+    /// add-API so we reflect to it.
     /// <para/>
-    /// We re-apply at the start of every pack dialogue (rather than at
-    /// plugin load) because <c>SpeechUI.Current</c> doesn't exist until
-    /// the DialogueUI has instantiated its speech-skin prefab, which only
-    /// happens after the first dialogue plays. Re-applying is cheap
-    /// (idempotent — duplicate entries for the same word are removed
-    /// before adding the new one).
+    /// This used to run only from <see cref="DialogueDispatcher"/>, once per
+    /// line of a pack's own dialogue, which meant a colour an author gave one
+    /// of the GAME's characters appeared in the pack's conversations and
+    /// nowhere else: the game's own scenes went on writing the name in the
+    /// colour the game shipped. <see cref="Tick"/> is the answer — it watches
+    /// for a speech UI to appear from any source, pack or game, and paints the
+    /// colorizers it can reach before the first name is drawn.
+    /// <para/>
+    /// "The colorizers it can reach" is deliberately every loaded one rather
+    /// than the ones under the live <see cref="SpeechUI"/>. The speech-skin
+    /// PREFAB is in that sweep, so an instance made later is born carrying
+    /// these colours instead of being repainted after its first name is
+    /// already on screen — and the label is a GC2 <c>TextReference</c>, so the
+    /// TMP object it resolves to is not guaranteed to sit under the SpeechUI
+    /// component in the first place. Painting extra colorizers is harmless:
+    /// the component matches a pair's word against its ENTIRE text, so an
+    /// actor name can never match a line of dialogue.
+    /// <para/>
+    /// Because that reaches shared, non-scene objects, what was in each list
+    /// before we touched it is kept and put back by <see cref="Forget"/> on
+    /// scene unload. Otherwise the game's own colour for a name would be gone
+    /// for the rest of the process, and the pack that replaced it would go on
+    /// doing so after it had been unloaded.
     /// </summary>
     internal static class SpeechColorApplier
     {
@@ -35,11 +51,27 @@ namespace SMSModForge.PackPlugin
         private static FieldInfo _colorField;
         private static bool _resolved;
 
-        // Remembers the last hierarchy we populated, so the usual case (same
-        // speech UI, same colours) costs one reference compare per node rather
-        // than a rebuild of every colorizer's list.
+        // Remembers the last hierarchy the DISPATCHER populated, so the usual
+        // case (same pack, same speech UI, same colours) costs three reference
+        // compares per line rather than a rebuild of every colorizer's list.
+        // The factory is part of the key because two packs with the same number
+        // of colours are not the same colours, and leaving it out let the
+        // second pack to speak be skipped entirely.
+        private static RuntimeActorFactory _appliedBy;
         private static Object _appliedFor;
         private static int _appliedCount = -1;
+
+        // ...and the same for the per-frame watch, which paints every loaded
+        // pack at once and so is keyed on the total instead.
+        private static Object _paintedFor;
+        private static int _paintedColors = -1;
+        private static bool _paintedOnce;
+
+        /// <summary>What each colorizer's list held before this plugin first
+        /// wrote to it. See the type doc: these are shared objects, and one of
+        /// them is a prefab.</summary>
+        private static readonly Dictionary<Object, object[]> _wasThere =
+            new Dictionary<Object, object[]>();
 
         public static void Apply(RuntimeActorFactory factory, ManualLogSource log)
         {
@@ -47,45 +79,101 @@ namespace SMSModForge.PackPlugin
             if (!ResolveTypes(log)) return;
 
             var speech = SpeechUI.Current;
-            int colorCount = 0;
-            foreach (var _ in factory.EnumerateColors()) colorCount++;
+            int colorCount = factory.ColorCount;
             if (colorCount == 0) return;
-            if (ReferenceEquals(_appliedFor, speech) && _appliedCount == colorCount) return;
+            if (ReferenceEquals(_appliedBy, factory)
+                && ReferenceEquals(_appliedFor, speech)
+                && _appliedCount == colorCount) return;
 
-            foreach (var colorizer in FindColorizers(speech))
+            foreach (var colorizer in FindColorizers())
                 ApplyTo(colorizer, factory);
 
+            _appliedBy = factory;
             _appliedFor = speech;
             _appliedCount = colorCount;
         }
 
         /// <summary>
-        /// Every colorizer worth populating.
+        /// Paint every loaded pack's colours as soon as there is somewhere to
+        /// paint them, and again each time a new speech UI appears.
         /// <para/>
-        /// The speaker label is a GC2 <c>TextReference</c>, so the TMP object it
-        /// resolves to is NOT guaranteed to sit under the SpeechUI component —
-        /// searching only that subtree finds nothing on a skin that keeps the
-        /// actor panel elsewhere, which reads in-game as every name staying the
-        /// colorizer's default white. So the subtree is the fast path and a
-        /// scene-wide sweep is the fallback.
-        /// <para/>
-        /// Populating extra colorizers is harmless: the component matches a
-        /// pair's word against its ENTIRE text, so an actor name can never
-        /// match a line of dialogue.
+        /// Called once a frame. The whole cost in the ordinary case is a
+        /// reference compare and a count, because the sweep only happens when
+        /// the live <see cref="SpeechUI"/> is one this has not painted — which
+        /// is once at load and once per conversation, including the game's own.
         /// </summary>
-        private static IEnumerable<Object> FindColorizers(SpeechUI speech)
+        public static void Tick(IReadOnlyList<PackContext> contexts, ManualLogSource log)
+        {
+            if (contexts == null || contexts.Count == 0) return;
+
+            int total = 0;
+            for (int i = 0; i < contexts.Count; i++)
+            {
+                var factory = contexts[i] != null ? contexts[i].ActorFactory : null;
+                if (factory != null) total += factory.ColorCount;
+            }
+            if (total == 0) return;
+
+            var speech = SpeechUI.Current;
+
+            // Unity's null: no conversation is up, or the last one's UI has
+            // been destroyed. Either way there is nothing new to paint, and
+            // without this the sweep would run every frame between
+            // conversations rather than once.
+            if (speech == null)
+            {
+                if (_paintedOnce && _paintedColors == total) return;
+            }
+            else if (ReferenceEquals(_paintedFor, speech) && _paintedColors == total) return;
+
+            if (!ResolveTypes(log)) return;
+
+            var colorizers = FindColorizers();
+            for (int i = 0; i < contexts.Count; i++)
+            {
+                var factory = contexts[i] != null ? contexts[i].ActorFactory : null;
+                if (factory == null || factory.ColorCount == 0) continue;
+                foreach (var colorizer in colorizers) ApplyTo(colorizer, factory);
+            }
+
+            _paintedFor = speech == null ? null : speech;
+            _paintedColors = total;
+            _paintedOnce = true;
+        }
+
+        /// <summary>
+        /// Put every list back the way it was and forget what was painted.
+        /// Called when the scene the packs were loaded into goes away.
+        /// </summary>
+        public static void Forget()
+        {
+            if (_wordColorsField != null)
+            {
+                foreach (var kv in _wasThere)
+                {
+                    if (kv.Key == null) continue;             // destroyed with its scene
+                    if (!(_wordColorsField.GetValue(kv.Key) is IList list)) continue;
+                    list.Clear();
+                    foreach (var item in kv.Value) list.Add(item);
+                }
+            }
+            _wasThere.Clear();
+
+            _appliedBy = null;
+            _appliedFor = null;
+            _appliedCount = -1;
+            _paintedFor = null;
+            _paintedColors = -1;
+            _paintedOnce = false;
+        }
+
+        /// <summary>Every colorizer worth populating — see the type doc for
+        /// why that is all of them rather than the live speech UI's.</summary>
+        private static List<Object> FindColorizers()
         {
             var found = new List<Object>();
-            if (speech != null)
-            {
-                foreach (var c in speech.GetComponentsInChildren(_colorizerType, true))
-                    found.Add(c);
-            }
-            if (found.Count == 0)
-            {
-                foreach (var c in Resources.FindObjectsOfTypeAll(_colorizerType))
-                    found.Add(c);
-            }
+            foreach (var c in Resources.FindObjectsOfTypeAll(_colorizerType))
+                found.Add(c);
             return found;
         }
 
@@ -93,6 +181,13 @@ namespace SMSModForge.PackPlugin
         {
             if (colorizer == null) return;
             if (!(_wordColorsField.GetValue(colorizer) is IList list)) return;
+
+            if (!_wasThere.ContainsKey(colorizer))
+            {
+                var was = new object[list.Count];
+                for (int i = 0; i < list.Count; i++) was[i] = list[i];
+                _wasThere[colorizer] = was;
+            }
 
             foreach (var kv in factory.EnumerateColors())
             {

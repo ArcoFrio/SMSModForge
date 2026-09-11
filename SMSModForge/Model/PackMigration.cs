@@ -141,6 +141,31 @@ public static class PackMigration
         if (variables > 0)
             report.Note("Variable checks merged into one with a Comparison field", variables);
 
+        int reset = ResetBorrowedCharactersWrittenBefore(pack);
+        if (reset > 0)
+            report.Note("The game's characters put back the way the game has them — nothing a "
+                        + "pack said about them before this version reached the game anyway", reset);
+
+        int renamed = NormaliseBorrowedIdentifiers(pack);
+        if (renamed > 0)
+            report.Note("Machine-written names on the game's characters put back the way "
+                        + "the editor derives them now", renamed);
+
+        int reclaimed = TakeBackWhatIsNotThePacksToSay(pack);
+        if (reclaimed > 0)
+            report.Note("Fields on the game's characters that a pack no longer sets - name, "
+                        + "bust source, default outfit - put back to the game's", reclaimed);
+
+        int redundant = DropWhatMatchesTheDefault(pack);
+        if (redundant > 0)
+            report.Note("Settings dropped from the game's characters that only repeated "
+                        + "what those characters already had", redundant);
+
+        int restated = DropRestatedFaces(pack);
+        if (restated > 0)
+            report.Note("Expressions dropped from the game's characters that only "
+                        + "restated faces the game already gives them", restated);
+
         if (GiveItAVersion(pack))
             report.Note($"Given a version to start from ({pack.Version})");
 
@@ -149,6 +174,372 @@ public static class PackMigration
                         + "game can tell you when a pack needs a newer one");
 
         return report;
+    }
+
+    /// <summary>
+    /// The version that first made a pack's word about one of the game's
+    /// characters mean anything.
+    /// </summary>
+    private const string FirstVersionThatMeantIt = "1.3.0";
+
+    /// <summary>
+    /// Put every borrowed character back the way the game has them, for packs
+    /// written before any of it was wired up.
+    /// <para/>
+    /// Before 1.3.0 a pack could hold a name, a wardrobe, a colour and a set of
+    /// expressions for one of the game's characters, and almost none of it went
+    /// anywhere: the runtime skipped a borrowed character's whole wardrobe, and
+    /// the editor has since taken the name, the bust source and the default
+    /// outfit away as fields a pack may set. What is left on those packs is a
+    /// sediment of defaults an older editor wrote unbidden, and it is what
+    /// makes half the cast read as changed.
+    /// <para/>
+    /// So the old ones start again. It is a bigger hammer than the passes below
+    /// and it makes them no-ops for anything it touched, which is the point:
+    /// one rule that leaves no residue, rather than five that each catch a
+    /// shape somebody thought of.
+    /// <para/>
+    /// TWO THINGS SURVIVE.
+    /// <list type="bullet">
+    ///   <item>A bust the pack DREW for one of the game's characters — an
+    ///   outfit carrying its own art. That is work, it is unambiguous, and
+    ///   1.3.0 is the version that finally builds it, so it is kept and marked
+    ///   as the pack's.</item>
+    ///   <item>The dialogue key. Every line the pack wrote names the character
+    ///   by it. Where it differs from the one the editor derives it is put back
+    ///   — but as a RENAME, so the lines come too.</item>
+    /// </list>
+    /// <para/>
+    /// Not silent, and not written until the author saves: the report names it
+    /// and the untouched original is kept beside the manifest on the first save
+    /// after. A colour or a typewriter set on one of these DID reach a pack's
+    /// own dialogue before now, so this can change how a character sounds in
+    /// it; that is what the report and the backup are for.
+    /// </summary>
+    private static int ResetBorrowedCharactersWrittenBefore(ModPack pack)
+    {
+        if (pack.Characters == null) return 0;
+        if (!WrittenBefore(pack.ForgeVersion, FirstVersionThatMeantIt)) return 0;
+
+        int reset = 0;
+        foreach (var character in pack.Characters)
+        {
+            if (!character.IsVanillaCharacter) continue;
+
+            var one = VanillaCharacters.Find(character.VanillaCharacter);
+            if (one == null) continue;
+
+            // Nothing to do for one that already reads as the game's.
+            if (VanillaCastSeed.IsUntouched(character)) continue;
+
+            // The busts the pack drew, which are the one thing here that is
+            // unambiguously somebody's work. Marked as the pack's so 1.3.0
+            // actually builds them - the flag did not exist when they were
+            // written.
+            var drawn = character.Outfits
+                .Where(o => !string.IsNullOrWhiteSpace(o.BaseSprite))
+                .ToList();
+            foreach (var o in drawn) o.PackArt = true;
+
+            var fresh = VanillaCastSeed.Make(one);
+
+            character.Name = fresh.Name;
+            character.DisplayName = fresh.DisplayName;
+            character.BustSource = fresh.BustSource;
+            character.DefaultOutfit = fresh.DefaultOutfit;
+            character.NameColor = null;
+            character.Typewriter = null;
+            character.GiftLikes = fresh.GiftLikes;
+            character.Expressions = fresh.Expressions;
+            character.Outfits = fresh.Outfits.Concat(drawn).ToList();
+
+            // The key last, and as a rename: every line the pack wrote names
+            // this character by it.
+            if (!string.Equals(character.Key, one.Key, StringComparison.OrdinalIgnoreCase)
+                && !pack.Characters.Any(c => c != character
+                                          && string.Equals(c.Key, one.Key, StringComparison.OrdinalIgnoreCase)))
+            {
+                Services.ReferenceRenamer.Rename(pack, Services.RefKind.Character, character.Key, one.Key);
+                character.Key = one.Key;
+            }
+
+            reset++;
+        }
+        return reset;
+    }
+
+    /// <summary>
+    /// Whether a pack was written before a given version.
+    /// <para/>
+    /// An absent or unreadable stamp counts as before, and has to: the stamp
+    /// itself is newer than the oldest packs, so "no stamp" means older than
+    /// anything that has one. <see cref="Shared.ForgeVersion.Compare"/> answers
+    /// zero for a stamp it cannot read — deliberately, so an unreadable one
+    /// never yields a verdict - which would otherwise read here as "not older"
+    /// and skip exactly the packs this is for.
+    /// </summary>
+    private static bool WrittenBefore(string stamp, string version)
+    {
+        if (Shared.ForgeVersion.Parse(stamp) == null) return true;
+        return Shared.ForgeVersion.Compare(stamp, version) < 0;
+    }
+
+    /// <summary>
+    /// Put a borrowed character's DERIVED identifiers back to what the editor
+    /// writes today.
+    /// <para/>
+    /// Two of them, and nobody typed either: the character's GameObject name
+    /// (<c>Adrian</c>, where seeding writes <c>adrian</c>) and each outfit's key
+    /// (<c>Adrian_bust</c>, where seeding writes <c>adrianbust</c>). An older
+    /// editor derived them differently, and the difference has been sitting in
+    /// every pack that adopted one of the game's characters ever since.
+    /// <para/>
+    /// It became worth fixing when the editor started marking changed
+    /// characters: Adrian carried the tag on the strength of two strings an
+    /// author never typed, cannot see — one is behind an expander that is
+    /// greyed out for him, the other is not shown at all — and has no way to
+    /// reset. A tag nobody can act on is worse than no tag.
+    /// <para/>
+    /// Safe because both are inert for a borrowed character. The runtime builds
+    /// no bust for one, so it reads the character's name only to check it is
+    /// not empty, and an outfit's key only as a fallback for a missing
+    /// <c>gameObjectName</c> — which is why an outfit without one is left
+    /// alone here. Neither is a dialogue reference; that is <c>key</c> on the
+    /// character, which this does not touch.
+    /// <para/>
+    /// Only outfits the GAME supplies. A bust the pack drew for one of its
+    /// characters keeps its key, which is the author's and is load-bearing.
+    /// </summary>
+    private static int NormaliseBorrowedIdentifiers(ModPack pack)
+    {
+        if (pack.Characters == null) return 0;
+
+        int renamed = 0;
+        foreach (var character in pack.Characters)
+        {
+            if (!character.IsVanillaCharacter) continue;
+
+            var one = VanillaCharacters.Find(character.VanillaCharacter);
+            if (one == null) continue;
+
+            if (!string.Equals(character.Name, one.Key, StringComparison.Ordinal))
+            {
+                character.Name = one.Key;
+                renamed++;
+            }
+
+            var theirs = new HashSet<string>(one.Outfits, StringComparer.Ordinal);
+            foreach (var outfit in character.Outfits)
+            {
+                if (outfit.PackArt) continue;
+                if (string.IsNullOrEmpty(outfit.GameObjectName)) continue;
+                if (!theirs.Contains(outfit.GameObjectName)) continue;
+
+                string derived = VanillaCharacters.KeyFor(outfit.GameObjectName);
+                if (string.Equals(outfit.Key, derived, StringComparison.Ordinal)) continue;
+
+                outfit.Key = derived;
+                renamed++;
+            }
+
+            if (ReorderToTheGames(character, one)) renamed++;
+        }
+        return renamed;
+    }
+
+    /// <summary>
+    /// Put back the fields on one of the game's characters that a pack is no
+    /// longer allowed to set.
+    /// <para/>
+    /// The name, the bust source and the default outfit are all greyed out in
+    /// the editor now: who Anna is, where her busts come from and which one she
+    /// walks in wearing belong to the game, in every scene it wrote. A pack
+    /// written before that could still be carrying its own answers, and because
+    /// the fields are greyed there is no way to correct them by hand.
+    /// <para/>
+    /// This is a real change to what a player sees, unlike the derived names
+    /// above — which is exactly why it is reported and why the original is kept
+    /// beside the manifest on the next save.
+    /// </summary>
+    private static int TakeBackWhatIsNotThePacksToSay(ModPack pack)
+    {
+        if (pack.Characters == null) return 0;
+
+        int taken = 0;
+        foreach (var character in pack.Characters)
+        {
+            if (!character.IsVanillaCharacter) continue;
+
+            var one = VanillaCharacters.Find(character.VanillaCharacter);
+            if (one == null) continue;
+
+            if (!string.Equals(character.DisplayName, one.Name, StringComparison.Ordinal))
+            {
+                character.DisplayName = one.Name;
+                taken++;
+            }
+
+            if (character.BustSource != BustSource.Vanilla)
+            {
+                character.BustSource = BustSource.Vanilla;
+                taken++;
+            }
+
+            if (one.Outfits.Count > 0
+                && !string.Equals(character.DefaultOutfit, one.Outfits[0], StringComparison.Ordinal))
+            {
+                character.DefaultOutfit = one.Outfits[0];
+                taken++;
+            }
+        }
+        return taken;
+    }
+
+    /// <summary>
+    /// Drop settings that say what the character already said.
+    /// <para/>
+    /// A name colour identical to the one the game writes them in, or a
+    /// typewriter holding exactly the voice they already have. Both are
+    /// invisible on screen — the editor shows the same numbers either way — and
+    /// both cost the same thing: the pack asserts a value it did not choose, so
+    /// the character is written to the manifest and marked as changed for
+    /// agreeing with the game.
+    /// <para/>
+    /// The editor stops NEW ones happening as they are typed. This is for the
+    /// ones already written down.
+    /// <para/>
+    /// A value that differs — Amelia at 45 where the game speaks her at 25 — is
+    /// left alone whether or not anybody meant it. It is a real difference, it
+    /// is visible in the panel, and one click resets it; guessing at intent
+    /// there would throw away work.
+    /// </summary>
+    private static int DropWhatMatchesTheDefault(ModPack pack)
+    {
+        if (pack.Characters == null) return 0;
+
+        int dropped = 0;
+        foreach (var character in pack.Characters)
+        {
+            if (!character.IsVanillaCharacter) continue;
+
+            var speaker = Shared.VanillaSpeech.For(VanillaFaces.KeyOf(character));
+            if (speaker == null) continue;
+
+            if (character.NameColor != null && SameColor(character.NameColor, speaker.NameColor))
+            {
+                character.NameColor = null;
+                dropped++;
+            }
+
+            var voice = character.Typewriter;
+            if (voice != null
+                && voice.Enabled == speaker.UseTypewriter
+                && voice.Frequency == speaker.Frequency
+                && voice.PitchMin == speaker.PitchMin
+                && voice.PitchMax == speaker.PitchMax)
+            {
+                character.Typewriter = null;
+                dropped++;
+            }
+        }
+        return dropped;
+    }
+
+    /// <summary>Whether two hex colours name the same colour, however they are
+    /// spelled. <c>#99c5ff</c> off a colour wheel is the same answer as the
+    /// <c>#99C5FF</c> the game has.</summary>
+    private static bool SameColor(string? a, string? b)
+    {
+        if (string.IsNullOrWhiteSpace(a) || string.IsNullOrWhiteSpace(b)) return false;
+        if (string.Equals(a, b, StringComparison.OrdinalIgnoreCase)) return true;
+
+        try
+        {
+            return System.Windows.Media.ColorConverter.ConvertFromString(a!.Trim())
+                is System.Windows.Media.Color x
+                && System.Windows.Media.ColorConverter.ConvertFromString(b!.Trim())
+                is System.Windows.Media.Color y
+                && x == y;
+        }
+        catch { return false; }   // a malformed hex is not the same as anything
+    }
+
+    /// <summary>
+    /// Put a borrowed character's wardrobe back into the order the game keeps
+    /// it in, with anything the pack added after it.
+    /// <para/>
+    /// Nobody chose the order either. A pack that adopted Amelia through her
+    /// Beach bust got that one first and the other seven appended behind it on
+    /// the next load, so her list reads Beach, default, Barista where the game
+    /// has default, Barista, Beach. It is not visible anywhere an author could
+    /// act on, and it was enough to keep her marked as changed after every
+    /// difference they COULD act on had been put back.
+    /// <para/>
+    /// Only when the character names a default outfit outright. Where the field
+    /// is blank, "first" IS the default — both here and in the runtime — and
+    /// reordering would quietly change which bust the character walks in
+    /// wearing.
+    /// </summary>
+    private static bool ReorderToTheGames(CharacterDef character,
+                                          VanillaCharacters.VanillaCharacter one)
+    {
+        if (string.IsNullOrEmpty(character.DefaultOutfit)) return false;
+        if (character.Outfits.Count < 2) return false;
+
+        var order = new Dictionary<string, int>(StringComparer.Ordinal);
+        for (int i = 0; i < one.Outfits.Count; i++) order[one.Outfits[i]] = i;
+
+        // Theirs in their order, then the pack's own, each keeping the place it
+        // had relative to the rest of the pack's.
+        var sorted = character.Outfits
+            .Select((o, at) => (Outfit: o, At: at))
+            .OrderBy(x => !x.Outfit.PackArt && x.Outfit.GameObjectName != null
+                       && order.ContainsKey(x.Outfit.GameObjectName)
+                          ? order[x.Outfit.GameObjectName]
+                          : int.MaxValue)
+            .ThenBy(x => x.At)
+            .Select(x => x.Outfit)
+            .ToList();
+
+        if (sorted.SequenceEqual(character.Outfits)) return false;
+
+        character.Outfits = sorted;
+        return true;
+    }
+
+    /// <summary>
+    /// Drop a borrowed character's expression entries that say nothing.
+    /// <para/>
+    /// Declaring a vanilla character used to mean writing the whole thing down,
+    /// and the editor filled the wardrobe and the five standard expressions in
+    /// for you: <c>neutral</c> mapped to nothing, and Happy, Angry, Sad and
+    /// Flirty each mapped to a child of their own name. Every one of those is
+    /// exactly what the runtime does with no entry at all.
+    /// <para/>
+    /// They were invisible until the editor started listing the faces the game
+    /// gives a character. Now they sit under those, spelling the same four a
+    /// second time, and an author cannot tell which row is theirs.
+    /// <para/>
+    /// Only the ones that RESTATE something. A face pointed at a different
+    /// child is an author aiming one of the game's names at their own art,
+    /// which is the whole reason the mapping exists — see
+    /// <see cref="VanillaFaces.OnlyRestatesTheGame"/>. And only on the game's
+    /// characters: on a pack's own, that list is the only list there is.
+    /// </summary>
+    private static int DropRestatedFaces(ModPack pack)
+    {
+        if (pack.Characters == null) return 0;
+
+        int dropped = 0;
+        foreach (var character in pack.Characters)
+        {
+            if (!character.IsVanillaCharacter || character.Expressions.Count == 0) continue;
+
+            var faces = VanillaFaces.Of(character);
+            dropped += character.Expressions.RemoveAll(
+                e => VanillaFaces.OnlyRestatesTheGame(e, faces));
+        }
+        return dropped;
     }
 
     /// <summary>

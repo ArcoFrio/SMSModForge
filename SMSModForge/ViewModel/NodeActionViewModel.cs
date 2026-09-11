@@ -553,7 +553,16 @@ public sealed class NodeActionViewModel : ObservableObject
 
     /// <summary>Written to the target when nothing survives the exclusion. Empty
     /// clears the target, which is the original behaviour.</summary>
-    public string VarFallback { get => GetParam("fallback"); set { SetParam("fallback", value); OnPropertyChanged(); } }
+    public string VarFallback
+    {
+        get => GetParam("fallback");
+        set
+        {
+            SetParam("fallback", value);
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ValueNamesAVariable));
+        }
+    }
 
     /// <summary>Pack (default) vs Vanilla GC2 global, stored in the 'source' param.</summary>
     public string VarSource
@@ -802,7 +811,33 @@ public sealed class NodeActionViewModel : ObservableObject
         }
     }
 
-    public string VarValue { get => GetParam("value"); set { SetParam("value", value); OnPropertyChanged(); } }
+    public string VarValue
+    {
+        get => GetParam("value");
+        set
+        {
+            SetParam("value", value);
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ValueNamesAVariable));
+        }
+    }
+
+    /// <summary>
+    /// Whether the value names another variable rather than being one.
+    /// <para/>
+    /// The store picker beside it only means anything then — both its own
+    /// tooltip and the runtime say a plain value ignores it — so that is the
+    /// only time it is on screen. Left showing, a second Pack/Vanilla row
+    /// sitting under Value reads as a second operand, and the whole editor
+    /// starts to look like it insists on comparing one variable to another.
+    /// <para/>
+    /// A <c>$</c> anywhere, not only at the start: <c>${name}</c> is the other
+    /// spelling, and a value can carry one mid-text.
+    /// </summary>
+    /// <remarks>The fallback counts too: it takes a <c>$name</c> on the same
+    /// terms, and is read from the same store.</remarks>
+    public bool ValueNamesAVariable
+        => (VarValue ?? "").Contains('$') || (VarFallback ?? "").Contains('$');
     public string VarDelta { get => GetParam("delta"); set { SetParam("delta", value); OnPropertyChanged(); } }
 
     /// <summary>Set-Active category, stored in the canonical <c>kind</c> param.</summary>

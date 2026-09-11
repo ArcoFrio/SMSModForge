@@ -103,6 +103,7 @@ namespace SMSModForge.PackPlugin
         /// variable value where applicable, and group nesting — plus the
         /// dialogue-level latch state that decides whether it would fire.
         /// </summary>
+#if DEBUG
         public void DumpConditionDebug()
         {
             foreach (var b in _built)
@@ -132,6 +133,7 @@ namespace SMSModForge.PackPlugin
 
         private void DumpCondition(JObject c, string indent)
             => ConditionEvaluator.DumpCondition(c, _ctx, indent);
+#endif
 
         /// <summary>Called every frame by <see cref="Plugin.Update"/> while in CoreGameScene.</summary>
         public void Tick()

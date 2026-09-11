@@ -39,6 +39,26 @@
             resolved in the order the dictionary is parsed.
         -->
         <GroupStyle x:Key="MusicOriginGroupStyle">
+            <!-- A heading lives exactly as long as something under it does.
+                 Without this, narrowing a grouped dropdown leaves its headings
+                 standing over nothing - the one place hiding item containers
+                 shows through, since a heading is not an item and never asked
+                 itself the question. Every grouped dropdown in the editor uses
+                 this one GroupStyle, so this is the only place it needs asking. -->
+            <GroupStyle.ContainerStyle>
+                <Style TargetType="GroupItem" BasedOn="{StaticResource {x:Type GroupItem}}">
+                    <Setter Property="Visibility">
+                        <Setter.Value>
+                            <MultiBinding Converter="{x:Static conv:SearchMatchConverter.Instance}">
+                                <Binding Path="."/>
+                                <Binding Path="(view:ComboBoxSearch.Typed)"
+                                         RelativeSource="{RelativeSource AncestorType=ComboBox}"/>
+                                <Binding RelativeSource="{RelativeSource AncestorType=ComboBox}"/>
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </GroupStyle.ContainerStyle>
             <GroupStyle.HeaderTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Name}" FontWeight="SemiBold"
@@ -1060,6 +1080,11 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <!-- What a value accepts, then where a $name in one
+                                 is read from. Both collapse when they have
+                                 nothing to say, so an ordinary check against a
+                                 literal is four rows, as it was. -->
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
@@ -1154,11 +1179,14 @@
                                          ToolTip="Passes while the variable is false."/>
                         </StackPanel>
 
-                        <!-- Which store a $name in the value reads from.
-                             Only meaningful when the value is text, because
-                             that is the only form a $name can be written in. -->
-                        <TextBlock Text="Compare to" Grid.Row="4" Grid.Column="0"
-                                   VerticalAlignment="Center" Margin="0,0,4,2">
+                        <!-- What a value accepts, said where it is typed. The
+                             row below only appears once somebody writes a
+                             $name, so without this the ability to compare one
+                             variable against another would have nowhere left to
+                             announce itself. -->
+                        <TextBlock Grid.Row="4" Grid.Column="1" Foreground="Gray" FontSize="10"
+                                   TextWrapping="Wrap" Margin="0,0,0,2"
+                                   Text="A plain value, or $othervariable to compare against another one.">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -1170,10 +1198,34 @@
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
-                        <ComboBox Grid.Row="4" Grid.Column="1" Margin="0,0,0,2"
+
+                        <!-- Where a $name in the value is READ from - the same
+                             thing the Set-variable editor calls Read from, and
+                             called the same thing here.
+                             It used to say "Compare to" and sit under Value on
+                             every condition, which read as a second operand and
+                             had authors believing a variable check always
+                             compares one variable to another. It is not an
+                             operand: it picks which store a $name is looked up
+                             in, and a plain value ignores it entirely - so now
+                             it appears only once there is a $name to look up. -->
+                        <TextBlock Text="Read from" Grid.Row="5" Grid.Column="0"
+                                   VerticalAlignment="Center" Margin="0,0,4,2">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ValueNamesAVariable}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <ComboBox Grid.Row="5" Grid.Column="1" Margin="0,0,0,2"
                                   ItemsSource="{x:Static vm:NodeConditionViewModel.VariableSources}"
                                   SelectedItem="{Binding VarValueSource, UpdateSourceTrigger=PropertyChanged}"
-                                  ToolTip="Which variables a $name in the value refers to. Pack = this pack's own; Vanilla = an existing 1.8E game variable. A plain value ignores this.">
+                                  ToolTip="Which variables the $name in the value refers to. Pack = this pack&apos;s own; Vanilla = an existing 1.8E game variable.">
                             <ComboBox.GroupStyle>
                                 <StaticResource ResourceKey="MusicOriginGroupStyle"/>
                             </ComboBox.GroupStyle>
@@ -1181,7 +1233,7 @@
                                 <Style TargetType="ComboBox" BasedOn="{StaticResource GroupedComboBox}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding VarValueIsText}" Value="True">
+                                        <DataTrigger Binding="{Binding ValueNamesAVariable}" Value="True">
                                             <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -1668,12 +1720,12 @@
                              vanilla global and write another. -->
                         <TextBlock Text="Read from" Grid.Row="7" Grid.Column="0"
                                    VerticalAlignment="Center" Margin="0,0,4,2"
-                                   Visibility="{Binding IsRandomFromList, Converter={StaticResource InverseBoolToVisibility}}"/>
+                                   Visibility="{Binding ValueNamesAVariable, Converter={StaticResource BoolToVisibility}}"/>
                         <ComboBox Grid.Row="7" Grid.Column="1" Margin="0,0,0,2"
                                   ItemsSource="{x:Static vm:NodeActionViewModel.VariableSources}"
                                   SelectedItem="{Binding VarValueSource, UpdateSourceTrigger=PropertyChanged}"
-                                  Visibility="{Binding IsRandomFromList, Converter={StaticResource InverseBoolToVisibility}}"
-                                  ToolTip="Which variables a $name in the value refers to. Pack = this pack's own; Vanilla = an existing 1.8E game variable. A plain value ignores this."/>
+                                  Visibility="{Binding ValueNamesAVariable, Converter={StaticResource BoolToVisibility}}"
+                                  ToolTip="Which variables the $name in the value refers to. Pack = this pack&apos;s own; Vanilla = an existing 1.8E game variable."/>
                     </Grid>
                     <!-- Unified Set-Active editor (SetGameObjectActive + ActivateScene folded
                          into one row). A Category dropdown swaps the Target autocomplete:
@@ -3199,15 +3251,63 @@
                                 <HierarchicalDataTemplate DataType="{x:Type vm:CharacterViewModel}"
                                                           ItemsSource="{Binding Outfits}">
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding DisplayName}" FontWeight="Bold"/>
-                                        <TextBlock Text="{Binding VanillaBust, StringFormat=' ({0})'}" Foreground="Gray"
-                                                   Visibility="{Binding IsVanillaBust, Converter={StaticResource BoolToVisibility}}"/>
+                                        <!-- An untouched one of the game's characters is deliberately
+                                             quiet: this heading holds a hundred and nineteen of them
+                                             and the two or three that were touched are what an author
+                                             is looking for. The same treatment the UI tree gives its
+                                             own 1434 vanilla rows. A character of the pack's own is
+                                             never dimmed — the whole entry is theirs. -->
+                                        <TextBlock Text="{Binding DisplayName}" FontWeight="Bold">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsQuietVanilla}" Value="True">
+                                                            <Setter Property="Opacity" Value="0.55"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                        <!-- The same chip the level tree and the UI tree use for the
+                                             same fact, in the same words: this row differs from what
+                                             the game has, so it is one of the few that will be saved.
+                                             Three names for one thing across three tabs would be three
+                                             things to learn. -->
+                                        <Border CornerRadius="2" Padding="4,0" Margin="6,0,0,0"
+                                                VerticalAlignment="Center" Background="#B26A00"
+                                                Visibility="{Binding IsModified, Converter={StaticResource BoolToVisibility}}"
+                                                ToolTip="This pack has changed something about this character, so it will be saved. Put every change back and it drops out of the manifest again.">
+                                            <TextBlock Text="changed" FontSize="10" Foreground="White"/>
+                                        </Border>
                                     </StackPanel>
                                 </HierarchicalDataTemplate>
                                 <DataTemplate DataType="{x:Type vm:OutfitViewModel}">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="• "/>
                                         <TextBlock Text="{Binding Key}"/>
+                                        <!-- The same chip the character above carries, and the same
+                                             words the level and UI trees use. On the row rather than
+                                             only on the character because a borrowed character can
+                                             have sixty-five outfits and one replaced texture: the
+                                             character&apos;s tag says something in there changed, this
+                                             one says which row to open.
+                                             new     = a bust this pack drew for one of the game&apos;s.
+                                             changed = one of theirs, painted over. -->
+                                        <Border CornerRadius="2" Padding="4,0" Margin="6,0,0,0"
+                                                VerticalAlignment="Center"
+                                                Visibility="{Binding HasChangedTag, Converter={StaticResource BoolToVisibility}}">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Background" Value="#B26A00"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ChangedTag}" Value="new">
+                                                            <Setter Property="Background" Value="#2E7D32"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <TextBlock Text="{Binding ChangedTag}" FontSize="10" Foreground="White"/>
+                                        </Border>
                                     </StackPanel>
                                 </DataTemplate>
                             </TreeView.Resources>
@@ -3233,6 +3333,34 @@
                                  it was unclear which "Name:" set what. -->
                             <GroupBox Header="Identity" Margin="0,0,0,6">
                                 <StackPanel>
+                                    <!-- The tag in the sidebar says this character differs. This
+                                         says what differs, which is the question that follows it -
+                                         and some of the answers are things an author cannot see
+                                         anywhere else, like a dialogue key sitting in an expander
+                                         that is greyed out for one of the game's characters.
+                                         The per-field Reset buttons handle a field at a time. This
+                                         one is for having decided you want the character as the
+                                         game has them: it reaches the faces, the replaced textures
+                                         and the busts the pack drew, which no single field button
+                                         can. It asks first, because unlike the others it destroys
+                                         work rather than putting a number back. -->
+                                    <Border DataContext="{Binding DataContext.SelectedCharacter,
+                                                          RelativeSource={RelativeSource AncestorType=Window}}"
+                                            Visibility="{Binding HasChangedFields, Converter={StaticResource BoolToVisibility}}"
+                                            Background="{DynamicResource Theme.ChangedSurface}"
+                                            BorderBrush="{DynamicResource Theme.Accent}" BorderThickness="1"
+                                            CornerRadius="3" Padding="6,4" Margin="0,0,0,8">
+                                        <DockPanel>
+                                            <Button DockPanel.Dock="Right" Content="Reset character"
+                                                    Padding="8,0" Margin="8,0,0,0" VerticalAlignment="Center"
+                                                    Command="{Binding DataContext.ResetCharacterCommand,
+                                                              RelativeSource={RelativeSource AncestorType=Window}}"
+                                                    ToolTip="Put everything about this character back the way the game has them - the voice, the colour, any faces or busts this pack added, and any textures it replaced. Asks first."/>
+                                            <TextBlock TextWrapping="Wrap" VerticalAlignment="Center"
+                                                       FontSize="11"
+                                                       Text="{Binding ChangedFields, StringFormat='This pack changes: {0}'}"/>
+                                        </DockPanel>
+                                    </Border>
                                     <!-- Character -->
                                     <Grid DataContext="{Binding DataContext.SelectedCharacter, RelativeSource={RelativeSource AncestorType=Window}}"
                                           Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
@@ -3264,12 +3392,29 @@
                                             <Button Content="Pick..." Margin="6,0,0,0" Padding="8,0"
                                                     Click="PickCharacterColor_Click"
                                                     ToolTip="Choose the colour on an RGB wheel instead of typing hex."/>
+                                            <!-- Disabled rather than collapsed, which is a departure
+                                                 from how the dialogue editor does these — and the
+                                                 reason is that hiding it does not work here.
+                                                 The box now SHOWS a colour whether or not the pack set
+                                                 one, so the row an author looks at while wondering how
+                                                 to get the original back is exactly the row where
+                                                 nothing is stored and a collapsed button is not there.
+                                                 It was reported missing twice on that row.
+                                                 Hiding earns its keep in the dialogue editor because
+                                                 the alternative is thirteen buttons with twelve greyed;
+                                                 one greyed button beside Pick is not that. -->
+                                            <Button x:Name="ResetNameColorButton"
+                                                    Content="Reset" Margin="6,0,0,0" Padding="8,0"
+                                                    Command="{Binding ResetFieldCommand}" CommandParameter="NameColor"
+                                                    IsEnabled="{Binding CanResetNameColor}"
+                                                    Visibility="{Binding ShowsResets, Converter={StaticResource BoolToVisibility}}"
+                                                    ToolTip="Drop the colour this pack sets, putting back the one the character already had. Nothing else changes."/>
                                         </StackPanel>
 
                                         <TextBlock Text="Bust source:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
                                         <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,2" HorizontalAlignment="Left" Width="220"
                                                   SelectedValue="{Binding BustSource}" SelectedValuePath="Tag"
-                                                  IsEnabled="{Binding CanEditIdentity}"
+                                                  IsEnabled="{Binding CanEditBustSource}"
                                                   ToolTip="Where this character&apos;s bust comes from. &apos;No bust&apos; is a speaking part with no art at all.">
                                             <ComboBoxItem Content="This pack&apos;s outfits"  Tag="{x:Static model:BustSource.Pack}"/>
                                             <ComboBoxItem Content="A vanilla bust"       Tag="{x:Static model:BustSource.Vanilla}"/>
@@ -3277,10 +3422,21 @@
                                         </ComboBox>
 
                                         <TextBlock Text="Default outfit:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
-                                        <ComboBox Grid.Row="3" Grid.Column="1" Margin="0,2" IsEditable="True"
+                                        <!-- The field is greyed on one of the game&apos;s characters, so this
+                                             button is the only way back from an answer an older editor
+                                             wrote: it adopted a character through whichever bust the pack
+                                             first used and recorded that as the default. -->
+                                        <Button Grid.Row="3" Grid.Column="1" Content="Reset" Padding="8,0"
+                                                Margin="0,2" HorizontalAlignment="Right"
+                                                Command="{Binding ResetFieldCommand}" CommandParameter="DefaultOutfit"
+                                                IsEnabled="{Binding CanResetDefaultOutfit}"
+                                                Visibility="{Binding ShowsResets, Converter={StaticResource BoolToVisibility}}"
+                                                ToolTip="Put the default outfit back to the bust the game has this character enter in."/>
+                                        <ComboBox Grid.Row="3" Grid.Column="1" Margin="0,2,58,2" IsEditable="True"
                                                   ItemsSource="{Binding WearableBusts}"
                                                   SelectedItem="{Binding DefaultOutfit}"
-                                                  ToolTip="Which bust this character appears in before any dialogue changes it. Set to the first outfit you add; editable, so a bust built elsewhere can be named directly."/>
+                                                  IsEnabled="{Binding CanEditDefaultOutfit}"
+                                                  ToolTip="Which bust this character appears in before any dialogue changes it. Set to the first outfit you add; editable, so a bust built elsewhere can be named directly. Fixed for one of the game&apos;s characters: which bust they enter in is the game&apos;s, in every scene it wrote."/>
                                     </Grid>
 
                                     <!-- Selected outfit -->
@@ -3296,31 +3452,37 @@
                                         </Grid.RowDefinitions>
                                         <TextBlock Text="Outfit name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"
                                                    ToolTip="What dialogue and actions reference this outfit by, and the GameObject the runtime builds."/>
+                                        <!-- Which of these shows follows the OUTFIT rather than the
+                                             character, and it has to: one of the game&apos;s characters can
+                                             wear both kinds at once now - the busts the game gave them,
+                                             whose name is simply which bust it is, and a bust this pack
+                                             drew for them, which is named like any other outfit. -->
                                         <TextBox ToolTip="What dialogue and actions reference this outfit by, and the GameObject the runtime builds."  Grid.Row="0" Grid.Column="1" Margin="0,2"
                                                   Text="{Binding GameObjectName, UpdateSourceTrigger=PropertyChanged}"
-                                                  Visibility="{Binding DataContext.SelectedCharacter.IsPackBust,
-                                                               RelativeSource={RelativeSource AncestorType=Window},
-                                                               Converter={StaticResource BoolToVisibility}}"/>
-                                        <ComboBox Grid.Row="0" Grid.Column="1" Margin="0,2"
-                                                  ItemsSource="{Binding DataContext.SelectedCharacter.VanillaBustCatalog,
-                                                                RelativeSource={RelativeSource AncestorType=Window}}"
-                                                  SelectedValue="{Binding GameObjectName}" SelectedValuePath="GoName"
-                                                  Visibility="{Binding DataContext.SelectedCharacter.IsVanillaBust,
-                                                               RelativeSource={RelativeSource AncestorType=Window},
-                                                               Converter={StaticResource BoolToVisibility}}"
-                                                  ToolTip="Which of the game&apos;s busts this outfit is.">
-                                            <ComboBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Text="{Binding GoName}"/>
-                                                        <TextBlock Text="{Binding Character}" Foreground="Gray" Margin="8,0,0,0"/>
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </ComboBox.ItemTemplate>
-                                        </ComboBox>
+                                                  Visibility="{Binding CanEditName, Converter={StaticResource BoolToVisibility}}"/>
+                                        <TextBox Grid.Row="0" Grid.Column="1" Margin="0,2" IsReadOnly="True" IsEnabled="False"
+                                                  Text="{Binding GameObjectName, Mode=OneWay}"
+                                                  Visibility="{Binding IsVanillaBust, Converter={StaticResource BoolToVisibility}}"
+                                                  ToolTip="Which of the game&apos;s busts this is. Not a name to change: it is how the game and this pack both find that bust."/>
                                         <TextBlock Grid.Row="1" Grid.Column="1" Foreground="Gray" FontSize="10"
-                                                   Text="Every outfit reference in this pack uses this name."/>
+                                                   Text="Every outfit reference in this pack uses this name."
+                                                   Visibility="{Binding CanEditName, Converter={StaticResource BoolToVisibility}}"/>
+                                        <TextBlock Grid.Row="1" Grid.Column="1" Foreground="Gray" FontSize="10" TextWrapping="Wrap"
+                                                   Text="One of the game&apos;s own busts. Its art is not in this pack - tick Replace textures below to paint over part of it."
+                                                   Visibility="{Binding IsVanillaBust, Converter={StaticResource BoolToVisibility}}"/>
+                                        <TextBlock Grid.Row="1" Grid.Column="1" Foreground="Gray" FontSize="10" TextWrapping="Wrap"
+                                                   Text="A bust this pack draws for one of the game&apos;s characters. It behaves like any other outfit of yours - dialogue switches to it by this name."
+                                                   Visibility="{Binding IsAddedToVanilla, Converter={StaticResource BoolToVisibility}}"/>
                                     </Grid>
+
+                                    <!-- The toggle the replace-textures panel hangs off. It sits with
+                                         the outfit name because that is what it qualifies: the name
+                                         above is somebody else&apos;s bust, and this is the one thing a
+                                         pack can do to it. -->
+                                    <CheckBox Margin="0,8,0,0" Content="Replace textures on this bust"
+                                              IsChecked="{Binding OverridesShown}"
+                                              Visibility="{Binding IsVanillaBust, Converter={StaticResource BoolToVisibility}}"
+                                              ToolTip="Paint over part of the game&apos;s art for this bust - a mouth, a face - leaving the rest of it alone."/>
 
                                     <!-- Contextual notes + the derived internal names -->
                                     <StackPanel DataContext="{Binding DataContext.SelectedCharacter, RelativeSource={RelativeSource AncestorType=Window}}">
@@ -3334,6 +3496,18 @@
                                                    Visibility="{Binding HasNoBust, Converter={StaticResource BoolToVisibility}}"
                                                    Text="This character speaks with no bust shown. Dialogue lines, name colour and voice all work; nothing is drawn."/>
 
+                                        <!-- The key is greyed for one of the game's characters, and a pack
+                                             written by an older editor can be carrying one of its own
+                                             ("mobster" where the catalog says "mobster1"). It could not be
+                                             migrated: every dialogue node in the pack names the character
+                                             by it. So it is a reset, and the rename takes the lines with
+                                             it rather than leaving them pointing at nobody. -->
+                                        <Button Content="Reset dialogue key" Padding="8,0" Margin="0,8,0,0"
+                                                HorizontalAlignment="Left"
+                                                Command="{Binding DataContext.ResetCharacterKeyCommand,
+                                                          RelativeSource={RelativeSource AncestorType=Window}}"
+                                                Visibility="{Binding CanResetKey, Converter={StaticResource BoolToVisibility}}"
+                                                ToolTip="Put the key back to the one this character's name derives, and repoint every dialogue line that names them at it."/>
                                         <Expander Header="Internal names" Margin="0,8,0,0"
                                                   IsEnabled="{Binding CanEditIdentity}">
                                             <StackPanel Margin="0,4,0,0">
@@ -3366,8 +3540,12 @@
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="140"/>
                                             <ColumnDefinition Width="*"/>
+                                            <!-- A column of its own, so the fields do not shift
+                                                 sideways as buttons appear and go. -->
+                                            <ColumnDefinition Width="64"/>
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
@@ -3377,11 +3555,41 @@
                                         <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,6"
                                                   Content="Enable typewriter voice" IsChecked="{Binding TypewriterEnabled}"
                                                   ToolTip="When off, this character's line types out silently."/>
+                                        <!-- The whole voice, and REMOVED rather than set back to
+                                             matching numbers: a typewriter holding the defaults is
+                                             still written to the manifest, and the character would
+                                             go on counting as changed for a voice identical to the
+                                             one they already had. Also the only way back from
+                                             having switched the voice off. -->
+                                        <Button Grid.Row="0" Grid.Column="2" Content="Reset all" Padding="4,0"
+                                                Margin="4,0,0,6" VerticalAlignment="Center"
+                                                Command="{Binding ResetFieldCommand}" CommandParameter="Voice"
+                                                IsEnabled="{Binding CanResetVoice}"
+                                                Visibility="{Binding ShowsResets, Converter={StaticResource BoolToVisibility}}"
+                                                ToolTip="Drop everything this pack says about the voice, so the character speaks the way they already did."/>
                                         <TextBlock Grid.Row="1" Grid.Column="0" Text="Template:" VerticalAlignment="Center"/>
                                         <ComboBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,4"
                                                   ItemsSource="{Binding VoiceTemplates}"
                                                   SelectedItem="{Binding VoiceTemplate}"
                                                   ToolTip="Male → freq 45, pitch 0.6–0.9. Female → freq 45, pitch 1.0–1.5. Custom → your own values."/>
+                                        <Button Grid.Row="2" Grid.Column="2" Content="Reset" Padding="4,0"
+                                                Margin="4,0,0,4" VerticalAlignment="Center"
+                                                Command="{Binding ResetFieldCommand}" CommandParameter="TypewriterFrequencyText"
+                                                IsEnabled="{Binding CanResetFrequency}"
+                                                Visibility="{Binding ShowsResets, Converter={StaticResource BoolToVisibility}}"
+                                                ToolTip="Put the frequency back to this character&apos;s own. Nothing else on the row changes."/>
+                                        <Button Grid.Row="3" Grid.Column="2" Content="Reset" Padding="4,0"
+                                                Margin="4,0,0,4" VerticalAlignment="Center"
+                                                Command="{Binding ResetFieldCommand}" CommandParameter="TypewriterPitchMinText"
+                                                IsEnabled="{Binding CanResetPitchMin}"
+                                                Visibility="{Binding ShowsResets, Converter={StaticResource BoolToVisibility}}"
+                                                ToolTip="Put the low end of the pitch range back to this character&apos;s own."/>
+                                        <Button Grid.Row="4" Grid.Column="2" Content="Reset" Padding="4,0"
+                                                Margin="4,0,0,0" VerticalAlignment="Center"
+                                                Command="{Binding ResetFieldCommand}" CommandParameter="TypewriterPitchMaxText"
+                                                IsEnabled="{Binding CanResetPitchMax}"
+                                                Visibility="{Binding ShowsResets, Converter={StaticResource BoolToVisibility}}"
+                                                ToolTip="Put the high end of the pitch range back to this character&apos;s own."/>
                                         <TextBlock Grid.Row="2" Grid.Column="0" Text="Frequency:" VerticalAlignment="Center"/>
                                         <TextBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,4"
                                                  Text="{Binding TypewriterFrequencyText, UpdateSourceTrigger=PropertyChanged}"
@@ -3394,6 +3602,16 @@
                                         <TextBox Grid.Row="4" Grid.Column="1"
                                                  Text="{Binding TypewriterPitchMaxText, UpdateSourceTrigger=PropertyChanged}"
                                                  ToolTip="High end of the random pitch range. Male 0.9, Female 1.5."/>
+                                        <!-- The character&apos;s own numbers, not the editor&apos;s generic
+                                             ones. GC2&apos;s typewriter is per character rather than per
+                                             speech skin, so there is a real answer for each of the
+                                             game&apos;s - and an author who changes the pitch should be
+                                             changing something rather than discovering the field was
+                                             never theirs. Still theirs to change. -->
+                                        <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,6,0,0"
+                                                   Foreground="Gray" FontSize="10" TextWrapping="Wrap"
+                                                   Text="{Binding GameVoiceSummary}"
+                                                   Visibility="{Binding HasGameVoice, Converter={StaticResource BoolToVisibility}}"/>
                                     </Grid>
                                 </StackPanel>
                             </GroupBox>
@@ -3409,7 +3627,10 @@
                                             HorizontalAlignment="Left" Margin="0,6,0,0" Padding="8,2"/>
                                     <TextBlock DockPanel.Dock="Top" Foreground="Gray" FontSize="10" Margin="0,0,0,4"
                                                TextWrapping="Wrap"
-                                               Text="What a dialogue node's Expression field selects. If empty, the four standard expressions (Happy/Angry/Sad/Flirty) each map by name to a child of the bust's MBase1/Expressions/. Add entries to override those or to add custom ones."/>
+                                               Text="What a dialogue node&apos;s Expression field selects. On one of the game&apos;s characters the faces the game already gave them are listed first and cannot be changed - they belong to the game, and its own conversations ask for them by these names."/>
+                                    <TextBlock DockPanel.Dock="Top" Foreground="Gray" FontSize="10" Margin="0,0,0,6"
+                                               TextWrapping="Wrap"
+                                               Text="Add a row to give a character a face it never had. Its art is named after it: on a bust this pack draws, the outfit&apos;s expression prefix picks it up as {prefix}{Name}.png; on one of the game&apos;s busts it gets a row of its own under Replace textures."/>
                                     <ItemsControl ItemsSource="{Binding Expressions}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate DataType="{x:Type vm:ActorExpressionViewModel}">
@@ -3421,11 +3642,19 @@
                                                         <ColumnDefinition Width="Auto"/>
                                                     </Grid.ColumnDefinitions>
                                                     <TextBox Grid.Column="0" Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}"
+                                                             IsEnabled="{Binding CanEdit}"
                                                              ToolTip="Pack-local expression key (e.g. Happy)"/>
                                                     <TextBox Grid.Column="2" Text="{Binding ExpressionGoName, UpdateSourceTrigger=PropertyChanged}"
+                                                             IsEnabled="{Binding CanEdit}"
                                                              ToolTip="Child name under MBase1/Expressions/ on the bust"/>
+                                                    <!-- The game&apos;s own faces have no remove button rather than a
+                                                         disabled one: there is nothing to remove. They are not in the
+                                                         manifest at all - they are read from the shipped dataset each
+                                                         time this panel is shown, so a pack that never touched this
+                                                         character still writes nothing about them. -->
                                                     <Button Grid.Column="3" Content="−" Width="22" Margin="4,0,0,0"
                                                             Command="{Binding RemoveCommand}"
+                                                            Visibility="{Binding CanEdit, Converter={StaticResource BoolToVisibility}}"
                                                             ToolTip="Remove this expression"/>
                                                 </Grid>
                                             </DataTemplate>
@@ -3434,10 +3663,63 @@
                                 </DockPanel>
                             </GroupBox>
 
+                            <!-- What a pack can do to somebody else's bust.
+                                 One row per texture, and each row is a tick and a path.
+                                 The tick is not a field: it IS whether the manifest carries
+                                 an entry for that slot, so a slot nobody ticked is a slot
+                                 the pack never mentions and the runtime leaves exactly as
+                                 the game drew it. That is the whole promise of the feature,
+                                 and a second boolean beside the path would be a second
+                                 thing to keep in step with it.
+
+                                 No Has Blink / Has Mouth / Has Expressions here on purpose:
+                                 those say what a bust HAS, and this bust's answer is the
+                                 game's rather than the pack's. -->
+                            <GroupBox Header="Replace textures on this bust"
+                                      Visibility="{Binding ShowOverridesPanel, Converter={StaticResource BoolToVisibility}}">
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Top" Foreground="Gray" FontSize="10" Margin="0,0,0,6"
+                                               TextWrapping="Wrap"
+                                               Text="Tick only what you are replacing. Anything left unticked stays exactly as the game drew it - this is not a whole bust, it is the parts of one you are painting over. A face the game did not give this character is created for it; the others are swapped in place."/>
+                                    <ItemsControl ItemsSource="{Binding Overrides}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate DataType="{x:Type vm:SpriteOverrideViewModel}">
+                                                <Grid Margin="0,0,0,3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="140"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <CheckBox Grid.Column="0" VerticalAlignment="Center"
+                                                              Content="{Binding Label}"
+                                                              IsChecked="{Binding Replaced}"
+                                                              ToolTip="Tick to replace this texture. Unticked, the pack says nothing about it."/>
+                                                    <!-- The mask row gets the painter, the way a pack
+                                                         outfit's does. It is the one texture here that
+                                                         nobody authors by hand: three intensity planes
+                                                         in R/G/B, which is what the painter is for.
+                                                         Every other row is a PNG somebody drew, so the
+                                                         button is only on this one. -->
+                                                    <DockPanel Grid.Column="1">
+                                                        <Button DockPanel.Dock="Right" Content="Edit Mask…"
+                                                                Margin="4,0,0,0" Padding="6,0"
+                                                                IsEnabled="{Binding Replaced}"
+                                                                Visibility="{Binding IsMask, Converter={StaticResource BoolToVisibility}}"
+                                                                Click="EditOverrideMask_Click"/>
+                                                        <ctl:PathPickerBox
+                                                                       PathText="{Binding Path, UpdateSourceTrigger=PropertyChanged}"
+                                                                       IsEnabled="{Binding Replaced}"
+                                                                       PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                       ToolTip="256x256 RGBA PNG, relative to the pack folder."/>
+                                                    </DockPanel>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </DockPanel>
+                            </GroupBox>
+
                             <GroupBox view:TutorialAnchor.Id="panel:outfitSprites" Header="Sprites and expressions (relative to pack root, 256×256 PNG)"
-                                      Visibility="{Binding DataContext.SelectedCharacter.IsPackBust,
-                                                   RelativeSource={RelativeSource AncestorType=Window},
-                                                   Converter={StaticResource BoolToVisibility}}">
+                                      Visibility="{Binding ShowsPackArt, Converter={StaticResource BoolToVisibility}}">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="140"/>
@@ -3511,9 +3793,9 @@
                                         <TextBlock Text="Expr. prefix:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
                                         <ctl:SuffixHintBox view:IssueTarget.Field="expression" Grid.Row="1" Grid.Column="1"
                                                            Text="{Binding ExpressionPrefix, UpdateSourceTrigger=PropertyChanged}"
-                                                           Suffix="Happy.png/Angry.png/Sad.png/Flirty.png"
+                                                           Suffix="{Binding ExpressionFilesHint}"
                                                            IsEnabled="{Binding ExpressionEnabled}"
-                                                           ToolTip="Path and filename start that the four expression files share, relative to the pack root. Art/Anna/Expression loads Art/Anna/ExpressionHappy.png and its three siblings. Only those four names are ever looked for."/>
+                                                           ToolTip="Path and filename start that this bust&apos;s expression files share, relative to the pack root. Art/Anna/Expression loads Art/Anna/ExpressionHappy.png and its siblings — one per face the character has, including any you added."/>
                                         <TextBlock Text="A path from the pack root, without the mood: Art/Anna/Expression"
                                                    Grid.Row="2" Grid.Column="1" Foreground="Gray" FontSize="10"/>
                                     </Grid>
@@ -3521,9 +3803,7 @@
                             </GroupBox>
 
                             <GroupBox Header="Jiggle (mask-driven shader)"
-                                      Visibility="{Binding DataContext.SelectedCharacter.IsPackBust,
-                                                   RelativeSource={RelativeSource AncestorType=Window},
-                                                   Converter={StaticResource BoolToVisibility}}">
+                                      Visibility="{Binding ShowsPackArt, Converter={StaticResource BoolToVisibility}}">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="140"/>
@@ -3593,9 +3873,7 @@
                             </GroupBox>
 
                             <GroupBox view:TutorialAnchor.Id="panel:outfitParticles" Header="Particles"
-                                      Visibility="{Binding DataContext.SelectedCharacter.IsPackBust,
-                                                   RelativeSource={RelativeSource AncestorType=Window},
-                                                   Converter={StaticResource BoolToVisibility}}">
+                                      Visibility="{Binding ShowsPackArt, Converter={StaticResource BoolToVisibility}}">
                                 <StackPanel>
                                     <CheckBox Content="Wet particle active on spawn"
                                               IsChecked="{Binding ParticleActive}"
@@ -3612,7 +3890,7 @@
                          (see the columns block above for why). -->
                     <DockPanel view:TutorialAnchor.Id="panel:bustPreviewPane" Grid.Column="3" Margin="8">
                         <TextBlock DockPanel.Dock="Top" FontWeight="Bold" Margin="0,0,0,4"
-                                   Text="{Binding SelectedCharacter.IsPackBust,
+                                   Text="{Binding SelectedOutfit.ShowsPackArt,
                                           Converter={x:Static conv:PreviewHeaderConverter.Instance}}"/>
                         <Border DockPanel.Dock="Top" Background="#222" Padding="4" ClipToBounds="True">
                             <!-- One preview for both kinds. A borrowed bust feeds

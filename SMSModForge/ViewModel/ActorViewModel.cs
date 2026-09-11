@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using SMSModForge.Model;
@@ -315,14 +315,32 @@ public sealed class ActorExpressionViewModel : ObservableObject
 {
     public ActorExpressionDef Model { get; }
 
-    public ActorExpressionViewModel(ActorExpressionDef model, System.Action<ActorExpressionViewModel>? remove = null)
+    public ActorExpressionViewModel(ActorExpressionDef model,
+                                    System.Action<ActorExpressionViewModel>? remove = null,
+                                    bool fromTheGame = false)
     {
         Model = model;
+        FromTheGame = fromTheGame;
         // Per-row, like ActorOutfitViewModel's: the row knows how to delete
         // itself, so the template needs no CommandParameter plumbing back up to
         // a list it cannot see.
         RemoveCommand = new RelayCommand(() => remove?.Invoke(this), () => remove != null);
     }
+
+    /// <summary>
+    /// One of the faces the GAME gave this character, shown so an author can
+    /// see what a dialogue node may already ask for.
+    /// <para/>
+    /// Not editable, and — more importantly — not in the manifest. These rows
+    /// are built from the shared dataset each time the panel is shown; writing
+    /// them down would put four expressions into every pack that so much as
+    /// looked at one of the game's characters, and untouched has to keep
+    /// meaning untouched.
+    /// </summary>
+    public bool FromTheGame { get; }
+
+    /// <summary>Inverse, for binding enabled-ness.</summary>
+    public bool CanEdit => !FromTheGame;
 
     /// <summary>Deletes this row. Disabled when the owner supplied no callback.</summary>
     public RelayCommand RemoveCommand { get; }
@@ -330,7 +348,26 @@ public sealed class ActorExpressionViewModel : ObservableObject
     public string Key
     {
         get => Model.Key;
-        set { Model.Key = value; OnPropertyChanged(); }
+        set
+        {
+            // The child name follows the key unless it was deliberately made to
+            // differ — the same bargain OutfitViewModel strikes between an
+            // outfit's key and its GameObject, and for the same reason. A face
+            // is added with a placeholder name and typed over; without this an
+            // author would type "Smirk" in the first box and the second would
+            // still say "Expression1", which is the box the art is named after.
+            //
+            // A BLANK child name counts as tracking. Clearing it and retyping
+            // is a normal way to work, and reading blank as "deliberately
+            // different" would detach the two on the first keystroke.
+            bool tracked = string.IsNullOrWhiteSpace(Model.ExpressionGoName)
+                           || string.Equals(Model.ExpressionGoName, Model.Key,
+                                            System.StringComparison.OrdinalIgnoreCase);
+            Model.Key = value;
+            if (tracked && !string.IsNullOrWhiteSpace(value)) Model.ExpressionGoName = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ExpressionGoName));
+        }
     }
 
     public string ExpressionGoName

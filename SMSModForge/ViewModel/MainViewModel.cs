@@ -581,7 +581,10 @@ public sealed class MainViewModel : ObservableObject
         get => _selectedOutfit;
         set
         {
-            _selectedOutfit = value;
+            // ...and the same for an outfit's GameObject name, which is
+            // what a dialogue node switches into.
+            if (!ReferenceEquals(_selectedOutfit, value)) CommitPendingOutfitRename();
+            TrackOutfit(value);
             OnPropertyChanged();
             OnPropertyChanged(nameof(VanillaPreviewBustKey));
             // Picking an outfit implies its owner. The reverse is not true, so
@@ -603,7 +606,7 @@ public sealed class MainViewModel : ObservableObject
     /// multi-binding for that reads far worse than the sentence it replaces.
     /// </summary>
     public string? VanillaPreviewBustKey
-        => SelectedCharacter?.IsVanillaBust == true ? SelectedOutfit?.GameObjectName : null;
+        => SelectedOutfit?.IsVanillaBust == true ? SelectedOutfit?.GameObjectName : null;
 
     private CharacterViewModel? _selectedCharacter;
 
@@ -622,18 +625,56 @@ public sealed class MainViewModel : ObservableObject
         set
         {
             if (ReferenceEquals(_selectedCharacter, value)) return;
+            // Leaving a character commits whatever was typed into its key box.
+            CommitPendingCharacterRename();
             _selectedCharacter = value;
+            _renameOriginCharacterKey = value?.Key ?? "";
             OnPropertyChanged();
             OnPropertyChanged(nameof(VanillaPreviewBustKey));
             // A stale outfit from the previously selected character would leave
-            // the sprite editor showing art that belongs to someone else.
-            if (value != null && _selectedOutfit != null && !value.Outfits.Contains(_selectedOutfit))
+            // the sprite editor showing art that belongs to someone else - and
+            // NO outfit leaves the panels below blank, which reads as a
+            // character with nothing in them. Either way, picking a character
+            // lands on the bust they enter in.
+            if (value != null && (_selectedOutfit == null || !value.Outfits.Contains(_selectedOutfit)))
             {
-                _selectedOutfit = value.Outfits.FirstOrDefault();
+                TrackOutfit(TheBustTheyEnterIn(value));
                 OnPropertyChanged(nameof(SelectedOutfit));
                 OnPropertyChanged(nameof(VanillaPreviewBustKey));
             }
         }
+    }
+
+    /// <summary>
+    /// The bust a character appears in unless something switches them, which is
+    /// where picking the character lands.
+    /// <para/>
+    /// It used to land on whichever bust was first in the list. That is the
+    /// same one only while nobody has chosen otherwise, and it left an author
+    /// who clicked one of the game's characters looking at a bust they had
+    /// never edited and concluding their edits had been lost.
+    /// </summary>
+    private static OutfitViewModel? TheBustTheyEnterIn(CharacterViewModel them)
+    {
+        string wanted = them.DefaultOutfit ?? "";
+        if (wanted.Length > 0)
+        {
+            // The GameObject name, which is what defaultOutfit holds - "Amber",
+            // "Adrian_bust" - and not the outfit key, which is a derived
+            // lower-case spelling of it. Matching the key instead finds a
+            // vanilla bust only by accident, and only when it is the sole one.
+            foreach (var bust in them.Outfits)
+                if (string.Equals(bust.Model.GameObjectName, wanted,
+                                  StringComparison.OrdinalIgnoreCase))
+                    return bust;
+
+            // ...and the key too, so a hand-edited manifest that named one is
+            // read the way its author plainly meant it.
+            foreach (var bust in them.Outfits)
+                if (string.Equals(bust.Model.Key, wanted, StringComparison.OrdinalIgnoreCase))
+                    return bust;
+        }
+        return them.Outfits.FirstOrDefault();
     }
 
     private PlaceViewModel? _selectedPlace;
@@ -1425,6 +1466,110 @@ public sealed class MainViewModel : ObservableObject
     /// author to resolve rather than silently repointing references at
     /// someone else's variable).
     /// </summary>
+    /// <summary>
+    /// Commit every rename somebody has typed but not yet left.
+    /// <para/>
+    /// Three boxes write through on every keystroke - a variable's name, a
+    /// character's key, an outfit's GameObject name - and all three are
+    /// referenced elsewhere in the pack. Cascading per character is nonsense
+    /// ("A", "Ad", "Adr"), so each is snapshotted on selection and reconciled
+    /// at the natural commit points: selecting something else, switching tabs,
+    /// saving. Typing stays free-form and references never reach disk dangling.
+    /// </summary>
+    public void CommitPendingRenames()
+    {
+        CommitPendingVariableRename();
+        CommitPendingCharacterRename();
+        CommitPendingOutfitRename();
+    }
+
+    private string _renameOriginCharacterKey = "";
+    private string _renameOriginOutfitName = "";
+
+    /// <summary>
+    /// Move the outfit selection, taking its rename snapshot with it.
+    /// <para/>
+    /// Both, always, in one place — because the one time they came apart was
+    /// not a spurious message, it was a silent rewrite. Selecting a CHARACTER
+    /// moves the outfit selection too (a stale outfit would leave the sprite
+    /// editor showing somebody else's art), and it did that by assigning the
+    /// field directly. The snapshot went on naming the previous character's
+    /// outfit while the selection pointed at the new character's, so the next
+    /// commit read the difference as a rename and repointed every node that
+    /// switched into <c>Adrian_bust</c> at <c>Anna_Bust</c>.
+    /// <para/>
+    /// A helper rather than a comment on each assignment: there were two, and
+    /// the second is exactly the kind that gets added later by somebody who has
+    /// no reason to know a snapshot exists.
+    /// </summary>
+    private void TrackOutfit(OutfitViewModel? value)
+    {
+        _selectedOutfit = value;
+        _renameOriginOutfitName = value?.GameObjectName ?? "";
+    }
+
+    /// <summary>
+    /// The character key, which is what a dialogue node names its speaker by.
+    /// <para/>
+    /// Left alone when the new key collides with another character: repointing
+    /// somebody else's lines at this character would be worse than leaving the
+    /// author to resolve it.
+    /// </summary>
+    public void CommitPendingCharacterRename()
+    {
+        var vm = _selectedCharacter;
+        if (vm == null || string.IsNullOrEmpty(_renameOriginCharacterKey)) return;
+
+        string current = vm.Key;
+        if (string.IsNullOrWhiteSpace(current) || current == _renameOriginCharacterKey) return;
+        if (!Characters.Contains(vm)) { _renameOriginCharacterKey = ""; return; }
+        if (Characters.Any(c => c != vm && string.Equals(c.Key, current, StringComparison.OrdinalIgnoreCase)))
+        {
+            _renameOriginCharacterKey = current;
+            return;
+        }
+
+        string from = _renameOriginCharacterKey;
+        _renameOriginCharacterKey = current;
+        Cascade(Services.RefKind.Character, from, current);
+    }
+
+    /// <summary>The outfit's GameObject name, which is what a node switches a
+    /// character into.</summary>
+    public void CommitPendingOutfitRename()
+    {
+        var vm = _selectedOutfit;
+        if (vm == null || string.IsNullOrEmpty(_renameOriginOutfitName)) return;
+
+        string current = vm.GameObjectName;
+        if (string.IsNullOrWhiteSpace(current) || current == _renameOriginOutfitName) return;
+
+        var all = Characters.SelectMany(c => c.Outfits).ToList();
+        if (!all.Contains(vm)) { _renameOriginOutfitName = ""; return; }
+        if (all.Any(o => o != vm && string.Equals(o.GameObjectName, current, StringComparison.OrdinalIgnoreCase)))
+        {
+            _renameOriginOutfitName = current;
+            return;
+        }
+
+        string from = _renameOriginOutfitName;
+        _renameOriginOutfitName = current;
+        Cascade(Services.RefKind.Outfit, from, current);
+    }
+
+    /// <summary>Point every reference at the new name, and say so — rewriting
+    /// parts of the pack somebody is not looking at should never be
+    /// silent.</summary>
+    private void Cascade(Services.RefKind kind, string from, string to)
+    {
+        int refs = Services.ReferenceRenamer.Rename(Pack, kind, from, to);
+        if (refs == 0) return;
+
+        RefreshConditionAndActionRows();
+        Announce("Rename",
+            $"Renamed '{from}' to '{to}' and updated {refs} reference{(refs == 1 ? "" : "s")}.");
+    }
+
     public void CommitPendingVariableRename()
     {
         var vm = _selectedVariable;
@@ -1444,7 +1589,7 @@ public sealed class MainViewModel : ObservableObject
         int refs = Services.VariableRenamer.RenameReferences(Pack, from, current);
         if (refs == 0) return;
         RefreshConditionAndActionRows();
-        ShowInfo?.Invoke("Rename",
+        Announce("Rename",
             $"Renamed '{from}' to '{current}' and updated {refs} reference{(refs == 1 ? "" : "s")}.");
     }
 
@@ -1551,6 +1696,73 @@ public sealed class MainViewModel : ObservableObject
     public RelayCommand AddVoiceCharacterCommand { get; }
     public RelayCommand AddVanillaOutfitCommand { get; }
     public RelayCommand AddCharacterExpressionCommand { get; }
+
+    /// <summary>Put one of the game's characters back the way the game has
+    /// them, whole.</summary>
+    public RelayCommand ResetCharacterCommand { get; }
+
+    /// <summary>Put a borrowed character's dialogue key back to the one the
+    /// editor derives, carrying every line that names them along with it.</summary>
+    public RelayCommand ResetCharacterKeyCommand { get; }
+
+    /// <summary>
+    /// The one difference on a borrowed character that could not be migrated:
+    /// every dialogue node in the pack names the character by this key, so
+    /// changing it in place would have silenced all of them.
+    /// <para/>
+    /// A rename rather than an assignment, so the lines come too. Nothing is
+    /// asked first because nothing is lost — unlike the whole-character reset,
+    /// this moves work rather than throwing it away.
+    /// </summary>
+    private void ResetCharacterKey()
+    {
+        var character = SelectedCharacter;
+        if (character?.CanResetKey != true) return;
+
+        string from = character.Key;
+        string to = character.TheirOwnKey;
+        if (Characters.Any(c => c != character && string.Equals(c.Key, to, StringComparison.OrdinalIgnoreCase)))
+        {
+            Announce("Reset key",
+                $"Another character is already keyed '{to}', so this one has been left alone.");
+            return;
+        }
+
+        Undo.Checkpoint();
+        Cascade(Services.RefKind.Character, from, to);
+        character.Key = to;
+        _renameOriginCharacterKey = to;
+    }
+
+    /// <summary>
+    /// Ask first, and say what is about to go.
+    /// <para/>
+    /// The only reset that destroys work rather than putting a number back: a
+    /// character can be carrying busts the author drew and textures they
+    /// painted, and all of it goes. Refused when nobody is there to answer, so
+    /// the harness cannot quietly wipe a character it opened.
+    /// </summary>
+    private void ResetCharacterToTheGames()
+    {
+        var character = SelectedCharacter;
+        if (character?.CanResetEverything != true) return;
+
+        string going = character.ResetEverythingSummary;
+        var answer = Ask(
+            $"Put {character.DisplayName} back the way the game has them?\n\n"
+            + (going.Length > 0 ? "This pack loses " + going + "." : "")
+            + "\n\nNothing is written until you save, and the original is kept "
+            + "beside the manifest when you do.",
+            "Reset character",
+            MessageBoxButton.YesNo, MessageBoxImage.Warning,
+            whenNobodyIsThere: MessageBoxResult.No);
+
+        if (answer != MessageBoxResult.Yes) return;
+
+        character.ResetEverything();
+        SelectedOutfit = character.Outfits.FirstOrDefault();
+        OnPropertyChanged(nameof(SelectedCharacter));
+    }
     public RelayCommand AddOutfitCommand { get; }
     public RelayCommand RemoveCharacterCommand { get; }
     public RelayCommand RemoveOutfitCommand { get; }
@@ -1915,6 +2127,14 @@ public sealed class MainViewModel : ObservableObject
         AddCharacterExpressionCommand = new RelayCommand(
             () => SelectedCharacter?.AddExpression(),
             () => SelectedCharacter != null);
+
+        ResetCharacterCommand = new RelayCommand(
+            ResetCharacterToTheGames,
+            () => SelectedCharacter?.CanResetEverything == true);
+
+        ResetCharacterKeyCommand = new RelayCommand(
+            ResetCharacterKey,
+            () => SelectedCharacter?.CanResetKey == true);
 
         // An outfit belongs to one character, so there has to BE one selected,
         // and it has to be a character an outfit means something for — a
@@ -2567,7 +2787,7 @@ public sealed class MainViewModel : ObservableObject
         // Any in-progress variable rename becomes real here: saving is a
         // commit point, so references get rewritten before the manifest is
         // written rather than being left dangling on disk.
-        CommitPendingVariableRename();
+        CommitPendingRenames();
         // Fold the current tree back into the model (catches a dialogue key
         // rename that happened without a tree mutation, so folder membership
         // — keyed by dialogue key — stays correct across a reload).
@@ -3081,7 +3301,7 @@ public sealed class MainViewModel : ObservableObject
             def.Outfits.Add(new OutfitDef { Key = def.Name, GameObjectName = def.Name });
         Pack.Characters.Add(def);
         Characters.Add(HookSpeaker(vm));
-        foreach (var o in def.Outfits) vm.Outfits.Add(new OutfitViewModel(o));
+        foreach (var o in def.Outfits) vm.Outfits.Add(new OutfitViewModel(o, vm));
         SelectedOutfit = vm.Outfits.FirstOrDefault();
         OnPropertyChanged(nameof(SelectedCharacter));
     }
@@ -3698,7 +3918,7 @@ public sealed class MainViewModel : ObservableObject
     {
         get => _selectedTabIndex;
         // Leaving the Variables tab is a commit point for a half-typed rename.
-        set { if (_selectedTabIndex != value) CommitPendingVariableRename();
+        set { if (_selectedTabIndex != value) CommitPendingRenames();
               _selectedTabIndex = value; OnPropertyChanged(); }
     }
 
@@ -3736,6 +3956,26 @@ public sealed class MainViewModel : ObservableObject
 
     /// <summary>Info-message hook wired by the window (title, message).</summary>
     public Action<string, string>? ShowInfo { get; set; }
+
+    /// <summary>
+    /// Say something to the author, and say nothing when there is no author.
+    /// <para/>
+    /// <see cref="ShowInfo"/> is wired straight to a real MessageBox by the
+    /// window, so invoking it under the harness does not fail a run — it STOPS
+    /// one, waiting for a click nobody is there to give, on a dialog sitting
+    /// over the work of whoever started the tests. It went unnoticed for as
+    /// long as it did because only a variable rename reached it, and the suite
+    /// rarely renamed one. Following references on every kind of rename reached
+    /// it constantly.
+    /// <para/>
+    /// Every notice goes through here rather than through the hook directly,
+    /// which is the same single switch Tell and Ask sit behind.
+    /// </summary>
+    private void Announce(string title, string message)
+    {
+        if (Services.TestMode.Active) return;
+        ShowInfo?.Invoke(title, message);
+    }
 
     /// <summary>
     /// Save-confirmation hook wired by the window (change list, pack root) →
@@ -3961,28 +4201,38 @@ public sealed class MainViewModel : ObservableObject
             case TabBusts:
                 var ch = SelectedOutfit != null ? Characters.FirstOrDefault(c => c.Outfits.Contains(SelectedOutfit)) : null;
                 if (ch != null)
-                    RenameKey("Outfit", SelectedOutfit!, v => v.Key, (v, k) => v.Key = k,
-                              ch.Outfits.Where(x => x != SelectedOutfit).Select(x => x.Key));
+                    // The GameObject name, not the key: that is what a dialogue
+                    // node switches into and what an action targets a bust by.
+                    // The key follows it, as it does when typed.
+                    RenameKey("Outfit", SelectedOutfit!, v => v.GameObjectName,
+                              (v, k) => v.GameObjectName = k,
+                              Characters.SelectMany(c => c.Outfits)
+                                        .Where(x => x != SelectedOutfit).Select(x => x.GameObjectName),
+                              Services.RefKind.Outfit);
                 break;
             case TabPlaces:
                 if (SelectedPlace != null)
                     RenameKey("Place", SelectedPlace, v => v.Key, (v, k) => { v.Key = k; RebuildDialogueRoomTalkOptions(); PlaceTree.Sort(); PlaceTree.SyncToModel(); },
-                              Places.Where(x => x != SelectedPlace).Select(x => x.Key));
+                              Places.Where(x => x != SelectedPlace).Select(x => x.Key),
+                              Services.RefKind.Place);
                 break;
             case TabDialogues:
                 if (SelectedDialogue != null)
                     RenameKey("Dialogue", SelectedDialogue, v => v.Key, (v, k) => v.Key = k,
-                              Dialogues.Where(x => x != SelectedDialogue).Select(x => x.Key));
+                              Dialogues.Where(x => x != SelectedDialogue).Select(x => x.Key),
+                              Services.RefKind.Dialogue);
                 break;
             case TabScenes:
                 if (SelectedScene != null)
                     RenameKey("Scene", SelectedScene, v => v.Key, (v, k) => { v.Key = k; RebuildSceneOptions(); SceneTree.Sort(); SceneTree.SyncToModel(); },
-                              Scenes.Where(x => x != SelectedScene).Select(x => x.Key));
+                              Scenes.Where(x => x != SelectedScene).Select(x => x.Key),
+                              Services.RefKind.Scene);
                 break;
             case TabNpcs:
                 if (SelectedNpc != null)
                     RenameKey("NPC", SelectedNpc, v => v.Key, (v, k) => { v.Key = k; RebuildNpcOptions(); NpcTree.Sort(); NpcTree.SyncToModel(); },
-                              Npcs.Where(x => x != SelectedNpc).Select(x => x.Key));
+                              Npcs.Where(x => x != SelectedNpc).Select(x => x.Key),
+                              Services.RefKind.Npc);
                 break;
             case TabVariables:
                 if (SelectedVariable != null)
@@ -4014,12 +4264,14 @@ public sealed class MainViewModel : ObservableObject
             case TabMusic:
                 if (SelectedMusic != null)
                     RenameKey("Music", SelectedMusic, v => v.Key, (v, k) => { v.Key = k; RebuildMusicKeyOptions(); MusicTree.Sort(); MusicTree.SyncToModel(); },
-                              Music.Where(x => x != SelectedMusic).Select(x => x.Key));
+                              Music.Where(x => x != SelectedMusic).Select(x => x.Key),
+                              Services.RefKind.Music);
                 break;
             case TabSfx:
                 if (SelectedSfx != null)
                     RenameKey("SFX", SelectedSfx, v => v.Key, (v, k) => { v.Key = k; RebuildSfxKeyOptions(); SfxTree.Sort(); SfxTree.SyncToModel(); },
-                              Sfx.Where(x => x != SelectedSfx).Select(x => x.Key));
+                              Sfx.Where(x => x != SelectedSfx).Select(x => x.Key),
+                              Services.RefKind.Sfx);
                 break;
             case TabIntegration:
                 if (SelectedIntegrationRule != null)
@@ -4095,18 +4347,38 @@ public sealed class MainViewModel : ObservableObject
         foreach (var row in a.ParamRows) row.Refresh();
     }
 
-    private void RenameKey<TVm>(string what, TVm vm, Func<TVm, string> get, Action<TVm, string> set, IEnumerable<string> otherKeys)
+    private void RenameKey<TVm>(string what, TVm vm, Func<TVm, string> get, Action<TVm, string> set,
+                                IEnumerable<string> otherKeys,
+                                Services.RefKind? follows = null)
     {
         var current = get(vm);
         var entered = PromptForText?.Invoke("Rename " + what, "New name:", current);
         if (string.IsNullOrWhiteSpace(entered) || entered.Trim() == current) return;
         LastRenameSummary = "";
         Undo.Checkpoint();
-        set(vm, UniqueKey(entered.Trim(), otherKeys));
+
+        string wanted = UniqueKey(entered.Trim(), otherKeys);
+
+        // Before the declaration moves, while the old name is still what the
+        // pack refers to. Renaming used to change the declaration and leave
+        // every reference pointing at something that no longer existed - with
+        // nothing to say so until the pack ran and a character stopped
+        // speaking.
+        int refs = follows.HasValue
+            ? Services.ReferenceRenamer.Rename(Pack, follows.Value, current, wanted)
+            : 0;
+
+        set(vm, wanted);
+
+        if (refs > 0)
+        {
+            LastRenameSummary = $"Renamed to '{wanted}' and updated {refs} reference{(refs == 1 ? "" : "s")}.";
+            RefreshConditionAndActionRows();
+        }
         // Only speak up when the rename reached beyond the item itself —
         // rewriting parts of the pack the user can't see shouldn't be silent.
         if (!string.IsNullOrEmpty(LastRenameSummary))
-            ShowInfo?.Invoke("Rename", LastRenameSummary);
+            Announce("Rename", LastRenameSummary);
     }
 
     /// <summary>Duplicate/paste an outfit into the selected outfit's character (else the first character).</summary>
@@ -4118,7 +4390,7 @@ public sealed class MainViewModel : ObservableObject
         if (ch == null) return;
         clone.Key = UniqueKey(clone.Key, ch.Model.Outfits.Select(o => o.Key));
         ch.Model.Outfits.Add(clone);
-        var vm = new OutfitViewModel(clone);
+        var vm = new OutfitViewModel(clone, ch);
         ch.Outfits.Add(vm);
         SelectedOutfit = vm;
     }

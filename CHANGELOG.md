@@ -1,5 +1,167 @@
 ﻿# Changelog
 
+## 1.3.0
+
+One release, one subject: **the game's own cast**. A pack could always put words
+in their mouths. It can now change how they look, how they sound, what faces
+they can pull and what colour their name is written in — and all of it holds in
+the game's own scenes, not only in the pack's conversations.
+
+### Before you update
+
+**Every pack written before 1.3.0 has the game's characters put back the way the
+game has them.** Those characters were being *stored* — names, colours, voices,
+whole wardrobes — and none of it was wired to anything, so what a pack carried
+was a record of edits that never happened. Rather than carry that forward into a
+release where those fields finally mean something, they are reset.
+
+**Busts your pack drew are kept.** An outfit with art of its own is your work,
+not a copy of the game's, and it survives with everything on it.
+
+Four smaller passes run alongside it, each reported by name when the pack loads:
+machine-written names on the game's characters are put back, fields a pack no
+longer sets are dropped, settings that only repeated the game's own defaults are
+dropped, and expressions that only restated the game's are dropped.
+
+As with every change to a saved pack: it happens on load, in memory, nothing is
+written until you save, you are told what changed and how many, and the original
+is kept beside the manifest the first time you save afterwards.
+
+### What a pack can do to one of the game's characters
+
+**Replace textures on a bust the game already has.** One row per texture — base,
+mask, blink, the four mouth frames, and a row for each face. Tick only what you
+are replacing. **A slot you do not tick is a slot your pack never mentions**, and
+the game draws it exactly as it always did. That is the promise the whole feature
+rests on, which is why the tick is not a stored setting: it *is* whether your
+pack carries an entry for that texture.
+
+- **Edit Mask** opens the painter on the jiggle mask, the same one a bust of your
+  own uses. It is the one texture here nobody can author by hand — three
+  intensity planes packed into R/G/B — so it was the one texture with no way to
+  make it.
+- **Add a bust the game never gave them.** Fully your art, sitting in their
+  wardrobe beside the game's, and treated as yours everywhere: it is validated
+  like your own bust, tagged **new** rather than **changed**, and a name that
+  collides with one of the game's is refused rather than quietly shadowing it.
+- **Give them a face they never had.** Named in the character's expression list
+  and drawn from the outfit's expression prefix, the same as any other face.
+
+**A name colour**, which replaces the one the game writes them in rather than
+sitting beside it. **A typing voice** — cadence and pitch range — starting from
+the character's real numbers rather than a generic default, so opening the panel
+describes the character instead of overwriting them.
+
+**Everything above applies in the game's own scenes.** A character you re-voiced
+sounds re-voiced when the game plays its own conversation, and their name is
+written in your colour there too.
+
+### Knowing which of it is yours
+
+- A **changed** tag on a character the pack has altered, and on each bust of
+  theirs individually — a character can have sixty-five outfits and one replaced
+  texture, and "something in here changed" does not say which row to open.
+  **new** marks a bust your pack drew for them.
+- A **reset** beside every field that has moved, and one that puts the whole
+  character back. A field showing the game's own value has nothing to reset, and
+  says so by having no button rather than by offering one that does nothing.
+- None of this appears on a character your pack invented, where every field is
+  yours and a tag on all of them says nothing.
+
+### The game's own speech, written down
+
+`Shared/VanillaSpeech.cs` — **84 of the game's characters**, of whom 54 can pull
+a face and 36 have a name colour of their own. The editor offers a character's
+real defaults and the runtime reproduces them, from one file compiled into both.
+
+None of it is readable from the game's files: the Actor assets carry no
+references an extractor can follow, and the name colours live in a private list
+on a component that does not exist until a conversation has started. It is
+extracted from a running game by `Tools/regen_vanilla_speech.py`, which refuses
+to write if what it reads stops being uniform.
+
+The faces turned out not to work by name at all. Each character owns **a number**
+under the game's `Expressions` variable, and every bust on screen watches for any
+global variable to change before switching to it — so a face switched on by hand
+lasted until the next variable was written, by anything, and then reverted.
+Writing the number is what makes a face stay.
+
+`Shared/VanillaBustExpressions.cs` records which busts have faces: 209 have all
+four, 76 have none, and not one has some other combination.
+
+### Renaming something renames it everywhere
+
+Change a character's key, a bust's name, a dialogue's key — anything the rest of
+the pack refers to — and **every reference to it is rewritten with it**. Actions,
+conditions, and the text of lines, across the whole pack. Before this, renaming
+meant hunting through the UI for everything that named the old spelling, and
+missing one produced a reference to something that no longer existed.
+
+The **reset** on a borrowed character's key uses the same machinery, so putting a
+key back is as safe as changing it.
+
+### Searching inside a dropdown
+
+**Type in any dropdown and it narrows to the names that contain what you typed** —
+not only the ones that start with it, so `na` finds both **Anna** and **Nadia**.
+It is not a separate mode or a separate box: it is how the dropdowns work now.
+
+It filters on **what you actually typed**, never on what autocompletion put in
+the box for you. Otherwise typing `An`, having `Anna` completed over it, and then
+seeing the list collapse to that one entry would take **Adrian** away at exactly
+the moment you were reaching for it.
+
+### A variable check stops looking like a comparison
+
+The store picker under a variable's Value was labelled **Compare to** and shown
+on every check, which had people believing a variable check always compares one
+variable against another. It never was an operand — it picks which store a
+`$name` in the value is read from, and a plain value ignores it entirely.
+
+It is called **Read from** now, the same thing the Set-variable editor already
+called it, and it appears only once there is a `$name` to look up. A grey line
+under the Value box says what a value accepts, so the ability to compare against
+another variable still announces itself.
+
+### Fixed
+
+- **A re-voiced character sounded exactly as before in the game's own scenes**,
+  and their name was still written in the game's colour. Both settings reached
+  only the Actor the plugin synthesises for its own lines, and the game speaks
+  through its own Actor assets and its own speech UI — so both did nothing
+  anywhere except inside a pack-built conversation, which from the author's
+  chair is indistinguishable from the setting being ignored. The pack's voice is
+  now written onto the game's own Actor, and speaker colours are painted wherever
+  a conversation appears from. Both put back what they found when the scene
+  unloads: these are the game's assets, and a pack that has been unloaded should
+  not still be speaking through them.
+- **Every `neutral` expression reported a warning.** Reading a character's faces
+  treated an expression mapped to an empty name as a face whose art was missing —
+  and an empty name is how every pack written so far spells `neutral`, which
+  means no face at all.
+- **Clicking between characters and outfits could raise a rename prompt** and
+  quietly repoint references. Selecting a character wrote the outfit selection
+  without taking the snapshot the rename check compares against, so the next
+  commit read the difference as a rename and rewrote every reference to the old
+  name.
+- **Double-clicking a validation issue about one of the game's characters did
+  nothing.** The jump asked the character tree for the row, and the game's cast
+  is filed under a heading that starts closed — a row inside a closed heading has
+  never been built, so the lookup found nothing and the jump gave up before
+  selecting, scrolling or flashing anything. It worked throughout for your own
+  characters, whose heading opens by default, which is why it went unseen.
+- **"Replace textures on this bust" came back unticked** every time a pack was
+  reopened, hiding replacements that were still in the manifest and still being
+  applied. The tick reads the pack now rather than starting blank.
+- **Clicking a character landed on whichever bust was first** rather than the one
+  they enter in. The same as each other until a pack says otherwise — at which
+  point it showed a bust the author had never edited.
+- **The plugin shipped its scene dumps.** F10, F11 and F12 wrote megabytes of
+  reflected scene state into the player's game folder, and every release up to
+  and including 1.2.0 carried them. They are compiled only into a Debug build
+  now, and a check reads the bytes of the packaged DLL before a release goes out,
+  because nothing in the ordinary test run can see it.
+
 ## 1.2.0
 
 Two things the roadmap named for this release, and a third that grew out of

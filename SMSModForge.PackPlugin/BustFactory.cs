@@ -46,22 +46,39 @@ namespace SMSModForge.PackPlugin
                 string charName = (string)charObj["name"];
                 if (string.IsNullOrEmpty(charName)) continue;
 
-                // Only a pack-drawn character has busts to build. A vanilla one
-                // carries outfits too, but they are the game's OWN bust names
-                // with no art behind them — building those would create empty
-                // GameObjects named after real busts and collide with them
-                // under 2_Bust_Manager, which is far worse than doing nothing.
+                // A voice with no bust has nothing to build.
                 string source = (string)charObj["bustSource"];
-                if (source == "Vanilla" || source == "None") continue;
+                if (source == "None") continue;
+                bool vanilla = source == "Vanilla";
 
                 var outfits = charObj["outfits"] as JArray;
                 if (outfits == null) continue;
 
+                // Which faces this character has, so an outfit can carry art
+                // for one the game never had. The four are always in: they are
+                // what the prototype bust is built with and what the game's own
+                // conversations ask for.
+                var faces = FacesOf(charObj);
+
                 foreach (var o in outfits)
                 {
+                    // One of the game's characters carries the game's OWN bust
+                    // names, with no art behind them: building those would
+                    // create empty GameObjects named after real busts and
+                    // collide with them under 2_Bust_Manager, which is far
+                    // worse than doing nothing. So the whole wardrobe used to
+                    // be skipped — and with it any outfit the pack ADDED to
+                    // that character, which is a bust like any other and the
+                    // one thing here worth building.
+                    //
+                    // Said in the manifest rather than worked out from whether
+                    // the outfit has sprites, because a half-finished one has
+                    // none and would be taken for the game's.
+                    if (vanilla && !((bool?)((JObject)o)["packArt"] ?? false)) continue;
+
                     try
                     {
-                        var go = BuildOne((JObject)o, pack, bustManager, baseBust, logger);
+                        var go = BuildOne((JObject)o, pack, bustManager, baseBust, faces, logger);
                         if (go != null) outfitCount++;
                     }
                     catch (System.Exception ex)
@@ -76,7 +93,47 @@ namespace SMSModForge.PackPlugin
                 logger.LogInfo("[SMSModForge.PackPlugin] Pack '" + pack.PackId + "' built " + outfitCount + " outfit(s).");
         }
 
-        private static GameObject BuildOne(JObject o, PackManifest pack, Transform bustManager, GameObject baseBust, ManualLogSource logger)
+        /// <summary>
+        /// The faces one character can pull, as child names under
+        /// <c>Expressions</c>: the four every bust is built with, plus any the
+        /// pack declared of its own.
+        /// <para/>
+        /// A pack's expression list used to be read only for ROUTING - which
+        /// child a node's key activates - so a face the pack invented had
+        /// nowhere for its art to come from and never appeared. It comes from
+        /// the outfit's expression prefix now, the same way the four do:
+        /// <c>{prefix}Smirk.PNG</c>.
+        /// <para/>
+        /// An entry mapping to an empty name is skipped rather than treated as
+        /// a face. That is how every pack written so far spells <c>neutral</c>,
+        /// which means no face at all.
+        /// </summary>
+        private static List<string> FacesOf(JObject charObj)
+        {
+            var faces = new List<string>(ExpressionNames);
+            var declared = charObj["expressions"] as JArray;
+            if (declared == null) return faces;
+
+            foreach (var e in declared)
+            {
+                var eo = e as JObject;
+                if (eo == null) continue;
+
+                // Absent falls back to the key; spelled out as EMPTY does not.
+                // That is the distinction ActorRegistry.Declare already draws,
+                // and it is the whole of what "neutral" is: an entry naming no
+                // child, meaning no face showing.
+                var spelled = eo["expressionGoName"];
+                string name = spelled != null ? (string)spelled : (string)eo["key"];
+                if (string.IsNullOrEmpty(name)) continue;
+                if (faces.Exists(f => string.Equals(f, name, System.StringComparison.OrdinalIgnoreCase)))
+                    continue;
+                faces.Add(name);
+            }
+            return faces;
+        }
+
+        private static GameObject BuildOne(JObject o, PackManifest pack, Transform bustManager, GameObject baseBust, List<string> faces, ManualLogSource logger)
         {
             string goName = (string)o["gameObjectName"] ?? (string)o["key"];
             if (string.IsNullOrEmpty(goName)) return null;
@@ -205,11 +262,32 @@ namespace SMSModForge.PackPlugin
                     sr.sprite = null;
             }
 
-            // Expression overlays — same pattern as mouth.
-            foreach (var name in ExpressionNames)
+            // Expression overlays — same pattern as mouth, over whatever faces
+            // this character has rather than the four the prototype came with.
+            // A face the pack invented is CREATED here: the prototype has no
+            // child by that name, so without this the art had nowhere to land
+            // and the expression silently did nothing.
+            foreach (var name in faces)
             {
-                var slot = expressions != null ? expressions.transform.Find(name) : null;
-                if (slot == null) continue;
+                if (expressions == null) break;
+                bool standard = System.Array.IndexOf(ExpressionNames, name) >= 0;
+
+                var slot = expressions.transform.Find(name);
+                if (slot == null)
+                {
+                    // Only for a face of the pack's own, and only when there is
+                    // art to put on it. Adding an empty child for one the author
+                    // has not drawn yet would leave a blank overlay switched on
+                    // by any node that asked for it.
+                    if (standard || !exprEnabled || string.IsNullOrEmpty(exprPrefix)) continue;
+                    if (!pack.Has(exprPrefix + name + ".PNG")) continue;
+
+                    var made = VanillaBustOverrides.FindOrAddFace(expressions.transform, name, logger);
+                    if (made == null) continue;
+                    ApplySprite(made, pack, exprPrefix + name + ".PNG");
+                    continue;
+                }
+
                 var sr = slot.GetComponent<SpriteRenderer>();
                 if (sr == null) continue;
                 if (exprEnabled && !string.IsNullOrEmpty(exprPrefix))
@@ -305,6 +383,18 @@ namespace SMSModForge.PackPlugin
         /// prototype's BlinkingSprite driver outlived its renderer and threw on
         /// the first activation.
         /// </summary>
+        internal static void ApplySpriteTo(SpriteRenderer sr, PackManifest pack, string rel)
+        {
+            ApplySprite(sr, pack, rel);
+        }
+
+        /// <summary>The same texture loading a bust build does, for the pass
+        /// that replaces textures on the game's own busts.</summary>
+        internal static Texture2D LoadTextureFrom(PackManifest pack, string rel, bool linear)
+        {
+            return LoadTexture(pack, rel, linear);
+        }
+
         private static void ApplySprite(SpriteRenderer sr, PackManifest pack, string rel)
         {
             if (sr == null) return;

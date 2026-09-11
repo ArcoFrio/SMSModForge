@@ -443,7 +443,30 @@ public sealed class NodeConditionViewModel : ObservableObject
         }
     }
 
-    public string VarValue { get => GetParam("value"); set { SetParam("value", value); OnPropertyChanged(); } }
+    public string VarValue
+    {
+        get => GetParam("value");
+        set
+        {
+            SetParam("value", value);
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ValueNamesAVariable));
+        }
+    }
+
+    /// <summary>
+    /// Whether the value names another variable rather than being one.
+    /// <para/>
+    /// The store picker beside it only means anything then — both its own
+    /// tooltip and the runtime say a plain value ignores it — so that is the
+    /// only time it is on screen. Left showing, a second Pack/Vanilla row
+    /// sitting under Value reads as a second operand, and the whole editor
+    /// starts to look like it insists on comparing one variable to another.
+    /// <para/>
+    /// A <c>$</c> anywhere, not only at the start: <c>${name}</c> is the other
+    /// spelling, and a value can carry one mid-text.
+    /// </summary>
+    public bool ValueNamesAVariable => (VarValue ?? "").Contains('$');
 
     public bool Negate
     {

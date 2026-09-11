@@ -1,6 +1,8 @@
 ﻿<Application x:Class="SMSModForge.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:view="clr-namespace:SMSModForge.View"
+             xmlns:conv="clr-namespace:SMSModForge.View.Converters"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <!--
@@ -175,6 +177,11 @@
         </Style>
 
         <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+            <!-- Typing narrows the list to the names that contain what was
+                 typed. Set here rather than at a hundred and twenty call sites:
+                 it is meant to be how a dropdown behaves, not a feature an
+                 author has to be handed. See View/ComboBoxSearch.cs. -->
+            <Setter Property="view:ComboBoxSearch.Enabled" Value="True"/>
             <Setter Property="IsSynchronizedWithCurrentItem" Value="False"/>
             <Setter Property="Background" Value="{DynamicResource Theme.Control}"/>
             <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
@@ -228,6 +235,24 @@
             </Setter>
         </Style>
         <Style TargetType="ComboBoxItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+            <!-- Each row asks whether it answers to what was typed. Hiding the
+                 container rather than filtering the collection is deliberate -
+                 several dropdowns share one list, and a filter on it would
+                 narrow all of them at once. -->
+            <Setter Property="Visibility">
+                <Setter.Value>
+                    <MultiBinding Converter="{x:Static conv:SearchMatchConverter.Instance}">
+                        <Binding Path="."/>
+                        <!-- The typed text is BOUND, not read off the ComboBox
+                             inside the converter: a value the converter fetches
+                             for itself is one WPF has no reason to re-evaluate,
+                             so the list would be decided once and never again. -->
+                        <Binding Path="(view:ComboBoxSearch.Typed)"
+                                 RelativeSource="{RelativeSource AncestorType=ComboBox}"/>
+                        <Binding RelativeSource="{RelativeSource AncestorType=ComboBox}"/>
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
             <Setter Property="Padding" Value="6,3"/>

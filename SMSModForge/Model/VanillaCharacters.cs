@@ -35,6 +35,30 @@ public static class VanillaCharacters
         /// which is the plain one for every character that has several.</summary>
         public string DefaultOutfit => Outfits.Count > 0 ? Outfits[0] : "";
 
+        /// <summary>
+        /// The faces this character can pull, taken from the busts they wear.
+        /// <para/>
+        /// A union rather than a per-outfit answer, because a speech expression
+        /// is asked for by name at the moment a line plays and the outfit
+        /// showing then is whatever the pack last switched to. Offering an
+        /// author a face only some of the wardrobe has would be offering them
+        /// one that sometimes does nothing.
+        /// <para/>
+        /// In practice the game is uniform about it — a bust has all four or
+        /// none — so this is "does any outfit have them", and for most
+        /// characters the answer covers the whole wardrobe. See
+        /// <see cref="Shared.VanillaBustExpressions"/>.
+        /// </summary>
+        public IReadOnlyList<string> Expressions
+            => Outfits.Any(Shared.VanillaBustExpressions.Has)
+                ? Shared.VanillaBustExpressions.Standard
+                : Array.Empty<string>();
+
+        /// <summary>Whether the game gives this character any expression at
+        /// all. 76 of the catalogued busts have none, and a character wearing
+        /// only those cannot emote however a line is written.</summary>
+        public bool CanEmote => Expressions.Count > 0;
+
         public string Summary => Outfits.Count == 1
             ? "1 outfit"
             : Outfits.Count + " outfits";

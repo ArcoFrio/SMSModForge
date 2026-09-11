@@ -1,4 +1,4 @@
-using BepInEx.Logging;
+﻿using BepInEx.Logging;
 using GameCreator.Runtime.Common;
 using GameCreator.Runtime.Dialogue;
 using System.Collections.Generic;
@@ -57,6 +57,14 @@ namespace SMSModForge.PackPlugin
         public const float DefaultPitchMin = 1.0f;
         public const float DefaultPitchMax = 1.5f;
 
+        /// <summary>
+        /// What every Actor this factory mints is named with. Anything wearing
+        /// it is ours rather than the game's, which is the only way a scan of
+        /// loaded Actor assets can tell the two apart — see
+        /// <see cref="FindDonorGibberish"/> and <see cref="VanillaVoiceOverrides"/>.
+        /// </summary>
+        public const string MintedPrefix = "SMSModForge_Actor_";
+
         private struct TwConfig { public bool Enabled; public int Frequency; public float PitchMin; public float PitchMax; }
         private readonly Dictionary<string, TwConfig> _twByKey = new Dictionary<string, TwConfig>();
 
@@ -82,7 +90,7 @@ namespace SMSModForge.PackPlugin
             string nameToShow = string.IsNullOrEmpty(displayName) ? key : displayName;
 
             var actor = ScriptableObject.CreateInstance<Actor>();
-            actor.name = "SMSModForge_Actor_" + key;
+            actor.name = MintedPrefix + key;
             actor.hideFlags = HideFlags.HideAndDontSave;
             SetActorName(actor, nameToShow);
             ApplyTypewriter(actor, key);
@@ -117,6 +125,10 @@ namespace SMSModForge.PackPlugin
         /// <summary>Enumerate every registered colour. Consumed by the speech-UI colour applier.</summary>
         public IEnumerable<KeyValuePair<string, Color>> EnumerateColors() => _colorByDisplayName;
 
+        /// <summary>How many colours are registered. The applier checks this
+        /// once a frame, so it is a count rather than a walk of the list.</summary>
+        public int ColorCount { get { return _colorByDisplayName.Count; } }
+
         /// <summary>Forget everything. Called on scene unload by <see cref="Plugin"/>.</summary>
         public void Reset()
         {
@@ -130,6 +142,62 @@ namespace SMSModForge.PackPlugin
         }
 
         // ── Typewriter voice wiring ───────────────────────────────────────
+
+        /// <summary>
+        /// Read a voice off an Actor. False when the GC2 shape this reflects
+        /// into is not the one we expect, so a caller keeping originals knows
+        /// it has nothing worth putting back rather than putting zeroes back.
+        /// </summary>
+        internal static bool ReadVoice(Actor actor, out bool enabled, out int frequency,
+                                       out Vector2 pitch)
+        {
+            enabled = true;
+            frequency = DefaultFrequency;
+            pitch = new Vector2(DefaultPitchMin, DefaultPitchMax);
+            if (actor == null) return false;
+            if (_fldTwUse == null || _fldTwFreq == null || _fldTwPitch == null) return false;
+
+            var tw = actor.Typewriter;
+            if (tw == null) return false;
+
+            enabled = (bool)_fldTwUse.GetValue(tw);
+            frequency = (int)_fldTwFreq.GetValue(tw);
+            pitch = (Vector2)_fldTwPitch.GetValue(tw);
+            return true;
+        }
+
+        /// <summary>
+        /// Write a voice onto an Actor this factory did not mint — one of the
+        /// game's own, so that a character an author re-voiced sounds re-voiced
+        /// in the game's scenes and not only in the pack's.
+        /// <para/>
+        /// <see cref="Typewriter"/> is a class, so what this changes is the
+        /// Actor's own instance rather than a copy of it. That is the whole
+        /// reason this can be done at all, and it was worth checking: were it a
+        /// struct, every one of these writes would land on a boxed copy and
+        /// disappear, which reads exactly like the game ignoring the setting.
+        /// <para/>
+        /// Only the three fields the editor offers. The blip clip above all is
+        /// left alone: it is the character's own, and a pack that says nothing
+        /// about it must not silence them.
+        /// </summary>
+        internal static bool WriteVoice(Actor actor, bool enabled, int frequency,
+                                        float pitchMin, float pitchMax)
+        {
+            if (actor == null) return false;
+            if (_fldTwUse == null || _fldTwFreq == null || _fldTwPitch == null) return false;
+
+            var tw = actor.Typewriter;
+            if (tw == null) return false;
+
+            _fldTwUse.SetValue(tw, enabled);
+            if (enabled)
+            {
+                _fldTwFreq.SetValue(tw, frequency);
+                _fldTwPitch.SetValue(tw, new Vector2(pitchMin, pitchMax));
+            }
+            return true;
+        }
 
         /// <summary>
         /// Stamp the actor's GC2 <see cref="Typewriter"/> with the pack-authored
@@ -161,9 +229,19 @@ namespace SMSModForge.PackPlugin
             // defaults: 45, 1.0–1.5. It used to be 1.0–1.0, and min == max is a
             // monotone blip — so a character with no typewriter object read as
             // having a pitch range in the editor and had none in the game.
-            int freq = hasCfg ? cfg.Frequency : DefaultFrequency;
-            float pmin = hasCfg ? cfg.PitchMin : DefaultPitchMin;
-            float pmax = hasCfg ? cfg.PitchMax : DefaultPitchMax;
+            //
+            // ...except for one of the GAME's characters, who has a voice of
+            // their own. A pack line spoken by Adrian went out at 45 and pitch
+            // 1.0–1.5 while the game speaks him at 40 and 0.8–1.2, so he sounded
+            // like somebody else the moment a mod gave him a line. The editor
+            // now shows his real numbers, which makes matching them here the
+            // difference between a panel that describes the game and one that
+            // lies about it.
+            var theirs = hasCfg ? null : SMSModForge.Shared.VanillaSpeech.For(key);
+
+            int freq = hasCfg ? cfg.Frequency : theirs != null ? theirs.Frequency : DefaultFrequency;
+            float pmin = hasCfg ? cfg.PitchMin : theirs != null ? theirs.PitchMin : DefaultPitchMin;
+            float pmax = hasCfg ? cfg.PitchMax : theirs != null ? theirs.PitchMax : DefaultPitchMax;
             _fldTwFreq?.SetValue(tw, freq);
             _fldTwPitch?.SetValue(tw, new Vector2(pmin, pmax));
 
@@ -194,7 +272,7 @@ namespace SMSModForge.PackPlugin
                 foreach (var a in Resources.FindObjectsOfTypeAll<Actor>())
                 {
                     if (a == null) continue;
-                    if (a.name != null && a.name.StartsWith("SMSModForge_Actor_")) continue;
+                    if (a.name != null && a.name.StartsWith(MintedPrefix)) continue;
                     var tw = _fldActorTypewriter.GetValue(a);
                     if (tw == null) continue;
                     var gib = _fldTwGibberish.GetValue(tw) as PropertyGetAudio;

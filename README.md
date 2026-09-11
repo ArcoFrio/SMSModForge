@@ -1,4 +1,4 @@
-﻿# SMSModForge 1.2.0
+﻿# SMSModForge 1.3.0
 
 A toolkit for making mod content for **Starmaker Story 1.8E**, in two parts:
 
@@ -93,7 +93,7 @@ loaded in the game.
 
 | | |
 |---|---|
-| **Characters** | Speakers with their own bust art, outfits, expressions, and a jiggle mask |
+| **Characters** | Speakers with their own bust art, outfits, expressions, and a jiggle mask — or one of the game's own, with textures replaced, busts added, a name colour and a typing voice |
 | **NPCs** | Standing figures, defined once and placed into any number of rooms |
 | **Places** | New rooms, or your own additions to the game's existing ones |
 | **Map Buttons** | Entries on the world map so players can reach your places |
@@ -182,7 +182,8 @@ an incremental build can carry forward assets that should no longer ship.
 
 ### Vanilla data the editor ships
 
-Two separate things, refreshed differently.
+Four separate things, refreshed differently — and two of them cannot be
+refreshed from the game's files at all.
 
 **The catalog of names** — `SMSModForge/Model/VanillaBusts.cs`, currently 285
 busts. **Not** every bust in the game: some exist in the scene with no content
@@ -209,6 +210,36 @@ identical to shipping full-resolution art and only sharpness differs.
 
 The generator ships art **only for busts in the catalog**. Drop one from
 `VanillaBusts.cs` and its artwork stops shipping too — the two cannot drift.
+
+**Which busts can pull a face** — `Shared/VanillaBustExpressions.cs`, generated
+by `Tools/regen_vanilla_expressions.py` from the bust art extraction, where every
+sprite records the GameObject it came from. The game is completely uniform about
+this: 209 busts have all four faces and 76 have none, and not one has some other
+combination. **The generator refuses to write if that ever stops being true**,
+because a mixed case would need a different shape than a membership test.
+
+**How the game's characters speak** — `Shared/VanillaSpeech.cs`: 84 characters,
+of whom 54 can pull a face and 36 have a name colour of their own. The expression
+variable each one owns, the cadence and pitch they are typed at, their speech
+skin, and their name colour.
+
+This one is **not extractable from the game's files**. The Actor assets carry no
+`SerializeField` references an extractor can follow, and the name colours live in
+a private list on a component that does not exist until a conversation has
+started — so it comes out of a **running game**, through two dumps the plugin
+writes on F10 and F11 (a Debug build only), and then:
+
+```pwsh
+python Tools\regen_vanilla_speech.py --actors <F10 json> --scripts <F11 json>
+```
+
+It refuses to write on anything it cannot vouch for: numbering that is not
+uniform across characters, or a dump with no colorizer in it. Pass `--check` to
+compare against the committed file without writing.
+
+Both files are compiled into **both** projects from one copy, for the usual
+reason: the editor offers an author a character's real defaults and the runtime
+has to reproduce them, and two copies drift the first time the game changes one.
 
 ### Checking the documentation
 

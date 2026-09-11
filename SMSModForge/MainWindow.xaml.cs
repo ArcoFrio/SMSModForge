@@ -1060,15 +1060,16 @@ public partial class MainWindow : Window
         if (DataContext is not MainViewModel vm) return;
         if (e.NewValue is OutfitViewModel outfit)
             vm.SelectedOutfit = outfit;
-        // Selecting a character shows its default (first) outfit in the preview,
-        // so you don't have to drill into an outfit just to see the bust. The
-        // character is set either way — one with no outfits at all is still
+        // Selecting a character shows the bust they enter in, so you don't have
+        // to drill into an outfit just to see one. WHICH bust that is belongs
+        // to the view model and is not decided again here: this used to reach
+        // past it and take Outfits[0], calling that "the default", and the two
+        // are the same only until a pack says otherwise - at which point
+        // clicking a character showed a bust the author had never edited.
+        //
+        // The character is set either way; one with no outfits at all is still
         // selectable, which is the whole point of a voice-only character.
-        else if (e.NewValue is CharacterViewModel ch)
-        {
-            vm.SelectedCharacter = ch;
-            if (ch.Outfits.Count > 0) vm.SelectedOutfit = ch.Outfits[0];
-        }
+        else if (e.NewValue is CharacterViewModel ch) vm.SelectedCharacter = ch;
     }
 
     // ── Silencing a validation issue ────────────────────────────────────
@@ -1169,6 +1170,47 @@ public partial class MainWindow : Window
         win.Closed += (_, _) => _maskEditors.Remove(outfit);
         win.Show();
     }
+
+    /// <summary>
+    /// The same painter, opened on a jiggle mask a pack is replacing on one of
+    /// the GAME's busts.
+    /// <para/>
+    /// A separate handler rather than a branch inside <see cref="EditMask_Click"/>
+    /// because the host is a different object: the row itself, not the outfit.
+    /// The outfit here belongs to the game and carries none of the pack's art,
+    /// so there is no MaskSprite on it for the painter to read or write — the
+    /// path lives in the override row, which is what gets handed over.
+    /// </summary>
+    private void EditOverrideMask_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is not MainViewModel vm) return;
+        if (sender is not Button { DataContext: SpriteOverrideViewModel row }) return;
+        if (string.IsNullOrWhiteSpace(vm.PackRoot))
+        {
+            // Guarded: the harness clicks this button, and an unguarded modal
+            // does not fail a run, it stops one - on the screen of whoever is
+            // running it. See Services.TestMode.
+            if (!Services.TestMode.Active)
+                MessageBox.Show(this,
+                    "Save the pack to disk first — the mask editor needs a folder to save the mask into.",
+                    "Mask Editor", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        if (_overrideMaskEditors.TryGetValue(row, out var existing))
+        {
+            existing.Activate();
+            return;
+        }
+
+        var win = new MaskEditorWindow(row, vm.PackRoot) { Owner = this };
+        View.WindowOwnership.ReturnFocusToOwner(win);
+        _overrideMaskEditors[row] = win;
+        win.Closed += (_, _) => _overrideMaskEditors.Remove(row);
+        win.Show();
+    }
+
+    private readonly Dictionary<SpriteOverrideViewModel, MaskEditorWindow> _overrideMaskEditors = new();
 
     /// <summary>
     /// Put the breathing depth back to what it started at.
@@ -1910,7 +1952,7 @@ public partial class MainWindow : Window
             NavigateToIssue(issue);
     }
 
-    private void NavigateToIssue(ValidationIssue issue)
+    internal void NavigateToIssue(ValidationIssue issue)
     {
         if (DataContext is not MainViewModel vm) return;
         ExpectTabChange("jumped to a validation issue");
@@ -2090,7 +2132,7 @@ public partial class MainWindow : Window
     /// <c>startConditions.VariableEquals</c>, and a node condition as a bare
     /// type like <c>VariableEquals</c>.
     /// </summary>
-    private FrameworkElement? FindIssueElement(string field)
+    internal FrameworkElement? FindIssueElement(string field)
     {
         if (string.IsNullOrEmpty(field)) return null;
 
@@ -2240,15 +2282,14 @@ public partial class MainWindow : Window
     /// <summary>Expand the character and select the offending outfit in the tree; returns the selected tree item (for fallback flashing).</summary>
     private FrameworkElement? SelectInTree(CharacterViewModel character, OutfitViewModel? outfit)
     {
-        if (CharacterTree.ItemContainerGenerator.ContainerFromItem(character)
-                is not System.Windows.Controls.TreeViewItem charItem) return null;
+        if (CharacterRow(character) is not TreeViewItem charItem) return null;
         charItem.IsExpanded = true;
         charItem.BringIntoView();
         charItem.UpdateLayout();
 
         if (outfit != null &&
             charItem.ItemContainerGenerator.ContainerFromItem(outfit)
-                is System.Windows.Controls.TreeViewItem outfitItem)
+                is TreeViewItem outfitItem)
         {
             outfitItem.IsSelected = true;   // drives SelectedOutfit via SelectedItemChanged
             outfitItem.BringIntoView();
@@ -2256,6 +2297,79 @@ public partial class MainWindow : Window
         }
         charItem.IsSelected = true;
         return charItem;
+    }
+
+    /// <summary>
+    /// The tree row showing a character, opening the heading it is filed under
+    /// so that there is one.
+    /// <para/>
+    /// This used to be a single call to the TreeView's own
+    /// ItemContainerGenerator. That generator does reach into groups; what it
+    /// cannot do is hand back a container that was never built, and the rows
+    /// under a CLOSED heading have not been. CharacterTree files characters by
+    /// bust source and the game's own cast starts closed - all hundred and
+    /// nineteen of them - so the lookup returned null, <see cref="SelectInTree"/>
+    /// gave up on its first line, and double-clicking a validation issue about
+    /// one of the game's busts selected nothing, scrolled nowhere and flashed
+    /// nothing.
+    /// <para/>
+    /// It worked perfectly for the pack's own characters, whose heading opens
+    /// by default. That is why nobody saw it, and why the control that proves
+    /// this fix has to use one of the game's.
+    /// <para/>
+    /// So the heading is opened first, and only then is the row looked for - by
+    /// walking the tree WPF actually built, since the generator has no lookup
+    /// that spans groups.
+    /// </summary>
+    private TreeViewItem? CharacterRow(CharacterViewModel character)
+    {
+        CharacterTree.UpdateLayout();
+
+        // Already built: an open heading, or an ungrouped tree. This is the
+        // answer for every character the pack wrote, which is exactly why the
+        // bug only ever showed on the game's own cast.
+        if (CharacterTree.ItemContainerGenerator.ContainerFromItem(character)
+                is TreeViewItem direct)
+            return direct;
+
+        // Items.Groups, not Items: a grouped ItemsControl still reports every
+        // item flat through Items, so walking THAT looking for a heading finds
+        // a hundred and nineteen characters and no headings at all. (Written
+        // the wrong way round first, which looks identical from the outside -
+        // no heading is opened, no row is found, and the jump does nothing.)
+        var headings = CharacterTree.Items.Groups;
+        if (headings != null)
+        {
+            foreach (var entry in headings)
+            {
+                if (entry is not System.Windows.Data.CollectionViewGroup group) continue;
+                if (!group.Items.Contains(character)) continue;
+
+                // Tag, because a GroupItem has no IsExpanded of its own - it is
+                // what the heading's template binds its expander to. See the
+                // GroupStyle.ContainerStyle in MainWindow.xaml.
+                if (CharacterTree.ItemContainerGenerator.ContainerFromItem(group) is GroupItem open)
+                    open.Tag = true;
+                break;
+            }
+        }
+        CharacterTree.UpdateLayout();
+
+        return RowShowing(CharacterTree, character);
+    }
+
+    /// <summary>The realised TreeViewItem whose row is <paramref name="item"/>,
+    /// or null when the tree has not built one.</summary>
+    private static TreeViewItem? RowShowing(DependencyObject root, object item)
+    {
+        int n = System.Windows.Media.VisualTreeHelper.GetChildrenCount(root);
+        for (int i = 0; i < n; i++)
+        {
+            var child = System.Windows.Media.VisualTreeHelper.GetChild(root, i);
+            if (child is TreeViewItem row && ReferenceEquals(row.DataContext, item)) return row;
+            if (RowShowing(child, item) is TreeViewItem found) return found;
+        }
+        return null;
     }
 
     /// <summary>

@@ -528,20 +528,78 @@ namespace SMSModForge.PackPlugin
             var expressions = mbase != null ? mbase.Find("Expressions") : null;
             if (expressions == null) return;
 
-            // Deactivate every standard expression first so we end up with at
-            // most one active.
-            foreach (var name in StandardExpressions)
+            string goName = expressionKey ?? "";
+            string mapped;
+            if (!string.IsNullOrEmpty(goName) && entry.ExpressionMap.TryGetValue(goName, out mapped))
+                goName = mapped;
+
+            SetVanillaExpressionNumber(entry, goName);
+
+            // Every child, not the four the game has. A pack can add a face to
+            // one of the game's busts (see VanillaBustOverrides), and that one
+            // is appended after the four — where the game's own trigger, which
+            // switches children 0 to 3 off, will never find it. Clearing the
+            // four by name would leave an added face showing under whatever
+            // came next.
+            for (int i = 0; i < expressions.childCount; i++)
             {
-                var t = expressions.Find(name);
-                if (t != null) t.gameObject.SetActive(false);
+                var child = expressions.GetChild(i);
+                if (child.gameObject.activeSelf) child.gameObject.SetActive(false);
             }
 
-            if (string.IsNullOrEmpty(expressionKey)) return;
+            if (goName.Length == 0) return;
 
-            string goName = expressionKey;
-            if (entry.ExpressionMap.TryGetValue(expressionKey, out var mapped)) goName = mapped;
             var picked = expressions.Find(goName);
             if (picked != null) picked.gameObject.SetActive(true);
+        }
+
+        /// <summary>
+        /// Tell the game which face one of ITS OWN busts is wearing, its way.
+        /// <para/>
+        /// The game's busts do not switch faces by name. Each character owns a
+        /// number under the <c>Expressions</c> global-name variable asset —
+        /// Adrian's is <c>B-Expression</c>, Alice's is <c>goth-expression</c>
+        /// — and every bust on screen carries a trigger that copies its own
+        /// character's number into <c>Currently-Chosen</c>, switches all four
+        /// expression children off and the matching one back on.
+        /// <para/>
+        /// That trigger fires on ANY global-name variable change, by anything,
+        /// anywhere. So a face switched on by hand lasts exactly until the next
+        /// global variable is written — which a pack does constantly — and
+        /// then silently reverts to whatever number the character was last left
+        /// on. Writing the number is what makes a face stay.
+        /// <para/>
+        /// The activation in the caller is still done, and is not redundant:
+        /// GC2 raises no change event when a variable is set to the value it
+        /// already holds, so the trigger does not always run. Between them the
+        /// face is both immediate and durable.
+        /// <para/>
+        /// Only for the game's own art. A pack's bust has that trigger
+        /// destroyed when it is built (see <c>BustFactory</c>) and has no
+        /// number of its own, so there the caller's activation is the whole
+        /// mechanism — including on a bust a pack added to one of the game's
+        /// characters, which is a pack bust in every way that matters here.
+        /// </summary>
+        private void SetVanillaExpressionNumber(ActorEntry entry, string goName)
+        {
+            if (!SMSModForge.Shared.VanillaBustExpressions.Has(entry.CurrentBustKey)) return;
+
+            var speaker = SMSModForge.Shared.VanillaSpeech.For(entry.Key);
+            if (speaker == null || string.IsNullOrEmpty(speaker.ExpressionVariable)) return;
+
+            // No expression asked for is the character's ordinary face, which
+            // is what zero means — and so is a face the game does not have.
+            //
+            // That second case is the one worth spelling out: when a pack adds
+            // a face to one of the game's busts, the number has to say NONE OF
+            // MINE. Zero matches no branch of the game's Conditions, so it
+            // switches every face the game knows about off and leaves the
+            // added one, which this method's caller has just switched on, as
+            // the only thing showing. Leaving the number alone instead would
+            // have the game paint its own face over the pack's on the next
+            // global variable write.
+            int value = goName.Length == 0 ? 0 : speaker.ValueOf(goName);
+            GameVariableBridge.SetDouble(speaker.ExpressionVariable, value < 0 ? 0 : value);
         }
     }
 }

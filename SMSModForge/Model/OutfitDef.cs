@@ -68,4 +68,46 @@ public sealed class OutfitDef
 
     [JsonProperty("particles", Order = 9, ObjectCreationHandling = ObjectCreationHandling.Replace)]
     public List<ParticleRef> Particles { get; set; } = new() { new ParticleRef { Preset = "Wet" } };
+
+    /// <summary>
+    /// Whether the pack draws this outfit for a character the GAME already
+    /// owns — a new bust for Anna, rather than one of Anna's own.
+    /// <para/>
+    /// Only meaningful on a <see cref="BustSource.Vanilla"/> character, whose
+    /// outfits are otherwise bust names with no art behind them. It has to be
+    /// said rather than inferred: a new outfit has no sprites on it for its
+    /// first few minutes of existence, so "has art" would call it one of the
+    /// game's and grey out every field the author came to fill in.
+    /// <para/>
+    /// The runtime reads it for the same reason it exists here: it builds these
+    /// and skips the rest, where before it skipped a vanilla character's whole
+    /// wardrobe on the grounds that building a GameObject named after a real
+    /// bust would collide with the real one.
+    /// </summary>
+    [JsonProperty("packArt", Order = 10, NullValueHandling = NullValueHandling.Ignore)]
+    public bool PackArt { get; set; }
+
+    public bool ShouldSerializePackArt() => PackArt;
+
+    /// <summary>
+    /// Textures on one of the game's busts that this pack replaces.
+    /// <para/>
+    /// Empty for everything else, and empty is the normal case: a pack says
+    /// nothing about a texture it did not come to change, and the runtime
+    /// leaves it alone. See <see cref="SpriteOverrideDef"/>.
+    /// </summary>
+    [JsonProperty("spriteOverrides", Order = 11)]
+    public List<SpriteOverrideDef> SpriteOverrides { get; set; } = new();
+
+    public bool ShouldSerializeSpriteOverrides() => SpriteOverrides.Count > 0;
+
+    /// <summary>The path this pack puts in one slot, or null when it does not
+    /// touch that slot.</summary>
+    public string? OverrideFor(string slot)
+    {
+        foreach (var o in SpriteOverrides)
+            if (string.Equals(o.Slot, slot, System.StringComparison.OrdinalIgnoreCase))
+                return o.Sprite ?? "";
+        return null;
+    }
 }

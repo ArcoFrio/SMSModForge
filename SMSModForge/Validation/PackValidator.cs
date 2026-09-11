@@ -562,18 +562,61 @@ public static class PackValidator
                 if (string.IsNullOrWhiteSpace(outfit.GameObjectName))
                     issues.Add(new(Severity.Error, oWhere, "gameObjectName is required", "outfit.gameObjectNameMissing"));
 
-                // A vanilla character's outfits are the game's own bust names
+                // A borrowed character's own outfits are the game's bust names
                 // and carry no art on purpose, so there is nothing to check for
                 // on disk — and demanding sprites for them would bury the real
                 // issues under a warning for every file such an outfit will
-                // never have.
-                if (character.BustSource != BustSource.Pack)
+                // never have. What CAN be checked is the part the pack does
+                // supply: the textures it replaces on that bust.
+                //
+                // A bust the pack ADDED to one of the game's characters is not
+                // one of these. It is the pack's own art in every respect, and
+                // falls through to the same checks a pack character's outfit
+                // gets.
+                if (character.BustSource != BustSource.Pack && !outfit.PackArt)
                 {
                     if (VanillaBusts.FindByGoName(outfit.GameObjectName) == null)
                         issues.Add(new(Severity.Warning, oWhere,
                             $"'{outfit.GameObjectName}' isn't a bust in the 1.8E catalog — the runtime will still look for it under 2_Bust_Manager, but check the name", "outfit.unknownVanillaBust"));
+
+                    var slotsSeen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                    foreach (var replaced in outfit.SpriteOverrides)
+                    {
+                        string label = SMSModForge.Shared.SpriteSlotNames.Label(replaced.Slot);
+                        string rWhere = $"{oWhere}.spriteOverrides[{replaced.Slot}]";
+
+                        if (string.IsNullOrWhiteSpace(replaced.Slot))
+                        {
+                            issues.Add(new(Severity.Error, rWhere,
+                                "A replaced texture has no slot, so nothing will be replaced", "outfit.overrideNoSlot"));
+                            continue;
+                        }
+                        if (!slotsSeen.Add(replaced.Slot))
+                            issues.Add(new(Severity.Error, rWhere,
+                                $"'{label}' is replaced twice — only one of them will be used", "outfit.overrideDuplicate"));
+
+                        // Ticked and nothing chosen. Kept rather than dropped
+                        // on save, because it is an author part-way through
+                        // something rather than a mistake in the data — but the
+                        // game keeps its own texture until art appears, and
+                        // nothing else would say so.
+                        if (string.IsNullOrWhiteSpace(replaced.Sprite))
+                            issues.Add(new(Severity.Warning, rWhere,
+                                $"'{label}' is ticked for replacement with no art chosen — the game keeps its own", "outfit.overrideNoArt"));
+                        else
+                            CheckFile(packRoot, replaced.Sprite, rWhere, issues);
+                    }
                     continue;
                 }
+
+                // The collision the runtime cannot resolve: a bust the pack
+                // draws, named after one the game already has. Both would be
+                // called the same thing under 2_Bust_Manager, and every
+                // reference to that name — the game's own included — would
+                // reach whichever won.
+                if (outfit.PackArt && VanillaBusts.FindByGoName(outfit.GameObjectName) != null)
+                    issues.Add(new(Severity.Error, oWhere,
+                        $"'{outfit.GameObjectName}' is already one of the game's busts — give this one a name of its own", "outfit.collidesWithVanillaBust"));
 
                 CheckFile(packRoot, outfit.BaseSprite,  $"{oWhere}.baseSprite",  issues);
                 CheckOptionalFile(packRoot, outfit.MaskSprite, $"{oWhere}.maskSprite", issues);
@@ -588,7 +631,12 @@ public static class PackValidator
                 }
                 if (outfit.Expression.Enabled)
                 {
-                    foreach (var name in ExpressionSpec.Names)
+                    // The faces this CHARACTER has, not a fixed four. A face
+                    // the author added is loaded from the same prefix as the
+                    // rest - {prefix}Smirk.PNG - and before this it was the one
+                    // kind of missing art nothing mentioned: the expression
+                    // simply did nothing in the game.
+                    foreach (var name in FacesOf(character))
                         CheckFile(packRoot, outfit.Expression.Prefix + name + ".PNG",
                                   $"{oWhere}.expression[{name}]", issues);
                 }
@@ -1608,6 +1656,32 @@ public static class PackValidator
     {
         if (string.IsNullOrWhiteSpace(relPath)) return;
         CheckFile(packRoot, relPath, where, issues);
+    }
+
+    /// <summary>
+    /// The faces one character's busts carry art for: the four every bust is
+    /// built with, plus any the pack declared of its own.
+    /// <para/>
+    /// Kept in step with what the runtime loads (see <c>BustFactory.FacesOf</c>)
+    /// and with what the editor shows under the prefix box. An entry mapping to
+    /// an empty name is not a face - that is how every pack spells
+    /// <c>neutral</c>, which means no face at all.
+    /// </summary>
+    private static IEnumerable<string> FacesOf(CharacterDef character)
+    {
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (string name in ExpressionSpec.Names)
+            if (seen.Add(name)) yield return name;
+
+        foreach (var e in character.Expressions)
+        {
+            // An empty child name is not a face. That is how every pack spells
+            // <c>neutral</c> - it means no expression showing, the bust's own
+            // face - and reading it as one had the validator asking every pack
+            // character for a neutral.png that was never supposed to exist.
+            if (string.IsNullOrEmpty(e.ExpressionGoName)) continue;
+            if (seen.Add(e.ExpressionGoName)) yield return e.ExpressionGoName;
+        }
     }
 
     private static void CheckFile(string packRoot, string relPath, string where, List<ValidationIssue> issues)

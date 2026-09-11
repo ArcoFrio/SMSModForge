@@ -32,6 +32,18 @@ namespace SMSModForge.PackPlugin
         // make every one of those judgements wrong at once.
         public const string pluginVersion = SMSModForge.Shared.ForgeVersion.Current;
 
+#if DEBUG
+        /// <summary>
+        /// Compiled in only by a Debug build, so its presence in a DLL is proof
+        /// that DLL is one.
+        /// <para/>
+        /// A string rather than a flag because the check that matters runs
+        /// against a packaged file rather than against loaded code: see
+        /// <c>ReleaseReadinessTests</c>, which reads the bytes.
+        /// </summary>
+        public const string DebugBuildMarker = "SMSMODFORGE_PLUGIN_DEBUG_BUILD";
+#endif
+
         public static bool loaded;
         public static Scene currentScene;
         public static Plugin Instance { get; private set; }
@@ -42,8 +54,10 @@ namespace SMSModForge.PackPlugin
         /// </summary>
         private static readonly List<DialogueDispatcher> _dispatchers = new List<DialogueDispatcher>();
 
+#if DEBUG
         /// <summary>Latched true if the legacy Input manager throws (Input System-only builds).</summary>
         private static bool _conditionDebugKeyBroken;
+#endif
         private static readonly List<PackContext> _contexts = new List<PackContext>();
 
         /// <summary>Loaded pack contexts, for the manual-save copy hook
@@ -686,6 +700,13 @@ namespace SMSModForge.PackPlugin
             // NanoSave listeners, but for the pack file). Self-gates until a
             // pack is loaded in CoreGameScene.
             gameObject.AddComponent<PackManualSaveSync>();
+#if DEBUG
+            // A shipped build must never say this. It is the marker a release
+            // check greps for, and the line somebody reads in a player's log
+            // when a diagnostic build has escaped.
+            Logger.LogWarning("[SMSModForge.PackPlugin] " + DebugBuildMarker
+                              + " — F10/F11/F12 scene dumps are live.");
+#endif
             Logger.LogInfo("[SMSModForge.PackPlugin] Awake — waiting for CoreGameScene");
         }
 
@@ -704,6 +725,7 @@ namespace SMSModForge.PackPlugin
         /// screen in question, press the key, and its instructions are in the
         /// file with their durations and easings.
         /// </summary>
+#if DEBUG
         /// <summary>
         /// Write down every dialogue the game has loaded, whole.
         /// <para/>
@@ -775,6 +797,7 @@ namespace SMSModForge.PackPlugin
                 Logger.LogError("[SMSModForge.PackPlugin] F11 script dump failed: " + ex);
             }
         }
+#endif
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
@@ -819,6 +842,11 @@ namespace SMSModForge.PackPlugin
             }
             _dispatchers.Clear();
             _contexts.Clear();
+            // Both of these reach objects the game owns rather than anything
+            // built here - the speech skin's colour list, and the cast's own
+            // Actor assets - so both put back what they found.
+            SpeechColorApplier.Forget();
+            VanillaVoiceOverrides.Restore();
             // The key watch list was built out of the conditions those packs
             // ran; nothing should still be polled for a pack that is gone.
             InputRuntime.Reset();
@@ -1432,6 +1460,14 @@ namespace SMSModForge.PackPlugin
                 // unlock condition flips true.
                 for (int i = 0; i < _contexts.Count; i++)
                     _contexts[i].Wallpapers?.Tick(Logger);
+                // Speaker-name colours, for whatever conversation is on screen
+                // rather than only the pack's own. Costs a reference compare
+                // per frame until a speech UI this has not painted turns up.
+                SpeechColorApplier.Tick(_contexts, Logger);
+                // ...and the typing voice, for anyone whose Actor asset was not
+                // loaded yet when the pack was. Free once they have all been
+                // found, which is the ordinary case.
+                VanillaVoiceOverrides.Tick(Logger);
                 for (int i = 0; i < _dispatchers.Count; i++) _dispatchers[i].Tick();
                 // Cross-pack fire: each dispatcher only nominates its best
                 // candidate; the actual start happens here after comparing
@@ -1491,10 +1527,18 @@ namespace SMSModForge.PackPlugin
                 for (int i = 0; i < _contexts.Count; i++)
                     _contexts[i].Gates?.Tick(_contexts[i], Logger);
 
+#if DEBUG
                 // F12 → dump condition state for every dialogue flagged
                 // "Set for condition debugging" in the editor. Legacy Input
                 // (available in this game); if a future build disables the
                 // legacy manager, fail once and stop probing.
+                //
+                // Debug builds only, and that is the whole point: these are
+                // diagnostics for whoever is developing the plugin, not
+                // features. Shipped, they are three function keys a player can
+                // press by accident that write megabytes of scene dump into
+                // their game folder. They were shipped, up to and including
+                // 1.2.0.
                 if (!_conditionDebugKeyBroken)
                 {
                     try
@@ -1522,6 +1566,7 @@ namespace SMSModForge.PackPlugin
                         Logger.LogWarning("[SMSModForge.PackPlugin] Legacy Input unavailable — F12 condition debugging disabled.");
                     }
                 }
+#endif
                 return;
             }
 
@@ -1980,6 +2025,21 @@ namespace SMSModForge.PackPlugin
             {
                 try { BustFactory.BuildAll(m, bustManager, baseBust, Logger); }
                 catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Busts failed in " + m.PackId + ": " + ex); }
+
+                // ...and the textures this pack replaces on the game's own
+                // busts, which are already standing in the scene rather than
+                // built here. Same pass so a pack's whole effect on the cast
+                // lands before the SpriteManager below is refreshed.
+                try { VanillaBustOverrides.ApplyAll(m, bustManager, Logger); }
+                catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Texture overrides failed in " + m.PackId + ": " + ex); }
+
+                // ...and the voice, for the same reason and on the same terms.
+                // A pack's typewriter used to reach only the Actor we mint for
+                // its own lines, so a character an author re-voiced sounded
+                // re-voiced in the pack's conversations and exactly as before
+                // in every scene the game plays itself.
+                try { VanillaVoiceOverrides.ApplyAll(m, Logger); }
+                catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Voice overrides failed in " + m.PackId + ": " + ex); }
             }
 
             // Refresh the SpriteManager once after all busts are built.

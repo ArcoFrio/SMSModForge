@@ -66,6 +66,28 @@ The same applies to anything else the editor does for a person's benefit rather
 than the pack's: writing window layout, prompting about unsaved changes, opening
 a browser. `Services.TestMode` is one switch for all of it.
 
+## Before publishing a release
+
+**Build the plugin with `-c Release`.** Its diagnostics — the F10/F11/F12 scene
+dumps, and the 745 lines of reflection behind them — are compiled only under
+`#if DEBUG`. A Debug build ships three function keys a player can press by
+accident that write megabytes into their game folder, and every release up to
+and including 1.2.0 did exactly that.
+
+The editor's own debug features are not conditional and are meant to ship.
+
+`#if DEBUG` makes a Release build clean by construction; it does not stop
+somebody packaging a Debug one. Check the artefact itself:
+
+```
+set SMSMODFORGE_RELEASE_PLUGIN=...\Starmaker - ModForge Plugin 1.3.0.zip
+dotnet test --filter ReleaseReadinessTests
+```
+
+That reads the bytes of the packaged DLL, because nothing in the ordinary suite
+can see this: the tests compile in Debug, and the plugin is a separate assembly
+for a different framework.
+
 ## Tests
 
 Committed tests must not hard-code a path to anyone's pack. Where a real pack is

@@ -14,9 +14,9 @@
          reports comes from Shared/ForgeVersion.cs. Kept in step, and listed
          here only so the next person to look for a version finds the note
          rather than believing these. -->
-    <Version>1.2.0</Version>
-    <AssemblyVersion>1.2.0.0</AssemblyVersion>
-    <FileVersion>1.2.0.0</FileVersion>
+    <Version>1.3.0</Version>
+    <AssemblyVersion>1.3.0.0</AssemblyVersion>
+    <FileVersion>1.3.0.0</FileVersion>
     <AssemblyName>SMSModForge.PackPlugin</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -61,7 +61,13 @@
     <Compile Include="UiButtonClick.cs" />
     <Compile Include="UiLiveText.cs" />
     <Compile Include="UiAssets.cs" />
-    <Compile Include="ScriptDump.cs" />
+    <!--
+      Compiled only into a Debug build. It exists for the F10/F11 scene dumps,
+      which are diagnostics for whoever is developing the plugin rather than
+      features, and it is 745 lines of reflection that has no business in a
+      player's game folder. See ReleaseReadinessTests.
+    -->
+    <Compile Include="ScriptDump.cs" Condition=" '$(Configuration)' == 'Debug' " />
     <Compile Include="VanillaDialogueInjector.cs" />
     <Compile Include="DialogueNodeWriter.cs" />
     <Compile Include="UiOpenAnimation.cs" />
@@ -71,6 +77,8 @@
     <Compile Include="AnimatedSprite.cs" />
     <Compile Include="InputRuntime.cs" />
     <Compile Include="BustFactory.cs" />
+    <Compile Include="VanillaBustOverrides.cs" />
+    <Compile Include="VanillaVoiceOverrides.cs" />
     <Compile Include="MaskTextures.cs" />
     <Compile Include="NpcFactory.cs" />
     <Compile Include="PlaceFactory.cs" />
@@ -245,6 +253,9 @@
     <Compile Include="..\Shared\VarCompare.cs" Link="Shared\VarCompare.cs" />
     <Compile Include="..\Shared\VanillaDialogueKeys.cs" Link="Shared\VanillaDialogueKeys.cs" />
     <Compile Include="..\Shared\VanillaCastData.cs" Link="Shared\VanillaCastData.cs" />
+    <Compile Include="..\Shared\VanillaBustExpressions.cs" Link="Shared\VanillaBustExpressions.cs" />
+    <Compile Include="..\Shared\VanillaSpeech.cs" Link="Shared\VanillaSpeech.cs" />
+    <Compile Include="..\Shared\SpriteSlotNames.cs" Link="Shared\SpriteSlotNames.cs" />
     <Compile Include="..\Shared\AnimationClock.cs" Link="Shared\AnimationClock.cs" />
     <Compile Include="..\Shared\MediaKinds.cs" Link="Shared\MediaKinds.cs" />
     <Compile Include="..\Shared\ModsFolder.cs" Link="Shared\ModsFolder.cs" />
