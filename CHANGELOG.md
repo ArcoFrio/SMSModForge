@@ -1,5 +1,41 @@
 ﻿# Changelog
 
+## 1.3.1
+
+**Updating itself works.** It never had.
+
+The editor downloaded an update, unpacked it, and handed over to the new build
+to copy itself into place — and that build died on its first line, every time,
+before copying anything. What an author saw was the progress prompt, the editor
+closing itself, and the same version still there when they opened it again.
+
+The line was one that reads as obviously correct:
+
+```csharp
+StartupUri = null;   // so WPF does not open a window
+```
+
+WPF rejects null outright, so it threw. The process that threw was the one
+started to do the replacing, after the editor had already been told to close —
+so there was no window left anywhere to report it, and nothing to distinguish it
+from an update that had simply decided to do nothing.
+
+Every release that has shipped the updater is affected: 1.2.0, which introduced
+it, and 1.3.0. **Installing this one fixes updating from any of them**, because
+the build doing the copying is the NEW one — so a 1.2.0 or 1.3.0 editor pointed
+at this release hands over to a version that can finish the job.
+
+The window is now opened by the editor itself rather than by `StartupUri`, so
+there is nothing for the applier to suppress. And the hand-over is tested by
+starting a real editor with the real switch and looking at what lands on disk,
+which is the only way to see it: the fault was in code that only runs in a second
+process, and every test around it passed while the step they exist to reach had
+never once run.
+
+Nothing else changed. The plugin is rebuilt only so the pair stay in step — a
+pack saved by a 1.3.1 editor names 1.3.1 as the runtime it wants, and a 1.3.0
+plugin would report that as an error on a pack that is perfectly fine.
+
 ## 1.3.0
 
 One release, one subject: **the game's own cast**. A pack could always put words
