@@ -1,4 +1,5 @@
-﻿using BepInEx.Logging;
+﻿using SMSModForge.Shared;
+using BepInEx.Logging;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
@@ -451,12 +452,12 @@ namespace SMSModForge.PackPlugin
             if (mBase == null || maskTex == null) return;
             var bodySr = mBase.GetComponent<SpriteRenderer>();
 
-            float speed         = (float?)j?["speed"]         ?? 3.0f;
-            float strength      = (float?)j?["strength"]      ?? -0.02f;
-            float frequency     = (float?)j?["frequency"]     ?? 4.0f;
-            float noiseScale    = (float?)j?["noiseScale"]    ?? 5.0f;
-            float noiseSpeed    = (float?)j?["noiseSpeed"]    ?? 0.5f;
-            float noiseStrength = (float?)j?["noiseStrength"] ?? 0.06f;
+            float speed         = (float?)j?["speed"]         ?? JiggleDefaults.Speed;
+            float strength      = (float?)j?["strength"]      ?? JiggleDefaults.Strength;
+            float frequency     = (float?)j?["frequency"]     ?? JiggleDefaults.Frequency;
+            float noiseScale    = (float?)j?["noiseScale"]    ?? JiggleDefaults.NoiseScale;
+            float noiseSpeed    = (float?)j?["noiseSpeed"]    ?? JiggleDefaults.NoiseSpeed;
+            float noiseStrength = (float?)j?["noiseStrength"] ?? JiggleDefaults.NoiseStrength;
 
             foreach (var sr in mBase.GetComponentsInChildren<SpriteRenderer>(true))
             {
@@ -548,13 +549,13 @@ namespace SMSModForge.PackPlugin
 
         internal static void ApplyJiggle(Material mat, JObject j)
         {
-            mat.SetFloat("_JiggleSpeed",     (float?)j["speed"]         ?? 3.0f);
-            mat.SetFloat("_JiggleStrength",  (float?)j["strength"]      ?? -0.02f);
-            mat.SetFloat("_JiggleFrequency", (float?)j["frequency"]     ?? 4.0f);
-            mat.SetFloat("_NoiseScale",      (float?)j["noiseScale"]    ?? 5.0f);
-            mat.SetFloat("_NoiseSpeed",      (float?)j["noiseSpeed"]    ?? 0.5f);
-            mat.SetFloat("_NoiseStrength",   (float?)j["noiseStrength"] ?? 0.06f);
-            mat.SetFloat("_PixelSnap",       ((bool?)j["pixelSnap"]     ?? false) ? 1f : 0f);
+            mat.SetFloat("_JiggleSpeed",     (float?)j["speed"]         ?? JiggleDefaults.Speed);
+            mat.SetFloat("_JiggleStrength",  (float?)j["strength"]      ?? JiggleDefaults.Strength);
+            mat.SetFloat("_JiggleFrequency", (float?)j["frequency"]     ?? JiggleDefaults.Frequency);
+            mat.SetFloat("_NoiseScale",      (float?)j["noiseScale"]    ?? JiggleDefaults.NoiseScale);
+            mat.SetFloat("_NoiseSpeed",      (float?)j["noiseSpeed"]    ?? JiggleDefaults.NoiseSpeed);
+            mat.SetFloat("_NoiseStrength",   (float?)j["noiseStrength"] ?? JiggleDefaults.NoiseStrength);
+            mat.SetFloat("_PixelSnap",       ((bool?)j["pixelSnap"]     ?? JiggleDefaults.PixelSnap) ? 1f : 0f);
             if (TryParseHexColor((string)j["tint"], out Color c)) mat.SetColor("_Color", c);
         }
 

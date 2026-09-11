@@ -266,6 +266,10 @@ public sealed class JigglePreview : Image
         nameof(OutfitViewModel.MouthPrefix),
         nameof(OutfitViewModel.ExpressionEnabled),
         nameof(OutfitViewModel.ExpressionPrefix),
+        // The textures a pack replaces on one of the game's busts. Raised by
+        // the outfit whenever one of its override rows changes, and on a
+        // rebuild of the rows themselves.
+        nameof(OutfitViewModel.Overrides),
     };
 
     private void OnOutfitChanged()
@@ -313,10 +317,8 @@ public sealed class JigglePreview : Image
             _base = _mask = _blink = null;
             for (int i = 1; i <= 4; i++) _mouth[i] = null;
             _expressions.Clear();
-            _vanillaJiggle = null;
             return;
         }
-        _vanillaJiggle = null;
         var m = Outfit.Model;
         _base = LoadIfExists(Path.Combine(PackRoot, Normalize(m.BaseSprite)));
         _mask = LoadIfExists(Path.Combine(PackRoot, Normalize(m.MaskSprite)));
@@ -351,10 +353,20 @@ public sealed class JigglePreview : Image
         _expressions.Clear();
 
         string? root = Rendering.VanillaArtResolver.FindArtRoot();
-        if (root == null) return;
-        string dir = Path.Combine(root, VanillaBustKey);
-        if (!Directory.Exists(dir)) return;
+        string? dir = root == null ? null : Path.Combine(root, VanillaBustKey);
+        if (dir != null && Directory.Exists(dir)) LoadGameArt(dir);
 
+        // Whatever the pack paints over it - AFTER the game's art, because it
+        // replaces it, and OUTSIDE the check above, because a replacement is the
+        // pack's own file and does not stop existing when the shipped art is
+        // missing. An editor with no extraction beside it still has something
+        // true to show for a texture the author supplied.
+        LoadPackReplacements();
+    }
+
+    /// <summary>The bust as the game draws it.</summary>
+    private void LoadGameArt(string dir)
+    {
         _base  = LoadIfExists(Path.Combine(dir, "Base.PNG"));
         // Absent on art exported before the mask was added, in which case the
         // bust simply holds still — the shader reads a missing mask as zero
@@ -368,58 +380,72 @@ public sealed class JigglePreview : Image
             var px = LoadIfExists(Path.Combine(dir, "Expression" + name + ".PNG"));
             if (px != null) _expressions[name] = px;
         }
-        _vanillaJiggle = LoadJiggleSettings(Path.Combine(dir, "Jiggle.txt"));
     }
-
-    /// <summary>The borrowed bust's own shader uniforms, or null to fall back
-    /// to the outfit's.</summary>
-    private JiggleParams? _vanillaJiggle;
 
     /// <summary>
-    /// Read the uniforms the extractor wrote beside a vanilla bust's art.
+    /// Paint the pack's replacement textures over the game's own, one slot at
+    /// a time.
     /// <para/>
-    /// Returns null when the file is absent — art exported before masks were
-    /// added — so the caller keeps its existing default rather than snapping a
-    /// bust to zero. Unknown keys are ignored, so the format can gain fields
-    /// without older editors choking on them.
+    /// The preview showed the game's bust and nothing else, so an author
+    /// replacing a mouth or a face picked their art, looked at the picture
+    /// beside it, and saw no difference — which reads as the replacement not
+    /// working rather than as the preview not knowing about it. The runtime had
+    /// been doing this since the feature landed; only the picture had not.
+    /// <para/>
+    /// Same rule as the runtime's (<c>VanillaBustOverrides</c>): a slot the
+    /// pack does not mention is left exactly as the game drew it, and a slot
+    /// ticked with no art chosen yet changes nothing — the game keeps its own,
+    /// and the picture should say so rather than going blank.
     /// </summary>
-    private static JiggleParams? LoadJiggleSettings(string abs)
+    private void LoadPackReplacements()
     {
-        if (!File.Exists(abs)) return null;
-        var p = new JiggleParams();
-        var inv = System.Globalization.CultureInfo.InvariantCulture;
-        try
+        var model = Outfit?.Model;
+        if (model == null || PackRoot == null) return;
+
+        foreach (var entry in model.SpriteOverrides)
         {
-            foreach (var raw in File.ReadAllLines(abs))
-            {
-                var line = raw.Trim();
-                if (line.Length == 0 || line[0] == '#') continue;
-                int eq = line.IndexOf('=');
-                if (eq <= 0) continue;
-                string key = line.Substring(0, eq).Trim();
-                string val = line.Substring(eq + 1).Trim();
-                if (string.Equals(key, "Tint", System.StringComparison.OrdinalIgnoreCase))
-                { p.Tint = val; continue; }
-                if (!float.TryParse(val, System.Globalization.NumberStyles.Float, inv, out var f)) continue;
-                switch (key)
-                {
-                    case "JiggleSpeed":     p.Speed = f; break;
-                    case "JiggleStrength":  p.Strength = f; break;
-                    case "JiggleFrequency": p.Frequency = f; break;
-                    case "NoiseScale":      p.NoiseScale = f; break;
-                    case "NoiseSpeed":      p.NoiseSpeed = f; break;
-                    case "NoiseStrength":   p.NoiseStrength = f; break;
-                }
-            }
+            if (entry == null || string.IsNullOrWhiteSpace(entry.Sprite)) continue;
+
+            var px = LoadIfExists(Path.Combine(PackRoot, Normalize(entry.Sprite)));
+            if (px == null) continue;   // named but not there; the game's stands
+
+            string slot = entry.Slot ?? "";
+            if (slot == SMSModForge.Shared.SpriteSlotNames.Base) { _base = px; continue; }
+            if (slot == SMSModForge.Shared.SpriteSlotNames.Mask) { _mask = px; continue; }
+            if (slot == SMSModForge.Shared.SpriteSlotNames.Blink) { _blink = px; continue; }
+
+            int frame = SMSModForge.Shared.SpriteSlotNames.MouthFrame(slot);
+            if (frame >= 1 && frame <= 4) { _mouth[frame] = px; continue; }
+
+            string? face = SMSModForge.Shared.SpriteSlotNames.ExpressionOf(slot);
+            if (!string.IsNullOrEmpty(face)) _expressions[face!] = px;
         }
-        catch { return null; }
-        return p;
     }
+
+    /// <summary>
+    /// The uniforms the next shader pass will use.
+    /// <para/>
+    /// A property rather than a local so a test can read the same expression
+    /// the renderer reads. Working it out a second time in the test would let
+    /// the two drift apart and still agree.
+    /// </summary>
+    internal JiggleParams JiggleInEffect => Outfit?.Model.Jiggle ?? new JiggleParams();
 
     private static string Normalize(string p) => p?.Replace('/', Path.DirectorySeparatorChar) ?? "";
 
     private static byte[]? LoadIfExists(string abs)
         => File.Exists(abs) ? BustComposer.LoadPng(abs) : null;
+
+    /// <summary>
+    /// The textures the next frame will draw. For tests only.
+    /// <para/>
+    /// The very fields the render path reads, handed back as they are rather
+    /// than looked up again: a test that re-derived which file each slot ought
+    /// to hold would agree with a preview that loads nothing at all.
+    /// </summary>
+    internal (byte[]? Base, byte[]? Mask, byte[]? Blink, byte[]?[] Mouth,
+              System.Collections.Generic.IReadOnlyDictionary<string, byte[]> Faces) Loaded()
+        => (_base, _mask, _blink, _mouth, _expressions);
 
     private static byte[] Empty() => new byte[JiggleShader.Stride * JiggleShader.Size];
 
@@ -569,9 +595,23 @@ public sealed class JigglePreview : Image
         // without disturbing the in-flight pass.
         byte[] baseSnap = _base;
         byte[] maskSnap = mask;
-        // A borrowed bust jiggles by the game's own numbers, not the pack's
-        // defaults — those would be motion the game never gives it.
-        var jiggle = _vanillaJiggle ?? Outfit.Model.Jiggle;
+        // EVERY bust jiggles by the pack's numbers, borrowed ones included.
+        //
+        // This used to prefer the uniforms the extractor read off the game's
+        // own material, on the reasoning that a borrowed bust should move the
+        // way the game moves it. That reasoning only holds if this shader IS
+        // the game's, and it is not - it is an approximation of it. Feeding the
+        // game's numbers into a different shader does not reproduce the game;
+        // it produces a third thing, and one that silently disagrees with every
+        // pack bust beside it for reasons an author cannot see.
+        //
+        // So the preview is consistent instead of falsely authentic: one set of
+        // settings, the pack's, and a difference on screen always means a
+        // difference somebody made. The extracted Jiggle.txt files still ship
+        // beside the art - they are the game's real numbers and worth having if
+        // these uniforms ever become something a pack can set - they are simply
+        // not read here.
+        var jiggle = JiggleInEffect;
         var tint = BustComposer.ParseTint(Outfit.Tint);
         float time = (float)(DateTime.Now - _startTime).TotalSeconds;
         byte[]? expression = (SelectedExpression is not (null or "None")

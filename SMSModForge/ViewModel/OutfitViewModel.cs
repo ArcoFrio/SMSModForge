@@ -128,7 +128,31 @@ public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode, IMa
     private SpriteOverrideViewModel Row(string slot)
     {
         var row = new SpriteOverrideViewModel(Model, slot);
-        row.PropertyChanged += (_, _) => { _owner?.RefreshModified(); RefreshTag(); };
+        row.PropertyChanged += (_, e) =>
+        {
+            // The painter's in-progress buffer, republished under the name the
+            // preview watches. Kept OUT of the reload below deliberately: a
+            // brush stamp bumps this several times a second, and the reload is
+            // file I/O. See JigglePreview's own note on the same trap.
+            if (e.PropertyName == nameof(SpriteOverrideViewModel.LiveMaskBgra))
+            {
+                OnPropertyChanged(nameof(LiveMaskBgra));
+                return;
+            }
+            if (e.PropertyName == nameof(SpriteOverrideViewModel.LiveMaskRevision))
+            {
+                OnPropertyChanged(nameof(LiveMaskRevision));
+                return;
+            }
+
+            _owner?.RefreshModified();
+            RefreshTag();
+            // ...and the preview, which draws these over the game's art. A row
+            // raises its own change, not the outfit's, so without this the
+            // picture beside the panel went on showing the bust the game ships
+            // while the author picked art for it.
+            OnPropertyChanged(nameof(Overrides));
+        };
         return row;
     }
 
@@ -499,8 +523,32 @@ public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode, IMa
     /// </summary>
     public byte[]? LiveMaskBgra
     {
-        get => _liveMaskBgra;
+        get => _liveMaskBgra ?? MaskRow?.LiveMaskBgra;
         set { _liveMaskBgra = value; OnPropertyChanged(); }
+    }
+
+    /// <summary>
+    /// The replace-textures row for the jiggle mask, on a bust the GAME draws.
+    /// <para/>
+    /// The painter publishes its in-progress buffer into whichever host opened
+    /// it, and on a borrowed bust that host is the row rather than the outfit —
+    /// the path lives there, so the mask does too. The preview reads one
+    /// property for both kinds of bust, so this is where the two meet.
+    /// <para/>
+    /// Reads the backing field rather than the <see cref="Overrides"/> property
+    /// on purpose: building the rows as a side effect of a getter would be a
+    /// surprise, and a painter cannot have been opened on a panel that was
+    /// never realised.
+    /// </summary>
+    private SpriteOverrideViewModel? MaskRow
+    {
+        get
+        {
+            if (_overrides == null) return null;
+            foreach (var row in _overrides)
+                if (row.Slot == SMSModForge.Shared.SpriteSlotNames.Mask) return row;
+            return null;
+        }
     }
 
     /// <summary>

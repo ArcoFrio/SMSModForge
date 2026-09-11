@@ -1,4 +1,4 @@
-﻿# SMSModForge 1.3.1
+﻿# SMSModForge 1.3.2
 
 A toolkit for making mod content for **Starmaker Story 1.8E**, in two parts:
 

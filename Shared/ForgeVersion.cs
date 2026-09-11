@@ -22,7 +22,7 @@
         /// Keep in step with the two csproj <c>Version</c> elements; a test
         /// fails if they part company.
         /// </summary>
-        public const string Current = "1.3.1";
+        public const string Current = "1.3.2";
 
         /// <summary>How a pack stands relative to the ModForge reading it.</summary>
         public enum Standing

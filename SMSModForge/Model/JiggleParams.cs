@@ -18,29 +18,29 @@ namespace SMSModForge.Model;
 public sealed class JiggleParams
 {
     [JsonProperty("speed", Order = 1)]
-    public float Speed { get; set; } = 3.0f;
+    public float Speed { get; set; } = SMSModForge.Shared.JiggleDefaults.Speed;
 
     [JsonProperty("strength", Order = 2)]
-    public float Strength { get; set; } = -0.02f;
+    public float Strength { get; set; } = SMSModForge.Shared.JiggleDefaults.Strength;
 
     [JsonProperty("frequency", Order = 3)]
-    public float Frequency { get; set; } = 4.0f;
+    public float Frequency { get; set; } = SMSModForge.Shared.JiggleDefaults.Frequency;
 
     [JsonProperty("noiseScale", Order = 4)]
-    public float NoiseScale { get; set; } = 5.0f;
+    public float NoiseScale { get; set; } = SMSModForge.Shared.JiggleDefaults.NoiseScale;
 
     [JsonProperty("noiseSpeed", Order = 5)]
-    public float NoiseSpeed { get; set; } = 0.5f;
+    public float NoiseSpeed { get; set; } = SMSModForge.Shared.JiggleDefaults.NoiseSpeed;
 
     [JsonProperty("noiseStrength", Order = 6)]
-    public float NoiseStrength { get; set; } = 0.06f;
+    public float NoiseStrength { get; set; } = SMSModForge.Shared.JiggleDefaults.NoiseStrength;
 
     /// <summary>RGBA hex tint, e.g. <c>"#FFFFFFFF"</c>. Maps to shader <c>_Color</c>.</summary>
     [JsonProperty("tint", Order = 7)]
     public string Tint { get; set; } = "#FFFFFFFF";
 
     [JsonProperty("pixelSnap", Order = 8)]
-    public bool PixelSnap { get; set; } = false;
+    public bool PixelSnap { get; set; } = SMSModForge.Shared.JiggleDefaults.PixelSnap;
 
     public JiggleParams Clone() => (JiggleParams)MemberwiseClone();
 

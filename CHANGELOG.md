@@ -1,5 +1,79 @@
 ﻿# Changelog
 
+## 1.3.2
+
+The preview tells the truth about one of the game's busts. Three things it was
+not showing, and one place where it and the game disagreed on purpose.
+
+### The preview shows what your pack replaces
+
+**Tick a texture, choose your PNG, and the bust beside the panel changes.** It
+did not before. The preview of a borrowed bust loaded the game's art and stopped
+there, with no notion that a pack could paint over any of it — so the replacement
+you had just chosen was applied by the runtime, saved in your manifest, and
+invisible in the editor. Base, mask, blink, the four mouth frames and every face,
+each landing where it belongs.
+
+The same rule the runtime has always followed holds here: a slot you have not
+ticked is left exactly as the game drew it, and a slot ticked with no art chosen
+yet keeps the game's texture rather than going blank.
+
+It also no longer needs the vanilla art extraction to be present. Your own
+replacement is your own file, and it should appear whether or not the editor has
+the game's art beside it to draw underneath.
+
+**And it updates as you type.** Pointing a row at a different file repaints the
+bust. The row and the outfit are different things as far as change notifications
+go, and the preview was listening to the outfit — so the picture stayed on
+whatever it had loaded when you selected the bust.
+
+### The mask painter works on a borrowed bust
+
+**Strokes appear as you paint**, the way they always have on a bust the pack
+draws. Edit Mask on one of the game's busts opened the painter perfectly well
+and published every stroke into the override row it was opened from — which
+nothing was reading. The preview reads the outfit.
+
+Painting does not reload the bust's textures from disk on every stroke, which is
+the trap next door to this one: the brush publishes several times a second, and
+choosing new art is what should reread files, not moving a brush.
+
+### One set of jiggle numbers, everywhere
+
+**Every bust in the preview now moves by the pack's jiggle settings, the game's
+own included** — and the runtime does the same to the busts your pack changes, so
+what you author is what plays.
+
+The preview used to run a borrowed bust on the uniforms the extractor read off
+the game's own material. That is right only if this shader IS the game's, and it
+is not: it is an approximation of it. The game's numbers through a different
+shader do not reproduce the game, they produce a third thing — and one that
+disagreed with every pack bust beside it, for reasons an author could not see and
+could not change, since the jiggle sliders are hidden on a borrowed bust. It read
+as the game's characters being mysteriously sluggish, which some of them are:
+Adrian's own frequency is 1 where a pack bust starts at 4.
+
+**This is a deliberate, visible divergence from the game.** A bust your pack
+changes will move differently from the same bust untouched beside it. That is the
+cost of the preview being honest about what it can reproduce, and it is the trade
+this release makes.
+
+Only busts your pack actually changes. Every other bust in the game keeps its own
+motion, and an outfit whose art all failed to load is not re-jiggled either.
+
+The defaults themselves lived in **three** copies — the editor's, and two
+separate fallbacks in the runtime, one of them driving the blink, mouth and
+expression overlays. They agreed only because nobody had yet changed one. There
+is one copy now, compiled into both projects, so they cannot drift.
+
+### Not changed
+
+The jiggle sliders are still hidden on one of the game's busts, so a pack sets
+those numbers without being able to tune them. Breathing is unchanged and has
+never differed between a pack bust and a borrowed one: it is one speed and one
+depth for whatever is on screen, because in game the offset is applied to the
+busts' shared parent rather than to any bust.
+
 ## 1.3.1
 
 **Updating itself works.** It never had.

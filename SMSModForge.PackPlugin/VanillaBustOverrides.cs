@@ -30,7 +30,7 @@ namespace SMSModForge.PackPlugin
             var characters = pack.Characters;
             if (characters == null || bustManager == null) return;
 
-            int slots = 0, busts = 0;
+            int slots = 0, busts = 0, moved = 0;
             foreach (var ch in characters)
             {
                 var charObj = (JObject)ch;
@@ -78,13 +78,46 @@ namespace SMSModForge.PackPlugin
                                              + " in " + pack.PackId + ": " + ex.Message);
                         }
                     }
-                    if (done > 0) { busts++; slots += done; }
+                    if (done == 0) continue;
+                    busts++;
+                    slots += done;
+
+                    // ...and the motion, which is the pack's now too.
+                    //
+                    // The editor previews EVERY bust with the pack's jiggle
+                    // settings, borrowed ones included, because this shader is
+                    // an approximation of the game's rather than the game's: the
+                    // game's own uniforms put through it do not reproduce the
+                    // game, they produce a third thing. Rather than have the
+                    // preview and the game disagree, both run on the pack's
+                    // numbers - accepted as a small divergence from how the game
+                    // moves the bust, in exchange for what an author sees being
+                    // what they get.
+                    //
+                    // Only busts this pack actually changed - hence the
+                    // `continue` above. Every other bust in the game keeps its
+                    // own motion, which is why this sits inside the loop over
+                    // the outfits a manifest names rather than sweeping the
+                    // cast, and why an outfit whose art all failed to load does
+                    // not have its jiggle rewritten either.
+                    try
+                    {
+                        if (ApplyJiggle(bust, outfit, logger)) moved++;
+                    }
+                    catch (System.Exception ex)
+                    {
+                        logger?.LogError("[SMSModForge.PackPlugin] Jiggle failed on " + goName
+                                         + " in " + pack.PackId + ": " + ex.Message);
+                    }
                 }
             }
 
             if (slots > 0)
                 logger?.LogInfo("[SMSModForge.PackPlugin] Pack '" + pack.PackId + "' replaced "
                                 + slots + " texture(s) across " + busts + " of the game's bust(s).");
+            if (moved > 0)
+                logger?.LogInfo("[SMSModForge.PackPlugin] Pack '" + pack.PackId + "' set its own "
+                                + "jiggle on " + moved + " of the game's bust(s).");
         }
 
         private static bool ApplyOne(PackManifest pack, Transform bust, JObject entry, ManualLogSource logger)
@@ -227,13 +260,64 @@ namespace SMSModForge.PackPlugin
         /// </summary>
         private static bool ApplyMask(PackManifest pack, Transform mBase, string rel)
         {
-            var sr = mBase.GetComponent<SpriteRenderer>();
-            if (sr == null || sr.sharedMaterial == null) return false;
+            var mat = OwnMaterial(mBase);
+            if (mat == null) return false;
 
-            var mat = new Material(sr.sharedMaterial);
             mat.SetTexture("_MaskTex", BustFactory.LoadTextureFrom(pack, rel, linear: true));
-            sr.sharedMaterial = mat;
             return true;
+        }
+
+        /// <summary>
+        /// Put this bust's jiggle uniforms on the pack's numbers.
+        /// <para/>
+        /// The whole <c>jiggle</c> object as the manifest has it, which for one
+        /// of the game's busts is usually absent — the editor does not offer
+        /// those sliders on a borrowed bust. Absent is the point rather than a
+        /// gap: <see cref="BustFactory.ApplyJiggle"/> falls back per field to
+        /// <c>JiggleDefaults</c>, the same constants the editor's own
+        /// <c>JiggleParams</c> starts from, so the bust lands exactly where the
+        /// preview drew it.
+        /// </summary>
+        private static bool ApplyJiggle(Transform bust, JObject outfit, ManualLogSource logger)
+        {
+            var mBase = ActorRegistry.FindMBase(bust.gameObject);
+            if (mBase == null) return false;
+
+            var mat = OwnMaterial(mBase);
+            if (mat == null) return false;
+
+            BustFactory.ApplyJiggle(mat, outfit["jiggle"] as JObject ?? new JObject());
+            return true;
+        }
+
+        /// <summary>
+        /// A material on this bust that belongs to this pack, cloned from the
+        /// game's the first time and reused afterwards.
+        /// <para/>
+        /// Cloned because the game's is SHARED: writing to it would move every
+        /// bust that uses it, and these materials are shared across a
+        /// character's whole wardrobe. Reused because two things write to it —
+        /// the replaced mask texture and the jiggle uniforms — and cloning
+        /// twice would leave the second clone without whatever the first wrote.
+        /// <para/>
+        /// Recognised by name rather than by a list kept on the side, so it
+        /// survives being asked for in any order and carries no state between
+        /// scene loads.
+        /// </summary>
+        private const string OursSuffix = " (SMSModForge)";
+
+        private static Material OwnMaterial(Transform mBase)
+        {
+            var sr = mBase.GetComponent<SpriteRenderer>();
+            if (sr == null || sr.sharedMaterial == null) return null;
+
+            var mat = sr.sharedMaterial;
+            if (mat.name != null && mat.name.EndsWith(OursSuffix)) return mat;
+
+            var mine = new Material(mat);
+            mine.name = mat.name + OursSuffix;
+            sr.sharedMaterial = mine;
+            return mine;
         }
     }
 }
