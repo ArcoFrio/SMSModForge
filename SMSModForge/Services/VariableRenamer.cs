@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using SMSModForge.Model;
@@ -79,6 +79,25 @@ public static class VariableRenamer
         foreach (var w in pack.Wallpapers)
             n += RenameConditions(w.UnlockConditions, oldName, newName);
 
+        // A quest's start conditions, and each task's completion conditions and
+        // actions, read and write variables like any other list.
+        foreach (var q in pack.Quests)
+        {
+            n += RenameConditions(q.StartConditions, oldName, newName);
+            foreach (var t in q.AllTasks())
+            {
+                n += RenameConditions(t.Conditions, oldName, newName);
+                n += RenameActions(t.Actions, oldName, newName);
+                // A counter following one of the pack's own variables. A game
+                // variable of the same name is a different variable.
+                if (t.CountsFromVariable && !t.CountVariableIsVanilla && t.CountVariable == oldName)
+                {
+                    t.CountVariable = newName;
+                    n++;
+                }
+            }
+        }
+
         return n;
     }
 
@@ -123,6 +142,13 @@ public static class VariableRenamer
         foreach (var w in pack.Wallpapers)
             if (CountConditions(w.UnlockConditions, name) > 0)
                 hits.Add($"Wallpaper '{w.Key}' unlock conditions");
+        foreach (var q in pack.Quests)
+        {
+            int c = CountConditions(q.StartConditions, name)
+                  + q.AllTasks().Sum(t => CountConditions(t.Conditions, name) + CountActions(t.Actions, name)
+                                          + (t.CountsFromVariable && !t.CountVariableIsVanilla && t.CountVariable == name ? 1 : 0));
+            if (c > 0) hits.Add($"Quest '{q.Key}'");
+        }
 
         return hits;
     }

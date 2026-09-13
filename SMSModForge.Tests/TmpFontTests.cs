@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -261,6 +261,193 @@ public class TmpFontTests
                                            align: TextAlign.Left);
         Assert.NotEmpty(layout.Glyphs);
         Assert.Equal(11, layout.Glyphs.Count);
+    }
+
+    [Fact]
+    public void An_indented_first_line_starts_in_and_the_rest_do_not()
+    {
+        // For text that shares its opening line with something drawn beside it
+        // - a speaker's name at the head of a dialogue row. The indent is a
+        // property of the FIRST line only; every line after starts at the left
+        // edge, which is what makes it an indent rather than a margin.
+        var f = Liberation;
+        const double indent = 40;
+
+        var flush = TmpTextLayout.Measure(f, "alpha beta gamma delta", 30,
+                                          wrapWidth: 200, align: TextAlign.Left);
+        var indented = TmpTextLayout.Measure(f, "alpha beta gamma delta", 30,
+                                             wrapWidth: 200, align: TextAlign.Left,
+                                             firstLineIndent: indent);
+
+        double LeftOf(TextLayout l, int line)
+            => l.Glyphs.Where(g => g.Line == line).Min(g => g.X);
+
+        _out.WriteLine($"flush: {flush.Lines} line(s) from x{LeftOf(flush, 0):0.#}; "
+                       + $"indented: {indented.Lines} from x{LeftOf(indented, 0):0.#}");
+
+        Assert.Equal(indent, LeftOf(indented, 0) - LeftOf(flush, 0), 3);
+        Assert.True(indented.Lines > 1, "nothing wrapped, so there is no second line to check");
+        Assert.Equal(LeftOf(flush, 0), LeftOf(indented, 1), 3);
+    }
+
+    [Fact]
+    public void An_indented_first_line_wraps_that_much_sooner()
+    {
+        // The control. An indent applied by shifting the glyphs afterwards
+        // would look identical on a line that fits and would push the text off
+        // the right edge on one that does not - so the wrap has to see it.
+        var f = Liberation;
+        var flush = TmpTextLayout.Measure(f, "alpha beta gamma delta epsilon", 30,
+                                          wrapWidth: 260, align: TextAlign.Left);
+        var indented = TmpTextLayout.Measure(f, "alpha beta gamma delta epsilon", 30,
+                                             wrapWidth: 260, align: TextAlign.Left,
+                                             firstLineIndent: 120);
+
+        string OnLine(TextLayout l, int line)
+            => new(l.Glyphs.Where(g => g.Line == line).Select(g => (char)g.Unicode).ToArray());
+
+        _out.WriteLine($"flush line 1: '{OnLine(flush, 0)}'; "
+                       + $"indented line 1: '{OnLine(indented, 0)}'");
+        Assert.True(OnLine(indented, 0).Length < OnLine(flush, 0).Length,
+                    "the indent did not cost the first line any words");
+
+        // ...and nothing runs past the box because of it.
+        Assert.True(indented.Glyphs.Max(g => g.Right) <= 260,
+                    $"the indented text reaches x{indented.Glyphs.Max(g => g.Right):0.#} of 260");
+    }
+
+    // ── Runs of different sizes on one line ──────────────────────────
+
+    [Fact]
+    public void A_run_can_be_laid_out_smaller_than_the_rest()
+    {
+        var f = Liberation;
+        var flat = TmpTextLayout.Measure(f, "one two", 30, align: TextAlign.Left);
+        var mixed = TmpTextLayout.MeasureRuns(f, new[]
+        {
+            new StyledRun("one "),
+            new StyledRun("two", 0.5),
+        }, 30, align: TextAlign.Left);
+
+        double Last(TextLayout l) => l.Glyphs[^1].Height;
+        _out.WriteLine($"last glyph {Last(flat):0.#} flat, {Last(mixed):0.#} at half size");
+
+        Assert.True(Last(mixed) < Last(flat) * 0.75,
+                    "the half-size run came out the same height as the rest");
+        Assert.True(mixed.Width < flat.Width, "it took no less room either");
+    }
+
+    [Fact]
+    public void A_bigger_run_makes_its_line_taller()
+    {
+        var f = Liberation;
+        var flat = TmpTextLayout.Measure(f, "one two", 30, align: TextAlign.Left);
+        var mixed = TmpTextLayout.MeasureRuns(f, new[]
+        {
+            new StyledRun("one "),
+            new StyledRun("two", 2.0),
+        }, 30, align: TextAlign.Left);
+
+        _out.WriteLine($"line height {flat.Height:0.#} flat, {mixed.Height:0.#} with a 2x run");
+        Assert.True(mixed.Height > flat.Height * 1.5,
+                    "a double-size word did not make its line any taller");
+    }
+
+    [Fact]
+    public void Runs_of_different_sizes_sit_on_one_baseline()
+    {
+        // The thing that goes wrong if each run is measured on its own: two
+        // boxes butted together, the small one floating at the top of the line.
+        // Letters with no descender, so the bottom of the ink IS the baseline.
+        var f = Liberation;
+        var mixed = TmpTextLayout.MeasureRuns(f, new[]
+        {
+            new StyledRun("nn"),
+            new StyledRun("nn", 0.5),
+        }, 40, align: TextAlign.Left);
+
+        double big = mixed.Glyphs[0].Bottom;
+        double small = mixed.Glyphs[^1].Bottom;
+
+        _out.WriteLine($"baselines: big ends at y{big:0.##}, small at y{small:0.##}");
+        Assert.Equal(big, small, 1);
+    }
+
+    [Fact]
+    public void Wrapping_counts_a_smaller_run_as_the_room_it_actually_takes()
+    {
+        // The control for measuring the whole thing at once: laid out run by
+        // run, the small text would wrap as though it were full size and the
+        // line would break early.
+        var f = Liberation;
+        const string line = "alpha beta gamma delta epsilon zeta";
+
+        var whole = TmpTextLayout.Measure(f, line, 30, wrapWidth: 200, align: TextAlign.Left);
+        var mixed = TmpTextLayout.MeasureRuns(f, new[]
+        {
+            new StyledRun("alpha "),
+            new StyledRun("beta gamma delta epsilon zeta", 0.4),
+        }, 30, wrapWidth: 200, align: TextAlign.Left);
+
+        int OnFirstLine(TextLayout l) => l.Glyphs.Count(g => g.Line == 0);
+
+        _out.WriteLine($"first line holds {OnFirstLine(whole)} glyph(s) at one size, "
+                       + $"{OnFirstLine(mixed)} with the tail small "
+                       + $"({whole.Lines} lines against {mixed.Lines})");
+        Assert.True(OnFirstLine(mixed) > OnFirstLine(whole),
+                    "shrinking the tail bought the line no room at all");
+    }
+
+    [Fact]
+    public void Every_glyph_says_which_run_it_came_from()
+    {
+        // How the drawer finds out what colour or weight a stretch wanted, and
+        // the only link between the two halves.
+        var f = Liberation;
+        var mixed = TmpTextLayout.MeasureRuns(f, new[]
+        {
+            new StyledRun("ab", 1, 7),
+            new StyledRun("cd", 1, 9),
+        }, 30, align: TextAlign.Left);
+
+        var seen = mixed.Glyphs.Select(g => g.Run).ToArray();
+        _out.WriteLine("runs: " + string.Join(",", seen));
+        Assert.Equal(new[] { 7, 7, 9, 9 }, seen);
+    }
+
+    [Fact]
+    public void One_run_lays_out_exactly_as_the_plain_string_does()
+    {
+        // The refactor's own control. The single-string Measure is now a
+        // wrapper, and every preview in the editor goes through it.
+        var f = CurseCasual;
+        var plain = TmpTextLayout.Measure(f, "The quick brown fox", 36, 220, TextAlign.Left);
+        var asRun = TmpTextLayout.MeasureRuns(f, new[] { new StyledRun("The quick brown fox") },
+                                              36, 220, TextAlign.Left);
+
+        Assert.Equal(plain.Glyphs.Count, asRun.Glyphs.Count);
+        Assert.Equal(plain.Height, asRun.Height, 6);
+        Assert.Equal(plain.Lines, asRun.Lines);
+        for (int i = 0; i < plain.Glyphs.Count; i++)
+        {
+            Assert.Equal(plain.Glyphs[i].X, asRun.Glyphs[i].X, 6);
+            Assert.Equal(plain.Glyphs[i].Y, asRun.Glyphs[i].Y, 6);
+        }
+        _out.WriteLine($"{plain.Glyphs.Count} glyphs, identical either way");
+    }
+
+    [Fact]
+    public void Bold_is_a_heavier_weight_the_material_already_carries()
+    {
+        // TextMeshPro has no bold atlas: it draws the same glyphs at the weight
+        // the material keeps beside the normal one. So this is the game's own
+        // number rather than a guess at one - and the control is that it is
+        // actually DIFFERENT, since a material with no bold weight would give
+        // back the face weight and bold would silently do nothing.
+        var f = CurseCasual;
+        _out.WriteLine($"face {f.FaceShift:0.####}, bold {f.BoldShift:0.####}");
+        Assert.True(f.BoldShift > f.FaceShift,
+                    $"bold is {f.BoldShift:0.####} against a face of {f.FaceShift:0.####}");
     }
 
     [Fact]

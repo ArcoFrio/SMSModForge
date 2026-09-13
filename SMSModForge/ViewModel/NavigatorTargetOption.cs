@@ -1,4 +1,4 @@
-namespace SMSModForge.ViewModel;
+﻿namespace SMSModForge.ViewModel;
 
 /// <summary>
 /// One entry in a labelled-key combo box (navigator targets, vanilla source
@@ -18,7 +18,25 @@ namespace SMSModForge.ViewModel;
 /// <c>BustNameOptions</c> / <c>RoomTalkOptions</c> / <c>AllTargetOptions</c>
 /// combos in MainWindow.xaml.
 /// </summary>
-public sealed record NavigatorTargetOption(string Token, string DisplayLabel)
+public sealed record NavigatorTargetOption(string Token, string DisplayLabel) : ISearchText
 {
     public override string ToString() => Token;
+
+    /// <summary>Both halves: the label is what the list shows and so what a
+    /// person types, and the token is what the box shows once one is chosen.</summary>
+    public string SearchText => Token + "\n" + DisplayLabel;
+}
+
+/// <summary>
+/// The text a dropdown's search matches an option against, when that is not
+/// simply what <c>ToString</c> returns.
+/// <para/>
+/// Needed wherever an option stores one thing and shows another. Searching
+/// only the stored half meant typing a word from the list found nothing - a
+/// quest listed as "Into the Dark (Astrid)" is stored as "Astrid Quest" - so
+/// the search looked absent rather than merely picky.
+/// </summary>
+public interface ISearchText
+{
+    string SearchText { get; }
 }

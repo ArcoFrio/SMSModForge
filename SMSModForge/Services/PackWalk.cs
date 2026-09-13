@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using SMSModForge.Model;
 
@@ -71,6 +71,15 @@ public static class PackWalk
         foreach (var w in pack.Wallpapers)
             foreach (var hit in Flatten(w.UnlockConditions, $"Wallpaper '{w.Key}' unlock conditions"))
                 yield return hit;
+
+        foreach (var q in pack.Quests)
+        {
+            foreach (var hit in Flatten(q.StartConditions, $"Quest '{q.Key}' start conditions"))
+                yield return hit;
+            foreach (var t in q.AllTasks())
+                foreach (var hit in Flatten(t.Conditions, $"Quest '{q.Key}' task '{t.Key}'"))
+                    yield return hit;
+        }
     }
 
     /// <summary>Every action in the pack.</summary>
@@ -101,6 +110,10 @@ public static class PackWalk
             foreach (var h in p.OnExit)
                 foreach (var a in h.Actions) yield return (a, $"Place '{p.Key}' on exit");
         }
+
+        foreach (var q in pack.Quests)
+            foreach (var t in q.AllTasks())
+                foreach (var a in t.Actions) yield return (a, $"Quest '{q.Key}' task '{t.Key}'");
     }
 
     /// <summary>

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -138,7 +140,81 @@ public partial class MaskEditorWindow : Window
         _host.LiveMaskBgra = _liveBgra;
         _host.LiveMaskRevision++;
 
+        OfferTheOtherOutfits();
+
         RecomposeRect(0, 0, MaskBuffer.Size - 1, MaskBuffer.Size - 1);
+        UpdateStatus();
+        CanvasHost.Focus();
+    }
+
+    // ──────────────────────── copying another outfit's layers
+
+    /// <summary>What the list is showing, in the order it shows them.</summary>
+    private IReadOnlyList<ViewModel.MaskSource> _otherMasks =
+        System.Array.Empty<ViewModel.MaskSource>();
+
+    /// <summary>
+    /// Fill the copy-from list, or hide it.
+    /// <para/>
+    /// Once, on load: an outfit's siblings do not change while a painter window
+    /// is open, and re-reading them on every click would be a list that flickers
+    /// for no reason.
+    /// </summary>
+    private void OfferTheOtherOutfits()
+    {
+        _otherMasks = _host.OtherMasks ?? System.Array.Empty<ViewModel.MaskSource>();
+        if (_otherMasks.Count == 0) return;
+
+        CopyFromList.ItemsSource = _otherMasks.Select(m => m.Label).ToList();
+        CopyFromPanel.Visibility = Visibility.Visible;
+    }
+
+    private void CopyFrom_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        => CopyFromButton.IsEnabled = CopyFromList.SelectedIndex >= 0;
+
+    private void CopyFrom_Click(object sender, RoutedEventArgs e)
+    {
+        int at = CopyFromList.SelectedIndex;
+        if (at < 0 || at >= _otherMasks.Count) return;
+
+        var from = _otherMasks[at];
+        string path = Path.Combine(_packRoot, Normalize(from.MaskPath));
+        if (!File.Exists(path))
+        {
+            if (!Services.TestMode.Active)
+                MessageBox.Show(PromptOwner,
+                    $"\"{from.Label}\" names a mask that is not there yet:\n{from.MaskPath}\n\n"
+                    + "Paint and save that one first, then it can be copied.",
+                    "Nothing to copy", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        // Everything on this canvas goes, painted or not. Worth asking even
+        // when nothing is dirty: a mask loaded from the file is still work
+        // somebody did, and "it replaced my mask" is not something an undo
+        // they have to discover makes better.
+        if (!Services.TestMode.Active)
+        {
+            var answer = MessageBox.Show(PromptOwner,
+                $"Load \"{from.Label}\" over this mask?\n\n"
+                + "Everything on this canvas is replaced"
+                + (_dirty ? ", including the changes you have not saved." : ".")
+                + "\n\nCtrl+Z puts it back.",
+                "Copy layers", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+            if (answer != MessageBoxResult.OK) return;
+        }
+
+        // Snapshot every channel first, so one Ctrl+Z undoes the whole load
+        // rather than one plane of it.
+        for (int channel = 0; channel < _mask.ChannelCount; channel++)
+            _history.Snapshot(channel, _mask.Channel(channel), _mask.A);
+
+        _mask.FromBgra(BustComposer.LoadPng(path));
+        _mask.ToBgra(_liveBgra);
+        _host.LiveMaskRevision++;
+        _dirty = true;
+
+        RecomposeAll();
         UpdateStatus();
         CanvasHost.Focus();
     }

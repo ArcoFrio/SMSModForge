@@ -175,6 +175,7 @@ public sealed class NodeConditionViewModel : ObservableObject
                 return "";
             };
             row.IsBooleanVarChecker = MainViewModel.IsVariableBoolean;
+            row.VariableKindChecker = VariableKindLookup;
             ParamRows.Add(row);
         }
     }
@@ -207,8 +208,97 @@ public sealed class NodeConditionViewModel : ObservableObject
             OnPropertyChanged(nameof(InputKeyToken));
             OnPropertyChanged(nameof(InputPhase));
             OnPropertyChanged(nameof(InputPhaseHelp));
+            NotifyQuestFamily();
             RebuildParamRows();
         }
+    }
+
+    // ── Quests ───────────────────────────────────────────────────────────
+    //
+    // Two conditions, one row: both name a quest and a task through the same
+    // picker the Quest action uses. State asks where the quest or task is;
+    // Counter compares a task's count against a number.
+
+    public bool IsQuestStateFamily => Model.Type == NodeConditionTypes.QuestState;
+    public bool IsQuestCounterFamily => Model.Type == NodeConditionTypes.QuestCounter;
+    public bool IsQuestFamily => IsQuestStateFamily || IsQuestCounterFamily;
+
+    private QuestPickerViewModel? _questPicker;
+    private bool _questPickerWholeQuest;
+
+    /// <summary>
+    /// Source, quest and task. Rebuilt when the type flips between the two,
+    /// because only the state condition can ask about the quest as a whole.
+    /// </summary>
+    public QuestPickerViewModel QuestPicker
+    {
+        get
+        {
+            if (_questPicker == null || _questPickerWholeQuest != IsQuestStateFamily)
+            {
+                _questPickerWholeQuest = IsQuestStateFamily;
+                _questPicker = new QuestPickerViewModel(Model.Params,
+                    () => OnPropertyChanged(nameof(Display)), offersWholeQuest: _questPickerWholeQuest);
+            }
+            return _questPicker;
+        }
+    }
+
+    public static IReadOnlyList<string> QuestStates => Shared.QuestVocabulary.States;
+    public static IReadOnlyList<string> QuestComparisons => Shared.QuestVocabulary.Comparisons;
+
+    public string QuestState
+    {
+        get
+        {
+            string state = GetParam(Shared.QuestVocabulary.StateParam);
+            return string.IsNullOrEmpty(state) ? Shared.QuestVocabulary.InProgress : state;
+        }
+        set
+        {
+            SetParam(Shared.QuestVocabulary.StateParam, value ?? Shared.QuestVocabulary.InProgress);
+            OnPropertyChanged();
+        }
+    }
+
+    public string QuestComparison
+    {
+        get
+        {
+            string how = GetParam(Shared.QuestVocabulary.ComparisonParam);
+            return string.IsNullOrEmpty(how) ? Shared.QuestVocabulary.GreaterOrEqual : how;
+        }
+        set
+        {
+            SetParam(Shared.QuestVocabulary.ComparisonParam, value ?? Shared.QuestVocabulary.GreaterOrEqual);
+            OnPropertyChanged();
+        }
+    }
+
+    public string QuestValue
+    {
+        get => GetParam(Shared.QuestVocabulary.ValueParam);
+        set { SetParam(Shared.QuestVocabulary.ValueParam, value); OnPropertyChanged(); }
+    }
+
+    private void NotifyQuestFamily()
+    {
+        // Seed the defaults the row shows, so what is on screen is what is
+        // saved: an absent state reads as "in progress" here and at runtime,
+        // but a manifest that says so is one a person can read.
+        if (IsQuestStateFamily && !Model.Params.ContainsKey(Shared.QuestVocabulary.StateParam))
+            Model.Params[Shared.QuestVocabulary.StateParam] = Shared.QuestVocabulary.InProgress;
+        if (IsQuestCounterFamily && !Model.Params.ContainsKey(Shared.QuestVocabulary.ComparisonParam))
+            Model.Params[Shared.QuestVocabulary.ComparisonParam] = Shared.QuestVocabulary.GreaterOrEqual;
+
+        OnPropertyChanged(nameof(IsQuestStateFamily));
+        OnPropertyChanged(nameof(IsQuestCounterFamily));
+        OnPropertyChanged(nameof(IsQuestFamily));
+        OnPropertyChanged(nameof(QuestPicker));
+        OnPropertyChanged(nameof(QuestState));
+        OnPropertyChanged(nameof(QuestComparison));
+        OnPropertyChanged(nameof(QuestValue));
+        if (IsQuestFamily) QuestPicker.RaiseAll();
     }
 
     // ── Unified "Variable" presentation ─────────────────────────────────
@@ -305,6 +395,7 @@ public sealed class NodeConditionViewModel : ObservableObject
         OnPropertyChanged(nameof(VarSource));
         OnPropertyChanged(nameof(VarComparison));
         OnPropertyChanged(nameof(IsVanillaSource));
+        RefreshVariableKind();
     }
 
     /// <summary>Type shown in the row's combo: one "Variable" entry for the family, else the real type.</summary>
@@ -329,6 +420,10 @@ public sealed class NodeConditionViewModel : ObservableObject
             OnPropertyChanged();
             OnPropertyChanged(nameof(IsVanillaSource));
             OnPropertyChanged(nameof(Display));
+            // The side decides which catalogue answers, so the note and
+            // the value editor follow it: the same word can be a flag in
+            // the pack and a number in the game.
+            RefreshVariableKind();
         }
     }
 
@@ -403,6 +498,7 @@ public sealed class NodeConditionViewModel : ObservableObject
         set
         {
             SetParam("name", value);
+            RefreshVariableKind();
             OnPropertyChanged();
             OnPropertyChanged(nameof(VarValueIsBool));
             OnPropertyChanged(nameof(VarValueIsText));
@@ -416,17 +512,46 @@ public sealed class NodeConditionViewModel : ObservableObject
     // variable holding "true" and nothing says why. The same reasoning as the
     // action side, and the same hook — see NodeActionViewModel.
 
-    /// <summary>Reports whether a pack variable of this name is a Bool. Set by
-    /// MainViewModel; null before a pack is loaded, so the text box stays the
-    /// fallback whenever the answer is not known.</summary>
-    internal static Func<string, bool>? IsBoolVariableLookup;
+    /// <summary>
+    /// What kind the named variable is, on the side this row is reading from.
+    /// Set by MainViewModel; null before a pack is loaded, in which case
+    /// nothing is claimed and the text box stays the fallback.
+    /// <para/>
+    /// A hook rather than a reference to the pack, because a row is built from
+    /// its own definition alone and has no route to the variable catalogue.
+    /// The VANILLA side does not need the pack at all, but it goes through the
+    /// same hook so a row never has to know which of the two it is asking.
+    /// </summary>
+    internal static Func<string, bool, SMSModForge.Model.VariableKind>? VariableKindLookup;
 
-    /// <summary>True when this condition compares a Bool variable's value.</summary>
-    public bool VarValueIsBool =>
-        IsBoolVariableLookup != null &&
-        ShowVariableValue &&
-        !string.IsNullOrWhiteSpace(VarName) &&
-        IsBoolVariableLookup(VarName);
+    /// <summary>Everything that follows from which variable this row names.
+    /// Called when the name changes AND when the side it reads from does: the
+    /// same word can be a flag in the pack and a number in the game.</summary>
+    private void RefreshVariableKind()
+    {
+        OnPropertyChanged(nameof(VarKind));
+        OnPropertyChanged(nameof(VarKindNote));
+        OnPropertyChanged(nameof(VarValueIsBool));
+        OnPropertyChanged(nameof(VarValueIsText));
+        OnPropertyChanged(nameof(VarValueBool));
+    }
+
+    /// <summary>What this row's variable holds, or Unknown.</summary>
+    public SMSModForge.Model.VariableKind VarKind =>
+        VariableKindLookup?.Invoke(VarName ?? "", IsVanillaSource) ?? SMSModForge.Model.VariableKind.Unknown;
+
+    /// <summary>
+    /// The small note beside the name saying what kind it is, or empty.
+    /// <para/>
+    /// Empty for a name nothing recognises, which is the case worth being
+    /// quiet about: a note reading "unknown" makes the editor look broken
+    /// rather than uninformed, and an author who has just mistyped a name gets
+    /// more from the note disappearing than from it saying so.
+    /// </summary>
+    public string VarKindNote => SMSModForge.Model.VariableTypes.Label(VarKind);
+
+    /// <summary>True when this condition compares a yes/no variable's value.</summary>
+    public bool VarValueIsBool => ShowVariableValue && VarKind == SMSModForge.Model.VariableKind.YesNo;
 
     /// <summary>The complement, for the text box beside it.</summary>
     public bool VarValueIsText => ShowVariableValue && !VarValueIsBool;

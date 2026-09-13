@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using SMSModForge.Model;
 
 namespace SMSModForge.ViewModel;
@@ -24,7 +25,27 @@ public interface IMaskEditorHost
     /// a level mask is authored in alpha instead. Defaulted so the NPC hosts
     /// need say nothing.</summary>
     Rendering.MaskKind MaskKind => Rendering.MaskKind.BustRgb;
+
+    /// <summary>
+    /// Masks the painter could load over this one, and what to call them.
+    /// <para/>
+    /// The other outfits of the same character: most of them are the same bust
+    /// in different clothes, so one is usually a better starting point than an
+    /// empty canvas.
+    /// <para/>
+    /// Empty by default, and that is the point of the default rather than an
+    /// oversight. A PLACE has no character and no siblings — its two masks are
+    /// a background and a foreground of one scene, and offering to paste one
+    /// over the other is offering a mistake. Not answering this is how a host
+    /// says the painter should not show the control at all.
+    /// </summary>
+    IReadOnlyList<MaskSource> OtherMasks => System.Array.Empty<MaskSource>();
 }
+
+/// <summary>One mask the painter could load over the one being edited.</summary>
+/// <param name="Label">What to call it in the list — an outfit's own name.</param>
+/// <param name="MaskPath">Pack-relative path to its PNG.</param>
+public readonly record struct MaskSource(string Label, string MaskPath);
 
 /// <summary>
 /// INPC wrapper around an <see cref="NpcDef"/> for the NPCs tab. Exposes the

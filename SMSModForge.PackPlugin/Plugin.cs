@@ -705,7 +705,7 @@ namespace SMSModForge.PackPlugin
             // check greps for, and the line somebody reads in a player's log
             // when a diagnostic build has escaped.
             Logger.LogWarning("[SMSModForge.PackPlugin] " + DebugBuildMarker
-                              + " — F10/F11/F12 scene dumps are live.");
+                              + " — F8/F10/F11/F12 are live.");
 #endif
             Logger.LogInfo("[SMSModForge.PackPlugin] Awake — waiting for CoreGameScene");
         }
@@ -826,6 +826,8 @@ namespace SMSModForge.PackPlugin
             NpcFactory.Reset();
             PlaceRegistry.Reset();
             WeatherRuntime.Reset();
+            // The journal it cached belongs to the scene going away.
+            QuestRuntime.Reset();
             NavigatorRuntime.Reset();
             RadialButtonRuntime.Reset();
             NavigatorGridSetup.Reset();
@@ -1518,6 +1520,11 @@ namespace SMSModForge.PackPlugin
                         // having them wiped. See DailyRefreshPending.
                         if (DailyRefreshPending(_contexts[i], today)) continue;
                         _contexts[i].UpdateRules?.Tick(_contexts[i], Logger);
+                        // Quests after rules, so a variable a rule just set is
+                        // seen by a quest's conditions on the same frame. Held by
+                        // the same gates: completing a task is permanent, and a
+                        // condition passing on unsettled values would be too.
+                        _contexts[i].Quests?.Tick(_contexts[i], Logger);
                     }
                 }
 
@@ -1559,6 +1566,21 @@ namespace SMSModForge.PackPlugin
                         // the depth a dialogue graph needs is mostly noise.
                         if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.F10))
                             DumpDialogues();
+
+                        // The quest journal, shape and scripts. Its own key
+                        // because it is off at load and never on screen, so
+                        // neither F11 nor F10 can reach it - and because what
+                        // a Quests tab has to generate is exactly what this
+                        // subtree turns out to be.
+                        //
+                        // F8 and not F9: a debug build of the diagnostics
+                        // plugin binds F9 to its bust scan, and one keypress
+                        // running two unrelated scans is how a dump gets read
+                        // as the wrong one's output. F10-F12 collide with
+                        // that plugin and with RuntimeUnityEditor too; F8
+                        // collides with nothing installed.
+                        if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.F8))
+                            QuestJournalDump.Write(Logger);
                     }
                     catch (System.Exception)
                     {
@@ -2020,6 +2042,27 @@ namespace SMSModForge.PackPlugin
                 return;
             }
 
+            // Pass 0 — quests. Every pack's at once: the registry replaces the
+            // pack quests in the game's catalogue as a set, so registering them
+            // one pack at a time would leave only the last pack's.
+            //
+            // First, because nothing else here needs them and everything that
+            // asks about one - a dialogue's start conditions, a rule - should
+            // find it on its first frame. The save has already been read by
+            // now, which is fine for what a pack quest can hold - see "When to
+            // register" on QuestRegistry.
+            var questSpecs = new List<QuestSpec>();
+            foreach (var m in manifests)
+            {
+                try { questSpecs.AddRange(QuestRuntime.ReadSpecs(m, Logger)); }
+                catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Quests could not be read from " + m.PackId + ": " + ex); }
+            }
+            if (questSpecs.Count > 0)
+            {
+                try { QuestRegistry.Register(questSpecs, Logger); }
+                catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Quest registration failed: " + ex); }
+            }
+
             // Pass 1 — busts.
             foreach (var m in manifests)
             {
@@ -2281,6 +2324,18 @@ namespace SMSModForge.PackPlugin
                 ["bustSource"] = "None",
             });
 
+            // The pack's quests that move on their own. Read after the variables
+            // are declared, since their conditions read them.
+            try { ctx.Quests = QuestTicker.Build(m); }
+            catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Quest conditions could not be read in " + m.PackId + ": " + ex); }
+
+            // Registered whether or not the pack has any dialogues. The per-frame
+            // loop drives rules, level hooks, gated objects, wallpapers and quests
+            // through this list, and a pack with none of its own conversations -
+            // rules and quests only - used to be left out of it entirely, so none
+            // of those ever ran for it.
+            _contexts.Add(ctx);
+
             // Build dialogues.
             var dialogues = m.Root["dialogues"] as Newtonsoft.Json.Linq.JArray;
             if (dialogues == null || dialogues.Count == 0) return;
@@ -2321,7 +2376,6 @@ namespace SMSModForge.PackPlugin
                 built++;
             }
 
-            _contexts.Add(ctx);
             _dispatchers.Add(dispatcher);
             if (built > 0)
                 Logger.LogInfo("[SMSModForge.PackPlugin] Pack '" + ctx.PackId + "' built " + built + " dialogue(s).");

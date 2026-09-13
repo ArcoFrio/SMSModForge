@@ -406,6 +406,20 @@ namespace SMSModForge.PackPlugin
                                     rolled, dpercent, rollDay, log);
                         return rolled < dchance;
                     }
+
+                // ── Quests ────────────────────────────────────────────────
+                // Read from the game's own journal, so a pack's condition
+                // and the quest screen can never disagree. Pack quests are
+                // found by this pack's id - a key is only unique within its
+                // pack.
+                case SMSModForge.Shared.QuestVocabulary.StateCondition:
+                    return QuestRuntime.IsInState(p, thisPackId ?? "", log);
+
+                case SMSModForge.Shared.QuestVocabulary.CounterCondition:
+                    return QuestRuntime.CounterMatches(
+                        p, DerefValue((string)p[SMSModForge.Shared.QuestVocabulary.ValueParam] ?? "0", p, vars),
+                        thisPackId ?? "", log);
+
                 default:
                     log?.LogWarning("[SMSModForge.PackPlugin] Unknown condition type '" + type + "' — treating as false");
                     return false;

@@ -86,7 +86,7 @@ public class UiBindingTests
 
             // Show the tab, so its templates are actually realised - an
             // unrealised tab binds nothing and would pass trivially.
-            tabs.SelectedIndex = tabs.Items.Count - 1;
+            tabs.SelectedIndex = tabs.Items.OfType<TabItem>().ToList().FindIndex(t => t.Header as string == "UI");
             WindowHarness.Pump();
 
             vm.AddOwnUiCommand.Execute(null);
@@ -128,7 +128,7 @@ public class UiBindingTests
             var list = (ListBox)window.FindName("UiList");
             Assert.NotNull(list);
 
-            tabs.SelectedIndex = tabs.Items.Count - 1;
+            tabs.SelectedIndex = tabs.Items.OfType<TabItem>().ToList().FindIndex(t => t.Header as string == "UI");
             WindowHarness.Pump();
 
             Assert.Empty(list.Items);
@@ -166,7 +166,7 @@ public class UiBindingTests
             var tabs = (TabControl)window.FindName("MainTabs");
             var preview = (UiPreview)window.FindName("UiScreenPreview");
 
-            tabs.SelectedIndex = tabs.Items.Count - 1;
+            tabs.SelectedIndex = tabs.Items.OfType<TabItem>().ToList().FindIndex(t => t.Header as string == "UI");
             WindowHarness.Pump();
 
             vm.AddVanillaUiCommand.Execute(null);
@@ -221,7 +221,7 @@ public class UiBindingTests
             var hint = (System.Windows.Controls.TextBlock)window.FindName("UiNoSelectionHint");
             Assert.NotNull(hint);
 
-            tabs.SelectedIndex = tabs.Items.Count - 1;
+            tabs.SelectedIndex = tabs.Items.OfType<TabItem>().ToList().FindIndex(t => t.Header as string == "UI");
             WindowHarness.Pump();
 
             vm.AddVanillaUiCommand.Execute(null);
@@ -255,7 +255,7 @@ public class UiBindingTests
             var hint = (System.Windows.FrameworkElement)window.FindName("UiNoSelectionHint");
             var fields = (System.Windows.FrameworkElement)window.FindName("UiNodeFields");
 
-            tabs.SelectedIndex = tabs.Items.Count - 1;
+            tabs.SelectedIndex = tabs.Items.OfType<TabItem>().ToList().FindIndex(t => t.Header as string == "UI");
             WindowHarness.Pump();
 
             void Check(string state)
@@ -312,7 +312,7 @@ public class UiBindingTests
             var tabs = (TabControl)window.FindName("MainTabs");
             var tree = (TreeView)window.FindName("UiTree");
 
-            tabs.SelectedIndex = tabs.Items.Count - 1;
+            tabs.SelectedIndex = tabs.Items.OfType<TabItem>().ToList().FindIndex(t => t.Header as string == "UI");
             WindowHarness.Pump();
 
             vm.AddVanillaUiCommand.Execute(null);
@@ -353,7 +353,7 @@ public class UiBindingTests
             var tree = (TreeView)window.FindName("UiTree");
             Assert.NotNull(tree);
 
-            tabs.SelectedIndex = tabs.Items.Count - 1;
+            tabs.SelectedIndex = tabs.Items.OfType<TabItem>().ToList().FindIndex(t => t.Header as string == "UI");
             WindowHarness.Pump();
 
             vm.AddVanillaUiCommand.Execute(null);
@@ -378,7 +378,7 @@ public class UiBindingTests
         {
             var vm = (MainViewModel)window.DataContext;
             var tabs = (TabControl)window.FindName("MainTabs");
-            tabs.SelectedIndex = tabs.Items.Count - 1;
+            tabs.SelectedIndex = tabs.Items.OfType<TabItem>().ToList().FindIndex(t => t.Header as string == "UI");
             WindowHarness.Pump();
 
             // "+ Piece" hangs off the selected UI, so there has to be one.

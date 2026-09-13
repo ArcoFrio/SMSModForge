@@ -66,11 +66,16 @@ namespace SMSModForge.PackPlugin
                     }
 
                     int done = 0;
+                    bool maskReplaced = false;
                     foreach (var entry in overrides)
                     {
                         try
                         {
-                            if (ApplyOne(pack, bust, (JObject)entry, logger)) done++;
+                            var one = (JObject)entry;
+                            if (!ApplyOne(pack, bust, one, logger)) continue;
+                            done++;
+                            if ((string)one["slot"] == SMSModForge.Shared.SpriteSlotNames.Mask)
+                                maskReplaced = true;
                         }
                         catch (System.Exception ex)
                         {
@@ -94,12 +99,17 @@ namespace SMSModForge.PackPlugin
                     // moves the bust, in exchange for what an author sees being
                     // what they get.
                     //
-                    // Only busts this pack actually changed - hence the
-                    // `continue` above. Every other bust in the game keeps its
-                    // own motion, which is why this sits inside the loop over
-                    // the outfits a manifest names rather than sweeping the
-                    // cast, and why an outfit whose art all failed to load does
-                    // not have its jiggle rewritten either.
+                    // Only where the pack replaced this bust's MASK. That
+                    // texture is what the jiggle reads, so replacing it is the
+                    // point at which the motion becomes the pack's business -
+                    // and it is a line an author draws deliberately, rather
+                    // than one they cross by swapping a mouth frame and finding
+                    // the whole bust moving differently.
+                    //
+                    // Every other bust in the game keeps its own motion,
+                    // including one this pack changed in some other way. The
+                    // editor's preview draws the line in the same place.
+                    if (!maskReplaced) continue;
                     try
                     {
                         if (ApplyJiggle(bust, outfit, logger)) moved++;

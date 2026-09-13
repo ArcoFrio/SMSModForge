@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using System.Windows.Controls;
 using SMSModForge.Model;
 using SMSModForge.Rendering;
@@ -43,7 +43,7 @@ public sealed class UiSpriteUndoTests
 
             var vm = (MainViewModel)window.DataContext;
             var tabs = (TabControl)window.FindName("MainTabs");
-            tabs.SelectedIndex = tabs.Items.Count - 1;
+            tabs.SelectedIndex = tabs.Items.OfType<TabItem>().ToList().FindIndex(t => t.Header as string == "UI");
             WindowHarness.Pump();
 
             vm.AddOwnUiCommand.Execute(UiTemplate.Find("panel"));
@@ -75,7 +75,7 @@ public sealed class UiSpriteUndoTests
 
             var vm = (MainViewModel)window.DataContext;
             var tabs = (TabControl)window.FindName("MainTabs");
-            tabs.SelectedIndex = tabs.Items.Count - 1;
+            tabs.SelectedIndex = tabs.Items.OfType<TabItem>().ToList().FindIndex(t => t.Header as string == "UI");
             WindowHarness.Pump();
 
             vm.AddOwnUiCommand.Execute(UiTemplate.Find("panel"));

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -74,6 +74,31 @@ public static class ThemeManager
     public const string KeyVanillaSurface = "Theme.VanillaSurface";
     public const string KeyChangedSurface = "Theme.ChangedSurface";
 
+    /// <summary>
+    /// The ink a formatting tag is shown in inside a dialogue line, and the
+    /// faint chip it sits on.
+    /// <para/>
+    /// A tag is an instruction rather than words, so it is drawn differently
+    /// from the sentence around it — but it was drawn as flat grey, which on a
+    /// white box is washed out and on a dark one is barely there. A HUE tells it
+    /// apart from the words without having to be dimmer than them, and the chip
+    /// says where the tag starts and stops.
+    /// </summary>
+    public const string KeyMarkup = "Theme.Markup";
+    public const string KeyMarkupBack = "Theme.MarkupBack";
+
+    /// <summary>
+    /// The hue markup is pulled toward. Fixed rather than taken from the theme's
+    /// own accent: several accents are greys, which is the thing being fixed,
+    /// and markup means the same on every theme.
+    /// <para/>
+    /// It is mixed into the theme's TEXT colour, which is the one thing
+    /// guaranteed to contrast with the box the tag is written in — so the same
+    /// rule gives a deep blue on the light themes and a pale one on the dark,
+    /// rather than a single colour that only works on half of them.
+    /// </summary>
+    private static readonly Color MarkupHue = Color.FromRgb(0x3B, 0x82, 0xC4);
+
     // Catalogue. Index 0 ("Light") is the neutral default + fallback. Light
     // themes keep dark Text on a near-white Control; the dark themes flip both
     // (light Text on a dark Control) — and every text-bearing surface below is
@@ -117,6 +142,17 @@ public static class ThemeManager
         r[KeyVanillaSurface] = Frozen(Blend(surface, Color.FromRgb(0x5B, 0x8F, 0xCB), 0.16));
         r[KeyChangedSurface] = Frozen(Blend(surface,
             (Color)ColorConverter.ConvertFromString(theme.Accent), 0.28));
+
+        // Six parts of the way from the theme's own text colour to the markup
+        // hue: far enough to read as a different KIND of thing, near enough to
+        // keep the text colour's contrast with the box behind it.
+        var ink = Blend((Color)ColorConverter.ConvertFromString(theme.Text), MarkupHue, 0.6);
+        r[KeyMarkup] = Frozen(ink);
+        // Faint: a chip that says where the tag starts, not a highlighter. Any
+        // stronger and it eats into the contrast the ink just earned, because
+        // the ink is now sitting on the chip rather than on the box.
+        r[KeyMarkupBack] = Frozen(Blend(
+            (Color)ColorConverter.ConvertFromString(theme.Control), ink, 0.12));
 
         foreach (var t in All) t.IsCurrent = ReferenceEquals(t, theme);
         Current = theme;

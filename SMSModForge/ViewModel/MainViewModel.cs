@@ -84,6 +84,9 @@ public sealed class MainViewModel : ObservableObject
         // removal of a UI, so the position of the one being edited is exactly
         // the thing that cannot be relied on.
         string? uiName = SelectedUi?.Model.Name;
+        // The quest being edited, and the task inside it, for the same reason.
+        string? questKey = SelectedQuest?.Key;
+        string? questTaskKey = SelectedQuest?.SelectedTask?.Key;
         string? uiNodeName = SelectedUi?.SelectedNode?.Model.Name;
 
         Undo.Suspended = true;
@@ -111,6 +114,16 @@ public sealed class MainViewModel : ObservableObject
         {
             var p = Places.FirstOrDefault(x => x.Key == placeKey);
             if (p != null) SelectedPlace = p;
+        }
+        if (questKey != null)
+        {
+            var q = Quests.FirstOrDefault(x => x.Key == questKey);
+            if (q != null)
+            {
+                SelectedQuest = q;
+                if (questTaskKey != null)
+                    q.SelectedTask = q.TaskRows.FirstOrDefault(t => t.Key == questTaskKey);
+            }
         }
         if (npcKey != null)
         {
@@ -194,6 +207,9 @@ public sealed class MainViewModel : ObservableObject
     public ObservableCollection<WallpaperViewModel> Wallpapers { get; } = new();
     public ObservableCollection<MusicViewModel> Music { get; } = new();
     public ObservableCollection<SfxViewModel> Sfx { get; } = new();
+
+    /// <summary>The pack's own quests, for the Quests tab.</summary>
+    public ObservableCollection<QuestViewModel> Quests { get; } = new();
     public ObservableCollection<UpdateRuleViewModel> IntegrationRules { get; } = new();
 
     /// <summary>
@@ -1632,6 +1648,13 @@ public sealed class MainViewModel : ObservableObject
         set { _selectedSfx = value; OnPropertyChanged(); }
     }
 
+    private QuestViewModel? _selectedQuest;
+    public QuestViewModel? SelectedQuest
+    {
+        get => _selectedQuest;
+        set { _selectedQuest = value; OnPropertyChanged(); RemoveQuestCommand?.Raise(); }
+    }
+
     private UpdateRuleViewModel? _selectedIntegrationRule;
     public UpdateRuleViewModel? SelectedIntegrationRule
     {
@@ -1897,6 +1920,16 @@ public sealed class MainViewModel : ObservableObject
     public RelayCommand RemoveMusicCommand { get; }
     public RelayCommand AddSfxCommand { get; }
     public RelayCommand RemoveSfxCommand { get; }
+    public RelayCommand AddQuestCommand { get; }
+    public RelayCommand RemoveQuestCommand { get; }
+
+    /// <summary>Rename the selected task's runtime name, following every row
+    /// that names it.</summary>
+    public RelayCommand RenameQuestTaskCommand { get; }
+
+    /// <summary>Rename the selected quest's runtime name - the F2 rename, from
+    /// a button beside the name.</summary>
+    public RelayCommand RenameQuestCommand { get; }
 
     /// <summary>Preview-plays an SFX clip (the row's <see cref="SfxViewModel"/>,
     /// or the selected one) at its authored default volume. Needs the pack
@@ -1925,6 +1958,31 @@ public sealed class MainViewModel : ObservableObject
     /// <summary>Bound by Options ▸ Check for updates on start. Two-way, and
     /// written straight through to the stored preference — there is no in-memory
     /// copy to fall out of step with it.</summary>
+    /// <summary>Whether node rows are drawn the way the game draws a line. See
+    /// EditorPrefs for why this starts off.</summary>
+    public bool GameLookNodeRows
+    {
+        get => Services.EditorPrefs.GameLookNodeRows;
+        set
+        {
+            Services.EditorPrefs.GameLookNodeRows = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(PlainNodeRows));
+        }
+    }
+
+    /// <summary>The other half of the same switch, for the row that hides when
+    /// the game look is on. XAML has no "not" for a binding.</summary>
+    public bool PlainNodeRows => !GameLookNodeRows;
+
+    /// <summary>Whether the dialogue tab's token cheatsheet is unfolded. Kept in
+    /// prefs so folding it sticks; see EditorPrefs for why it starts open.</summary>
+    public bool ShowTextTokenTips
+    {
+        get => Services.EditorPrefs.ShowTextTokenTips;
+        set { Services.EditorPrefs.ShowTextTokenTips = value; OnPropertyChanged(); }
+    }
+
     public bool CheckForUpdatesOnStart
     {
         get => Services.EditorPrefs.CheckForUpdatesOnStart;
@@ -2040,6 +2098,14 @@ public sealed class MainViewModel : ObservableObject
         SfxTree = new UnitTreeController(() => Pack.SfxFolders,
             o => ((SfxViewModel)o).Key, o => ((SfxViewModel)o).Display,
             o => SelectedSfx = (SfxViewModel)o, () => Undo.Checkpoint());
+        QuestTree = new UnitTreeController(() => Pack.QuestFolders,
+            o => ((QuestViewModel)o).Key, o => ((QuestViewModel)o).Display,
+            o => SelectedQuest = (QuestViewModel)o, () => Undo.Checkpoint());
+
+        // Quest action and condition rows list the pack's quests and their
+        // tasks. A row is built from its own definition and cannot reach the
+        // pack, so the list comes from here - read live, since Pack swaps on load.
+        QuestPickerViewModel.PackQuests = () => Pack.Quests;
 
         // Let Level Overlay action rows list the overlays of whichever level the
         // author picks (see NodeActionViewModel.OverlayOptions).
@@ -2072,6 +2138,7 @@ public sealed class MainViewModel : ObservableObject
         SortView(Wallpapers, nameof(WallpaperViewModel.Display));
         SortView(Music, nameof(MusicViewModel.Display));
         SortView(Sfx, nameof(SfxViewModel.Display));
+        SortView(Quests, nameof(QuestViewModel.Display));
         SortView(IntegrationRules, nameof(UpdateRuleViewModel.Display));
 
         Undo = new Services.UndoService(() => PackRepository.Serialize(Pack));
@@ -2140,6 +2207,21 @@ public sealed class MainViewModel : ObservableObject
         // and it has to be a character an outfit means something for — a
         // voice-only speaker (the player included) shows no bust at all.
         AddOutfitCommand   = new RelayCommand(AddOutfit, CanAddOutfit);
+
+        // Four fields an outfit almost always shares with the one it was made
+        // from. Whether there IS a default to copy from is the outfit's own
+        // question - see OutfitViewModel.CanCopyFromDefaultOutfit - and the
+        // buttons are hidden rather than greyed when there is not.
+        UseDefaultMaskCommand = new RelayCommand(UseDefaultMask, CanCopyFromDefault);
+        UseDefaultBlinkCommand = new RelayCommand(
+            () => CopyFromDefault(d => SelectedOutfit!.BlinkSprite = d.BlinkSprite),
+            CanCopyFromDefault);
+        UseDefaultMouthPrefixCommand = new RelayCommand(
+            () => CopyFromDefault(d => SelectedOutfit!.MouthPrefix = d.MouthPrefix),
+            CanCopyFromDefault);
+        UseDefaultExpressionPrefixCommand = new RelayCommand(
+            () => CopyFromDefault(d => SelectedOutfit!.ExpressionPrefix = d.ExpressionPrefix),
+            CanCopyFromDefault);
         RemoveCharacterCommand = new RelayCommand(RemoveCharacter, () => SelectedCharacter != null);
         RemoveOutfitCommand    = new RelayCommand(RemoveOutfit,
             () => SelectedOutfit != null && SelectedCharacter != null);
@@ -2236,6 +2318,10 @@ public sealed class MainViewModel : ObservableObject
         AddMusicCommand               = new RelayCommand(AddMusic);
         RemoveMusicCommand            = new RelayCommand(RemoveMusic, () => SelectedMusic != null || MusicTree.Selected is UnitFolderNode);
         AddSfxCommand                 = new RelayCommand(AddSfx);
+        AddQuestCommand               = new RelayCommand(AddQuest);
+        RenameQuestTaskCommand        = new RelayCommand(RenameQuestTask, () => SelectedQuest?.SelectedTask != null);
+        RenameQuestCommand            = new RelayCommand(() => { if (SelectedTabIndex == TabQuests) RenameActiveItem(); }, () => SelectedQuest != null);
+        RemoveQuestCommand            = new RelayCommand(RemoveQuest, () => SelectedQuest != null || QuestTree.Selected is UnitFolderNode);
         RemoveSfxCommand              = new RelayCommand(RemoveSfx, () => SelectedSfx != null || SfxTree.Selected is UnitFolderNode);
         PlaySfxCommand                = new RelayCommand(
             p => PlaySfx(p as SfxViewModel ?? SelectedSfx),
@@ -2268,8 +2354,8 @@ public sealed class MainViewModel : ObservableObject
         // Lets an action or condition row ask what type a variable is. The
         // rows are built from their own defs and have no path to the catalog,
         // and this is the one place that owns both.
-        NodeActionViewModel.IsBoolVariableLookup = IsBoolVariable;
-        NodeConditionViewModel.IsBoolVariableLookup = IsBoolVariable;
+        NodeActionViewModel.VariableKindLookup = KindOfVariable;
+        NodeConditionViewModel.VariableKindLookup = KindOfVariable;
 
         TutorialRunner                = new TutorialRunner(this);
         // Tutorials is a snapshot joined against saved progress, so it has to be
@@ -2313,6 +2399,7 @@ public sealed class MainViewModel : ObservableObject
         ViewSort.Alphabetical(Wallpapers, nameof(WallpaperViewModel.Display));
         ViewSort.Alphabetical(Music, nameof(MusicViewModel.Display));
         ViewSort.Alphabetical(Sfx, nameof(SfxViewModel.Display));
+        ViewSort.Alphabetical(Quests, nameof(QuestViewModel.Display));
         ViewSort.Alphabetical(IntegrationRules, nameof(UpdateRuleViewModel.Display));
 
         LoadRecentFiles();
@@ -2329,6 +2416,7 @@ public sealed class MainViewModel : ObservableObject
         RebindMusic();
         RebindSfx();
         RebindIntegrationRules();
+        RebindQuests();
         RebuildTargetOptions();
         RebuildVanillaSourceOptions();
         RebuildWorldMapDistrictOptions();
@@ -2494,12 +2582,27 @@ public sealed class MainViewModel : ObservableObject
     /// Read by the action / condition rows to decide between a tick box and a
     /// text field for its value.</summary>
     private bool IsBoolVariable(string name)
+        => KindOfVariable(name, vanilla: false) == Model.VariableKind.YesNo;
+
+    /// <summary>
+    /// What kind a variable is, on whichever side a row is reading from.
+    /// <para/>
+    /// The pack's own are declared, so their type is whatever the author said.
+    /// The game's are read out of the shipped catalogue, which is where this
+    /// gained its second half: a vanilla Boolean used to get a text box and no
+    /// note, because nothing asked the catalogue.
+    /// </summary>
+    private Model.VariableKind KindOfVariable(string name, bool vanilla)
+        => Model.VariableTypes.Of(name, vanilla, PackVariableTypeOf);
+
+    /// <summary>The declared type of one of the pack's own, or null for a name
+    /// this pack does not have.</summary>
+    private Model.PackVariableType? PackVariableTypeOf(string name)
     {
-        if (string.IsNullOrWhiteSpace(name)) return false;
         foreach (var v in Variables)
             if (string.Equals(v.Name, name, StringComparison.OrdinalIgnoreCase))
-                return v.Type == Model.PackVariableType.Bool;
-        return false;
+                return v.Type;
+        return null;
     }
 
     private void NewPack()
@@ -2528,6 +2631,7 @@ public sealed class MainViewModel : ObservableObject
         RebindMusic();
         RebindSfx();
         RebindIntegrationRules();
+        RebindQuests();
         RebuildTargetOptions();
         RebuildDialogueRoomTalkOptions();
         RebuildLevelOptions();
@@ -2780,6 +2884,56 @@ public sealed class MainViewModel : ObservableObject
     {
         if (Services.TestMode.Active) return whenNobodyIsThere;
         return MessageBox.Show(message, title, buttons, icon);
+    }
+
+    // ── Same as the default outfit ───────────────────────────────────
+    //
+    // Most outfits of a character are the same bust in different clothes: the
+    // mask, the blink frame and the mouth and expression prefixes are usually
+    // the default outfit's, and typing them again by hand is where the typos
+    // come from.
+
+    public RelayCommand UseDefaultMaskCommand { get; }
+    public RelayCommand UseDefaultBlinkCommand { get; }
+    public RelayCommand UseDefaultMouthPrefixCommand { get; }
+    public RelayCommand UseDefaultExpressionPrefixCommand { get; }
+
+    private bool CanCopyFromDefault() => SelectedOutfit?.CanCopyFromDefaultOutfit == true;
+
+    private void CopyFromDefault(System.Action<OutfitViewModel> copy)
+    {
+        var outfit = SelectedOutfit;
+        var from = outfit?.DefaultOutfit;
+        if (outfit == null || from == null || ReferenceEquals(from, outfit)) return;
+        copy(from);
+    }
+
+    /// <summary>
+    /// Point this outfit's mask at the default outfit's.
+    /// <para/>
+    /// Worth a warning where the other three are not, because a path is not a
+    /// copy: both outfits then name the SAME file, and the mask painter writes
+    /// to the file. Editing this outfit's mask afterwards edits the default
+    /// outfit's too, and there is nothing on the row afterwards that says so.
+    /// </summary>
+    private void UseDefaultMask()
+    {
+        var outfit = SelectedOutfit;
+        var from = outfit?.DefaultOutfit;
+        if (outfit == null || from == null || ReferenceEquals(from, outfit)) return;
+
+        var answer = Ask(
+            $"\"{outfit.Key}\" will use the same mask file as \"{from.Key}\":\n"
+            + (string.IsNullOrWhiteSpace(from.MaskSprite) ? "(no mask)" : from.MaskSprite)
+            + "\n\nThat is the same file, not a copy — editing this outfit's mask "
+            + "afterwards changes the default outfit's as well. Paint one of them "
+            + "separately by saving it under a new name from the mask editor.\n\nUse it?",
+            "Same mask as the default outfit",
+            MessageBoxButton.OKCancel, MessageBoxImage.Warning,
+            whenNobodyIsThere: MessageBoxResult.OK);
+        if (answer != MessageBoxResult.OK) return;
+
+        outfit.MaskSprite = from.MaskSprite;
     }
 
     private bool SavePack()
@@ -3911,6 +4065,9 @@ public sealed class MainViewModel : ObservableObject
     private const int TabBusts = 1, TabNpcs = 2, TabPlaces = 3,
                       TabMapButtons = 4, TabDialogues = 5, TabScenes = 6, TabMusic = 7,
                       TabSfx = 8, TabWallpapers = 9, TabVariables = 10, TabIntegration = 11;
+    // After the UI tab, which has no constant of its own because none of the
+    // per-tab commands act on it.
+    private const int TabQuests = 13;
 
     private int _selectedTabIndex;
     /// <summary>Active tab (bound to the TabControl) — drives which list Copy/Paste/Duplicate hit.</summary>
@@ -3930,6 +4087,7 @@ public sealed class MainViewModel : ObservableObject
     public UnitTreeController WallpaperTree { get; }
     public UnitTreeController MusicTree { get; }
     public UnitTreeController SfxTree { get; }
+    public UnitTreeController QuestTree { get; }
 
     /// <summary>Write every unit tree's folder structure to the pack model —
     /// the save-time counterpart of the hand-rolled trees' Sync* calls.</summary>
@@ -3942,6 +4100,7 @@ public sealed class MainViewModel : ObservableObject
         WallpaperTree.SyncToModel();
         MusicTree.SyncToModel();
         SfxTree.SyncToModel();
+        QuestTree.SyncToModel();
     }
 
     public RelayCommand DuplicateItemCommand { get; private set; } = null!;
@@ -4127,6 +4286,7 @@ public sealed class MainViewModel : ObservableObject
             case TabWallpapers: DuplicateFlat(SelectedWallpaper?.Model, Pack.Wallpapers, Wallpapers, w => w.Key, (w, k) => w.Key = k, d => new WallpaperViewModel(d), vm => WallpaperTree.PlaceNew(vm)); break;
             case TabMusic: DuplicateFlat(SelectedMusic?.Model, Pack.Music, Music, m => m.Key, (m, k) => m.Key = k, d => new MusicViewModel(d), vm => { MusicTree.PlaceNew(vm); RebuildMusicKeyOptions(); }); break;
             case TabSfx: DuplicateFlat(SelectedSfx?.Model, Pack.Sfx, Sfx, s => s.Key, (s, k) => s.Key = k, MakeSfxVm, vm => { SfxTree.PlaceNew(vm); RebuildSfxKeyOptions(); }); break;
+            case TabQuests: DuplicateFlat(SelectedQuest?.Model, Pack.Quests, Quests, q => q.Key, (q, k) => q.Key = k, MakeQuestVm, vm => { QuestTree.PlaceNew(vm); SelectedQuest = vm; }); break;
             case TabIntegration: DuplicateFlat(SelectedIntegrationRule?.Model, Pack.IntegrationRules, IntegrationRules, r => r.Key, (r, k) => r.Key = k, d => new UpdateRuleViewModel(d), vm => PlaceNewIntegrationRuleInTree(vm)); break;
         }
     }
@@ -4145,6 +4305,7 @@ public sealed class MainViewModel : ObservableObject
             case TabWallpapers: if (SelectedWallpaper != null) EditorClipboard.SetItem(SelectedWallpaper.Model); break;
             case TabMusic: if (SelectedMusic != null) EditorClipboard.SetItem(SelectedMusic.Model); break;
             case TabSfx: if (SelectedSfx != null) EditorClipboard.SetItem(SelectedSfx.Model); break;
+            case TabQuests: if (SelectedQuest != null) EditorClipboard.SetItem(SelectedQuest.Model); break;
             case TabIntegration: if (SelectedIntegrationRule != null) EditorClipboard.SetItem(SelectedIntegrationRule.Model); break;
         }
     }
@@ -4163,6 +4324,7 @@ public sealed class MainViewModel : ObservableObject
             case TabWallpapers: PasteFlat(Pack.Wallpapers, Wallpapers, w => w.Key, (w, k) => w.Key = k, d => new WallpaperViewModel(d), vm => WallpaperTree.PlaceNew(vm)); break;
             case TabMusic: PasteFlat(Pack.Music, Music, m => m.Key, (m, k) => m.Key = k, d => new MusicViewModel(d), vm => { MusicTree.PlaceNew(vm); RebuildMusicKeyOptions(); }); break;
             case TabSfx: PasteFlat(Pack.Sfx, Sfx, s => s.Key, (s, k) => s.Key = k, MakeSfxVm, vm => { SfxTree.PlaceNew(vm); RebuildSfxKeyOptions(); }); break;
+            case TabQuests: PasteFlat(Pack.Quests, Quests, q => q.Key, (q, k) => q.Key = k, MakeQuestVm, vm => { QuestTree.PlaceNew(vm); SelectedQuest = vm; }); break;
             case TabIntegration: PasteFlat(Pack.IntegrationRules, IntegrationRules, r => r.Key, (r, k) => r.Key = k, d => new UpdateRuleViewModel(d), vm => PlaceNewIntegrationRuleInTree(vm)); break;
         }
     }
@@ -4186,6 +4348,7 @@ public sealed class MainViewModel : ObservableObject
             case TabWallpapers: Run(RemoveWallpaperCommand); break;
             case TabMusic: Run(RemoveMusicCommand); break;
             case TabSfx: Run(RemoveSfxCommand); break;
+            case TabQuests: Run(RemoveQuestCommand); break;
             case TabIntegration: Run(RemoveIntegrationRuleCommand); break;
         }
     }
@@ -4273,6 +4436,16 @@ public sealed class MainViewModel : ObservableObject
                               Sfx.Where(x => x != SelectedSfx).Select(x => x.Key),
                               Services.RefKind.Sfx);
                 break;
+            case TabQuests:
+                if (SelectedQuest != null)
+                    // Actions and conditions naming the quest follow it. Its
+                    // players' saved progress cannot: that is filed under an id
+                    // made from the key, which is why the tab says so beside it.
+                    RenameKey("Quest", SelectedQuest, v => v.Key,
+                              (v, k) => { v.Key = k; QuestTree.Sort(); QuestTree.SyncToModel(); },
+                              Quests.Where(x => x != SelectedQuest).Select(x => x.Key),
+                              Services.RefKind.Quest);
+                break;
             case TabIntegration:
                 if (SelectedIntegrationRule != null)
                     // Folder membership is stored BY KEY, so a rename has to be
@@ -4334,17 +4507,30 @@ public sealed class MainViewModel : ObservableObject
         }
         foreach (var b in MapButtons)
             foreach (var c in b.Conditions) RefreshCondition(c);
+        foreach (var q in Quests)
+        {
+            foreach (var c in q.StartConditions.Items) RefreshCondition(c);
+            foreach (var t in q.TaskRows)
+            {
+                foreach (var c in t.CompletionConditions.Items) RefreshCondition(c);
+                foreach (var a in t.CompletionActions.Items) RefreshAction(a);
+            }
+        }
     }
 
     private static void RefreshCondition(NodeConditionViewModel c)
     {
         foreach (var row in c.ParamRows) row.Refresh();
+        // Quest rows draw from their own picker rather than from param rows.
+        if (c.IsQuestFamily) c.QuestPicker.RaiseAll();
         foreach (var child in c.Children) RefreshCondition(child);   // groups recurse
     }
 
     private static void RefreshAction(NodeActionViewModel a)
     {
         foreach (var row in a.ParamRows) row.Refresh();
+        if (a.IsQuestFamily) a.QuestPicker.RaiseAll();
+        foreach (var b in a.DiceBranches) RefreshAction(b.Action);
     }
 
     private void RenameKey<TVm>(string what, TVm vm, Func<TVm, string> get, Action<TVm, string> set,
@@ -5061,7 +5247,20 @@ public sealed class MainViewModel : ObservableObject
         }
         SyncOptions(VariableNameOptions, all);
         SyncOptions(ListVariableNameOptions, lists);
+
+        // The grouped view files each name under its folder when the name
+        // arrives, and never looks again - so filing an existing variable into
+        // a folder left it under its old heading for as long as the view lived.
+        // Regroup when the filing changed, and only then: this runs on every
+        // node selection, and a view reset for nothing is churn under every
+        // open picker.
+        string filing = string.Join("\n", all.Select(n => n + "\t" + FolderOf(n)));
+        if (_variableNamesGrouped != null && filing != _variableFiling)
+            _variableNamesGrouped.Refresh();
+        _variableFiling = filing;
     }
+
+    private string _variableFiling = "";
 
     /// <summary>
     /// Rebuilds <see cref="MusicKeyOptions"/>. Called after rebind, add and
@@ -5526,6 +5725,79 @@ public sealed class MainViewModel : ObservableObject
         MusicTree.RemoveLeafFor(vm);
         SelectedMusic = Music.FirstOrDefault();
         RebuildMusicKeyOptions();
+    }
+
+    /// <summary>
+    /// A quest's view model, wired so rows naming it follow its key.
+    /// <para/>
+    /// Handles the keys that move on their own - a new quest's key following its
+    /// title, a task's following its name - and task renames. Renaming a quest
+    /// goes through RenameKey, which follows references itself.
+    /// </summary>
+    private QuestViewModel MakeQuestVm(QuestDef def)
+    {
+        var vm = new QuestViewModel(def);
+        vm.KeyDerived += (oldKey, newKey) =>
+        {
+            if (Services.ReferenceRenamer.Rename(Pack, Services.RefKind.Quest, oldKey, newKey) > 0)
+                RefreshConditionAndActionRows();
+        };
+        vm.TaskKeyChanged += (oldKey, newKey) =>
+        {
+            if (Services.ReferenceRenamer.RenameQuestTask(Pack, vm.Key, oldKey, newKey) > 0)
+                RefreshConditionAndActionRows();
+        };
+        return vm;
+    }
+
+    private void RebindQuests()
+    {
+        Quests.Clear();
+        foreach (var q in Pack.Quests)
+            Quests.Add(MakeQuestVm(q));
+        QuestTree.Build(Quests);
+        SelectedQuest = Quests.FirstOrDefault();
+    }
+
+    private void AddQuest()
+    {
+        var def = new QuestDef
+        {
+            Key = CharacterDef.UniqueIdentifier("Quest" + (Pack.Quests.Count + 1), Pack.Quests.Select(q => q.Key)),
+            Title = "",
+        };
+        Pack.Quests.Add(def);
+        var vm = MakeQuestVm(def);
+        Quests.Add(vm);
+        // The key follows the title from here until somebody renames it - so a
+        // quest is never saved under "Quest3" because its title came second.
+        vm.DeriveKeyFromTitle(() => Quests.Select(x => x.Key));
+        vm.Title = "New quest";
+        QuestTree.PlaceNew(vm);
+        SelectedQuest = vm;
+    }
+
+    private void RenameQuestTask()
+    {
+        var quest = SelectedQuest;
+        var task = quest?.SelectedTask;
+        if (quest == null || task == null) return;
+
+        // The key setter tells the quest, and the handler in MakeQuestVm
+        // rewrites the rows - so this only has to pick a name free in the quest.
+        RenameKey("Task", task, t => t.Key, (t, k) => t.Key = k,
+                  quest.AllTaskKeys.Where(k => k != task.Key));
+    }
+
+    private void RemoveQuest()
+    {
+        if (QuestTree.RemoveSelectedFolderLiftChildren()) return;
+        if (SelectedQuest is null) return;
+        var vm = SelectedQuest;
+        Pack.Quests.Remove(vm.Model);
+        Quests.Remove(vm);
+        QuestTree.RemoveLeafFor(vm);
+        SelectedQuest = Quests.FirstOrDefault();
     }
 
     private void RebindSfx()

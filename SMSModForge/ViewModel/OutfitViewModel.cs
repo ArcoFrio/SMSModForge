@@ -331,7 +331,59 @@ public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode, IMa
     public string Key
     {
         get => Model.Key;
-        set { Model.Key = value; OnPropertyChanged(); OnPropertyChanged(nameof(Display)); }
+        set
+        {
+            Model.Key = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(Display));
+            OnPropertyChanged(nameof(IsDefaultOutfit));
+            OnPropertyChanged(nameof(CanCopyFromDefaultOutfit));
+        }
+    }
+
+    /// <summary>The character's default outfit, or null when this outfit has no
+    /// character (the vanilla-bust rows) or the character names one that is not
+    /// there.</summary>
+    public OutfitViewModel? DefaultOutfit
+    {
+        get
+        {
+            if (_owner == null) return null;
+            foreach (var outfit in _owner.Outfits)
+                if (string.Equals(outfit.Key, _owner.DefaultOutfit, System.StringComparison.Ordinal))
+                    return outfit;
+            return null;
+        }
+    }
+
+    /// <summary>Whether this IS the default outfit, which is the one case where
+    /// copying from it would be copying from itself.</summary>
+    public bool IsDefaultOutfit => ReferenceEquals(DefaultOutfit, this);
+
+    /// <summary>
+    /// Whether the "same as default" buttons have anything to offer.
+    /// <para/>
+    /// A character with one outfit has no second set of paths, and the default
+    /// outfit itself has nothing to copy from. Both are hidden rather than
+    /// disabled: a greyed button on the row you are most likely to be looking
+    /// at reads as something broken.
+    /// </summary>
+    public bool CanCopyFromDefaultOutfit
+    {
+        get
+        {
+            var def = DefaultOutfit;
+            return def != null && !ReferenceEquals(def, this);
+        }
+    }
+
+    /// <summary>Re-ask the two above. The character raises this when its
+    /// default outfit changes, or when an outfit is added or removed.</summary>
+    public void RefreshDefaultOutfit()
+    {
+        OnPropertyChanged(nameof(DefaultOutfit));
+        OnPropertyChanged(nameof(IsDefaultOutfit));
+        OnPropertyChanged(nameof(CanCopyFromDefaultOutfit));
     }
 
     public string GameObjectName
@@ -505,6 +557,31 @@ public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode, IMa
     // ── IMaskEditorHost ────────────────────────────────────────────────
 
     string IMaskEditorHost.Key => Model.Key;
+
+    /// <summary>
+    /// The other outfits of this character that have a mask to copy.
+    /// <para/>
+    /// Only the ones with a path: an outfit whose mask is empty has no layout
+    /// worth taking, and listing it would be offering to replace what somebody
+    /// has painted with nothing. Whether the FILE is there is left to the
+    /// painter, which is where the answer can be given.
+    /// </summary>
+    IReadOnlyList<MaskSource> IMaskEditorHost.OtherMasks
+    {
+        get
+        {
+            if (_owner == null) return System.Array.Empty<MaskSource>();
+
+            var found = new List<MaskSource>();
+            foreach (var outfit in _owner.Outfits)
+            {
+                if (ReferenceEquals(outfit, this)) continue;
+                if (string.IsNullOrWhiteSpace(outfit.MaskSprite)) continue;
+                found.Add(new MaskSource(outfit.Key, outfit.MaskSprite));
+            }
+            return found;
+        }
+    }
     public string PoseSpritePath => BaseSprite;
     public string MaskPath
     {

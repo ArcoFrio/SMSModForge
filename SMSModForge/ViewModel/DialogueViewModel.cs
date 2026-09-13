@@ -296,6 +296,7 @@ public sealed class DialogueViewModel : ObservableObject
         {
             if (e.PropertyName == nameof(DialogueNodeViewModel.IsChangedFromVanilla)
                 || e.PropertyName == nameof(DialogueNodeViewModel.ChangedFieldsText)) return;
+
             Recount();
         };
     }

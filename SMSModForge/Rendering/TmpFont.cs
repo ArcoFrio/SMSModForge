@@ -271,6 +271,23 @@ public sealed class TmpFont
     public double FaceShift
         => (Number("WeightNormal") / 4.0 + Number("FaceDilate")) * Number("ScaleRatioA", 1) * 0.5;
 
+    /// <summary>
+    /// The same, for text inside a <c>&lt;b&gt;</c>.
+    /// <para/>
+    /// TextMeshPro has no second atlas for bold: it draws the same glyphs at a
+    /// heavier weight, and the material carries that weight beside the normal
+    /// one. So this is the real number the game would use, not a guess at one —
+    /// <c>WeightBold</c> is 0.75 against <c>WeightNormal</c> 0 on the dialogue
+    /// font.
+    /// <para/>
+    /// What is NOT reproduced is TMP's bold SPACING, which nudges the advance
+    /// out as well. It lives on the font asset rather than on the material and
+    /// the export does not carry it, so bold here is the right weight at the
+    /// ordinary spacing.
+    /// </summary>
+    public double BoldShift
+        => (Number("WeightBold") / 4.0 + Number("FaceDilate")) * Number("ScaleRatioA", 1) * 0.5;
+
     /// <summary>Half the outline's width. It is centred ON the edge - half
     /// outside the glyph and half eaten out of the face - which is why an
     /// outline makes letters look no bigger, only heavier.</summary>

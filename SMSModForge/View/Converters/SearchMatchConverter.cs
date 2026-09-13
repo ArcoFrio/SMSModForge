@@ -76,6 +76,10 @@ public sealed class SearchMatchConverter : IMultiValueConverter
             if (property != null) return property.GetValue(item)?.ToString() ?? "";
         }
 
+        // An option that shows one thing and stores another says what it is
+        // searched by; otherwise the stored half is all a search could see.
+        if (item is ViewModel.ISearchText searchable) return searchable.SearchText ?? "";
+
         return item.ToString() ?? "";
     }
 

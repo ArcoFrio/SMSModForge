@@ -201,6 +201,93 @@ public sealed class ComboBoxSearchTests
         });
     }
 
+    /// <summary>
+    /// Real keystrokes, through WPF's text input, into a focused box - not
+    /// Text set from outside. Setting Text is what every test above does, and
+    /// it is exactly why none of them saw the first letter going missing: the
+    /// letter was lost to the SELECTION, which only real typing goes through.
+    /// </summary>
+    private static void Keys(TextBox target, string text)
+    {
+        foreach (char c in text)
+        {
+            System.Windows.Input.TextCompositionManager.StartComposition(
+                new System.Windows.Input.TextComposition(System.Windows.Input.InputManager.Current, target, c.ToString()));
+            WindowHarness.Pump();
+        }
+    }
+
+    [Fact]
+    public void EveryLetterTypedIsKept()
+    {
+        // Reported: the first letter typed into a dropdown vanished and had to
+        // be typed again. The search opens the list after the first letter, and
+        // opening an editable dropdown selects all of its text - so the second
+        // letter replaced the first one along with the completion.
+        WindowHarness.Run(_ =>
+        {
+            var box = new ComboBox { IsEditable = true, Width = 200, ItemsSource = new[] { "Anna", "Adrian", "Kate", "Nadia" } };
+            var window = new Window { Width = 300, Height = 200, Left = -10000, Top = -10000, ShowInTaskbar = false, Content = box };
+            window.Show();
+            window.Activate();
+            WindowHarness.Pump();
+
+            var typing = Typing(box);
+            typing.Focus();
+            WindowHarness.Pump();
+            Assert.True(typing.IsKeyboardFocused, "the box never had the keyboard, so this proves nothing");
+
+            Keys(typing, "ka");
+            _out.WriteLine($"'{box.Text}' caret {typing.SelectionStart}+{typing.SelectionLength}, open={box.IsDropDownOpen}");
+
+            // Both letters are there - completion adds the rest of Kate after
+            // them - and the list opened by itself, narrowed to what was typed.
+            Assert.StartsWith("ka", box.Text, StringComparison.OrdinalIgnoreCase);
+            Assert.Equal(2, typing.SelectionStart);
+            Assert.True(box.IsDropDownOpen);
+            Assert.Equal(new[] { "Kate" }, Showing(box));
+            window.Close();
+        });
+    }
+
+    [Fact]
+    public void ADropdownThatAppearsLaterSearchesToo()
+    {
+        // Reported on the Quests tab: the quest and task pickers, and the
+        // variable a counter follows, sit on rows that only appear once a type
+        // or a mode is chosen. Collapsed when it loads, a dropdown has not built
+        // its template, so there was no text box to attach the search to - and
+        // nothing tried again when it was shown. The Variable box never showed
+        // this only because a new condition starts out as a Variable one.
+        WindowHarness.Run(_ =>
+        {
+            var box = new ComboBox
+            {
+                IsEditable = true, Width = 200, Visibility = Visibility.Collapsed,
+                ItemsSource = new[] { "Anna", "Adrian", "Kate", "Nadia" },
+            };
+            var window = new Window
+            {
+                Width = 300, Height = 200, Left = -10000, Top = -10000,
+                ShowInTaskbar = false, Content = new StackPanel { Children = { box } },
+            };
+            window.Show();
+            WindowHarness.Pump();
+            Assert.True(box.IsLoaded);
+
+            // Shown only now, the way choosing a condition's type shows its row.
+            box.Visibility = Visibility.Visible;
+            WindowHarness.Pump();
+
+            Type(box, "na");
+            var shown = Showing(box);
+            _out.WriteLine(string.Join(", ", shown));
+            Assert.Contains("Anna", shown);
+            Assert.Contains("Nadia", shown);
+            Assert.DoesNotContain("Kate", shown);
+        });
+    }
+
     [Fact]
     public void ClosingTheListLeavesItWholeForNextTime()
     {

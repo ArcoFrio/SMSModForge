@@ -50,6 +50,7 @@ public sealed class ReleaseReadinessTests
     private static readonly string[] MustNotShip =
     {
         DebugMarker, "DumpScriptsOnScreen", "DumpDialogues", "DumpConditionDebug", "ScriptDump",
+        "QuestJournalDump",
     };
 
     /// <summary>The plugin DLL's bytes, from a DLL or from inside a zip.</summary>

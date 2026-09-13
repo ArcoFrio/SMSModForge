@@ -158,6 +158,7 @@ public sealed class NodeActionViewModel : ObservableObject
                 return "";
             };
             row.IsBooleanVarChecker = MainViewModel.IsVariableBoolean;
+            row.VariableKindChecker = VariableKindLookup;
             ParamRows.Add(row);
         }
     }
@@ -514,6 +515,7 @@ public sealed class NodeActionViewModel : ObservableObject
         OnPropertyChanged(nameof(VarSource));
         OnPropertyChanged(nameof(IsVanillaSource));
         OnPropertyChanged(nameof(Display));
+        RefreshVariableKind();
         RebuildParamRows();
     }
 
@@ -575,6 +577,10 @@ public sealed class NodeActionViewModel : ObservableObject
             OnPropertyChanged();
             OnPropertyChanged(nameof(IsVanillaSource));
             OnPropertyChanged(nameof(Display));
+            // The side decides which catalogue answers, so the note and the
+            // value editor follow it: the same word can be a flag in the pack
+            // and a number in the game.
+            RefreshVariableKind();
         }
     }
 
@@ -760,10 +766,20 @@ public sealed class NodeActionViewModel : ObservableObject
             OnPropertyChanged();
             // Picking a different variable can change which editor belongs in
             // the value cell, so the row has to be told to re-evaluate.
-            OnPropertyChanged(nameof(VarValueIsBool));
-            OnPropertyChanged(nameof(VarValueIsText));
-            OnPropertyChanged(nameof(VarValueBool));
+            RefreshVariableKind();
         }
+    }
+
+    /// <summary>Everything that follows from which variable this row names.
+    /// Called when the name changes AND when the side it reads from does:
+    /// the same word can be a flag in the pack and a number in the game.</summary>
+    private void RefreshVariableKind()
+    {
+        OnPropertyChanged(nameof(VarKind));
+        OnPropertyChanged(nameof(VarKindNote));
+        OnPropertyChanged(nameof(VarValueIsBool));
+        OnPropertyChanged(nameof(VarValueIsText));
+        OnPropertyChanged(nameof(VarValueBool));
     }
 
     // ── Bool variables get a tick box, not a text field ─────────────────
@@ -777,18 +793,36 @@ public sealed class NodeActionViewModel : ObservableObject
     // row is constructed from a NodeActionDef alone and has no route to the
     // variable catalog. MainViewModel installs the lookup at startup.
 
-    /// <summary>Reports whether a pack variable of this name is a Bool. Set by
-    /// MainViewModel; null before a pack is loaded, and treated as "not a
-    /// bool", so the text box remains the fallback in every uncertain case.</summary>
-    internal static Func<string, bool>? IsBoolVariableLookup;
+    /// <summary>
+    /// What kind the named variable is, on the side this row is reading from.
+    /// Set by MainViewModel; null before a pack is loaded, in which case
+    /// nothing is claimed and the text box stays the fallback.
+    /// <para/>
+    /// A hook rather than a reference to the pack, because a row is built from
+    /// its own definition alone and has no route to the variable catalogue.
+    /// The VANILLA side does not need the pack at all, but it goes through the
+    /// same hook so a row never has to know which of the two it is asking.
+    /// </summary>
+    internal static Func<string, bool, SMSModForge.Model.VariableKind>? VariableKindLookup;
 
-    /// <summary>True when the named variable is a Bool and this operation
+    /// <summary>What this row's variable holds, or Unknown.</summary>
+    public SMSModForge.Model.VariableKind VarKind =>
+        VariableKindLookup?.Invoke(VarName ?? "", IsVanillaSource) ?? SMSModForge.Model.VariableKind.Unknown;
+
+    /// <summary>
+    /// The small note beside the name saying what kind it is, or empty.
+    /// <para/>
+    /// Empty for a name nothing recognises, which is the case worth being
+    /// quiet about: a note reading "unknown" makes the editor look broken
+    /// rather than uninformed, and an author who has just mistyped a name gets
+    /// more from the note disappearing than from it saying so.
+    /// </summary>
+    public string VarKindNote => SMSModForge.Model.VariableTypes.Label(VarKind);
+
+    /// <summary>True when the named variable is a yes/no and this operation
     /// writes a value to it.</summary>
     public bool VarValueIsBool =>
-        IsBoolVariableLookup != null &&
-        !IsIncrement && !IsRandomFromList &&
-        !string.IsNullOrWhiteSpace(VarName) &&
-        IsBoolVariableLookup(VarName);
+        !IsIncrement && !IsRandomFromList && VarKind == SMSModForge.Model.VariableKind.YesNo;
 
     /// <summary>The complement, for the text box that would otherwise show
     /// alongside it.</summary>
@@ -1132,6 +1166,7 @@ public sealed class NodeActionViewModel : ObservableObject
         OnPropertyChanged(nameof(VarFromList));
         OnPropertyChanged(nameof(VarSource));
         OnPropertyChanged(nameof(IsVanillaSource));
+        RefreshVariableKind();
         OnPropertyChanged(nameof(IsDiceFamily));
         // GameObject category/target family (Fade/Move/Spin).
         OnPropertyChanged(nameof(IsGoCategoryFamily));
@@ -1142,6 +1177,99 @@ public sealed class NodeActionViewModel : ObservableObject
         OnPropertyChanged(nameof(GoOverlayOptions));
         OnPropertyChanged(nameof(GoOverlayLevelOptions));
         OnPropertyChanged(nameof(IsGoOverlayTargetEnabled));
+        NotifyQuestFamily();
+    }
+
+    // ── Quest ────────────────────────────────────────────────────────────
+    //
+    // One action for everything a pack does to a quest, with an Operation
+    // picker, the way Variable is one action with Set / Increment. Which quest
+    // and which task come from the shared picker, so the action and the two
+    // quest conditions cannot disagree about what a quest row offers.
+
+    /// <summary>True for the Quest action.</summary>
+    public bool IsQuestFamily => Model.Type == NodeActionTypes.Quest;
+
+    private QuestPickerViewModel? _questPicker;
+
+    /// <summary>Source, quest and task for this row. Built on first use and
+    /// kept: it holds nothing but a view of the params.</summary>
+    public QuestPickerViewModel QuestPicker => _questPicker ??= new QuestPickerViewModel(
+        Model.Params, () => OnPropertyChanged(nameof(Display)), offersWholeQuest: false)
+    {
+        ShowsTask = QuestTakesTask,
+    };
+
+    public static IReadOnlyList<string> QuestOperations => Shared.QuestVocabulary.Operations;
+
+    /// <summary>What the action does. Absent reads as starting the quest,
+    /// which is what the runtime does with it too.</summary>
+    public string QuestOperation
+    {
+        get
+        {
+            string op = GetParam(Shared.QuestVocabulary.OperationParam);
+            return string.IsNullOrEmpty(op) ? Shared.QuestVocabulary.Start : op;
+        }
+        set
+        {
+            if (value == QuestOperation) return;
+            Model.Params[Shared.QuestVocabulary.OperationParam] = value ?? Shared.QuestVocabulary.Start;
+            // A task and a number belong to the operations that take them. Left
+            // behind by an operation that does not, they would be a silent
+            // second meaning in the manifest and a warning nobody understands.
+            if (!Shared.QuestVocabulary.TakesTask(QuestOperation)) Model.Params.Remove(Shared.QuestVocabulary.TaskParam);
+            if (!Shared.QuestVocabulary.TakesValue(QuestOperation)) Model.Params.Remove(Shared.QuestVocabulary.ValueParam);
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(QuestTakesTask));
+            OnPropertyChanged(nameof(QuestTakesValue));
+            OnPropertyChanged(nameof(QuestValue));
+            OnPropertyChanged(nameof(QuestOperationHelp));
+            OnPropertyChanged(nameof(Display));
+            QuestPicker.ShowsTask = QuestTakesTask;
+            QuestPicker.RaiseAll();
+        }
+    }
+
+    public bool QuestTakesTask => Shared.QuestVocabulary.TakesTask(QuestOperation);
+    public bool QuestTakesValue => Shared.QuestVocabulary.TakesValue(QuestOperation);
+
+    /// <summary>The number for Set / Add. A $variable works, as it does on
+    /// every other number an action takes.</summary>
+    public string QuestValue
+    {
+        get => GetParam(Shared.QuestVocabulary.ValueParam);
+        set { SetParam(Shared.QuestVocabulary.ValueParam, value); OnPropertyChanged(); }
+    }
+
+    /// <summary>One line on what the chosen operation does in the game,
+    /// including the part the game does on its own.</summary>
+    public string QuestOperationHelp => QuestOperation switch
+    {
+        Shared.QuestVocabulary.Start => "Adds the quest to the journal and starts its first task. Does nothing to a quest that has already started.",
+        Shared.QuestVocabulary.CompleteTask => "The task must be in progress. Finishing it starts the next one, and the last one finishes the quest.",
+        Shared.QuestVocabulary.FailTask => "The task must be in progress. Failing a top-level task fails the quest.",
+        Shared.QuestVocabulary.SetCounter => "The task must be in progress and count. Reaching its target completes it.",
+        Shared.QuestVocabulary.AddToCounter => "The task must be in progress and count. Reaching its target completes it. Empty adds 1.",
+        Shared.QuestVocabulary.Track => "Marks the quest with the bookmark in the journal. Completing it removes the mark.",
+        Shared.QuestVocabulary.Untrack => "Removes the bookmark.",
+        Shared.QuestVocabulary.Reset => "Takes the quest out of the journal and back to not started, tasks and counters included, so it can be started again.",
+        _ => "",
+    };
+
+    private void NotifyQuestFamily()
+    {
+        // What the row shows is what gets saved.
+        if (IsQuestFamily && !Model.Params.ContainsKey(Shared.QuestVocabulary.OperationParam))
+            Model.Params[Shared.QuestVocabulary.OperationParam] = Shared.QuestVocabulary.Start;
+
+        OnPropertyChanged(nameof(IsQuestFamily));
+        OnPropertyChanged(nameof(QuestOperation));
+        OnPropertyChanged(nameof(QuestTakesTask));
+        OnPropertyChanged(nameof(QuestTakesValue));
+        OnPropertyChanged(nameof(QuestValue));
+        OnPropertyChanged(nameof(QuestOperationHelp));
+        if (IsQuestFamily) QuestPicker.RaiseAll();
     }
 
     public Dictionary<string, string> Params => Model.Params;

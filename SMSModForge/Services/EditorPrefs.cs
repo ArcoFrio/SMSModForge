@@ -113,6 +113,38 @@ public static class EditorPrefs
         set => SetBool(KeySpellCheckNodeText, value);
     }
 
+    private const string KeyGameLookNodeRows = "gameLookNodeRows";
+
+    /// <summary>
+    /// Whether the dialogue node list draws each line the way the game draws
+    /// it — the game's own font, its outline and shadow, the speaker's name in
+    /// their colour, on a dark panel.
+    /// <para/>
+    /// OFF by default, and that is not timidity: it is a different-looking list
+    /// from the one somebody has been using, it costs the spell-check squiggles
+    /// on those rows, and a list that redecorated itself after an update is a
+    /// change nobody asked for. Worth finding on purpose.
+    /// </summary>
+    public static bool GameLookNodeRows
+    {
+        get => GetBool(KeyGameLookNodeRows, defaultValue: false);
+        set => SetBool(KeyGameLookNodeRows, value);
+    }
+
+    private const string KeyTextTokenTips = "showTextTokenTips";
+
+    /// <summary>
+    /// Whether the token cheatsheet under the dialogue list is unfolded. On by
+    /// default, because it exists to be seen by somebody who does not yet know
+    /// those tokens exist — and folds away for anybody who does, since it shares
+    /// a column with the dialogue tree and the tree is where the work happens.
+    /// </summary>
+    public static bool ShowTextTokenTips
+    {
+        get => GetBool(KeyTextTokenTips, defaultValue: true);
+        set => SetBool(KeyTextTokenTips, value);
+    }
+
     private const string KeyCheckUpdates = "checkForUpdatesOnStart";
     private const string KeyAutoInstall = "installUpdatesWithoutAsking";
     private const string KeyGameFolder = "gameFolder";

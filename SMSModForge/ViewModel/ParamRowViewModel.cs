@@ -71,6 +71,60 @@ public sealed class ParamRowViewModel : ObservableObject
     internal System.Func<string, bool>? IsBooleanVarChecker { get; set; }
 
     /// <summary>
+    /// What kind the named variable is. Set by the parent beside
+    /// <see cref="IsBooleanVarChecker"/>.
+    /// <para/>
+    /// These rows name one of the PACK's own variables — the picker beside them
+    /// is the pack's list — so the side is not a question here the way it is on
+    /// a Variable condition, and the lookup is asked for the pack every time.
+    /// </summary>
+    internal System.Func<string, bool, Model.VariableKind>? VariableKindChecker { get; set; }
+
+    /// <summary>
+    /// The small note beside the name saying what kind it holds, or empty.
+    /// <para/>
+    /// Same note, same words, as the one on a Variable condition or action: a
+    /// row that names a variable should say what it is looking at wherever it
+    /// appears, and these rows are where the list actions, the dice actions and
+    /// the GC2-global conditions name theirs.
+    /// <para/>
+    /// Every one of these pickers is EDITABLE, which is why a note earns its
+    /// place even on the filtered ones: a List picker offers only lists, and
+    /// still takes whatever somebody types into it.
+    /// </summary>
+    public string VarKindNote
+    {
+        get
+        {
+            bool vanilla;
+            switch (Schema.Type)
+            {
+                // The pack's own.
+                case ParamType.PackVarRef:
+                case ParamType.ListVarRef:
+                case ParamType.BoolVarRef:
+                    vanilla = false;
+                    break;
+
+                // A GC2 global, which is the game's. Its own doc said there was
+                // no authoring-time enumeration of these; there is one now, and
+                // this is where it earns the most - a free-text box with no
+                // list behind it is exactly where a name goes wrong.
+                case ParamType.GameVarRef:
+                    vanilla = true;
+                    break;
+
+                default:
+                    return "";
+            }
+
+            var kind = VariableKindChecker?.Invoke(Value ?? "", vanilla)
+                       ?? Model.VariableKind.Unknown;
+            return Model.VariableTypes.Label(kind);
+        }
+    }
+
+    /// <summary>
     /// False when <see cref="ParamSchema.EnabledWhen"/> names a sibling param
     /// that doesn't currently hold <see cref="ParamSchema.EnabledWhenValue"/>.
     /// Bound to the editor's IsEnabled so a param that doesn't apply in the
@@ -211,6 +265,11 @@ public sealed class ParamRowViewModel : ObservableObject
         if (Schema.Type != ParamType.PackVarRef && Schema.Type != ParamType.BoolVarRef)
         {
             if (IsBooleanVariable) { IsBooleanVariable = false; OnPropertyChanged(); }
+
+            // The boolean answer is only asked on those two, but the NOTE is
+            // shown on four - so it is raised before this returns rather than
+            // after, or a List row's note never changes.
+            OnPropertyChanged(nameof(VarKindNote));
             return;
         }
         var varName = Value;
@@ -220,5 +279,9 @@ public sealed class ParamRowViewModel : ObservableObject
             IsBooleanVariable = isBool;
             OnPropertyChanged();
         }
+
+        // Raised whether or not the boolean answer moved: "score" to "note" is
+        // not-a-bool either way round, and the note still has to change.
+        OnPropertyChanged(nameof(VarKindNote));
     }
 }

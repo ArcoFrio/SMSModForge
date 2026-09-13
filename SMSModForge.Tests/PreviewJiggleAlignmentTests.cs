@@ -10,8 +10,8 @@ using Xunit.Abstractions;
 namespace SMSModForge.Tests;
 
 /// <summary>
-/// Every bust in the preview moves by the pack's jiggle settings, one of the
-/// game's included.
+/// A bust whose mask the pack replaces moves by the pack's jiggle settings,
+/// one of the game's included. One whose mask it leaves alone keeps the game's.
 /// <para/>
 /// It used to prefer the uniforms the extractor read off the game's own
 /// material — speed, strength, frequency, the noise trio — on the reasoning that
@@ -26,14 +26,61 @@ namespace SMSModForge.Tests;
 /// while being edited. It was: Adrian's own frequency is 1 where a pack bust
 /// starts at 4.
 /// <para/>
-/// The extracted <c>Jiggle.txt</c> files still ship beside the art. They are the
-/// game's real numbers and worth keeping if these ever become something a pack
-/// can set; they are simply not what the preview runs on.
+/// Where the line sits is the mask, on both ends. That texture is what the
+/// jiggle reads, so replacing it is the one edit that says "the motion is mine
+/// now" — and it is a line an author draws deliberately rather than one they
+/// cross by swapping a mouth frame. The runtime draws it in the same place.
+/// <para/>
+/// The same inputs through an approximate shader land close rather than
+/// identical, which is as honest as this can be and better than matching
+/// neither.
 /// </summary>
 public sealed class PreviewJiggleAlignmentTests
 {
     private readonly ITestOutputHelper _out;
     public PreviewJiggleAlignmentTests(ITestOutputHelper o) => _out = o;
+
+    /// <summary>One of the game's busts with the pack replacing its mask, which
+    /// is what puts the motion in the pack's hands.</summary>
+    private (OutfitViewModel Bust, JigglePreview Preview) BorrowedWithOurMask()
+    {
+        var (bust, _) = Borrowed();
+        bust.Model.SpriteOverrides.Add(new SpriteOverrideDef
+        {
+            Slot = SMSModForge.Shared.SpriteSlotNames.Mask,
+            Sprite = Mask(),
+        });
+        var preview = new JigglePreview
+        { PackRoot = _dir, Outfit = bust, VanillaBustKey = bust.GameObjectName };
+        return (bust, preview);
+    }
+
+    private string _dir = "";
+
+    /// <summary>A real 256x256 PNG for the mask row to point at, since a row
+    /// naming a file that is not there replaces nothing.</summary>
+    private string Mask()
+    {
+        if (_dir.Length == 0)
+        {
+            _dir = Path.Combine(Path.GetTempPath(), "smsmf-jig-" + Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(_dir);
+        }
+        string name = "mask.png";
+        string abs = Path.Combine(_dir, name);
+        if (!File.Exists(abs))
+        {
+            const int size = 256;
+            var px = new byte[size * size * 4];
+            var bmp = System.Windows.Media.Imaging.BitmapSource.Create(
+                size, size, 96, 96, System.Windows.Media.PixelFormats.Bgra32, null, px, size * 4);
+            using var fs = File.Create(abs);
+            var enc = new System.Windows.Media.Imaging.PngBitmapEncoder();
+            enc.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(bmp));
+            enc.Save(fs);
+        }
+        return name;
+    }
 
     private static (OutfitViewModel Bust, JigglePreview Preview) Borrowed()
     {
@@ -77,11 +124,11 @@ public sealed class PreviewJiggleAlignmentTests
     }
 
     [Fact]
-    public void ABorrowedBustRunsOnThePacksNumbers()
+    public void ABorrowedBustWhoseMaskWeReplacedRunsOnThePacksNumbers()
     {
         WindowHarness.Run(_ =>
         {
-            var (bust, preview) = Borrowed();
+            var (bust, preview) = BorrowedWithOurMask();
             var running = preview.JiggleInEffect;
             var theirs = bust.Model.Jiggle;
 
@@ -138,8 +185,13 @@ public sealed class PreviewJiggleAlignmentTests
                 return;
             }
 
+            subject.Model.SpriteOverrides.Add(new SpriteOverrideDef
+            {
+                Slot = SMSModForge.Shared.SpriteSlotNames.Mask,
+                Sprite = Mask(),
+            });
             var preview = new JigglePreview
-            { Outfit = subject, VanillaBustKey = subject.GameObjectName };
+            { PackRoot = _dir, Outfit = subject, VanillaBustKey = subject.GameObjectName };
 
             _out.WriteLine($"{subject.GameObjectName}: the game says speed {differs!.Speed} / "
                            + $"frequency {differs.Frequency}; the preview runs "
@@ -147,6 +199,46 @@ public sealed class PreviewJiggleAlignmentTests
 
             Assert.Equal(subject.Model.Jiggle.Frequency, preview.JiggleInEffect.Frequency);
             Assert.NotEqual(differs.Frequency, preview.JiggleInEffect.Frequency);
+        });
+    }
+
+    [Fact]
+    public void ABustWhoseMaskWeLeftAloneKeepsTheGamesNumbers()
+    {
+        // The other side of the line, and the reason it moved here. Replacing a
+        // mouth frame should not change how the whole bust moves - the author
+        // did not ask for that and cannot see it coming, since the jiggle
+        // sliders are hidden on a borrowed bust.
+        WindowHarness.Run(_ =>
+        {
+            var pack = new ModPack();
+            VanillaCastSeed.Seed(pack);
+
+            foreach (var def in pack.Characters.Where(c => !string.IsNullOrEmpty(c.VanillaCharacter)))
+            {
+                var them = new CharacterViewModel(def);
+                foreach (var bust in them.Outfits)
+                {
+                    var shipped = TheGames(bust.GameObjectName);
+                    if (shipped == null || shipped.Frequency == bust.Model.Jiggle.Frequency) continue;
+
+                    var preview = new JigglePreview
+                    { Outfit = bust, VanillaBustKey = bust.GameObjectName };
+
+                    _out.WriteLine($"{bust.GameObjectName}: no mask of ours -> "
+                                   + $"frequency {preview.JiggleInEffect.Frequency}, "
+                                   + $"the game's is {shipped.Frequency}");
+
+                    Assert.Equal(shipped.Frequency, preview.JiggleInEffect.Frequency);
+                    Assert.Equal(shipped.Speed, preview.JiggleInEffect.Speed);
+                    return;
+                }
+            }
+
+            Assert.True(SMSModForge.Rendering.VanillaArtResolver.FindArtRoot() == null,
+                        "the art extraction is here, but no bust differed from the defaults - "
+                        + "this test proved nothing");
+            _out.WriteLine("no extraction beside the tests - skipping");
         });
     }
 
@@ -178,7 +270,7 @@ public sealed class PreviewJiggleAlignmentTests
         // is no longer pinned to numbers nothing on screen can reach.
         WindowHarness.Run(_ =>
         {
-            var (bust, preview) = Borrowed();
+            var (bust, preview) = BorrowedWithOurMask();
 
             bust.JiggleFrequency = 9f;
             Assert.Equal(9f, preview.JiggleInEffect.Frequency);

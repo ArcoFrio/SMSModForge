@@ -339,4 +339,17 @@ public sealed class ModPack
     [JsonProperty("uiFolders", Order = 28)]
     public List<UnitFolderDef> UiFolders { get; set; } = new();
     public bool ShouldSerializeUiFolders() => UiFolders != null && UiFolders.Count > 0;
+
+    /// <summary>
+    /// The pack's own quests, shown in the game's journal beside the game's.
+    /// Started, advanced and asked about with the Quest action and the two
+    /// quest conditions. See <see cref="QuestDef"/>.
+    /// </summary>
+    [JsonProperty("quests", Order = 29)]
+    public List<QuestDef> Quests { get; set; } = new();
+    public bool ShouldSerializeQuests() => Quests != null && Quests.Count > 0;
+
+    [JsonProperty("questFolders", Order = 30)]
+    public List<UnitFolderDef> QuestFolders { get; set; } = new();
+    public bool ShouldSerializeQuestFolders() => QuestFolders != null && QuestFolders.Count > 0;
 }

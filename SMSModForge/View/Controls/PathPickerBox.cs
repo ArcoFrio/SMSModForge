@@ -106,6 +106,8 @@ public sealed class PathPickerBox : DockPanel
         };
         if (dlg.ShowDialog() != true) return;
 
+        Remember(dlg.FileName);
+
         string root = PackRoot ?? "";
         if (string.IsNullOrEmpty(root))
         {
@@ -130,9 +132,38 @@ public sealed class PathPickerBox : DockPanel
         PathText = fullPick.Substring(fullRoot.Length).Replace(Path.DirectorySeparatorChar, '/');
     }
 
-    /// <summary>Open where the current value points when it resolves, else the
-    /// pack root, else wherever the dialog last was.</summary>
-    private string ResolveInitialDirectory()
+    /// <summary>
+    /// The folder the last file was picked from, shared by every picker in the
+    /// editor.
+    /// <para/>
+    /// An outfit's art sits together — base, mask, blink and the numbered
+    /// frames are one folder — so after the first pick the rest are one click
+    /// away rather than four levels of tree away. Per session and not saved:
+    /// it is where you were a moment ago, not a setting.
+    /// </summary>
+    private static string _lastPicked = "";
+
+    internal static void Remember(string file)
+    {
+        try
+        {
+            string? dir = Path.GetDirectoryName(file);
+            if (!string.IsNullOrEmpty(dir)) _lastPicked = dir!;
+        }
+        catch { /* a path the framework will not parse is not worth keeping */ }
+    }
+
+    /// <summary>
+    /// Where to open: the folder this field already points at, else the one the
+    /// last pick came from, else the pack root, else wherever the dialog was.
+    /// <para/>
+    /// The remembered folder is only offered when it is INSIDE this pack. It is
+    /// shared across every picker and lives as long as the editor does, so
+    /// without that check, opening a second pack would start you off in the
+    /// first one's art folder — and a pack-relative field cannot store
+    /// anything from there anyway.
+    /// </summary>
+    internal string ResolveInitialDirectory()
     {
         try
         {
@@ -144,9 +175,31 @@ public sealed class PathPickerBox : DockPanel
                 : Path.Combine(root, current.Replace('/', Path.DirectorySeparatorChar));
             string? dir = string.IsNullOrEmpty(abs) ? null : Path.GetDirectoryName(abs);
             if (!string.IsNullOrEmpty(dir) && Directory.Exists(dir)) return dir!;
+
+            if (Directory.Exists(_lastPicked) && Inside(_lastPicked, root)) return _lastPicked;
             if (!string.IsNullOrEmpty(root) && Directory.Exists(root)) return root;
         }
         catch { /* fall through to dialog default */ }
         return "";
     }
+
+    /// <summary>Whether a folder is within the pack. Always true in absolute
+    /// mode, which has no pack to be outside of.</summary>
+    private static bool Inside(string folder, string root)
+    {
+        if (string.IsNullOrEmpty(root)) return true;
+        try
+        {
+            string full = Path.GetFullPath(root).TrimEnd(Path.DirectorySeparatorChar)
+                          + Path.DirectorySeparatorChar;
+            return (Path.GetFullPath(folder).TrimEnd(Path.DirectorySeparatorChar)
+                    + Path.DirectorySeparatorChar)
+                   .StartsWith(full, StringComparison.OrdinalIgnoreCase);
+        }
+        catch { return false; }
+    }
+
+    /// <summary>Forget where the last pick was. For the tests, which must not
+    /// leave one another a folder.</summary>
+    internal static void ForgetLastPicked() => _lastPicked = "";
 }

@@ -803,6 +803,7 @@ public static class TutorialCatalog
         _first
             .Concat(TutorialsPart2.All)
             .Concat(TutorialsUi.All)
+            .Concat(TutorialsQuests.All)
 #if DEBUG
             .Concat(_smoke)
 #endif

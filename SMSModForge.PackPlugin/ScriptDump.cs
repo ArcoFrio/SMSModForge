@@ -127,6 +127,71 @@ namespace SMSModForge.PackPlugin
         }
 
         /// <summary>
+        /// Every asset whose type has this full name.
+        /// <para/>
+        /// The same as <see cref="WriteAssets{T}"/> for a type this plugin does
+        /// not reference. A compile-time reference to an assembly only a
+        /// diagnostic needs is coupling the shipped plugin would carry for
+        /// nothing, so the type is matched by name instead.
+        /// </summary>
+        public static string WriteAssetsNamed(string typeFullName, ManualLogSource log,
+                                              string label, out int count)
+        {
+            var found = new List<UnityEngine.Object>();
+            foreach (var asset in Resources.FindObjectsOfTypeAll<ScriptableObject>())
+            {
+                if (asset == null) continue;
+                if (asset.GetType().FullName != typeFullName) continue;
+                found.Add(asset);
+            }
+            count = found.Count;
+            return Write(found, log, label);
+        }
+
+        /// <summary>
+        /// Every script on prefab ASSETS with these names, children included.
+        /// <para/>
+        /// A UI that instantiates rows at runtime holds a reference to a prefab,
+        /// and the prefab is a file rather than an object in the scene: no pass
+        /// over the scene reaches it, and a clone only exists once the screen
+        /// has been opened. The template is where the row's real wiring lives.
+        /// </summary>
+        public static string WritePrefabs(ICollection<string> names, ManualLogSource log,
+                                          string label, out int count)
+        {
+            var found = new List<UnityEngine.Object>();
+            foreach (var go in Resources.FindObjectsOfTypeAll<GameObject>())
+            {
+                if (go == null || !names.Contains(go.name)) continue;
+                if (go.scene.IsValid()) continue;               // a scene object, not the asset
+                if (go.transform.parent != null) continue;      // a prefab's root only
+                foreach (var behaviour in go.GetComponentsInChildren<MonoBehaviour>(true))
+                    if (behaviour != null) found.Add(behaviour);
+            }
+            count = found.Count;
+            return Write(found, log, label);
+        }
+
+        /// <summary>
+        /// The scripts on one object and its children whose type lives in a
+        /// namespace starting with this, switched on or not.
+        /// </summary>
+        public static string WriteUnderInNamespace(GameObject root, string ns, ManualLogSource log,
+                                                   string label, out int count)
+        {
+            var found = new List<UnityEngine.Object>();
+            if (root != null)
+                foreach (var behaviour in root.GetComponentsInChildren<MonoBehaviour>(true))
+                {
+                    if (behaviour == null) continue;
+                    string name = behaviour.GetType().Namespace ?? "";
+                    if (name.StartsWith(ns, StringComparison.Ordinal)) found.Add(behaviour);
+                }
+            count = found.Count;
+            return Write(found, log, label);
+        }
+
+        /// <summary>
         /// Every other script sitting on the same object as one of these, or
         /// on anything above it.
         /// <para/>
@@ -177,6 +242,26 @@ namespace SMSModForge.PackPlugin
         /// script.</summary>
         public static string Write(IEnumerable<GameObject> roots, ManualLogSource log)
             => Write(OnRoots(roots, null), log, "scripts");
+
+        /// <summary>
+        /// Every script under one object, switched on or not, presentation
+        /// included.
+        /// <para/>
+        /// The opposite of what the on-screen dump wants, and deliberately: an
+        /// answer about ONE subtree is an answer about all of it. The quest
+        /// journal is off at load, so "active only" would write an empty file;
+        /// and its text and its images are not noise there the way they are in
+        /// a whole-scene pass - they are the subject.
+        /// </summary>
+        public static string WriteUnder(GameObject root, ManualLogSource log, string label)
+            => Write(Under(root), log, label);
+
+        private static IEnumerable<MonoBehaviour> Under(GameObject root)
+        {
+            if (root == null) yield break;
+            foreach (var behaviour in root.GetComponentsInChildren<MonoBehaviour>(true))
+                if (behaviour != null) yield return behaviour;     // null = a missing script
+        }
 
         /// <summary>The scripts on these roots: one type of them, or every
         /// active one that is not presentation.</summary>

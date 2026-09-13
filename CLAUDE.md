@@ -1,4 +1,4 @@
-# Working rules for this repository
+﻿# Working rules for this repository
 
 ## Changing anything a saved pack already contains
 
@@ -65,6 +65,30 @@ appears over that person's work. It looks exactly like a hang.
 The same applies to anything else the editor does for a person's benefit rather
 than the pack's: writing window layout, prompting about unsaved changes, opening
 a browser. `Services.TestMode` is one switch for all of it.
+
+## Write the changelog as you go
+
+Keep an `## Unreleased` section at the top of `CHANGELOG.md` and add to it in
+the same change that does the work. Not at release time.
+
+A changelog assembled at the end is assembled from memory, and memory keeps the
+wrong half: it keeps the big feature and loses the fix somebody will actually
+notice, and it loses the REASON, which is the part worth writing down. By the
+time a release is being cut, "why was this done this way" has already gone.
+
+An entry is worth adding when a person using the editor or playing a pack would
+notice the difference. Refactors, test-only changes and internal renames do not
+need one.
+
+At release, that section becomes the version heading, and the GitHub release
+body is the same text. So write it for an author reading it in the update
+prompt, not for whoever wrote the code:
+
+- What changed, and what it means for them.
+- Where the old behaviour was wrong, said plainly. "It looked like it was
+  working" is more use than "fixed a null reference".
+- Anything they must know BEFORE updating, under its own heading — a migration,
+  a deliberate divergence, a setting that now means something else.
 
 ## Before publishing a release
 

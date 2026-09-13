@@ -14,9 +14,9 @@
          reports comes from Shared/ForgeVersion.cs. Kept in step, and listed
          here only so the next person to look for a version finds the note
          rather than believing these. -->
-    <Version>1.3.2</Version>
-    <AssemblyVersion>1.3.2.0</AssemblyVersion>
-    <FileVersion>1.3.2.0</FileVersion>
+    <Version>1.4.0</Version>
+    <AssemblyVersion>1.4.0.0</AssemblyVersion>
+    <FileVersion>1.4.0.0</FileVersion>
     <AssemblyName>SMSModForge.PackPlugin</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -68,6 +68,10 @@
       player's game folder. See ReleaseReadinessTests.
     -->
     <Compile Include="ScriptDump.cs" Condition=" '$(Configuration)' == 'Debug' " />
+    <Compile Include="QuestJournalDump.cs" Condition=" '$(Configuration)' == 'Debug' " />
+    <Compile Include="QuestRegistry.cs" />
+    <Compile Include="QuestRuntime.cs" />
+    <Compile Include="QuestTicker.cs" />
     <Compile Include="VanillaDialogueInjector.cs" />
     <Compile Include="DialogueNodeWriter.cs" />
     <Compile Include="UiOpenAnimation.cs" />
@@ -168,6 +172,10 @@
       <HintPath>$(GameLibs)GameCreator.Runtime.Dialogue.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="GameCreator.Runtime.Quests">
+      <HintPath>$(GameLibs)GameCreator.Runtime.Quests.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>$(GameLibs)Unity.TextMeshPro.dll</HintPath>
       <Private>False</Private>
@@ -250,6 +258,8 @@
          pack is authored and what it means while it is played must be the same
          thing, and two copies of a parser drift. -->
     <Compile Include="..\Shared\JiggleDefaults.cs" Link="Shared\JiggleDefaults.cs" />
+    <Compile Include="..\Shared\QuestIds.cs" Link="Shared\QuestIds.cs" />
+    <Compile Include="..\Shared\QuestVocabulary.cs" Link="Shared\QuestVocabulary.cs" />
     <Compile Include="..\Shared\VarText.cs" Link="Shared\VarText.cs" />
     <Compile Include="..\Shared\VarCompare.cs" Link="Shared\VarCompare.cs" />
     <Compile Include="..\Shared\VanillaDialogueKeys.cs" Link="Shared\VanillaDialogueKeys.cs" />

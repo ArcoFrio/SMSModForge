@@ -310,6 +310,20 @@ public static class NodeActionTypes
     /// </summary>
     public const string DeactivateAllScenes = "DeactivateAllScenes";
 
+    /// <summary>
+    /// Drive one of the pack's quests, or one of the game's. Params:
+    /// <c>source</c> (<c>vanilla</c> for the game's), <c>quest</c> (a pack
+    /// quest's key or a game quest's asset name), <c>operation</c> (one of
+    /// <see cref="Shared.QuestVocabulary.Operations"/>), <c>task</c> for the
+    /// operations that act on one, and <c>value</c> for the counter ones.
+    /// <para/>
+    /// One action with an operation rather than eight: every one of them names a
+    /// quest the same way, and a picker of eight quest entries is a question
+    /// asked before the author knows there is a choice. See
+    /// <see cref="Shared.QuestVocabulary"/> for why the game may refuse one.
+    /// </summary>
+    public const string Quest = Shared.QuestVocabulary.ActionType;
+
     /// <summary>All action types recognised by the editor's picker.</summary>
     /// <summary>
     /// A Game Creator step this editor has no equivalent for, kept so it can be
@@ -347,6 +361,7 @@ public static class NodeActionTypes
         Wait,
         PickRandomFromList, AddToList, RemoveFromList, ClearList, CountList,
         DiceRoll, SetWeather,
+        Quest,
         // ActivateScene likewise: it is SetGameObjectActive aimed at a scene,
         // which the runtime has treated it as for some time. DeactivateAll is a
         // different verb - no target at all - and stays.

@@ -1977,6 +1977,34 @@ public static class VanillaGameVariables
         return made;
     }
 
+    /// <summary>
+    /// The value type the runtime dump recorded for a variable, or empty for a
+    /// name the game does not have.
+    /// <para/>
+    /// The FIRST list holding it, for the same reason <see cref="ListOf"/> uses
+    /// the first: the address is name-only, so the first list is the one
+    /// anything resolving it will find. Five of the 1,644 names appear in more
+    /// than one list, and three of those disagree about their type - "android",
+    /// "best-friend" and "movie-night" are a Boolean in one list and a number
+    /// in another. First wins there too, because that is what the game does.
+    /// <para/>
+    /// "null" is a real answer rather than a missing one: it is what a GC2
+    /// global reads as before anything has written to it.
+    /// </summary>
+    public static string TypeOf(string? name)
+        => string.IsNullOrEmpty(name) ? ""
+           : _types.TryGetValue(name!, out string? type) ? type : "";
+
+    private static readonly Dictionary<string, string> _types = BuildTypes();
+
+    private static Dictionary<string, string> BuildTypes()
+    {
+        var made = new Dictionary<string, string>(System.StringComparer.OrdinalIgnoreCase);
+        foreach (var v in All)
+            if (!made.ContainsKey(v.Name)) made[v.Name] = v.Type;
+        return made;
+    }
+
     private static readonly HashSet<string> _names =
         new(AllNames, System.StringComparer.OrdinalIgnoreCase);
 

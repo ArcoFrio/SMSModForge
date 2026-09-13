@@ -710,6 +710,10 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
             if (Model.DefaultOutfit == value) return;
             Model.DefaultOutfit = value ?? "";
             OnPropertyChanged();
+            // Every outfit's "same as default" buttons point at a different
+            // outfit now, and the one that has just BECOME the default has to
+            // lose its own.
+            foreach (var outfit in Outfits) outfit.RefreshDefaultOutfit();
             BustSourceChanged?.Invoke(this, EventArgs.Empty);
         }
     }

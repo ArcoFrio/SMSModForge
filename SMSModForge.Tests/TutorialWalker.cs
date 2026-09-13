@@ -96,6 +96,25 @@ internal static class TutorialSolutions
         },
         ["first-steps / Save it somewhere"] = w => w.SaveToRoot(),
 
+        // ── A quest in the journal ───────────────────────────────────
+        ["a-quest / Start one"] = w => w.Vm.AddQuestCommand.Execute(null),
+        ["a-quest / Call it something"] = w => w.Vm.SelectedQuest!.Title = "Lost Letters (Mira)",
+        ["a-quest / Say when it starts"] = w => w.Vm.SelectedQuest!.StartConditions.AddCommand.Execute(null),
+        ["a-quest / Say what finishes a step"] = w =>
+        {
+            var q = w.Vm.SelectedQuest!;
+            q.SelectedTask = q.TaskRows[0];
+            q.SelectedTask.CompletionConditions.AddCommand.Execute(null);
+        },
+        ["a-quest / Give it steps"] = w =>
+        {
+            var q = w.Vm.SelectedQuest!;
+            q.AddTaskCommand.Execute(null);
+            q.SelectedTask!.Name = "Ask around the harbour.";
+            q.AddTaskCommand.Execute(null);
+            q.SelectedTask!.Name = "Bring the letters home.";
+        },
+
         // ── A screen of your own ─────────────────────────────────────
         ["a-screen-of-your-own / Start one"] = w => w.Vm.AddOwnUiCommand.Execute(null),
         ["a-screen-of-your-own / Call it something"] = w =>

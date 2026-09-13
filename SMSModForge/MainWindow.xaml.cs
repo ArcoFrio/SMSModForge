@@ -123,6 +123,7 @@ public partial class MainWindow : Window
             WireUnitTree(WallpaperTreeView, vm, vm.WallpaperTree);
             WireUnitTree(MusicTreeView,     vm, vm.MusicTree);
             WireUnitTree(SfxTreeView,       vm, vm.SfxTree);
+            WireUnitTree(QuestTreeView,     vm, vm.QuestTree);
             // Checkpoint the undo history whenever a field loses focus — this
             // collapses a field's typing into a single undo step (committed when
             // you move off it). handledEventsToo so it fires even when inner
@@ -341,6 +342,28 @@ public partial class MainWindow : Window
     /// Away from a misspelling this falls back to the ordinary editing
     /// commands, which would otherwise be lost along with the built-in menu.
     /// </summary>
+    // ── The formatting buttons over the dialogue line ────────────────
+    //
+    // Thin on purpose: what a tag IS lives in MarkupTextBox.Markup, and what
+    // wrapping MEANS lives in MarkupTextBox.Surround, which the keyboard
+    // shortcuts go through as well. These four are the click half of it.
+
+    private void MarkupBold_Click(object sender, RoutedEventArgs e)
+        => NodeTextBox?.Surround(View.Controls.MarkupTextBox.Markup.OpenBold,
+                                 View.Controls.MarkupTextBox.Markup.CloseBold);
+
+    private void MarkupItalic_Click(object sender, RoutedEventArgs e)
+        => NodeTextBox?.Surround(View.Controls.MarkupTextBox.Markup.OpenItalic,
+                                 View.Controls.MarkupTextBox.Markup.CloseItalic);
+
+    private void MarkupColor_Click(object sender, RoutedEventArgs e)
+        => NodeTextBox?.Surround(View.Controls.MarkupTextBox.Markup.OpenColor,
+                                 View.Controls.MarkupTextBox.Markup.CloseColor);
+
+    private void MarkupSize_Click(object sender, RoutedEventArgs e)
+        => NodeTextBox?.Surround(View.Controls.MarkupTextBox.Markup.OpenSize,
+                                 View.Controls.MarkupTextBox.Markup.CloseSize);
+
     private void NodeTextBox_ContextMenuOpening(object sender, ContextMenuEventArgs e)
     {
         var box = NodeTextBox;
@@ -553,6 +576,7 @@ public partial class MainWindow : Window
         {
             CharacterTree, PlaceTreeView, DialogueTreeView, SceneTreeView,
             VariableTreeView, WallpaperTreeView, MusicTreeView, SfxTreeView, IntegrationTreeView,
+            QuestTreeView,
         };
         const string hint = "Del: delete • F2/F12: rename • Ctrl+C/V: copy/paste • Ctrl+D: duplicate";
         foreach (var list in lists)
@@ -1944,7 +1968,7 @@ public partial class MainWindow : Window
     // one — the constants are the only record of that order, so a stale one
     // silently navigates to the wrong tab rather than failing.
     private const int TabBusts = 1, TabNpcs = 2, TabPlaces = 3,
-                      TabMapButtons = 4, TabDialogues = 5, TabVariables = 10;
+                      TabMapButtons = 4, TabDialogues = 5, TabVariables = 10, TabQuests = 13;
 
     private void IssueList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
@@ -2031,6 +2055,18 @@ public partial class MainWindow : Window
                 if (ac == null) return;
                 Dispatcher.BeginInvoke(new Action(() => SelectInTree(ac, null)),
                                        System.Windows.Threading.DispatcherPriority.Loaded);
+                break;
+            }
+            case "quests":
+            {
+                MainTabs.SelectedIndex = TabQuests;
+                var quest = vm.Quests.FirstOrDefault(q => q.Key == inner);
+                if (quest == null) return;
+                vm.SelectedQuest = quest;
+                var taskM = Regex.Match(where, @"tasks\[(?<k>[^\]]*)\]");
+                if (taskM.Success)
+                    quest.SelectedTask = quest.TaskRows.FirstOrDefault(t => t.Key == taskM.Groups["k"].Value);
+                Reveal("", QuestTaskList, quest.SelectedTask);
                 break;
             }
             case "variables":

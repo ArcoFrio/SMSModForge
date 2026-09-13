@@ -1075,7 +1075,26 @@ public static class PackValidator
                                           issues, ConditionContext.Rule);
         }
 
+        // Quest start and completion lists get the same checks as every other
+        // condition and action list: they are polled like dialogue start
+        // conditions, and their actions run like a rule's.
+        foreach (var q in pack.Quests)
+        {
+            var qWhere = $"quests[{q.Key}]";
+            for (int ci = 0; ci < q.StartConditions.Count; ci++)
+                ValidateNodeCondition(q.StartConditions[ci], $"{qWhere}.startConditions[{ci}]", packVarNames, issues);
+            foreach (var t in q.AllTasks())
+            {
+                var tWhere = $"{qWhere}.tasks[{t.Key}]";
+                for (int ci = 0; ci < t.Conditions.Count; ci++)
+                    ValidateNodeCondition(t.Conditions[ci], $"{tWhere}.conditions[{ci}]", packVarNames, issues);
+                for (int ai = 0; ai < t.Actions.Count; ai++)
+                    ValidateNodeAction(t.Actions[ai], $"{tWhere}.actions[{ai}]", packVarNames, actorKeysInPack, issues);
+            }
+        }
+
         CheckLevelTokens(pack, issues);
+        QuestValidation.Check(pack, issues);
 
         return issues;
     }

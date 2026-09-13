@@ -44,10 +44,17 @@ public static class UiTextRaster
     }
 
     /// <summary>As <see cref="Draw"/>, onto a buffer that already exists.</summary>
+    /// <param name="faceShift">What to draw the face at instead of the
+    /// material's own weight, or a negative number to use the material's. This
+    /// is how <c>&lt;b&gt;</c> is drawn: TextMeshPro has no bold atlas, it draws
+    /// the same glyphs heavier — see <see cref="TmpFont.BoldShift"/>.</param>
+    /// <param name="slant">How far the top of a glyph leans right of its
+    /// baseline, as a share of its height. 0 is upright; this is how
+    /// <c>&lt;i&gt;</c> is drawn, since there is no italic atlas either.</param>
     public static void DrawInto(byte[] target, int width, int height,
                                 TextLayout layout, TmpFont font,
                                 byte[] atlasAlpha, int atlasWidth, int atlasHeight,
-                                UiColor color)
+                                UiColor color, double faceShift = -1, double slant = 0)
     {
         if (target == null || layout == null || font == null || atlasAlpha == null) return;
         if (width <= 0 || height <= 0 || atlasWidth <= 0 || atlasHeight <= 0) return;
@@ -58,8 +65,9 @@ public static class UiTextRaster
         double cb = color.B / 255.0, cg = color.G / 255.0;
         double cr = color.R / 255.0, ca = color.A / 255.0;
 
-        // What the material asks for, read once rather than per pixel.
-        double faceShift = font.FaceShift;
+        // What the material asks for, read once rather than per pixel - unless
+        // the caller asked for a different weight, which is what bold is.
+        if (faceShift < 0) faceShift = font.FaceShift;
         bool outlined = font.HasOutline;
         double outlineShift = outlined ? font.OutlineShift : 0;
         double edgeSoftness = font.OutlineSoftness;
@@ -101,9 +109,22 @@ public static class UiTextRaster
             // distance field resolves its edge.
             double pixelsPerTexel = dw / sw;
 
-            int px0 = Math.Max(0, (int)Math.Floor(dx));
+            // Leaning the glyph: every row is read from a little further left
+            // the higher it sits, which shears the sampled rectangle without
+            // moving the baseline. The same thing TMP does for faux italic, and
+            // it is a sample-time offset rather than a second buffer.
+            //
+            // The baseline is where the glyph SITS rather than where its ink
+            // starts, so it is recovered from the bearing the layout placed it
+            // by - otherwise a letter with a descender would lean about its
+            // tail and an "o" about its middle.
+            double baselineY = placed.Y + metrics.BearingY * scale;
+            double lean = Math.Abs(slant) < 1e-6 ? 0 : slant;
+            double reach = lean == 0 ? 0 : Math.Abs(lean) * dh;
+
+            int px0 = Math.Max(0, (int)Math.Floor(dx - reach));
             int py0 = Math.Max(0, (int)Math.Floor(dy));
-            int px1 = Math.Min(width, (int)Math.Ceiling(dx + dw));
+            int px1 = Math.Min(width, (int)Math.Ceiling(dx + dw + reach));
             int py1 = Math.Min(height, (int)Math.Ceiling(dy + dh));
 
             for (int y = py0; y < py1; y++)
@@ -111,9 +132,19 @@ public static class UiTextRaster
                 double v = (y + 0.5 - dy) / dh;
                 double fy = sy + v * sh - 0.5;
 
+                // Above the baseline leans right, below it leans left.
+                double shift = lean == 0 ? 0 : lean * (baselineY - (y + 0.5));
+
                 for (int x = px0; x < px1; x++)
                 {
-                    double u = (x + 0.5 - dx) / dw;
+                    double u = (x + 0.5 - dx - shift) / dw;
+
+                    // Outside the glyph's own quad there is nothing to read:
+                    // Sample() clamps at the ATLAS edges, so carrying on would
+                    // smear whatever is baked at the corner of the sheet across
+                    // the lean. Only checked when there IS a lean, so upright
+                    // text draws exactly the pixels it always did.
+                    if (lean != 0 && (u < 0 || u > 1)) continue;
                     double fx = sx + u * sw - 0.5;
 
                     double alpha = Sample(atlasAlpha, atlasWidth, atlasHeight, fx, fy);

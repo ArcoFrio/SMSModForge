@@ -1,5 +1,285 @@
 ﻿# Changelog
 
+## 1.4.0
+
+Quests of your own, in the game's journal, that run themselves from a tab of
+their own. And dialogue lines that show their formatting while you write them.
+
+### Quests
+
+**A Quests tab, and quests of your own in the game's journal.** Give a quest a
+title, a description and its tasks, and it is listed beside the game's quests,
+with the same popups when it starts and when it is finished. The game saves
+the player's progress on it with the rest of their save, and completing one
+gives the same reward the game's own quests give.
+
+**A quest runs itself from that tab.** It starts when its start conditions
+pass, and each task completes when its completion conditions pass, running its
+completion actions as it does. They are the same conditions and actions as
+everywhere else in the editor, so no dialogue or rule is needed to move a quest
+along. A quest with no start conditions waits to be started by an action, so
+one you have only begun writing never turns up in a player's journal.
+
+Tasks work the way the game's do. The top-level ones run in order: starting the
+quest starts the first, and finishing the last completes it. A task can have
+subtasks, finished in order, in any order, or when any one is done, and a task
+can count up to a target and complete itself when it gets there. The count is
+set by Quest actions, or follows a number variable, the pack's or the game's,
+picked the way a Variable condition picks one. Only a task without subtasks has
+completion conditions and actions; one with subtasks finishes through them.
+
+**The Quest action** lets a dialogue, a rule or a button take part too: start a
+quest, complete a task, set or add to a counter, fail a task, mark it in the
+journal, or reset it. A task's completion actions run however it was finished,
+including by this. **QuestState and QuestCounter** ask where a player has got
+to, so a conversation can wait until a quest is in progress. All three can point
+at the game's own quests as well as yours.
+
+The game only completes a task that is in progress, and it does so quietly: a
+task completed before the player reaches it simply stays unfinished. So
+Validate now says when nothing starts a quest, when nothing can ever finish one
+of its tasks, when a task with subtasks still carries conditions it no longer
+uses, and when a counter action points at a task that does not count. A quest
+that can never be fully completed gets a warning of its own on the ModForge
+tab, naming the task it stops at, so a quest that is stuck is visible without
+reading every task's warning to work that out.
+In game, a refused action says why in the log.
+
+Three things to know:
+
+- **Keep a quest's runtime name once players have it.** Their progress is saved
+  under it, and under each task's. Renaming either after release starts that
+  quest over for everyone. Rename freely while writing; every action and
+  condition naming it follows.
+- **The journal never ticks a subtask**, finished or not, and only shows a count
+  beside a top-level task. That is how the game draws its own quests too.
+- **Players need this version of the plugin.** An older plugin does not know
+  quests: the quests are not added, quest actions do nothing, and quest
+  conditions never pass.
+
+### Searching a dropdown finds what it shows
+
+**Every dropdown you can type into can now be searched, including the ones that
+appear later.** Typing narrows a dropdown to the entries containing what you
+typed, but that only ever worked on dropdowns already showing when their tab
+opened. A dropdown on a row that appears once you choose something - an
+action switched to Set Active, a condition switched to QuestState, a quest
+counter set to follow a variable - never got the search, and simply listed
+everything. It does now.
+
+Typing in a dropdown whose entries show a friendly name over a runtime one -
+places, screens, levels, the game's quests - only ever searched the runtime
+one, so a word read straight off the list found nothing and the search looked
+broken. It now searches both.
+
+The quest task lists can be typed into and searched as well. The box shows the
+task's name, never the id a game task is stored by, and leaving a search
+without picking puts the chosen task back.
+
+**The first letter you type is kept.** Since the search arrived, the first
+letter typed into a dropdown vanished as soon as the second one went in, so it
+had to be typed twice. The search opens the list after the first letter, and
+opening the list selected everything in the box, which the next letter then
+replaced. What you typed now stays where it is.
+
+### A pack with no dialogues runs its rules
+
+A pack with no dialogues of its own never ran its integration rules or its
+places' enter and exit actions, never showed its wallpapers, and never switched
+its condition-gated objects on or off: the plugin only started all of that
+alongside a pack's conversations. It runs now whether the pack has dialogues or
+not.
+
+### Dialogue text shows its own formatting
+
+**A line is drawn the way the player will read it, while you write it.** Markup
+is set apart in a colour of its own, and the words it wraps turn bold, italic,
+coloured or resized in the box itself. Tags stack, so <b><i>both</i></b> shows
+as both.
+
+Before this a line was flat, which made `<b>` and `<bold>` look identical — one
+of which the game acts on, and the other of which it prints at the player, four
+characters and all. The only way to tell them apart was to build the pack and
+read the line in game.
+
+**The node list shows the same thing, with the tags gone entirely.**
+That row is for scanning what a conversation says, and in a column that narrow
+four characters of `<b>` cost real words — so the formatting is applied and the
+markup simply is not drawn. The line itself is untouched: the row is a display,
+and what it shows being shorter than what the pack stores is exactly why.
+
+A tag the editor does not know is deliberately left looking like words, in both
+places, because that is what the player will get. Same for a `<color>` with
+nothing after it, and for a colour value nothing can make sense of: the text
+keeps its ordinary colour rather than being painted a guess.
+
+Spell checking still works in both, and a `<size=40>` is now measured against
+the size the game really draws dialogue at rather than a guess.
+
+### Node rows can look like the game
+
+**Options ▸ Dialogue rows look like the game.** Off by default; turn it on and
+every line in the node list is drawn the way the game draws it — the game’s own
+font, its black outline and drop shadow, the speaker’s name at the head of the
+line in their own colour, on a dark panel. The same in every editor theme,
+because the game does not have a light mode.
+
+Not a styled approximation: the editor already ships the game’s TextMeshPro
+atlases for the UI tab, so this is the game’s actual glyphs with its actual
+metrics and kerning.
+
+Two things to know before turning it on:
+
+- **No spelling squiggles on those rows.** Windows underlines misspellings in a
+  text box, and this is a picture of text. They are still in the Text box below
+  the list, which is where you fix them.
+- **A line does not break where the game breaks it.** Each line is capped at
+  28px so a conversation still fits on screen, and sizing to that height means
+  giving up the game’s size-to-width ratio. A line too long for the column wraps
+  where the column runs out, and the row takes a second line to show the rest of
+  it — so a long line is a taller row rather than half a sentence.
+
+### Reading a dialogue row
+
+- **Long lines wrap instead of being cut off.** A line too long for the node
+  list used to stop at the column edge, and the only way to read the rest was to
+  click it. It now takes a second line, and the row grows to hold it.
+- **Rows have a margin before the text**, whatever comes first — the speaker, the
+  line, or the “(no text)” an empty node shows. Text hard against the panel edge
+  reads as clipped even when it is whole.
+- **Formatting tags are legible on every theme.** They were one flat grey on all
+  ten, which is the colour that fails at both ends: washed out on the light
+  themes, half-gone on the dark ones. A tag now takes a colour mixed from the
+  theme’s own text colour, on a faint chip that shows where it starts and stops.
+
+### Formatting shows on both kinds of row
+
+**The game-look rows now apply the markup too**, the way the plain rows always
+did: `<b>` is drawn at the heavier weight the font’s own material carries,
+`<i>` leans, `<color=…>` paints, and `<size=…>` really does change how big
+the words are — a bigger run makes its line taller, and a smaller one fits more
+on the line before it wraps.
+
+One thing to know: the italic lean is the single number in that preview that is
+not the game’s own. TextMeshPro keeps its italic angle on the font asset rather
+than on the material, and the asset export does not carry it — so that one is a
+likeness, and everything else is a copy.
+
+**The game’s tokens are marked in place, on both kinds of row.** `{PC}`, `{M}`,
+`{D}`, `{B}`, `{S}`, `{DA}` and `{F}` now show in a colour of their own on a
+faint chip, where they sit in the sentence, so it is obvious at a glance that a
+name goes there and those are not characters the player reads. They keep the
+formatting around them, because what the game puts in their place will be bold
+or coloured along with the rest of the line.
+
+A brace pair that is **not** on that list — `{PCC}`, say — is deliberately left
+looking like ordinary words, for the same reason an unknown tag is: the editor
+cannot promise the game does anything with it, and dressing up a typo as a
+working token is how the typo reaches the player.
+
+### Writing the markup
+
+**Formatting buttons over the Text box**, with the shortcuts beside them: bold
+(Ctrl+B), italic (Ctrl+I), colour (Ctrl+Shift+C) and size (Ctrl+Shift+S). Each
+one wraps whatever is selected — select a word, press the button, and the tag
+opens in front of it and closes after it. With nothing selected you get an empty
+pair with the cursor already between them.
+
+If the cursor is nowhere — the box has not been clicked into yet — the pair
+goes at the END of the line rather than at the start, which is where Windows
+reports a cursor that was never placed.
+
+Ctrl+B and Ctrl+I used to do something else entirely and quietly: a rich text
+box answers them itself by applying Windows' own bold to what is on screen,
+which is not markup, never reaches the pack, and disappears the next time the
+line is redrawn. Those two keys are now the editor's.
+
+### Seeing the shape of a conversation
+
+**Every row shows what it is inside.** A line per node above it, down the left,
+with the nearest one drawn stronger and carrying a short arm into the row — so
+"this hangs off that" is readable without counting indents. On both kinds of
+row: the plain rows follow your theme, and the game-look rows use their own
+palette, because a theme colour on a fixed dark panel is a coin toss.
+
+Depth used to be said only by how far in a row started, which reads at one level
+and stops reading at three.
+
+**A switch for the row style, over the node list.** It is the same setting as
+Options ▸ Dialogue rows look like the game, in the place you are looking when
+you want it.
+
+**The root node ids are gone from that spot.** They were internal numbers nobody
+acts on, and the roots are the rows at the left edge of the list anyway.
+
+### The outfit panel
+
+- **"= default" buttons** on Mask, Blink, Mouth prefix and Expr. prefix take
+  the value straight from the character's default outfit. Hidden on the default
+  outfit itself, and on a character with only one.
+  - The **mask** one asks first, and it is worth reading: it points both
+    outfits at the same FILE, not at a copy, so editing either one's mask
+    afterwards changes the other's. Save it under a new name from the mask
+    editor to break them apart.
+- **File pickers open where you last picked**, rather than at the pack root.
+  An outfit's art sits in one folder, so after the first pick the rest are one
+  click away. A field that already points somewhere still opens there, and a
+  folder from a different pack is never offered.
+
+### Starting a mask from another outfit
+
+**Copy layers from**, in the mask editor's Layers panel: pick another outfit of
+the same character and load its mask over the one on the canvas. Most outfits
+are the same bust in different clothes, and a jiggle mask is three intensity
+planes painted by hand — a long way to come twice.
+
+It asks before replacing anything, and says so when there are unsaved changes
+on the canvas. Ctrl+Z puts it back.
+
+Deliberately absent on a **place**: its two masks are the background and the
+foreground of one scene rather than versions of each other, so pasting one over
+the other would only ever be a mistake.
+
+### Conditions and actions say what a variable holds
+
+**A small note beside the variable name** — "yes/no", "number", "text",
+"list" — in the words you would use rather than the ones a compiler would.
+Whole and fractional numbers are both just a number; they compare and increment
+the same way.
+
+**The game's own variables are now included in that**, which is the half that
+was missing. A comparison runs on strings at runtime, so "True" against a
+variable holding "true" never matches and nothing says why. Pack variables have
+had a tick box instead of a text field for a while; the game's 1,386 yes/no
+variables did not, because nothing asked the game's catalogue. They do now,
+and so do its numbers and its text.
+
+Nothing is claimed where nothing is known: a name the editor does not recognise
+gets no note and keeps the text field, so an unexpected text box reads as
+"this name is not one I know" rather than as "this variable is text".
+
+**The note shows on every row that names a variable**, not only on a Variable
+condition: the list actions, the dice actions and the several conditions that
+take a variable as one of their settings all carry it too. Those pickers are
+editable — a List picker offers only lists and still accepts whatever you type
+— so the note is what catches a scalar typed into one.
+
+### The dialogue cheatsheet
+
+- **Three more of the game’s address tokens**, confirmed to resolve: `{S}` (what
+  Anna and Josef call the player and Adrian), `{DA}` (what Mario calls Emma) and
+  `{F}` (the family). `{B}` now says what it actually does — the player and
+  Adrian use it for **each other**, not just the player for Adrian.
+- **Markup is listed beside them**: `<b>`, `<i>`, `<color=…>` and `<size=…>`.
+  Only `<size>` appears anywhere in the game’s own 19,636 lines, so the other
+  three say so on hover rather than being presented as proven.
+- **It no longer crowds the dialogue tree.** Two columns instead of one, a
+  height ceiling it cannot grow past, and a fold that is remembered between
+  sessions. It had taken 167px of a column where the tree only gets about 214.
+- The in-app reference had gone stale against it, still saying to treat anything
+  beyond four tokens as unsupported. Both lists are now checked against one
+  another so they cannot drift again.
+
 ## 1.3.2
 
 The preview tells the truth about one of the game's busts. Three things it was

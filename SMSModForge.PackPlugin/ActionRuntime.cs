@@ -741,6 +741,17 @@ namespace SMSModForge.PackPlugin
                         return false; // unreachable when chances are sane
                     }
 
+                case SMSModForge.Shared.QuestVocabulary.ActionType:
+                    {
+                        // Journal state, which the game saves with the player's
+                        // own save - nothing in the pack store changes, so there
+                        // is nothing to flush. The value goes through the deref so
+                        // a counter can be set from a variable, like every other
+                        // number an action takes.
+                        QuestRuntime.Run(p, DerefParam(p, SMSModForge.Shared.QuestVocabulary.ValueParam, ctx), ctx);
+                        return false;
+                    }
+
                 case "SetWeather":
                     {
                         string weather = (string)p["weather"] ?? "Clear";
@@ -1406,6 +1417,9 @@ namespace SMSModForge.PackPlugin
         /// <summary>Index of the pack's DailyChance conditions — report-only,
         /// so the day-change hook can log the day's outcomes.</summary>
         public DailyChanceRegistry DailyChances;
+        /// <summary>This pack's quests that start, complete and act on their
+        /// own conditions. Built with the rest of the runtime.</summary>
+        internal QuestTicker Quests;
         public ManualLogSource Log;
         public MonoBehaviour Plugin;
 

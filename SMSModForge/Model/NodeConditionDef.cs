@@ -232,6 +232,22 @@ public static class NodeConditionTypes
     /// </summary>
     public const string InputKey = "InputKey";
 
+    /// <summary>
+    /// A quest, or one of its tasks, is in a given state. Params: <c>source</c>
+    /// (<c>vanilla</c> for the game's), <c>quest</c>, <c>task</c> (empty means
+    /// the quest itself), <c>state</c> (one of
+    /// <see cref="Shared.QuestVocabulary.States"/>). Read from the game's own
+    /// journal, so it agrees with the quest screen by construction.
+    /// </summary>
+    public const string QuestState = Shared.QuestVocabulary.StateCondition;
+
+    /// <summary>
+    /// A task's counter against a number. Params: <c>source</c>, <c>quest</c>,
+    /// <c>task</c>, <c>comparison</c> (the variable comparisons' words),
+    /// <c>value</c> (a number, or <c>$variable</c>).
+    /// </summary>
+    public const string QuestCounter = Shared.QuestVocabulary.CounterCondition;
+
     /// <summary>Always-true condition (useful for testing).</summary>
     public const string AlwaysTrue = "AlwaysTrue";
 
@@ -269,6 +285,7 @@ public static class NodeConditionTypes
         VariableCompare, VariableExists,
         LevelActive, GameObjectActive, DailyChance, AlwaysTrue, Weather,
         VariableStartsWith, ListContains, ListCount, InputKey,
+        QuestState, QuestCounter,
     };
 
     /// <summary>

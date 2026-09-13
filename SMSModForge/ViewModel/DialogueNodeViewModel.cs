@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using SMSModForge.Model;
@@ -138,6 +139,8 @@ public sealed class DialogueNodeViewModel : ObservableObject
             Model.Actor = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(SpeakerPrefix));
+            OnPropertyChanged(nameof(SpeakerName));
+            OnPropertyChanged(nameof(SpeakerColorHex));
             OnPropertyChanged(nameof(Display));
             OnPropertyChanged(nameof(ActorTintBrush));
         }
@@ -266,6 +269,8 @@ public sealed class DialogueNodeViewModel : ObservableObject
         // The row label carries the speaker's NAME, so renaming a character has
         // to redraw it as well as the tint.
         OnPropertyChanged(nameof(SpeakerPrefix));
+            OnPropertyChanged(nameof(SpeakerName));
+            OnPropertyChanged(nameof(SpeakerColorHex));
         OnPropertyChanged(nameof(Display));
     }
 
@@ -458,6 +463,37 @@ public sealed class DialogueNodeViewModel : ObservableObject
                 ? ""
                 : (ActorDisplayNameProvider?.Invoke(Actor) ?? Actor);
             return string.IsNullOrEmpty(speakerName) ? "" : "[" + speakerName + "]";
+        }
+    }
+
+    /// <summary>
+    /// The speaker's name with no brackets, for the row that draws the line the
+    /// way the game does.
+    /// <para/>
+    /// The game shows the name itself, larger than the line and in the
+    /// character's own colour — the brackets are this editor's way of telling a
+    /// name apart from the words when both are the same size and colour, and
+    /// there they would be two characters the player never sees.
+    /// </summary>
+    public string SpeakerName
+        => string.IsNullOrEmpty(Actor)
+            ? ""
+            : (ActorDisplayNameProvider?.Invoke(Actor) ?? Actor);
+
+    /// <summary>
+    /// The speaker's colour as <c>#RRGGBB</c>, or empty when they have none.
+    /// <para/>
+    /// The same colour <see cref="ActorTintBrush"/> washes the row with, at full
+    /// strength: the wash is a hint behind everything else, and this is the
+    /// name itself, which the game paints in exactly this colour.
+    /// </summary>
+    public string SpeakerColorHex
+    {
+        get
+        {
+            if (string.IsNullOrWhiteSpace(Actor) || ActorColorProvider == null) return "";
+            var c = ActorColorProvider(Actor);
+            return c == null ? "" : $"#{c.Value.R:X2}{c.Value.G:X2}{c.Value.B:X2}";
         }
     }
 

@@ -309,6 +309,8 @@ public sealed class JigglePreview : Image
     private void ReloadTextures()
     {
         _renderGeneration++;
+        _packReplacedMask = false;
+        _vanillaJiggle = null;
         if (!string.IsNullOrWhiteSpace(VanillaBustKey)) { ReloadVanillaTextures(); return; }
         if (Outfit == null || PackRoot == null)
         {
@@ -351,10 +353,15 @@ public sealed class JigglePreview : Image
         _base = _mask = _blink = null;
         for (int i = 1; i <= 4; i++) _mouth[i] = null;
         _expressions.Clear();
+        _packReplacedMask = false;
 
         string? root = Rendering.VanillaArtResolver.FindArtRoot();
         string? dir = root == null ? null : Path.Combine(root, VanillaBustKey);
-        if (dir != null && Directory.Exists(dir)) LoadGameArt(dir);
+        if (dir != null && Directory.Exists(dir))
+        {
+            LoadGameArt(dir);
+            _vanillaJiggle = LoadJiggleSettings(Path.Combine(dir, "Jiggle.txt"));
+        }
 
         // Whatever the pack paints over it - AFTER the game's art, because it
         // replaces it, and OUTSIDE the check above, because a replacement is the
@@ -397,6 +404,17 @@ public sealed class JigglePreview : Image
     /// ticked with no art chosen yet changes nothing — the game keeps its own,
     /// and the picture should say so rather than going blank.
     /// </summary>
+    /// <summary>
+    /// Whether the pack's own mask actually landed on this bust.
+    /// <para/>
+    /// Set while loading rather than read off the manifest, because the runtime
+    /// applies the pack's jiggle exactly when the mask override LANDS - a row
+    /// ticked with no file, or naming a file that is not there, replaces
+    /// nothing and leaves the game's motion alone. Deciding that from the
+    /// manifest alone would be a second opinion about the same question.
+    /// </summary>
+    private bool _packReplacedMask;
+
     private void LoadPackReplacements()
     {
         var model = Outfit?.Model;
@@ -411,7 +429,12 @@ public sealed class JigglePreview : Image
 
             string slot = entry.Slot ?? "";
             if (slot == SMSModForge.Shared.SpriteSlotNames.Base) { _base = px; continue; }
-            if (slot == SMSModForge.Shared.SpriteSlotNames.Mask) { _mask = px; continue; }
+            if (slot == SMSModForge.Shared.SpriteSlotNames.Mask)
+            {
+                _mask = px;
+                _packReplacedMask = true;
+                continue;
+            }
             if (slot == SMSModForge.Shared.SpriteSlotNames.Blink) { _blink = px; continue; }
 
             int frame = SMSModForge.Shared.SpriteSlotNames.MouthFrame(slot);
@@ -425,11 +448,77 @@ public sealed class JigglePreview : Image
     /// <summary>
     /// The uniforms the next shader pass will use.
     /// <para/>
+    /// The pack's, once the pack has replaced this bust's MASK - that texture
+    /// is the jiggle's input, so replacing it is the point at which the motion
+    /// becomes the pack's to describe, and the runtime draws the line in the
+    /// same place. A borrowed bust whose mask the pack leaves alone keeps the
+    /// game's own numbers, because that is what the game will do with it.
+    /// <para/>
+    /// Those numbers do not reproduce the game exactly: this shader is an
+    /// approximation of the game's, so the same inputs through it land
+    /// somewhere close rather than somewhere identical. Matching the inputs is
+    /// as honest as this can be, and is better than matching neither.
+    /// <para/>
     /// A property rather than a local so a test can read the same expression
     /// the renderer reads. Working it out a second time in the test would let
     /// the two drift apart and still agree.
     /// </summary>
-    internal JiggleParams JiggleInEffect => Outfit?.Model.Jiggle ?? new JiggleParams();
+    internal JiggleParams JiggleInEffect
+    {
+        get
+        {
+            var outfit = Outfit;
+            if (outfit == null) return new JiggleParams();
+            if (!_packReplacedMask && _vanillaJiggle != null) return _vanillaJiggle;
+            return outfit.Model.Jiggle;
+        }
+    }
+
+    /// <summary>The borrowed bust's own shader uniforms, or null to fall back
+    /// to the outfit's.</summary>
+    private JiggleParams? _vanillaJiggle;
+
+    /// <summary>
+    /// Read the uniforms the extractor wrote beside a vanilla bust's art.
+    /// <para/>
+    /// Returns null when the file is absent — art exported before masks were
+    /// added — so the caller keeps its existing default rather than snapping a
+    /// bust to zero. Unknown keys are ignored, so the format can gain fields
+    /// without older editors choking on them.
+    /// </summary>
+    private static JiggleParams? LoadJiggleSettings(string abs)
+    {
+        if (!File.Exists(abs)) return null;
+        var p = new JiggleParams();
+        var inv = System.Globalization.CultureInfo.InvariantCulture;
+        try
+        {
+            foreach (var raw in File.ReadAllLines(abs))
+            {
+                var line = raw.Trim();
+                if (line.Length == 0 || line[0] == '#') continue;
+                int eq = line.IndexOf('=');
+                if (eq <= 0) continue;
+                string key = line.Substring(0, eq).Trim();
+                string val = line.Substring(eq + 1).Trim();
+                if (string.Equals(key, "Tint", System.StringComparison.OrdinalIgnoreCase))
+                { p.Tint = val; continue; }
+                if (!float.TryParse(val, System.Globalization.NumberStyles.Float, inv, out var f)) continue;
+                switch (key)
+                {
+                    case "JiggleSpeed":     p.Speed = f; break;
+                    case "JiggleStrength":  p.Strength = f; break;
+                    case "JiggleFrequency": p.Frequency = f; break;
+                    case "NoiseScale":      p.NoiseScale = f; break;
+                    case "NoiseSpeed":      p.NoiseSpeed = f; break;
+                    case "NoiseStrength":   p.NoiseStrength = f; break;
+                }
+            }
+        }
+        catch { return null; }
+        return p;
+    }
+
 
     private static string Normalize(string p) => p?.Replace('/', Path.DirectorySeparatorChar) ?? "";
 

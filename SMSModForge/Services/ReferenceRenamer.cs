@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using SMSModForge.Model;
@@ -31,6 +31,10 @@ public enum RefKind
 
     /// <summary>An NPC key.</summary>
     Npc,
+
+    /// <summary>A pack quest's key - what the Quest action and the quest
+    /// conditions name it by.</summary>
+    Quest,
 }
 
 /// <summary>
@@ -71,6 +75,7 @@ public static class ReferenceRenamer
         [RefKind.Place] = Array.Empty<ParamType>(),
         [RefKind.Dialogue] = Array.Empty<ParamType>(),
         [RefKind.Npc] = Array.Empty<ParamType>(),
+        [RefKind.Quest] = Array.Empty<ParamType>(),
     };
 
     /// <summary>
@@ -94,6 +99,36 @@ public static class ReferenceRenamer
             n += RenameParams(action.Params, ActionSchemas.For(action.Type), kind, oldName, newName);
 
         n += RenameStructural(pack, kind, oldName, newName, rewrite: true);
+        return n;
+    }
+
+    /// <summary>
+    /// Point every row that names one task of one of the pack's quests at the
+    /// task's new key. Returns how many were rewritten.
+    /// <para/>
+    /// A task key is only unique within its quest, so the quest is part of the
+    /// match: another quest's task of the same name is a different task.
+    /// </summary>
+    public static int RenameQuestTask(ModPack? pack, string questKey, string oldTask, string newTask)
+    {
+        if (pack == null || string.IsNullOrEmpty(oldTask) || oldTask == newTask) return 0;
+
+        int n = 0;
+        void Row(Dictionary<string, string> ps)
+        {
+            if (ps == null || QuestReferences.IsVanilla(ps)) return;
+            if (QuestReferences.Param(ps, Shared.QuestVocabulary.QuestParam) != questKey) return;
+            if (QuestReferences.Param(ps, Shared.QuestVocabulary.TaskParam) != oldTask) return;
+            ps[Shared.QuestVocabulary.TaskParam] = newTask;
+            n++;
+        }
+
+        foreach (var (c, _) in PackWalk.Conditions(pack))
+            if (c.Type == NodeConditionTypes.QuestState || c.Type == NodeConditionTypes.QuestCounter)
+                Row(c.Params);
+        foreach (var (a, _) in PackWalk.Actions(pack))
+            foreach (var each in WithBranches(a))
+                if (each.Type == NodeActionTypes.Quest) Row(each.Params);
         return n;
     }
 
@@ -173,6 +208,13 @@ public static class ReferenceRenamer
             if (rewrite && oldName != newName) write(newName);
         }
 
+        void QuestParam(Dictionary<string, string> ps)
+        {
+            if (ps == null || QuestReferences.IsVanilla(ps)) return;
+            Field(() => QuestReferences.Param(ps, Shared.QuestVocabulary.QuestParam),
+                  v => ps[Shared.QuestVocabulary.QuestParam] = v);
+        }
+
         switch (kind)
         {
             case RefKind.Character:
@@ -247,6 +289,18 @@ public static class ReferenceRenamer
                 }
                 break;
 
+            case RefKind.Quest:
+                // Not a schema type: which quest a row names depends on its
+                // source, and a game quest that happens to share the name is a
+                // different quest that must be left alone.
+                foreach (var (c, _) in PackWalk.Conditions(pack))
+                    if (c.Type == NodeConditionTypes.QuestState || c.Type == NodeConditionTypes.QuestCounter)
+                        QuestParam(c.Params);
+                foreach (var (a, _) in PackWalk.Actions(pack))
+                    foreach (var each in WithBranches(a))
+                        if (each.Type == NodeActionTypes.Quest) QuestParam(each.Params);
+                break;
+
             case RefKind.Npc:
                 foreach (var p in pack.Places)
                     foreach (var placement in NpcPlacements(p))
@@ -257,6 +311,18 @@ public static class ReferenceRenamer
                 break;
         }
         return n;
+    }
+
+    /// <summary>An action and every action inside its dice branches, which
+    /// the walk hands over as one.</summary>
+    private static IEnumerable<NodeActionDef> WithBranches(NodeActionDef? action)
+    {
+        if (action == null) yield break;
+        yield return action;
+        if (action.Branches == null) yield break;
+        foreach (var b in action.Branches)
+            foreach (var inner in WithBranches(b.Action))
+                yield return inner;
     }
 
     /// <summary>Every NPC placement a place holds, wherever the tree keeps

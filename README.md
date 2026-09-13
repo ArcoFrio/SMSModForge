@@ -1,4 +1,4 @@
-﻿# SMSModForge 1.3.2
+﻿# SMSModForge 1.4.0
 
 A toolkit for making mod content for **Starmaker Story 1.8E**, in two parts:
 
@@ -75,15 +75,16 @@ Under **Options**:
 
 The editor teaches itself. On the **⚒ ModForge** tab you will find:
 
-- **Fourteen guided tutorials** that walk you through building a real pack, one
+- **Sixteen guided tutorials** that walk you through building a real pack, one
   control at a time — a character and its face, a room you can walk into and
   dress, a door on the world map, conversations that branch and remember, a
-  jiggle mask, NPCs, music and sound, variables, and rules. They run in order,
+  jiggle mask, NPCs, music and sound, variables, rules, a screen of your own,
+  and a quest in the journal. They run in order,
   each one carrying on in the pack the last one left, and everything they make
   is kept. The practice art and audio ship with the editor.
 - A tutorial you have finished stays ticked, and says so if it has been
   rewritten since you ran it.
-- **A 33-topic reference** with search, covering every tab and field.
+- **A 34-topic reference** with search, covering every tab and field.
 - **Validate**, which lists what is wrong with your pack and jumps you to it.
 
 If you read nothing else, run the first tutorial. It ends with your character
@@ -104,10 +105,13 @@ loaded in the game.
 | **Wallpapers** | Images the player unlocks and can set in-game |
 | **Variables** | The pack's memory, optionally surviving a restart |
 | **Integration** | Rules that watch the game and act without a conversation |
+| **UI** | Anything drawn on top of the game rather than in it — screens of your own, or changes to the game's |
+| **Quests** | Quests in the game's journal, with tasks that start and finish by themselves |
 
-Dialogue nodes and integration rules draw on **26 action types** and
-**23 condition types**. The in-app reference documents them; this file
-deliberately does not duplicate the list, because a copy here would rot.
+Dialogue nodes, integration rules, screens and quests are all driven by the
+same actions and conditions. The in-app reference documents them; this file
+deliberately does not duplicate the list, or even count it, because a copy
+here would rot.
 
 ---
 

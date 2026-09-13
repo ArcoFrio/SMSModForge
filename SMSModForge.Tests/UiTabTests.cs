@@ -33,8 +33,8 @@ public class UiTabTests
                               .Select(t => t.Header?.ToString() ?? "").ToList();
 
             _out.WriteLine(string.Join(" | ", headers));
-            Assert.Equal("UI", headers[^1]);
-            Assert.Equal(12, headers.Count - 1);
+            // Quests went in after it, on the same terms - see QuestTabTests.
+            Assert.Equal("UI", headers[12]);
 
             // The indices the focus sweep and the layout memory rely on.
             Assert.Equal("Characters", headers[1]);

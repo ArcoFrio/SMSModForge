@@ -77,6 +77,15 @@ public static class ComboBoxSearch
         // jump-to-first-letter and are left exactly as they were.
         if (!box.IsEditable) return;
 
+        // Built now rather than found. A dropdown that is collapsed when it
+        // loads has not applied its template - that waits for its first measure
+        // - so the text box was not there yet, the search never attached, and
+        // nothing tried again when the dropdown was shown. Which is every
+        // dropdown on a row that appears once a type or a mode is chosen: the
+        // quest pickers on a condition switched to QuestState, the variable a
+        // counter follows, the targets of an action switched to Set Active.
+        box.ApplyTemplate();
+
         if (box.Template?.FindName("PART_EditableTextBox", box) is not TextBox typing) return;
 
         typing.TextChanged -= OnTextChanged;
@@ -119,19 +128,87 @@ public static class ComboBoxSearch
         // point of typing: an author who types two letters wants the shortlist,
         // not to have to reach for the arrow afterwards.
         if (typed.Length > 0 && !box.IsDropDownOpen && typing.IsKeyboardFocusWithin)
+        {
+            // Opening an editable dropdown selects everything in its box. After
+            // the first letter that is the letter plus whatever completion added
+            // - so the second letter replaced all of it and the first one was
+            // gone. The caret and the completed part go back where they were.
+            int start = typing.SelectionStart, length = typing.SelectionLength;
             box.IsDropDownOpen = true;
+            if (typing.SelectionStart != start || typing.SelectionLength != length)
+                typing.Select(start, length);
+        }
     }
 
     /// <summary>The list is whole again once it closes, so opening it next time
     /// shows everything rather than the last thing somebody searched for.</summary>
     private static void OnDropDownClosed(object? sender, EventArgs e)
     {
-        if (sender is ComboBox box) SetTyped(box, "");
+        if (sender is not ComboBox box) return;
+        SetTyped(box, "");
+        ReturnToChoice(box);
     }
 
     private static void OnLostFocus(object sender, RoutedEventArgs e)
     {
-        if (sender is TextBox typing && Owner(typing) is ComboBox box) SetTyped(box, "");
+        if (sender is not TextBox typing || Owner(typing) is not ComboBox box) return;
+        SetTyped(box, "");
+        ReturnToChoice(box);
+    }
+
+    /// <summary>
+    /// A dropdown whose value can only be one of its options - its choice bound
+    /// through SelectedValue, and nothing bound to the typed text - puts back
+    /// what is chosen when somebody searches and then leaves without picking.
+    /// <para/>
+    /// Searching means typing, and typing something that is not an option
+    /// clears the selection. The choice itself is kept (the view model ignores
+    /// the empty write), so without this the box would go on showing half a
+    /// search over a value it no longer displays. A dropdown that accepts free
+    /// text binds Text as well, and is left alone: what was typed there IS the
+    /// value.
+    /// <para/>
+    /// Deferred, so a click on an option has landed before this looks.
+    /// </summary>
+    private static void ReturnToChoice(ComboBox box)
+    {
+        box.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input, new Action(() =>
+        {
+            if (box.IsDropDownOpen || box.IsKeyboardFocusWithin || box.SelectedItem != null) return;
+            if (System.Windows.Data.BindingOperations.GetBindingExpression(box, ComboBox.TextProperty) != null) return;
+            var choice = System.Windows.Data.BindingOperations.GetBindingExpression(box, Selector.SelectedValueProperty);
+            if (choice == null) return;
+            choice.UpdateTarget();
+
+            // A search that matched nothing empties the selection but can leave
+            // SelectedValue holding the chosen value, and then refreshing it
+            // from the source changes nothing - so the option is found and
+            // selected directly, which puts its text back in the box without
+            // writing anything back to the source.
+            if (box.SelectedItem == null && box.SelectedValue != null)
+            {
+                foreach (var item in box.Items)
+                {
+                    if (Equals(ValueOf(item, box.SelectedValuePath), box.SelectedValue))
+                    {
+                        box.SelectedItem = item;
+                        break;
+                    }
+                }
+            }
+
+            // Nothing was chosen before the search either: leave the box as
+            // empty as the choice is, not holding the leftover search.
+            if (box.SelectedItem == null) box.Text = "";
+        }));
+    }
+
+    /// <summary>An option's value by a SelectedValuePath of one plain property
+    /// name - the only shape this editor uses - or the option itself.</summary>
+    private static object? ValueOf(object? item, string? path)
+    {
+        if (item == null || string.IsNullOrEmpty(path)) return item;
+        return item.GetType().GetProperty(path)?.GetValue(item);
     }
 
     private static ComboBox? Owner(DependencyObject from)
