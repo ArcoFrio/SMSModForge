@@ -84,9 +84,13 @@ public static class VariableRenamer
         foreach (var q in pack.Quests)
         {
             n += RenameConditions(q.StartConditions, oldName, newName);
+            n += RenameConditions(q.ResetConditions, oldName, newName);
+            foreach (var place in q.SiteConditions)
+                n += RenameConditions(place.Conditions, oldName, newName);
             foreach (var t in q.AllTasks())
             {
                 n += RenameConditions(t.Conditions, oldName, newName);
+                n += RenameConditions(t.ShowConditions, oldName, newName);
                 n += RenameActions(t.Actions, oldName, newName);
                 // A counter following one of the pack's own variables. A game
                 // variable of the same name is a different variable.
@@ -95,6 +99,14 @@ public static class VariableRenamer
                     t.CountVariable = newName;
                     n++;
                 }
+            }
+
+            // And what the pack hangs on the game's own tasks, in a quest it
+            // extends: those actions read and write variables like any other.
+            foreach (var h in q.VanillaTasks)
+            {
+                n += RenameActions(h.Actions, oldName, newName);
+                n += RenameConditions(h.ShowConditions, oldName, newName);
             }
         }
 
@@ -145,8 +157,12 @@ public static class VariableRenamer
         foreach (var q in pack.Quests)
         {
             int c = CountConditions(q.StartConditions, name)
-                  + q.AllTasks().Sum(t => CountConditions(t.Conditions, name) + CountActions(t.Actions, name)
-                                          + (t.CountsFromVariable && !t.CountVariableIsVanilla && t.CountVariable == name ? 1 : 0));
+                  + CountConditions(q.ResetConditions, name)
+                  + q.SiteConditions.Sum(s => CountConditions(s.Conditions, name))
+                  + q.AllTasks().Sum(t => CountConditions(t.Conditions, name) + CountConditions(t.ShowConditions, name)
+                                          + CountActions(t.Actions, name)
+                                          + (t.CountsFromVariable && !t.CountVariableIsVanilla && t.CountVariable == name ? 1 : 0))
+                  + q.VanillaTasks.Sum(h => CountActions(h.Actions, name) + CountConditions(h.ShowConditions, name));
             if (c > 0) hits.Add($"Quest '{q.Key}'");
         }
 

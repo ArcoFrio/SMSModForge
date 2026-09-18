@@ -314,6 +314,17 @@
      }
     }
    ],
+   "gates": [
+    {
+     "at": [
+      "m_Branches",
+      "m_Branches",
+      0,
+      "m_ConditionList"
+     ],
+     "count": 3
+    }
+   ],
    "before": [
     {
      "kind": "wait",
@@ -337,6 +348,32 @@
    "how": "InstructionDialoguePlay",
    "title": "Play Nothere and wait",
    "as": "Dialogue",
+   "ahead": [
+    {
+     "plays": "8_Room_Talk/Office/Nothere",
+     "count": 3
+    },
+    {
+     "plays": "8_Room_Talk/Office/BedroomKeys",
+     "count": 3
+    },
+    {
+     "plays": "8_Room_Talk/Office/Josef_PlayerBirthdayTalk",
+     "count": 2
+    },
+    {
+     "plays": "8_Room_Talk/Office/DebtPaidofTalkMario",
+     "count": 2
+    },
+    {
+     "plays": "8_Room_Talk/Office/Isabellappears",
+     "count": 3
+    },
+    {
+     "plays": "8_Room_Talk/Office/DefaultDialoge",
+     "count": 1
+    }
+   ],
    "before": [
     {
      "kind": "wait",

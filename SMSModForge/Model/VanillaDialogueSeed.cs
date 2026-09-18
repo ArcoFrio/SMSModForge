@@ -157,20 +157,22 @@ public static class VanillaDialogueSeed
         var gates = new List<NodeConditionDef>();
         if (vanilla == null) return gates;
 
-        foreach (var start in vanilla.Starts)
+        return AnyOf(vanilla.Starts, null);
+    }
+
+    /// <summary>
+    /// What any of several starts needs, as <see cref="StartGates"/> reads a
+    /// conversation's - an Any-of when there is more than one place. The
+    /// conditions that have no equivalent are added to
+    /// <paramref name="untranslated"/> by the game's own words, when given.
+    /// </summary>
+    public static List<NodeConditionDef> AnyOf(IEnumerable<VanillaDialogueCatalog.Start> starts,
+                                               List<string>? untranslated)
+    {
+        var gates = new List<NodeConditionDef>();
+        foreach (var start in starts)
         {
-            var when = new List<NodeConditionDef>();
-
-            // Where it is played from is itself a condition, and the one an
-            // author is most likely to want: a room talk only runs while its
-            // room is the one on screen. The game does not write that down
-            // because it does not have to - the component lives on the room -
-            // so it reads as a conversation with no gate at all unless it is
-            // said out loud here.
-            var level = LevelOf(start);
-            if (level != null) when.Add(level);
-
-            when.AddRange(VanillaDialogueConditions.TranslateAll(start.When, out _));
+            var when = GateOf(start, untranslated);
             if (when.Count == 0) continue;
 
             gates.Add(when.Count == 1
@@ -184,6 +186,33 @@ public static class VanillaDialogueSeed
                   new() { Type = NodeConditionTypes.GroupAny, Conditions = gates },
               }
             : gates;
+    }
+
+    /// <summary>
+    /// What one start needs, all of it at once: the room it is on, and the
+    /// conditions written on it.
+    /// </summary>
+    public static List<NodeConditionDef> GateOf(VanillaDialogueCatalog.Start start, List<string>? untranslated)
+    {
+        var when = new List<NodeConditionDef>();
+
+        // Where it is played from is itself a condition, and the one an
+        // author is most likely to want: a room talk only runs while its
+        // room is the one on screen. The game does not write that down
+        // because it does not have to - the component lives on the room -
+        // so it reads as a conversation with no gate at all unless it is
+        // said out loud here.
+        var level = LevelOf(start);
+        if (level != null) when.Add(level);
+
+        foreach (var step in start.When ?? new List<VanillaDialogueCatalog.Step>())
+        {
+            if (step == null) continue;
+            var one = VanillaDialogueConditions.Translate(step);
+            if (one != null) when.Add(one);
+            else untranslated?.Add(step.Describe());
+        }
+        return when;
     }
 
     /// <summary>
@@ -201,8 +230,25 @@ public static class VanillaDialogueSeed
     /// </summary>
     private static NodeConditionDef? LevelOf(VanillaDialogueCatalog.Start start)
     {
+        var place = PlaceOf(start?.By);
+        if (place == null) return null;
+
+        return new NodeConditionDef
+        {
+            Type = NodeConditionTypes.LevelActive,
+            Params = new Dictionary<string, string> { ["level"] = "vanilla:" + place.GoName },
+        };
+    }
+
+    /// <summary>
+    /// The place a room's script belongs to, from where it sits
+    /// (<c>8_Room_Talk/&lt;room&gt;</c>, or anything under it), or null for a
+    /// script that is not a room's.
+    /// </summary>
+    public static VanillaPlaces.VanillaPlace? PlaceOf(string? by)
+    {
         const string root = "8_Room_Talk/";
-        string by = start?.By ?? "";
+        by ??= "";
         if (!by.StartsWith(root, StringComparison.Ordinal)) return null;
 
         // The room, and nothing under it: a conversation nested deeper is
@@ -211,15 +257,8 @@ public static class VanillaDialogueSeed
         int slash = room.IndexOf('/');
         if (slash >= 0) room = room.Substring(0, slash);
 
-        var place = VanillaPlaces.All.FirstOrDefault(
+        return VanillaPlaces.All.FirstOrDefault(
             p => string.Equals(p.RoomTalkName, room, StringComparison.OrdinalIgnoreCase));
-        if (place == null) return null;
-
-        return new NodeConditionDef
-        {
-            Type = NodeConditionTypes.LevelActive,
-            Params = new Dictionary<string, string> { ["level"] = "vanilla:" + place.GoName },
-        };
     }
 
     /// <summary>

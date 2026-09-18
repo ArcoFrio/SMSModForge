@@ -11,24 +11,28 @@ public static partial class VanillaQuests
     /// <summary>Every quest of the game's own that a pack can point at.</summary>
     public static readonly IReadOnlyList<VanillaQuest> All = new VanillaQuest[]
     {
-        new("A Trained Eye (Gabriel)", "A Trained Eye (Gabriel)", false, 0, new VanillaTask[]
+        new("A Trained Eye (Gabriel)", "A Trained Eye (Gabriel)",
+            "Gabriel, a well-known photographer, emailed me after seeing the photos I took of Anna. He liked what he saw and wants to meet. He says there's potential, and he’s offering to train me. This could be a huge step forward if I’m serious about improving. I should hear him out.", false, 0, new VanillaTask[]
         {
             new(889406522, -1, "Meet Gabriel.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(612240961, 889406522, "Visit Gabriel at his Mansion in the Hiils.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Acolyte (Adrian)", "Trial by Fire (Adrian)", false, 0, new VanillaTask[]
+        new("Acolyte (Adrian)", "Trial by Fire (Adrian)",
+            "Adrian wants to stop being invisible to women. I should take him to the mall and coach him through real-world interactions… whether he crashes or not.", false, 0, new VanillaTask[]
         {
             new(472439085, -1, "Teach Adrian how to approach women.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(-818926455, 472439085, "Meet Adrian at the mall.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Another Time (River", "Another Time (River)", false, 0, new VanillaTask[]
+        new("Another Time (River", "Another Time (River)",
+            "I met River at the park in the suburbs. He has this dreamy vibe, like he's in his own little world. Might be fun to spend more time with him... if I can figure out what he's really about.", false, 0, new VanillaTask[]
         {
             new(1813187919, -1, "Talk to River.", TaskCompletion.AnySubtask, TaskCounter.None, 0, "", false),
             new(-989935106, 1813187919, "Make time for a weekly visit to the park.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(400938478, -1, "Ask River to come over.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(-210829219, 400938478, "Spend some quality time with River.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Astrid Quest", "Into the Dark (Astrid)", false, 0, new VanillaTask[]
+        new("Astrid Quest", "Into the Dark (Astrid)",
+            "Astrid asked for my help finding something she lost deep inside Lady Noire’s lair. She won’t say what it is, only that it matters and that I’m the only one she trusts to get it back. If I go, I’ll be stepping into the heart of a vampire’s domain, where nothing is safe and everything has a price.", false, 0, new VanillaTask[]
         {
             new(276722473, -1, "Meet with Astrid.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(1321869430, 276722473, "Lady Noire's Lair is near the harbor.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
@@ -38,7 +42,8 @@ public static partial class VanillaQuests
             new(2076169433, -1, "Go back home.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(700721478, 2076169433, "I have the feeling someone's waiting for me.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Behind The Looking Glass (Alice)", "Behind The Looking Glass (Alice)", false, 0, new VanillaTask[]
+        new("Behind The Looking Glass (Alice)", "Behind The Looking Glass (Alice)",
+            "Adrian met a new friend at church. Her name's Alice, and she's basically the walking definition of a big tiddy goth girlfriend. Black eyeliner, teasing smile, no shame. Out of nowhere, she invited me to hang out. I have no idea what she really wants... but I’d be lying if I said I wasn’t curious. Should I take the risk?", false, 0, new VanillaTask[]
         {
             new(1813187919, -1, "Hit the club and see who shows up.", TaskCompletion.AnySubtask, TaskCounter.None, 0, "", false),
             new(-989935106, 1813187919, "Head to the club on Friday.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
@@ -48,7 +53,8 @@ public static partial class VanillaQuests
             new(-1235282320, 2044070570, "Turn up the heat and make her melt on the dancefloor.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(-1286401561, -1, "To be continued...", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Bishop (Mario)", "Bishop (Mario)", false, 0, new VanillaTask[]
+        new("Bishop (Mario)", "Bishop (Mario)",
+            "Mario di Luca, the former governor of PeakCity, made me an offer. He’ll cover the debt, but not out of kindness. A man like him never gives without taking. The real cost? Still unclear, but I’m already in too deep to back out now.", false, 0, new VanillaTask[]
         {
             new(1813187919, -1, "Help Mario compare files", TaskCompletion.AnySubtask, TaskCounter.None, 0, "", false),
             new(-989935106, 1813187919, "Visit Mario once a week.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
@@ -57,12 +63,14 @@ public static partial class VanillaQuests
             new(1410719678, -1, "Corrupt Emma.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(1070760953, 1410719678, "Visit the sauna every week.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Codebreaker (Samantha)", "Codebreaker (Samantha)", false, 0, new VanillaTask[]
+        new("Codebreaker (Samantha)", "Codebreaker (Samantha)",
+            "Sam offered to teach me the basics of hacking. It’s not exactly legal, but in a place like Peak City, knowing how to slip past a few firewalls might come in handy. If I want to learn, I need to keep up. She doesn’t slow down for anyone.", false, 0, new VanillaTask[]
         {
             new(1813187919, -1, "Start hacking lessons with Sam.", TaskCompletion.AnySubtask, TaskCounter.Property, 5, "Traits[Hacker]", false),
             new(-989935106, 1813187919, "Talk with Samantha at her place weekly.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Cold Logic (Dr. Frost)", "Cold Logic (Doctor Frost)", false, 0, new VanillaTask[]
+        new("Cold Logic (Dr. Frost)", "Cold Logic (Doctor Frost)",
+            "Dr. Evelyn Frost invited me to her hidden lab at the harbor. She says she’s working on something important and wants me to be part of it. She didn’t explain much, only that it involves testing and trust. I’m not sure what I’m walking into.", false, 0, new VanillaTask[]
         {
             new(856343042, -1, "Find Dr. Frost's secret lab.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(2074802715, 856343042, "Her lab should be at the harbor.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
@@ -73,14 +81,16 @@ public static partial class VanillaQuests
             new(1151313953, 912427419, "I probably already met someone divine, someone celestial.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(-1459919121, -1, "To be continued...", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Collab (Chloe)", "Collab (Chloe)", false, 0, new VanillaTask[]
+        new("Collab (Chloe)", "Collab (Chloe)",
+            "Chloe, one of the biggest names on Starmaker, just reached out for a collab. With me. No idea why she’s interested, but it’s a huge opportunity. Still… I’m not sure how Anna will feel about it.", false, 0, new VanillaTask[]
         {
             new(1813187919, -1, "Set up a meeting with Chloe.", TaskCompletion.AnySubtask, TaskCounter.None, 0, "", false),
             new(-989935106, 1813187919, "Go see Chloe at her place in the Hills.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(400938478, -1, "Start the collaboration with Chloe.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(-210829219, 400938478, "Visit Chloe on Wednesday.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Cryptids (Emma)", "Weirder Things (Emma)", false, 0, new VanillaTask[]
+        new("Cryptids (Emma)", "Weirder Things (Emma)",
+            "Emma asked for help investigating cryptid sightings around PeakCity. She’s not chasing monsters for fun. She’s trying to clean up her father’s mess. Most of the rumors are probably fake, but some might be real. We need to find out which is which.", false, 0, new VanillaTask[]
         {
             new(1813187919, -1, "Join Emma to look for signs of Bigfoot.", TaskCompletion.AnySubtask, TaskCounter.None, 0, "", false),
             new(-989935106, 1813187919, "Meet Emma in the city on Tuesday.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
@@ -89,13 +99,15 @@ public static partial class VanillaQuests
             new(-342992218, -1, "Investigate the vampire rumors.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(1942567620, -342992218, "Meet Emma in the city on Tuesday.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Debt", "<color=#ffd257>The Debt", false, -25, new VanillaTask[]
+        new("Debt", "<color=#ffd257>The Debt",
+            "Josef is drowning in debt, and it’s dragging all of us down with him. If we don’t deal with it, we’re stuck. Or… maybe there’s another way. If I make him leave Anna, the problem disappears with him.", false, -25, new VanillaTask[]
         {
             new(1813187919, -1, "Find a way to deal with Josef’s debt.", TaskCompletion.AnySubtask, TaskCounter.None, 0, "", false),
             new(-989935106, 1813187919, "Support Josef in paying off what he owes.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(-1675646997, 1813187919, "Or find a way to push Josef out.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Dinner Boyfriend (Himari)", "A Convincing Lie (Himari)", false, 0, new VanillaTask[]
+        new("Dinner Boyfriend (Himari)", "A Convincing Lie (Himari)",
+            "Himari wants me to pretend to be her boyfriend while her parents are visiting. No feelings, no questions, just play my role and look convincing. Smile at the right moments, say the right things, and don’t embarrass her. It sounds simple, but with her family watching every move, one mistake could turn this little favor into a disaster.", false, 0, new VanillaTask[]
         {
             new(1070060591, -1, "Get through the first dinner.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(351069880, 1070060591, "I can visit Himari once a week using the garage elevator.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
@@ -104,14 +116,16 @@ public static partial class VanillaQuests
             new(2131395796, -1, "Get through the last dinner.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(1071521521, 2131395796, "Prove your worth in front of her parents.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Explore The City", "<color=#ffd257>The World Just Got Bigger", false, -15, new VanillaTask[]
+        new("Explore The City", "<color=#ffd257>The World Just Got Bigger",
+            "I finally have Josef’s car. No more waiting around, no more being stuck at home. Peak City is wide open now, and every road leads to someone new, something risky, or an opportunity I didn’t even know I needed. This is my first real taste of freedom. Where I go next is my choice.", false, -15, new VanillaTask[]
         {
             new(1802849953, -1, "Explore Peak City", TaskCompletion.SubtasksInCombination, TaskCounter.Value, 3, "", false),
             new(-1625034000, 1802849953, "Visit the Mall", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(-2014205567, 1802849953, "Visit the Beach", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(-1798439349, 1802849953, "Visit the Park", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Fanboy (Ken)", "Fanboy (Ken)", false, 0, new VanillaTask[]
+        new("Fanboy (Ken)", "Fanboy (Ken)",
+            "I got an email from some guy named Ken. He says he’s Anna’s biggest fan and practically worships her Starmaker content. He’s even offering money for a custom photo. Feels a little weird... but also like an easy payday. Should I take it?", false, 0, new VanillaTask[]
         {
             new(1813187919, -1, " Go over Ken's email.", TaskCompletion.AnySubtask, TaskCounter.None, 0, "", false),
             new(-989935106, 1813187919, "Speak with Anna in the kitchen.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
@@ -120,14 +134,16 @@ public static partial class VanillaQuests
             new(-25251400, -1, "Keep an eye on Ken’s meeting with Anna.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(-1160666087, -25251400, "Be at your front door to meet Ken on Thursday.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Flowers (Zhen)", "Flowers (Zhen)", false, 0, new VanillaTask[]
+        new("Flowers (Zhen)", "Flowers (Zhen)",
+            "Zhen wants to rebuild his garden to find some peace, but it’s clear he doesn’t have a green thumb. Still, he’s trying. Maybe I can find someone who knows what they’re doing to help him out.", false, 0, new VanillaTask[]
         {
             new(1813187919, -1, "Look for someone with gardening skills.", TaskCompletion.AnySubtask, TaskCounter.None, 0, "", false),
             new(-989935106, 1813187919, "Talk to Anna about helping with the garden.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(400938478, -1, "Go back to Zhen.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(-210829219, 400938478, "Visit Zhen and speak with him at the shrine.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Gabriel Training", "Photography Lessons (Gabriel)", false, 0, new VanillaTask[]
+        new("Gabriel Training", "Photography Lessons (Gabriel)",
+            "Gabriel, a well-known and talented photographer, offered to mentor me. He’s the real deal — creative, experienced, and connected. Passing on this would be a mistake. If I want to grow, I should take him up on it.", false, 0, new VanillaTask[]
         {
             new(1813187919, -1, "Finish Gabriel’s first set of lessons.", TaskCompletion.AnySubtask, TaskCounter.None, 0, "", false),
             new(-989935106, 1813187919, "Meet Gabriel every Tuesday.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
@@ -147,14 +163,16 @@ public static partial class VanillaQuests
             new(-2003788056, -1, "Finish Gabriel’s last teaching session.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(1270318540, -2003788056, "Pass Gabriel’s ultimate photography challenge.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Gains (Phoneix", "Gains (Phoenix)", false, 0, new VanillaTask[]
+        new("Gains (Phoneix", "Gains (Phoenix)",
+            "Phoenix offered to train me. With her strength, energy, and zero tolerance for slacking, she could whip me into shape in no time. It won’t be easy, but if I want results, she’s the one to follow.", false, 0, new VanillaTask[]
         {
             new(1813187919, -1, "Finish a full session of Phoenix’s standard training.", TaskCompletion.AnySubtask, TaskCounter.Value, 5, "", false),
             new(-989935106, 1813187919, "Complete five regular training sessions with Phoenix.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(400938478, -1, "Finish one of Phoenix’s advanced training sessions.", TaskCompletion.SubtasksInSequence, TaskCounter.Value, 5, "", false),
             new(-210829219, 400938478, "Complete five special training sessions with Phoenix.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Going Live (Anna)", "Going Live (Anna)", false, 0, new VanillaTask[]
+        new("Going Live (Anna)", "Going Live (Anna)",
+            "Anna wants to start doing livestreams, but the internet in the basement studio is awful. If we’re serious about this, we’ll need to improve the signal first. No stream is happening with the connection like this.", false, 0, new VanillaTask[]
         {
             new(1813187919, -1, "Look for someone who knows their way around tech.", TaskCompletion.AnySubtask, TaskCounter.None, 0, "", false),
             new(-989935106, 1813187919, "Speak with Joey about the issue.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
@@ -165,7 +183,8 @@ public static partial class VanillaQuests
             new(1569370815, -1, "Return to Anna.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(-1094926156, 1569370815, "Talk to Anna at the Studio.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Going Viral (Anna)", "<color=#ffd257>Starmaker", false, -50, new VanillaTask[]
+        new("Going Viral (Anna)", "<color=#ffd257>Starmaker",
+            "The Starmaker page is live. Anna and I took the leap, and there’s no turning back now. This is more than just a side project. It's the start of something bigger. If we want to rise through the ranks and make a real impact, I need to capture her at her best. Every photo matters. Every shoot brings us closer to the top.", false, -50, new VanillaTask[]
         {
             new(1813187919, -1, "Reach 50 subscribers on Anna’s page.", TaskCompletion.AnySubtask, TaskCounter.Property, 50, "Core[Subscriber]", false),
             new(-989935106, 1813187919, "Keep photographing Anna to build content.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
@@ -190,31 +209,36 @@ public static partial class VanillaQuests
             new(-283368465, -1, "Visit the Studio.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(-202414027, -283368465, "Ask Anna to pose with your cock in full view.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Gold and Wine (Charlotte)", "Gold And Wine (Charlotte)", false, 0, new VanillaTask[]
+        new("Gold and Wine (Charlotte)", "Gold And Wine (Charlotte)",
+            "Charlotte invited me to her yacht. Private, luxurious, and way out of my usual league. This could be the perfect chance to get closer to her...to find out what she really wants, and maybe give her what she’s looking for.", false, 0, new VanillaTask[]
         {
             new(1813187919, -1, "Build a connection with Charlotte.", TaskCompletion.AnySubtask, TaskCounter.None, 0, "", false),
             new(-989935106, 1813187919, "Meet Charlotte on her yacht each Monday.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Heavenly Husband (Himari) OUTDATED", "Heavenly Husband (Himari)", false, 0, new VanillaTask[]
+        new("Heavenly Husband (Himari) OUTDATED", "Heavenly Husband (Himari)",
+            "Himari is quite stuck-up, and pointing out her flaws will be challenging. Should I take on that task?", false, 0, new VanillaTask[]
         {
             new(1813187919, -1, "Reveal the truth to Himari", TaskCompletion.AnySubtask, TaskCounter.None, 0, "", false),
             new(-989935106, 1813187919, "Become a heavenly husband and confront Himari", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Inner Regret", "<color=#ffd257>Inner Regret", false, -5, new VanillaTask[]
+        new("Inner Regret", "<color=#ffd257>Inner Regret",
+            "Something’s different. I can see it in Anna’s face. There’s a flicker of regret she’s trying hard to hide. She’s holding herself together, but just barely. If I don’t step in soon, she’s going to fall apart… and I’m not sure she’ll come back from it.", false, -5, new VanillaTask[]
         {
             new(1813187919, -1, "Support Anna and help her recover emotionally.", TaskCompletion.AnySubtask, TaskCounter.None, 0, "", false),
             new(-989935106, 1813187919, "Speak with Anna when she’s drinking in the kitchen.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(-649791451, 1813187919, "Be there for Anna and try to pull her back up.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(871721791, 1813187919, "Or don't...", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Just A Drink (Liz)", "Just A Drink (Liz)", false, 0, new VanillaTask[]
+        new("Just A Drink (Liz)", "Just A Drink (Liz)",
+            "There’s a cute chemistry between Liz and Anna. It starts with smiles and small talk, but I can feel the tension building. If I play this right, it could lead to something a lot more fun.", false, 0, new VanillaTask[]
         {
             new(1813187919, -1, "Hang out with Liz and see where things go.", TaskCompletion.AnySubtask, TaskCounter.None, 0, "", false),
             new(-989935106, 1813187919, " Meet up at the bar each Tuesday night.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(400938478, -1, "Spend time with both Anna and Liz.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(-210829219, 400938478, "Head to the hotel.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Justice (Sofia)", "Justice (Sofia)", false, 0, new VanillaTask[]
+        new("Justice (Sofia)", "Justice (Sofia)",
+            "Sofia, one of the few honest cops in Peak City, wants my help taking down Mario. She’s serious, and she’s got dirt on him. Helping her might be the right thing to do… but if I side with her, I’ll have to handle the debt on my own. No favors, no shortcuts. She’s waiting at the gas station every Friday.", false, 0, new VanillaTask[]
         {
             new(1813187919, -1, "Search for proof that can be used against Mario.", TaskCompletion.AnySubtask, TaskCounter.None, 0, "", false),
             new(-989935106, 1813187919, "Assist Sofia in her case against Mario.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
@@ -222,7 +246,8 @@ public static partial class VanillaQuests
             new(400938478, -1, "Check back in with Sofia.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(-210829219, 400938478, "Meet Sofia at the gas station on Friday.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Lonely (Samantha)", "Lonely (Samantha)", false, 0, new VanillaTask[]
+        new("Lonely (Samantha)", "Lonely (Samantha)",
+            "Samantha hides it well, but the loneliness is all over her. Two decades of being a housewife, forgotten passions, and fading sparks. She’s lost touch with who she used to be. Maybe I can remind her how it feels to be alive again.", false, 0, new VanillaTask[]
         {
             new(1813187919, -1, "Break through her walls and earn her trust.", TaskCompletion.AnySubtask, TaskCounter.Property, 3, "Core[samantha-seduction]", false),
             new(-989935106, 1813187919, "Spend Mondays with Samantha at the beach.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
@@ -231,7 +256,8 @@ public static partial class VanillaQuests
             new(-196740262, -1336846769, "Stop by Samantha’s house and spend time with her.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(926414583, -1336846769, "She’s in the living room on Tuesday and Friday.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Moo! (Kirby)", "Moo! (Kirby)", false, 0, new VanillaTask[]
+        new("Moo! (Kirby)", "Moo! (Kirby)",
+            "Kirby came to me with a wild idea. She wants to turn her struggling farm into a full-blown human milk dairy. She’s completely serious. I’m not sure how we’re pulling this off, but she’s excited and determined... and now I’m involved. Welp, here goes nothing.", false, 0, new VanillaTask[]
         {
             new(1813187919, -1, "Introduce yourself to Kirby.", TaskCompletion.AnySubtask, TaskCounter.None, 0, "", false),
             new(-989935106, 1813187919, "Go to Kirby’s farm and check it out.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
@@ -242,23 +268,35 @@ public static partial class VanillaQuests
             new(837760614, -1, "Help Kirby get the dairy running successfully.", TaskCompletion.SubtasksInSequence, TaskCounter.Property, 5, "Milking Save[bafa-totalmilksold]", false),
             new(708891727, 837760614, "Maintain steady milk production.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Mura Quest", "The Other Side of Science (Dr. Mura)", false, 0, new VanillaTask[]
+        new("Mura Quest", "The Other Side of Science (Dr. Mura)",
+            "While exploring Dr. Frost's lab, I found someone locked away... Dr. Mura, her former colleague. He claims he was imprisoned for opposing her methods. I can choose to help him escape or leave him to his fate. Either way, the truth behind Frost’s work is more complicated than she let on.", false, 0, new VanillaTask[]
         {
             new(2122219745, -1, "Talk to Dr. Mura.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(685928625, 2122219745, "I discovered that he is held prisoner by Evelyn. ", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(-2142819677, -1, "To be continued...", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("No Going Back (Anna)", "<color=#ffd257>Point of No Return", false, -5, new VanillaTask[]
+        new("No Going Back (Anna)", "<color=#ffd257>Point of No Return",
+            "This is it. I can see it in Anna’s eyes. She’s already mine — even if she hasn’t said it out loud. One word, one touch, and she’ll give in completely. She wants this. So do I. But am I ready to cross that final line and take her without holding back?", false, -5, new VanillaTask[]
         {
             new(-2076518017, -1, "Go to the studio and meet with Anna.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(-1460210145, -2076518017, "Fuck Anna raw in the studio. No condom. No regrets.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Rival (Tristan)", "Rival (Tristan)", false, 0, new VanillaTask[]
+        new("Old Friends (Charlotte)", "Old Friends (Charlotte)",
+            "Charlotte says she wants to help Anna, but now she needs something from me to make it happen. I’m not sure I trust her. There’s something in her smile that feels off. Still, if it’s for Anna… I might not have a choice.", false, 0, new VanillaTask[]
+        {
+            new(1813187919, -1, "Meet with Charlotte.", TaskCompletion.AnySubtask, TaskCounter.None, 0, "", false),
+            new(-989935106, 1813187919, "Be at the garage to meet Charlotte on Tuesday.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
+            new(400938478, -1, "Locate Cheeseburger.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
+            new(-210829219, 400938478, "Assist Charlotte in tracking down Cheeseburger.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
+        }),
+        new("Rival (Tristan)", "Rival (Tristan)",
+            "I met Tristan, a smug rival who manages a Starmaker page for his own group of girls. He’s confident, maybe too confident. This isn’t just about content anymore. It’s about pride. Maybe it’s time to show him who really runs the game.", false, 0, new VanillaTask[]
         {
             new(1813187919, -1, "Beat Tristan at his own game.", TaskCompletion.AnySubtask, TaskCounter.None, 0, "", false),
             new(-989935106, 1813187919, "Check out different places in Peak City each Wednesday.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Secrets (Adrian)", "Secrets (Adrian)", false, 0, new VanillaTask[]
+        new("Secrets (Adrian)", "Secrets (Adrian)",
+            "Adrian has his PC locked down tighter than usual. Passwords, hidden folders, constant paranoia. He’s definitely hiding something. The question is... what is it, and how far am I willing to go to find out?", false, 0, new VanillaTask[]
         {
             new(1813187919, -1, "Figure out how to get into Adrian’s computer.", TaskCompletion.Manual, TaskCounter.None, 0, "", false),
             new(-989935106, 1813187919, "Bypass Adrian’s security and access his files.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
@@ -275,7 +313,8 @@ public static partial class VanillaQuests
             new(-643516662, -1, "Check the Bathroom.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(-150770455, -643516662, "Adrian should be more confident now.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Starborn (Celeste)", "Starborn (Celeste)", false, 0, new VanillaTask[]
+        new("Starborn (Celeste)", "Starborn (Celeste)",
+            "Celeste is the undisputed queen of Starmaker. Elegant, untouchable, and always ahead. But her presence is keeping Anna from rising any further. If I want Anna to reach the top, I’ll have to bring Celeste down or find a way to remove her from the spotlight. One way or another, the throne won’t stay hers forever.", false, 0, new VanillaTask[]
         {
             new(1813187919, -1, "Arrange a meeting with Starmaker’s top model.", TaskCompletion.AnySubtask, TaskCounter.None, 0, "", false),
             new(-989935106, 1813187919, "Head to the abandoned theme park.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
@@ -289,33 +328,38 @@ public static partial class VanillaQuests
             new(1236349690, 1358935201, "Try to talk Celeste into stepping aside.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(1029245597, 1358935201, "... Or destroy Celeste’s image.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Starcon", "Starcon (Anna)", false, 0, new VanillaTask[]
+        new("Starcon", "Starcon (Anna)",
+            "Anna and I got an invitation to Starcon, one of the biggest events in the Starmaker world. The entry fee is high, but the exposure, connections, and opportunities could be exactly what we need to push Anna’s page to the next level. The question is... can we afford not to go?", false, 0, new VanillaTask[]
         {
             new(1813187919, -1, "Attend the Starcon event.", TaskCompletion.AnySubtask, TaskCounter.None, 0, "", false),
             new(-989935106, 1813187919, "Go to Starcon with Anna during the weekend.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Techbro (Joey)", "Techbro (Joey)", false, 0, new VanillaTask[]
+        new("Techbro (Joey)", "Techbro (Joey)",
+            "Joey came to me with one of his ideas... a prank on Zuri. She’s always so serious, and he’s dying to get under her skin. I agreed to help him pull it off. This might blow up in our faces, but honestly, it sounds like fun.", false, 0, new VanillaTask[]
         {
             new(1813187919, -1, "Talk to Zuri.", TaskCompletion.AnySubtask, TaskCounter.None, 0, "", false),
             new(-989935106, 1813187919, "Get Zuri to investigate the restroom.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(400938478, -1, "See how Zuri’s doing after the prank.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(-210829219, 400938478, "Go to the restroom where the prank is set up.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("The Moment of Truth (Josef)", "Moment of Truth (Josef)", false, 0, new VanillaTask[]
+        new("The Moment of Truth (Josef)", "Moment of Truth (Josef)",
+            "Josef’s not holding it together. The pressure is building, the debt keeps growing, and the distance from Anna is only getting worse. I could help him get back on his feet… or I could use this chance to take control. Maybe it’s time someone else became the man of the house.", false, 0, new VanillaTask[]
         {
             new(1813187919, -1, "Meet Josef at the door each Friday.", TaskCompletion.AnySubtask, TaskCounter.None, 0, "", false),
             new(-989935106, 1813187919, "Pick up beer before talking to Josef.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(-368520077, 1813187919, "Gain Josef’s trust.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(1806912568, 1813187919, "... Or use Josef’s weakness to your advantage.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Vanessa Quest", "Holy Temptation (Vanessa)", false, 0, new VanillaTask[]
+        new("Vanessa Quest", "Holy Temptation (Vanessa)",
+            "Vanessa tries to keep her desires buried beneath faith and discipline, but I can see the cracks forming. She’s torn between devotion and temptation, and I might be the one who tips the balance. If I push, she might fall. The question is how far she's willing to go before guilt pulls her back.", false, 0, new VanillaTask[]
         {
             new(2105965574, -1, "Spend time with Vanessa.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(-359344693, 2105965574, "You can study with her once a week at the Library.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(-413582714, -1, "Help Vanessa to open up.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
             new(556514677, -413582714, "I should talk to her at church.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),
         }),
-        new("Virile (Isabella)", "Virile (Isabella)", false, 0, new VanillaTask[]
+        new("Virile (Isabella)", "Virile (Isabella)",
+            "Isabella reached out and wants to meet. I’m curious what she has to say, but I can’t forget who she is... Josef’s ex. He warned me about her, said she brings nothing but trouble. Still, I want to hear her out.", false, 0, new VanillaTask[]
         {
             new(1813187919, -1, "Go to the meeting with Isabella.", TaskCompletion.AnySubtask, TaskCounter.None, 0, "", false),
             new(-989935106, 1813187919, "Show up at the hotel to meet Isabella on Thursday.", TaskCompletion.SubtasksInSequence, TaskCounter.None, 0, "", false),

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace SMSModForge.Model;
@@ -352,4 +353,15 @@ public sealed class ModPack
     [JsonProperty("questFolders", Order = 30)]
     public List<UnitFolderDef> QuestFolders { get; set; } = new();
     public bool ShouldSerializeQuestFolders() => QuestFolders != null && QuestFolders.Count > 0;
+
+    /// <summary>
+    /// Conditions the pack takes out of the game's own scripts - a room's
+    /// branch that plays a conversation, most often. Edited from the Quests
+    /// tab (a place that starts or resets a quest) and the Dialogues tab (what
+    /// the game checks before playing a conversation). See
+    /// <see cref="GameGateEditDef"/>.
+    /// </summary>
+    [JsonProperty(SMSModForge.Shared.GameConditionEdits.GatesKey, Order = 31)]
+    public List<GameGateEditDef> VanillaGates { get; set; } = new();
+    public bool ShouldSerializeVanillaGates() => VanillaGates != null && VanillaGates.Any(g => g.Removed.Count > 0);
 }

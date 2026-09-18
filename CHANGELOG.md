@@ -1,4 +1,435 @@
-﻿# Changelog
+# Changelog
+
+## 1.5.0
+
+The game's own quests, yours to change: add and take out their tasks, change
+what starts and resets them, and see everything the game does with them. The
+game now warns a player whose save might not suit a pack, and the dialogue Text
+box gets proper undo and a colour picker.
+
+### Before you update
+
+**Every character of your pack now has the neutral expression, and older packs
+gain it when they open.** A character that has none gets `neutral` as its first
+expression, with an empty child name, which is how the runtime spells no face
+showing. One that already has a neutral row keeps it exactly as it is. The
+editor says how many characters it gave one when the pack loads, nothing is
+written until you save, and the first save keeps a copy of the original beside
+the manifest, as with every migration. The game's own characters are not
+touched: the game gives them theirs.
+
+**A line of the game's with every condition taken out now plays without
+them.** In earlier versions the game went on checking its own conditions for
+such a line, whatever your pack said. If a pack of yours took every condition
+off one of the game's lines, that line now does what the pack asked once
+players update the plugin.
+
+### Change the game's own quests
+
+**+ Vanilla on the Quests tab.** An entry about one of the game's quests, in a
+**Vanilla quests** list of its own under your quests - the same split the
+Places and Dialogues tabs make, with each entry showing how much it changes
+(tasks added, tasks taken out, other changes). Pick the quest by name, and your
+pack can
+
+- **replace the paragraph the journal shows under its title**, with the game's
+  own shown beside the box so you can see what you are replacing;
+- **change that paragraph as its tasks are done** - every task in the list
+  gets a "Quest description once done", and the journal shows the one from the
+  task furthest down the list that is finished;
+- **run actions when the game completes one of its tasks**, whether its own
+  dialogue finished it or a Quest action of yours did;
+- **hide any of its tasks** from the journal - always, or (for a subtask) until
+  it starts;
+- **add tasks and subtasks of your own** anywhere in it: before or after the
+  game's, as new top-level steps, or as subtasks of one of the game's steps -
+  including a step that had none. They have everything a task of your own quest
+  has: text, completion conditions and actions, a counter, "Hidden until it
+  starts" and "Quest description once done". Quest actions and conditions name
+  them on the Vanilla side, by the game's quest and your task's runtime name;
+- **take any of its tasks out** of the quest;
+- **start the quest early**, when conditions of yours pass, if the game has not
+  started it already.
+
+The Tasks list shows the game's tasks in the game's order with yours among
+them, marked "yours". + Task and + Subtask add a task just after the selected
+row, ▲ and ▼ move yours past the game's, and − Remove deletes one of yours or
+takes one of the game's out (its panel puts it back).
+
+**Adding and taking out tasks can break a save that is already under way, and
+so can removing your pack later** - the game waits for every task in its order,
+including yours, and a quest part-way through when its list changes can be
+left with nothing it can finish. That is your call to make; the editor says so
+in orange on any entry that does it, and the game warns the player (see
+below). Two things keep it from being worse than it has to be:
+
+- **A task taken out is not deleted.** The game's own scenes still name it, and
+  the game's quest code fails on a task that is not there. It stays, hidden,
+  and the quest moves past it the moment it starts, as though the game had
+  completed it. Under a task that finishes with any one of its subtasks it is
+  left alone instead, so it cannot finish that task for the player.
+- **A save that lost tasks is put back on its feet.** When a save has progress
+  on tasks a game quest no longer has - your pack added them and is gone, or
+  now adds different ones - the plugin does, once, what the game would have
+  done with the quest as it is now: completes a step whose subtasks are all
+  done, starts the next step of an in-order list that has nothing in progress,
+  and completes the quest when all of its steps are. Only for those quests.
+
+Everything your pack changes on the game's quests goes back to the game's own
+whenever a save is loaded, and only the packs installed then put theirs on
+again - so removing a pack and loading a save, without restarting the game,
+leaves nothing of it behind.
+
+The game's tasks are named by the id the game files them under rather than by
+their text, so a patch that rewrites a line does not detach what you hung on
+it. Your added tasks are filed under an id made from your pack, the game's
+quest and the task's runtime name, so renaming the entry itself is safe but
+renaming one of those tasks after release starts it over for players.
+
+Needs this version of the plugin. An older one does not know what an entry
+like this is: it reads it as a quest of your pack's own, with no title and no
+tasks, and would put a blank quest in the journal if anything started it.
+
+### See what the game does with its own quests
+
+**What the game does with it**, on an entry about one of the game's quests and
+on each of its tasks: every place the game starts the quest or puts it back to
+not started, and every place it completes, counts, fails or abandons a task.
+Each one says
+
+- **where it is**: which conversation, and which line - as the line appears, or
+  once it is done - with the lines the player passes through to get there; or
+  which script on which object (a room, a trigger, a button), what sets it
+  off, whether that object starts switched off, and which conversations the
+  script plays just before and just after it;
+- **what has to be true for it to happen**: the conditions on the way there,
+  and what the conversation needs before it plays, as read-only condition rows
+  like the ones a changed conversation already shows. A condition ModForge has
+  no equivalent for is still listed, in the game's own words, so nothing looks
+  less guarded than it is;
+- for a counter, how much it adds.
+
+**Open conversation** takes you to that conversation on the Dialogues tab, with
+the line selected. If your pack does not change that conversation yet, you are
+asked before it is added to your vanilla conversations; it changes nothing
+until you edit it.
+
+**Every task now says when it starts**, the game's and yours alike. Nothing in
+the game starts a task directly - it follows the quest's order - so the panel
+works it out from where the task sits: when the quest starts, once the task
+before it is done, when its own task starts, or never, under a task completed
+by an action. A task your pack takes out is counted as skipped on the way.
+
+This covers everything the game does to its quests: all 180 of its quest steps,
+in its conversations and in every script of the scene they are all in.
+
+**"Old Friends (Charlotte)" is now in the list of the game's quests.** It was
+missing because the list only counted quests started from a line of a
+conversation, and this one is started by the script that plays the
+conversation.
+
+### Change what starts and resets the game's quests
+
+The places under **Started by** and **Put back to not started by** can now be
+changed. Each of the game's conditions around the step is listed where it
+lives - a line on the way, the line itself, the place that plays the
+conversation, or the script - and
+
+- **Take out** removes one of them from the game. It stays on screen, struck
+  through, with **Put back** beside it. A condition that belongs to a line is
+  taken out of your version of that conversation; one that belongs to a
+  place is taken out of that place's script. Either way, whatever else it
+  guards happens without it too - the line is offered, or the room plays the
+  conversation - because that is where the game keeps it. The Dialogues tab
+  shows the same change.
+- **And only if (yours)** adds conditions of your own.
+- **Where it is** is a row too, and it can be taken out: the game's script
+  sits on one room, so the quest only ever starts there until you say
+  otherwise.
+
+**Once you change anything at a place, that place is yours, and what is left of
+it starts the quest by itself.** The game's conditions you kept, the room
+(unless you took it out) and your own are asked over and over; the moment they
+all pass, the quest starts - whether or not the conversation ever plays or the
+script ever runs. So "take out everything, add Insert" means: press Insert and
+the quest starts. Take the room out as well and it starts anywhere. A place you
+have not touched is untouched: the game reaches it and starts the quest, as
+always. Putting everything back gives the place back to the game.
+
+The same for **Put back to not started by**, with the quest going back to not
+started. A quest never starts on a frame where something of yours would put it
+back.
+
+A changed place is marked with a dot, and its reset arrow puts it back the way
+the game has it.
+
+**What the game tries first is shown, and stops mattering once a place is
+yours.** A room plays the first of its conversations that can play, so the ones
+before yours come first - at the bar, Claudia's, Zuri's, Kate's and Toni's come
+before Anna and Liz's first one. Every place says which those are ("The game
+tries these first: ClaudiaBar, ZuriBar, ..."), on the Quests tab and on the
+Dialogues tab, and it is worth knowing for the conversation itself; your rule
+for the place does not wait for any of them. The game's log also says, each time
+a room picks a conversation from a list you changed, which one it played.
+
+A place in a room says which room in its heading ("... plays from
+8_Room_Talk/Bar (Conditions), in Bar"). The room is not listed as a condition:
+it isn't one of the game's - the script runs there because that is where it
+lives - so there is nothing to take out or change. To have a quest start
+somewhere else as well, use a LevelActive condition in your own Starts when.
+The Dialogues tab still shows the room as the first row of "The game plays this
+when", headed as where the game's script is. The game's conditions are no
+longer headed "Required - this dialogue only starts in this level", which
+belongs only to the level row of a dialogue of your own (still required, still
+editable).
+
+**Resets when**, beside Starts when, on your quests and on the game's: when all
+of its conditions pass, a quest that has started - in progress, completed or
+failed - goes back to not started, with its tasks and counts, so it can be done
+again. While they pass, the start conditions wait, so a quest can't start and
+reset in turn.
+
+**What an entry about one of the game's quests changes is now shown, and each
+change can be undone,** the way a changed conversation's lines are: a
+**Changes** line with **Reset all** (which puts everything above back,
+including the conditions taken out), a **Reset** beside the description, and a
+dot on every task of the game's that you change, whose panel lists each change
+with its own button and a **Reset** for the whole task.
+
+**On the Dialogues tab, "The game plays this when" can be changed too**: one
+group per place that plays the conversation, each of the game's conditions
+with Take out and Put back, and the same change shown on the Quests tab. The
+conversation's Reset all puts them back as well.
+
+Taking a condition out of the game's conversations or scripts is a change to
+when a conversation happens, so a player loading a save already under way is
+warned about it, as for a changed line. A place that only gains conditions of
+yours is not warned about: it can only make the quest start somewhere the game
+would not have started it.
+
+If a game update moves a condition you took out, the game checks it as before
+and the Issues list says so, rather than something else being taken out in
+its place.
+
+Needs this version of the plugin. An older one does not take conditions out of
+the game's scripts, decide a place for itself, or reset a quest by its Resets
+when list. **Packs written during the previous test builds need one save**: what
+a changed place comes to is worked out when the pack is saved, and the plugin
+says so in the log if it finds a place without it.
+
+**Fixed: a line of the game's with every condition taken out still checked
+them all.** Taking the last condition off one of the game's lines, in your
+version of a conversation, reached the game as "nothing said about this line's
+conditions", so the game went on checking its own. Now an empty list means what
+it says. A pack made with an earlier version that did this gets the change it
+asked for once players update the plugin: the line is offered without those
+conditions.
+
+**Fixed: "This entry changes nothing about ..." on an entry that does.** An
+entry about one of the game's quests whose only changes were to what starts or
+resets it - Resets when, your conditions at one of its places, or the game's
+conditions taken out there - was listed in Issues as doing nothing.
+
+**Fixed: a conversation line's conditions and actions went stale after a
+reset.** Putting a line's conditions or actions back the way the game has them
+left the panel showing the old list, and editing one of those rows changed
+nothing that was saved.
+
+### The game warns before a save meets a pack it might not suit
+
+When a player loads a save, a window now stops them as soon as it has loaded -
+before your pack's rules and quests move - when either of these is true, and
+says both when both are:
+
+- **A pack changes the game's own quests or conversations in ways this save has
+  not been played with.** That is: tasks added to or taken out of one of the
+  game's quests; lines of one of the game's conversations changed, added or
+  taken out, or one of the game's conditions taken out of what plays one. They
+  are told what the pack actually changed, in plain words: **the game's own
+  quests** when it adds or takes out tasks; **when the game's own quests
+  start** when it takes conditions out where one of them starts (on the
+  Quests tab); **when the game's own conversations play** when it takes
+  conditions out anywhere else; **the game's own conversations** only when it
+  rewrites lines. A pack that only changed a quest is no longer said to change
+  conversations. They are told it as a list when there are several packs, that
+  progress could break - now, or if the pack is removed later - and that a new
+  game is safest. **The game's quests the pack changes are listed** - tasks
+  changed, or where they start taken over - **each with where this save is in
+  it**: not started yet; in progress
+  and should be fine; in progress with a new task added before where the
+  player is, which can leave it stuck (the game only completes a task once
+  every task before it is done); or already finished, so the changes won't be
+  seen. It is kept short on purpose: the warning itself is one sentence, and the lists - what each pack changes, and which quests - sit in a box of their own under it, in smaller text, which scrolls (with a scrollbar and the mouse wheel) once there is more than fits, so the window never outgrows the screen however many packs a player has. **Saves from before this version** carry no
+  record of what they were played with. For the one change a pack could already
+  make then - rewritten conversations - such a save is told ModForge can't tell
+  whether it has been played with it, rather than that it hasn't; everything
+  else is new in this version, so an older save is told plainly. Once they continue, the save the
+  game writes when they next sleep remembers it and is not asked again (a save
+  made before sleeping is a copy of the one they loaded, so it still asks). A
+  pack update that starts changing something new asks again, about that. New
+  games are never asked: they start with the changes in place. Changes to the
+  game's places and screens, and to its characters' art, voice or name colour,
+  are not asked about.
+- **The save has data from a pack that is not installed.** The pack is named,
+  and they are told its data won't be kept in the saves they make from then
+  on - which was already true, and nothing said it.
+
+**Continue** goes on with the save, and the window folds away the way the
+game's own panels close. **Return to Main Menu** leaves the save for the title
+screen the way the game itself goes back to it after an ending, with the same
+reset of the game's state. Both buttons make the game's own button click. Only the packs that are installed
+have their data read, as before.
+
+The Quests and Dialogues tabs say the same thing in orange where you make one
+of those changes, so it is not a surprise when a player reports the window.
+
+### Hide a task until your conditions pass
+
+**Hidden until conditions pass**, on any task of yours and - as a choice under
+"In the journal" - on any of the game's tasks in a quest you extend: the task
+stays out of the journal until conditions of yours all pass. Once they have, it
+stays in the journal for the rest of that save; tick **Hide it again when they
+stop passing** to show it only while they pass instead. It uses the same
+condition list as everything else, and changes nothing about when the task or
+its quest finishes. Neither the game nor ModForge could do this before: the
+game's journal only knows a task as hidden or not.
+
+Needs this version of the plugin. An older one ignores it and shows the task.
+
+### A quest's journal entry keeps up with the player
+
+**Quest description once done**, on every task: what the quest's description
+becomes in the journal once that task is done. Several tasks can have one; the
+journal shows the one from the task furthest down the list that is done, and
+the quest's own description before any of them is. It is worked out from where
+the player is each time rather than remembered, so it cannot come back wrong
+after a load.
+
+**Hidden until it starts**, on a subtask: keeps it out of the journal until it
+starts. The game's journal lists every subtask of a task it shows, including
+the ones that have not started yet, so a quest with steps in order gave the
+later steps away. Under a task whose subtasks run in order, a hidden one appears
+once the subtask before it is done. A top-level task has no tick because it
+does not need one: the game's journal already leaves out a top-level task until
+it starts.
+
+Both need this version of the plugin. An older one ignores them.
+
+### Undo in the dialogue Text box
+
+**Ctrl+Z and Ctrl+Y step through a line one change at a time.** Using a
+formatting button broke both: every other Ctrl+Z appeared to do nothing, and
+anything undone could not be redone. The box redraws the line whenever its
+formatting changes, and each redraw was being recorded as an edit of its own.
+Now a run of typing is one step, each formatting button is one step, and redo
+works until you make a new edit. With nothing of the line's left to undo,
+Ctrl+Z goes on to the editor's own undo, as it does from any other field.
+
+### Text colours match the game
+
+**The Text box and the game-look row now agree about colours, and both agree
+with the game.** They read `<color=…>` differently: the formatting button's own
+`#f66` was red in the Text box and white on the row. Neither was right about
+everything. Read off the game's own text code, the game accepts:
+
+- `#RGB`, `#RGBA`, `#RRGGBB` and `#RRGGBBAA`. The short forms do work in game:
+  `#f66` is `#ff6666`.
+- Ten names, in any case: red, lightblue, blue, grey, black, green, white,
+  orange, purple, yellow.
+
+The row only understood six and eight digits, so it showed short codes and
+names as white. The Text box used Windows' colour reader, which knows about a
+hundred and forty names the game prints as nothing, and reads four hex digits
+as ARGB where the game reads RGBA. Both now read exactly what the game reads,
+and anything else keeps the ordinary colour in both.
+
+### A colour picker on the Colour button
+
+**The Colour button and Ctrl+Shift+C open the colour picker** and wrap the
+selected words in the colour you choose, written as six hex digits (eight if
+you give it transparency). It opens on the colour you used last, so a run of
+lines in one colour is one pick each. Cancelling writes nothing.
+
+### The token legend is spelled out again
+
+The panel under the dialogue list no longer lists the formatting tags: the
+buttons over the Text box write those. The room went back to the tokens, one
+per line, each with what it stands for written beside it ("what they call
+Anna") instead of a single word with the meaning on a hover.
+
+### The Actor picker is grouped
+
+**The Actor field on a dialogue node, and on the LeaveBust action, lists
+speakers under "This pack" and "The game's own"**, the way the music pickers
+do. The pack's heading holds the characters your pack made; the game's holds
+its cast, the player, and the speakers of the game's conversation you have
+open.
+
+**A character you add is offered there straight away**, and so is a new
+runtime name. The list was only rebuilt when the whole pack was loaded into the
+editor again - opening it, or an undo - so a character just added could not be
+picked as a speaker.
+
+### The Default outfit follows a rename
+
+**Renaming a character's default outfit renames the default with it, at
+once.** The Default outfit box went on naming the old outfit until you selected
+something else, and until then it named an outfit that no longer existed.
+Clearing the name to retype it does not hand the default to another outfit
+along the way.
+
+**Typing another outfit's name no longer takes the default with it.** An
+outfit whose name starts like the default's - "AnnaDaySwim" beside "AnnaDay" -
+passed through the default's exact name while it was being typed, and the next
+keystroke was taken for the default being renamed: the Default outfit box
+switched to the outfit being typed. The default now stays with the outfit that
+has it, whatever the others are called along the way.
+
+### Long dropdowns with headings scroll normally
+
+**The InputKey condition's Key list, and the music track lists, now scroll a
+few lines at a time.** They jumped a whole heading's worth per turn of the
+wheel, and the letters section is taller than the list, so most letters could
+not be reached by scrolling.
+
+### Mask editor
+
+**Left and Right move a mask editor slider by one of the units it shows**: one
+pixel of brush size, or one percent of hardness or opacity. Hold Shift for
+five. They moved by five percent on the two percentage sliders, and Shift did
+nothing.
+
+**Hold the middle mouse button (the wheel) and drag anywhere on the canvas
+area to pan.** It only worked with the pointer over the mask itself, so on the
+dark area around it - most of the window when zoomed out or panned away -
+nothing happened. The help list now says "Middle-drag" rather than
+"wheel-drag".
+
+**"Copy layers from" is readable on the light themes.** It was drawn in a
+fixed light grey, which vanished into the light panels; it now uses the
+theme's text colour like the labels around it.
+
+### The "= default" outfit buttons show up
+
+**The "= default" buttons beside an outfit's Mask, Blink, Mouth prefix and
+Expr. prefix now appear on every outfit that is not the default.** 1.4.0 added
+them, and on many packs they never appeared on any outfit of any character.
+
+A character's default outfit is saved under the outfit's GameObject name, which
+is what the Default outfit dropdown lists and what the game finds the bust by.
+The buttons looked it up by the outfit's key instead. An outfit added in the
+editor gets a key equal to its name, so a pack built entirely in the editor had
+the buttons; a pack whose outfit keys are not their names had none. They now
+find the default outfit the same way picking the character does.
+
+Also:
+
+- A character with no default outfit set counts its first outfit as the
+  default, the way the game does, so its other outfits have the buttons too.
+- Renaming the default outfit keeps the buttons on the others.
+- A bust you add to one of the game's characters does not offer them. Its
+  default is the game's own bust, which has no paths, and copying from it would
+  only empty the field.
 
 ## 1.4.0
 

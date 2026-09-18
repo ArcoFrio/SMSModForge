@@ -21,6 +21,23 @@ public sealed class NodeConditionViewModel : ObservableObject
     /// </summary>
     public bool IsLocked { get; }
 
+    /// <summary>What a dialogue's pinned level row says above itself.</summary>
+    public const string PinnedLevelHeader = "Required \u2014 this dialogue only starts in this level";
+
+    /// <summary>
+    /// The line shown above a locked row, which also gives it its framed look;
+    /// empty for none.
+    /// <para/>
+    /// A dialogue's pinned level row says it is required. A locked row is not
+    /// always that: the game's own conditions are shown locked on the Quests
+    /// and Dialogues tabs, and every one of them said "this dialogue only
+    /// starts in this level" - including the ones that are not about a level,
+    /// and the one about a place, which is not the dialogue's to change.
+    /// </summary>
+    public string LockedHeader { get; }
+
+    public bool HasLockedHeader => LockedHeader.Length > 0;
+
     public NodeConditionDef Model { get; }
 
     /// <summary>
@@ -36,14 +53,20 @@ public sealed class NodeConditionViewModel : ObservableObject
     /// When true, removal is explicitly disabled even if a callback was
     /// supplied (used to pin the LevelActive condition at index 0).
     /// </param>
+    /// <param name="lockedHeader">
+    /// What a locked row says above itself. Null for the pinned level row's
+    /// <see cref="PinnedLevelHeader"/>; empty for nothing.
+    /// </param>
     public NodeConditionViewModel(NodeConditionDef model,
                                    Action<NodeConditionViewModel>? removeCallback = null,
                                    bool isLocked = false,
-                                   ConditionContext context = ConditionContext.Polled)
+                                   ConditionContext context = ConditionContext.Polled,
+                                   string? lockedHeader = null)
     {
         Model = model;
         _removeCallback = removeCallback;
         IsLocked = isLocked;
+        LockedHeader = isLocked ? lockedHeader ?? PinnedLevelHeader : "";
         Context = context;
         RemoveCommand = new RelayCommand(
             () => _removeCallback?.Invoke(this),

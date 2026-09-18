@@ -1,9 +1,10 @@
-using BepInEx.Logging;
+﻿using BepInEx.Logging;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 
 namespace SMSModForge.PackPlugin
 {
@@ -113,6 +114,91 @@ namespace SMSModForge.PackPlugin
             // Which in-game day the Daily refresh last ran for. Persisted so it
             // travels with the save — see LastRefreshDay.
             Declare(LastRefreshDayName, PackVariableType.Int, "0", persisted: true);
+            // Which of the pack's changes to the game's own content this save
+            // has been played with. Persisted so the warning about them is
+            // shown once per save, not once per load.
+            Declare(GameChangesSeenName, PackVariableType.String, "", persisted: true);
+            // The pack's tasks that are hidden until conditions pass and have
+            // been shown for good in this save.
+            Declare(RevealedTasksName, PackVariableType.List, "[]", persisted: true);
+        }
+
+        private const string GameChangesSeenName = "__gameChangesSeen";
+
+        /// <summary>
+        /// The kinds of change to the game's own content (see
+        /// <c>SaveLoadChecks</c>) the save this store is bound to has already
+        /// been played with.
+        /// <para/>
+        /// A save that has never had the pack reads empty, and so does one
+        /// written by a version of the pack that changed none of them: the
+        /// warning is about the changes, not about the pack. A new game reads
+        /// all of them (see <see cref="AcknowledgeGameChanges"/>): it starts
+        /// with the changes in place, so there is no progress for them to break.
+        /// </summary>
+        public string GameChangesSeen =>
+            _values.TryGetValue(GameChangesSeenName, out var s) ? s ?? "" : "";
+
+        /// <summary>
+        /// Whether this save's file for the pack was last written by a plugin
+        /// from before saves were marked with the changes they had been played
+        /// with (1.5.0): the file is there, so the save WAS played with the
+        /// pack, but nothing says with which of its changes. Every file written
+        /// since holds the mark, empty or not - every persisted value is
+        /// written - so this cannot be mistaken for a save that simply has none.
+        /// </summary>
+        public bool WrittenBeforeChangeMarks { get; private set; }
+
+        /// <summary>Record that this save goes on with these changes as well.
+        /// Kept in memory like any other value, and written with the next save.</summary>
+        public void AcknowledgeGameChanges(IEnumerable<string> kinds)
+            => _values[GameChangesSeenName] = SMSModForge.Shared.SaveLoadChecks.Merge(GameChangesSeen, kinds);
+
+        private const string RevealedTasksName = "__revealedTasks";
+        private HashSet<string> _revealed;
+        private string _revealedFrom;
+
+        /// <summary>
+        /// Whether a task that is hidden until its conditions pass has been
+        /// shown for good in this save. Read from the stored list, which a
+        /// slot change or a reset replaces - so the parsed set is rebuilt
+        /// whenever the text behind it is not the text it was built from.
+        /// </summary>
+        public bool IsTaskRevealed(string key)
+        {
+            SyncRevealed();
+            return _revealed.Contains(key ?? "");
+        }
+
+        /// <summary>Remember that a task has been shown, for this save. Written
+        /// with the next save, like everything else.</summary>
+        public void RevealTask(string key)
+        {
+            if (string.IsNullOrEmpty(key)) return;
+            SyncRevealed();
+            if (!_revealed.Add(key)) return;
+            var arr = new JArray();
+            foreach (var k in _revealed.OrderBy(k => k, StringComparer.Ordinal)) arr.Add(k);
+            _revealedFrom = arr.ToString(Newtonsoft.Json.Formatting.None);
+            _values[RevealedTasksName] = _revealedFrom;
+        }
+
+        private void SyncRevealed()
+        {
+            string raw = _values.TryGetValue(RevealedTasksName, out var s) ? s ?? "" : "";
+            if (_revealed != null && string.Equals(raw, _revealedFrom, StringComparison.Ordinal)) return;
+            _revealed = new HashSet<string>(StringComparer.Ordinal);
+            try
+            {
+                if (raw.Length > 0)
+                    foreach (var item in JArray.Parse(raw))
+                    {
+                        var k = (string)item;
+                        if (!string.IsNullOrEmpty(k)) _revealed.Add(k);
+                    }
+            }
+            catch (Exception) { }
+            _revealedFrom = raw;
         }
 
         /// <summary>Internal marker, underscored like the roll seed so it stays
@@ -201,6 +287,15 @@ namespace SMSModForge.PackPlugin
             SaveFilePath = Path.Combine(_savesRoot,
                                         "NANOSAVE_" + slot.ToString("D4"),
                                         "SMSModForge_" + PackId + ".json");
+
+            // Binding only happens when a save is LOADED - a new game never
+            // reports a slot - so whatever the session said about the pack's
+            // changes does not apply here: the save's own file decides, and a
+            // save without one has never seen them. Tasks revealed in the
+            // session go the same way.
+            _values[GameChangesSeenName] = "";
+            _values[RevealedTasksName] = "[]";
+            WrittenBeforeChangeMarks = false;
 
             // Reset ONLY when there is a file to load.
             //
@@ -333,6 +428,7 @@ namespace SMSModForge.PackPlugin
             try
             {
                 var obj = JObject.Parse(File.ReadAllText(SaveFilePath));
+                WrittenBeforeChangeMarks = obj[GameChangesSeenName] == null;
                 foreach (var prop in obj.Properties())
                 {
                     if (!_decls.TryGetValue(prop.Name, out var decl) || !decl.Persisted) continue;

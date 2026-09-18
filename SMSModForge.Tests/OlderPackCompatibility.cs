@@ -104,6 +104,81 @@ public sealed class OlderPackCompatibility
         }
     }
 
+    /// <summary>
+    /// The check before every release: a pack from any earlier version, back
+    /// to 1.0.0, opens with its migrations, saves, and is from then on a pack
+    /// of this version - opening what was saved needs no further migration,
+    /// and saving it again writes the same file. Through the real Load and
+    /// Save, since the file they write is the one the game reads.
+    /// </summary>
+    [Fact]
+    public void AnOlderPackMigratesOnceAndIsCurrentAfterOneSave()
+    {
+        var packs = Subjects().ToList();
+        if (packs.Count == 0)
+        {
+            _out.WriteLine("SMSMODFORGE_OLD_PACKS not set - nothing to check.");
+            return;
+        }
+
+        foreach (string path in packs)
+        {
+            string name = Path.GetFileName(path);
+            var original = Newtonsoft.Json.JsonConvert.DeserializeObject<ModPack>(File.ReadAllText(path));
+            if (original?.PackId == null) { _out.WriteLine($"{name}: not a pack"); continue; }
+
+            string root = Path.Combine(Path.GetTempPath(), "smsforge-old-" + Guid.NewGuid().ToString("N"));
+            try
+            {
+                string first = Path.Combine(root, "first"), second = Path.Combine(root, "second");
+                Directory.CreateDirectory(first);
+                File.Copy(path, Path.Combine(first, PackRepository.ManifestFileName));
+
+                var pack = PackRepository.Load(first);
+                var migration = PackRepository.LastMigration;
+                string by = string.IsNullOrEmpty(original.ForgeVersion) ? "before 1.1" : original.ForgeVersion;
+                _out.WriteLine($"── {name}  (written by {by})");
+                _out.WriteLine("   " + (migration?.Migrated == true
+                                            ? string.Join(" / ", migration.Changes.Select(c => c.What + " (" + c.Count + ")"))
+                                            : "no migration"));
+
+                PackRepository.Save(pack, first);
+                string saved = File.ReadAllText(Path.Combine(first, PackRepository.ManifestFileName));
+                if (migration?.Migrated == true)
+                    Assert.Single(Directory.GetFiles(first, "modpack.pre-migration-*.json"));
+
+                // Opening what was saved finds nothing left to do...
+                var again = PackRepository.Load(first);
+                var still = PackRepository.LastMigration;
+                Assert.False(still?.Migrated == true, $"{name}: still migrating after a save - {still?.Describe()}");
+
+                // ...and saving it again writes the same file.
+                Directory.CreateDirectory(second);
+                PackRepository.Save(again, second);
+                Assert.Equal(saved, File.ReadAllText(Path.Combine(second, PackRepository.ManifestFileName)));
+
+                // Nothing the author made went missing on the way.
+                Assert.Equal(original.Dialogues.Count, again.Dialogues.Count);
+                Assert.Equal(original.Places.Count, again.Places.Count);
+                Assert.Equal(original.Variables.Count, again.Variables.Count);
+                Assert.Equal(original.Quests.Count, again.Quests.Count);
+                Assert.Equal(original.Scenes.Count, again.Scenes.Count);
+                Assert.Equal(original.IntegrationRules.Count, again.IntegrationRules.Count);
+
+                // And this version's checks all run on it. Only the manifest was
+                // copied, so a missing picture is expected here and not counted.
+                var issues = SMSModForge.Validation.PackValidator.Validate(again, first);
+                var errors = issues.Where(i => i.Severity == SMSModForge.Validation.Severity.Error).ToList();
+                _out.WriteLine($"   saved, reopened clean; {errors.Count} error(s) from validation"
+                               + (errors.Count == 0 ? "" : ": " + string.Join(", ", errors.Select(e => e.Code).Distinct())));
+            }
+            finally
+            {
+                try { Directory.Delete(root, true); } catch (IOException) { }
+            }
+        }
+    }
+
     /// <summary>Every character key the pack gives a line to.</summary>
     private static HashSet<string> Speakers(ModPack pack)
     {

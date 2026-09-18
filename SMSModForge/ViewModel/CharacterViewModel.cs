@@ -540,7 +540,10 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
 
         foreach (var e in Model.Expressions)
         {
-            Expressions.Add(Hooked(new ActorExpressionViewModel(e, RemoveExpression)));
+            // Neutral is fixed on a character of the pack's own: greyed out,
+            // with no remove button, like the game's faces on one of theirs.
+            bool locked = Model.CarriesNeutral && CharacterDef.IsNeutral(e);
+            Expressions.Add(Hooked(new ActorExpressionViewModel(e, RemoveExpression, locked: locked)));
         }
 
         ExpressionsChanged?.Invoke(this, EventArgs.Empty);
@@ -707,15 +710,105 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
         get => Model.DefaultOutfit;
         set
         {
+            // A null is the Default outfit dropdown losing its selection, not an
+            // author choosing no default: when the names it offers are re-read
+            // and the chosen one is not among them, it selects nothing and writes
+            // that back. Measured: it emptied the default of a renamed outfit
+            // before FollowRenamedDefault put its two notices in the right order.
+            // Nothing a person means to do in that box writes null.
+            if (value == null) return;
             if (Model.DefaultOutfit == value) return;
             Model.DefaultOutfit = value ?? "";
+            // A different default: which outfit holds it is looked up again.
+            _defaultHolder = null;
             OnPropertyChanged();
             // Every outfit's "same as default" buttons point at a different
             // outfit now, and the one that has just BECOME the default has to
             // lose its own.
-            foreach (var outfit in Outfits) outfit.RefreshDefaultOutfit();
+            RefreshOutfitDefaults();
             BustSourceChanged?.Invoke(this, EventArgs.Empty);
         }
+    }
+
+    /// <summary>
+    /// The outfit <see cref="DefaultOutfit"/> names: the one the character
+    /// enters in, and the one the "= default" buttons copy from.
+    /// <para/>
+    /// By GameObject name, which is what defaultOutfit holds - "RosannaBase",
+    /// "Adrian_bust" - and not the outfit key, which is usually a derived
+    /// lower-case spelling of it ("rosanna"). The buttons used to match the key,
+    /// so on a real pack they found no default outfit on any character and never
+    /// appeared at all. The key is still tried second, so a hand-edited manifest
+    /// that named one is read the way its author meant it. Case is ignored, the
+    /// way the runtime ignores it when it finds the bust.
+    /// <para/>
+    /// Blank means the first outfit, as it does in game. Null only when the name
+    /// is not any outfit's.
+    /// </summary>
+    /// <para/>
+    /// The outfit found is remembered, and stays the answer for as long as it
+    /// is still one of the outfits and still answers to the name. Two outfits
+    /// can share a name for a moment - typing "AnnaDay2" into another outfit
+    /// passes through "AnnaDay" - and asked by name alone, that moment made the
+    /// other outfit the default, which then followed it to its new name.
+    public OutfitViewModel? FindDefaultOutfit()
+    {
+        string wanted = Model.DefaultOutfit ?? "";
+        if (wanted.Length == 0) return Outfits.FirstOrDefault();
+
+        if (_defaultHolder != null && Outfits.Contains(_defaultHolder) && AnswersTo(_defaultHolder, wanted))
+            return _defaultHolder;
+
+        _defaultHolder = Outfits.FirstOrDefault(o => string.Equals(o.Model.GameObjectName, wanted, StringComparison.OrdinalIgnoreCase))
+                         ?? Outfits.FirstOrDefault(o => string.Equals(o.Model.Key, wanted, StringComparison.OrdinalIgnoreCase));
+        return _defaultHolder;
+    }
+
+    private static bool AnswersTo(OutfitViewModel outfit, string name)
+        => string.Equals(outfit.Model.GameObjectName, name, StringComparison.OrdinalIgnoreCase)
+           || string.Equals(outfit.Model.Key, name, StringComparison.OrdinalIgnoreCase);
+
+    private OutfitViewModel? _defaultHolder;
+
+    /// <summary>Whether <paramref name="outfit"/> is the one the default names.
+    /// False while the default is blank: that means the first outfit, and
+    /// renaming it changes nothing about the default.</summary>
+    internal bool HoldsDefault(OutfitViewModel outfit)
+        => (Model.DefaultOutfit ?? "").Length > 0 && ReferenceEquals(FindDefaultOutfit(), outfit);
+
+    /// <summary>Every outfit re-asks which one is the default. Needed whenever
+    /// the answer can move: the default changing, or an outfit's name changing
+    /// under it.</summary>
+    public void RefreshOutfitDefaults()
+    {
+        foreach (var outfit in Outfits) outfit.RefreshDefaultOutfit();
+    }
+
+    /// <summary>
+    /// The default outfit was renamed: the default follows it, at once.
+    /// <para/>
+    /// The Default outfit box is told its new value BEFORE the names it offers
+    /// are re-read, and the order is measured rather than chosen. Re-reading the
+    /// names first left the box selecting nothing for a moment: it wrote that
+    /// empty selection back over the default, and even with that write refused,
+    /// the box's text stayed blank after the new name was selected. Told the
+    /// value first, it shows the new name and writes nothing back.
+    /// </summary>
+    internal void FollowRenamedDefault(OutfitViewModel outfit, string newName)
+    {
+        Model.DefaultOutfit = newName;
+        _defaultHolder = outfit;
+        OnPropertyChanged(nameof(DefaultOutfit));
+        OnPropertyChanged(nameof(WearableBusts));
+        RefreshOutfitDefaults();
+        BustSourceChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    /// <summary>An outfit's name changed: the names on offer did too.</summary>
+    internal void OutfitRenamed()
+    {
+        OnPropertyChanged(nameof(WearableBusts));
+        RefreshOutfitDefaults();
     }
 
     /// <summary>Bust names a dialogue node can switch this character to.</summary>

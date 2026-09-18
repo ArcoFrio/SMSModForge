@@ -72,9 +72,12 @@ namespace SMSModForge.Shared
         /// </summary>
         public static int TaskId(string packId, string questKey, string taskKey)
         {
-            byte[] hash = Sha1("smsmodforge/task/" + (packId ?? "") + "/" + (questKey ?? "") + "/"
-                               + (taskKey ?? ""));
+            return FromHash(Sha1("smsmodforge/task/" + (packId ?? "") + "/" + (questKey ?? "") + "/"
+                                 + (taskKey ?? "")));
+        }
 
+        private static int FromHash(byte[] hash)
+        {
             // Walk forward through the hash until a usable value turns up. Two
             // reserved values out of four billion means this almost never moves
             // past the first four bytes, and it stays deterministic when it does.
@@ -91,6 +94,20 @@ namespace SMSModForge.Shared
             }
             return 1;
         }
+
+        /// <summary>
+        /// The id of a task a pack adds to one of the game's own quests.
+        /// <para/>
+        /// Scoped by the GAME's quest name rather than by the pack entry that
+        /// extends it: an entry's key is the editor's handle and can be renamed
+        /// freely, and a player's progress on the task must not go with it. A
+        /// different namespace from <see cref="TaskId"/>, so a pack quest that
+        /// happens to share a name with one of the game's is a different set of
+        /// ids.
+        /// </summary>
+        public static int AddedTaskId(string packId, string gameQuest, string taskKey)
+            => FromHash(Sha1("smsmodforge/added-task/" + (packId ?? "") + "/" + (gameQuest ?? "") + "/"
+                             + (taskKey ?? "")));
 
         private static byte[] Sha1(string text)
         {

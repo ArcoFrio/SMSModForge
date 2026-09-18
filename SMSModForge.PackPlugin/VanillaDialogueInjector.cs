@@ -167,7 +167,9 @@ namespace SMSModForge.PackPlugin
                     // as they are for a dialogue the pack built itself.
                     if (Named(node, "conditions"))
                     {
-                        PackNodeConditions.Register(line, node["conditions"] as JArray, ctx);
+                        // An empty list is a change like any other: every
+                        // condition taken out.
+                        PackNodeConditions.Register(line, node["conditions"] as JArray ?? new JArray(), ctx);
                         written++;
                     }
                     if (Named(node, "actionsOnStart") || Named(node, "actionsOnFinish")

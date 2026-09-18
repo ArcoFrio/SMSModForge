@@ -24,6 +24,10 @@ public static class PackRepository
         NullValueHandling = NullValueHandling.Ignore,
     };
 
+    /// <summary>How the manifest is written, for anything that has to write a
+    /// piece of it the same way (<see cref="PlaceRules"/>).</summary>
+    public static JsonSerializerSettings ManifestSettings => JsonSettings;
+
     public const string ManifestFileName = "modpack.json";
     public const string LegacyManifestFileName = "bustpack.json";
 
@@ -100,29 +104,14 @@ public static class PackRepository
 
         var manifest = Path.Combine(packRoot, ManifestFileName);
 
-        // Vanilla extensions are authored against the real level hierarchy, so
-        // most of their nodes just mirror what the game already has. Reduce
-        // them to the actual delta for the write — swapped in around the
-        // serialize and restored after, so what's on screen is never rewritten.
-        // Deliberately NOT in Serialize(): that also backs undo snapshots, and
-        // pruning there would drop bound nodes on undo.
-        string json;
-        using (GameObjectDef.SaveScope())
-        {
-            var restore = VanillaDelta.PrepareForSave(pack);
-            // The same pass for UI extensions, which seed a whole vanilla
-            // screen so it can be edited and must store only what changed.
-            var restoreUi = VanillaUiDelta.PrepareForSave(pack);
-            // And for dialogue extensions, which seed a whole vanilla
-            // conversation - 118 lines for the beach, and one of them is
-            // usually the only thing an author changed.
-            var restoreDialogues = VanillaDialogueDelta.PrepareForSave(pack);
-            // And the game's own cast, all of which the editor holds so it can
-            // be used, and only some of which a pack has anything to say about.
-            var restoreCast = VanillaCastSeed.PrepareForSave(pack);
-            try { json = JsonConvert.SerializeObject(pack, JsonSettings); }
-            finally { restoreCast(); restoreDialogues(); restoreUi(); restore(); }
-        }
+        // Exactly what SerializeAsSaved produces - the same string the editor
+        // compares against for "unsaved changes". Written ONCE, there: this
+        // used to be a second copy of the same passes, and a pass added to one
+        // copy and not the other (the rules of the game's places a pack takes
+        // over) was tested through the copy that is never written to disk, and
+        // never reached a pack. Deliberately NOT Serialize(): that also backs
+        // undo snapshots, and pruning there would drop bound nodes on undo.
+        string json = SerializeAsSaved(pack);
         // Atomic-ish write: write to temp, then move.
         var tmp = manifest + ".tmp";
         File.WriteAllText(tmp, json);
@@ -189,6 +178,11 @@ public static class PackRepository
     {
         using (GameObjectDef.SaveScope())
         {
+            // Vanilla extensions are authored against the real level
+            // hierarchy, so most of their nodes just mirror what the game
+            // already has: reduced to the actual delta, swapped in around the
+            // serialize and restored after, so what's on screen is never
+            // rewritten.
             var restore = VanillaDelta.PrepareForSave(pack);
             // UI extensions too, and for the reason spelled out above: a seeded
             // screen is thousands of nodes that never reach disk, so comparing
@@ -199,8 +193,11 @@ public static class PackRepository
             // conversation is hundreds of lines that never reach disk.
             var restoreDialogues = VanillaDialogueDelta.PrepareForSave(pack);
             var restoreCast = VanillaCastSeed.PrepareForSave(pack);
+            // And what the game's start/reset places the pack has changed come
+            // to, which only the runtime reads.
+            var restoreRules = PlaceRules.PrepareForSave(pack);
             try { return JsonConvert.SerializeObject(pack, JsonSettings); }
-            finally { restoreCast(); restoreDialogues(); restoreUi(); restore(); }
+            finally { restoreRules(); restoreCast(); restoreDialogues(); restoreUi(); restore(); }
         }
     }
 

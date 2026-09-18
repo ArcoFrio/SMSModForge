@@ -5,9 +5,9 @@
     <!-- One source of truth for the version. The About line and the title
          bar read it back off the assembly, so they cannot drift from what
          was actually built. -->
-    <Version>1.4.0</Version>
-    <AssemblyVersion>1.4.0.0</AssemblyVersion>
-    <FileVersion>1.4.0.0</FileVersion>
+    <Version>1.5.0</Version>
+    <AssemblyVersion>1.5.0.0</AssemblyVersion>
+    <FileVersion>1.5.0.0</FileVersion>
     <Product>SMSModForge</Product>
     <TargetFramework>net8.0-windows</TargetFramework>
     <RootNamespace>SMSModForge</RootNamespace>
@@ -224,6 +224,14 @@
       <Link>VanillaDialogues\index.json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <!-- What the game does with its own quests: what starts them, what
+         completes, counts or fails their tasks. Written by
+         Tools/Dialogue/BuildQuestReferences.py. Absent, the quest panels say
+         nothing is known rather than that nothing happens. -->
+    <Content Include="Resources\VanillaQuests\references.json">
+      <Link>VanillaQuests\references.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\VanillaDialogues\Dialogues\**\*.json">
       <Link>VanillaDialogues\Dialogues\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -237,6 +245,9 @@
     <Compile Include="..\Shared\JiggleDefaults.cs" Link="Shared\JiggleDefaults.cs" />
     <Compile Include="..\Shared\QuestIds.cs" Link="Shared\QuestIds.cs" />
     <Compile Include="..\Shared\QuestVocabulary.cs" Link="Shared\QuestVocabulary.cs" />
+    <Compile Include="..\Shared\QuestTreeEdits.cs" Link="Shared\QuestTreeEdits.cs" />
+    <Compile Include="..\Shared\SaveLoadChecks.cs" Link="Shared\SaveLoadChecks.cs" />
+    <Compile Include="..\Shared\GameConditionEdits.cs" Link="Shared\GameConditionEdits.cs" />
     <Compile Include="..\Shared\VarText.cs" Link="Shared\VarText.cs" />
     <Compile Include="..\Shared\VarCompare.cs" Link="Shared\VarCompare.cs" />
     <Compile Include="..\Shared\VanillaDialogueKeys.cs" Link="Shared\VanillaDialogueKeys.cs" />

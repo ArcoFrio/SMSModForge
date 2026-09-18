@@ -29,21 +29,29 @@ public sealed class OutfitConveniencesTests : IDisposable
 
     // ── Same as the default outfit ───────────────────────────────────
 
-    /// <summary>A character with a filled-in default outfit and a bare second
-    /// one.</summary>
+    /// <summary>
+    /// A character with a filled-in default outfit and a bare second one.
+    /// <para/>
+    /// In the shape a manifest really has: defaultOutfit holds the outfit's
+    /// GameObject NAME, and the outfit's key is a different string. These tests
+    /// used to give both the same value, and the buttons, which matched the
+    /// key, passed here while never appearing on any character of a real pack
+    /// whose keys were not their names.
+    /// </summary>
     private static CharacterViewModel Character()
     {
-        var model = new CharacterDef { Key = "anna", DefaultOutfit = "day" };
+        var model = new CharacterDef { Key = "anna", DefaultOutfit = "AnnaDay" };
         model.Outfits.Add(new OutfitDef
         {
             Key = "day",
+            GameObjectName = "AnnaDay",
             BaseSprite = "Art/Anna/Base.png",
             MaskSprite = "Art/Anna/Mask.png",
             BlinkSprite = "Art/Anna/Blink.png",
         });
         model.Outfits[0].Mouth.Prefix = "Art/Anna/Mouth";
         model.Outfits[0].Expression.Prefix = "Art/Anna/Expression";
-        model.Outfits.Add(new OutfitDef { Key = "night" });
+        model.Outfits.Add(new OutfitDef { Key = "night", GameObjectName = "AnnaNight" });
         return new CharacterViewModel(model);
     }
 
@@ -68,6 +76,10 @@ public sealed class OutfitConveniencesTests : IDisposable
         var c = Character();
         var night = Outfit(c, "night");
 
+        // The whole reason this fixture changed: the default is named by
+        // something that is not the key.
+        Assert.NotEqual(Outfit(c, "day").Key, c.DefaultOutfit);
+
         Assert.False(night.IsDefaultOutfit);
         Assert.True(night.CanCopyFromDefaultOutfit);
         Assert.Same(Outfit(c, "day"), night.DefaultOutfit);
@@ -82,7 +94,7 @@ public sealed class OutfitConveniencesTests : IDisposable
         var day = Outfit(c, "day");
         var night = Outfit(c, "night");
 
-        c.DefaultOutfit = "night";
+        c.DefaultOutfit = "AnnaNight";
 
         _out.WriteLine($"after the move: day can copy {day.CanCopyFromDefaultOutfit}, "
                        + $"night can copy {night.CanCopyFromDefaultOutfit}");
@@ -101,6 +113,153 @@ public sealed class OutfitConveniencesTests : IDisposable
         var c = new CharacterViewModel(model);
 
         Assert.False(c.Outfits[0].CanCopyFromDefaultOutfit);
+    }
+
+    [Fact]
+    public void ABlankDefaultIsTheFirstOutfit()
+    {
+        // As it is in game: a character that names no default enters in the
+        // first outfit, so that is the one there is something to copy from.
+        var c = Character();
+        c.Model.DefaultOutfit = "";
+        c.RefreshOutfitDefaults();
+
+        Assert.True(Outfit(c, "day").IsDefaultOutfit);
+        Assert.True(Outfit(c, "night").CanCopyFromDefaultOutfit);
+    }
+
+    [Fact]
+    public void TheNameIsMatchedWhateverItsCase()
+    {
+        // The game finds the bust ignoring case, so a default written in the
+        // wrong case still dresses the character - and still has buttons.
+        var c = Character();
+        c.DefaultOutfit = "annaday";
+
+        Assert.Same(Outfit(c, "day"), Outfit(c, "night").DefaultOutfit);
+        Assert.True(Outfit(c, "night").CanCopyFromDefaultOutfit);
+    }
+
+    [Fact]
+    public void ADefaultThatIsNoOutfitOffersNothing()
+    {
+        // The control for the two above: a name that matches nothing is not
+        // quietly taken to mean some other outfit to copy from.
+        var c = Character();
+        c.DefaultOutfit = "Nobody";
+
+        Assert.Null(Outfit(c, "night").DefaultOutfit);
+        Assert.False(Outfit(c, "night").CanCopyFromDefaultOutfit);
+        Assert.False(Outfit(c, "day").CanCopyFromDefaultOutfit);
+    }
+
+    [Fact]
+    public void RenamingTheDefaultOutfitKeepsTheButtonsOnTheOthers()
+    {
+        // A rename rewrites the character's defaultOutfit behind the view
+        // model. Unless the outfits are told, the buttons go on looking for the
+        // old name - and the renamed outfit is still the default.
+        var vm = new MainViewModel();
+        var c = Character();
+        vm.Pack.Characters.Add(c.Model);
+        vm.Characters.Add(c);
+        vm.SelectedCharacter = c;
+        var day = Outfit(c, "day");
+        var night = Outfit(c, "night");
+        vm.SelectedOutfit = day;
+
+        day.GameObjectName = "AnnaMorning";
+
+        int told = 0;
+        night.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(OutfitViewModel.CanCopyFromDefaultOutfit)) told++;
+        };
+        vm.SelectedOutfit = night;      // leaving the outfit is what commits a rename
+
+        _out.WriteLine($"default is now '{c.DefaultOutfit}', night can copy "
+                       + $"{night.CanCopyFromDefaultOutfit}, told {told} time(s)");
+        Assert.Equal("AnnaMorning", c.DefaultOutfit);
+        Assert.Same(day, night.DefaultOutfit);
+        Assert.True(night.CanCopyFromDefaultOutfit);
+        Assert.True(told > 0, "the outfit was never told, so a button already on screen would not come back");
+    }
+
+    [Fact]
+    public void ABustAddedToOneOfTheGamesCharactersOffersNothing()
+    {
+        // Its default is the character's own bust in the game, which has no
+        // paths. Copying from it would empty the field it was pressed on.
+        var vm = new MainViewModel();
+        var theirs = vm.Characters.First(c => c.IsVanillaBust && c.Outfits.Count > 0);
+        var added = theirs.AddOutfit();
+
+        _out.WriteLine($"{theirs.Key}: default '{theirs.DefaultOutfit}', added '{added.GameObjectName}'");
+        Assert.True(added.ShowsPackArt, "the added bust is not one the pack draws, so this proves nothing");
+        Assert.NotNull(added.DefaultOutfit);
+        Assert.False(added.DefaultOutfit!.ShowsPackArt);
+        Assert.False(added.CanCopyFromDefaultOutfit);
+    }
+
+    [Fact]
+    public void TheButtonsAreOnScreen()
+    {
+        // Measured on the real window, not asked of the view model: the report
+        // was "I don't see them", and a property that says true behind a
+        // binding that never reaches the button reads exactly the same.
+        WindowHarness.Run(window =>
+        {
+            var vm = (MainViewModel)window.DataContext;
+            var tabs = (System.Windows.Controls.TabControl)window.FindName("MainTabs");
+            for (int i = 0; i < tabs.Items.Count; i++)
+                if (tabs.Items[i] is System.Windows.Controls.TabItem t && (t.Header as string) == "Characters")
+                { tabs.SelectedIndex = i; break; }
+            WindowHarness.Pump();
+
+            var c = Character();
+            vm.Pack.Characters.Add(c.Model);
+            vm.Characters.Add(c);
+            vm.SelectedCharacter = c;
+            vm.SelectedOutfit = Outfit(c, "night");
+            WindowHarness.Pump();
+
+            string[] names =
+            {
+                "MaskSameAsDefaultButton", "BlinkSameAsDefaultButton",
+                "MouthSameAsDefaultButton", "ExpressionSameAsDefaultButton",
+            };
+            foreach (string name in names)
+            {
+                var button = Named(window, name);
+                _out.WriteLine($"night: {name} visible={button?.IsVisible}");
+                Assert.True(button != null, $"{name} is not in the window at all");
+                Assert.True(button!.IsVisible, $"{name} is not on screen for an outfit that is not the default");
+            }
+
+            // ...and gone again on the default outfit itself.
+            vm.SelectedOutfit = Outfit(c, "day");
+            WindowHarness.Pump();
+            foreach (string name in names)
+            {
+                var button = Named(window, name);
+                _out.WriteLine($"day: {name} visible={button?.IsVisible}");
+                Assert.False(button?.IsVisible == true, $"{name} is on screen for the default outfit");
+            }
+        });
+    }
+
+    /// <summary>A control by x:Name, walked out of the visual tree so a name
+    /// inside a template is found as well as one in the window's own.</summary>
+    private static System.Windows.FrameworkElement? Named(System.Windows.DependencyObject from, string name)
+    {
+        if (from is System.Windows.FrameworkElement fe && fe.Name == name) return fe;
+        int count = System.Windows.Media.VisualTreeHelper.GetChildrenCount(from);
+        for (int i = 0; i < count; i++)
+        {
+            var found = Named(System.Windows.Media.VisualTreeHelper.GetChild(from, i), name);
+            if (found != null) return found;
+        }
+        return null;
     }
 
     [Theory]

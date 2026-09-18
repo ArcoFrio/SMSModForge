@@ -46,6 +46,12 @@ namespace SMSModForge.PackPlugin
                     continue;
                 }
 
+                // An entry naming one of the game's quests EXTENDS it: the
+                // quest is already in the journal, and registering a second one
+                // under the pack's own id would put a copy beside it. What the
+                // pack says about it is driven by the ticker instead.
+                if (!string.IsNullOrEmpty((string)q["source"])) continue;
+
                 var spec = new QuestSpec
                 {
                     PackId = manifest.PackId,
@@ -65,26 +71,35 @@ namespace SMSModForge.PackPlugin
             foreach (var token in tasks)
             {
                 if (!(token is JObject t)) continue;
-                string key = (string)t["key"];
-                if (string.IsNullOrEmpty(key)) continue;
-
-                double countTo = 0;
-                var raw = t["countTo"];
-                if (raw != null && raw.Type != JTokenType.Null)
-                    double.TryParse(raw.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out countTo);
-
-                var spec = new TaskSpec
-                {
-                    Key = key,
-                    Name = (string)t["name"] ?? "",
-                    Description = (string)t["description"] ?? "",
-                    Completion = CompletionOf((string)t["completion"]),
-                    Counter = countTo > 0,
-                    CountTo = countTo,
-                };
-                ReadTasks(t["subtasks"] as JArray, spec.Subtasks);
-                into.Add(spec);
+                if (string.IsNullOrEmpty((string)t["key"])) continue;
+                into.Add(ReadTask(t));
             }
+        }
+
+        /// <summary>One task and its subtasks, as the manifest writes them - for
+        /// a quest of the pack's own, and for a task a pack adds to one of the
+        /// game's.</summary>
+        internal static TaskSpec ReadTask(JObject t)
+        {
+            double countTo = 0;
+            var raw = t["countTo"];
+            if (raw != null && raw.Type != JTokenType.Null)
+                double.TryParse(raw.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out countTo);
+
+            var spec = new TaskSpec
+            {
+                Key = ((string)t["key"] ?? "").Trim(),
+                Name = (string)t["name"] ?? "",
+                Description = (string)t["description"] ?? "",
+                Completion = CompletionOf((string)t["completion"]),
+                Counter = countTo > 0,
+                CountTo = countTo,
+                HideUntilStarted = t["hideUntilStarted"]?.Type == JTokenType.Boolean && (bool)t["hideUntilStarted"],
+                HideUntilConditions = t[QuestTreeEdits.HideUntilConditionsKey]?.Type == JTokenType.Boolean
+                                      && (bool)t[QuestTreeEdits.HideUntilConditionsKey],
+            };
+            ReadTasks(t["subtasks"] as JArray, spec.Subtasks);
+            return spec;
         }
 
         internal static TaskType CompletionOf(string word)
@@ -173,13 +188,11 @@ namespace SMSModForge.PackPlugin
             if (vanilla)
             {
                 // A game task is named by its id: the game's own instructions
-                // do the same, and two of its quests reuse a task's text.
+                // do the same, and two of its quests reuse a task's text. A task
+                // the pack added to that quest is named by the pack's key, and
+                // its id comes from the quest the game actually found.
                 if (!int.TryParse(taskName, NumberStyles.Integer, CultureInfo.InvariantCulture, out id))
-                {
-                    WarnOnce(log, who + "|badtask|" + questName + "|" + taskName,
-                             who + " in " + packId + ": '" + taskName + "' is not a task id of " + target.Label + ".");
-                    return null;
-                }
+                    id = QuestIds.AddedTaskId(packId, quest.name, taskName);
             }
             else id = QuestIds.TaskId(packId, questName, taskName);
 

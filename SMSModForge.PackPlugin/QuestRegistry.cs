@@ -41,6 +41,15 @@ namespace SMSModForge.PackPlugin
         public bool Counter;
         public double CountTo;
 
+        /// <summary>Registered hidden, so a subtask that has not started is
+        /// out of the journal from the start. The ticker shows it once it has
+        /// started, and hides it again if the quest is reset.</summary>
+        public bool HideUntilStarted;
+
+        /// <summary>Registered hidden for the same reason: the ticker shows it
+        /// once its show conditions pass.</summary>
+        public bool HideUntilConditions;
+
         public readonly List<TaskSpec> Subtasks = new List<TaskSpec>();
     }
 
@@ -194,12 +203,12 @@ namespace SMSModForge.PackPlugin
         public static GcQuest FindVanilla(string name)
         {
             if (string.IsNullOrEmpty(name)) return null;
-            var quests = _vanilla ?? QuestsRepository.Get.Quests.Quests ?? new GcQuest[0];
+            var quests = GameQuests.ToList();
 
             foreach (var q in quests)
-                if (q != null && string.Equals(q.name, name, StringComparison.Ordinal)) return q;
+                if (string.Equals(q.name, name, StringComparison.Ordinal)) return q;
             foreach (var q in quests)
-                if (q != null && string.Equals(TitleOf(q), name, StringComparison.Ordinal)) return q;
+                if (string.Equals(TitleOf(q), name, StringComparison.Ordinal)) return q;
             return null;
         }
 
@@ -318,13 +327,7 @@ namespace SMSModForge.PackPlugin
                                     TreeNodes nodes, List<int> roots)
         {
             int id = QuestIds.TaskId(quest.PackId, quest.Key, spec.Key);
-
-            var task = new GcTask();
-            Set(task, "m_Completion", spec.Completion);
-            Set(task, "m_Name", new PropertyGetString(spec.Name ?? ""));
-            Set(task, "m_Description", new PropertyGetString(spec.Description ?? ""));
-            Set(task, "m_UseCounter", spec.Counter ? ProgressType.Value : ProgressType.None);
-            if (spec.Counter) Set(task, "m_CountTo", new PropertyGetDecimal(spec.CountTo));
+            var task = NewTask(spec);
 
             data.Add(id, new TTreeDataItem<GcTask>(id, task));
             nodes.Add(id, new TreeNode(id, parent));
@@ -335,6 +338,90 @@ namespace SMSModForge.PackPlugin
             foreach (var sub in spec.Subtasks)
                 AddTask(quest, sub, id, data, nodes, roots);
         }
+
+        /// <summary>One of the game's task objects, made from a pack's task.
+        /// Its place in a quest is the caller's business.</summary>
+        internal static GcTask NewTask(TaskSpec spec)
+        {
+            var task = new GcTask();
+            Set(task, "m_Completion", spec.Completion);
+            Set(task, "m_Name", new PropertyGetString(spec.Name ?? ""));
+            Set(task, "m_Description", new PropertyGetString(spec.Description ?? ""));
+            Set(task, "m_UseCounter", spec.Counter ? ProgressType.Value : ProgressType.None);
+            if (spec.Counter) Set(task, "m_CountTo", new PropertyGetDecimal(spec.CountTo));
+            if (spec.HideUntilStarted || spec.HideUntilConditions) Set(task, "m_IsHidden", true);
+            return task;
+        }
+
+        /// <summary>The storage behind a quest's task tree: the task objects by
+        /// id, and the top-level ids in order. The parent/child links are
+        /// <c>quest.Tasks.Nodes</c>.</summary>
+        internal static TSerializableDictionary<int, TTreeDataItem<GcTask>> TreeData(GcQuest quest)
+            => (TSerializableDictionary<int, TTreeDataItem<GcTask>>)Get(quest.Tasks, "m_Data");
+
+        internal static List<int> TreeRoots(GcQuest quest) => (List<int>)Get(quest.Tasks, "m_Roots");
+
+        /// <summary>
+        /// Make the catalogue build its lookups again. Its task table maps a
+        /// task id to its quest and is built once, on first use - so after a
+        /// task is added to, or taken back out of, one of the game's quests, the
+        /// old table would still answer for the old tree.
+        /// </summary>
+        internal static void ForgetLookups()
+        {
+            if (QuestsLut == null || TasksLut == null) return;
+            var catalogue = QuestsRepository.Get.Quests;
+            QuestsLut.SetValue(catalogue, null);
+            TasksLut.SetValue(catalogue, null);
+        }
+
+        /// <summary>The game's own quests: the ones captured before any pack
+        /// quest was registered, or the live catalogue when nothing has been.</summary>
+        internal static IEnumerable<GcQuest> GameQuests
+        {
+            get
+            {
+                var quests = _vanilla ?? QuestsRepository.Get.Quests.Quests ?? new GcQuest[0];
+                foreach (var q in quests)
+                    if (q != null && !_ours.Contains(q.Id.String)) yield return q;
+            }
+        }
+
+        // ── Changing what the journal shows, while the game runs ───────────
+
+        /// <summary>
+        /// Replace a quest's description. The journal reads it through
+        /// <c>Quest.GetDescription</c> each time it draws the quest
+        /// (<c>TQuestUI.Refresh</c>), so the new text is what the player sees
+        /// the next time the quest is on screen.
+        /// </summary>
+        internal static void SetDescription(GcQuest quest, string text)
+            => Set(quest, "m_Description", new PropertyGetString(text ?? ""));
+
+        /// <summary>
+        /// The description property a quest carries, so it can be put back.
+        /// <para/>
+        /// Kept as the OBJECT rather than as text: one of the game's quests may
+        /// describe itself through something other than a plain string, and a
+        /// pack that stops overriding it should leave the game exactly what it
+        /// had rather than a copy of what it happened to say once.
+        /// </summary>
+        internal static object DescriptionOf(GcQuest quest) => Get(quest, "m_Description");
+
+        /// <summary>Put back the property <see cref="DescriptionOf"/> read.</summary>
+        internal static void RestoreDescription(GcQuest quest, object property)
+        {
+            if (property != null) Set(quest, "m_Description", property);
+        }
+
+        /// <summary>
+        /// Show or hide a task in the journal. Read off the journal's IL: both
+        /// the quest's task list and a task's subtask list
+        /// (<c>TQuestUI</c>/<c>TTaskUI.CollectTaskIds</c>) leave out a task whose
+        /// <c>IsHidden</c> is set, and the game's journal does not ask them to
+        /// show hidden ones.
+        /// </summary>
+        internal static void SetHidden(GcTask task, bool hidden) => Set(task, "m_IsHidden", hidden);
 
         // ── Reflection, kept to private fields whose names and types were read
         //    off the game's metadata ────────────────────────────────────────

@@ -16,7 +16,7 @@ namespace SMSModForge.ViewModel;
 /// outfit (which drives the preview + editor panel), and the file-system root
 /// for the pack (so file pickers can resolve relative paths).
 /// </summary>
-public sealed class MainViewModel : ObservableObject
+public sealed class MainViewModel : ObservableObject, IGameConditionEditor
 {
     private ModPack _pack = PackRepository.CreateEmpty("Untitled");
     public ModPack Pack
@@ -120,9 +120,20 @@ public sealed class MainViewModel : ObservableObject
             var q = Quests.FirstOrDefault(x => x.Key == questKey);
             if (q != null)
             {
-                SelectedQuest = q;
-                if (questTaskKey != null)
-                    q.SelectedTask = q.TaskRows.FirstOrDefault(t => t.Key == questTaskKey);
+                if (q.ShowsVanillaPanel)
+                {
+                    SelectedVanillaQuest = q;
+                    var row = q.ExtensionRows.OfType<QuestTaskViewModel>().FirstOrDefault(t => t.Key == questTaskKey);
+                    if (row != null) q.SelectedExtensionRow = row;
+                }
+                else
+                {
+                    var leaf = QuestTree.FindLeaf(q);
+                    if (leaf != null) QuestTree.Selected = leaf;
+                    else SelectedQuest = q;
+                    if (questTaskKey != null)
+                        q.SelectedTask = q.TaskRows.FirstOrDefault(t => t.Key == questTaskKey);
+                }
             }
         }
         if (npcKey != null)
@@ -242,6 +253,26 @@ public sealed class MainViewModel : ObservableObject
 
     /// <summary>All actor keys for node-actor pickers.</summary>
     public ObservableCollection<string> ActorOptions { get; } = new();
+
+    /// <summary>
+    /// <see cref="ActorOptions"/> under "This pack" and "The game's own", the
+    /// headings the music pickers use.
+    /// <para/>
+    /// The pack's heading holds the characters this pack made, whatever bust
+    /// they draw from. The game's holds its own cast, the player - who belongs
+    /// to the game in every pack - and the speakers of whichever of the game's
+    /// conversations is open, which are not characters of the pack at all.
+    /// </summary>
+    public System.ComponentModel.ICollectionView ActorOptionsGrouped
+        => _actorOptionsGrouped ??= GroupUnder(
+            ActorOptions,
+            o => Characters.FirstOrDefault(c => string.Equals(c.Key, o as string, System.StringComparison.OrdinalIgnoreCase))
+                     is { } c && IsPackSpeaker(c)
+                 ? View.Converters.MusicOriginConverter.PackHeading
+                 : View.Converters.MusicOriginConverter.GameHeading);
+    private System.ComponentModel.ICollectionView? _actorOptionsGrouped;
+
+    private static bool IsPackSpeaker(CharacterViewModel c) => !c.Model.IsVanillaCharacter && !c.IsPlayer;
 
     /// <summary>
     /// Available busts for actor → bust pickers. Combines every vanilla bust
@@ -671,27 +702,11 @@ public sealed class MainViewModel : ObservableObject
     /// never edited and concluding their edits had been lost.
     /// </summary>
     private static OutfitViewModel? TheBustTheyEnterIn(CharacterViewModel them)
-    {
-        string wanted = them.DefaultOutfit ?? "";
-        if (wanted.Length > 0)
-        {
-            // The GameObject name, which is what defaultOutfit holds - "Amber",
-            // "Adrian_bust" - and not the outfit key, which is a derived
-            // lower-case spelling of it. Matching the key instead finds a
-            // vanilla bust only by accident, and only when it is the sole one.
-            foreach (var bust in them.Outfits)
-                if (string.Equals(bust.Model.GameObjectName, wanted,
-                                  StringComparison.OrdinalIgnoreCase))
-                    return bust;
-
-            // ...and the key too, so a hand-edited manifest that named one is
-            // read the way its author plainly meant it.
-            foreach (var bust in them.Outfits)
-                if (string.Equals(bust.Model.Key, wanted, StringComparison.OrdinalIgnoreCase))
-                    return bust;
-        }
-        return them.Outfits.FirstOrDefault();
-    }
+        // One rule for which outfit is the default, shared with the "= default"
+        // buttons: two copies of it are how those buttons came to match the key
+        // while this matched the GameObject name. A name that is no outfit's
+        // still lands somewhere rather than on nothing.
+        => them.FindDefaultOutfit() ?? them.Outfits.FirstOrDefault();
 
     private PlaceViewModel? _selectedPlace;
     public PlaceViewModel? SelectedPlace
@@ -1571,6 +1586,11 @@ public sealed class MainViewModel : ObservableObject
         string from = _renameOriginOutfitName;
         _renameOriginOutfitName = current;
         Cascade(Services.RefKind.Outfit, from, current);
+
+        // The cascade rewrites a character's defaultOutfit in the model, behind
+        // the view model, so the "= default" buttons have to be told the
+        // renamed outfit is still the one they copy from.
+        foreach (var c in Characters) c.RefreshOutfitDefaults();
     }
 
     /// <summary>Point every reference at the new name, and say so — rewriting
@@ -1653,6 +1673,74 @@ public sealed class MainViewModel : ObservableObject
     {
         get => _selectedQuest;
         set { _selectedQuest = value; OnPropertyChanged(); RemoveQuestCommand?.Raise(); }
+    }
+
+    /// <summary>
+    /// The pack's entries about the game's own quests, listed apart from the
+    /// pack's quests - the way the Places and Dialogues tabs list what they
+    /// change of the game's.
+    /// <para/>
+    /// Kept separate because they are a different kind of thing: a quest of the
+    /// pack's is one it wrote and can name, group and rename, while these are
+    /// the game's, named by the game. Folders mean nothing to them. Still in
+    /// <see cref="Quests"/> as well, which stays the whole list - key checks,
+    /// validation and saving all want every entry.
+    /// </summary>
+    public ObservableCollection<QuestViewModel> VanillaQuestEntries { get; } = new();
+
+    /// <summary>Rebuild the vanilla list from the whole one.</summary>
+    public void RefreshVanillaQuests()
+    {
+        var wanted = Quests.Where(q => q.ShowsVanillaPanel).ToList();
+        VanillaQuestEntries.Clear();
+        foreach (var q in wanted) VanillaQuestEntries.Add(q);
+    }
+
+    private QuestViewModel? _selectedVanillaQuest;
+
+    /// <summary>The entry picked in the vanilla list. Shares the detail pane
+    /// with the tree, which lets go of its row so coming back to a quest of the
+    /// pack's is a real change rather than a click on a row the control still
+    /// thinks is selected.</summary>
+    public QuestViewModel? SelectedVanillaQuest
+    {
+        get => _selectedVanillaQuest;
+        set
+        {
+            _selectedVanillaQuest = value;
+            OnPropertyChanged();
+            if (value != null)
+            {
+                SelectedQuest = value;
+                QuestTree.Deselect();
+            }
+            RemoveVanillaQuestCommand?.Raise();
+        }
+    }
+
+    /// <summary>A quest of the pack's picked in the tree: the pane follows, and
+    /// the vanilla list lets go.</summary>
+    private void QuestPickedInTree(QuestViewModel quest)
+    {
+        SelectedQuest = quest;
+        if (_selectedVanillaQuest != null)
+        {
+            _selectedVanillaQuest = null;
+            OnPropertyChanged(nameof(SelectedVanillaQuest));
+        }
+    }
+
+    /// <summary>Where a new, duplicated or pasted entry goes: an entry about
+    /// one of the game's quests to the vanilla list, a quest of the pack's to
+    /// the tree.</summary>
+    private void ShowNewQuest(QuestViewModel vm)
+    {
+        if (vm.ShowsVanillaPanel)
+        {
+            RefreshVanillaQuests();
+            SelectedVanillaQuest = vm;
+        }
+        else QuestTree.PlaceNew(vm);
     }
 
     private UpdateRuleViewModel? _selectedIntegrationRule;
@@ -1921,6 +2009,7 @@ public sealed class MainViewModel : ObservableObject
     public RelayCommand AddSfxCommand { get; }
     public RelayCommand RemoveSfxCommand { get; }
     public RelayCommand AddQuestCommand { get; }
+    public RelayCommand AddVanillaQuestCommand { get; }
     public RelayCommand RemoveQuestCommand { get; }
 
     /// <summary>Rename the selected task's runtime name, following every row
@@ -1930,6 +2019,7 @@ public sealed class MainViewModel : ObservableObject
     /// <summary>Rename the selected quest's runtime name - the F2 rename, from
     /// a button beside the name.</summary>
     public RelayCommand RenameQuestCommand { get; }
+    public RelayCommand RemoveVanillaQuestCommand { get; }
 
     /// <summary>Preview-plays an SFX clip (the row's <see cref="SfxViewModel"/>,
     /// or the selected one) at its authored default volume. Needs the pack
@@ -2073,6 +2163,11 @@ public sealed class MainViewModel : ObservableObject
 
     public MainViewModel()
     {
+        // The rows that change the game's own conditions ask the editor that
+        // owns the pack. One window, one editor; a test that makes another
+        // takes over, which is the one it is driving.
+        GameConditionEditing.Editor = this;
+
         // Shared folder trees for the remaining unit tabs (Dialogues /
         // Variables / Integration have their own hand-rolled trees). One
         // controller per tab; the window wires one set of handlers for all.
@@ -2100,11 +2195,15 @@ public sealed class MainViewModel : ObservableObject
             o => SelectedSfx = (SfxViewModel)o, () => Undo.Checkpoint());
         QuestTree = new UnitTreeController(() => Pack.QuestFolders,
             o => ((QuestViewModel)o).Key, o => ((QuestViewModel)o).Display,
-            o => SelectedQuest = (QuestViewModel)o, () => Undo.Checkpoint());
+            o => QuestPickedInTree((QuestViewModel)o), () => Undo.Checkpoint());
 
         // Quest action and condition rows list the pack's quests and their
         // tasks. A row is built from its own definition and cannot reach the
         // pack, so the list comes from here - read live, since Pack swaps on load.
+        // All of them. An entry extending one of the game's quests is not a
+        // quest a row can pick on the Pack side - a row names that quest on the
+        // Vanilla side, by the game's name for it - but the tasks it adds are
+        // tasks of that quest, and a row has to be able to name them.
         QuestPickerViewModel.PackQuests = () => Pack.Quests;
 
         // Let Level Overlay action rows list the overlays of whichever level the
@@ -2319,10 +2418,13 @@ public sealed class MainViewModel : ObservableObject
         RemoveMusicCommand            = new RelayCommand(RemoveMusic, () => SelectedMusic != null || MusicTree.Selected is UnitFolderNode);
         AddSfxCommand                 = new RelayCommand(AddSfx);
         AddQuestCommand               = new RelayCommand(AddQuest);
+        AddVanillaQuestCommand        = new RelayCommand(AddVanillaQuest);
         RenameQuestTaskCommand        = new RelayCommand(RenameQuestTask, () => SelectedQuest?.SelectedTask != null);
         RenameQuestCommand            = new RelayCommand(() => { if (SelectedTabIndex == TabQuests) RenameActiveItem(); }, () => SelectedQuest != null);
-        RemoveQuestCommand            = new RelayCommand(RemoveQuest, () => SelectedQuest != null || QuestTree.Selected is UnitFolderNode);
-        RemoveSfxCommand              = new RelayCommand(RemoveSfx, () => SelectedSfx != null || SfxTree.Selected is UnitFolderNode);
+        RemoveQuestCommand            = new RelayCommand(RemoveQuest,
+                                            () => (SelectedQuest != null && !SelectedQuest.ShowsVanillaPanel)
+                                                  || QuestTree.Selected is UnitFolderNode);
+        RemoveVanillaQuestCommand     = new RelayCommand(RemoveVanillaQuest, () => SelectedVanillaQuest != null);        RemoveSfxCommand              = new RelayCommand(RemoveSfx, () => SelectedSfx != null || SfxTree.Selected is UnitFolderNode);
         PlaySfxCommand                = new RelayCommand(
             p => PlaySfx(p as SfxViewModel ?? SelectedSfx),
             p => CanPlaySfx(p as SfxViewModel ?? SelectedSfx));
@@ -3449,6 +3551,8 @@ public sealed class MainViewModel : ObservableObject
         // GameObject follow whatever display name gets typed, until the author
         // overrides one. Existing characters never re-derive.
         var def = new CharacterDef { DisplayName = "New Character", BustSource = source };
+        // Every character starts able to be asked for no face at all.
+        def.Expressions.Add(CharacterDef.NewNeutral());
         var vm = new CharacterViewModel(def, () => Characters, isNew: true);
         vm.DisplayName = def.DisplayName;   // triggers the first derivation
         if (source == BustSource.Pack)
@@ -3458,6 +3562,10 @@ public sealed class MainViewModel : ObservableObject
         foreach (var o in def.Outfits) vm.Outfits.Add(new OutfitViewModel(o, vm));
         SelectedOutfit = vm.Outfits.FirstOrDefault();
         OnPropertyChanged(nameof(SelectedCharacter));
+        // Offered as a speaker straight away. The list was only rebuilt when the
+        // whole pack was loaded into the editor again - opening it, or an undo -
+        // so a character just added could not be picked in a node's Actor box.
+        RebuildActorAndBustOptions();
     }
 
     /// <summary>
@@ -4209,6 +4317,12 @@ public sealed class MainViewModel : ObservableObject
                 e.PropertyName == nameof(CharacterViewModel.Key) ||
                 string.IsNullOrEmpty(e.PropertyName))
                 RefreshNodeActorTints();
+
+            // The Actor pickers list speakers by key, so a new key is a new
+            // entry - under the same heading, since whose a character is never
+            // changes with its name.
+            if (e.PropertyName == nameof(CharacterViewModel.Key))
+                RebuildActorAndBustOptions();
         };
         return vm;
     }
@@ -4286,7 +4400,7 @@ public sealed class MainViewModel : ObservableObject
             case TabWallpapers: DuplicateFlat(SelectedWallpaper?.Model, Pack.Wallpapers, Wallpapers, w => w.Key, (w, k) => w.Key = k, d => new WallpaperViewModel(d), vm => WallpaperTree.PlaceNew(vm)); break;
             case TabMusic: DuplicateFlat(SelectedMusic?.Model, Pack.Music, Music, m => m.Key, (m, k) => m.Key = k, d => new MusicViewModel(d), vm => { MusicTree.PlaceNew(vm); RebuildMusicKeyOptions(); }); break;
             case TabSfx: DuplicateFlat(SelectedSfx?.Model, Pack.Sfx, Sfx, s => s.Key, (s, k) => s.Key = k, MakeSfxVm, vm => { SfxTree.PlaceNew(vm); RebuildSfxKeyOptions(); }); break;
-            case TabQuests: DuplicateFlat(SelectedQuest?.Model, Pack.Quests, Quests, q => q.Key, (q, k) => q.Key = k, MakeQuestVm, vm => { QuestTree.PlaceNew(vm); SelectedQuest = vm; }); break;
+            case TabQuests: DuplicateFlat(SelectedQuest?.Model, Pack.Quests, Quests, q => q.Key, (q, k) => q.Key = k, MakeQuestVm, ShowNewQuest); break;
             case TabIntegration: DuplicateFlat(SelectedIntegrationRule?.Model, Pack.IntegrationRules, IntegrationRules, r => r.Key, (r, k) => r.Key = k, d => new UpdateRuleViewModel(d), vm => PlaceNewIntegrationRuleInTree(vm)); break;
         }
     }
@@ -4324,7 +4438,7 @@ public sealed class MainViewModel : ObservableObject
             case TabWallpapers: PasteFlat(Pack.Wallpapers, Wallpapers, w => w.Key, (w, k) => w.Key = k, d => new WallpaperViewModel(d), vm => WallpaperTree.PlaceNew(vm)); break;
             case TabMusic: PasteFlat(Pack.Music, Music, m => m.Key, (m, k) => m.Key = k, d => new MusicViewModel(d), vm => { MusicTree.PlaceNew(vm); RebuildMusicKeyOptions(); }); break;
             case TabSfx: PasteFlat(Pack.Sfx, Sfx, s => s.Key, (s, k) => s.Key = k, MakeSfxVm, vm => { SfxTree.PlaceNew(vm); RebuildSfxKeyOptions(); }); break;
-            case TabQuests: PasteFlat(Pack.Quests, Quests, q => q.Key, (q, k) => q.Key = k, MakeQuestVm, vm => { QuestTree.PlaceNew(vm); SelectedQuest = vm; }); break;
+            case TabQuests: PasteFlat(Pack.Quests, Quests, q => q.Key, (q, k) => q.Key = k, MakeQuestVm, ShowNewQuest); break;
             case TabIntegration: PasteFlat(Pack.IntegrationRules, IntegrationRules, r => r.Key, (r, k) => r.Key = k, d => new UpdateRuleViewModel(d), vm => PlaceNewIntegrationRuleInTree(vm)); break;
         }
     }
@@ -4510,6 +4624,9 @@ public sealed class MainViewModel : ObservableObject
         foreach (var q in Quests)
         {
             foreach (var c in q.StartConditions.Items) RefreshCondition(c);
+            foreach (var c in q.ResetConditions.Items) RefreshCondition(c);
+            foreach (var list in q.OpenSiteConditions)
+                foreach (var c in list.Items) RefreshCondition(c);
             foreach (var t in q.TaskRows)
             {
                 foreach (var c in t.CompletionConditions.Items) RefreshCondition(c);
@@ -5048,8 +5165,12 @@ public sealed class MainViewModel : ObservableObject
         // only the pack's left the speaker of every seeded line looking like a
         // mistake, and gave an author no way to hand a new line to somebody
         // already in the scene.
+        // The pack's own first, then the game's: the grouped picker files them
+        // under "This pack" and "The game's own", and a heading goes where its
+        // first entry is.
         var speakers = Characters
-            .OrderBy(c => c.Key, System.StringComparer.OrdinalIgnoreCase)
+            .OrderBy(c => IsPackSpeaker(c) ? 0 : 1)
+            .ThenBy(c => c.Key, System.StringComparer.OrdinalIgnoreCase)
             .Select(c => c.Key)
             .ToList();
 
@@ -5744,8 +5865,10 @@ public sealed class MainViewModel : ObservableObject
         };
         vm.TaskKeyChanged += (oldKey, newKey) =>
         {
-            if (Services.ReferenceRenamer.RenameQuestTask(Pack, vm.Key, oldKey, newKey) > 0)
-                RefreshConditionAndActionRows();
+            int renamed = vm.IsVanillaExtension
+                ? Services.ReferenceRenamer.RenameQuestTask(Pack, vm.Source, oldKey, newKey, vanilla: true)
+                : Services.ReferenceRenamer.RenameQuestTask(Pack, vm.Key, oldKey, newKey);
+            if (renamed > 0) RefreshConditionAndActionRows();
         };
         return vm;
     }
@@ -5755,8 +5878,14 @@ public sealed class MainViewModel : ObservableObject
         Quests.Clear();
         foreach (var q in Pack.Quests)
             Quests.Add(MakeQuestVm(q));
-        QuestTree.Build(Quests);
-        SelectedQuest = Quests.FirstOrDefault();
+        QuestTree.Build(Quests.Where(q => !q.ShowsVanillaPanel).ToList());
+        RefreshVanillaQuests();
+        _selectedVanillaQuest = null;
+        OnPropertyChanged(nameof(SelectedVanillaQuest));
+        var first = Quests.FirstOrDefault(q => !q.ShowsVanillaPanel);
+        if (first != null) SelectedQuest = first;
+        else if (VanillaQuestEntries.Count > 0) SelectedVanillaQuest = VanillaQuestEntries[0];
+        else SelectedQuest = null;
     }
 
     private void AddQuest()
@@ -5777,6 +5906,187 @@ public sealed class MainViewModel : ObservableObject
         SelectedQuest = vm;
     }
 
+    /// <summary>
+    /// An entry about one of the game's own quests.
+    /// <para/>
+    /// It arrives naming none: the quest is chosen from the picker at the top
+    /// of the panel, and until one is chosen the entry does nothing and is
+    /// saved as nothing.
+    /// </summary>
+    private void AddVanillaQuest()
+    {
+        var def = new QuestDef
+        {
+            Key = CharacterDef.UniqueIdentifier("Extension" + (Pack.Quests.Count + 1), Pack.Quests.Select(q => q.Key)),
+            Title = "",
+        };
+        Pack.Quests.Add(def);
+        var vm = MakeQuestVm(def);
+        Quests.Add(vm);
+        // The key follows the quest that gets picked, the way a pack quest's
+        // follows its title.
+        vm.DeriveKeyFromTitle(() => Quests.Select(x => x.Key));
+        vm.WantsVanilla = true;
+        ShowNewQuest(vm);
+    }
+
+    /// <summary>Drop an entry about one of the game's quests. The game's quest
+    /// itself is untouched - it was never the pack's.</summary>
+    private void RemoveVanillaQuest()
+    {
+        var doomed = SelectedVanillaQuest;
+        if (doomed == null) return;
+
+        Pack.Quests.Remove(doomed.Model);
+        Quests.Remove(doomed);
+        RefreshVanillaQuests();
+        SelectedVanillaQuest = VanillaQuestEntries.FirstOrDefault();
+        if (SelectedVanillaQuest == null)
+            SelectedQuest = Quests.FirstOrDefault(q => !q.ShowsVanillaPanel);
+    }
+
+    /// <summary>
+    /// Go from a place the game changes a quest to the conversation it is in,
+    /// with the line selected. A conversation the pack does not change yet is
+    /// added to its vanilla conversations first, which changes nothing until a
+    /// line is edited - and the author is asked, since it is a new entry.
+    /// <para/>
+    /// The window calls this rather than a command, and announces the tab
+    /// switch in <paramref name="beforeSwitch"/>: a switch nobody announced is
+    /// logged as a stray one, and an announcement made before the question
+    /// would have lapsed while the question was open. Returns whether it
+    /// switched, so the window can scroll to the line.
+    /// </summary>
+    internal bool OpenVanillaConversation(GameQuestSiteViewModel site, Action? beforeSwitch = null)
+    {
+        var entry = VanillaDialogueCatalog.Find(site.Conversation);
+        if (entry == null) return false;
+
+        var dialogue = Dialogues.FirstOrDefault(
+            d => string.Equals(d.Model.Source, entry.Token, StringComparison.OrdinalIgnoreCase));
+        if (dialogue == null)
+        {
+            var answer = Ask("Your pack does not change the conversation " + entry.Id + " yet.\n\n"
+                             + "Add it to your vanilla conversations to open it? Nothing about it changes until "
+                             + "you edit it, and you can remove it again from the Dialogues tab.",
+                             "Open the game's conversation", MessageBoxButton.YesNo, MessageBoxImage.Question,
+                             whenNobodyIsThere: MessageBoxResult.Yes);
+            if (answer != MessageBoxResult.Yes) return false;
+
+            Undo.Checkpoint();
+            AddVanillaDialogue();
+            dialogue = SelectedVanillaDialogue;
+            if (dialogue == null) return false;
+            dialogue.VanillaSource = entry;
+            RefreshVanillaDialogues();
+            Undo.Checkpoint();
+        }
+
+        beforeSwitch?.Invoke();
+        SelectedTabIndex = TabDialogues;
+        SelectedVanillaDialogue = dialogue;
+        if (site.Site.IsDialogue && site.Site.Node is long node)
+            SelectedNode = dialogue.Nodes.FirstOrDefault(n => n.Id == unchecked((int)node));
+        return true;
+    }
+
+    // -- The game's own conditions ----------------------------------
+    //
+    // Taken out of a script's list (IGameConditionEditor.SetRemoved), or out
+    // of a conversation's line (SetLineConditions). Both show on the Quests
+    // tab and the Dialogues tab, so both tell every open quest and
+    // conversation once they change.
+
+    public bool IsRemoved(string by, string script, Newtonsoft.Json.Linq.JArray at, int index)
+    {
+        string key = Shared.GameConditionEdits.GateKey(by, script, Shared.GameConditionEdits.PathText(at));
+        return Pack.VanillaGates.Any(g => g.Key == key && g.Removed.Any(r => r.Index == index));
+    }
+
+    public void SetRemoved(string by, string script, Newtonsoft.Json.Linq.JArray at, int index,
+                           string type, string title, bool removed)
+    {
+        string key = Shared.GameConditionEdits.GateKey(by, script, Shared.GameConditionEdits.PathText(at));
+        var gate = Pack.VanillaGates.FirstOrDefault(g => g.Key == key);
+        if (removed)
+        {
+            if (gate == null)
+            {
+                gate = new GameGateEditDef
+                {
+                    By = by ?? "", Script = script ?? "",
+                    At = (Newtonsoft.Json.Linq.JArray)(at ?? new Newtonsoft.Json.Linq.JArray()).DeepClone(),
+                };
+                Pack.VanillaGates.Add(gate);
+            }
+            if (!gate.Removed.Any(r => r.Index == index))
+            {
+                gate.Removed.Add(new RemovedConditionDef { Index = index, Type = type ?? "", Title = title ?? "" });
+                gate.Removed.Sort((a, b) => a.Index.CompareTo(b.Index));
+            }
+        }
+        else if (gate != null)
+        {
+            gate.Removed.RemoveAll(r => r.Index == index);
+            // Kept only while it takes something out.
+            if (gate.Removed.Count == 0) Pack.VanillaGates.Remove(gate);
+        }
+        GameConditionsChanged();
+    }
+
+    public IReadOnlyList<NodeConditionDef> LineConditions(string dialogue, long node)
+    {
+        var entry = VanillaDialogueCatalog.Find(dialogue);
+        if (entry == null) return Array.Empty<NodeConditionDef>();
+        var line = ExtensionOf(entry)?.Model.Nodes.FirstOrDefault(n => n.Id == unchecked((int)node));
+        if (line != null) return line.Conditions;
+
+        var game = VanillaDialogueCatalog.Open(dialogue)?.Node(node);
+        return game == null
+            ? Array.Empty<NodeConditionDef>()
+            : VanillaDialogueConditions.TranslateAll(game.Conditions, out _);
+    }
+
+    public void SetLineConditions(string dialogue, long node, List<NodeConditionDef> conditions)
+    {
+        var entry = VanillaDialogueCatalog.Find(dialogue);
+        if (entry == null) return;
+
+        // A change to a line is a change to the conversation, so the pack's
+        // version of it is made if it has none - without moving the
+        // Dialogues tab to it.
+        var extension = ExtensionOf(entry) ?? NewVanillaDialogue(entry);
+        var line = extension?.Model.Nodes.FirstOrDefault(n => n.Id == unchecked((int)node));
+        if (extension == null || line == null) return;
+
+        line.Conditions = conditions;
+        extension.LineChanged(line);
+        GameConditionsChanged();
+    }
+
+    private DialogueViewModel? ExtensionOf(VanillaDialogueCatalog.Entry entry)
+        => Dialogues.FirstOrDefault(d => string.Equals(d.Model.Source, entry.Token, StringComparison.OrdinalIgnoreCase));
+
+    /// <summary>The pack's version of one of the game's conversations, made
+    /// the way + Vanilla makes one, but left unselected.</summary>
+    private DialogueViewModel? NewVanillaDialogue(VanillaDialogueCatalog.Entry entry)
+    {
+        var def = new DialogueDef { Key = $"dialogue{Pack.Dialogues.Count + 1}" };
+        Pack.Dialogues.Add(def);
+        if (HookDebugTracking(new DialogueViewModel(def)) is not DialogueViewModel vm) return null;
+        vm.WantsVanilla = true;
+        Dialogues.Add(vm);
+        vm.VanillaSource = entry;
+        RefreshVanillaDialogues();
+        return vm;
+    }
+
+    private void GameConditionsChanged()
+    {
+        foreach (var quest in Quests) quest.RefreshGameConditions();
+        foreach (var dialogue in Dialogues) dialogue.RefreshGameConditions();
+    }
+
     private void RenameQuestTask()
     {
         var quest = SelectedQuest;
@@ -5792,12 +6102,12 @@ public sealed class MainViewModel : ObservableObject
     private void RemoveQuest()
     {
         if (QuestTree.RemoveSelectedFolderLiftChildren()) return;
-        if (SelectedQuest is null) return;
+        if (SelectedQuest is null || SelectedQuest.ShowsVanillaPanel) return;
         var vm = SelectedQuest;
         Pack.Quests.Remove(vm.Model);
         Quests.Remove(vm);
         QuestTree.RemoveLeafFor(vm);
-        SelectedQuest = Quests.FirstOrDefault();
+        SelectedQuest = Quests.FirstOrDefault(q => !q.ShowsVanillaPanel);
     }
 
     private void RebindSfx()

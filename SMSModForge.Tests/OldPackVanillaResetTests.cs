@@ -174,7 +174,9 @@ public sealed class OldPackVanillaResetTests
         Assert.Equal("Sarah the Barista", mine.DisplayName);
         Assert.Equal("#ABCDEF", mine.NameColor);
         Assert.NotNull(mine.Typewriter);
-        Assert.Single(mine.Expressions);
+        // Its own expression kept. The neutral one in front of it is the pass
+        // that gives every character of the pack's own that row, not this one.
+        Assert.Equal(new[] { "neutral", "Happy" }, mine.Expressions.Select(e => e.Key));
         Assert.Single(mine.Outfits);
     }
 

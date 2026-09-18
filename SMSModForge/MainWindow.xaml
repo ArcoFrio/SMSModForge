@@ -635,12 +635,16 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="{Binding Label}" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                <ComboBox  Grid.Column="1"
-                           ItemsSource="{Binding DataContext.ActorOptions,
+                <ComboBox  Grid.Column="1" Style="{StaticResource GroupedComboBox}"
+                           ItemsSource="{Binding DataContext.ActorOptionsGrouped,
                                          RelativeSource={RelativeSource AncestorType=Window}}"
                            IsEditable="True"
                            Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
-                           ToolTip="{Binding Tooltip}"/>
+                           ToolTip="{Binding Tooltip}">
+                    <ComboBox.GroupStyle>
+                        <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                    </ComboBox.GroupStyle>
+                </ComboBox>
             </Grid>
         </DataTemplate>
 
@@ -745,7 +749,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="{Binding Label}" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                <ComboBox  Grid.Column="1"
+                <ComboBox Style="{StaticResource GroupedComboBox}"  Grid.Column="1"
                            IsSynchronizedWithCurrentItem="False"
                            ItemsSource="{Binding DataContext.MusicKeyOptionsGrouped,
                                          RelativeSource={RelativeSource AncestorType=Window}}"
@@ -948,7 +952,7 @@
                         <Setter Property="BorderBrush" Value="LightGray"/>
                         <Setter Property="Background" Value="Transparent"/>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsLocked}" Value="True">
+                            <DataTrigger Binding="{Binding HasLockedHeader}" Value="True">
                                 <Setter Property="BorderBrush" Value="#FF6A8CAF"/>
                                 <Setter Property="BorderThickness" Value="2"/>
                                 <Setter Property="Background" Value="#146A8CAF"/>
@@ -957,20 +961,12 @@
                     </Style>
                 </Border.Style>
                 <StackPanel>
-                    <TextBlock Text="Required — this dialogue only starts in this level"
+                    <!-- The pinned level row's "Required", or what a locked row of the
+                         game's is, when it needs saying. -->
+                    <TextBlock x:Name="LockedHeaderText" Text="{Binding LockedHeader}"
                                FontWeight="SemiBold" Foreground="#FF3E6084"
-                               Margin="0,0,0,4" TextWrapping="Wrap">
-                        <TextBlock.Style>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsLocked}" Value="True">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>
-                    </TextBlock>
+                               Margin="0,0,0,4" TextWrapping="Wrap"
+                               Visibility="{Binding HasLockedHeader, Converter={StaticResource BoolToVisibility}}"/>
                     <!-- Header row: Type combo + Remove button. The Type
                          combo is disabled when IsTypeEditable is false
                          (locked LevelActive row). -->
@@ -1080,7 +1076,11 @@
                                   ToolTip="Which list of keys to choose from. Mouse buttons are keys like any other to the game; this only filters the picker below."/>
 
                         <TextBlock Text="Key" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2"/>
-                        <ComboBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,2"
+                        <!-- The grouped style scrolls by pixel. Without it a grouped list
+                             scrolls a whole group per step, and the letters group is taller
+                             than the list, so most of it could never be reached. -->
+                        <ComboBox x:Name="InputKeyPicker" Grid.Row="1" Grid.Column="1" Margin="0,0,0,2"
+                                  Style="{StaticResource GroupedComboBox}"
                                   ItemsSource="{Binding InputKeyOptions}"
                                   SelectedValuePath="Token"
                                   DisplayMemberPath="Label"
@@ -2282,7 +2282,7 @@
                          Starts empty, unlike a map button: a door within an area should
                          let the area keep its music. See PlaceViewModel.AddNavigatorButton. -->
                     <TextBlock Text="Music (optional):" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
-                    <ComboBox Grid.Row="2" Grid.Column="1"
+                    <ComboBox Style="{StaticResource GroupedComboBox}" Grid.Row="2" Grid.Column="1"
                               IsSynchronizedWithCurrentItem="False"
                               IsEditable="True"
                               ItemsSource="{Binding DataContext.MusicKeyOptionsGrouped,
@@ -2843,6 +2843,161 @@
                             ToolTip="Replace these actions with the clipboard"/>
                 </StackPanel>
             </StackPanel>
+        </DataTemplate>
+
+        <!-- One of the game's conditions, as a row that can be taken out and put
+             back. Taken out, it stays on screen, faded and struck through, with
+             the way back beside it. -->
+        <DataTemplate x:Key="GameConditionRowTemplate" DataType="{x:Type vm:GameConditionRowViewModel}">
+            <DockPanel Margin="0,1">
+                <Button DockPanel.Dock="Right" Content="Take out" Padding="6,0" Margin="6,0,0,0" FontSize="10"
+                        VerticalAlignment="Center" Command="{Binding RemoveCommand}" ToolTip="{Binding Note}">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding CanRemove}" Value="True"/>
+                                        <Condition Binding="{Binding IsRemoved}" Value="False"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button DockPanel.Dock="Right" Content="Put back" Padding="6,0" Margin="6,0,0,0" FontSize="10"
+                        VerticalAlignment="Center" Command="{Binding UndoCommand}"
+                        ToolTip="Put this condition back the way the game has it.">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding CanRemove}" Value="True"/>
+                                        <Condition Binding="{Binding IsRemoved}" Value="True"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Border DockPanel.Dock="Right" Background="#FFB06A00" CornerRadius="2" Padding="3,0" Margin="6,0,0,0"
+                        VerticalAlignment="Center" ToolTip="{Binding Note}"
+                        Visibility="{Binding IsRemoved, Converter={StaticResource BoolToVisibility}}">
+                    <TextBlock Text="taken out" Foreground="White" FontSize="9"/>
+                </Border>
+                <Border DockPanel.Dock="Right" Background="#FF2F6FB0" CornerRadius="2" Padding="3,0" Margin="6,0,0,0"
+                        VerticalAlignment="Center" ToolTip="{Binding Note}"
+                        Visibility="{Binding IsYours, Converter={StaticResource BoolToVisibility}}">
+                    <TextBlock Text="yours" Foreground="White" FontSize="9"/>
+                </Border>
+                <Grid ToolTip="{Binding Note}">
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsRemoved}" Value="True">
+                                    <Setter Property="Opacity" Value="0.45"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                    <ContentControl Content="{Binding Condition}" IsEnabled="False" Focusable="False"
+                                    ContentTemplateSelector="{StaticResource ConditionTemplateSelector}"
+                                    Visibility="{Binding IsTranslated, Converter={StaticResource BoolToVisibility}}"/>
+                    <TextBlock Text="{Binding Text}" TextWrapping="Wrap" FontStyle="Italic" VerticalAlignment="Center"
+                               Visibility="{Binding IsTranslated, Converter={StaticResource InverseBoolToVisibility}}"/>
+                    <!-- The strike: a condition row is a template of its own, so a
+                         line drawn across it is what says "not any more". -->
+                    <Rectangle Height="1.5" VerticalAlignment="Center" Fill="#FFB06A00" IsHitTestVisible="False"
+                               Visibility="{Binding IsRemoved, Converter={StaticResource BoolToVisibility}}"/>
+                </Grid>
+            </DockPanel>
+        </DataTemplate>
+
+        <!-- The game's conditions that live together: one line's, or one
+             script's. -->
+        <DataTemplate x:Key="GameConditionGroupTemplate" DataType="{x:Type vm:GameConditionGroupViewModel}">
+            <StackPanel Margin="0,3,0,0">
+                <TextBlock Text="{Binding Title}" Foreground="Gray" TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding Note}" Foreground="Gray" FontSize="10" TextWrapping="Wrap"
+                           Visibility="{Binding HasNote, Converter={StaticResource BoolToVisibility}}"/>
+                <ItemsControl ItemsSource="{Binding Rows}" Margin="12,0,0,0"
+                              ItemTemplate="{StaticResource GameConditionRowTemplate}"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <!-- One place the game changes or asks about one of its quests:
+             what it does, where, when, and what has to be true. A place that
+             starts or resets the quest can be changed: the game's conditions
+             taken out and put back, and conditions of yours the step waits
+             for - marked, and resettable, the way a changed line of a
+             conversation is. -->
+        <DataTemplate x:Key="GameQuestSiteTemplate" DataType="{x:Type vm:GameQuestSiteViewModel}">
+            <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="0,3,0,5">
+                <StackPanel>
+                    <DockPanel>
+                        <Button DockPanel.Dock="Right" Content="Open conversation" Padding="6,0" Margin="6,0,0,0"
+                                VerticalAlignment="Top" FontSize="10"
+                                Click="OpenGameConversation_Click"
+                                Visibility="{Binding CanOpenConversation, Converter={StaticResource BoolToVisibility}}"
+                                ToolTip="Show this conversation on the Dialogues tab, with the line selected. If your pack does not change it yet, you are asked before it is added to your vanilla conversations."/>
+                        <Button DockPanel.Dock="Right" Content="&#x21BA;" Width="18" Padding="0" Margin="6,0,0,0"
+                                VerticalAlignment="Top" FontSize="11" Command="{Binding ResetCommand}"
+                                ToolTip="Put this place back the way the game has it: every condition taken out goes back, and yours are removed."
+                                Visibility="{Binding IsChanged, Converter={StaticResource BoolToVisibility}}"/>
+                        <TextBlock DockPanel.Dock="Left" Text="&#x25CF;" Width="10" FontSize="10" VerticalAlignment="Top"
+                                   Foreground="{DynamicResource Theme.Accent}" ToolTip="{Binding ChangedText}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Hidden"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsChanged}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsEditable}" Value="False">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <TextBlock TextWrapping="Wrap">
+                            <Run Text="{Binding What, Mode=OneWay}" FontWeight="SemiBold"/><Run Text=" - "/><Run Text="{Binding Where, Mode=OneWay}"/>
+                        </TextBlock>
+                    </DockPanel>
+                    <TextBlock Text="{Binding When}" TextWrapping="Wrap" Margin="0,1,0,0"
+                               Visibility="{Binding HasWhen, Converter={StaticResource BoolToVisibility}}"/>
+                    <TextBlock Text="{Binding Path}" TextWrapping="Wrap" Foreground="Gray" FontSize="10" Margin="0,1,0,0"
+                               Visibility="{Binding HasPath, Converter={StaticResource BoolToVisibility}}"/>
+                    <TextBlock Text="{Binding Standing}" TextWrapping="Wrap" Foreground="Gray" FontSize="10" Margin="0,1,0,0"
+                               Visibility="{Binding HasStanding, Converter={StaticResource BoolToVisibility}}"/>
+                    <ItemsControl ItemsSource="{Binding ConditionGroups}" Margin="0,2,0,0"
+                                  ItemTemplate="{StaticResource GameConditionGroupTemplate}"/>
+                    <TextBlock Text="{Binding PlaysNote}" TextWrapping="Wrap" Foreground="Gray" FontSize="10" Margin="0,2,0,0"
+                               Visibility="{Binding HasPlaysNote, Converter={StaticResource BoolToVisibility}}"/>
+                    <TextBlock Text="{Binding RuleNote}" TextWrapping="Wrap" FontSize="10" Margin="0,3,0,0"
+                               Foreground="{DynamicResource Theme.Accent}"
+                               Visibility="{Binding HasRuleNote, Converter={StaticResource BoolToVisibility}}"/>
+                    <StackPanel Margin="0,4,0,0"
+                                Visibility="{Binding IsEditable, Converter={StaticResource BoolToVisibility}}">
+                        <TextBlock Text="And only if (yours):" Foreground="Gray"/>
+                        <TextBlock Text="{Binding ExtraNote}" Foreground="Gray" FontSize="10" TextWrapping="Wrap"/>
+                        <ContentControl Focusable="False" Margin="12,0,0,0" Content="{Binding ExtraConditions}"
+                                        ContentTemplate="{StaticResource ConditionListTemplate}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="GameQuestSiteGroupTemplate" DataType="{x:Type vm:GameQuestSiteGroup}">
+            <Expander Header="{Binding Title}" IsExpanded="True" Margin="0,2,0,0">
+                <ItemsControl ItemsSource="{Binding Sites}" Margin="16,0,0,0"
+                              ItemTemplate="{StaticResource GameQuestSiteTemplate}"/>
+            </Expander>
         </DataTemplate>
 
         <!-- One conditions-gated action group on a place's enter/exit edge.
@@ -3746,7 +3901,7 @@
                                                 IsEnabled="{Binding CanResetDefaultOutfit}"
                                                 Visibility="{Binding ShowsResets, Converter={StaticResource BoolToVisibility}}"
                                                 ToolTip="Put the default outfit back to the bust the game has this character enter in."/>
-                                        <ComboBox Grid.Row="3" Grid.Column="1" Margin="0,2,58,2" IsEditable="True"
+                                        <ComboBox x:Name="DefaultOutfitPicker" Grid.Row="3" Grid.Column="1" Margin="0,2,58,2" IsEditable="True"
                                                   ItemsSource="{Binding WearableBusts}"
                                                   SelectedItem="{Binding DefaultOutfit}"
                                                   IsEnabled="{Binding CanEditDefaultOutfit}"
@@ -3941,7 +4096,7 @@
                                             HorizontalAlignment="Left" Margin="0,6,0,0" Padding="8,2"/>
                                     <TextBlock DockPanel.Dock="Top" Foreground="Gray" FontSize="10" Margin="0,0,0,4"
                                                TextWrapping="Wrap"
-                                               Text="What a dialogue node&apos;s Expression field selects. On one of the game&apos;s characters the faces the game already gave them are listed first and cannot be changed - they belong to the game, and its own conversations ask for them by these names."/>
+                                               Text="What a dialogue node&apos;s Expression field selects. Every character starts with neutral, which is no expression showing and cannot be changed. On one of the game&apos;s characters the faces the game already gave them are listed first and cannot be changed either - they belong to the game, and its own conversations ask for them by these names."/>
                                     <TextBlock DockPanel.Dock="Top" Foreground="Gray" FontSize="10" Margin="0,0,0,6"
                                                TextWrapping="Wrap"
                                                Text="Add a row to give a character a face it never had. Its art is named after it: on a bust this pack draws, the outfit&apos;s expression prefix picks it up as {prefix}{Name}.png; on one of the game&apos;s busts it gets a row of its own under Replace textures."/>
@@ -3957,7 +4112,8 @@
                                                     </Grid.ColumnDefinitions>
                                                     <TextBox Grid.Column="0" Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}"
                                                              IsEnabled="{Binding CanEdit}"
-                                                             ToolTip="Pack-local expression key (e.g. Happy)"/>
+                                                             ToolTipService.ShowOnDisabled="True"
+                                                             ToolTip="{Binding KeyToolTip}"/>
                                                     <TextBox Grid.Column="2" Text="{Binding ExpressionGoName, UpdateSourceTrigger=PropertyChanged}"
                                                              IsEnabled="{Binding CanEdit}"
                                                              ToolTip="Child name under MBase1/Expressions/ on the bust"/>
@@ -4753,6 +4909,7 @@
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <TextBlock Text="Source place:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
                                         <ComboBox ToolTip="Which of the game&apos;s own places this extension attaches to. What you add below appears when the player is there." Grid.Row="0" Grid.Column="1"
@@ -5170,7 +5327,7 @@
 
                                             <!-- Music -->
                                             <TextBlock Text="Music (optional):" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"/>
-                                            <ComboBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"
+                                            <ComboBox Style="{StaticResource GroupedComboBox}" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"
                                                       IsSynchronizedWithCurrentItem="False"
                                                       IsEditable="True"
                                                       ItemsSource="{Binding DataContext.MusicKeyOptionsGrouped,
@@ -5241,100 +5398,85 @@
                         <ContentControl DockPanel.Dock="Top" Focusable="False"
                                         DataContext="{Binding DialogueTreeFilter}"
                                         Template="{StaticResource SidebarSearchTemplate}"/>
-                        <!-- Token and markup cheatsheet, pinned under the list.
-                             THREE things about the shape, all of them about height. The
-                             dialogue tree shares this column, and the tree is where the
-                             work happens: at a 1400x900 window it gets about 214px, and
-                             this took 167 of the rest. So:
-                               - two columns, not one, which is why the labels are a word
-                                 each and the sentence lives on the hover;
-                               - a MaxHeight with its own scrollbar, so another entry can
-                                 never take another pixel from the tree;
-                               - foldable, remembered between sessions, for anyone who
-                                 knows these by heart and wants the column back.
-                             Open by default, because the whole point is being seen by
-                             somebody who does not know the tokens exist. Docked before
-                             the TreeView so the tree keeps the remaining height. -->
+                        <!-- Token cheatsheet, pinned under the list.
+                             One column, each token with what it stands for written beside it.
+                             The markup used to share this panel, which is what squeezed it into
+                             two columns of one-word labels with the meaning on a hover; the
+                             formatting buttons over the Text box write the markup now, so the
+                             room went back to the tokens, which have no button.
+                             Still bounded and foldable, because the dialogue tree shares this
+                             column and the tree is where the work happens: a MaxHeight with its
+                             own scrollbar keeps the panel from ever taking more of it, and the
+                             fold is remembered for anyone who knows these by heart. Open by
+                             default, because the point is being seen by somebody who does not
+                             know the tokens exist. Docked before the TreeView so the tree keeps
+                             the remaining height. -->
                         <Expander DockPanel.Dock="Bottom" Margin="4,4,4,4"
                                   IsExpanded="{Binding ShowTextTokenTips, Mode=TwoWay}"
-                                  ToolTip="The game swaps each {token} for whatever this player chose to call somebody, so writing the word yourself says it to everyone &#x2014; including the player who chose something else, who cannot tell your line from the game losing their choice. Validate warns when it spots one. Hover any row for what it means.">
+                                  ToolTip="The game swaps each {token} for whatever this player chose to call somebody, so writing the word yourself says it to everyone &#x2014; including the player who chose something else, who cannot tell your line from the game losing their choice. Validate warns when it spots one.">
                             <Expander.Header>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="In dialogue text" FontWeight="SemiBold" FontSize="10"
-                                               Opacity="0.8"/>
-                                    <!-- The labels are one word each so two columns fit; the
-                                         sentence is on the hover. Nobody hovers a thing they
-                                         have no reason to think is hoverable, so say so. -->
-                                    <TextBlock Text=" (hover over each for explanation)" FontSize="9"
-                                               Opacity="0.6" VerticalAlignment="Center"/>
-                                </StackPanel>
+                                <TextBlock Text="In dialogue text" FontWeight="SemiBold" FontSize="10"
+                                           Opacity="0.8"/>
                             </Expander.Header>
                             <Border Padding="6,4" CornerRadius="3" BorderThickness="1"
                                     BorderBrush="{DynamicResource Theme.Accent}"
                                     Background="{DynamicResource Theme.Surface}">
-                                <ScrollViewer MaxHeight="130" VerticalScrollBarVisibility="Auto"
+                                <ScrollViewer MaxHeight="150" VerticalScrollBarVisibility="Auto"
                                               HorizontalScrollBarVisibility="Disabled">
+                                    <StackPanel>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
-                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{}{PC}" ToolTip="The player’s own name, whatever they chose at the start."
-                                                       FontFamily="Consolas" FontSize="10" Margin="0,0,5,0"/>
-                                        <TextBlock Grid.Row="0" Grid.Column="1" Text="player" ToolTip="The player’s own name, whatever they chose at the start."
-                                                       FontSize="10" Opacity="0.8" Margin="0,0,10,0"/>
-                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{}{M}" ToolTip="What this player calls Anna. They picked the word themselves."
-                                                       FontFamily="Consolas" FontSize="10" Margin="0,0,5,0"/>
-                                        <TextBlock Grid.Row="1" Grid.Column="1" Text="Anna" ToolTip="What this player calls Anna. They picked the word themselves."
-                                                       FontSize="10" Opacity="0.8" Margin="0,0,10,0"/>
-                                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{}{D}" ToolTip="What this player calls Josef. They picked the word themselves."
-                                                       FontFamily="Consolas" FontSize="10" Margin="0,0,5,0"/>
-                                        <TextBlock Grid.Row="2" Grid.Column="1" Text="Josef" ToolTip="What this player calls Josef. They picked the word themselves."
-                                                       FontSize="10" Opacity="0.8" Margin="0,0,10,0"/>
-                                        <TextBlock Grid.Row="3" Grid.Column="0" Text="{}{B}" ToolTip="What the player and Adrian call each other. Works both ways round."
-                                                       FontFamily="Consolas" FontSize="10" Margin="0,0,5,0"/>
-                                        <TextBlock Grid.Row="3" Grid.Column="1" Text="brother" ToolTip="What the player and Adrian call each other. Works both ways round."
-                                                       FontSize="10" Opacity="0.8" Margin="0,0,10,0"/>
-                                        <TextBlock Grid.Row="4" Grid.Column="0" Text="{}{S}" ToolTip="What Anna and Josef call the player and Adrian."
-                                                       FontFamily="Consolas" FontSize="10" Margin="0,0,5,0"/>
-                                        <TextBlock Grid.Row="4" Grid.Column="1" Text="son" ToolTip="What Anna and Josef call the player and Adrian."
-                                                       FontSize="10" Opacity="0.8" Margin="0,0,10,0"/>
-                                        <TextBlock Grid.Row="5" Grid.Column="0" Text="{}{DA}" ToolTip="What Mario calls Emma."
-                                                       FontFamily="Consolas" FontSize="10" Margin="0,0,5,0"/>
-                                        <TextBlock Grid.Row="5" Grid.Column="1" Text="daughter" ToolTip="What Mario calls Emma."
-                                                       FontSize="10" Opacity="0.8" Margin="0,0,10,0"/>
-                                        <TextBlock Grid.Row="6" Grid.Column="0" Text="{}{F}" ToolTip="What this player calls the family."
-                                                       FontFamily="Consolas" FontSize="10" Margin="0,0,5,0"/>
-                                        <TextBlock Grid.Row="6" Grid.Column="1" Text="family" ToolTip="What this player calls the family."
-                                                       FontSize="10" Opacity="0.8" Margin="0,0,10,0"/>
-                                        <TextBlock Grid.Row="0" Grid.Column="2" Text="&lt;size=70%&gt;" ToolTip="Sets text size, as a percentage or a number. The game uses this in its own lines for a muttered aside, so it is known to work here."
-                                                       FontFamily="Consolas" FontSize="10" Margin="0,0,5,0"/>
-                                        <TextBlock Grid.Row="0" Grid.Column="3" Text="smaller" ToolTip="Sets text size, as a percentage or a number. The game uses this in its own lines for a muttered aside, so it is known to work here."
-                                                       FontSize="10" Opacity="0.8" Margin="0,0,10,0"/>
-                                        <TextBlock Grid.Row="1" Grid.Column="2" Text="&lt;b&gt;" ToolTip="Bold. TextMeshPro markup — the game never uses it in its own dialogue, so watch a line render before relying on it."
-                                                       FontFamily="Consolas" FontSize="10" Margin="0,0,5,0"/>
-                                        <TextBlock Grid.Row="1" Grid.Column="3" Text="bold" ToolTip="Bold. TextMeshPro markup — the game never uses it in its own dialogue, so watch a line render before relying on it."
-                                                       FontSize="10" Opacity="0.8" Margin="0,0,10,0"/>
-                                        <TextBlock Grid.Row="2" Grid.Column="2" Text="&lt;i&gt;" ToolTip="Italic. TextMeshPro markup — the game never uses it in its own dialogue, so watch a line render before relying on it."
-                                                       FontFamily="Consolas" FontSize="10" Margin="0,0,5,0"/>
-                                        <TextBlock Grid.Row="2" Grid.Column="3" Text="italic" ToolTip="Italic. TextMeshPro markup — the game never uses it in its own dialogue, so watch a line render before relying on it."
-                                                       FontSize="10" Opacity="0.8" Margin="0,0,10,0"/>
-                                        <TextBlock Grid.Row="3" Grid.Column="2" Text="&lt;color=#f66&gt;" ToolTip="Coloured text, by hex or name. TextMeshPro markup — the game never uses it in its own dialogue, so watch a line render before relying on it."
-                                                       FontFamily="Consolas" FontSize="10" Margin="0,0,5,0"/>
-                                        <TextBlock Grid.Row="3" Grid.Column="3" Text="colour" ToolTip="Coloured text, by hex or name. TextMeshPro markup — the game never uses it in its own dialogue, so watch a line render before relying on it."
-                                                       FontSize="10" Opacity="0.8" Margin="0,0,10,0"/>
+                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{}{PC}"
+                                                   FontFamily="Consolas" FontSize="11" Margin="0,0,8,1"/>
+                                        <TextBlock Grid.Row="0" Grid.Column="1" Text="the player’s name"
+                                                   FontSize="10" Opacity="0.85" VerticalAlignment="Center"
+                                                   TextWrapping="Wrap" Margin="0,0,0,1"/>
+                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{}{M}"
+                                                   FontFamily="Consolas" FontSize="11" Margin="0,0,8,1"/>
+                                        <TextBlock Grid.Row="1" Grid.Column="1" Text="what they call Anna"
+                                                   FontSize="10" Opacity="0.85" VerticalAlignment="Center"
+                                                   TextWrapping="Wrap" Margin="0,0,0,1"/>
+                                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{}{D}"
+                                                   FontFamily="Consolas" FontSize="11" Margin="0,0,8,1"/>
+                                        <TextBlock Grid.Row="2" Grid.Column="1" Text="what they call Josef"
+                                                   FontSize="10" Opacity="0.85" VerticalAlignment="Center"
+                                                   TextWrapping="Wrap" Margin="0,0,0,1"/>
+                                        <TextBlock Grid.Row="3" Grid.Column="0" Text="{}{B}"
+                                                   FontFamily="Consolas" FontSize="11" Margin="0,0,8,1"/>
+                                        <TextBlock Grid.Row="3" Grid.Column="1" Text="what the player and Adrian call each other"
+                                                   FontSize="10" Opacity="0.85" VerticalAlignment="Center"
+                                                   TextWrapping="Wrap" Margin="0,0,0,1"/>
+                                        <TextBlock Grid.Row="4" Grid.Column="0" Text="{}{S}"
+                                                   FontFamily="Consolas" FontSize="11" Margin="0,0,8,1"/>
+                                        <TextBlock Grid.Row="4" Grid.Column="1" Text="what Anna and Josef call the player and Adrian"
+                                                   FontSize="10" Opacity="0.85" VerticalAlignment="Center"
+                                                   TextWrapping="Wrap" Margin="0,0,0,1"/>
+                                        <TextBlock Grid.Row="5" Grid.Column="0" Text="{}{DA}"
+                                                   FontFamily="Consolas" FontSize="11" Margin="0,0,8,1"/>
+                                        <TextBlock Grid.Row="5" Grid.Column="1" Text="what Mario calls Emma"
+                                                   FontSize="10" Opacity="0.85" VerticalAlignment="Center"
+                                                   TextWrapping="Wrap" Margin="0,0,0,1"/>
+                                        <TextBlock Grid.Row="6" Grid.Column="0" Text="{}{F}"
+                                                   FontFamily="Consolas" FontSize="11" Margin="0,0,8,1"/>
+                                        <TextBlock Grid.Row="6" Grid.Column="1" Text="what they call the family"
+                                                   FontSize="10" Opacity="0.85" VerticalAlignment="Center"
+                                                   TextWrapping="Wrap" Margin="0,0,0,1"/>
                                     </Grid>
+                                    <TextBlock Text="Players choose all of these &#x2014; write the token, not the word."
+                                               FontSize="9" Opacity="0.7" TextWrapping="Wrap" Margin="0,3,0,0"/>
+                                    </StackPanel>
                                 </ScrollViewer>
                             </Border>
                         </Expander>
@@ -5470,15 +5612,26 @@
                                                    Foreground="Gray"/>
                                     </DockPanel>
 
-                                    <!-- The room's gate, read-only. It decides whether this
-                                         conversation happens at all, and it belongs to the room
-                                         rather than to the conversation - so it is worth reading
-                                         beside the lines, and is not the pack's to change. -->
-                                    <TextBlock Text="The game plays this when:" Margin="0,4,0,2"
+                                    <!-- The same warning the game gives a player: a conversation
+                                         the story runs through can set or skip what the story
+                                         needs. -->
+                                    <Border x:Name="DialogueChangeWarning" Margin="0,2,0,6" Padding="6,4" BorderThickness="1"
+                                            BorderBrush="#FFB06A00" Background="#1FB06A00">
+                                        <TextBlock Foreground="#FFB06A00" FontSize="11" TextWrapping="Wrap"
+                                                   Text="Changing one of the game&apos;s conversations can break a save already under way - a line you change, add or take out, or a condition taken out of what plays it, can set or skip something the story needs - and so can removing your pack later. Once this conversation changes anything, the first time a player loads an existing save with your pack the game warns them and recommends a new game."/>
+                                    </Border>
+
+                                    <!-- The room's gate. It decides whether this conversation
+                                         happens at all, and it belongs to the room rather than to
+                                         the conversation: a condition taken out of it changes the
+                                         room's script, so the Quests tab shows the same change. -->
+                                    <TextBlock Text="The game plays this when:" Margin="0,4,0,0"
                                                Foreground="Gray"/>
-                                    <ItemsControl ItemsSource="{Binding VanillaGates}" Margin="12,0,0,0"
-                                                  ItemTemplateSelector="{StaticResource ConditionTemplateSelector}"
-                                                  IsEnabled="False"/>
+                                    <TextBlock Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,2"
+                                               Text="Any one of these places plays it. Taking a condition out changes that place&apos;s script, so anything else it guards - another conversation, a quest it starts - happens without it too."
+                                               Visibility="{Binding HasGateGroups, Converter={StaticResource BoolToVisibility}}"/>
+                                    <ItemsControl x:Name="DialogueGateGroups" ItemsSource="{Binding GateGroups}" Margin="12,0,0,0"
+                                                  ItemTemplate="{StaticResource GameConditionGroupTemplate}"/>
                                 </StackPanel>
                             </GroupBox>
                             <GroupBox Header="Identity">
@@ -5972,12 +6125,21 @@
                                          both to the same property makes SelectedItem null-out and flush an
                                          empty value back to the node being navigated away from when its
                                          value isn't in the (per-node, rebuilt) ItemsSource. -->
-                                    <ComboBox ToolTip="Who speaks this line, and every line after it until another node changes it. A character&apos;s runtime name; the line is labelled with that character&apos;s display name." view:IssueTarget.Field="actor" Grid.Row="2" Grid.Column="1"
-                                              ItemsSource="{Binding DataContext.ActorOptions,
+                                    <!-- Under "This pack" and "The game's own", like the music
+                                         pickers: a pack that adopts the game's cast lists
+                                         dozens of speakers, and the ones an author wrote are
+                                         the ones they are usually looking for. -->
+                                    <ComboBox x:Name="NodeActorPicker" Style="{StaticResource GroupedComboBox}"
+                                              ToolTip="Who speaks this line, and every line after it until another node changes it. A character&apos;s runtime name; the line is labelled with that character&apos;s display name." view:IssueTarget.Field="actor" Grid.Row="2" Grid.Column="1"
+                                              ItemsSource="{Binding DataContext.ActorOptionsGrouped,
                                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                               IsEditable="True"
                                               Visibility="{Binding DataContext.SelectedNodeShowsSpeaker, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"
-                                              Text="{Binding Actor, UpdateSourceTrigger=PropertyChanged}"/>
+                                              Text="{Binding Actor, UpdateSourceTrigger=PropertyChanged}">
+                                        <ComboBox.GroupStyle>
+                                            <StaticResource ResourceKey="MusicOriginGroupStyle"/>
+                                        </ComboBox.GroupStyle>
+                                    </ComboBox>
                                     <!-- Speaker, expression and outfit are hidden for the two nodes
                                          that have no speaker worth asking about: the player, whose bust
                                          belongs to the game, and an option on a Choice, which is a button
@@ -6046,7 +6208,7 @@
                                             <Button x:Name="MarkupColorButton"
                                                     Style="{StaticResource Theme.MarkupButton}"
                                                     Click="MarkupColor_Click"
-                                                    ToolTip="Colour  (Ctrl+Shift+C) &#x2014; wraps the selection in &lt;color=#f66&gt;&lt;/color&gt;. Edit the value in place; the words take the colour as you type it.">
+                                                    ToolTip="Colour  (Ctrl+Shift+C) &#x2014; pick a colour, and the selected words are wrapped in &lt;color=#RRGGBB&gt;&lt;/color&gt;, or an empty pair opens where the cursor is. The value can be edited in place; the words take the colour as you type it.">
                                                 <Grid Width="14" Height="15">
                                                     <TextBlock Text="A" FontSize="11" Margin="0,-1,0,0"
                                                                HorizontalAlignment="Center"
@@ -7988,34 +8150,154 @@
                         <ColumnDefinition Width="8*"/>
                     </Grid.ColumnDefinitions>
 
-                    <DockPanel Grid.Column="0">
-                        <TextBlock DockPanel.Dock="Top" Text="Quests"
-                                   FontWeight="Bold" Margin="6,4,0,2"/>
-                        <ToolBar DockPanel.Dock="Top">
-                            <Button view:TutorialAnchor.Id="btn:addQuest" Content="+ Quest" Command="{Binding AddQuestCommand}"/>
-                            <Button Content="+ Folder" Tag="{Binding QuestTree}" Click="UnitAddFolder_Click"
-                                    ToolTip="Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack)."/>
-                            <Button Content="Rename" Tag="{Binding QuestTree}" Click="UnitRenameFolder_Click"
-                                    ToolTip="Rename the selected folder."/>
-                            <Button Content="− Remove" Command="{Binding RemoveQuestCommand}"
-                                    ToolTip="Remove the selected quest, or delete the selected folder (its contents move up)."/>
-                        </ToolBar>
-                        <ContentControl DockPanel.Dock="Top" Focusable="False"
-                                        DataContext="{Binding QuestTree.Filter}"
-                                        Template="{StaticResource SidebarSearchTemplate}"/>
-                        <TreeView x:Name="QuestTreeView"
-                                  ItemsSource="{Binding QuestTree.Tree}"
-                                  ItemContainerStyle="{StaticResource UnitTreeItemStyle}"
-                                  AllowDrop="True"
-                                  ToolTip="Ctrl+click / Shift+click selects extra items to drag into a folder together. The detail pane follows the normally-selected item."/>
-                    </DockPanel>
+                    <!-- LEFT: the pack's quests, and its changes to the game's -->
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="3*" MinHeight="120"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="2*" MinHeight="90"/>
+                        </Grid.RowDefinitions>
+
+                        <DockPanel Grid.Row="0">
+                            <TextBlock DockPanel.Dock="Top" Text="Quests"
+                                       FontWeight="Bold" Margin="6,4,0,2"/>
+                            <ToolBar DockPanel.Dock="Top">
+                                <Button view:TutorialAnchor.Id="btn:addQuest" Content="+ Quest" Command="{Binding AddQuestCommand}"/>
+                                <Button Content="+ Folder" Tag="{Binding QuestTree}" Click="UnitAddFolder_Click"
+                                        ToolTip="Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack)."/>
+                                <Button Content="Rename" Tag="{Binding QuestTree}" Click="UnitRenameFolder_Click"
+                                        ToolTip="Rename the selected folder."/>
+                                <Button x:Name="RemoveQuestButton" Content="− Remove" Command="{Binding RemoveQuestCommand}"
+                                        ToolTip="Remove the selected quest, or delete the selected folder (its contents move up)."/>
+                            </ToolBar>
+                            <ContentControl DockPanel.Dock="Top" Focusable="False"
+                                            DataContext="{Binding QuestTree.Filter}"
+                                            Template="{StaticResource SidebarSearchTemplate}"/>
+                            <TreeView x:Name="QuestTreeView"
+                                      ItemsSource="{Binding QuestTree.Tree}"
+                                      ItemContainerStyle="{StaticResource UnitTreeItemStyle}"
+                                      AllowDrop="True"
+                                      ToolTip="Ctrl+click / Shift+click selects extra items to drag into a folder together. The detail pane follows the normally-selected item."/>
+                        </DockPanel>
+
+                        <GridSplitter Grid.Row="1" Height="4" Background="LightGray"
+                                      HorizontalAlignment="Stretch"/>
+
+                        <!-- Changes to quests the game already has. Listed apart from
+                             the pack's own because they are a different kind of thing:
+                             these are the game's, named by the game, and folders mean
+                             nothing to them. -->
+                        <DockPanel Grid.Row="2">
+                            <TextBlock DockPanel.Dock="Top" Text="Vanilla quests"
+                                       FontWeight="Bold" Margin="6,4,0,2"
+                                       ToolTip="Changes to quests the game already has: what the journal shows of them, what happens as their tasks are done, and which tasks they have."/>
+                            <ToolBar DockPanel.Dock="Top">
+                                <Button x:Name="AddVanillaQuestButton" Content="+ Vanilla" Command="{Binding AddVanillaQuestCommand}"
+                                        ToolTip="Change one of the game&apos;s own quests: the paragraph under its title, what the journal lists, what happens as its tasks are done, and which tasks it has. The quest itself stays the game&apos;s."/>
+                                <Button x:Name="RemoveVanillaQuestButton" Content="− Remove" Command="{Binding RemoveVanillaQuestCommand}"
+                                        ToolTip="Drop these changes. The game&apos;s quest itself is untouched."/>
+                            </ToolBar>
+                            <ListBox x:Name="VanillaQuestList"
+                                     ItemsSource="{Binding VanillaQuestEntries}"
+                                     SelectedItem="{Binding SelectedVanillaQuest, Mode=TwoWay}"
+                                     HorizontalContentAlignment="Stretch">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type vm:QuestViewModel}">
+                                        <DockPanel ToolTip="{Binding ChangeSummary}">
+                                            <TextBlock DockPanel.Dock="Right" Text="{Binding ChangeSummary}"
+                                                       Foreground="Gray" FontSize="10"
+                                                       VerticalAlignment="Center" Margin="4,0,0,0"/>
+                                            <TextBlock Text="{Binding VanillaListName}"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </DockPanel>
+                    </Grid>
                     <GridSplitter Grid.Column="1" Width="4" Background="LightGray" HorizontalAlignment="Stretch"/>
 
                     <ScrollViewer view:TutorialAnchor.Id="panel:questDetail" Grid.Column="2" VerticalScrollBarVisibility="Auto"
                                   DataContext="{Binding SelectedQuest}"
                                   Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
                         <StackPanel Margin="8">
-                            <GroupBox Header="Quest">
+                            <!-- One of the game's own quests, extended. The quest, its tasks
+                                 and what finishes them are the game's; everything here is
+                                 what the pack says about it as the player works through it. -->
+                            <GroupBox x:Name="VanillaQuestPanel" Header="The game&apos;s quest"
+                                      Visibility="{Binding ShowsVanillaPanel, Converter={StaticResource BoolToVisibility}}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="140"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Text="Quest:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+                                    <ComboBox x:Name="QuestSourcePicker" Grid.Row="0" Grid.Column="1" IsEditable="True"
+                                              ItemsSource="{x:Static vm:QuestViewModel.VanillaQuestOptions}"
+                                              Text="{Binding Source, UpdateSourceTrigger=PropertyChanged}"
+                                              ToolTip="Which of the game&apos;s quests this is about, by the name the game&apos;s own instructions use. Type to search; the journal title is shown beside it."/>
+                                    <TextBlock Grid.Row="1" Grid.Column="1" Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,1,0,4"
+                                               Text="{Binding SourceNote}"/>
+
+                                    <TextBlock Text="The game says:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" Margin="0,3,6,0"
+                                               TextWrapping="Wrap"/>
+                                    <TextBox x:Name="VanillaQuestDescriptionShown" Grid.Row="2" Grid.Column="1" Margin="0,0,0,4"
+                                             Text="{Binding TheGamesDescription, Mode=OneWay}"
+                                             IsReadOnly="True" IsReadOnlyCaretVisible="False"
+                                             BorderThickness="0" Background="Transparent" Padding="0"
+                                             Foreground="Gray" Cursor="Arrow"
+                                             TextWrapping="Wrap" MaxHeight="90" VerticalScrollBarVisibility="Auto"
+                                             ToolTip="The paragraph the game shows under this quest&apos;s title, as it ships. This is what an override below replaces."/>
+
+                                    <TextBlock Text="Description:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Top" Margin="0,3,0,0"/>
+                                    <DockPanel Grid.Row="3" Grid.Column="1">
+                                        <Button x:Name="VanillaQuestDescriptionReset" DockPanel.Dock="Right" Content="Reset"
+                                                Padding="8,0" Margin="6,0,0,0" VerticalAlignment="Top"
+                                                Command="{Binding ResetDescriptionCommand}"
+                                                Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BoolToVisibility}}"
+                                                ToolTip="Put the game&apos;s own paragraph back."/>
+                                        <TextBox x:Name="VanillaQuestDescriptionBox"
+                                                 Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                                                 AcceptsReturn="True" TextWrapping="Wrap" MinHeight="48"
+                                                 VerticalScrollBarVisibility="Auto"
+                                                 ToolTip="Replaces the game&apos;s paragraph while your pack is installed. Leave it empty to keep the game&apos;s own."/>
+                                    </DockPanel>
+                                    <TextBlock Grid.Row="4" Grid.Column="1" Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,1,0,0"
+                                               Text="{Binding DescriptionNote}"/>
+                                    <!-- How much the entry changes, and the way back from all of it -
+                                         the same header a changed conversation has. -->
+                                    <DockPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,6,0,0">
+                                        <TextBlock Text="Changes:" Width="140" VerticalAlignment="Center"/>
+                                        <Button x:Name="VanillaQuestResetAll" DockPanel.Dock="Right" Content="Reset all" Padding="8,1"
+                                                Click="ResetVanillaQuest_Click" IsEnabled="{Binding HasChanges}"
+                                                ToolTip="Put the whole quest back the way the game has it: its description and tasks, your tasks in it, your start and reset conditions, and every place that starts or resets it."/>
+                                        <TextBlock x:Name="VanillaQuestChangeSummary" Text="{Binding ChangeSummary}"
+                                                   VerticalAlignment="Center" Foreground="Gray"/>
+                                    </DockPanel>
+                                    <!-- Said wherever the entry changes the quest's shape, because
+                                         that is what can leave a player's save unable to finish it. -->
+                                    <Border x:Name="QuestTreeChangeWarning" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"
+                                            Margin="0,6,0,0" Padding="6,4" BorderThickness="1"
+                                            BorderBrush="#FFB06A00" Background="#1FB06A00"
+                                            Visibility="{Binding WarnsOnLoad, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Foreground="#FFB06A00" FontSize="11" TextWrapping="Wrap"
+                                                   Text="{Binding LoadWarningText}"/>
+                                    </Border>
+                                </Grid>
+                            </GroupBox>
+
+                            <GroupBox Header="Quest"
+                                      Visibility="{Binding ShowsOwnPanel, Converter={StaticResource BoolToVisibility}}">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="140"/>
@@ -8068,7 +8350,32 @@
                                 </StackPanel>
                             </GroupBox>
 
-                            <GroupBox Header="Tasks" Margin="0,6,0,0">
+                            <!-- The other half of a repeatable quest: when a started one goes back
+                                 to not started. -->
+                            <GroupBox x:Name="QuestResetPanel" Header="Resets when" Margin="0,6,0,0">
+                                <StackPanel>
+                                    <TextBlock x:Name="QuestResetNote" Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,4"
+                                               Text="{Binding ResetNote}"/>
+                                    <ContentControl x:Name="QuestResetConditions" Focusable="False" Content="{Binding ResetConditions}"
+                                                    ContentTemplate="{StaticResource ConditionListTemplate}"/>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <!-- What the game itself does with its quest, read-only: the
+                                 places that start it or put it back, with what each needs. -->
+                            <GroupBox x:Name="GameQuestSitesPanel" Header="What the game does with it" Margin="0,6,0,0"
+                                      Visibility="{Binding IsVanillaExtension, Converter={StaticResource BoolToVisibility}}">
+                                <StackPanel>
+                                    <TextBlock x:Name="GameQuestSitesNote" Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,2"
+                                               Text="{Binding GameSitesNote}"
+                                               Visibility="{Binding HasGameSitesNote, Converter={StaticResource BoolToVisibility}}"/>
+                                    <ItemsControl x:Name="GameQuestSiteGroups" ItemsSource="{Binding GameSites}"
+                                                  ItemTemplate="{StaticResource GameQuestSiteGroupTemplate}"/>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox Header="Tasks" Margin="0,6,0,0"
+                                      Visibility="{Binding ShowsOwnPanel, Converter={StaticResource BoolToVisibility}}">
                                 <StackPanel>
                                     <TextBlock Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,4"
                                                Text="Top-level tasks run one after another: starting the quest starts the first, finishing one starts the next, and finishing the last completes the quest. A task with subtasks completes itself when they are done."/>
@@ -8094,6 +8401,76 @@
                                 </StackPanel>
                             </GroupBox>
 
+                            <!-- The game's quest as the pack leaves it: the game's tasks, with
+                                 what the pack says about each, and the pack's own tasks among
+                                 them. The game's rows cannot be edited or moved; the pack's can. -->
+                            <GroupBox x:Name="VanillaTasksPanel" Header="Tasks" Margin="0,6,0,0"
+                                      Visibility="{Binding ShowsVanillaPanel, Converter={StaticResource BoolToVisibility}}">
+                                <StackPanel>
+                                    <TextBlock Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,4"
+                                               Text="The game&apos;s tasks, in the game&apos;s order, and yours among them. Pick one of the game&apos;s to change what the journal shows for it, what happens when it is done, or to take it out of the quest. + Task and + Subtask add tasks of yours just after the selected row; ▲ and ▼ move yours past the game&apos;s."/>
+                                    <ToolBar>
+                                        <Button x:Name="AddExtensionTaskButton" Content="+ Task" Command="{Binding AddTaskCommand}"
+                                                ToolTip="Add a top-level task of yours to the game&apos;s quest, just after the selected top-level task, or at the end."/>
+                                        <Button x:Name="AddExtensionSubtaskButton" Content="+ Subtask" Command="{Binding AddSubtaskCommand}"
+                                                ToolTip="Add a subtask of yours: at the end of the selected top-level task&apos;s subtasks, or just after the selected subtask. Works on the game&apos;s tasks too, including ones with no subtasks yet."/>
+                                        <Button Content="▲" Command="{Binding MoveTaskUpCommand}" ToolTip="Move a task of yours up among the tasks it sits with, the game&apos;s included."/>
+                                        <Button Content="▼" Command="{Binding MoveTaskDownCommand}" ToolTip="Move a task of yours down among the tasks it sits with, the game&apos;s included."/>
+                                        <Button x:Name="RemoveExtensionRowButton" Content="− Remove" Command="{Binding RemoveTaskCommand}"
+                                                ToolTip="Delete a task of yours, or take one of the game&apos;s out of the quest (its panel below can put it back)."/>
+                                    </ToolBar>
+                                    <ListBox x:Name="VanillaTaskList" MinHeight="90" MaxHeight="360" Margin="0,2,0,0"
+                                             ItemsSource="{Binding ExtensionRows}"
+                                             SelectedItem="{Binding SelectedExtensionRow, Mode=TwoWay}">
+                                        <ListBox.Resources>
+                                            <DataTemplate DataType="{x:Type vm:VanillaTaskRowViewModel}">
+                                                <DockPanel Margin="{Binding Indent}">
+                                                <TextBlock DockPanel.Dock="Left" Text="&#x25CF;" Width="10" FontSize="10"
+                                                           VerticalAlignment="Center" Foreground="{DynamicResource Theme.Accent}"
+                                                           ToolTip="{Binding ChangedFieldsText}">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Visibility" Value="Hidden"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsChanged}" Value="True">
+                                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                                <TextBlock Text="{Binding RowText}">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsOutOfSight}" Value="True">
+                                                                    <Setter Property="Opacity" Value="0.5"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding IsTakenOut}" Value="True">
+                                                                    <Setter Property="TextDecorations" Value="Strikethrough"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                                </DockPanel>
+                                            </DataTemplate>
+                                            <DataTemplate DataType="{x:Type vm:QuestTaskViewModel}">
+                                                <StackPanel Orientation="Horizontal" Margin="{Binding Indent}">
+                                                    <Border Background="#FF2F6FB0" CornerRadius="2" Padding="3,0" Margin="0,0,5,0" VerticalAlignment="Center">
+                                                        <TextBlock Text="yours" Foreground="White" FontSize="9"/>
+                                                    </Border>
+                                                    <TextBlock Text="{Binding RowText}" Foreground="#FF2F6FB0"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListBox.Resources>
+                                    </ListBox>
+                                    <TextBlock Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,4,0,0"
+                                               Text="This quest is not one ModForge knows, so it has no task list to show. A Quest action can still name its tasks by id."
+                                               Visibility="{Binding HasNoVanillaTasks, Converter={StaticResource BoolToVisibility}}"/>
+                                </StackPanel>
+                            </GroupBox>
+
                             <GroupBox Header="Selected task" Margin="0,6,0,0"
                                       DataContext="{Binding SelectedTask}"
                                       Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
@@ -8103,6 +8480,8 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
@@ -8133,17 +8512,61 @@
                                                  ToolTip="What Quest actions and conditions name this task by. Written for you from its text while the task is new."/>
                                     </DockPanel>
 
-                                    <TextBlock Text="Completes:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <ComboBox x:Name="QuestTaskCompletionPicker" Grid.Row="2" Grid.Column="1" Margin="0,0,0,2"
+                                    <!-- What the journal shows while the player is part way through.
+                                         The description is the quest's, changed by a task being done;
+                                         the tick is a subtask's, since the game's journal already leaves
+                                         out a top-level task that has not started. -->
+                                    <TextBlock Text="Quest description once done:" Grid.Row="2" Grid.Column="0"
+                                               VerticalAlignment="Top" TextWrapping="Wrap" Margin="0,2,6,0"/>
+                                    <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,0,0,4">
+                                        <TextBox x:Name="QuestTaskDescriptionBox"
+                                                 Text="{Binding QuestDescription, UpdateSourceTrigger=PropertyChanged}"
+                                                 AcceptsReturn="True" TextWrapping="Wrap" MinHeight="36"
+                                                 VerticalScrollBarVisibility="Auto"
+                                                 ToolTip="What the quest's description becomes in the journal once this task is done. Leave it empty to keep the description as it is."/>
+                                        <TextBlock Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,1,0,0"
+                                                   Text="Several tasks can have one: the journal shows the one from the task furthest down this list that is done, and the quest's own description before any of them is."/>
+                                    </StackPanel>
+
+                                    <TextBlock Text="In the journal:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Top" Margin="0,2,0,0"/>
+                                    <StackPanel Grid.Row="3" Grid.Column="1" Margin="0,0,0,4">
+                                        <StackPanel Visibility="{Binding IsSubtask, Converter={StaticResource BoolToVisibility}}">
+                                            <CheckBox x:Name="QuestTaskHiddenBox" Content="Hidden until it starts"
+                                                      IsChecked="{Binding HideUntilStarted}"
+                                                      ToolTip="Keep this subtask out of the journal until it has started. Under a task whose subtasks run in order, that is once the subtask before it is done."/>
+                                            <TextBlock Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,1,0,4"
+                                                       Text="{Binding HideUntilStartedNote}"/>
+                                        </StackPanel>
+                                        <!-- Hidden until conditions of the pack's own pass: the same
+                                             condition list every polled list uses. Once shown it stays
+                                             shown for that save, unless the author asks for it to
+                                             follow the conditions live. -->
+                                        <CheckBox x:Name="QuestTaskHiddenUntilConditionsBox" Content="Hidden until conditions pass"
+                                                  IsChecked="{Binding HideUntilConditions}"
+                                                  ToolTip="Keep this task out of the journal until the conditions below all pass."/>
+                                        <StackPanel x:Name="QuestTaskShowConditions" Margin="16,2,0,0"
+                                                    Visibility="{Binding HideUntilConditions, Converter={StaticResource BoolToVisibility}}">
+                                            <ContentControl Focusable="False" Content="{Binding ShowConditions}"
+                                                            ContentTemplate="{StaticResource ConditionListTemplate}"/>
+                                            <CheckBox x:Name="QuestTaskShowLiveBox" Content="Hide it again when they stop passing" Margin="0,4,0,0"
+                                                      IsChecked="{Binding ShowConditionsLive}"
+                                                      ToolTip="Off: once the conditions have passed, the task stays in the journal for the rest of that save. On: it is shown only while they pass."/>
+                                            <TextBlock Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,1,0,0"
+                                                       Text="{Binding ShowConditionsNote}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <TextBlock Text="Completes:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"/>
+                                    <ComboBox x:Name="QuestTaskCompletionPicker" Grid.Row="4" Grid.Column="1" Margin="0,0,0,2"
                                               ItemsSource="{x:Static vm:QuestTaskViewModel.Completions}"
                                               SelectedItem="{Binding Completion, UpdateSourceTrigger=PropertyChanged}"
                                               IsEnabled="{Binding HasSubtasks}"
                                               ToolTip="How a task with subtasks finishes. Only means something once it has subtasks."/>
-                                    <TextBlock Grid.Row="3" Grid.Column="1" Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,4"
+                                    <TextBlock Grid.Row="5" Grid.Column="1" Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,4"
                                                Text="{Binding CompletionNote}"/>
 
-                                    <TextBlock Text="Counter:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,2">
+                                    <TextBlock Text="Counter:" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center"/>
+                                    <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,2">
                                         <CheckBox x:Name="QuestTaskCountsBox" Content="Counts to" VerticalAlignment="Center"
                                                   IsChecked="{Binding Counts}"
                                                   ToolTip="Show a count beside the task, set or added to by Quest actions."/>
@@ -8155,17 +8578,17 @@
                                          follows. The variable row is the Variable condition's own
                                          shape - Source, then a name picker whose list follows it,
                                          with the note saying what the chosen variable holds. -->
-                                    <TextBlock Text="Counted by:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"
+                                    <TextBlock Text="Counted by:" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center"
                                                Visibility="{Binding Counts, Converter={StaticResource BoolToVisibility}}"/>
-                                    <ComboBox x:Name="QuestTaskCounterSourcePicker" Grid.Row="5" Grid.Column="1" Margin="0,0,0,2"
+                                    <ComboBox x:Name="QuestTaskCounterSourcePicker" Grid.Row="7" Grid.Column="1" Margin="0,0,0,2"
                                               ItemsSource="{x:Static vm:QuestTaskViewModel.CounterSources}"
                                               SelectedItem="{Binding CounterSource, UpdateSourceTrigger=PropertyChanged}"
                                               Visibility="{Binding Counts, Converter={StaticResource BoolToVisibility}}"
                                               ToolTip="Quest action: Quest actions set or add to the count. Variable: the count follows a number variable while the task is in progress."/>
 
-                                    <TextBlock Text="Variable:" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center"
+                                    <TextBlock Text="Variable:" Grid.Row="8" Grid.Column="0" VerticalAlignment="Center"
                                                Visibility="{Binding CountsFromVariable, Converter={StaticResource BoolToVisibility}}"/>
-                                    <DockPanel x:Name="QuestTaskCountVariableRow" Grid.Row="6" Grid.Column="1" Margin="0,0,0,2"
+                                    <DockPanel x:Name="QuestTaskCountVariableRow" Grid.Row="8" Grid.Column="1" Margin="0,0,0,2"
                                                Visibility="{Binding CountsFromVariable, Converter={StaticResource BoolToVisibility}}">
                                         <ComboBox DockPanel.Dock="Left" Width="80" Margin="0,0,4,0"
                                                   ItemsSource="{x:Static vm:QuestTaskViewModel.CountVariableSources}"
@@ -8205,7 +8628,7 @@
                                         </ComboBox>
                                     </DockPanel>
 
-                                    <TextBlock Grid.Row="7" Grid.Column="1" Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,2"
+                                    <TextBlock Grid.Row="9" Grid.Column="1" Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,2"
                                                Text="{Binding CounterNote}">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
@@ -8221,7 +8644,7 @@
                                     <!-- Only a task with no subtasks has these: one with subtasks
                                          finishes through them, and the runtime does not check it. -->
                                     <StackPanel x:Name="QuestTaskCompletionLists" view:TutorialAnchor.Id="panel:questTaskCompletion"
-                                                Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"
+                                                Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2"
                                                 Visibility="{Binding HasOwnCompletion, Converter={StaticResource BoolToVisibility}}">
                                         <TextBlock Text="Completes when" FontWeight="SemiBold" Margin="0,8,0,2"/>
                                         <ContentControl Focusable="False" Content="{Binding CompletionConditions}"
@@ -8232,14 +8655,116 @@
                                         <ContentControl Focusable="False" Content="{Binding CompletionActions}"
                                                         ContentTemplate="{StaticResource ActionListTemplate}"/>
                                     </StackPanel>
-                                    <TextBlock x:Name="QuestTaskNoCompletionNote" Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2"
+                                    <TextBlock x:Name="QuestTaskNoCompletionNote" Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2"
                                                Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,8,0,0"
                                                Text="{Binding NoOwnCompletionNote}"
                                                Visibility="{Binding HasSubtasks, Converter={StaticResource BoolToVisibility}}"/>
+                                    <StackPanel Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="2"
+                                                Visibility="{Binding IsAddedToGameQuest, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock x:Name="AddedTaskStartsNote" TextWrapping="Wrap" Margin="0,8,0,0"
+                                                   Text="{Binding StartsNote}"
+                                                   Visibility="{Binding HasStartsNote, Converter={StaticResource BoolToVisibility}}"/>
+                                        <TextBlock x:Name="AddedTaskNote"
+                                                   Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,4,0,0"
+                                                   Text="A task of yours in the game&apos;s quest. The game treats it as one of its own: a task before it holds the ones after it back, and the quest does not finish until it is done. Nothing of the game&apos;s names it, so only what you give it completes it: its completion conditions, a Quest action of yours, or its subtasks. Quest actions and conditions name it on the Vanilla side, by the game&apos;s quest and this runtime name."/>
+                                    </StackPanel>
                                 </Grid>
                             </GroupBox>
 
+                            <GroupBox x:Name="VanillaTaskPanel" Header="Selected task of the game&apos;s" Margin="0,6,0,0"
+                                      DataContext="{Binding SelectedVanillaTask}"
+                                      Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                                    <TextBlock Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,1,0,0"
+                                               Text="{Binding Note}"
+                                               Visibility="{Binding HasNote, Converter={StaticResource BoolToVisibility}}"/>
+                                    <!-- What the pack changes about this task, each with its own way
+                                         back, like a changed line of a conversation. -->
+                                    <DockPanel x:Name="VanillaTaskChanges" Margin="0,4,0,0"
+                                               Visibility="{Binding IsChanged, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="&#x25CF;" Width="10" FontSize="10" VerticalAlignment="Center"
+                                                   Foreground="{DynamicResource Theme.Accent}"/>
+                                        <Button x:Name="VanillaTaskResetButton" DockPanel.Dock="Right" Content="Reset" Padding="8,0"
+                                                Command="{Binding ResetCommand}"
+                                                ToolTip="Put this task back the way the game has it: in the quest, shown as the game shows it, with no description or actions of yours."/>
+                                        <ItemsControl DockPanel.Dock="Right" ItemsSource="{Binding ResettableFields}" Margin="2,0,4,0">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Horizontal"/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Button Content="{Binding Label}" FontSize="9" Padding="4,0" Margin="2,0,0,0"
+                                                            Command="{Binding Reset}"
+                                                            ToolTip="{Binding Label, StringFormat='Put this task''s {0} back the way the game has it'}"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                        <TextBlock Text="{Binding ChangedFieldsText}" Foreground="Gray" FontSize="10"
+                                                   VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                    </DockPanel>
+                                    <TextBlock x:Name="VanillaTaskStartsNote" TextWrapping="Wrap" Margin="0,4,0,0"
+                                               Text="{Binding StartsNote}"
+                                               Visibility="{Binding HasStartsNote, Converter={StaticResource BoolToVisibility}}"/>
+
+                                    <!-- The game's own steps on this task, read-only. -->
+                                    <TextBlock Text="What the game does with it" FontWeight="SemiBold" Margin="0,8,0,0"/>
+                                    <TextBlock x:Name="VanillaTaskSitesNote" Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,2"
+                                               Text="{Binding GameSitesNote}"
+                                               Visibility="{Binding HasGameSitesNote, Converter={StaticResource BoolToVisibility}}"/>
+                                    <ItemsControl x:Name="VanillaTaskSiteGroups" ItemsSource="{Binding GameSites}"
+                                                  ItemTemplate="{StaticResource GameQuestSiteGroupTemplate}"/>
+
+                                    <CheckBox x:Name="VanillaTaskRemovedBox" Content="Take it out of the quest" Margin="0,8,0,0"
+                                              IsChecked="{Binding IsRemoved}" IsEnabled="{Binding CanChooseRemoved}"
+                                              ToolTip="The quest moves past this task as soon as it starts, and the journal never lists it. Untick to put it back."/>
+                                    <TextBlock Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,1,0,0"
+                                               Text="{Binding RemovedNote}"/>
+
+                                    <DockPanel Margin="0,8,0,0">
+                                        <TextBlock Text="In the journal:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                        <ComboBox x:Name="VanillaTaskVisibilityPicker"
+                                                  ItemsSource="{Binding VisibilityOptions}"
+                                                  SelectedItem="{Binding Visibility, UpdateSourceTrigger=PropertyChanged}"
+                                                  IsEnabled="{Binding CanChooseVisibility}"
+                                                  ToolTip="Whether the journal lists this task: as the game has it, only once it has started (subtasks), only once conditions of yours pass, or never. The quest still waits for it either way."/>
+                                    </DockPanel>
+                                    <StackPanel x:Name="VanillaTaskShowConditions" Margin="16,4,0,0"
+                                                Visibility="{Binding IsHiddenUntilConditions, Converter={StaticResource BoolToVisibility}}">
+                                        <ContentControl Focusable="False" Content="{Binding ShowConditions}"
+                                                        ContentTemplate="{StaticResource ConditionListTemplate}"/>
+                                        <CheckBox x:Name="VanillaTaskShowLiveBox" Content="Hide it again when they stop passing" Margin="0,4,0,0"
+                                                  IsChecked="{Binding ShowConditionsLive}"
+                                                  ToolTip="Off: once the conditions have passed, the task stays in the journal for the rest of that save. On: it is shown only while they pass."/>
+                                    </StackPanel>
+                                    <TextBlock Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,1,0,0"
+                                               Text="{Binding VisibilityNote}"/>
+
+                                    <TextBlock Text="Quest description once done" FontWeight="SemiBold" Margin="0,8,0,2"/>
+                                    <TextBox x:Name="VanillaTaskDescriptionBox"
+                                             Text="{Binding QuestDescription, UpdateSourceTrigger=PropertyChanged}"
+                                             AcceptsReturn="True" TextWrapping="Wrap" MinHeight="36"
+                                             VerticalScrollBarVisibility="Auto"
+                                             ToolTip="What the quest&apos;s description becomes in the journal once the game completes this task. Leave it empty to keep whatever is showing."/>
+                                    <TextBlock Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,1,0,0"
+                                               Text="The journal shows the one from the task furthest down this list that is done, and the description above before any of them is."/>
+
+                                    <TextBlock Text="When the game completes it" FontWeight="SemiBold" Margin="0,10,0,0"/>
+                                    <TextBlock Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,2"
+                                               Text="Runs once, the moment the game marks this task done - by its own dialogue, or by a Quest action of yours."/>
+                                    <ContentControl Focusable="False" Content="{Binding Actions}"
+                                                    ContentTemplate="{StaticResource ActionListTemplate}"/>
+                                </StackPanel>
+                            </GroupBox>
+
                             <TextBlock Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="2,8,0,0"
+                                       Visibility="{Binding ShowsVanillaPanel, Converter={StaticResource BoolToVisibility}}"
+                                       Text="The game still moves its own quest: its scenes complete its tasks as they always did. Descriptions, hidden tasks and actions change nothing about when the quest finishes. Tasks you add or take out do - see the warning above. Use the QuestState and QuestCounter conditions to ask where a player has got to in it, and the Quest action to move it or your tasks in it."/>
+
+                            <TextBlock Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="2,8,0,0"
+                                       Visibility="{Binding ShowsOwnPanel, Converter={StaticResource BoolToVisibility}}"
                                        Text="A quest moves along by itself: it starts when its start conditions pass, and each task completes when its own completion conditions pass, running its completion actions. Only a task with no subtasks has completion conditions and actions - a task with subtasks finishes through them. A dialogue or a rule can still drive a quest with the Quest action, and check on it with the QuestState and QuestCounter conditions. Completing a quest gives the player the same reward the game's own quests do."/>
                         </StackPanel>
                     </ScrollViewer>

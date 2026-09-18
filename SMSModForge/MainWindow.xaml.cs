@@ -44,6 +44,16 @@ public partial class MainWindow : Window
             row.IsSelected = true;
         };
 
+        // The colour button and Ctrl+Shift+C ask with the same wheel every other
+        // colour in the editor uses. Never under the harness: a dialog there
+        // stops the suite, so nothing is picked and nothing is written, the
+        // same as cancelling.
+        NodeTextBox.PickColor = current =>
+        {
+            if (Services.TestMode.Active) return null;
+            return ColorTagValue(View.ColorPickerWindow.Pick(this, current));
+        };
+
         // A drag is neither a command nor a text field, so it is checkpointed
         // here or not at all - see UiPreview.EditBeginning. Before the first
         // pixel moves, so the stored step is where the object started.
@@ -357,8 +367,23 @@ public partial class MainWindow : Window
                                  View.Controls.MarkupTextBox.Markup.CloseItalic);
 
     private void MarkupColor_Click(object sender, RoutedEventArgs e)
-        => NodeTextBox?.Surround(View.Controls.MarkupTextBox.Markup.OpenColor,
-                                 View.Controls.MarkupTextBox.Markup.CloseColor);
+        => NodeTextBox?.SurroundWithColor();
+
+    /// <summary>
+    /// What the picker chose, as a value to write in a <c>&lt;color=…&gt;</c>
+    /// tag - or null when it was cancelled.
+    /// <para/>
+    /// The picker hands back the pack's own form, <c>#RRGGBBAA</c>, which the
+    /// game reads too; six digits are written where it is opaque because that
+    /// is the form a person reads back. Separate from the lambda that calls it
+    /// so a test can put the picker's own output through the same conversion
+    /// the button uses, rather than a hex string somebody typed into a test.
+    /// </summary>
+    internal static string? ColorTagValue(string? picked)
+        => picked != null
+           && SMSModForge.Services.ColorMath.TryParse(picked, out byte r, out byte g, out byte b, out byte a)
+            ? Rendering.TmpColor.ToTagValue(r, g, b, a)
+            : null;
 
     private void MarkupSize_Click(object sender, RoutedEventArgs e)
         => NodeTextBox?.Surround(View.Controls.MarkupTextBox.Markup.OpenSize,
@@ -1689,6 +1714,45 @@ public partial class MainWindow : Window
         vm.EditWithUndo(dialogue.ResetAll);
     }
 
+    /// <summary>
+    /// Put one of the game's quests back the way the game has it. Confirmed
+    /// first: it discards everything the entry changes at once, and the
+    /// conditions it puts back belong to the game's scripts and lines, which
+    /// the Dialogues tab shows too.
+    /// </summary>
+    private void ResetVanillaQuest_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is not MainViewModel vm) return;
+        var quest = vm.SelectedQuest;
+        if (quest == null || !quest.IsVanillaExtension || !quest.HasChanges) return;
+
+        if (!Services.TestMode.Active
+            && MessageBox.Show(this,
+                   "Put this quest back the way the game has it?" + Environment.NewLine + Environment.NewLine
+                   + quest.ChangeSummary + " will be discarded, including any condition taken out of the places "
+                   + "that start or reset it.",
+                   "Reset quest", MessageBoxButton.OKCancel, MessageBoxImage.Question)
+               != MessageBoxResult.OK)
+            return;
+
+        vm.EditWithUndo(quest.ResetAll);
+    }
+
+    /// <summary>
+    /// From a place a game quest is changed to the conversation it is in, on
+    /// the Dialogues tab, with the line in view.
+    /// </summary>
+    private void OpenGameConversation_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is not MainViewModel vm) return;
+        if ((sender as FrameworkElement)?.DataContext is not GameQuestSiteViewModel site) return;
+        if (!vm.OpenVanillaConversation(site, () => ExpectTabChange("opened a game conversation from a quest")))
+            return;
+
+        // Deferred inside: the node list rebinds to the conversation first.
+        if (vm.SelectedNode is { } node) Reveal("", NodeList, node);
+    }
+
     private void RenameFolder_Click(object sender, RoutedEventArgs e)
     {
         if (DataContext is not MainViewModel vm) return;
@@ -2062,8 +2126,25 @@ public partial class MainWindow : Window
                 MainTabs.SelectedIndex = TabQuests;
                 var quest = vm.Quests.FirstOrDefault(q => q.Key == inner);
                 if (quest == null) return;
-                vm.SelectedQuest = quest;
-                var taskM = Regex.Match(where, @"tasks\[(?<k>[^\]]*)\]");
+                if (quest.ShowsVanillaPanel) vm.SelectedVanillaQuest = quest;
+                else if (vm.QuestTree.FindLeaf(quest) is { } leaf) vm.QuestTree.Selected = leaf;
+                else vm.SelectedQuest = quest;
+
+                // One of the game's quests: its list holds the game's tasks
+                // (vanillaTasks[id]) and the pack's (addedTasks[key]) together.
+                var addedM = Regex.Match(where, @"addedTasks\[(?<k>[^\]]*)\]");
+                var gameM = Regex.Match(where, @"vanillaTasks\[(?<k>[^\]]*)\]");
+                if (addedM.Success || gameM.Success)
+                {
+                    object? row = addedM.Success
+                        ? quest.ExtensionRows.OfType<QuestTaskViewModel>().FirstOrDefault(t => t.Key == addedM.Groups["k"].Value)
+                        : quest.VanillaTaskRows.FirstOrDefault(t => t.Token == gameM.Groups["k"].Value);
+                    if (row != null) quest.SelectedExtensionRow = row;
+                    Reveal("", VanillaTaskList, row);
+                    break;
+                }
+
+                var taskM = Regex.Match(where, @"(?<![A-Za-z])tasks\[(?<k>[^\]]*)\]");
                 if (taskM.Success)
                     quest.SelectedTask = quest.TaskRows.FirstOrDefault(t => t.Key == taskM.Groups["k"].Value);
                 Reveal("", QuestTaskList, quest.SelectedTask);

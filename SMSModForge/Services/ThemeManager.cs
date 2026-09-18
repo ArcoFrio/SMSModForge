@@ -194,6 +194,10 @@ public static class ThemeManager
 
     private static void SaveName(string name)
     {
+        // The tests switch themes and put back the one they started with, which
+        // under the harness is the default rather than the person's own - so
+        // saving would reset the theme of whoever ran them.
+        if (TestMode.Active) return;
         try
         {
             var dir = Path.GetDirectoryName(FilePath)!;

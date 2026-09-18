@@ -64,6 +64,7 @@ public sealed class CharacterDef
         Name = "You",
         DisplayName = "You",
         BustSource = BustSource.None,
+        Expressions = { NewNeutral() },
     };
 
     /// <summary>True for the reserved player character.</summary>
@@ -151,6 +152,28 @@ public sealed class CharacterDef
     /// <summary>Typing-blip voice, or null for the default.</summary>
     [JsonProperty("typewriter", Order = 12, NullValueHandling = NullValueHandling.Ignore)]
     public TypewriterDef? Typewriter { get; set; }
+
+    /// <summary>
+    /// The expression every character of the pack's own carries first:
+    /// <c>neutral</c>, naming no child, which is how the runtime spells no face
+    /// showing - the bust as it is drawn. Fixed, so it cannot be renamed or
+    /// pointed at a child and stop meaning that.
+    /// </summary>
+    public static ActorExpressionDef NewNeutral()
+        => new() { Key = VanillaFaces.Neutral, ExpressionGoName = "" };
+
+    /// <summary>Whether this is the neutral expression, however it is
+    /// capitalised.</summary>
+    public static bool IsNeutral(ActorExpressionDef? expression)
+        => expression != null
+           && string.Equals(expression.Key, VanillaFaces.Neutral, System.StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>Whether this character is one that carries the neutral
+    /// expression as a fixed row: every character of the pack's own, the player
+    /// and voice-only parts included. The game's own characters get theirs from
+    /// the game.</summary>
+    [JsonIgnore]
+    public bool CarriesNeutral => !IsVanillaCharacter;
 
     public bool ShouldSerializeGiftLikes() => GiftLikes.Count > 0;
     public bool ShouldSerializeOutfits() => Outfits.Count > 0;

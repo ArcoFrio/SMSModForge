@@ -213,6 +213,9 @@ public sealed class DialogueViewModel : ObservableObject
             OnPropertyChanged(nameof(NameIsEditable));
             OnPropertyChanged(nameof(NameIsReadOnly));
             OnPropertyChanged(nameof(VanillaGates));
+            _gateGroups = null;
+            OnPropertyChanged(nameof(GateGroups));
+            OnPropertyChanged(nameof(HasGateGroups));
             OnPropertyChanged(nameof(ChangeSummary));
             OnPropertyChanged(nameof(Key));
             OnPropertyChanged(nameof(DisplayName));
@@ -235,9 +238,61 @@ public sealed class DialogueViewModel : ObservableObject
     public IReadOnlyList<NodeConditionViewModel> VanillaGates
         => IsVanillaBased
             ? VanillaDialogueSeed.StartGates(Model.Source)
-                  .Select(c => new NodeConditionViewModel(c, isLocked: true))
+                  .Select(c => new NodeConditionViewModel(c, isLocked: true, lockedHeader: ""))
                   .ToList()
             : (IReadOnlyList<NodeConditionViewModel>)System.Array.Empty<NodeConditionViewModel>();
+
+    private IReadOnlyList<GameConditionGroupViewModel>? _gateGroups;
+
+    /// <summary>
+    /// What the game checks before it plays this, one group per place that
+    /// plays it - any one of them is enough - with each of the game's
+    /// conditions removable.
+    /// <para/>
+    /// Taking one out changes the room's script, not this conversation: the
+    /// same list may guard more than one conversation, and a quest step beside
+    /// it. The Quests tab shows the same change.
+    /// </summary>
+    public IReadOnlyList<GameConditionGroupViewModel> GateGroups
+        => _gateGroups ??= BuildGateGroups();
+
+    public bool HasGateGroups => GateGroups.Count > 0;
+
+    private IReadOnlyList<GameConditionGroupViewModel> BuildGateGroups()
+    {
+        var vanilla = IsVanillaBased ? VanillaDialogueCatalog.Open(Model.Source) : null;
+        if (vanilla == null) return System.Array.Empty<GameConditionGroupViewModel>();
+        return vanilla.Starts
+            .Select(start => GameConditionGroups.ForScript(
+                "Played from " + (string.IsNullOrEmpty(start.By) ? "(unnamed object)" : start.By)
+                + (string.IsNullOrEmpty(start.Script) ? "" : " (" + start.Script + ")")
+                + (string.IsNullOrEmpty(start.Event) ? "" : ", set off by "
+                   + GameQuestSiteViewModel.EventWords(start.Event!)),
+                start.By, start.Script, start.When, start.Gates, canEdit: true, ahead: start.Ahead))
+            .Where(g => g.Rows.Count > 0 || g.HasNote)
+            .ToList();
+    }
+
+    /// <summary>How many of the game's conditions for playing this the pack
+    /// takes out.</summary>
+    public int GateRemovals => GateGroups.Sum(g => g.RemovedCount);
+
+    /// <summary>The game's conditions changed - here, or on the Quests tab.</summary>
+    internal void RefreshGameConditions()
+    {
+        if (_gateGroups != null)
+            foreach (var group in _gateGroups) group.Refresh();
+        Recount();
+    }
+
+    /// <summary>A line's conditions were given to it from outside the list -
+    /// by the Quests tab.</summary>
+    internal void LineChanged(DialogueNodeDef node)
+    {
+        var row = Nodes.FirstOrDefault(n => ReferenceEquals(n.Model, node));
+        row?.RefreshAll();
+        Recount();
+    }
 
     /// <summary>
     /// Whether this dialogue is far enough along to be edited.
@@ -308,7 +363,7 @@ public sealed class DialogueViewModel : ObservableObject
     }
 
     /// <summary>Whether this conversation changes anything at all.</summary>
-    public bool HasAnyChanges => IsVanillaBased && Model.Nodes.Any(HasChanges);
+    public bool HasAnyChanges => IsVanillaBased && (Model.Nodes.Any(HasChanges) || GateRemovals > 0);
 
     /// <summary>How much of this conversation the pack changes, for a header
     /// that answers "what did I do here" without opening every line.</summary>
@@ -326,13 +381,15 @@ public sealed class DialogueViewModel : ObservableObject
             int added = Model.Nodes.Count(n => baseline.Node(n.Id) == null);
             int changed = Model.Nodes.Count(n => baseline.Node(n.Id) != null && HasChanges(n));
             int removed = VanillaDialogueDelta.RemovedNodes(Model.Nodes, baseline).Count;
+            int gates = GateRemovals;
 
-            if (added == 0 && changed == 0 && removed == 0) return "unchanged from the game";
+            if (added == 0 && changed == 0 && removed == 0 && gates == 0) return "unchanged from the game";
 
             var parts = new List<string>();
             if (added > 0) parts.Add(added + " added");
             if (changed > 0) parts.Add(changed + (changed == 1 ? " line changed" : " lines changed"));
             if (removed > 0) parts.Add(removed + " removed");
+            if (gates > 0) parts.Add(gates + (gates == 1 ? " condition to play it taken out" : " conditions to play it taken out"));
             return string.Join(", ", parts);
         }
     }
@@ -408,6 +465,9 @@ public sealed class DialogueViewModel : ObservableObject
         Nodes.Clear();
         foreach (var node in Model.Nodes) Nodes.Add(new DialogueNodeViewModel(node));
         RecomputeDepths();
+
+        // And the conditions for playing it, which the room keeps.
+        foreach (var group in GateGroups) group.RestoreAll();
 
         Recount();
     }

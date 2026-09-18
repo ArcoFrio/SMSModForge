@@ -1083,13 +1083,36 @@ public static class PackValidator
             var qWhere = $"quests[{q.Key}]";
             for (int ci = 0; ci < q.StartConditions.Count; ci++)
                 ValidateNodeCondition(q.StartConditions[ci], $"{qWhere}.startConditions[{ci}]", packVarNames, issues);
+            for (int ci = 0; ci < q.ResetConditions.Count; ci++)
+                ValidateNodeCondition(q.ResetConditions[ci], $"{qWhere}.resetConditions[{ci}]", packVarNames, issues);
+            // Asked continuously once the game's step has been reached, like
+            // a quest's own start conditions.
+            for (int si = 0; si < q.SiteConditions.Count; si++)
+                for (int ci = 0; ci < q.SiteConditions[si].Conditions.Count; ci++)
+                    ValidateNodeCondition(q.SiteConditions[si].Conditions[ci],
+                                          $"{qWhere}.siteConditions[{si}].conditions[{ci}]", packVarNames, issues);
+            string taskList = q.IsVanillaExtension ? "addedTasks" : "tasks";
             foreach (var t in q.AllTasks())
             {
-                var tWhere = $"{qWhere}.tasks[{t.Key}]";
+                var tWhere = $"{qWhere}.{taskList}[{t.Key}]";
                 for (int ci = 0; ci < t.Conditions.Count; ci++)
                     ValidateNodeCondition(t.Conditions[ci], $"{tWhere}.conditions[{ci}]", packVarNames, issues);
+                for (int ci = 0; ci < t.ShowConditions.Count; ci++)
+                    ValidateNodeCondition(t.ShowConditions[ci], $"{tWhere}.showConditions[{ci}]", packVarNames, issues);
                 for (int ai = 0; ai < t.Actions.Count; ai++)
                     ValidateNodeAction(t.Actions[ai], $"{tWhere}.actions[{ai}]", packVarNames, actorKeysInPack, issues);
+            }
+
+            // The same for what the pack hangs on the game's own tasks in a
+            // quest it extends - an action there is an action like any other.
+            foreach (var h in q.VanillaTasks)
+            {
+                for (int ai = 0; ai < h.Actions.Count; ai++)
+                    ValidateNodeAction(h.Actions[ai], $"{qWhere}.vanillaTasks[{h.Task}].actions[{ai}]",
+                                       packVarNames, actorKeysInPack, issues);
+                for (int ci = 0; ci < h.ShowConditions.Count; ci++)
+                    ValidateNodeCondition(h.ShowConditions[ci], $"{qWhere}.vanillaTasks[{h.Task}].showConditions[{ci}]",
+                                          packVarNames, issues);
             }
         }
 

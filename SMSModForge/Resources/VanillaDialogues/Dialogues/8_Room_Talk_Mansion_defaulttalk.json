@@ -627,6 +627,39 @@
    "how": "InstructionDialoguePlay",
    "title": "Play defaulttalk and wait",
    "as": "Dialogue",
+   "ahead": [
+    {
+     "branch": "bringmeaphoto",
+     "plays": "8_Room_Talk/Mansion/TheFinalTest",
+     "count": 4
+    },
+    {
+     "plays": "8_Room_Talk/Mansion/first lesson",
+     "count": 4
+    },
+    {
+     "plays": "8_Room_Talk/Mansion/thirdlesson",
+     "count": 5
+    },
+    {
+     "branch": "bringmeaphoto",
+     "plays": "8_Room_Talk/Mansion/BringMeAphoto",
+     "count": 5
+    },
+    {
+     "branch": "bringmeaphoto",
+     "plays": "8_Room_Talk/Mansion/Theperfectphoto",
+     "count": 5
+    },
+    {
+     "plays": "8_Room_Talk/Mansion/secondlesson",
+     "count": 5
+    },
+    {
+     "plays": "8_Room_Talk/Mansion/FirstTalk",
+     "count": 1
+    }
+   ],
    "before": [
     {
      "kind": "setBool",

@@ -11,18 +11,27 @@ WHERE IT COMES FROM
 
 WHAT IT KEEPS
     What an author needs to point an action or a condition at one of the
-    game's quests: the name the game's own instructions use (the asset name),
-    the title the journal shows, and every task with its id, its place in the
-    tree, how it completes, and whether it counts.
+    game's quests, or to extend one: the name the game's own instructions use
+    (the asset name), the title the journal shows, the description under it,
+    and every task with its id, its place in the tree, how it completes, and
+    whether it counts.
 
-    Descriptions are left out. Nothing in the editor shows them, and they are
-    the part of a quest that tells its story.
+    The quest description is kept because a pack can replace it, and an author
+    has to see what they are replacing. TASK descriptions are not: the game's
+    journal binds a task row's title and counter and nothing else, so a task
+    description is text the player never sees.
 
 WHICH QUESTS
     The game ships Game Creator's sample quests beside its own ("Quest Simple",
     "Beast_Rat"...), and a few that nothing in the dumps starts. A quest is
-    kept when one of the game's dialogues refers to it, or when it is named in
-    CONFIRMED below because it has been seen in play. Everything else is left
+    kept when anything of the game's refers to it - a dialogue, the script that
+    plays one, or (with an F8 scene extraction) any other script - or when it is
+    named in CONFIRMED below because it has been seen in play.
+
+    Pass --references (Tools/Dialogue/BuildQuestReferences.py's output) for
+    that. The dialogue extraction alone misses the scripts that PLAY a
+    conversation, which is where "Old Friends (Charlotte)" is started, so on its
+    own it wrongly calls that quest unused. Everything else is left
     out rather than advertised: a quest nothing starts is either a sample or
     unreleased work, and this tool has no business listing either.
 
@@ -31,7 +40,8 @@ WHICH QUESTS
 
 Usage:
     python Tools/regen_vanilla_quests.py --quests <F8 quests json> --dialogues <F10 json>
-    python Tools/regen_vanilla_quests.py --quests ... --dialogues ... --check
+        [--references SMSModForge/Resources/VanillaQuests/references.json]
+    python Tools/regen_vanilla_quests.py --quests ... --dialogues ... --references ... --check
 """
 
 import argparse
@@ -93,6 +103,13 @@ def referenced_quests(dialogues_path):
     return set(re.findall(r'\{"\$unity": "([^"]+)", "\$type": "Quest"\}', text))
 
 
+def referenced_elsewhere(references_path):
+    """Every quest the reference catalogue found anything doing - in a
+    conversation, in the script that plays one, or in the scene."""
+    data = json.load(io.open(references_path, encoding="utf-8"))
+    return set((data.get("quests") or {}).keys())
+
+
 def read_quest(obj):
     f = obj["fields"]
     tree = f["m_Tasks"]
@@ -134,6 +151,7 @@ def read_quest(obj):
     return {
         "name": obj["object"],
         "title": prop_string(f["m_Title"]),
+        "description": prop_string(f["m_Description"]),
         "hidden": f.get("m_Type") != "Normal",
         "sortOrder": int(f.get("m_SortOrder") or 0),
         "tasks": ordered,
@@ -162,7 +180,8 @@ def render(quests):
     w("    /// <summary>Every quest of the game's own that a pack can point at.</summary>\n")
     w("    public static readonly IReadOnlyList<VanillaQuest> All = new VanillaQuest[]\n    {\n")
     for q in quests:
-        w("        new(" + cs_string(q["name"]) + ", " + cs_string(q["title"]) + ", "
+        w("        new(" + cs_string(q["name"]) + ", " + cs_string(q["title"]) + ",\n            "
+          + cs_string(q["description"]) + ", "
           + ("true" if q["hidden"] else "false") + ", " + str(q["sortOrder"]) + ", new VanillaTask[]\n        {\n")
         for t in q["tasks"]:
             w("            new(" + str(t["id"]) + ", " + str(t["parent"]) + ", " + cs_string(t["name"]) + ", "
@@ -178,12 +197,16 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--quests", required=True)
     parser.add_argument("--dialogues", required=True)
+    parser.add_argument("--references",
+                        help="BuildQuestReferences.py's output: quests named by any script, not only dialogues")
     parser.add_argument("--check", action="store_true",
                         help="fail if the file on disk differs from what would be written")
     args = parser.parse_args()
 
     dump = json.load(io.open(args.quests, encoding="utf-8-sig"))
     used = referenced_quests(args.dialogues)
+    if args.references:
+        used |= referenced_elsewhere(args.references)
 
     # The control: a dialogue dump with no quest references at all is a dump
     # that was taken wrong, not a game without quests.

@@ -67,6 +67,19 @@ public sealed class MarkupTextBox : RichTextBox
         Document = new FlowDocument(new Paragraph()) { PagePadding = new Thickness(0) };
         AcceptsReturn = true;
         TextChanged += OnDocumentChanged;
+
+        // The box keeps its own history of the LINE - see "Undo" below - so the
+        // RichTextBox's history of the document is switched off. That one
+        // recorded every redraw as an edit of its own.
+        IsUndoEnabled = false;
+        CommandBindings.Add(new System.Windows.Input.CommandBinding(
+            System.Windows.Input.ApplicationCommands.Undo,
+            (_, e) => { e.Handled = Undo(); },
+            (_, e) => { e.CanExecute = CanUndoLine; e.Handled = CanUndoLine; }));
+        CommandBindings.Add(new System.Windows.Input.CommandBinding(
+            System.Windows.Input.ApplicationCommands.Redo,
+            (_, e) => { e.Handled = Redo(); },
+            (_, e) => { e.CanExecute = CanRedoLine; e.Handled = CanRedoLine; }));
     }
 
     // ── The TextBox surface ───────────────────────────────────────────
@@ -85,7 +98,19 @@ public sealed class MarkupTextBox : RichTextBox
     }
 
     private static void OnTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        => ((MarkupTextBox)d).Render((string)e.NewValue ?? "");
+    {
+        var box = (MarkupTextBox)d;
+        string text = (string)e.NewValue ?? "";
+
+        // A line arriving from outside - another node selected, the editor's
+        // own undo putting the pack back - is a different line as far as this
+        // box's history goes. Stepping back into the last one's edits from
+        // here would write them onto this one.
+        if (!box._syncing && !box._writingOwnEdit) box.ForgetHistory();
+        box._last = text;
+
+        box.Render(text);
+    }
 
     public static readonly DependencyProperty HidesTagsProperty =
         DependencyProperty.Register(nameof(HidesTags), typeof(bool), typeof(MarkupTextBox),
@@ -218,12 +243,153 @@ public sealed class MarkupTextBox : RichTextBox
         to = Math.Clamp(to, from, text.Length);
 
         string inside = text.Substring(from, to - from);
-        SetCurrentValue(TextProperty,
-                        text.Substring(0, from) + open + inside + close + text.Substring(to));
+
+        // One step of its own, whatever was typed just before it: undoing a
+        // tag takes the tag back off, not the tag and the sentence under it.
+        Remember(new Step(text, from, to - from));
+        _typing = false;
+        WriteOwnEdit(text.Substring(0, from) + open + inside + close + text.Substring(to));
 
         Focus();
         if (inside.Length > 0) Select(from + open.Length, inside.Length);
         else CaretIndex = from + open.Length;
+    }
+
+    /// <summary>
+    /// Asks for a colour and hands it back as a tag value, or null when the
+    /// author changed their mind. Set by the window, which owns the picker; a
+    /// box with nothing to ask writes <see cref="Markup.DefaultColor"/>.
+    /// </summary>
+    public Func<string?, string?>? PickColor { get; set; }
+
+    /// <summary>The colour last written, so the picker opens on it and a run
+    /// of lines in one colour is one click each.</summary>
+    public string LastColor { get; private set; } = Markup.DefaultColor;
+
+    /// <summary>
+    /// Put a colour round the selected words: asked for with the picker when
+    /// there is one, and nothing at all written if it is cancelled.
+    /// </summary>
+    public void SurroundWithColor()
+    {
+        if (IsReadOnly) return;
+
+        // Read BEFORE the picker opens: a dialog takes the keyboard, and the
+        // box's own idea of what was selected is only trusted while it has it.
+        bool focused = IsKeyboardFocusWithin;
+        int start = SelectionStart, length = SelectionLength;
+
+        string? value = PickColor == null ? LastColor : PickColor(LastColor);
+        if (string.IsNullOrWhiteSpace(value)) return;
+        LastColor = value!;
+
+        if (focused)
+        {
+            Focus();
+            Select(start, length);
+        }
+        Surround(Markup.OpenColorFor(value!), Markup.CloseColor);
+    }
+
+    // ── Undo ──────────────────────────────────────────────────────────
+    //
+    // The line's history, kept by this box rather than by the RichTextBox.
+    //
+    // WPF's own undo records changes to the DOCUMENT, and this box redraws the
+    // document whenever the styling moves - which WPF recorded as an edit of
+    // its own. So every other Ctrl+Z undid a redraw and appeared to do nothing,
+    // and undoing anything redrew the line, which counted as a new edit and
+    // threw the redo away. Kept here, a step is a state of the LINE, which is
+    // the only thing an author ever changed.
+    //
+    // Typing collapses into one step until the caret is moved by hand or a
+    // formatting button is used, the way a TextBox groups it; each tag is a
+    // step of its own. With nothing left to undo here, Ctrl+Z is left for the
+    // editor's own undo, which is what it does in every other field.
+
+    private readonly record struct Step(string Text, int SelectionStart, int SelectionLength);
+
+    private readonly List<Step> _undo = new();
+    private readonly List<Step> _redo = new();
+
+    /// <summary>Whether the last step taken was typing, which the next
+    /// keystroke joins rather than starting one of its own.</summary>
+    private bool _typing;
+
+    /// <summary>The line as it was before whatever is happening now.</summary>
+    private string _last = "";
+
+    /// <summary>Set while this box writes <see cref="Text"/> itself, so the
+    /// write is not mistaken for a line arriving from outside.</summary>
+    private bool _writingOwnEdit;
+
+    public bool CanUndoLine => _undo.Count > 0;
+    public bool CanRedoLine => _redo.Count > 0;
+
+    /// <summary>Step back once. False when there is nothing to step back to,
+    /// so the caller can hand the key on.</summary>
+    public bool Undo() => Move(_undo, _redo);
+
+    /// <summary>Step forward again. False when there is nothing to redo.</summary>
+    public bool Redo() => Move(_redo, _undo);
+
+    private bool Move(List<Step> from, List<Step> to)
+    {
+        if (IsReadOnly || from.Count == 0) return false;
+
+        var step = from[^1];
+        from.RemoveAt(from.Count - 1);
+        to.Add(new Step(Text, SelectionStart, SelectionLength));
+        _typing = false;
+
+        WriteOwnEdit(step.Text);
+        Select(Math.Clamp(step.SelectionStart, 0, step.Text.Length),
+               Math.Clamp(step.SelectionLength, 0, step.Text.Length - Math.Clamp(step.SelectionStart, 0, step.Text.Length)));
+        return true;
+    }
+
+    /// <summary>Where the caret goes when a run of typing is undone: the end of
+    /// the part of the old line the run replaced, which is where a TextBox puts
+    /// it too.</summary>
+    private static int CaretFor(string before, string after)
+    {
+        int prefix = 0;
+        int shorter = Math.Min(before.Length, after.Length);
+        while (prefix < shorter && before[prefix] == after[prefix]) prefix++;
+
+        int suffix = 0;
+        while (suffix < shorter - prefix
+               && before[before.Length - 1 - suffix] == after[after.Length - 1 - suffix]) suffix++;
+
+        return before.Length - suffix;
+    }
+
+    private void Remember(Step before)
+    {
+        _undo.Add(before);
+        _redo.Clear();
+    }
+
+    private void ForgetHistory()
+    {
+        _undo.Clear();
+        _redo.Clear();
+        _typing = false;
+    }
+
+    private void WriteOwnEdit(string text)
+    {
+        _writingOwnEdit = true;
+        try { SetCurrentValue(TextProperty, text); }
+        finally { _writingOwnEdit = false; }
+    }
+
+    /// <summary>A click moves the caret somewhere new, so whatever is typed
+    /// next is a new step.</summary>
+    protected override void OnPreviewMouseDown(System.Windows.Input.MouseButtonEventArgs e)
+    {
+        _typing = false;
+        base.OnPreviewMouseDown(e);
     }
 
     /// <summary>
@@ -242,8 +408,20 @@ public sealed class MarkupTextBox : RichTextBox
             e.Handled = true;
             return;
         }
+
+        // Moving the caret by hand ends a run of typing, and so does anything
+        // done with Ctrl held - a paste or a cut is a step of its own.
+        if (IsNavigation(e.Key) || (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Control) != 0)
+            _typing = false;
+
         base.OnPreviewKeyDown(e);
     }
+
+    private static bool IsNavigation(System.Windows.Input.Key key)
+        => key is System.Windows.Input.Key.Left or System.Windows.Input.Key.Right
+               or System.Windows.Input.Key.Up or System.Windows.Input.Key.Down
+               or System.Windows.Input.Key.Home or System.Windows.Input.Key.End
+               or System.Windows.Input.Key.PageUp or System.Windows.Input.Key.PageDown;
 
     /// <summary>
     /// Write the markup a chord asks for, and say whether it was one of ours.
@@ -274,6 +452,14 @@ public sealed class MarkupTextBox : RichTextBox
                 // left to do something that only looks like it worked.
                 case System.Windows.Input.Key.U:
                     return true;
+
+                // Only while there is something of this line's to undo or redo.
+                // Otherwise the key is not ours, and goes on to the editor's
+                // undo like it does from any other field.
+                case System.Windows.Input.Key.Z:
+                    return Undo();
+                case System.Windows.Input.Key.Y:
+                    return Redo();
             }
             return false;
         }
@@ -281,9 +467,11 @@ public sealed class MarkupTextBox : RichTextBox
         switch (key)
         {
             case System.Windows.Input.Key.C:
-                Surround(Markup.OpenColor, Markup.CloseColor); return true;
+                SurroundWithColor(); return true;
             case System.Windows.Input.Key.S:
                 Surround(Markup.OpenSize, Markup.CloseSize); return true;
+            case System.Windows.Input.Key.Z:
+                return Redo();
         }
         return false;
     }
@@ -291,10 +479,9 @@ public sealed class MarkupTextBox : RichTextBox
     /// <summary>
     /// What the buttons and the shortcuts write.
     /// <para/>
-    /// Colour and size need a VALUE, and there is no way to ask for one without
-    /// a dialog in the way of somebody who is typing. So each starts at a
-    /// sensible value the author can edit in place — and both are shown styled
-    /// the moment they are written, which is how they find out it took.
+    /// Colour is asked for with the picker. Size starts at a sensible value the
+    /// author can edit in place, shown styled the moment it is written, which is
+    /// how they find out it took.
     /// </summary>
     public static class Markup
     {
@@ -302,10 +489,17 @@ public sealed class MarkupTextBox : RichTextBox
         public const string CloseBold = "</b>";
         public const string OpenItalic = "<i>";
         public const string CloseItalic = "</i>";
-        public const string OpenColor = "<color=#f66>";
+
+        /// <summary>The colour the picker first opens on. Six digits, like
+        /// everything the button writes - see TmpColor.ToTagValue.</summary>
+        public const string DefaultColor = "#FF6666";
+
+        public const string OpenColor = "<color=" + DefaultColor + ">";
         public const string CloseColor = "</color>";
         public const string OpenSize = "<size=70%>";
         public const string CloseSize = "</size>";
+
+        public static string OpenColorFor(string value) => "<color=" + value + ">";
     }
 
         // ── Document to text ──────────────────────────────────────────────
@@ -379,6 +573,21 @@ public sealed class MarkupTextBox : RichTextBox
         if (HidesTags) return;
 
         string typed = PlainText();
+
+        // Typed, deleted or pasted: one step for the run, recorded from what
+        // the line was before the run began. A document change that leaves the
+        // line as it was - WPF's own bold, say - is no step at all, and is
+        // still redrawn away below.
+        if (typed != _last)
+        {
+            if (!_typing)
+            {
+                Remember(new Step(_last, CaretFor(_last, typed), 0));
+                _typing = true;
+            }
+            else _redo.Clear();
+        }
+
         _syncing = true;
         try { SetCurrentValue(TextProperty, typed); }
         finally { _syncing = false; }
@@ -407,8 +616,9 @@ public sealed class MarkupTextBox : RichTextBox
         _syncing = true;
         try
         {
-            // One undo unit with whatever the author just did, rather than a
-            // second one they have to press Ctrl+Z twice to get past.
+            // One change block, so the redraw lands as one document change.
+            // Nothing is recorded for undo: the box keeps the line's history
+            // itself, and a redraw is not an edit.
             BeginChange();
             try
             {
@@ -514,30 +724,20 @@ public sealed class MarkupTextBox : RichTextBox
     }
 
     /// <summary>
-    /// The colour a <c>&lt;color=…&gt;</c> asks for, or null when nothing here
-    /// can make sense of it — in which case the text keeps the ordinary colour
+    /// The colour a <c>&lt;color=…&gt;</c> asks for, or null when the game would
+    /// not read it as one - in which case the text keeps the ordinary colour
     /// rather than being painted a guess.
     /// <para/>
-    /// Eight hex digits are the one place WPF and the game disagree: TMP writes
-    /// <c>#RRGGBBAA</c> and WPF reads <c>#AARRGGBB</c>, so the alpha is moved to
-    /// the front before handing it over. Everything else — three and six digit
-    /// hex, and the colour names — means the same in both.
+    /// The game's reading, through <see cref="TmpColor"/>, the same one the
+    /// game-look row uses. This used WPF's colour parser, which is not the
+    /// game's: it coloured a hundred and forty names the game prints as
+    /// nothing, and read four hex digits as ARGB where the game reads RGBA.
+    /// A fully transparent colour keeps the ordinary one, as it does on the row:
+    /// a line that vanished from the box it is typed in could not be fixed.
     /// </summary>
     internal static Brush? BrushFor(string? value)
     {
-        if (string.IsNullOrWhiteSpace(value)) return null;
-        string v = value!.Trim();
-
-        if (v.StartsWith("#", StringComparison.Ordinal) && v.Length == 9)
-            v = "#" + v.Substring(7, 2) + v.Substring(1, 6);
-
-        try
-        {
-            var converted = ColorConverter.ConvertFromString(v);
-            if (converted is Color c) return new SolidColorBrush(c);
-        }
-        catch (FormatException) { }
-        catch (NotSupportedException) { }
-        return null;
+        if (!TmpColor.TryParse(value, out var c) || c.A == 0) return null;
+        return new SolidColorBrush(Color.FromArgb(c.A, c.R, c.G, c.B));
     }
 }

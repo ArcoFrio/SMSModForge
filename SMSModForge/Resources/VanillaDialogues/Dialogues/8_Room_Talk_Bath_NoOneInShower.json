@@ -446,6 +446,25 @@
    "how": "InstructionDialoguePlay",
    "title": "Play NoOneInShower and wait",
    "as": "Dialogue",
+   "ahead": [
+    {
+     "branch": "annabathpresent",
+     "plays": "8_Room_Talk/Bath/AnnaBathPresent",
+     "count": 2
+    },
+    {
+     "plays": "8_Room_Talk/Bath/AnnaAndAdrianFirsttime",
+     "count": 5
+    },
+    {
+     "plays": "8_Room_Talk/Bath/AnnaAndAdrianInshower",
+     "count": 5
+    },
+    {
+     "plays": "8_Room_Talk/Bath/AnnaInShower",
+     "count": 3
+    }
+   ],
    "before": [
     {
      "kind": "setBool",

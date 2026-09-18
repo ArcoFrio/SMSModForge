@@ -474,6 +474,19 @@ namespace SMSModForge.PackPlugin
         internal static int CurrentRollDay() => (int)GameVariableBridge.GetNumber("DaysPassed");
 
         /// <summary>
+        /// A chance rolled once per in-game day for this pack and this key, the
+        /// way the DailyChance condition rolls - for anything that has to turn
+        /// a chance of the game's into one that can be asked continuously
+        /// (<see cref="QuestPlaceRules"/>).
+        /// </summary>
+        internal static bool DailyRollPasses(string packId, string key, float chance, PackVariableStore vars)
+        {
+            if (chance <= 0f) return false;
+            if (chance >= 1f) return true;
+            return StableRoll(packId, key, CurrentRollDay(), vars?.RollSeed ?? 0) < chance;
+        }
+
+        /// <summary>
         /// Deterministic pseudo-random value in [0,1) derived from
         /// (save seed, pack, roll id, day) via an FNV-1a hash. Deterministic
         /// on purpose: the same inputs always give the same number, so a

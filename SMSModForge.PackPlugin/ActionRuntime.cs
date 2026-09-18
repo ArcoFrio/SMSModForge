@@ -1420,6 +1420,19 @@ namespace SMSModForge.PackPlugin
         /// <summary>This pack's quests that start, complete and act on their
         /// own conditions. Built with the rest of the runtime.</summary>
         internal QuestTicker Quests;
+
+        /// <summary>The kinds of the game's own content this pack changes in
+        /// ways that can break a save already under way (SaveLoadChecks).</summary>
+        internal List<string> GameChanges = new List<string>();
+
+        /// <summary>What those kinds come to for this pack, where its manifest
+        /// says something more exact (SaveLoadChecks.WordsOf).</summary>
+        internal Dictionary<string, List<string>> ChangeWords = new Dictionary<string, List<string>>();
+
+        /// <summary>The game's quests this pack adds tasks to or takes tasks
+        /// out of, with the keys of the tasks it adds
+        /// (SaveLoadChecks.QuestsWithChangedTasks).</summary>
+        internal List<KeyValuePair<string, List<string>>> ChangedQuests = new List<KeyValuePair<string, List<string>>>();
         public ManualLogSource Log;
         public MonoBehaviour Plugin;
 

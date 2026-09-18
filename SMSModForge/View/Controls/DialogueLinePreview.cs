@@ -356,10 +356,14 @@ public sealed class DialogueLinePreview : Control
     private static UiColor InkFor(Piece piece)
     {
         if (piece.Token) return DialogueLook.TokenColor;
-        if (string.IsNullOrWhiteSpace(piece.Style.Color)) return DialogueLook.BodyColor;
 
-        var asked = UiColor.Parse(piece.Style.Color);
-        return asked.A == 0 ? DialogueLook.BodyColor : asked;
+        // The game's reading of the value, shared with the Text box so the two
+        // cannot disagree - see TmpColor. A fully transparent colour is drawn
+        // in the ordinary one, here and there: the game would show nothing, and
+        // a line that vanishes from the editor cannot be read or fixed.
+        return TmpColor.TryParse(piece.Style.Color, out var asked) && asked.A > 0
+            ? asked
+            : DialogueLook.BodyColor;
     }
 
     /// <summary>

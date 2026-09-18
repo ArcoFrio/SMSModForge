@@ -30,8 +30,12 @@ public static partial class VanillaQuests
     /// One quest. <paramref name="Name"/> is the asset name, which is what the
     /// game's own instructions call it and what a pack stores; <paramref name="Title"/>
     /// is what the journal shows, and they differ for a third of them.
+    /// <para/>
+    /// <paramref name="Description"/> is the paragraph the journal shows under
+    /// the title - the one piece of a quest's text a pack can replace, so an
+    /// author needs to see what they would be replacing.
     /// </summary>
-    public sealed record VanillaQuest(string Name, string Title, bool Hidden, int SortOrder,
+    public sealed record VanillaQuest(string Name, string Title, string Description, bool Hidden, int SortOrder,
                                       IReadOnlyList<VanillaTask> Tasks)
     {
         /// <summary>The title without its rich-text tags, for a picker.</summary>

@@ -110,13 +110,21 @@ public static class ReferenceRenamer
     /// match: another quest's task of the same name is a different task.
     /// </summary>
     public static int RenameQuestTask(ModPack? pack, string questKey, string oldTask, string newTask)
+        => RenameQuestTask(pack, questKey, oldTask, newTask, vanilla: false);
+
+    /// <summary>
+    /// The same, for a task a pack adds to one of the game's quests: rows name
+    /// that quest on the Vanilla side, by the game's name, and the task by the
+    /// pack's key.
+    /// </summary>
+    public static int RenameQuestTask(ModPack? pack, string questKey, string oldTask, string newTask, bool vanilla)
     {
         if (pack == null || string.IsNullOrEmpty(oldTask) || oldTask == newTask) return 0;
 
         int n = 0;
         void Row(Dictionary<string, string> ps)
         {
-            if (ps == null || QuestReferences.IsVanilla(ps)) return;
+            if (ps == null || QuestReferences.IsVanilla(ps) != vanilla) return;
             if (QuestReferences.Param(ps, Shared.QuestVocabulary.QuestParam) != questKey) return;
             if (QuestReferences.Param(ps, Shared.QuestVocabulary.TaskParam) != oldTask) return;
             ps[Shared.QuestVocabulary.TaskParam] = newTask;

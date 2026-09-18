@@ -167,7 +167,7 @@ public sealed class NodeTextToolbarTests
 
     [Theory]
     [InlineData(Key.I, false, "say <i>this</i> now")]
-    [InlineData(Key.C, true, "say <color=#f66>this</color> now")]
+    [InlineData(Key.C, true, "say <color=#FF6666>this</color> now")]   // no picker: the colour it would open on
     [InlineData(Key.S, true, "say <size=70%>this</size> now")]
     public void TheOtherChordsWriteTheirOwnTag(Key key, bool shift, string expected)
     {

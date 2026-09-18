@@ -317,15 +317,26 @@ public sealed class ActorExpressionViewModel : ObservableObject
 
     public ActorExpressionViewModel(ActorExpressionDef model,
                                     System.Action<ActorExpressionViewModel>? remove = null,
-                                    bool fromTheGame = false)
+                                    bool fromTheGame = false,
+                                    bool locked = false)
     {
         Model = model;
         FromTheGame = fromTheGame;
+        IsLocked = locked;
         // Per-row, like ActorOutfitViewModel's: the row knows how to delete
         // itself, so the template needs no CommandParameter plumbing back up to
         // a list it cannot see.
-        RemoveCommand = new RelayCommand(() => remove?.Invoke(this), () => remove != null);
+        RemoveCommand = new RelayCommand(() => { if (!IsLocked) remove?.Invoke(this); },
+                                         () => remove != null && !IsLocked);
     }
+
+    /// <summary>
+    /// The neutral expression on a character of the pack's own: in the
+    /// manifest, unlike the game's faces, but just as fixed. Renamed or pointed
+    /// at a child it would stop meaning no face showing, and removed it would
+    /// leave a character nothing to be asked for between expressions.
+    /// </summary>
+    public bool IsLocked { get; }
 
     /// <summary>
     /// One of the faces the GAME gave this character, shown so an author can
@@ -339,8 +350,16 @@ public sealed class ActorExpressionViewModel : ObservableObject
     /// </summary>
     public bool FromTheGame { get; }
 
-    /// <summary>Inverse, for binding enabled-ness.</summary>
-    public bool CanEdit => !FromTheGame;
+    /// <summary>Whether the row can be typed in and removed: not one of the
+    /// game's faces, and not the fixed neutral one.</summary>
+    public bool CanEdit => !FromTheGame && !IsLocked;
+
+    /// <summary>What the key box says on hover, which a greyed-out box still
+    /// needs to - it is the only place that explains why it is greyed out.</summary>
+    public string KeyToolTip
+        => IsLocked ? "Neutral: no expression showing, the bust as it is drawn. Every character has it, so it cannot be renamed or removed."
+         : FromTheGame ? "One of the faces the game gave this character. It belongs to the game, and its own conversations ask for it by this name."
+         : "Pack-local expression key (e.g. Happy)";
 
     /// <summary>Deletes this row. Disabled when the owner supplied no callback.</summary>
     public RelayCommand RemoveCommand { get; }

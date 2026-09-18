@@ -28,6 +28,17 @@
    "how": "InstructionDialoguePlay",
    "title": "Play NoOneHere and wait",
    "as": "Dialogue",
+   "ahead": [
+    {
+     "branch": "badweather",
+     "plays": "8_Room_Talk/Pool_DifferentDay/Badweather",
+     "count": 1
+    },
+    {
+     "plays": "8_Room_Talk/Pool_DifferentDay/Himari_VisitsPool",
+     "count": 2
+    }
+   ],
    "before": [
     {
      "kind": "setBool",

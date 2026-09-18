@@ -166,6 +166,10 @@ public static class PackMigration
             report.Note("Expressions dropped from the game's characters that only "
                         + "restated faces the game already gives them", restated);
 
+        int neutral = GiveEveryCharacterNeutral(pack);
+        if (neutral > 0)
+            report.Note("Characters given the neutral expression every character now starts with", neutral);
+
         if (GiveItAVersion(pack))
             report.Note($"Given a version to start from ({pack.Version})");
 
@@ -540,6 +544,34 @@ public static class PackMigration
                 e => VanillaFaces.OnlyRestatesTheGame(e, faces));
         }
         return dropped;
+    }
+
+    /// <summary>
+    /// Give every character of the pack's own the neutral expression, first in
+    /// its list, where it has none.
+    /// <para/>
+    /// A character now starts with it and cannot lose it: <c>neutral</c> naming
+    /// no child is no face showing, which every character can be asked for. A
+    /// pack written before that has whatever its author happened to add, so
+    /// one that never added it gains it here. One that already has it keeps
+    /// the row exactly as it is, wherever it sits in the list, and it is fixed
+    /// from now on like the new ones.
+    /// <para/>
+    /// Not the game's characters: the game gives those theirs, and a pack's own
+    /// row restating it is dropped just above.
+    /// </summary>
+    private static int GiveEveryCharacterNeutral(ModPack pack)
+    {
+        if (pack.Characters == null) return 0;
+
+        int given = 0;
+        foreach (var character in pack.Characters)
+        {
+            if (!character.CarriesNeutral || character.Expressions.Any(CharacterDef.IsNeutral)) continue;
+            character.Expressions.Insert(0, CharacterDef.NewNeutral());
+            given++;
+        }
+        return given;
     }
 
     /// <summary>

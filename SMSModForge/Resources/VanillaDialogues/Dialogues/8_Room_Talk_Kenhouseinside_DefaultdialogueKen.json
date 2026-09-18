@@ -1812,6 +1812,31 @@
    "how": "InstructionDialoguePlay",
    "title": "Play DefaultdialogueKen and wait",
    "as": "Dialogue",
+   "ahead": [
+    {
+     "plays": "8_Room_Talk/Kenhouseinside/Firstdialogue",
+     "count": 1
+    },
+    {
+     "branch": "samsex",
+     "plays": "8_Room_Talk/Kenhouseinside/SamanthaPlayerSex",
+     "count": 4
+    },
+    {
+     "branch": "samkenfirsttime",
+     "plays": "8_Room_Talk/Kenhouseinside/SamanthaKenFirstime",
+     "count": 3
+    },
+    {
+     "branch": "kensamanthadefault",
+     "plays": "8_Room_Talk/Kenhouseinside/SamanthaKenDefault",
+     "count": 2
+    },
+    {
+     "plays": "8_Room_Talk/Kenhouseinside/DefaultdialogueSamantha",
+     "count": 1
+    }
+   ],
    "before": [
     {
      "kind": "setActive",

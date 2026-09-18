@@ -386,6 +386,15 @@ namespace SMSModForge.PackPlugin
         internal static bool AutosaveProcedThisSession;
 
         /// <summary>
+        /// Frames between a loaded save settling and the quest repair looking at
+        /// it. The settle gate watches the game's variables; the journal is read
+        /// in the same load, and a second's grace costs nothing against a check
+        /// that only ever runs once.
+        /// </summary>
+        private const int RepairWaitFrames = 60;
+        private static int _repairWait = RepairWaitFrames;
+
+        /// <summary>
         /// The NanoSave slot the pack stores are bound to, or <c>-1</c> before
         /// binding. Set ONCE per CoreGameScene the first frame the slot reads
         /// valid (see <see cref="TickSaveSlot"/>); reset to <c>-1</c> in
@@ -695,7 +704,11 @@ namespace SMSModForge.PackPlugin
             SceneManager.sceneLoaded += OnSceneLoaded;
             // Node conditions are answered by us rather than by GC2's cloned
             // condition runners — patched once here, before any dialogue exists.
-            PackNodeConditions.Install(new HarmonyLib.Harmony("smsmodforge.packplugin"), Logger);
+            var harmony = new HarmonyLib.Harmony("smsmodforge.packplugin");
+            PackNodeConditions.Install(harmony, Logger);
+            // And the game's own quest steps a pack holds back until its
+            // conditions pass.
+            QuestPlaceRules.Install(harmony, Logger);
             // Drives the manual-save copy hook (mirrors the host mod's SaveManager
             // NanoSave listeners, but for the pack file). Self-gates until a
             // pack is loaded in CoreGameScene.
@@ -828,6 +841,17 @@ namespace SMSModForge.PackPlugin
             WeatherRuntime.Reset();
             // The journal it cached belongs to the scene going away.
             QuestRuntime.Reset();
+            // The game's quests are assets and outlive the scene: whatever the
+            // packs changed on them goes back before the packs installed now
+            // put theirs on again - so a pack removed between two loads leaves
+            // nothing of itself behind.
+            VanillaQuestEdits.RestoreAll(Logger);
+            // The same for the game's scripts, when the scene kept them, and the
+            // quest steps held back belong to the scene going away.
+            GameGateRuntime.RestoreAll(Logger);
+            QuestPlaceRules.Reset();
+            SaveLoadWarning.Reset();
+            _repairWait = RepairWaitFrames;
             NavigatorRuntime.Reset();
             RadialButtonRuntime.Reset();
             NavigatorGridSetup.Reset();
@@ -1509,8 +1533,22 @@ namespace SMSModForge.PackPlugin
                 // self-correct the moment the data is good.
                 if (VanillaDaySettled())
                 {
+                    // The warning about this save goes up over the settled game,
+                    // and rules and quests wait for the player's answer: going on
+                    // is what makes the packs' changes this save's.
+                    SaveLoadWarning.ShowIfPending(Logger);
+                    bool answered = !SaveLoadWarning.IsWaiting;
+
+                    // A loaded save whose quests lost tasks is put back on its
+                    // feet once, a little after the save has settled.
+                    if (answered && _lastSeenSlot > 0 && _repairWait > 0 && --_repairWait == 0)
+                    {
+                        try { VanillaQuestEdits.RepairOnce(Logger); }
+                        catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Quest repair failed: " + ex); }
+                    }
+
                     int today = (int)GameVariableBridge.GetNumber("Day");
-                    for (int i = 0; i < _contexts.Count; i++)
+                    for (int i = 0; i < _contexts.Count && answered; i++)
                     {
                         // …and not while the calendar has moved ahead of the
                         // pack's own daily refresh. The day flips when the player
@@ -1525,6 +1563,9 @@ namespace SMSModForge.PackPlugin
                         // the same gates: completing a task is permanent, and a
                         // condition passing on unsettled values would be too.
                         _contexts[i].Quests?.Tick(_contexts[i], Logger);
+                        // And the game's own start and reset places this pack
+                        // has taken over.
+                        QuestPlaceRules.Tick(_contexts[i], Logger);
                     }
                 }
 
@@ -1849,6 +1890,11 @@ namespace SMSModForge.PackPlugin
             _lastSeenSlot = slot;
             Logger.LogInfo("[SMSModForge.PackPlugin] Bound pack saves to slot " + slot +
                            " (NANOSAVE_" + slot.ToString("D4") + ").");
+
+            // A save was loaded: is there anything the player should hear
+            // before playing it with these packs?
+            try { SaveLoadWarning.Check(slot, _contexts, SavesRoot, Logger); }
+            catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Save check failed: " + ex); }
         }
 
         /// <summary>
@@ -2063,6 +2109,16 @@ namespace SMSModForge.PackPlugin
                 catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Quest registration failed: " + ex); }
             }
 
+            // ...and the tasks packs add to the game's own quests. After the
+            // pack quests, so an id check sees everything already in play.
+            try { VanillaQuestEdits.Apply(manifests, Logger); }
+            catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Adding tasks to the game's quests failed: " + ex); }
+
+            // ...and the conditions packs take out of the game's own scripts,
+            // all packs together, so two packs changing one list agree.
+            try { GameGateRuntime.Apply(manifests, Logger); }
+            catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Taking conditions out of the game's scripts failed: " + ex); }
+
             // Pass 1 — busts.
             foreach (var m in manifests)
             {
@@ -2133,6 +2189,12 @@ namespace SMSModForge.PackPlugin
                 try { BuildDialogueRuntimeFor(m); }
                 catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Dialogue runtime failed in " + m.PackId + ": " + ex); }
             }
+        }
+
+        private void RegisterQuestSteps(PackManifest m, PackContext ctx)
+        {
+            try { QuestPlaceRules.Register(m, ctx, Logger); }
+            catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] The quest steps " + m.PackId + " holds back could not be found: " + ex); }
         }
 
         private void BuildDialogueRuntimeFor(PackManifest m)
@@ -2261,6 +2323,16 @@ namespace SMSModForge.PackPlugin
             }
             ctx.Vars.ResetNonPersistedToDefaults();
 
+            // What the pack changes of the game's own content. Every session
+            // starts as if the save had been played with all of it - which is
+            // true of a new game, the only kind that never binds a save slot.
+            // Loading a save rebinds the store, and the save's own file says
+            // what it has been played with.
+            ctx.GameChanges = SMSModForge.Shared.SaveLoadChecks.Of(m.Root);
+            ctx.ChangeWords = SMSModForge.Shared.SaveLoadChecks.WordsOf(m.Root);
+            ctx.ChangedQuests = SMSModForge.Shared.SaveLoadChecks.QuestsChanged(m.Root);
+            ctx.Vars.AcknowledgeGameChanges(ctx.GameChanges);
+
             // Declare actors. The bust-side state lives on ctx.Actors; the
             // speech-bubble name colour goes to ctx.ActorFactory so the
             // dispatcher's per-line colour-applier can find it by display
@@ -2338,13 +2410,22 @@ namespace SMSModForge.PackPlugin
 
             // Build dialogues.
             var dialogues = m.Root["dialogues"] as Newtonsoft.Json.Linq.JArray;
-            if (dialogues == null || dialogues.Count == 0) return;
+            if (dialogues == null || dialogues.Count == 0)
+            {
+                RegisterQuestSteps(m, ctx);
+                return;
+            }
 
             // Extensions first, and not through the builder at all: a vanilla
             // dialogue already exists in the scene, so it is edited in place
             // rather than rebuilt. Building one would leave the game playing
             // its own copy while the pack's sat beside it doing nothing.
             VanillaDialogueInjector.ApplyAll(dialogues, ctx);
+
+            // The game's quest steps this pack holds back - found after its
+            // changes to the conversations, so a step is looked for in the
+            // lines as they now are.
+            RegisterQuestSteps(m, ctx);
 
             var dispatcher = new DialogueDispatcher(ctx);
             var host = EnsureDialogueHost(ctx.PackId);

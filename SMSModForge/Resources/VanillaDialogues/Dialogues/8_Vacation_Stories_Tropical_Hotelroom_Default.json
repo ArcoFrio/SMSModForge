@@ -859,6 +859,28 @@
    "how": "InstructionDialoguePlay",
    "title": "Play Default and wait",
    "as": "Dialogue",
+   "ahead": [
+    {
+     "branch": "freyavisit",
+     "plays": "8_Vacation_Stories/Tropical_Hotelroom/FreyaVisit",
+     "count": 1
+    },
+    {
+     "branch": "hornynight",
+     "plays": "8_Vacation_Stories/Tropical_Hotelroom/Trop_HornyNightevent",
+     "count": 1
+    },
+    {
+     "branch": "leilani",
+     "plays": "8_Vacation_Stories/Tropical_Hotelroom/Leilani_Appears",
+     "count": 1
+    },
+    {
+     "branch": "vacationend",
+     "plays": "8_Vacation_Stories/Tropical_Hotelroom/Vacation_End",
+     "count": 2
+    }
+   ],
    "after": [
     {
      "kind": "setActive",

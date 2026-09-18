@@ -42,9 +42,11 @@ public sealed class QuestPickerViewModel : ObservableObject
     }
 
     /// <summary>
-    /// The pack's quests, installed by MainViewModel. A hook rather than a
-    /// reference for the same reason as the variable lookup: a row is built
-    /// from its own definition and has no route to the pack.
+    /// The pack's quests, installed by MainViewModel - its own and its entries
+    /// extending the game's, which change what a game quest's task list holds.
+    /// A hook rather than a reference for the same reason as the variable
+    /// lookup: a row is built from its own definition and has no route to the
+    /// pack.
     /// </summary>
     internal static Func<IReadOnlyList<QuestDef>>? PackQuests;
 
@@ -124,6 +126,7 @@ public sealed class QuestPickerViewModel : ObservableObject
                     .ToList();
 
             return Quests
+                .Where(q => !q.IsVanillaExtension)
                 .OrderBy(q => q.Title, StringComparer.OrdinalIgnoreCase)
                 .Select(q => new NavigatorTargetOption(q.Key, QuestReferences.QuestLabel(Quests, false, q.Key)))
                 .ToList();
@@ -186,7 +189,9 @@ public sealed class QuestPickerViewModel : ObservableObject
                     string name = string.IsNullOrWhiteSpace(t.Name) ? "(" + t.Token + ")" : t.Name;
                     options.Add(new QuestTaskOption(t.Token, name,
                         new string(' ', t.Depth * 4) + (t.Depth > 0 ? "▸ " : "") + name
-                        + (t.Counts ? "  [counts]" : "")));
+                        + (t.Counts ? "  [counts]" : "")
+                        + (t.Added ? "  [yours]" : "")
+                        + (t.Removed ? "  [taken out]" : "")));
                 }
 
             // A stored task this list does not have still shows as itself, so

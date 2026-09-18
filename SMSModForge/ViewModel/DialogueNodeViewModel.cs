@@ -259,8 +259,31 @@ public sealed class DialogueNodeViewModel : ObservableObject
     /// </summary>
     public void RefreshAll()
     {
+        ReloadLists();
         OnPropertyChanged(string.Empty);
         RefreshActorTint();
+    }
+
+    /// <summary>
+    /// Rebuild the condition and action rows from the model's lists.
+    /// <para/>
+    /// A reset REPLACES those lists on the model rather than editing them, and
+    /// so does a change made from the Quests tab. The rows kept pointing at the
+    /// old lists: the panel showed conditions the line no longer had, and
+    /// editing one changed nothing that was saved.
+    /// </summary>
+    internal void ReloadLists()
+    {
+        Reload(Conditions, Model.Conditions.Select(c => new NodeConditionViewModel(
+            c, removeCallback: RemoveCondition, context: ConditionContext.OneShot)));
+        Reload(ActionsOnStart, Model.ActionsOnStart.Select(a => new NodeActionViewModel(a, removeCallback: RemoveActionOnStart)));
+        Reload(ActionsOnFinish, Model.ActionsOnFinish.Select(a => new NodeActionViewModel(a, removeCallback: RemoveActionOnFinish)));
+    }
+
+    private static void Reload<T>(ObservableCollection<T> rows, IEnumerable<T> fresh)
+    {
+        rows.Clear();
+        foreach (var row in fresh) rows.Add(row);
     }
 
     public void RefreshActorTint()

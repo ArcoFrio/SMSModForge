@@ -338,23 +338,15 @@ public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode, IMa
             OnPropertyChanged(nameof(Display));
             OnPropertyChanged(nameof(IsDefaultOutfit));
             OnPropertyChanged(nameof(CanCopyFromDefaultOutfit));
+            _owner?.RefreshOutfitDefaults();
         }
     }
 
     /// <summary>The character's default outfit, or null when this outfit has no
-    /// character (the vanilla-bust rows) or the character names one that is not
-    /// there.</summary>
-    public OutfitViewModel? DefaultOutfit
-    {
-        get
-        {
-            if (_owner == null) return null;
-            foreach (var outfit in _owner.Outfits)
-                if (string.Equals(outfit.Key, _owner.DefaultOutfit, System.StringComparison.Ordinal))
-                    return outfit;
-            return null;
-        }
-    }
+    /// character or the character names one that is not there. Found by
+    /// <see cref="CharacterViewModel.FindDefaultOutfit"/>, the same rule that
+    /// decides where picking the character lands.</summary>
+    public OutfitViewModel? DefaultOutfit => _owner?.FindDefaultOutfit();
 
     /// <summary>Whether this IS the default outfit, which is the one case where
     /// copying from it would be copying from itself.</summary>
@@ -367,13 +359,19 @@ public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode, IMa
     /// outfit itself has nothing to copy from. Both are hidden rather than
     /// disabled: a greyed button on the row you are most likely to be looking
     /// at reads as something broken.
+    /// <para/>
+    /// So is a default outfit the pack does not draw. A bust added to one of
+    /// the game's characters has that character's own bust as its default,
+    /// which has no paths at all, and copying from it would only empty the
+    /// field.
     /// </summary>
     public bool CanCopyFromDefaultOutfit
     {
         get
         {
+            if (!ShowsPackArt) return false;
             var def = DefaultOutfit;
-            return def != null && !ReferenceEquals(def, this);
+            return def != null && !ReferenceEquals(def, this) && def.ShowsPackArt;
         }
     }
 
@@ -403,13 +401,47 @@ public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode, IMa
             bool keyTracked = string.IsNullOrWhiteSpace(Model.GameObjectName)
                               || string.Equals(Model.Key, Model.GameObjectName,
                                                StringComparison.OrdinalIgnoreCase);
+
+            // Whether the character's default outfit is THIS one, asked before
+            // the name moves out from under it. The default is stored by name,
+            // so a rename that did not take it along left the Default outfit
+            // box naming an outfit that was no longer there until something
+            // else committed the rename. Asked of the outfit, not of its old
+            // name: another outfit's name passes through the default's on the
+            // way to a longer one, and matching names made that outfit take
+            // the default with it.
+            // Looked up now, while the names still tell the outfits apart, so a
+            // name pasted straight over the default's cannot be mistaken for it.
+            _owner?.FindDefaultOutfit();
+            string old = Model.GameObjectName ?? "";
+            bool wasDefault = _owner != null
+                && (old.Length > 0 ? _owner.HoldsDefault(this) : _defaultWhileBlank);
+
             Model.GameObjectName = value;
             if (keyTracked && !string.IsNullOrWhiteSpace(value)) Model.Key = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(Key));
             OnPropertyChanged(nameof(Display));
+
+            if (wasDefault)
+            {
+                // Cleared on the way to a new name: the default keeps the old
+                // name for now, since an empty default means the FIRST outfit,
+                // and this remembers that it belongs to this one.
+                _defaultWhileBlank = string.IsNullOrWhiteSpace(value);
+                if (!_defaultWhileBlank) _owner!.FollowRenamedDefault(this, value);
+            }
+
+            // The Default outfit box lists every outfit by name, and the
+            // default is named by this, so renaming an outfit can move which one
+            // it is - for the other outfits' "= default" buttons as well.
+            _owner?.OutfitRenamed();
         }
     }
+
+    /// <summary>Set while this outfit, the character's default, has had its
+    /// name cleared on the way to a new one.</summary>
+    private bool _defaultWhileBlank;
 
     public string BaseSprite
     {

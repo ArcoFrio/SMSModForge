@@ -603,10 +603,16 @@ class Starts(Steps):
     table of shapes per component.
     """
 
-    def gate(self, value):
+    def gate(self, value, path=None):
         """The conditions guarding everything inside this object, or None if it
-        guards nothing."""
+        guards nothing.
+
+        Given the path the walk took to `value`, the gate also says where its
+        condition list is: the fields and positions from the script to it, the
+        same steps the plugin takes through the live component to change that
+        list. The conditions in it are its m_Conditions, in order."""
         conditions = instructions = None
+        conditions_key = None
         for key, inner in value.items():
             if key.startswith("$"):
                 continue
@@ -616,16 +622,92 @@ class Starts(Steps):
             kind = resolved.get("$type")
             if kind == "ConditionList":
                 conditions = resolved
+                conditions_key = key
             elif kind == "InstructionList":
                 instructions = resolved
         if conditions is None or instructions is None:
             return None
 
-        return OrderedDict((
+        found = OrderedDict((
             ("branch", value.get("m_Description") or None),
             ("when", [self.condition(c)
                       for c in self.d.items(conditions, "m_Conditions")]),
         ))
+        if path is not None:
+            found["at"] = list(path) + [conditions_key]
+        return found
+
+    def ranked(self, items, holder):
+        """The branches of a BranchList, each summed up, by position - or None
+        for any other list.
+
+        Game Creator tries a BranchList's branches in order and runs the first
+        whose conditions pass, so a branch is only reached when every branch
+        before it fails. That is a condition of its own that no list holds, and
+        a room's list is where a pack that takes a conversation's conditions
+        out finds another conversation playing instead.
+
+        Only a list held as m_Branches whose items are all Branches: other
+        lists of gate-shaped things - a conversation's nodes - are not tried
+        that way. A null item is skipped by the game, and here."""
+        if holder != "m_Branches":
+            return None
+        out = []
+        for raw in items:
+            value = self.d.resolve(raw)
+            if value is None:
+                out.append(None)
+                continue
+            if not isinstance(value, dict) or value.get("$type") != "Branch":
+                return None
+            found = self.gate(value)
+            if found is None:
+                return None
+            summary = OrderedDict()
+            if found["branch"]:
+                summary["branch"] = found["branch"]
+            plays = self.plays(value)
+            if plays:
+                summary["plays"] = plays
+            summary["count"] = len(found["when"])
+            out.append(summary)
+        return out
+
+    def plays(self, value, depth=0):
+        """The conversation the first Play step inside a branch names, or
+        None."""
+        value = self.d.resolve(value)
+        if depth > 12:
+            return None
+        if isinstance(value, dict):
+            if value.get("$type") == "InstructionDialoguePlay":
+                return self.path_in(value.get("m_Dialogue"))
+            for key, inner in value.items():
+                if key.startswith("$") or key == "m_ConditionList":
+                    continue
+                found = self.plays(inner, depth + 1)
+                if found:
+                    return found
+        elif isinstance(value, list):
+            for inner in value:
+                found = self.plays(inner, depth + 1)
+                if found:
+                    return found
+        return None
+
+    def path_in(self, value, depth=0):
+        """The first scene object a value names by path."""
+        value = self.d.resolve(value)
+        if depth > 8 or not isinstance(value, dict):
+            return None
+        if isinstance(value.get("$path"), str):
+            return value["$path"]
+        for key, inner in value.items():
+            if not key.startswith("$"):
+                found = self.path_in(inner, depth + 1)
+                if found:
+                    return found
+        return None
 
     def scan(self, record, wanted, into, only_by_index=False):
         """Every place in this script that reaches one of the wanted dialogues.
@@ -639,7 +721,7 @@ class Starts(Steps):
         self._walk(record["fields"], [], None, None, record, wanted, into, set())
 
     def _walk(self, value, gates, instruction, site, record, wanted, into, seen,
-              holder=None):
+              holder=None, trail=(), ahead=None):
         value = self.d.resolve(value, holder)
 
         if isinstance(value, dict):
@@ -655,15 +737,17 @@ class Starts(Steps):
             if kind.startswith("Instruction"):
                 instruction = value
 
-            found = self.gate(value)
+            found = self.gate(value, trail)
             if found is not None:
+                if ahead:
+                    found["ahead"] = ahead
                 gates = gates + [found]
 
             for key, inner in value.items():
                 if key.startswith("$"):
                     continue
                 self._walk(inner, gates, instruction, site, record, wanted, into,
-                           seen, key)
+                           seen, key, trail + (key,))
 
         elif isinstance(value, list):
             # Descending into a list of instructions, remember WHERE: the
@@ -671,10 +755,12 @@ class Starts(Steps):
             # cooldown set afterwards - is as much a part of how a
             # conversation happens as the conditions that let it.
             staged = holder == "m_Instructions"
+            ranked = self.ranked(value, holder)
             for index, inner in enumerate(value):
                 self._walk(inner, gates, instruction,
                            (value, index) if staged else site,
-                           record, wanted, into, seen, holder)
+                           record, wanted, into, seen, holder, trail + (index,),
+                           [r for r in ranked[:index] if r is not None] if ranked else None)
 
     def by_index(self, value):
         """
@@ -768,14 +854,28 @@ class Starts(Steps):
 
         conditions = []
         branches = []
+        located = []
+        ahead = []
         for gate in gates:
+            ahead.extend(gate.get("ahead") or [])
             conditions.extend(gate["when"])
             if gate["branch"]:
                 branches.append(gate["branch"])
+            if gate.get("at") is not None and gate["when"]:
+                located.append(OrderedDict((("at", gate["at"]), ("count", len(gate["when"])))))
         if conditions:
             entry["when"] = conditions
         if branches:
             entry["branches"] = branches
+        # Where each run of "when" lives, in the same order: the first
+        # gate's count conditions are its list, and so on. What follows the
+        # last of them is not a list in the script (a child-by-index test).
+        if located:
+            entry["gates"] = located
+        # The branches the same list tries first, outermost list first: while
+        # one of them passes, this one is not reached.
+        if ahead:
+            entry["ahead"] = ahead
 
         if site is not None:
             items, index = site

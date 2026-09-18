@@ -101,6 +101,64 @@ namespace SMSModForge.PackPlugin
             => Write(Referencing<T>(log), log, label);
 
         /// <summary>
+        /// Every script - in the scene, switched on or not, or on a loaded
+        /// prefab - whose own serialised state names an ASSET of the named type.
+        /// <para/>
+        /// <see cref="WriteReferencing{T}"/> looks for scene objects; a quest is
+        /// a file, and what starts it, completes its tasks or asks about them is
+        /// a Trigger, an Actions or a Conditions component somewhere else that
+        /// names it. Most of those sit switched off until something turns them
+        /// on, which is why inactive objects are searched too, and some live on
+        /// prefabs the game spawns later, which is why those are as well.
+        /// Scripts of <paramref name="skipTypeFullName"/> are left out - for
+        /// quests, the conversations, which the dialogue extraction already has.
+        /// </summary>
+        public static string WriteReferencingAssetsNamed(string typeFullName, string skipTypeFullName,
+                                                         ManualLogSource log, string label, out int matched)
+        {
+            var targets = new HashSet<UnityEngine.Object>();
+            foreach (var asset in Resources.FindObjectsOfTypeAll<ScriptableObject>())
+                if (asset != null && asset.GetType().FullName == typeFullName) targets.Add(asset);
+
+            var found = new List<UnityEngine.Object>();
+            int examined = 0, skipped = 0, prefabs = 0;
+            if (targets.Count > 0)
+            {
+                foreach (var behaviour in Resources.FindObjectsOfTypeAll<MonoBehaviour>())
+                {
+                    if (behaviour == null) continue;
+                    if (Presentation(behaviour) || IsOrDerives(behaviour.GetType(), skipTypeFullName))
+                    {
+                        skipped++;
+                        continue;
+                    }
+
+                    examined++;
+                    var seen = new HashSet<object>(ReferenceComparer.Instance);
+                    if (!Mentions(behaviour, targets, 0, seen)) continue;
+                    found.Add(behaviour);
+                    if (!behaviour.gameObject.scene.IsValid()) prefabs++;
+                }
+            }
+            matched = found.Count;
+
+            // Counted, because "nothing names a quest" and "the search never
+            // ran" write the same empty file.
+            log?.LogInfo("[SMSModForge.PackPlugin] looked for " + targets.Count + " " + typeFullName
+                         + " asset(s) in " + examined + " script(s), skipped " + skipped + ", matched "
+                         + matched + " (" + prefabs + " on prefabs)");
+            return Write(found, log, label);
+        }
+
+        private static bool IsOrDerives(Type type, string fullName)
+        {
+            if (string.IsNullOrEmpty(fullName)) return false;
+            for (var at = type; at != null; at = at.BaseType)
+                if (at.FullName == fullName) return true;
+            return false;
+        }
+
+        /// <summary>
         /// Every ASSET of a type, rather than every instance in a scene.
         /// <para/>
         /// Some of what a conversation refers to is not in the scene at all. An
@@ -426,6 +484,13 @@ namespace SMSModForge.PackPlugin
                     else
                     {
                         Quote(w, Path(placed.transform));
+
+                        // Whether it runs as things stand: a switched-off
+                        // Trigger only fires once something turns it on, and a
+                        // script on a prefab only once the game spawns it.
+                        w.Write(", \"active\": ");
+                        w.Write(placed.gameObject.activeInHierarchy ? "true" : "false");
+                        if (!placed.gameObject.scene.IsValid()) w.Write(", \"prefab\": true");
 
                         // Where it sits among its siblings.
                         //

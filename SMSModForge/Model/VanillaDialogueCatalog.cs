@@ -129,6 +129,30 @@ public static class VanillaDialogueCatalog
     /// the only sense that matters to an author, this dialogue's start
     /// conditions.
     /// </summary>
+    /// <summary>One condition list in a script: its place in the script, and
+    /// how many of the conditions beside it are its.</summary>
+    public sealed class GateLocation
+    {
+        [JsonProperty("at")] public JArray At { get; set; } = new();
+        [JsonProperty("count")] public int Count { get; set; }
+    }
+
+    /// <summary>One branch the game tries before another in the same list.
+    /// Game Creator runs the first branch of a list whose conditions pass, so
+    /// a later one is only reached while every earlier one fails.</summary>
+    public sealed class EarlierBranch
+    {
+        /// <summary>The author's label for it, when there is one.</summary>
+        [JsonProperty("branch")] public string? Branch { get; set; }
+
+        /// <summary>The conversation it plays, by object path, when it plays
+        /// one.</summary>
+        [JsonProperty("plays")] public string? Plays { get; set; }
+
+        /// <summary>How many conditions it has.</summary>
+        [JsonProperty("count")] public int Count { get; set; }
+    }
+
     public sealed class Start
     {
         /// <summary>The object holding whatever plays this.</summary>
@@ -160,6 +184,19 @@ public static class VanillaDialogueCatalog
         /// <summary>The author's own labels for the branches this sits
         /// inside.</summary>
         [JsonProperty("branches")] public List<string> Branches { get; set; } = new();
+
+        /// <summary>
+        /// Where the conditions in <see cref="When"/> live in the script, in
+        /// the same order: the first gate's <see cref="GateLocation.Count"/>
+        /// conditions are the first list, and so on. Whatever follows the
+        /// last of them is not a list in the script and cannot be taken out -
+        /// a "play the child at this position" test, for one.
+        /// </summary>
+        [JsonProperty("gates")] public List<GateLocation> Gates { get; set; } = new();
+
+        /// <summary>The branches the same script tries before this one, in
+        /// order: while one of them can run, this one is not reached.</summary>
+        [JsonProperty("ahead")] public List<EarlierBranch> Ahead { get; set; } = new();
 
         /// <summary>What is done to stage the conversation first — the busts
         /// switched on, the fade, the wait.</summary>

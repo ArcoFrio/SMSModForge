@@ -76,8 +76,20 @@ public static class PackWalk
         {
             foreach (var hit in Flatten(q.StartConditions, $"Quest '{q.Key}' start conditions"))
                 yield return hit;
+            foreach (var hit in Flatten(q.ResetConditions, $"Quest '{q.Key}' reset conditions"))
+                yield return hit;
+            foreach (var place in q.SiteConditions)
+                foreach (var hit in Flatten(place.Conditions, $"Quest '{q.Key}' conditions at one of the game's places"))
+                    yield return hit;
             foreach (var t in q.AllTasks())
+            {
                 foreach (var hit in Flatten(t.Conditions, $"Quest '{q.Key}' task '{t.Key}'"))
+                    yield return hit;
+                foreach (var hit in Flatten(t.ShowConditions, $"Quest '{q.Key}' task '{t.Key}' show conditions"))
+                    yield return hit;
+            }
+            foreach (var h in q.VanillaTasks)
+                foreach (var hit in Flatten(h.ShowConditions, $"Quest '{q.Key}' the game's task '{h.Task}' show conditions"))
                     yield return hit;
         }
     }
@@ -112,8 +124,14 @@ public static class PackWalk
         }
 
         foreach (var q in pack.Quests)
+        {
             foreach (var t in q.AllTasks())
                 foreach (var a in t.Actions) yield return (a, $"Quest '{q.Key}' task '{t.Key}'");
+
+            // What a pack hangs on the game's own tasks, in a quest it extends.
+            foreach (var h in q.VanillaTasks)
+                foreach (var a in h.Actions) yield return (a, $"Quest '{q.Key}' the game's task '{h.Task}'");
+        }
     }
 
     /// <summary>

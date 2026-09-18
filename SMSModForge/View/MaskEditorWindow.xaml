@@ -99,7 +99,10 @@
                     IMaskEditorHost.OtherMasks.
                 -->
                 <StackPanel x:Name="CopyFromPanel" Visibility="Collapsed" Margin="0,10,0,0">
-                    <TextBlock Text="Copy layers from" Foreground="LightGray" Margin="0,0,0,3"/>
+                    <!-- The theme's own text colour, like the other labels on
+                         these panels: a fixed light grey vanished on a light
+                         theme's panel. -->
+                    <TextBlock x:Name="CopyFromLabel" Text="Copy layers from" Margin="0,0,0,3"/>
                     <ComboBox x:Name="CopyFromList" Height="24"
                               SelectionChanged="CopyFrom_SelectionChanged"
                               ToolTip="Another outfit of this character whose mask to load over this one."/>
@@ -115,8 +118,12 @@
              z-order, so the working area is the whole window and a panned or
              zoomed-in canvas slides UNDER the side panels instead of being cut
              off at a column edge. ClipToBounds then only trims at the window. -->
-        <Border Grid.Column="0" Grid.ColumnSpan="3" Panel.ZIndex="0"
-                Background="#1a1a1a" Padding="8" ClipToBounds="True">
+        <!-- Holding the middle button anywhere on it pans, not only over the
+             image: zoomed out, or panned away, most of it is this dark area. -->
+        <Border x:Name="CanvasArea" Grid.Column="0" Grid.ColumnSpan="3" Panel.ZIndex="0"
+                Background="#1a1a1a" Padding="8" ClipToBounds="True"
+                MouseDown="CanvasArea_MouseDown" MouseMove="CanvasArea_MouseMove"
+                MouseUp="CanvasArea_MouseUp" LostMouseCapture="CanvasArea_LostMouseCapture">
             <Grid HorizontalAlignment="Center" VerticalAlignment="Center"
                   x:Name="CanvasHost" Width="512" Height="512"
                   RenderTransformOrigin="0.5,0.5"
@@ -176,6 +183,7 @@
                                Text="{Binding ElementName=SizeSlider, Path=Value, StringFormat=F0}"/>
                     <Slider x:Name="SizeSlider" Minimum="1" Maximum="80" Value="20"
                             SmallChange="1" LargeChange="5"
+                            PreviewKeyDown="Slider_PreviewKeyDown"
                             ValueChanged="BrushParamChanged"/>
                 </DockPanel>
 
@@ -185,7 +193,8 @@
                                TextAlignment="Right"
                                Text="{Binding ElementName=HardnessSlider, Path=Value, StringFormat=P0}"/>
                     <Slider x:Name="HardnessSlider" Minimum="0" Maximum="1" Value="0.8"
-                            SmallChange="0.05" ValueChanged="BrushParamChanged"/>
+                            SmallChange="0.01" PreviewKeyDown="Slider_PreviewKeyDown"
+                            ValueChanged="BrushParamChanged"/>
                 </DockPanel>
 
                 <TextBlock Text="Opacity" Margin="0,8,0,0"/>
@@ -194,7 +203,7 @@
                                TextAlignment="Right"
                                Text="{Binding ElementName=OpacitySlider, Path=Value, StringFormat=P0}"/>
                     <Slider x:Name="OpacitySlider" Minimum="0.01" Maximum="1" Value="0.2"
-                            SmallChange="0.05"/>
+                            SmallChange="0.01" PreviewKeyDown="Slider_PreviewKeyDown"/>
                 </DockPanel>
 
                 <CheckBox x:Name="CapToggle" Content="Cap at opacity" Margin="0,12,0,0"
@@ -205,6 +214,7 @@
                            Margin="0,0,0,4" Text="100%"/>
                 <TextBlock Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,4">
                     <Run Text="Scroll wheel"/><Run Text="  zoom in / out"/><LineBreak/>
+                    <Run Text="Hold the wheel and drag"/><Run Text="  pan"/><LineBreak/>
                 </TextBlock>
 
                 <TextBlock Text="Hotkeys" FontWeight="Bold" Margin="0,12,0,4"/>
@@ -217,7 +227,7 @@
                     <Run Text="C / F"/><Run Text="  clear / fill channel"/><LineBreak/>
                     <Run Text="Ctrl+Z / Ctrl+Y"/><Run Text="  undo / redo"/><LineBreak/>
                     <Run Text="Ctrl+S"/><Run Text="  save mask to file"/><LineBreak/>
-                    <Run Text="wheel-drag"/><Run Text="  pan the canvas"/><LineBreak/>
+                    <Run Text="Middle-drag"/><Run Text="  pan the canvas"/><LineBreak/>
                     <Run Text="Home"/><Run Text="  reset zoom and pan"/>
                 </TextBlock>
             </StackPanel>

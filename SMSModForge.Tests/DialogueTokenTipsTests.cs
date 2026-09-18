@@ -11,8 +11,9 @@ using Xunit.Abstractions;
 namespace SMSModForge.Tests;
 
 /// <summary>
-/// The cheatsheet under the dialogue list: every token the game resolves, and
-/// every markup tag worth writing, without eating the tree it sits beside.
+/// The cheatsheet under the dialogue list: every token the game resolves, each
+/// with what it stands for written beside it, without eating the tree it sits
+/// beside.
 /// <para/>
 /// The tokens are the game's, not this editor's — a braced word swapped for
 /// whatever the player chose to call somebody. An author who does not know one
@@ -23,9 +24,10 @@ namespace SMSModForge.Tests;
 /// panel and the in-app reference, which have already drifted once.
 /// <para/>
 /// The height is the other half. The dialogue tree shares this column and the
-/// tree is where the work happens; at a 1400x900 window it gets about 214px,
-/// and an earlier one-column cheatsheet took 167 of the rest. Two columns, a
-/// bounded height and a fold keep a growing list from taking any more.
+/// tree is where the work happens, so the panel has a ceiling of its own and a
+/// fold. The markup tags used to share it too, squeezed into two columns of
+/// one-word labels; the formatting buttons over the Text box write those now,
+/// so the room went back to spelling the tokens out.
 /// <para/>
 /// Measured off the rendered panel rather than the file, because a TextBlock
 /// that is in the XAML and collapsed, clipped or never realised is one nobody
@@ -47,11 +49,10 @@ public sealed class DialogueTokenTipsTests
     private static readonly string[] Tokens =
         SMSModForge.Rendering.DialogueMarkup.Tokens.ToArray();
 
-    /// <summary>Markup, as the panel spells it. Only the first is evidenced by
-    /// the game's own dialogue; the rest are TextMeshPro's and are labelled as
-    /// unwatched in their hover text.</summary>
+    /// <summary>Markup, as the in-app reference spells it. Not on the panel any
+    /// more - the buttons write it - but still documented.</summary>
     private static readonly string[] Markup =
-        { "<size=70%>", "<b>", "<i>", "<color=#f66>" };
+        { "<size=70%>", "<b>", "<i>", "<color=#FF6666>" };
 
     private static IEnumerable<string> Everything => Tokens.Concat(Markup);
 
@@ -92,7 +93,7 @@ public sealed class DialogueTokenTipsTests
             ShowDialogues(window);
             var shown = Blocks(window).Where(b => b.IsVisible).Select(b => b.Text).ToList();
 
-            foreach (string entry in Everything)
+            foreach (string entry in Tokens)
             {
                 bool there = shown.Any(t => t == entry);
                 _out.WriteLine($"   {entry,-12} {(there ? "shown" : "MISSING")}");
@@ -104,16 +105,14 @@ public sealed class DialogueTokenTipsTests
     [Fact]
     public void EachEntryIsSpelledOutRatherThanLeftToGuess()
     {
-        // Two columns means the label beside a token is one word, so the
-        // sentence lives on the hover. Both have to be there: a one-word label
-        // with nothing behind it explains nothing, and a hover nobody can see a
-        // reason to try is a hover nobody tries.
+        // What each token stands for, written out beside it where it can be
+        // read without knowing there is anything to hover.
         WindowHarness.Run(window =>
         {
             ShowDialogues(window);
             var blocks = Blocks(window);
 
-            foreach (string entry in Everything)
+            foreach (string entry in Tokens)
             {
                 var cell = blocks.FirstOrDefault(b => b.Text == entry && b.IsVisible);
                 Assert.True(cell != null, $"{entry} is not on screen");
@@ -121,16 +120,37 @@ public sealed class DialogueTokenTipsTests
                 int row = Grid.GetRow(cell!);
                 int col = Grid.GetColumn(cell!);
                 var label = blocks.FirstOrDefault(
-                    b => b.IsVisible && Grid.GetRow(b) == row && Grid.GetColumn(b) == col + 1);
+                    b => b.IsVisible && b.Parent == cell!.Parent
+                         && Grid.GetRow(b) == row && Grid.GetColumn(b) == col + 1);
 
-                string tip = (cell!.ToolTip as string) ?? "";
-                _out.WriteLine($"   {entry,-12} r{row}c{col}  {label?.Text ?? "(no label)"}"
-                               + $"  |  {tip.Split('.')[0]}");
+                _out.WriteLine($"   {entry,-6} r{row}c{col}  {label?.Text ?? "(no label)"}");
 
-                Assert.True(label != null && label.Text.Length > 2,
-                            $"{entry} has no label beside it");
-                Assert.True(tip.Length > 20, $"{entry} has no hover explaining it");
+                // A phrase rather than a word: "what they call Anna", not "Anna".
+                Assert.True(label != null && label.Text.Contains(' '),
+                            $"{entry} has no description beside it");
             }
+        });
+    }
+
+    [Fact]
+    public void TheMarkupIsLeftToTheButtons()
+    {
+        // The formatting buttons over the Text box write every tag the panel
+        // used to list, so the panel no longer spends its room on them.
+        WindowHarness.Run(window =>
+        {
+            ShowDialogues(window);
+            var expanders = new List<Expander>();
+            Collect(window, expanders);
+            var fold = expanders.First(e => Blocks(window).Any(b => b.Text == "{PC}" && e.IsAncestorOf(b)));
+
+            var inPanel = Blocks(window).Where(b => fold.IsAncestorOf(b)).Select(b => b.Text).ToList();
+            foreach (string tag in new[] { "<b>", "<i>", "<size=70%>", "<color" })
+                Assert.DoesNotContain(inPanel, t => t.StartsWith(tag, System.StringComparison.Ordinal));
+
+            // ...and the buttons that took them over are there.
+            foreach (string name in new[] { "MarkupBoldButton", "MarkupItalicButton", "MarkupColorButton", "MarkupSizeButton" })
+                Assert.NotNull(window.FindName(name));
         });
     }
 

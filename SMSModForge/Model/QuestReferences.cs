@@ -15,8 +15,11 @@ namespace SMSModForge.Model;
 /// <param name="CountTo">The target, or null when the task does not count.</param>
 /// <param name="CounterFollowsVariable">A counter that follows a variable
 /// rather than being set - an action writing it is overwritten.</param>
+/// <param name="Added">A task the pack adds to one of the game's quests.</param>
+/// <param name="Removed">One of the game's tasks the pack takes out of its quest.</param>
 public sealed record QuestTaskInfo(string Token, string Name, int Depth, bool HasSubtasks,
-                                   string Completion, double? CountTo, bool CounterFollowsVariable)
+                                   string Completion, double? CountTo, bool CounterFollowsVariable,
+                                   bool Added = false, bool Removed = false)
 {
     public bool IsTopLevel => Depth == 0;
     public bool Counts => CountTo.HasValue;
@@ -43,9 +46,16 @@ public static class QuestReferences
     public static string Param(IReadOnlyDictionary<string, string>? ps, string key)
         => ps != null && ps.TryGetValue(key, out var v) ? v ?? "" : "";
 
-    /// <summary>A pack quest by key. Case-sensitive, as the runtime's id is.</summary>
+    /// <summary>A quest of the pack's own by key. Case-sensitive, as the
+    /// runtime's id is. An entry extending one of the game's quests is not one:
+    /// a row names that quest on the Vanilla side, by the game's name.</summary>
     public static QuestDef? PackQuest(IEnumerable<QuestDef>? quests, string key)
-        => quests?.FirstOrDefault(q => string.Equals(q.Key, key, StringComparison.Ordinal));
+        => quests?.FirstOrDefault(q => !q.IsVanillaExtension && string.Equals(q.Key, key, StringComparison.Ordinal));
+
+    /// <summary>The pack's entry extending one of the game's quests, or null.
+    /// The first, when there are two - validation says so.</summary>
+    public static QuestDef? Extension(IEnumerable<QuestDef>? quests, string gameQuest)
+        => quests?.FirstOrDefault(q => q.IsVanillaExtension && string.Equals(q.Source, gameQuest, StringComparison.Ordinal));
 
     /// <summary>Whether the quest a row names exists on the side it names.</summary>
     public static bool QuestExists(IEnumerable<QuestDef>? packQuests, bool vanilla, string quest)
@@ -74,6 +84,26 @@ public static class QuestReferences
         {
             var v = VanillaQuests.Find(quest);
             if (v == null) return null;
+
+            // The pack's own changes to that quest are part of it as far as the
+            // pack is concerned: its added tasks can be named, and a task it
+            // took out is still there to name, marked.
+            var extension = Extension(packQuests, quest);
+            if (extension != null && (extension.AddedTasks.Count > 0 || extension.VanillaTasks.Any(h => h.Removed)))
+            {
+                var rows = ExtensionTree.Build(v, extension);
+                return rows.Where(r => !r.Orphan).Select(r => new QuestTaskInfo(
+                    r.Token, r.Name, r.Depth,
+                    rows.Any(c => ReferenceEquals(c.Parent, r)),
+                    r.Completion,
+                    r.Game != null
+                        ? (r.Game.Counter == TaskCounter.None ? null : r.Game.CountTo)
+                        : (r.Added!.CountTo is > 0 ? r.Added.CountTo : null),
+                    r.Game != null ? r.Game.Counter == TaskCounter.Property : r.Added!.CountsFromVariable,
+                    Added: r.Added != null,
+                    Removed: r.Removed)).ToList();
+            }
+
             return v.Tasks.Select(t => new QuestTaskInfo(
                 t.Id.ToString(CultureInfo.InvariantCulture), t.Name, v.DepthOf(t),
                 v.Tasks.Any(c => c.Parent == t.Id),
@@ -119,6 +149,8 @@ public static class QuestReferences
     {
         if (task == null) return "";
         var parts = new List<string>();
+        if (task.Removed) parts.Add("taken out of the quest by this pack, which moves past it as soon as it starts");
+        if (task.Added) parts.Add("added by this pack");
         if (task.HasSubtasks)
             parts.Add(QuestVocabulary.Is(task.Completion, QuestVocabulary.ByAction)
                 ? "completed by an action; its subtasks are notes"

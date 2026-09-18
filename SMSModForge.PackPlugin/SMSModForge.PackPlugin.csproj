@@ -14,9 +14,9 @@
          reports comes from Shared/ForgeVersion.cs. Kept in step, and listed
          here only so the next person to look for a version finds the note
          rather than believing these. -->
-    <Version>1.4.0</Version>
-    <AssemblyVersion>1.4.0.0</AssemblyVersion>
-    <FileVersion>1.4.0.0</FileVersion>
+    <Version>1.5.0</Version>
+    <AssemblyVersion>1.5.0.0</AssemblyVersion>
+    <FileVersion>1.5.0.0</FileVersion>
     <AssemblyName>SMSModForge.PackPlugin</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -72,6 +72,10 @@
     <Compile Include="QuestRegistry.cs" />
     <Compile Include="QuestRuntime.cs" />
     <Compile Include="QuestTicker.cs" />
+    <Compile Include="VanillaQuestEdits.cs" />
+    <Compile Include="SaveLoadWarning.cs" />
+    <Compile Include="GameGateRuntime.cs" />
+    <Compile Include="QuestPlaceRules.cs" />
     <Compile Include="VanillaDialogueInjector.cs" />
     <Compile Include="DialogueNodeWriter.cs" />
     <Compile Include="UiOpenAnimation.cs" />
@@ -260,6 +264,9 @@
     <Compile Include="..\Shared\JiggleDefaults.cs" Link="Shared\JiggleDefaults.cs" />
     <Compile Include="..\Shared\QuestIds.cs" Link="Shared\QuestIds.cs" />
     <Compile Include="..\Shared\QuestVocabulary.cs" Link="Shared\QuestVocabulary.cs" />
+    <Compile Include="..\Shared\QuestTreeEdits.cs" Link="Shared\QuestTreeEdits.cs" />
+    <Compile Include="..\Shared\SaveLoadChecks.cs" Link="Shared\SaveLoadChecks.cs" />
+    <Compile Include="..\Shared\GameConditionEdits.cs" Link="Shared\GameConditionEdits.cs" />
     <Compile Include="..\Shared\VarText.cs" Link="Shared\VarText.cs" />
     <Compile Include="..\Shared\VarCompare.cs" Link="Shared\VarCompare.cs" />
     <Compile Include="..\Shared\VanillaDialogueKeys.cs" Link="Shared\VanillaDialogueKeys.cs" />

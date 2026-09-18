@@ -46,9 +46,16 @@ namespace SMSModForge.PackPlugin
         private static readonly ConditionalWeakTable<Node, Binding> Bound =
             new ConditionalWeakTable<Node, Binding>();
 
+        /// <summary>
+        /// Answer this node's conditions from the pack's list from now on. An
+        /// EMPTY list is registered like any other: on one of the game's lines
+        /// it means the pack has taken every condition out, and leaving it
+        /// unregistered would hand the line back to the game's own list - the
+        /// one change that looks applied and is not.
+        /// </summary>
         public static void Register(Node node, JArray conditions, PackContext ctx)
         {
-            if (node == null || conditions == null || conditions.Count == 0) return;
+            if (node == null || conditions == null) return;
             Bound.Remove(node);
             Bound.Add(node, new Binding { Conditions = conditions, Ctx = ctx });
         }

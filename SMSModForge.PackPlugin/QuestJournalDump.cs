@@ -113,6 +113,18 @@ namespace SMSModForge.PackPlugin
                 log?.LogWarning("[SMSModForge.PackPlugin] F8: no " + QuestType + " assets are loaded. " +
                                 "Try again after a quest has been started in this session.");
 
+            // And everything outside the conversations that names a quest: what
+            // starts one, completes, counts or fails its tasks, resets it, or
+            // asks about it. The conversations are left to the dialogue
+            // extraction (F10), which already carries every step in them.
+            int naming;
+            string namingFile = ScriptDump.WriteReferencingAssetsNamed(
+                QuestType, DialogueType, log, "quest-references", out naming);
+            log?.LogInfo("[SMSModForge.PackPlugin] F8: " + naming + " script(s) naming a quest written to " + namingFile);
+            if (naming == 0)
+                log?.LogWarning("[SMSModForge.PackPlugin] F8: no script outside the conversations names a quest - "
+                                + "either none does, or the quests were not loaded yet.");
+
             int prefabs;
             string prefabFile = ScriptDump.WritePrefabs(
                 RowPrefabs, log, "questjournal-prefabs", out prefabs);
@@ -134,6 +146,9 @@ namespace SMSModForge.PackPlugin
         /// <summary>The quest asset type. Matched by name, so the shipped plugin
         /// takes no reference to the Quests assembly for a diagnostic.</summary>
         private const string QuestType = "GameCreator.Runtime.Quests.Quest";
+
+        /// <summary>A conversation, left to the dialogue extraction.</summary>
+        private const string DialogueType = "GameCreator.Runtime.Dialogue.Dialogue";
 
         private const string QuestsNamespace = "GameCreator.Runtime.Quests";
 

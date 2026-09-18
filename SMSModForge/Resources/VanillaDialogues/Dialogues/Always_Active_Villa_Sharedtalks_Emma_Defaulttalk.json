@@ -1490,6 +1490,17 @@
      }
     }
    ],
+   "gates": [
+    {
+     "at": [
+      "m_Branches",
+      "m_Branches",
+      0,
+      "m_ConditionList"
+     ],
+     "count": 2
+    }
+   ],
    "before": [
     {
      "kind": "setBool",
@@ -1653,6 +1664,28 @@
        "value": false
       }
      }
+    }
+   ],
+   "gates": [
+    {
+     "at": [
+      "m_Branches",
+      "m_Branches",
+      2,
+      "m_ConditionList"
+     ],
+     "count": 2
+    }
+   ],
+   "ahead": [
+    {
+     "branch": "badweather",
+     "plays": "8_Room_Talk/Villa_Backyard/Badweather",
+     "count": 1
+    },
+    {
+     "plays": "Always_Active/Villa_Sharedtalks/Katarina_Sex",
+     "count": 4
     }
    ],
    "before": [

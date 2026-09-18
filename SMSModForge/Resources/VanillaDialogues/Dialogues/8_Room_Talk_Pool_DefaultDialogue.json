@@ -2400,6 +2400,23 @@
    "how": "InstructionDialoguePlay",
    "title": "Play DefaultDialogue and wait",
    "as": "Dialogue",
+   "ahead": [
+    {
+     "branch": "badweather",
+     "plays": "8_Room_Talk/Pool/Badweather",
+     "count": 1
+    },
+    {
+     "branch": "redbikinicharlotte",
+     "plays": "8_Room_Talk/Pool/RedBikiniDayCharlotte",
+     "count": 4
+    },
+    {
+     "branch": "redbikini",
+     "plays": "8_Room_Talk/Pool/RedBikiniDay",
+     "count": 2
+    }
+   ],
    "before": [
     {
      "kind": "setBool",

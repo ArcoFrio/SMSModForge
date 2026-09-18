@@ -868,6 +868,23 @@
    "how": "InstructionDialoguePlay",
    "title": "Play Default_Snow and wait",
    "as": "Dialogue",
+   "ahead": [
+    {
+     "branch": "charmed",
+     "plays": "8_Vacation_Stories/Snowy_CozyHut/AnnaWrappingScene1",
+     "count": 1
+    },
+    {
+     "branch": "wasted",
+     "plays": "8_Vacation_Stories/Snowy_CozyHut/AnnaWinterWasted",
+     "count": 1
+    },
+    {
+     "branch": "vacationend",
+     "plays": "8_Vacation_Stories/Snowy_CozyHut/Vacation_End",
+     "count": 2
+    }
+   ],
    "after": [
     {
      "kind": "setActive",

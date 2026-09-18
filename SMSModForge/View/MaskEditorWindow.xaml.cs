@@ -87,6 +87,7 @@ public partial class MaskEditorWindow : Window
     public MaskEditorWindow(IMaskEditorHost host, string packRoot)
     {
         InitializeComponent();
+        PointerOnArea = e => e.GetPosition(CanvasArea);
         _host = host;
         _packRoot = packRoot;
         // A level mask is one intensity plane authored in ALPHA; a bust mask is
@@ -231,6 +232,9 @@ public partial class MaskEditorWindow : Window
 
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
+        // The pan cursor is set for the whole application, so it cannot be
+        // left behind with the window.
+        if (_panning) EndPan();
         _closing = true;
         try { ConfirmAndTidy(e); }
         finally { if (e.Cancel) _closing = false; }
@@ -328,6 +332,36 @@ public partial class MaskEditorWindow : Window
             case Key.S when (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control:
                 Save(); e.Handled = true; break;
         }
+    }
+
+    /// <summary>
+    /// Left and Right on a focused slider: one of the units the slider shows,
+    /// or five with Shift.
+    /// <para/>
+    /// The unit is what is written beside the slider - a pixel of brush size,
+    /// one percent of hardness or opacity. WPF's own arrow step is the slider's
+    /// SmallChange, which was five percent on the two percentage sliders, and
+    /// it ignores Shift.
+    /// </summary>
+    private void Slider_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (sender is not Slider slider) return;
+        double unit = ReferenceEquals(slider, SizeSlider) ? 1 : 0.01;
+        if (NudgeSlider(slider, e.Key, Keyboard.Modifiers, unit)) e.Handled = true;
+    }
+
+    /// <summary>The step itself, apart from the live keyboard so a test can
+    /// hold Shift down. Returns whether the key was one of the two.</summary>
+    internal static bool NudgeSlider(Slider slider, Key key, ModifierKeys modifiers, double unit)
+    {
+        int direction = key switch { Key.Left => -1, Key.Right => +1, _ => 0 };
+        if (direction == 0) return false;
+
+        double step = unit * ((modifiers & ModifierKeys.Shift) == ModifierKeys.Shift ? 5 : 1);
+        int digits = unit >= 1 ? 0 : (int)Math.Ceiling(-Math.Log10(unit));
+        slider.Value = Math.Clamp(Math.Round(slider.Value + direction * step, digits),
+                                  slider.Minimum, slider.Maximum);
+        return true;
     }
 
     /// <summary>Step the brush opacity by one notch in <paramref name="direction"/>,
@@ -428,13 +462,67 @@ public partial class MaskEditorWindow : Window
     // ───────────────────────── panning
     //
     // Zooming past the viewport used to put the edges of the mask out of reach,
-    // since the canvas is centred in its border with no scroll host. Wheel-drag
-    // pans, which keeps the left button free for painting and matches what the
-    // wheel already does here (zoom).
+    // since the canvas is centred in its border with no scroll host. Holding
+    // the middle button pans, which keeps the left button free for painting and
+    // matches what the wheel already does here (zoom).
+    //
+    // Handled on the whole working area (CanvasArea), not on the image: the
+    // image's own handlers only hear the mouse while it is over the image, so
+    // pressing the wheel on the dark area around it - most of the window when
+    // zoomed out or panned away - did nothing. A press over the image bubbles
+    // up to the area the same way.
 
     private bool _panning;
     private Point _panStart;
     private double _panStartX, _panStartY;
+
+    /// <summary>Whether a middle-button pan is under way.</summary>
+    internal bool IsPanning => _panning;
+
+    /// <summary>Where the pointer is over the working area. A seam for tests,
+    /// which cannot move the real pointer.</summary>
+    internal Func<MouseEventArgs, Point> PointerOnArea;
+
+    private void CanvasArea_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ChangedButton != MouseButton.Middle || _drawing) return;
+
+        // Anchored on the area, which stays put while the image moves.
+        _panning = true;
+        _panStart = PointerOnArea(e);
+        _panStartX = PanTransform.X;
+        _panStartY = PanTransform.Y;
+        CanvasArea.CaptureMouse();
+        // Over the whole window while it lasts: the image asks for no cursor
+        // at all, so it can draw its brush ring instead.
+        Mouse.OverrideCursor = Cursors.SizeAll;
+        BrushCursor.Visibility = Visibility.Hidden;
+        BrushCursorHard.Visibility = Visibility.Hidden;
+        e.Handled = true;
+    }
+
+    private void CanvasArea_MouseMove(object sender, MouseEventArgs e)
+    {
+        if (!_panning) return;
+        var now = PointerOnArea(e);
+        PanTransform.X = _panStartX + (now.X - _panStart.X);
+        PanTransform.Y = _panStartY + (now.Y - _panStart.Y);
+    }
+
+    private void CanvasArea_MouseUp(object sender, MouseButtonEventArgs e)
+    {
+        if (!_panning || e.ChangedButton != MouseButton.Middle) return;
+        EndPan();
+        UpdateBrushCursor(e.GetPosition(CanvasHost));
+        e.Handled = true;
+    }
+
+    /// <summary>The window lost the pointer mid-pan - switched away from, or
+    /// released outside it where the up never arrived.</summary>
+    private void CanvasArea_LostMouseCapture(object sender, MouseEventArgs e)
+    {
+        if (_panning) EndPan();
+    }
 
     /// <summary>Put the view back to 100% centred. Panning has no scrollbars to
     /// hint at where the canvas went, so there has to be a way home.</summary>
@@ -448,22 +536,8 @@ public partial class MaskEditorWindow : Window
 
     private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
     {
-        if (e.MiddleButton == MouseButtonState.Pressed)
-        {
-            // Anchor on the parent: CanvasHost itself moves as we pan, so
-            // measuring against it would feed the delta back into itself.
-            _panning = true;
-            _panStart = e.GetPosition(CanvasHost.Parent as IInputElement);
-            _panStartX = PanTransform.X;
-            _panStartY = PanTransform.Y;
-            CanvasHost.CaptureMouse();
-            CanvasHost.Cursor = Cursors.SizeAll;
-            BrushCursor.Visibility = Visibility.Hidden;
-            BrushCursorHard.Visibility = Visibility.Hidden;
-            e.Handled = true;
-            return;
-        }
-
+        // The middle button is the working area's: left to bubble up to it.
+        if (e.ChangedButton != MouseButton.Left || _panning) return;
         if (e.LeftButton != MouseButtonState.Pressed) return;
         CanvasHost.Focus();
 
@@ -488,14 +562,8 @@ public partial class MaskEditorWindow : Window
 
     private void Canvas_MouseMove(object sender, MouseEventArgs e)
     {
-        if (_panning)
-        {
-            if (e.MiddleButton != MouseButtonState.Pressed) { EndPan(); return; }
-            var now = e.GetPosition(CanvasHost.Parent as IInputElement);
-            PanTransform.X = _panStartX + (now.X - _panStart.X);
-            PanTransform.Y = _panStartY + (now.Y - _panStart.Y);
-            return;
-        }
+        // Panning is the working area's, which holds the pointer meanwhile.
+        if (_panning) return;
 
         var p = e.GetPosition(CanvasHost);
         UpdateBrushCursor(p);
@@ -525,20 +593,15 @@ public partial class MaskEditorWindow : Window
 
     private void EndPan()
     {
+        // Cleared first: releasing the pointer raises LostMouseCapture, which
+        // comes back here.
         _panning = false;
-        CanvasHost.ReleaseMouseCapture();
-        CanvasHost.Cursor = Cursors.None;   // back to the drawn brush ring
+        Mouse.OverrideCursor = null;   // back to the drawn brush ring
+        if (CanvasArea.IsMouseCaptured) CanvasArea.ReleaseMouseCapture();
     }
 
     private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
     {
-        if (_panning && e.ChangedButton == MouseButton.Middle)
-        {
-            EndPan();
-            UpdateBrushCursor(e.GetPosition(CanvasHost));
-            return;
-        }
-
         if (_drawing)
         {
             _drawing = false;

@@ -782,6 +782,22 @@
    "branches": [
     "1"
    ],
+   "gates": [
+    {
+     "at": [
+      "m_Branches",
+      "m_Branches",
+      1,
+      "m_ConditionList"
+     ],
+     "count": 2
+    }
+   ],
+   "ahead": [
+    {
+     "count": 1
+    }
+   ],
    "before": [
     {
      "kind": "setActive",
@@ -876,6 +892,27 @@
    "branches": [
     "2"
    ],
+   "gates": [
+    {
+     "at": [
+      "m_Branches",
+      "m_Branches",
+      2,
+      "m_ConditionList"
+     ],
+     "count": 2
+    }
+   ],
+   "ahead": [
+    {
+     "count": 1
+    },
+    {
+     "branch": "1",
+     "plays": "8_Core_Events/Trips/ParkVisitM/AnnaLoveEventsPark",
+     "count": 2
+    }
+   ],
    "before": [
     {
      "kind": "setActive",
@@ -969,6 +1006,32 @@
    ],
    "branches": [
     "3"
+   ],
+   "gates": [
+    {
+     "at": [
+      "m_Branches",
+      "m_Branches",
+      3,
+      "m_ConditionList"
+     ],
+     "count": 2
+    }
+   ],
+   "ahead": [
+    {
+     "count": 1
+    },
+    {
+     "branch": "1",
+     "plays": "8_Core_Events/Trips/ParkVisitM/AnnaLoveEventsPark",
+     "count": 2
+    },
+    {
+     "branch": "2",
+     "plays": "8_Core_Events/Trips/ParkVisitM/AnnaLoveEventsPark",
+     "count": 2
+    }
    ],
    "before": [
     {
