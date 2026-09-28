@@ -246,15 +246,22 @@ namespace SMSModForge.Shared
             if (TextCodes.HasAccessKey(english) && !TextCodes.HasAccessKey(mine.Text))
                 result.Findings.Add(new Finding { Kind = Kind.AccessKey, Key = mine.Key, Line = mine.Line, English = english, Found = mine.Text });
 
-            if (mine.ChangedFrom != null)
+            // A "changed from" that differs only by the space the file's trim
+            // took off its end is no change: files written before 2026-09-28
+            // have them.
+            if (mine.ChangedFrom != null && PackTexts.Normal(mine.ChangedFrom) != PackTexts.Normal(english))
                 result.Findings.Add(new Finding { Kind = Kind.NeedsReview, Key = mine.Key, Line = mine.Line, English = english, Found = mine.Text, Was = mine.ChangedFrom });
-            else if (mine.English != null && mine.English != english)
+            // Told apart as the file can tell them: it trims every line it
+            // reads, so a space at either end of the English never survives
+            // into the note, and a line ending in one was out of date for ever.
+            else if (mine.English != null && PackTexts.Normal(mine.English) != PackTexts.Normal(english))
                 result.Findings.Add(new Finding { Kind = Kind.EnglishChanged, Key = mine.Key, Line = mine.Line, English = english, Found = mine.Text, Was = mine.English });
 
             // The file's own details (its language's name, who made it) are not
             // texts anybody translates.
             // Nor is a line marked as meant to read the same.
-            if (!sameLanguage && mine.Text == english && HasWords(english) && !mine.Same
+            if (!sameLanguage && PackTexts.Normal(mine.Text) == PackTexts.Normal(english)
+                && HasWords(WithoutCodes(english)) && !mine.Same
                 && !mine.Key.StartsWith(LanguageKeys, StringComparison.OrdinalIgnoreCase))
                 result.Findings.Add(new Finding { Kind = Kind.Untranslated, Key = mine.Key, Line = mine.Line, English = english });
         }
@@ -343,6 +350,18 @@ namespace SMSModForge.Shared
         }
 
         private static List<string> CodesIn(string text) => TextCodes.Of(text).Distinct().ToList();
+
+        /// <summary>
+        /// <paramref name="s"/> with its codes taken out: "&lt;size=60%&gt;..."
+        /// is three dots, and "{PC}..." the same. The letters of a tag or a
+        /// token are not words anybody translates, and a line of nothing else
+        /// read as untranslated in every language, for ever.
+        /// </summary>
+        private static string WithoutCodes(string s)
+        {
+            foreach (string code in TextCodes.Of(s)) s = s.Replace(code, " ");
+            return s;
+        }
 
         private static bool HasWords(string s)
         {

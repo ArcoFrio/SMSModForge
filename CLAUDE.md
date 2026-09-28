@@ -162,6 +162,16 @@ have exiled exactly the tests a fast tier most needs to keep.
 Re-measure with `dotnet test --logger "trx;LogFileName=timings.trx"` and read
 the durations out of the TRX rather than re-deriving this by eye.
 
+### How far along a run is
+
+A run that will take a while opens a small window saying so: tests done, time
+left, the test running now and for how long (orange past a minute - the first
+sign of one waiting on a click), and what has failed. The taskbar button
+carries the same bar. Time left comes from what each test took last time,
+kept in `bin/.../test-timings.tsv`; the first run on a machine counts tests
+instead. `SMSMODFORGE_TEST_PROGRESS=0` keeps the window away, `=1` shows it
+for every run. See `RunProgress`.
+
 ### Never run a suite while editing the files it reads
 
 A background run reading `en.txt` while it is being rewritten fails in a way

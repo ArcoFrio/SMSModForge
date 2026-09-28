@@ -13881,8 +13881,8 @@ export.title = Paket exportieren
 exportTranslate.title = Vor dem Export übersetzen?
 
 # The offer; {languages} is a list, one per line, of the line below
-# en: Some of what players read in {pack} is not in every language ModForge has:\n\n{languages}\n\nTranslate it by machine now? Only what is still untranslated is sent. A line already translated, by you or by a machine, stays exactly as it is, and so does one marked as the same in that language. The text goes to Google's free translation service.\n\nYes translates, then exports. No exports it as it is. Cancel does neither.\n\nOptions ▸ Offer to translate before exporting turns this off for this pack.
-exportTranslate.ask = Ein Teil dessen, was Spieler in {pack} lesen, liegt nicht in jeder Sprache von ModForge vor:\n\n{languages}\n\nJetzt maschinell übersetzen? Gesendet wird nur, was noch unübersetzt ist. Eine schon übersetzte Zeile, ob von dir oder von einer Maschine, bleibt genau, wie sie ist, ebenso eine, die als gleich in dieser Sprache markiert ist. Der Text geht an den kostenlosen Übersetzungsdienst von Google.\n\nJa übersetzt und exportiert dann. Nein exportiert es so, wie es ist. Abbrechen tut keins von beiden.\n\nOptionen ▸ Vor dem Export Übersetzung anbieten schaltet das für dieses Paket ab.
+# en: Some of what players read in {pack} is not in every language ModForge has:\n\n{languages}\n\nTranslate it by machine first? Only what is still untranslated is sent. A line already translated, by you or by a machine, stays exactly as it is, and so does one marked as the same in that language. The text goes to Google's free translation service.\n\nYes opens the Translate window with these languages ticked: change them if you like, then press Translate. The export goes ahead when you close the window. No exports it as it is. Cancel does neither.\n\nOptions ▸ Offer to translate before exporting turns this off for this pack.
+exportTranslate.ask = Ein Teil dessen, was Spieler in {pack} lesen, liegt nicht in jeder Sprache von ModForge vor:\n\n{languages}\n\nZuerst maschinell übersetzen? Gesendet wird nur, was noch unübersetzt ist. Eine schon übersetzte Zeile, ob von dir oder von einer Maschine, bleibt genau, wie sie ist, ebenso eine, die als gleich in dieser Sprache markiert ist. Der Text geht an den kostenlosen Übersetzungsdienst von Google.\n\nJa öffnet das Übersetzungsfenster mit diesen Sprachen angehakt: Ändere sie, wenn du willst, und drücke dann Übersetzen. Der Export geht weiter, wenn du das Fenster schließt. Nein exportiert es so, wie es ist. Abbrechen tut keins von beiden.\n\nOptionen ▸ Vor dem Export Übersetzung anbieten schaltet das für dieses Paket ab.
 
 # One language in that list
 # en: {language}: {missing} of {total} still to translate
@@ -17038,6 +17038,94 @@ editingLanguage.own = Standard ({language})
 # en: Show and edit every text a player reads in one of the pack's translations. Everything the game finds things by - keys, names of objects, targets - stays the same in every language, and anything you add or change that is not a text is added or changed for every language.
 editingLanguage.tip = Jeden Text, den ein Spieler liest, in einer der Übersetzungen des Pakets zeigen und bearbeiten. Alles, woran das Spiel Dinge findet – Schlüssel, Namen von Objekten, Ziele –, bleibt in jeder Sprache gleich, und alles, was du hinzufügst oder änderst und kein Text ist, wird für jede Sprache hinzugefügt oder geändert.
 
+# A small button beside the Editing in list: opens the window listing the pack's translations
+# en: Edit…
+editingLanguage.edit = Bearbeiten…
+
+# Tooltip on that button
+# en: See the pack's translations and how far along each one is, copy one over another language, or delete one.
+editingLanguage.edit.tip = Die Übersetzungen des Pakets ansehen und wie weit jede ist, eine über eine andere Sprache kopieren oder eine löschen.
+
+# Title of that window
+# en: Pack translations
+packTranslations.title = Übersetzungen des Pakets
+
+# At the top of that window
+# en: The translations beside your pack, and how far along each one is. Pick one to copy it over another language, or to delete it.
+packTranslations.intro = Die Übersetzungen neben deinem Paket und wie weit jede ist. Wähle eine aus, um sie über eine andere Sprache zu kopieren oder um sie zu löschen.
+
+# The window's list: its column headings
+# en: Language
+packTranslations.column.language = Sprache
+
+# en: Translated
+packTranslations.column.translated = Übersetzt
+
+# en: Out of date
+packTranslations.column.outOfDate = Veraltet
+
+# en: File
+packTranslations.column.file = Datei
+
+# In the Translated column: how much of the translation is done. {percent} is a whole number
+# en: {percent}% ({done} of {total})
+packTranslations.translatedValue = {percent} % ({done} von {total})
+
+# Shown instead of the list when the pack has no translations
+# en: This pack has no translations yet. Start one by picking a language in Editing in, or with File ▸ Pack translations.
+packTranslations.none = Dieses Paket hat noch keine Übersetzungen. Beginne eine, indem du unter „Bearbeiten auf“ eine Sprache wählst, oder mit Datei ▸ Übersetzungen des Pakets.
+
+# Beside the list of languages the picked translation can be copied over
+# en: Copy to:
+packTranslations.transferTo = Kopieren nach:
+
+# The button that copies the picked translation over the language chosen beside it
+# en: Transfer…
+packTranslations.transfer = Übertragen…
+
+# Tooltip on that button
+# en: Copy the picked translation's texts, word for word, over the language chosen beside it - for a translation typed in while the wrong language was up.
+packTranslations.transfer.tip = Die Texte der gewählten Übersetzung Wort für Wort über die daneben gewählte Sprache kopieren – für eine Übersetzung, die getippt wurde, während die falsche Sprache eingestellt war.
+
+# The button that deletes the picked translation
+# en: Delete…
+packTranslations.delete = Löschen…
+
+# Tooltip on that button
+# en: Delete the picked translation and every text in it.
+packTranslations.delete.tip = Die gewählte Übersetzung mit jedem Text darin löschen.
+
+# The window's close button
+# en: Close
+packTranslations.close = Schließen
+
+# Title of the question asked before a transfer
+# en: Transfer a translation
+packTranslations.transfer.title = Eine Übersetzung übertragen
+
+# The question asked before a transfer. {from} and {to} are languages, named with their codes
+# en: Copy every text of {from} over {to}? Where {from} has a text, {to} takes it word for word, and loses what it had there. The rest of {to} stays as it is, and {from} keeps all of its own.
+packTranslations.transfer.confirm = Jeden Text von {from} über {to} kopieren? Wo {from} einen Text hat, übernimmt {to} ihn Wort für Wort und verliert, was dort stand. Der Rest von {to} bleibt, wie er ist, und {from} behält alle seine eigenen.
+
+# Title of the question asked before deleting a translation
+# en: Delete a translation
+packTranslations.delete.title = Eine Übersetzung löschen
+
+# The question asked before deleting a translation. {language} is the language, named with its code
+# en: Delete {language} and every text in it? Its file goes to the Recycle Bin, and players reading this language get the default text.
+packTranslations.delete.confirm = {language} mit jedem Text darin löschen? Die Datei kommt in den Papierkorb, und Spieler, die diese Sprache lesen, bekommen den Standardtext.
+
+# After a transfer: what was done
+# one: 1 · other: 0, 2, 3, 4…
+# en: Copied {count} text from {from} to {to}.
+packTranslations.transferred.one = {count} Text von {from} nach {to} kopiert.
+# en: Copied {count} texts from {from} to {to}.
+packTranslations.transferred.other = {count} Texte von {from} nach {to} kopiert.
+
+# After a delete: what was done
+# en: Deleted {language}.
+packTranslations.deleted = {language} gelöscht.
+
 # The bar across the window while a translation is being edited.
 # en: You are editing a translation. Every text a player reads shows it, and what you type goes into it. Anything that is not a text is shared by every language - adding a line adds it to all of them. A line you add, or a text that was empty, gets its words in this language only: its default text stays empty until you write it, and the pack's check lists it as an error.
 editingLanguage.banner = Du bearbeitest eine Übersetzung. Jeder Text, den ein Spieler liest, zeigt sie, und was du tippst, kommt in sie hinein. Alles, was kein Text ist, teilen sich alle Sprachen – fügst du eine Zeile hinzu, kommt sie in alle. Eine Zeile, die du hinzufügst, oder ein Text, der leer war, bekommt seine Worte nur in dieser Sprache: Sein Standardtext bleibt leer, bis du ihn schreibst, und die Prüfung des Pakets listet ihn als Fehler.
@@ -17163,6 +17251,18 @@ translatePack.pickOne = Hak zuerst mindestens eine Sprache an.
 # While it runs.
 # en: {language}: {done} of {total} translated...
 translatePack.progress = {language}: {done} von {total} übersetzt...
+
+# While it runs, over the bar for the whole run: every language picked, counted in texts. {number} is the language it is on, {count} how many languages were picked
+# en: All languages: {done} of {total} texts (language {number} of {count})
+translatePack.progress.all = Alle Sprachen: {done} von {total} Texten (Sprache {number} von {count})
+
+# Over the Translate window's bar once a run is over, having done every language picked.
+# en: Translation finished.
+translatePack.over.finished = Übersetzung abgeschlossen.
+
+# Over the Translate window's bar when a run was stopped, or failed, before the end.
+# en: Translation stopped before the end. Everything translated so far is kept, and Translate picks up from there.
+translatePack.over.stopped = Übersetzung vor dem Ende angehalten. Alles bisher Übersetzte bleibt erhalten, und Übersetzen macht dort weiter.
 
 # One line per language afterwards.
 # en: {language}: {count} translated.

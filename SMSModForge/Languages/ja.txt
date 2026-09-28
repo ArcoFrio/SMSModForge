@@ -13830,8 +13830,8 @@ export.title = パックのエクスポート
 exportTranslate.title = エクスポート前に翻訳しますか？
 
 # The offer; {languages} is a list, one per line, of the line below
-# en: Some of what players read in {pack} is not in every language ModForge has:\n\n{languages}\n\nTranslate it by machine now? Only what is still untranslated is sent. A line already translated, by you or by a machine, stays exactly as it is, and so does one marked as the same in that language. The text goes to Google's free translation service.\n\nYes translates, then exports. No exports it as it is. Cancel does neither.\n\nOptions ▸ Offer to translate before exporting turns this off for this pack.
-exportTranslate.ask = {pack} でプレイヤーが読むものの一部が、ModForge のすべての言語にはありません：\n\n{languages}\n\n今すぐ機械翻訳しますか？ 送られるのはまだ翻訳されていないものだけです。すでに翻訳された行は、あなたが書いたものも機械が書いたものもそのまま残り、その言語で同じと印の付いた行も同様です。テキストは Google の無料翻訳サービスに送られます。\n\n「はい」は翻訳してからエクスポートします。「いいえ」はそのままエクスポートします。「キャンセル」はどちらもしません。\n\nオプション ▸ エクスポート前に翻訳を提案 で、このパックではこの質問を出さないようにできます。
+# en: Some of what players read in {pack} is not in every language ModForge has:\n\n{languages}\n\nTranslate it by machine first? Only what is still untranslated is sent. A line already translated, by you or by a machine, stays exactly as it is, and so does one marked as the same in that language. The text goes to Google's free translation service.\n\nYes opens the Translate window with these languages ticked: change them if you like, then press Translate. The export goes ahead when you close the window. No exports it as it is. Cancel does neither.\n\nOptions ▸ Offer to translate before exporting turns this off for this pack.
+exportTranslate.ask = {pack} でプレイヤーが読むものの一部が、ModForge のすべての言語にはありません：\n\n{languages}\n\n先に機械翻訳しますか？ 送られるのはまだ翻訳されていないものだけです。すでに翻訳された行は、あなたが書いたものも機械が書いたものもそのまま残り、その言語で同じと印の付いた行も同様です。テキストは Google の無料翻訳サービスに送られます。\n\n「はい」を選ぶと、これらの言語にチェックが入った状態で翻訳ウィンドウが開きます。必要なら変更してから「翻訳」を押してください。ウィンドウを閉じるとエクスポートが続きます。「いいえ」はそのままエクスポートします。「キャンセル」はどちらもしません。\n\nオプション ▸ エクスポート前に翻訳を提案 で、このパックではこの質問を出さないようにできます。
 
 # One language in that list
 # en: {language}: {missing} of {total} still to translate
@@ -16837,6 +16837,91 @@ editingLanguage.own = 既定（{language}）
 # en: Show and edit every text a player reads in one of the pack's translations. Everything the game finds things by - keys, names of objects, targets - stays the same in every language, and anything you add or change that is not a text is added or changed for every language.
 editingLanguage.tip = プレイヤーが読むすべてのテキストを、パックの翻訳の1つで表示・編集します。ゲームが物を見つけるためのもの（キー、オブジェクトの名前、対象）はどの言語でも同じで、テキスト以外に追加・変更したものは、すべての言語に対して追加・変更されます。
 
+# A small button beside the Editing in list: opens the window listing the pack's translations
+# en: Edit…
+editingLanguage.edit = 編集…
+
+# Tooltip on that button
+# en: See the pack's translations and how far along each one is, copy one over another language, or delete one.
+editingLanguage.edit.tip = パックの翻訳とそれぞれの進み具合を見たり、1つを別の言語に上書きコピーしたり、削除したりします。
+
+# Title of that window
+# en: Pack translations
+packTranslations.title = パックの翻訳
+
+# At the top of that window
+# en: The translations beside your pack, and how far along each one is. Pick one to copy it over another language, or to delete it.
+packTranslations.intro = パックの横にある翻訳と、それぞれの進み具合です。1つ選んで、別の言語に上書きコピーするか、削除できます。
+
+# The window's list: its column headings
+# en: Language
+packTranslations.column.language = 言語
+
+# en: Translated
+packTranslations.column.translated = 翻訳済み
+
+# en: Out of date
+packTranslations.column.outOfDate = 古くなったもの
+
+# en: File
+packTranslations.column.file = ファイル
+
+# In the Translated column: how much of the translation is done. {percent} is a whole number
+# en: {percent}% ({done} of {total})
+packTranslations.translatedValue = {percent}%（{total} 個中 {done} 個）
+
+# Shown instead of the list when the pack has no translations
+# en: This pack has no translations yet. Start one by picking a language in Editing in, or with File ▸ Pack translations.
+packTranslations.none = このパックにはまだ翻訳がありません。「編集する言語」で言語を選ぶか、ファイル ▸ パックの翻訳 から始めてください。
+
+# Beside the list of languages the picked translation can be copied over
+# en: Copy to:
+packTranslations.transferTo = コピー先：
+
+# The button that copies the picked translation over the language chosen beside it
+# en: Transfer…
+packTranslations.transfer = 転送…
+
+# Tooltip on that button
+# en: Copy the picked translation's texts, word for word, over the language chosen beside it - for a translation typed in while the wrong language was up.
+packTranslations.transfer.tip = 選んだ翻訳のテキストを、横で選んだ言語にそのまま上書きコピーします。間違った言語を選んだまま入力してしまった翻訳のためのものです。
+
+# The button that deletes the picked translation
+# en: Delete…
+packTranslations.delete = 削除…
+
+# Tooltip on that button
+# en: Delete the picked translation and every text in it.
+packTranslations.delete.tip = 選んだ翻訳を、中のテキストごとすべて削除します。
+
+# The window's close button
+# en: Close
+packTranslations.close = 閉じる
+
+# Title of the question asked before a transfer
+# en: Transfer a translation
+packTranslations.transfer.title = 翻訳を転送
+
+# The question asked before a transfer. {from} and {to} are languages, named with their codes
+# en: Copy every text of {from} over {to}? Where {from} has a text, {to} takes it word for word, and loses what it had there. The rest of {to} stays as it is, and {from} keeps all of its own.
+packTranslations.transfer.confirm = {from} のすべてのテキストを {to} に上書きコピーしますか？ {from} にテキストがある箇所では、{to} はそれをそのまま受け取り、そこにあった内容は失われます。{to} のそれ以外はそのままで、{from} も自分のテキストをすべて残します。
+
+# Title of the question asked before deleting a translation
+# en: Delete a translation
+packTranslations.delete.title = 翻訳を削除
+
+# The question asked before deleting a translation. {language} is the language, named with its code
+# en: Delete {language} and every text in it? Its file goes to the Recycle Bin, and players reading this language get the default text.
+packTranslations.delete.confirm = {language} を中のテキストごと削除しますか？ ファイルはごみ箱に移り、この言語で読むプレイヤーには既定のテキストが表示されます。
+
+# After a transfer: what was done
+# en: Copied {count} texts from {from} to {to}.
+packTranslations.transferred.other = {from} から {to} に {count} 個のテキストをコピーしました。
+
+# After a delete: what was done
+# en: Deleted {language}.
+packTranslations.deleted = {language} を削除しました。
+
 # The bar across the window while a translation is being edited.
 # en: You are editing a translation. Every text a player reads shows it, and what you type goes into it. Anything that is not a text is shared by every language - adding a line adds it to all of them. A line you add, or a text that was empty, gets its words in this language only: its default text stays empty until you write it, and the pack's check lists it as an error.
 editingLanguage.banner = 翻訳を編集しています。プレイヤーが読むすべてのテキストにその翻訳が表示され、入力したものはその翻訳に入ります。テキスト以外のものはすべての言語で共有されます。セリフを追加すると、すべての言語に追加されます。追加したセリフや、空だったテキストは、この言語にだけ言葉が入ります。その既定のテキストは書くまで空のままで、パックのチェックはそれをエラーとして挙げます。
@@ -16962,6 +17047,18 @@ translatePack.pickOne = 先に言語を1つ以上チェックしてください�
 # While it runs.
 # en: {language}: {done} of {total} translated...
 translatePack.progress = {language}：{total} 個中 {done} 個を翻訳済み...
+
+# While it runs, over the bar for the whole run: every language picked, counted in texts. {number} is the language it is on, {count} how many languages were picked
+# en: All languages: {done} of {total} texts (language {number} of {count})
+translatePack.progress.all = すべての言語：{total} 個中 {done} 個のテキスト（{count} 言語中 {number} 番目）
+
+# Over the Translate window's bar once a run is over, having done every language picked.
+# en: Translation finished.
+translatePack.over.finished = 翻訳が完了しました。
+
+# Over the Translate window's bar when a run was stopped, or failed, before the end.
+# en: Translation stopped before the end. Everything translated so far is kept, and Translate picks up from there.
+translatePack.over.stopped = 翻訳は最後まで終わらずに止まりました。ここまでに翻訳したものは残り、「翻訳」を押すと続きから再開します。
 
 # One line per language afterwards.
 # en: {language}: {count} translated.

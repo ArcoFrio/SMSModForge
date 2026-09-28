@@ -355,6 +355,19 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         }
     }
 
+    /// <summary>
+    /// The translation files were changed by hand - one copied over another,
+    /// one deleted: the list of languages to edit in is read again, and a
+    /// language that was deleted while it was being edited is left for the
+    /// default text, since there is nothing of it left to show.
+    /// </summary>
+    public void AfterTranslationFilesEdited(IReadOnlyCollection<string> deleted)
+    {
+        if (_language != null && deleted.Any(d => string.Equals(d, _language.Code, StringComparison.OrdinalIgnoreCase)))
+            SwitchEditingLanguage("");
+        RefreshEditingLanguageOptions();
+    }
+
     private void RaiseEditingLanguage()
     {
         OnPropertyChanged(nameof(EditingLanguage));
@@ -4205,9 +4218,10 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
     /// in that language is done. So the offer comes back only when there is
     /// real work - a new line, a changed one - and not after every run.
     /// <para/>
-    /// Yes opens the Translate window already running, with every language that
-    /// needs it ticked: the window is where the run shows its progress, can be
-    /// stopped, and says what happened. The export goes ahead when it is closed,
+    /// Yes opens the Translate window with every language that needs it
+    /// ticked, waiting for Translate to be pressed: the languages can be
+    /// changed and the names looked at first, and the window is where the run
+    /// shows its progress, can be stopped, and says what happened. The export goes ahead when it is closed,
     /// with whatever was translated; a run cut short keeps its work either way.
     /// No exports as it is; Cancel exports nothing. Nobody at the keyboard (the
     /// test harness) is No: a test must never send anybody's text anywhere.
@@ -4232,7 +4246,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
             if (answer == MessageBoxResult.Cancel) return false;
             if (answer != MessageBoxResult.Yes || Services.TestMode.Active) return true;
 
-            var window = new View.TranslatePackWindow(pack, root, startNow: true)
+            var window = new View.TranslatePackWindow(pack, root)
             {
                 Owner = System.Windows.Application.Current?.MainWindow,
             };

@@ -9131,6 +9131,11 @@
                           SelectedValue="{Binding EditingLanguage, Mode=TwoWay}"
                           SelectionChanged="EditingLanguagePicker_SelectionChanged"
                           ToolTip="{l:T editingLanguage.tip}"/>
+                <!-- The pack's translations in a list of their own: how far
+                     along each is, and Transfer and Delete. -->
+                <Button x:Name="EditTranslationsButton" Content="{l:T editingLanguage.edit}" Padding="8,0"
+                        Margin="6,0,0,0" ToolTip="{l:T editingLanguage.edit.tip}"
+                        Click="EditPackTranslations_Click"/>
             </StackPanel>
         </Grid>
     </DockPanel>

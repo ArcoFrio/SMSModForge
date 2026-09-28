@@ -13830,8 +13830,8 @@ export.title = 팩 내보내기
 exportTranslate.title = 내보내기 전에 번역할까요?
 
 # The offer; {languages} is a list, one per line, of the line below
-# en: Some of what players read in {pack} is not in every language ModForge has:\n\n{languages}\n\nTranslate it by machine now? Only what is still untranslated is sent. A line already translated, by you or by a machine, stays exactly as it is, and so does one marked as the same in that language. The text goes to Google's free translation service.\n\nYes translates, then exports. No exports it as it is. Cancel does neither.\n\nOptions ▸ Offer to translate before exporting turns this off for this pack.
-exportTranslate.ask = {pack}에서 플레이어가 읽는 것 중 일부가 ModForge의 모든 언어로 되어 있지 않습니다:\n\n{languages}\n\n지금 기계 번역할까요? 아직 번역되지 않은 것만 보냅니다. 이미 번역된 줄은 직접 쓴 것이든 기계가 쓴 것이든 그대로 남고, 그 언어에서 같다고 표시된 줄도 마찬가지입니다. 텍스트는 Google의 무료 번역 서비스로 보내집니다.\n\n'예'는 번역한 뒤 내보냅니다. '아니요'는 그대로 내보냅니다. '취소'는 둘 다 하지 않습니다.\n\n옵션 ▸ 내보내기 전에 번역 제안에서 이 팩에 대해 이 질문을 끌 수 있습니다.
+# en: Some of what players read in {pack} is not in every language ModForge has:\n\n{languages}\n\nTranslate it by machine first? Only what is still untranslated is sent. A line already translated, by you or by a machine, stays exactly as it is, and so does one marked as the same in that language. The text goes to Google's free translation service.\n\nYes opens the Translate window with these languages ticked: change them if you like, then press Translate. The export goes ahead when you close the window. No exports it as it is. Cancel does neither.\n\nOptions ▸ Offer to translate before exporting turns this off for this pack.
+exportTranslate.ask = {pack}에서 플레이어가 읽는 것 중 일부가 ModForge의 모든 언어로 되어 있지 않습니다:\n\n{languages}\n\n먼저 기계 번역할까요? 아직 번역되지 않은 것만 보냅니다. 이미 번역된 줄은 직접 쓴 것이든 기계가 쓴 것이든 그대로 남고, 그 언어에서 같다고 표시된 줄도 마찬가지입니다. 텍스트는 Google의 무료 번역 서비스로 보내집니다.\n\n'예'를 누르면 이 언어들이 체크된 번역 창이 열립니다. 원하면 바꾼 뒤 '번역'을 누르세요. 창을 닫으면 내보내기가 계속됩니다. '아니요'는 그대로 내보냅니다. '취소'는 둘 다 하지 않습니다.\n\n옵션 ▸ 내보내기 전에 번역 제안에서 이 팩에 대해 이 질문을 끌 수 있습니다.
 
 # One language in that list
 # en: {language}: {missing} of {total} still to translate
@@ -16837,6 +16837,91 @@ editingLanguage.own = 기본 ({language})
 # en: Show and edit every text a player reads in one of the pack's translations. Everything the game finds things by - keys, names of objects, targets - stays the same in every language, and anything you add or change that is not a text is added or changed for every language.
 editingLanguage.tip = 플레이어가 읽는 모든 텍스트를 팩의 번역 중 하나로 보여 주고 편집합니다. 게임이 무언가를 찾는 데 쓰는 것(키, 오브젝트 이름, 대상)은 모든 언어에서 같으며, 텍스트가 아닌 것을 추가하거나 바꾸면 모든 언어에 대해 추가되거나 바뀝니다.
 
+# A small button beside the Editing in list: opens the window listing the pack's translations
+# en: Edit…
+editingLanguage.edit = 편집…
+
+# Tooltip on that button
+# en: See the pack's translations and how far along each one is, copy one over another language, or delete one.
+editingLanguage.edit.tip = 팩의 번역과 각각의 진행 정도를 보고, 하나를 다른 언어 위에 복사하거나 삭제합니다.
+
+# Title of that window
+# en: Pack translations
+packTranslations.title = 팩 번역
+
+# At the top of that window
+# en: The translations beside your pack, and how far along each one is. Pick one to copy it over another language, or to delete it.
+packTranslations.intro = 팩 옆에 있는 번역들과 각각의 진행 정도입니다. 하나를 골라 다른 언어 위에 복사하거나 삭제할 수 있습니다.
+
+# The window's list: its column headings
+# en: Language
+packTranslations.column.language = 언어
+
+# en: Translated
+packTranslations.column.translated = 번역됨
+
+# en: Out of date
+packTranslations.column.outOfDate = 오래됨
+
+# en: File
+packTranslations.column.file = 파일
+
+# In the Translated column: how much of the translation is done. {percent} is a whole number
+# en: {percent}% ({done} of {total})
+packTranslations.translatedValue = {percent}% ({total}개 중 {done}개)
+
+# Shown instead of the list when the pack has no translations
+# en: This pack has no translations yet. Start one by picking a language in Editing in, or with File ▸ Pack translations.
+packTranslations.none = 이 팩에는 아직 번역이 없습니다. '편집 언어'에서 언어를 고르거나 파일 ▸ 팩 번역으로 시작하세요.
+
+# Beside the list of languages the picked translation can be copied over
+# en: Copy to:
+packTranslations.transferTo = 복사할 곳:
+
+# The button that copies the picked translation over the language chosen beside it
+# en: Transfer…
+packTranslations.transfer = 옮기기…
+
+# Tooltip on that button
+# en: Copy the picked translation's texts, word for word, over the language chosen beside it - for a translation typed in while the wrong language was up.
+packTranslations.transfer.tip = 고른 번역의 텍스트를 옆에서 고른 언어 위에 글자 그대로 복사합니다. 잘못된 언어가 선택된 상태에서 입력한 번역을 위한 기능입니다.
+
+# The button that deletes the picked translation
+# en: Delete…
+packTranslations.delete = 삭제…
+
+# Tooltip on that button
+# en: Delete the picked translation and every text in it.
+packTranslations.delete.tip = 고른 번역과 그 안의 모든 텍스트를 삭제합니다.
+
+# The window's close button
+# en: Close
+packTranslations.close = 닫기
+
+# Title of the question asked before a transfer
+# en: Transfer a translation
+packTranslations.transfer.title = 번역 옮기기
+
+# The question asked before a transfer. {from} and {to} are languages, named with their codes
+# en: Copy every text of {from} over {to}? Where {from} has a text, {to} takes it word for word, and loses what it had there. The rest of {to} stays as it is, and {from} keeps all of its own.
+packTranslations.transfer.confirm = {from}의 모든 텍스트를 {to} 위에 복사할까요? {from}에 텍스트가 있는 곳은 {to}가 그것을 글자 그대로 받고, 원래 있던 내용은 사라집니다. {to}의 나머지는 그대로 남고, {from}도 자신의 텍스트를 모두 유지합니다.
+
+# Title of the question asked before deleting a translation
+# en: Delete a translation
+packTranslations.delete.title = 번역 삭제
+
+# The question asked before deleting a translation. {language} is the language, named with its code
+# en: Delete {language} and every text in it? Its file goes to the Recycle Bin, and players reading this language get the default text.
+packTranslations.delete.confirm = {language}와 그 안의 모든 텍스트를 삭제할까요? 파일은 휴지통으로 가고, 이 언어로 읽는 플레이어는 기본 텍스트를 보게 됩니다.
+
+# After a transfer: what was done
+# en: Copied {count} texts from {from} to {to}.
+packTranslations.transferred.other = {from}에서 {to}(으)로 텍스트 {count}개를 복사했습니다.
+
+# After a delete: what was done
+# en: Deleted {language}.
+packTranslations.deleted = {language}을(를) 삭제했습니다.
+
 # The bar across the window while a translation is being edited.
 # en: You are editing a translation. Every text a player reads shows it, and what you type goes into it. Anything that is not a text is shared by every language - adding a line adds it to all of them. A line you add, or a text that was empty, gets its words in this language only: its default text stays empty until you write it, and the pack's check lists it as an error.
 editingLanguage.banner = 번역을 편집하고 있습니다. 플레이어가 읽는 모든 텍스트에 그 번역이 보이고, 입력한 것은 그 번역에 들어갑니다. 텍스트가 아닌 것은 모든 언어가 공유합니다. 대사를 추가하면 모든 언어에 추가됩니다. 추가한 대사나 비어 있던 텍스트는 이 언어로만 내용이 들어갑니다. 그 기본 텍스트는 직접 쓰기 전까지 비어 있고, 팩 검사는 그것을 오류로 나열합니다.
@@ -16962,6 +17047,18 @@ translatePack.pickOne = 먼저 언어를 하나 이상 체크하세요.
 # While it runs.
 # en: {language}: {done} of {total} translated...
 translatePack.progress = {language}: {total}개 중 {done}개 번역됨...
+
+# While it runs, over the bar for the whole run: every language picked, counted in texts. {number} is the language it is on, {count} how many languages were picked
+# en: All languages: {done} of {total} texts (language {number} of {count})
+translatePack.progress.all = 모든 언어: {total}개 중 {done}개 텍스트 ({count}개 언어 중 {number}번째)
+
+# Over the Translate window's bar once a run is over, having done every language picked.
+# en: Translation finished.
+translatePack.over.finished = 번역을 마쳤습니다.
+
+# Over the Translate window's bar when a run was stopped, or failed, before the end.
+# en: Translation stopped before the end. Everything translated so far is kept, and Translate picks up from there.
+translatePack.over.stopped = 번역이 끝나기 전에 멈췄습니다. 지금까지 번역한 것은 그대로 남고, '번역'을 누르면 거기서부터 이어서 합니다.
 
 # One line per language afterwards.
 # en: {language}: {count} translated.

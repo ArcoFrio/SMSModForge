@@ -13830,8 +13830,8 @@ export.title = 导出模组包
 exportTranslate.title = 导出前翻译吗？
 
 # The offer; {languages} is a list, one per line, of the line below
-# en: Some of what players read in {pack} is not in every language ModForge has:\n\n{languages}\n\nTranslate it by machine now? Only what is still untranslated is sent. A line already translated, by you or by a machine, stays exactly as it is, and so does one marked as the same in that language. The text goes to Google's free translation service.\n\nYes translates, then exports. No exports it as it is. Cancel does neither.\n\nOptions ▸ Offer to translate before exporting turns this off for this pack.
-exportTranslate.ask = {pack} 中玩家读到的内容，有一部分还没有覆盖 ModForge 的所有语言：\n\n{languages}\n\n现在用机器翻译吗？只发送仍未翻译的内容。已经翻译好的行——无论是你写的还是机器写的——都原样保留，在该语言中标记为相同的行也一样。文字会发送到 Google 的免费翻译服务。\n\n「是」会先翻译再导出。「否」按原样导出。「取消」两者都不做。\n\n「选项 ▸ 导出前提议翻译」可以为本模组包关闭这个提问。
+# en: Some of what players read in {pack} is not in every language ModForge has:\n\n{languages}\n\nTranslate it by machine first? Only what is still untranslated is sent. A line already translated, by you or by a machine, stays exactly as it is, and so does one marked as the same in that language. The text goes to Google's free translation service.\n\nYes opens the Translate window with these languages ticked: change them if you like, then press Translate. The export goes ahead when you close the window. No exports it as it is. Cancel does neither.\n\nOptions ▸ Offer to translate before exporting turns this off for this pack.
+exportTranslate.ask = {pack} 中玩家读到的内容，有一部分还没有覆盖 ModForge 的所有语言：\n\n{languages}\n\n先用机器翻译吗？只发送仍未翻译的内容。已经翻译好的行——无论是你写的还是机器写的——都原样保留，在该语言中标记为相同的行也一样。文字会发送到 Google 的免费翻译服务。\n\n「是」会打开翻译窗口，并勾选这些语言：可以按需修改，然后点击「翻译」。关闭窗口后，导出会继续。「否」按原样导出。「取消」两者都不做。\n\n「选项 ▸ 导出前提议翻译」可以为本模组包关闭这个提问。
 
 # One language in that list
 # en: {language}: {missing} of {total} still to translate
@@ -16837,6 +16837,91 @@ editingLanguage.own = 默认（{language}）
 # en: Show and edit every text a player reads in one of the pack's translations. Everything the game finds things by - keys, names of objects, targets - stays the same in every language, and anything you add or change that is not a text is added or changed for every language.
 editingLanguage.tip = 用模组包的某个译本来显示和编辑玩家会读到的所有文本。游戏用来查找东西的一切（键、对象名、目标）在所有语言里都保持不变；你添加或修改的任何非文本内容，会在所有语言里一起添加或修改。
 
+# A small button beside the Editing in list: opens the window listing the pack's translations
+# en: Edit…
+editingLanguage.edit = 编辑…
+
+# Tooltip on that button
+# en: See the pack's translations and how far along each one is, copy one over another language, or delete one.
+editingLanguage.edit.tip = 查看模组包的各个翻译及其完成程度，把其中一个复制到另一种语言上，或删除一个。
+
+# Title of that window
+# en: Pack translations
+packTranslations.title = 模组包翻译
+
+# At the top of that window
+# en: The translations beside your pack, and how far along each one is. Pick one to copy it over another language, or to delete it.
+packTranslations.intro = 你的模组包旁边的各个翻译，以及每个的完成程度。选中一个，可以把它复制到另一种语言上，或者删除它。
+
+# The window's list: its column headings
+# en: Language
+packTranslations.column.language = 语言
+
+# en: Translated
+packTranslations.column.translated = 已翻译
+
+# en: Out of date
+packTranslations.column.outOfDate = 已过时
+
+# en: File
+packTranslations.column.file = 文件
+
+# In the Translated column: how much of the translation is done. {percent} is a whole number
+# en: {percent}% ({done} of {total})
+packTranslations.translatedValue = {percent}%（{done}/{total}）
+
+# Shown instead of the list when the pack has no translations
+# en: This pack has no translations yet. Start one by picking a language in Editing in, or with File ▸ Pack translations.
+packTranslations.none = 这个模组包还没有翻译。在“编辑语言”中选一种语言，或通过 文件 ▸ 模组包翻译 开始一个。
+
+# Beside the list of languages the picked translation can be copied over
+# en: Copy to:
+packTranslations.transferTo = 复制到：
+
+# The button that copies the picked translation over the language chosen beside it
+# en: Transfer…
+packTranslations.transfer = 转移…
+
+# Tooltip on that button
+# en: Copy the picked translation's texts, word for word, over the language chosen beside it - for a translation typed in while the wrong language was up.
+packTranslations.transfer.tip = 把选中翻译的文字逐字复制到旁边选的语言上——用于在选错语言时输入的翻译。
+
+# The button that deletes the picked translation
+# en: Delete…
+packTranslations.delete = 删除…
+
+# Tooltip on that button
+# en: Delete the picked translation and every text in it.
+packTranslations.delete.tip = 删除选中的翻译及其中的所有文字。
+
+# The window's close button
+# en: Close
+packTranslations.close = 关闭
+
+# Title of the question asked before a transfer
+# en: Transfer a translation
+packTranslations.transfer.title = 转移翻译
+
+# The question asked before a transfer. {from} and {to} are languages, named with their codes
+# en: Copy every text of {from} over {to}? Where {from} has a text, {to} takes it word for word, and loses what it had there. The rest of {to} stays as it is, and {from} keeps all of its own.
+packTranslations.transfer.confirm = 要把{from}的所有文字复制到{to}上吗？{from}有文字的地方，{to}会逐字采用，并失去原来的内容。{to}的其余部分保持不变，{from}也保留自己的全部文字。
+
+# Title of the question asked before deleting a translation
+# en: Delete a translation
+packTranslations.delete.title = 删除翻译
+
+# The question asked before deleting a translation. {language} is the language, named with its code
+# en: Delete {language} and every text in it? Its file goes to the Recycle Bin, and players reading this language get the default text.
+packTranslations.delete.confirm = 要删除{language}及其中的所有文字吗？它的文件会移到回收站，使用这种语言的玩家会看到默认文字。
+
+# After a transfer: what was done
+# en: Copied {count} texts from {from} to {to}.
+packTranslations.transferred.other = 已把 {count} 条文字从{from}复制到{to}。
+
+# After a delete: what was done
+# en: Deleted {language}.
+packTranslations.deleted = 已删除{language}。
+
 # The bar across the window while a translation is being edited.
 # en: You are editing a translation. Every text a player reads shows it, and what you type goes into it. Anything that is not a text is shared by every language - adding a line adds it to all of them. A line you add, or a text that was empty, gets its words in this language only: its default text stays empty until you write it, and the pack's check lists it as an error.
 editingLanguage.banner = 你正在编辑一个译本。玩家会读到的所有文本都显示这个译本，你输入的内容也写进它。非文本的内容由所有语言共用——添加一行，就会添加到所有语言里。你新添加的行，或原本为空的文本，只在这个语言里有文字：它的默认文字保持为空，直到你写上为止，模组包检查会把它列为错误。
@@ -16962,6 +17047,18 @@ translatePack.pickOne = 请先勾选至少一种语言。
 # While it runs.
 # en: {language}: {done} of {total} translated...
 translatePack.progress = {language}：已翻译 {done}/{total}……
+
+# While it runs, over the bar for the whole run: every language picked, counted in texts. {number} is the language it is on, {count} how many languages were picked
+# en: All languages: {done} of {total} texts (language {number} of {count})
+translatePack.progress.all = 所有语言：{done}/{total} 条文字（第 {number} 种，共 {count} 种）
+
+# Over the Translate window's bar once a run is over, having done every language picked.
+# en: Translation finished.
+translatePack.over.finished = 翻译完成。
+
+# Over the Translate window's bar when a run was stopped, or failed, before the end.
+# en: Translation stopped before the end. Everything translated so far is kept, and Translate picks up from there.
+translatePack.over.stopped = 翻译在完成前停止了。已经翻译的内容都会保留，点击「翻译」会从那里继续。
 
 # One line per language afterwards.
 # en: {language}: {count} translated.

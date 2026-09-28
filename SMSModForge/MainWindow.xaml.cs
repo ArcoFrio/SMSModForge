@@ -548,6 +548,28 @@ public partial class MainWindow : Window
         });
     }
 
+    /// <summary>
+    /// The pack's translations in a window of their own: how far along each
+    /// is, and Transfer and Delete (<see cref="View.PackTranslationsWindow"/>).
+    /// </summary>
+    private void EditPackTranslations_Click(object sender, RoutedEventArgs e)
+    {
+        if (Services.TestMode.Active) return;
+        string? root = PackFolderForTranslations();
+        if (root == null) return;
+
+        var vm = (MainViewModel)DataContext;
+        var deleted = new List<string>();
+        vm.WithTranslationFilesCurrent(pack =>
+        {
+            var window = new View.PackTranslationsWindow(pack, root) { Owner = this };
+            window.ShowDialog();
+            deleted.AddRange(window.Deleted);
+            return window.Changed;
+        });
+        vm.AfterTranslationFilesEdited(deleted);
+    }
+
     /// <summary>Check every translation the pack has against the pack as it
     /// stands, with the offer to put back keys a Replace All changed.</summary>
     private void PackTranslationCheck_Click(object sender, RoutedEventArgs e)

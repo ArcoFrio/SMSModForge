@@ -10380,7 +10380,7 @@ export.title = Export pack
 # Title of the message box that offers to translate before an export or a publish
 exportTranslate.title = Translate before exporting?
 # The offer; {languages} is a list, one per line, of the line below
-exportTranslate.ask = Some of what players read in {pack} is not in every language ModForge has:\n\n{languages}\n\nTranslate it by machine now? Only what is still untranslated is sent. A line already translated, by you or by a machine, stays exactly as it is, and so does one marked as the same in that language. The text goes to Google's free translation service.\n\nYes translates, then exports. No exports it as it is. Cancel does neither.\n\nOptions ▸ Offer to translate before exporting turns this off for this pack.
+exportTranslate.ask = Some of what players read in {pack} is not in every language ModForge has:\n\n{languages}\n\nTranslate it by machine first? Only what is still untranslated is sent. A line already translated, by you or by a machine, stays exactly as it is, and so does one marked as the same in that language. The text goes to Google's free translation service.\n\nYes opens the Translate window with these languages ticked: change them if you like, then press Translate. The export goes ahead when you close the window. No exports it as it is. Cancel does neither.\n\nOptions ▸ Offer to translate before exporting turns this off for this pack.
 # One language in that list
 exportTranslate.language = {language}: {missing} of {total} still to translate
 
@@ -12678,6 +12678,67 @@ editingLanguage.own = Default ({language})
 
 editingLanguage.tip = Show and edit every text a player reads in one of the pack's translations. Everything the game finds things by - keys, names of objects, targets - stays the same in every language, and anything you add or change that is not a text is added or changed for every language.
 
+# A small button beside the Editing in list: opens the window listing the pack's translations
+editingLanguage.edit = Edit…
+
+# Tooltip on that button
+editingLanguage.edit.tip = See the pack's translations and how far along each one is, copy one over another language, or delete one.
+
+# Title of that window
+packTranslations.title = Pack translations
+
+# At the top of that window
+packTranslations.intro = The translations beside your pack, and how far along each one is. Pick one to copy it over another language, or to delete it.
+
+# The window's list: its column headings
+packTranslations.column.language = Language
+packTranslations.column.translated = Translated
+packTranslations.column.outOfDate = Out of date
+packTranslations.column.file = File
+
+# In the Translated column: how much of the translation is done. {percent} is a whole number
+packTranslations.translatedValue = {percent}% ({done} of {total})
+
+# Shown instead of the list when the pack has no translations
+packTranslations.none = This pack has no translations yet. Start one by picking a language in Editing in, or with File ▸ Pack translations.
+
+# Beside the list of languages the picked translation can be copied over
+packTranslations.transferTo = Copy to:
+
+# The button that copies the picked translation over the language chosen beside it
+packTranslations.transfer = Transfer…
+
+# Tooltip on that button
+packTranslations.transfer.tip = Copy the picked translation's texts, word for word, over the language chosen beside it - for a translation typed in while the wrong language was up.
+
+# The button that deletes the picked translation
+packTranslations.delete = Delete…
+
+# Tooltip on that button
+packTranslations.delete.tip = Delete the picked translation and every text in it.
+
+# The window's close button
+packTranslations.close = Close
+
+# Title of the question asked before a transfer
+packTranslations.transfer.title = Transfer a translation
+
+# The question asked before a transfer. {from} and {to} are languages, named with their codes
+packTranslations.transfer.confirm = Copy every text of {from} over {to}? Where {from} has a text, {to} takes it word for word, and loses what it had there. The rest of {to} stays as it is, and {from} keeps all of its own.
+
+# Title of the question asked before deleting a translation
+packTranslations.delete.title = Delete a translation
+
+# The question asked before deleting a translation. {language} is the language, named with its code
+packTranslations.delete.confirm = Delete {language} and every text in it? Its file goes to the Recycle Bin, and players reading this language get the default text.
+
+# After a transfer: what was done
+packTranslations.transferred.one = Copied {count} text from {from} to {to}.
+packTranslations.transferred.other = Copied {count} texts from {from} to {to}.
+
+# After a delete: what was done
+packTranslations.deleted = Deleted {language}.
+
 # The bar across the window while a translation is being edited.
 editingLanguage.banner = You are editing a translation. Every text a player reads shows it, and what you type goes into it. Anything that is not a text is shared by every language - adding a line adds it to all of them. A line you add, or a text that was empty, gets its words in this language only: its default text stays empty until you write it, and the pack's check lists it as an error.
 
@@ -12768,6 +12829,15 @@ translatePack.pickOne = Tick at least one language first.
 
 # While it runs.
 translatePack.progress = {language}: {done} of {total} translated...
+
+# While it runs, over the bar for the whole run: every language picked, counted in texts. {number} is the language it is on, {count} how many languages were picked
+translatePack.progress.all = All languages: {done} of {total} texts (language {number} of {count})
+
+# Over the Translate window's bar once a run is over, having done every language picked.
+translatePack.over.finished = Translation finished.
+
+# Over the Translate window's bar when a run was stopped, or failed, before the end.
+translatePack.over.stopped = Translation stopped before the end. Everything translated so far is kept, and Translate picks up from there.
 
 # One line per language afterwards.
 translatePack.did = {language}: {count} translated.

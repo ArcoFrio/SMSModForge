@@ -98,6 +98,16 @@ namespace SMSModForge.Shared
             return sb.ToString();
         }
 
+        /// <summary>
+        /// The same words as far as a file can tell: every line is trimmed as
+        /// it is read, so what a note says a line was translated from never
+        /// keeps a space at either end of it. Told apart exactly, a line of
+        /// the pack ending in one got a "changed from" note on every save
+        /// after the first, and lost its "same in this language" (2026-09-28).
+        /// </summary>
+        private static bool Alike(string a, string b)
+            => string.Equals(PackTexts.Normal(a), PackTexts.Normal(b), StringComparison.Ordinal);
+
         private static void WriteText(StringBuilder sb, string key, string englishNow, TextFile existing)
         {
             var mine = existing == null ? null : existing.Find(key);
@@ -105,7 +115,7 @@ namespace SMSModForge.Shared
             string changedFrom = null;
             if (mine != null)
             {
-                bool untouched = mine.English != null && mine.Text == mine.English && !mine.Blank;
+                bool untouched = mine.English != null && Alike(mine.Text, mine.English) && !mine.Blank;
                 if (untouched || (mine.Text.Length == 0 && !mine.Blank))
                 {
                     // Never translated: it follows the English.
@@ -114,8 +124,10 @@ namespace SMSModForge.Shared
                 else
                 {
                     text = mine.Text;
-                    changedFrom = mine.ChangedFrom
-                                  ?? (mine.English != null && mine.English != englishNow ? mine.English : null);
+                    // A "changed from" left by the exact comparison, for a
+                    // change that was only a space, goes on the next save.
+                    changedFrom = (mine.ChangedFrom != null && !Alike(mine.ChangedFrom, englishNow) ? mine.ChangedFrom : null)
+                                  ?? (mine.English != null && !Alike(mine.English, englishNow) ? mine.English : null);
                 }
             }
 
@@ -125,8 +137,8 @@ namespace SMSModForge.Shared
             // Kept only while it is still true: the line says what the English
             // says NOW. Once the English moves on, "the same" was about words
             // nobody says any more, and the line is waiting again.
-            else if (mine != null && mine.Same && text == englishNow
-                     && (mine.English == null || mine.English == englishNow))
+            else if (mine != null && mine.Same && Alike(text, englishNow)
+                     && (mine.English == null || Alike(mine.English, englishNow)))
                 sb.Append("# ").Append(TextFile.SameNote).Append("\r\n");
             bool blank = mine != null && mine.Blank && text.Length == 0;
             sb.Append(key).Append(" = ").Append(blank ? TextFile.EmptyOnPurpose : TextFile.Escape(text)).Append("\r\n");

@@ -144,11 +144,13 @@ public partial class TranslatePackWindow : Window
 
     private double? _heightBefore;
 
-    /// <param name="startNow">Start translating as soon as the window is up,
-    /// into every language that needs it. For the offer made before an export,
-    /// where the author has already said yes to exactly that; the window is
-    /// still where the run shows its progress and can be stopped.</param>
-    public TranslatePackWindow(ModPack pack, string packRoot, bool startNow = false)
+    /// <summary>
+    /// Opened, it waits for Translate to be pressed, whichever way it was
+    /// opened. The offer before an export used to open it already running,
+    /// with no moment to change the languages or look at the names before
+    /// thousands of texts went to Google (the author, 2026-09-28).
+    /// </summary>
+    public TranslatePackWindow(ModPack pack, string packRoot)
     {
         InitializeComponent();
         _pack = pack;
@@ -166,7 +168,6 @@ public partial class TranslatePackWindow : Window
         RefreshNames();
         Loaded += (_, _) => FitToContent(widen: true);
         SizeChanged += (_, e) => { if (e.WidthChanged) FitToContent(widen: false); };
-        if (startNow) Loaded += (_, _) => Translate_Click(this, new RoutedEventArgs());
     }
 
     /// <summary>
@@ -363,6 +364,7 @@ public partial class TranslatePackWindow : Window
 
         _running = true;
         _stopping = new CancellationTokenSource();
+        ProgressPanel.Visibility = Visibility.Collapsed;
         TranslateButton.IsEnabled = false;
         AllButton.IsEnabled = NoneButton.IsEnabled = false;
         TranslateNamesBox.IsEnabled = false;
@@ -413,9 +415,7 @@ public partial class TranslatePackWindow : Window
                 // and a WPF property set from one throws rather than being
                 // slightly wrong, which is at least honest but not useful
                 // halfway through somebody's five thousand lines.
-                (code, so, far) => Dispatcher.Invoke(() =>
-                    ProgressText.Text = Loc.F("translatePack.progress", "language", code,
-                                              "done", so.ToString(), "total", far.ToString())),
+                null,
                 _stopping.Token,
                 probeFirst: true,
                 // The Google Translate page, if the free service fails its
@@ -423,13 +423,15 @@ public partial class TranslatePackWindow : Window
                 fallback: OpenWebsite,
                 said: note => Dispatcher.Invoke(() => ProgressText.Text = note),
                 keepNames: kept,
-                person: AskAPerson);
+                person: AskAPerson,
+                stepped: p => Dispatcher.Invoke(() => ShowProgress(p)));
         }
         catch (Exception ex)
         {
             ProgressText.Text = ex.Message;
             _browser?.Finished();
             _browser = null;
+            ShowOver(finished: false);
             Finish();
             return;
         }
@@ -437,8 +439,38 @@ public partial class TranslatePackWindow : Window
         _browser?.Finished();
         _browser = null;
         ProgressText.Text = (done.Any(d => d.ByFallback) ? Loc.T("packText.web.used") + "\n" : "") + Report(done);
+        ShowOver(Completed(wanted, done));
         Finish();
         Refresh();
+    }
+
+    /// <summary>Whether a run did all it was asked: every language picked
+    /// got to its end. One stopped between languages has fewer of them.</summary>
+    internal static bool Completed(IReadOnlyCollection<string> wanted, IReadOnlyList<PackTranslationJob.Done> done)
+        => done.Count >= wanted.Count && done.All(d => d.Finished);
+
+    /// <summary>
+    /// The run is over, and the window says so where the bars are:
+    /// "finished" or "stopped" over the whole run's bar, and the language bar
+    /// - which only ever meant "the one it is on now" - put away. Left as they
+    /// were, full bars under "...translated..." read as a run still going (the
+    /// author, 2026-09-28). What each language got is listed under them, as
+    /// before.
+    /// <para/>
+    /// And the taskbar button flashes until the window is brought forward,
+    /// when it is not in front already: a run of eight languages is long, and
+    /// nobody watches all of it.
+    /// </summary>
+    internal void ShowOver(bool finished)
+    {
+        if (ProgressPanel.Visibility == Visibility.Visible)
+        {
+            LanguageProgressText.Visibility = LanguageProgressBar.Visibility = Visibility.Collapsed;
+            AllProgressText.Text = Loc.T(finished ? "translatePack.over.finished" : "translatePack.over.stopped");
+            AllProgressText.FontWeight = FontWeights.SemiBold;
+            if (finished) AllProgressBar.Value = AllProgressBar.Maximum;
+        }
+        Services.WindowAttention.Flash(this);
     }
 
     /// <summary>What happened, per language, in one place. A run that stopped
@@ -459,6 +491,30 @@ public partial class TranslatePackWindow : Window
             lines.Add(line);
         }
         return string.Join("\n", lines);
+    }
+
+    /// <summary>
+    /// The two bars: the whole run, counted in texts across every language
+    /// picked, and the language it is on. A run of eight languages is long,
+    /// and one line of text saying which language and how far into it said
+    /// nothing about how much of the whole was left (2026-09-28).
+    /// </summary>
+    internal void ShowProgress(PackTranslationJob.Progress p)
+    {
+        // A run going again, after one that finished: its language bar back.
+        ProgressPanel.Visibility = Visibility.Visible;
+        LanguageProgressText.Visibility = LanguageProgressBar.Visibility = Visibility.Visible;
+        AllProgressText.FontWeight = FontWeights.Normal;
+        AllProgressText.Text = Loc.F("translatePack.progress.all", "done", p.AllDone.ToString("N0"),
+                                     "total", p.AllTotal.ToString("N0"),
+                                     "number", p.Number.ToString(), "count", p.Languages.ToString());
+        AllProgressBar.Maximum = Math.Max(1, p.AllTotal);
+        AllProgressBar.Value = Math.Min(p.AllDone, AllProgressBar.Maximum);
+        LanguageProgressText.Text = Loc.F("translatePack.progress", "language",
+                                          TranslationFiles.NativeName(p.Code) ?? p.Code,
+                                          "done", p.Done.ToString("N0"), "total", p.Total.ToString("N0"));
+        LanguageProgressBar.Maximum = Math.Max(1, p.Total);
+        LanguageProgressBar.Value = p.Total == 0 ? 1 : Math.Min(p.Done, LanguageProgressBar.Maximum);
     }
 
     private void Finish()

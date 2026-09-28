@@ -163,6 +163,119 @@ public static class PackTranslations
         return list;
     }
 
+    // ── The pack's translations, as a list to work on ───────────────
+
+    /// <summary>One of the pack's translations, as the Edit window lists it.</summary>
+    /// <param name="Translated">Texts it has done, by the rule the Translate
+    /// window and the offer before an export use
+    /// (<see cref="Services.Translation.PackTranslationJob.Missing"/>): not
+    /// still the default text word for word, not translated from default text
+    /// that has changed since - and a line with nothing in it to translate,
+    /// "&lt;size=60%&gt;..." or "{PC}...", is done as it is.</param>
+    /// <param name="Total">Texts the pack has, with something in them.</param>
+    /// <param name="OutOfDate">Texts translated from default text that has
+    /// changed since: they count as still to do.</param>
+    public sealed record Summary(string Code, string Path, int Translated, int Total, int OutOfDate)
+    {
+        /// <summary>How much of it is translated, rounded down: 100 only when
+        /// every text is.</summary>
+        public int Percent => Total <= 0 ? 0 : (int)Math.Floor(Translated * 100.0 / Total);
+    }
+
+    /// <summary>
+    /// Every translation beside the pack, with how far along it is.
+    /// <para/>
+    /// Counted as the Translate window counts what is still to do, so the two
+    /// agree: a translation at 100% here is one it has nothing left to send
+    /// for. They were counted by the check at first, which took the letters of
+    /// "&lt;size=60%&gt;..." for words and a line whose default text had
+    /// changed for done - and no finished translation ever reached 100%
+    /// (the author, 2026-09-28).
+    /// </summary>
+    public static List<Summary> Summaries(ModPack pack, string packRoot)
+    {
+        var list = new List<Summary>();
+        foreach (var c in CheckAll(pack, packRoot))
+        {
+            var file = Loc.Read(c.Path);
+            var source = Source(pack, file);
+            int total = source.Entries.Count(e => !string.IsNullOrWhiteSpace(e.Text));
+            int left = Services.Translation.PackTranslationJob.Missing(source, file, c.Code).Count;
+            list.Add(new Summary(c.Code, c.Path, total - left, total, c.Result.Of(TextCheck.Kind.EnglishChanged)));
+        }
+        return list;
+    }
+
+    /// <summary>
+    /// Copy what <paramref name="from"/> has translated over <paramref name="to"/>,
+    /// as it is: where <paramref name="from"/> has a text, <paramref name="to"/>
+    /// takes it word for word - with the note of what it was translated from,
+    /// so it goes out of date when that changes, as it would have there. What
+    /// <paramref name="to"/> has and <paramref name="from"/> does not is left
+    /// alone, and <paramref name="from"/> keeps its own.
+    /// <para/>
+    /// For a translation typed into the wrong language - Spanish written while
+    /// French was up - which would otherwise have to be typed again (the
+    /// author, 2026-09-28). Returns how many texts were copied.
+    /// </summary>
+    public static int Transfer(ModPack pack, string packRoot, string from, string to)
+    {
+        var source = Loc.Read(PathOf(packRoot, from));
+        if (source == null || string.Equals(from, to, StringComparison.OrdinalIgnoreCase)) return 0;
+        var target = Loc.Read(PathOf(packRoot, to)) ?? new TextFile();
+        int copied = CopyTexts(source, target, Source(pack, source));
+        if (copied > 0) Write(pack, packRoot, to, Source(pack, target), target);
+        return copied;
+    }
+
+    /// <summary>
+    /// The copying of <see cref="Transfer"/>, on the files themselves. Only
+    /// what is translated: a file the editor writes has every text in it, the
+    /// ones nobody has translated yet filled with the default text - and copied
+    /// as they are, those would put the default text over what the other
+    /// language had translated.
+    /// </summary>
+    /// <param name="defaults">The pack's default texts, by key.</param>
+    public static int CopyTexts(TextFile from, TextFile onto, TextFile defaults)
+    {
+        int copied = 0;
+        foreach (var e in from.Entries)
+        {
+            if (e.Text.Length == 0 && !e.Blank) continue;   // nothing translated
+            // Still the default text: now, or when it was filled in.
+            if (!e.Same && !e.Blank
+                && (PackTexts.Normal(e.Text) == PackTexts.Normal(defaults.Get(e.Key)) || (e.English != null && e.Text == e.English)))
+                continue;
+            onto.Remove(e.Key);
+            onto.Add(new TextFile.Entry
+            {
+                Key = e.Key, Text = e.Text, Blank = e.Blank, English = e.English,
+                ChangedFrom = e.ChangedFrom, Same = e.Same, Notes = new List<string>(e.Notes),
+                Heading = e.Heading,
+            });
+            copied++;
+        }
+        return copied;
+    }
+
+    /// <summary>Take a translation away, every text in it: its file goes to
+    /// the Recycle Bin, where Windows can put it back - a translation can be
+    /// hours of somebody's work, and one wrong pick in a list is all it takes.
+    /// Under the test harness it is simply deleted: a test's temporary files
+    /// are not the author's to find in their bin. False when there was none.</summary>
+    public static bool Delete(string packRoot, string code)
+    {
+        string path = PathOf(packRoot, code);
+        if (!File.Exists(path)) return false;
+        if (Services.TestMode.Active)
+            File.Delete(path);
+        else
+            Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(
+                path, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs,
+                Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+        return !File.Exists(path);
+    }
+
     // ── Where each text is, in words ────────────────────────────────
 
     /// <summary>What the pack calls its things, for the notes: a dialogue's

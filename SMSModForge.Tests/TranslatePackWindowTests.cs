@@ -283,4 +283,119 @@ public sealed class TranslatePackWindowTests : IDisposable
         Assert.Contains("block", warning);
         Assert.DoesNotContain("translatePack.warning", warning);   // it is a real text, not a missing key
     }
+
+    [Fact]
+    public void ItWaitsForTranslateToBeClicked_AndEnterDoesNotStartIt()
+    {
+        // Every language unticked before it opens: a run started by anything
+        // gets no further than "tick a language" - which is what shows one was
+        // started, and a test must never send text anywhere. It used to start
+        // on its own when opened from the offer before an export, and Enter in
+        // a name's spelling started it too (the author, 2026-09-28).
+        var pack = Pack();
+        WindowHarness.Run(_ =>
+        {
+            var window = new TranslatePackWindow(pack, _root)
+            {
+                WindowStartupLocation = System.Windows.WindowStartupLocation.Manual,
+                Left = -32000, Top = -32000, ShowInTaskbar = false,
+            };
+            foreach (var c in Choices(window)) c.Wanted = false;
+            var said = (TextBlock)window.FindName("ProgressText")!;
+            string started = Loc.T("translatePack.pickOne");
+            try
+            {
+                window.Show();
+                window.Activate();
+                WindowHarness.Pump();
+                Assert.NotEqual(started, said.Text);
+
+                // Enter, on something in the window that does nothing with it.
+                var box = (CheckBox)window.FindName("TranslateNamesBox")!;
+                Assert.True(box.Focus());
+                System.Windows.Input.InputManager.Current.ProcessInput(
+                    new System.Windows.Input.KeyEventArgs(System.Windows.Input.Keyboard.PrimaryDevice,
+                        System.Windows.PresentationSource.FromVisual(window)!, 0, System.Windows.Input.Key.Enter)
+                    { RoutedEvent = System.Windows.Input.Keyboard.KeyDownEvent });
+                WindowHarness.Pump();
+                Assert.NotEqual(started, said.Text);
+
+                // The control: a click is what starts one.
+                ((Button)window.FindName("TranslateButton")!).RaiseEvent(
+                    new System.Windows.RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent));
+                WindowHarness.Pump();
+                Assert.Equal(started, said.Text);
+            }
+            finally { window.Close(); }
+        });
+    }
+
+    [Fact]
+    public void WhenARunIsOver_TheWindowSaysSo_AndNothingLooksStillGoing()
+    {
+        // After a run the bars stayed full under "...translated...", which
+        // reads as a run still going (the author, 2026-09-28).
+        var pack = Pack();
+        WindowHarness.Run(_ =>
+        {
+            var window = new TranslatePackWindow(pack, _root)
+            {
+                WindowStartupLocation = System.Windows.WindowStartupLocation.Manual,
+                Left = -32000, Top = -32000, ShowInTaskbar = false,
+            };
+            var all = (TextBlock)window.FindName("AllProgressText")!;
+            var allBar = (ProgressBar)window.FindName("AllProgressBar")!;
+            var language = (TextBlock)window.FindName("LanguageProgressText")!;
+            var languageBar = (ProgressBar)window.FindName("LanguageProgressBar")!;
+            try
+            {
+                window.Show();
+                WindowHarness.Pump();
+
+                // Going: both bars, and the dots.
+                window.ShowProgress(new PackTranslationJob.Progress("de", 2, 2, 10, 10, 30, 30));
+                WindowHarness.Pump();
+                Assert.True(language.IsVisible && languageBar.IsVisible);
+                Assert.EndsWith("...", language.Text);
+
+                // Over: the language bar gone, and the other says finished.
+                window.ShowOver(finished: true);
+                WindowHarness.Pump();
+                _out.WriteLine("over: " + all.Text);
+                Assert.False(language.IsVisible);
+                Assert.False(languageBar.IsVisible);
+                Assert.True(all.IsVisible && allBar.IsVisible);
+                Assert.Equal(Loc.T("translatePack.over.finished"), all.Text);
+                Assert.Equal(allBar.Maximum, allBar.Value);
+                Assert.DoesNotContain("...", all.Text);
+
+                // Another run: its language bar back.
+                window.ShowProgress(new PackTranslationJob.Progress("fr", 1, 1, 3, 40, 3, 40));
+                WindowHarness.Pump();
+                Assert.True(language.IsVisible && languageBar.IsVisible);
+                Assert.NotEqual(Loc.T("translatePack.over.finished"), all.Text);
+
+                // Stopped part of the way: said so, and the bar left where it got to.
+                window.ShowOver(finished: false);
+                WindowHarness.Pump();
+                Assert.Equal(Loc.T("translatePack.over.stopped"), all.Text);
+                Assert.Equal(3, allBar.Value);
+                Assert.False(language.IsVisible);
+            }
+            finally { window.Close(); }
+        });
+    }
+
+    [Fact]
+    public void ARunIsFinishedOnlyWhenEveryLanguagePickedGotToItsEnd()
+    {
+        var picked = new[] { "de", "fr" };
+        var de = new PackTranslationJob.Done("de", 5, 0, null);
+        var fr = new PackTranslationJob.Done("fr", 5, 0, null);
+        Assert.True(TranslatePackWindow.Completed(picked, new[] { de, fr }));
+        // Stopped in French.
+        Assert.False(TranslatePackWindow.Completed(picked, new[] { de, new PackTranslationJob.Done("fr", 2, 0, "cancelled") }));
+        // Stopped between languages: French never started.
+        Assert.False(TranslatePackWindow.Completed(picked, new[] { de }));
+    }
 }

@@ -8,6 +8,9 @@
     -->
     <TargetFramework>net8.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
+    <!-- For the test run's progress window only: see RunProgressWindow for
+         why that one is not WPF. -->
+    <UseWindowsForms>true</UseWindowsForms>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <!-- The editor's warnings are the editor's business. -->

@@ -1,5 +1,64 @@
 # Changelog
 
+## 1.6.1
+
+A smaller release, about translating packs. A pack's translations get a
+window of their own, where one can be copied over another language or deleted;
+the Translate window shows how far along a run is and says when it is over; and
+a translation can now actually be finished - a line of the pack that began or
+ended with a space kept every language short of 100%. Nothing changes in the
+game: the plugin is the same apart from its version number.
+
+### New
+
+- **The pack's translations, in a window of their own.** An **Edit…** button
+  beside Editing in lists every translation the pack has, how much of each is
+  translated (as a percentage, and in texts), how many texts have gone out of
+  date since, and the file each one is in. Pick one and:
+  - **Transfer** copies its texts, word for word, over another language. For a
+    translation typed in while the wrong language was picked in Editing in: the
+    work moves to the language it was really written in, instead of being
+    typed again. Only the texts that were actually translated are copied; the
+    other language keeps whatever it had where the first one had nothing, and
+    the first one keeps all of its own.
+  - **Delete** removes the translation and every text in it. The file goes to
+    the Recycle Bin, so a wrong pick can be put back.
+
+  Both ask first, saying exactly what is about to happen.
+
+- **Translate the pack shows how far along it is.** Two bars instead of one
+  line of text: one for the whole run across every language picked, counted in
+  texts, and one for the language being translated now. Before, the window said
+  which language it was on and how far into it, and nothing about how much of
+  the whole was still to come.
+
+### Fixed
+
+- **A translation could never be finished if any line of the pack started or
+  ended with a space.** Translation files don't keep spaces at the ends of a
+  line, so every line like that looked changed again after each run. The
+  Translate window offered the same lines every time, the pack check listed
+  them as out of date, a later save marked some of them "changed from" for
+  review, and no language reached 100%. Nothing about how they showed in the
+  game was wrong. Those lines now count as done, the stray review marks go
+  away the next time the translation is saved, and one more Translate run
+  finishes the few lines the machine gave back exactly as they were.
+- **The Translate window waits for you.** Saying Yes to the offer before an
+  export or a publish opened it already translating, with no chance to change
+  the languages or look at the names first. Now it opens with those languages
+  ticked and starts when you press Translate; the export goes ahead when you
+  close it. Pressing Enter in the window, for instance after typing a name's
+  spelling, no longer starts a run either.
+- **The Translate window says when a run is over.** Once a run ended, the
+  bars stayed full under "...translated...", which looked like a run still
+  going. Now the language bar goes away and the other one says "Translation
+  finished." or that it stopped before the end, with what each language got
+  listed below as before. If the window isn't in front when the run ends, its
+  taskbar button flashes until you come back to it.
+- **The pack check no longer calls lines with nothing to translate
+  untranslated**, such as `<size=60%>...`, `{PC}...` or `[PV:Money]`. The
+  letters inside the markup were being read as words.
+
 ## 1.6.0
 
 ModForge in your language, and your pack in your players'. The editor comes in

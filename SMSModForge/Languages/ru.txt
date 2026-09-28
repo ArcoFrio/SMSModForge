@@ -13915,8 +13915,8 @@ export.title = Экспорт пака
 exportTranslate.title = Перевести перед экспортом?
 
 # The offer; {languages} is a list, one per line, of the line below
-# en: Some of what players read in {pack} is not in every language ModForge has:\n\n{languages}\n\nTranslate it by machine now? Only what is still untranslated is sent. A line already translated, by you or by a machine, stays exactly as it is, and so does one marked as the same in that language. The text goes to Google's free translation service.\n\nYes translates, then exports. No exports it as it is. Cancel does neither.\n\nOptions ▸ Offer to translate before exporting turns this off for this pack.
-exportTranslate.ask = Часть того, что читают игроки в {pack}, есть не на всех языках ModForge:\n\n{languages}\n\nПеревести машинно сейчас? Отправляется только то, что ещё не переведено. Уже переведённая строка — вами или машиной — остаётся ровно такой, как есть, как и строка, помеченная как одинаковая на этом языке. Текст отправляется в бесплатную службу перевода Google.\n\n«Да» переводит, затем экспортирует. «Нет» экспортирует как есть. «Отмена» не делает ни того, ни другого.\n\nПараметры ▸ Предлагать перевод перед экспортом отключает этот вопрос для этого пака.
+# en: Some of what players read in {pack} is not in every language ModForge has:\n\n{languages}\n\nTranslate it by machine first? Only what is still untranslated is sent. A line already translated, by you or by a machine, stays exactly as it is, and so does one marked as the same in that language. The text goes to Google's free translation service.\n\nYes opens the Translate window with these languages ticked: change them if you like, then press Translate. The export goes ahead when you close the window. No exports it as it is. Cancel does neither.\n\nOptions ▸ Offer to translate before exporting turns this off for this pack.
+exportTranslate.ask = Часть того, что читают игроки в {pack}, есть не на всех языках ModForge:\n\n{languages}\n\nСначала перевести машинно? Отправляется только то, что ещё не переведено. Уже переведённая строка — вами или машиной — остаётся ровно такой, как есть, как и строка, помеченная как одинаковая на этом языке. Текст отправляется в бесплатную службу перевода Google.\n\n«Да» открывает окно перевода с отмеченными языками: измените их, если хотите, затем нажмите «Перевести». Экспорт продолжится, когда вы закроете окно. «Нет» экспортирует как есть. «Отмена» не делает ни того, ни другого.\n\nПараметры ▸ Предлагать перевод перед экспортом отключает этот вопрос для этого пака.
 
 # One language in that list
 # en: {language}: {missing} of {total} still to translate
@@ -17172,6 +17172,96 @@ editingLanguage.own = По умолчанию ({language})
 # en: Show and edit every text a player reads in one of the pack's translations. Everything the game finds things by - keys, names of objects, targets - stays the same in every language, and anything you add or change that is not a text is added or changed for every language.
 editingLanguage.tip = Показывать и редактировать каждый текст, который читает игрок, в одном из переводов пака. Всё, по чему игра находит вещи, — ключи, имена объектов, цели — одинаково во всех языках, а всё, что вы добавляете или меняете и что не является текстом, добавляется или меняется для всех языков.
 
+# A small button beside the Editing in list: opens the window listing the pack's translations
+# en: Edit…
+editingLanguage.edit = Изменить…
+
+# Tooltip on that button
+# en: See the pack's translations and how far along each one is, copy one over another language, or delete one.
+editingLanguage.edit.tip = Посмотреть переводы пака и насколько готов каждый, скопировать один поверх другого языка или удалить.
+
+# Title of that window
+# en: Pack translations
+packTranslations.title = Переводы пака
+
+# At the top of that window
+# en: The translations beside your pack, and how far along each one is. Pick one to copy it over another language, or to delete it.
+packTranslations.intro = Переводы рядом с вашим паком и насколько готов каждый. Выберите один, чтобы скопировать его поверх другого языка или удалить.
+
+# The window's list: its column headings
+# en: Language
+packTranslations.column.language = Язык
+
+# en: Translated
+packTranslations.column.translated = Переведено
+
+# en: Out of date
+packTranslations.column.outOfDate = Устарело
+
+# en: File
+packTranslations.column.file = Файл
+
+# In the Translated column: how much of the translation is done. {percent} is a whole number
+# en: {percent}% ({done} of {total})
+packTranslations.translatedValue = {percent}% ({done} из {total})
+
+# Shown instead of the list when the pack has no translations
+# en: This pack has no translations yet. Start one by picking a language in Editing in, or with File ▸ Pack translations.
+packTranslations.none = У этого пака пока нет переводов. Начните перевод, выбрав язык в поле «Редактирование на», или через Файл ▸ Переводы пака.
+
+# Beside the list of languages the picked translation can be copied over
+# en: Copy to:
+packTranslations.transferTo = Копировать в:
+
+# The button that copies the picked translation over the language chosen beside it
+# en: Transfer…
+packTranslations.transfer = Перенести…
+
+# Tooltip on that button
+# en: Copy the picked translation's texts, word for word, over the language chosen beside it - for a translation typed in while the wrong language was up.
+packTranslations.transfer.tip = Скопировать тексты выбранного перевода слово в слово поверх языка, выбранного рядом, – для перевода, который набирали, пока был выбран не тот язык.
+
+# The button that deletes the picked translation
+# en: Delete…
+packTranslations.delete = Удалить…
+
+# Tooltip on that button
+# en: Delete the picked translation and every text in it.
+packTranslations.delete.tip = Удалить выбранный перевод со всеми его текстами.
+
+# The window's close button
+# en: Close
+packTranslations.close = Закрыть
+
+# Title of the question asked before a transfer
+# en: Transfer a translation
+packTranslations.transfer.title = Перенос перевода
+
+# The question asked before a transfer. {from} and {to} are languages, named with their codes
+# en: Copy every text of {from} over {to}? Where {from} has a text, {to} takes it word for word, and loses what it had there. The rest of {to} stays as it is, and {from} keeps all of its own.
+packTranslations.transfer.confirm = Скопировать все тексты {from} поверх {to}? Там, где у {from} есть текст, {to} получает его слово в слово и теряет то, что там было. Остальное в {to} остаётся как есть, а {from} сохраняет все свои тексты.
+
+# Title of the question asked before deleting a translation
+# en: Delete a translation
+packTranslations.delete.title = Удаление перевода
+
+# The question asked before deleting a translation. {language} is the language, named with its code
+# en: Delete {language} and every text in it? Its file goes to the Recycle Bin, and players reading this language get the default text.
+packTranslations.delete.confirm = Удалить {language} со всеми текстами? Файл отправится в Корзину, а игроки, читающие на этом языке, получат текст по умолчанию.
+
+# After a transfer: what was done
+# one: 1, 21, 31, 41… · few: 2, 3, 4, 22… · many: 0, 5, 6, 7…
+# en: Copied {count} text from {from} to {to}.
+packTranslations.transferred.one = Скопирован {count} текст из {from} в {to}.
+# en: Copied {count} texts from {from} to {to}.
+packTranslations.transferred.few = Скопировано {count} текста из {from} в {to}.
+# en: Copied {count} texts from {from} to {to}.
+packTranslations.transferred.many = Скопировано {count} текстов из {from} в {to}.
+
+# After a delete: what was done
+# en: Deleted {language}.
+packTranslations.deleted = {language}: удалено.
+
 # The bar across the window while a translation is being edited.
 # en: You are editing a translation. Every text a player reads shows it, and what you type goes into it. Anything that is not a text is shared by every language - adding a line adds it to all of them. A line you add, or a text that was empty, gets its words in this language only: its default text stays empty until you write it, and the pack's check lists it as an error.
 editingLanguage.banner = Вы редактируете перевод. Каждый текст, который читает игрок, показывает его, и то, что вы вводите, попадает в него. Всё, что не является текстом, общее для всех языков — добавленная реплика добавляется во все. Реплика, которую вы добавляете, или текст, который был пуст, получает слова только на этом языке: его текст по умолчанию остаётся пустым, пока вы его не напишете, и проверка пака показывает это как ошибку.
@@ -17297,6 +17387,18 @@ translatePack.pickOne = Сначала отметьте хотя бы один �
 # While it runs.
 # en: {language}: {done} of {total} translated...
 translatePack.progress = {language}: переведено {done} из {total}...
+
+# While it runs, over the bar for the whole run: every language picked, counted in texts. {number} is the language it is on, {count} how many languages were picked
+# en: All languages: {done} of {total} texts (language {number} of {count})
+translatePack.progress.all = Все языки: {done} из {total} текстов (язык {number} из {count})
+
+# Over the Translate window's bar once a run is over, having done every language picked.
+# en: Translation finished.
+translatePack.over.finished = Перевод завершён.
+
+# Over the Translate window's bar when a run was stopped, or failed, before the end.
+# en: Translation stopped before the end. Everything translated so far is kept, and Translate picks up from there.
+translatePack.over.stopped = Перевод остановлен до конца. Всё, что уже переведено, сохраняется, и «Перевести» продолжит с этого места.
 
 # One line per language afterwards.
 # en: {language}: {count} translated.

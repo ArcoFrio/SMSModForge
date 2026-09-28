@@ -98,22 +98,40 @@ public static class PackTranslationJob
         if (mine.Blank) return false;
 
         // Meant to read the same, and said so - about what the pack says now.
-        if (mine.Same && string.Equals(mine.Text, source, StringComparison.Ordinal) && mine.ChangedFrom == null
-            && (mine.English == null || string.Equals(mine.English, source, StringComparison.Ordinal)))
+        if (mine.Same && Alike(mine.Text, source) && !ChangedSince(mine, source)
+            && (mine.English == null || Alike(mine.English, source)))
             return false;
 
         // Nothing there, or the pack's own words still sitting where a
         // translation goes.
         if (string.IsNullOrEmpty(mine.Text)) return true;
-        if (string.Equals(mine.Text, source, StringComparison.Ordinal)) return true;
+        if (Alike(mine.Text, source)) return true;
 
         // Translated, but from words the pack has since changed.
-        if (mine.ChangedFrom != null) return true;
-        if (mine.English != null && !string.Equals(mine.English, source, StringComparison.Ordinal))
+        if (ChangedSince(mine, source)) return true;
+        if (mine.English != null && !Alike(mine.English, source))
             return true;
 
         return false;
     }
+
+    /// <summary>
+    /// The same words, as far as a translation file can tell: it trims every
+    /// line it reads, so a space or a tab at either end of the pack's words
+    /// never survives into the note of what a line was translated from. Told
+    /// apart exactly, a line ending in a space was out of date again after
+    /// every run - offered for translating each time, and no language ever
+    /// reached 100% (the author's pack, 2026-09-28: 43 lines, in every
+    /// language). The game already compares them this way (<see cref="PackTexts.Normal"/>).
+    /// </summary>
+    private static bool Alike(string? a, string? b)
+        => string.Equals(PackTexts.Normal(a), PackTexts.Normal(b), StringComparison.Ordinal);
+
+    /// <summary>Marked as translated from words the pack has changed since -
+    /// really changed: files written before 2026-09-28 carry the mark on lines
+    /// whose only change was the space the file's trim took off their end.</summary>
+    private static bool ChangedSince(TextFile.Entry mine, string source)
+        => mine.ChangedFrom != null && !Alike(mine.ChangedFrom, source);
 
     /// <summary>One language ModForge offers, and how much of the pack it still lacks.</summary>
     public sealed record Waiting(string Code, string Name, int Missing, int Total, bool HasFile);
@@ -198,6 +216,27 @@ public static class PackTranslationJob
         }
     }
 
+    /// <summary>
+    /// Where a run is: in the language it is on, and across all of them.
+    /// <para/>
+    /// The whole run is counted in texts, not in languages, so a language that
+    /// is nearly done already does not count for as much as one starting from
+    /// nothing. What each language has left is counted before the run starts,
+    /// from its file as it stands (<see cref="Missing"/>), and put right as
+    /// each one is reached - so the total may move a little when it does.
+    /// </summary>
+    /// <param name="Number">Which of the languages this is, from 1.</param>
+    public sealed record Progress(string Code, int Number, int Languages, int Done, int Total, int AllDone, int AllTotal);
+
+    /// <summary>How many texts <paramref name="code"/> has left to translate,
+    /// by its file as it stands - read, and nothing written.</summary>
+    public static int Left(ModPack pack, string packRoot, string code)
+    {
+        if (string.Equals(code, pack.OwnLanguage, StringComparison.OrdinalIgnoreCase)) return 0;
+        var file = Loc.Read(PackTranslations.PathOf(packRoot, code));
+        return Missing(PackTranslations.Source(pack, file), file, code).Count;
+    }
+
     public static async Task<List<Done>> Run(
         ModPack? pack, string packRoot, IReadOnlyList<string>? codes,
         TranslationRun.Send send, TranslationRun.Wait wait,
@@ -207,7 +246,8 @@ public static class PackTranslationJob
         Fallback? fallback = null,
         Action<string>? said = null,
         KeptNames? keepNames = null,
-        TranslationRun.AskAPerson? person = null)
+        TranslationRun.AskAPerson? person = null,
+        Action<Progress>? stepped = null)
     {
         var done = new List<Done>();
         if (pack == null || string.IsNullOrEmpty(packRoot) || codes == null) return done;
@@ -265,9 +305,28 @@ public static class PackTranslationJob
         // words change with it.
         var who = GenderHints.For(pack);
 
+        // What each language has left, counted before the first is started,
+        // so the whole run has a size from the beginning.
+        var left = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        if (stepped != null)
+            foreach (string code in codes)
+                left[code] = Left(pack, packRoot, code);
+        int finished = 0;   // texts in the languages already done
+        int number = 0;
+        void Step(string code, int done, int total)
+        {
+            if (stepped == null) return;
+            left[code] = total;
+            int later = 0;
+            for (int i = number; i < codes.Count; i++) later += left[codes[i]];
+            stepped(new Progress(code, number, codes.Count, done, total,
+                                 finished + done, finished + total + later));
+        }
+
         foreach (string code in codes)
         {
             if (cancel.IsCancellationRequested) break;
+            number++;
 
             // The pack's own words are already in its own language.
             if (string.Equals(code, pack.OwnLanguage, StringComparison.OrdinalIgnoreCase))
@@ -325,9 +384,11 @@ public static class PackTranslationJob
 
             if (todo.Count == 0)
             {
+                Step(code, 0, 0);
                 done.Add(new Done(code, translated, 0, null));
                 continue;
             }
+            Step(code, 0, todo.Count);
 
             var run = new TranslationRun(send, wait)
             {
@@ -356,6 +417,7 @@ public static class PackTranslationJob
                 // a run that is cut off keep its work.
                 Write(pack, packRoot, code, source, holding);
                 progress?.Invoke(code, translated, todo.Count);
+                Step(code, translated + damaged, todo.Count);
             }, cancel, keepNames?.Names, keepNames?.In(code), who).ConfigureAwait(false);
 
             // Switched to the website mid-run: the languages after it go on there.
@@ -365,6 +427,7 @@ public static class PackTranslationJob
                 byFallback = true;
             }
             done.Add(new Done(code, translated, damaged, run.StoppedBecause) { ByFallback = byFallback });
+            finished += todo.Count;
         }
 
         return done;
@@ -473,7 +536,7 @@ public static class PackTranslationJob
     private static void Put(TextFile file, TextFile source, string key, string text)
     {
         string original = source.Get(key);
-        bool same = string.Equals(text, original, StringComparison.Ordinal);
+        bool same = Alike(text, original);
         var entry = file.Find(key);
         if (entry != null)
         {
