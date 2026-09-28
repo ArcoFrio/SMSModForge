@@ -105,6 +105,8 @@ somebody packaging a Debug one. Check the artefact itself:
 
 ```
 set SMSMODFORGE_RELEASE_PLUGIN=...\Starmaker - ModForge Plugin 1.3.0.zip
+git show v<last>:SMSModForge/Languages/en.txt > last-en.txt
+set SMSMODFORGE_LAST_RELEASE_EN=last-en.txt
 dotnet test --filter ReleaseReadinessTests
 ```
 
@@ -112,7 +114,58 @@ That reads the bytes of the packaged DLL, because nothing in the ordinary suite
 can see this: the tests compile in Debug, and the plugin is a separate assembly
 for a different framework.
 
+**Every language must have this version's texts.** A text added or reworded
+during a version shows in English in every other language until somebody
+translates it, and the ordinary suite lets that through: it fails only on a
+damaged line. The same command checks it against the last release's English
+(`SMSMODFORGE_LAST_RELEASE_EN=none` when the last release had no language
+files). It fails on any text a language is missing, has empty, or translated
+from English that has since changed, and lists what this version added that is
+still word for word the English - a name can be right that way, so that part
+is for a person to read. Translate what it names, bring the files in with
+`SMSMODFORGE_REFRESH_TRANSLATIONS` (see `ShippedTranslationsTests`), and run it
+again.
+
 ## Tests
+
+### Which tests to run, and when
+
+The suite is in two tiers, because one of them is a hundred times slower than
+the other. Anything that builds a real `MainWindow` through `WindowHarness`
+costs seconds per test and cannot be parallelised — the harness serialises
+everything onto one STA thread — while the pure-logic tests run in
+microseconds.
+
+```
+dotnet test --filter "Speed!=Slow"    # the edit loop: seconds
+dotnet test                           # before a commit or a release: minutes
+```
+
+Run the fast tier constantly and the full suite before anything ships. Do not
+settle into running only what you think you touched: the failures that justify
+having a suite at all are the ones nobody would have thought to target. Two
+real examples, both caught by a full run and by nothing else — a scan that
+found eleven hard-coded English sentences in a file that had just been written,
+and a check that the shipped translations were complete after a key was added
+somewhere unrelated.
+
+Measured, not guessed: **672 tests take 12.9 minutes and the other 981 take 17
+seconds.** Nearly all of the cost is building a real `MainWindow`, but not all
+of it — a few classes are slow for their own reasons, so the tag goes on a
+class that either uses `WindowHarness` or measures over about five seconds.
+
+The threshold is per CLASS rather than per test, deliberately. The
+cross-cutting checks — the code scan for untranslated sentences, the shipped
+translation checks — cost around a second each, and a per-test threshold would
+have exiled exactly the tests a fast tier most needs to keep.
+
+Re-measure with `dotnet test --logger "trx;LogFileName=timings.trx"` and read
+the durations out of the TRX rather than re-deriving this by eye.
+
+### Never run a suite while editing the files it reads
+
+A background run reading `en.txt` while it is being rewritten fails in a way
+that looks exactly like a real defect and is not. Finish the edits, then run.
 
 Committed tests must not hard-code a path to anyone's pack. Where a real pack is
 genuinely the only meaningful subject — backward compatibility, for one — gate it

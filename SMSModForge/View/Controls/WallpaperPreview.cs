@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using SMSModForge.Localization;
 
 namespace SMSModForge.View.Controls;
 
@@ -98,6 +99,9 @@ public sealed class WallpaperPreview : Grid
         // A tooltip that outlived its owner sits over the one thing an
         // author is trying to look at. See ToolTipDismisser.
         View.ToolTipDismisser.KeepClearOf(this);
+        // Its words are worked out as it draws: drawn again when the language
+        // changes, so none is left in the old one.
+        LocText.Follow(this, Refresh);
 
         Width = MinWidth = MaxWidth = FixedWidth;
         Height = MinHeight = MaxHeight = FixedHeight;
@@ -123,20 +127,20 @@ public sealed class WallpaperPreview : Grid
         if (path == null)
         {
             ShowPlaceholder(string.IsNullOrEmpty(PackRoot)
-                ? "Save the pack and set a wallpaper image path."
-                : "No wallpaper image path set.");
+                ? Loc.T("preview.wallpaper.saveAndSet")
+                : Loc.T("preview.wallpaper.noImage"));
             return;
         }
         if (!File.Exists(path))
         {
-            ShowPlaceholder($"Wallpaper image not found:\n{path}");
+            ShowPlaceholder(Loc.F("preview.wallpaper.missing", "path", path));
             return;
         }
 
         var img = TryLoad(path);
         if (img == null)
         {
-            ShowPlaceholder($"Couldn't read image:\n{path}");
+            ShowPlaceholder(Loc.F("preview.wallpaper.unreadable", "path", path));
             return;
         }
 

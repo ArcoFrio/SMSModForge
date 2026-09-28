@@ -14,6 +14,7 @@ namespace SMSModForge.Tests;
 /// The UI tab, in the real window: that it is where it should be, that adding a
 /// screen works end to end, and that the preview follows the selection.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public class UiTabTests
 {
     private readonly ITestOutputHelper _out;

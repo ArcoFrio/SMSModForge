@@ -7,6 +7,7 @@ using System.Windows;
 using SMSModForge.Model;
 using SMSModForge.Shared;
 using V = SMSModForge.Shared.QuestVocabulary;
+using SMSModForge.Localization;
 
 namespace SMSModForge.ViewModel;
 
@@ -154,8 +155,40 @@ public sealed class QuestViewModel : ObservableObject, ISiteConditionsOwner
     /// <summary>Back to the game's own paragraph.</summary>
     public RelayCommand ResetDescriptionCommand { get; }
 
+    // ── Players who had already finished it ──────────────────────────
+    //
+    // Three buttons rather than a list: the choice is between three things
+    // that happen to a player, and each is worth a line saying what it does.
+
+    public bool StepsAddedLeaveFinished
+    {
+        get => QuestGrowth.ChoiceOf(Model.WhenStepsAdded) == QuestGrowth.LeaveFinished;
+        set { if (value) SetWhenStepsAdded(QuestGrowth.LeaveFinished); }
+    }
+
+    public bool StepsAddedReopen
+    {
+        get => QuestGrowth.ChoiceOf(Model.WhenStepsAdded) == QuestGrowth.Reopen;
+        set { if (value) SetWhenStepsAdded(QuestGrowth.Reopen); }
+    }
+
+    public bool StepsAddedStartOver
+    {
+        get => QuestGrowth.ChoiceOf(Model.WhenStepsAdded) == QuestGrowth.StartOver;
+        set { if (value) SetWhenStepsAdded(QuestGrowth.StartOver); }
+    }
+
+    private void SetWhenStepsAdded(string choice)
+    {
+        if (QuestGrowth.ChoiceOf(Model.WhenStepsAdded) == choice) return;
+        Model.WhenStepsAdded = choice;
+        OnPropertyChanged(nameof(StepsAddedLeaveFinished));
+        OnPropertyChanged(nameof(StepsAddedReopen));
+        OnPropertyChanged(nameof(StepsAddedStartOver));
+    }
+
     public string Display => IsVanillaExtension
-        ? (TheGamesTitle.Length > 0 ? TheGamesTitle : Model.Source) + " (the game's)"
+        ? Loc.F("quests.gamesQuest", "quest", TheGamesTitle.Length > 0 ? TheGamesTitle : Model.Source)
         : string.IsNullOrWhiteSpace(Title) ? Key : $"{QuestKeys.Plain(Title)} ({Key})";
 
     // ── One of the game's own quests, extended ───────────────────────
@@ -287,16 +320,12 @@ public sealed class QuestViewModel : ObservableObject, ISiteConditionsOwner
         get
         {
             var what = new List<string>();
-            if (Model.AddedTasks.Count > 0) what.Add("adds tasks to the game's quest");
-            if (Model.VanillaTasks.Any(h => h.Removed)) what.Add("takes some of its tasks out");
-            if (TakesGameConditionsOut) what.Add("takes conditions out of the game's own conversations or scripts");
+            if (Model.AddedTasks.Count > 0) what.Add(Loc.T("quests.loadWarning.addsTasks"));
+            if (Model.VanillaTasks.Any(h => h.Removed)) what.Add(Loc.T("quests.loadWarning.takesTasksOut"));
+            if (TakesGameConditionsOut) what.Add(Loc.T("quests.loadWarning.takesConditionsOut"));
             if (what.Count == 0) return "";
             bool tasks = Model.AddedTasks.Count > 0 || Model.VanillaTasks.Any(h => h.Removed);
-            return "This entry " + Shared.SaveLoadChecks.Sentence(what) + ". A save already part-way through the "
-                   + "quest can be left unable to finish it - and so can removing your pack later. The first time a "
-                   + "player loads an existing save with your pack, the game warns them"
-                   + (tasks ? ", names this quest with how far their save is in it," : "")
-                   + " and recommends a new save.";
+            return Loc.F(tasks ? "quests.loadWarning.withQuest" : "quests.loadWarning", "what", Loc.JoinAnd(what));
         }
     }
 
@@ -332,7 +361,7 @@ public sealed class QuestViewModel : ObservableObject, ISiteConditionsOwner
     public string VanillaListName
         => TheGamesTitle.Length > 0 ? TheGamesTitle
          : Model.Source.Length > 0 ? Model.Source
-         : "(choose one of the game's quests)";
+         : Loc.T("quests.chooseGamesQuest");
 
     /// <summary>How much of the game's quest this entry changes, for the
     /// vanilla list: what an author asks of it without opening it.</summary>
@@ -350,10 +379,10 @@ public sealed class QuestViewModel : ObservableObject, ISiteConditionsOwner
                         + ChangedPlaces;
 
             var parts = new List<string>();
-            if (added > 0) parts.Add(added + " added");
-            if (takenOut > 0) parts.Add(takenOut + " taken out");
-            if (other > 0) parts.Add(other + (other == 1 ? " other change" : " other changes"));
-            return parts.Count == 0 ? "unchanged" : string.Join(", ", parts);
+            if (added > 0) parts.Add(Loc.P("quests.summary.added", added));
+            if (takenOut > 0) parts.Add(Loc.P("quests.summary.takenOut", takenOut));
+            if (other > 0) parts.Add(Loc.P("quests.summary.other", other));
+            return parts.Count == 0 ? Loc.T("quests.summary.unchanged") : Loc.JoinList(parts);
         }
     }
 
@@ -456,18 +485,15 @@ public sealed class QuestViewModel : ObservableObject, ISiteConditionsOwner
         get
         {
             if (!ShowsVanillaPanel) return "";
-            if (Model.Source.Length == 0) return "Choose one of the game's quests. Nothing happens until you do.";
+            if (Model.Source.Length == 0) return Loc.T("quests.vanillaNote.choose");
             if (TheGamesQuest == null)
-                return "The game has no quest called '" + Model.Source + "'. It is listed by the name the game's own "
-                     + "instructions use, which is not always the title in the journal.";
-            return "The quest stays the game's. Your pack can change what the journal shows of it, what happens as "
-                 + "the player works through it, and which tasks it has.";
+                return Loc.F("quests.vanillaNote.unknown", "quest", Model.Source);
+            return Loc.T("quests.vanillaNote.stays");
         }
     }
 
     public string DescriptionNote => IsVanillaExtension
-        ? "Replaces the paragraph the game shows under the title, for as long as your pack is installed. Leave it "
-          + "empty to keep the game's own."
+        ? Loc.T("quests.descriptionNote")
         : "";
 
     /// <summary>The game's tasks, as rows a pack can hang something on - the
@@ -867,18 +893,16 @@ public sealed class QuestViewModel : ObservableObject, ISiteConditionsOwner
         get
         {
             string held = ResetConditions.Count > 0
-                ? " While its reset conditions pass, these wait."
+                ? " " + Loc.T("quests.startNote.held")
                 : "";
             if (IsVanillaExtension)
                 return StartConditions.Count == 0
-                    ? "No start conditions of yours: the game starts this quest when it always did."
-                    : "Starts the game's quest early, the moment all of these pass - if the game has not started it "
-                      + "already. What the game does to start it is below." + held;
+                    ? Loc.T("quests.startNote.gameNone")
+                    : Loc.T("quests.startNote.gameEarly") + held;
 
             return StartConditions.Count == 0
-                ? "No start conditions: the quest only starts when a Quest action starts it."
-                : "The quest starts by itself the moment all of these pass. A Quest action can still start it sooner."
-                  + held;
+                ? Loc.T("quests.startNote.none")
+                : Loc.T("quests.startNote.own") + held;
         }
     }
 
@@ -893,12 +917,9 @@ public sealed class QuestViewModel : ObservableObject, ISiteConditionsOwner
         {
             if (ResetConditions.Count == 0)
                 return IsVanillaExtension
-                    ? "No reset conditions of yours: the game puts this quest back to not started only where it "
-                      + "always did."
-                    : "No reset conditions: the quest only goes back to not started when a Quest action resets it.";
-            return "Once the quest has started - in progress, completed or failed - it goes back to not started the "
-                   + "moment all of these pass, so it can be done again. Its tasks and counts start over, and its "
-                   + "start conditions wait until these stop passing.";
+                    ? Loc.T("quests.resetNote.gameNone")
+                    : Loc.T("quests.resetNote.none");
+            return Loc.T("quests.resetNote.own");
         }
     }
 
@@ -1094,10 +1115,9 @@ public sealed class QuestTaskViewModel : ObservableObject
 
     /// <summary>Said where the lists would be, on a task with subtasks.</summary>
     public string NoOwnCompletionNote
-        => "This task has subtasks, so it finishes through them and has no completion conditions or actions "
-           + "of its own - give those to its subtasks instead."
+        => Loc.T("quests.noOwnCompletion")
            + (Model.Conditions.Count + Model.Actions.Count > 0
-               ? " The ones it had before it gained subtasks are kept, but not used while it has them."
+               ? " " + Loc.T("quests.noOwnCompletion.kept")
                : "");
 
     private readonly DerivedKey _derivedKey = new();
@@ -1214,17 +1234,17 @@ public sealed class QuestTaskViewModel : ObservableObject
 
             string when;
             if (V.Is(parent.Completion, V.ByAction))
-                when = "Its task is completed by an action, so its subtasks never start: ticked, this one is never shown.";
+                when = Loc.T("quests.hiddenNote.byActionTicked");
             else if (V.Is(parent.Completion, V.AnyOrder) || V.Is(parent.Completion, V.AnyOne))
-                when = "Its task starts all its subtasks together, so this one appears as soon as that task starts.";
+                when = Loc.T("quests.hiddenNote.together");
             else if (parent.Index == 0)
-                when = "It is the first subtask, so it appears as soon as its task starts.";
+                when = Loc.T("quests.hiddenNote.first");
             else
-                when = "It appears once the subtask before it is done.";
+                when = Loc.T("quests.hiddenNote.afterPrevious");
 
             return HideUntilStarted
                 ? when
-                : "The journal lists every subtask of a task it shows, including the ones that have not started.";
+                : Loc.T("quests.hiddenNote.everySubtask");
         }
     }
 
@@ -1265,7 +1285,7 @@ public sealed class QuestTaskViewModel : ObservableObject
     /// <summary>What the list row says: the journal's line, or a placeholder
     /// that reads as unfinished rather than as blank.</summary>
     public string RowText
-        => (IsTopLevel ? "" : "▸ ") + (string.IsNullOrWhiteSpace(Name) ? "(no text)" : Name)
+        => (IsTopLevel ? "" : "▸ ") + (string.IsNullOrWhiteSpace(Name) ? Loc.T("quests.noText") : Name)
            + (Counts ? "  (0/" + CountToText + ")" : "");
 
     /// <summary>Called by the quest after the list is rebuilt: subtasks may
@@ -1314,21 +1334,21 @@ public sealed class QuestTaskViewModel : ObservableObject
         {
             if (!HasSubtasks)
                 return CompletionConditions.Count > 0
-                    ? "Completes by itself when its conditions below pass. A Quest action, or its counter reaching its target, can still complete it."
-                    : "No completion conditions yet: only a Quest action, or its counter reaching its target, completes it.";
+                    ? Loc.T("quests.completionNote.conditions")
+                    : Loc.T("quests.completionNote.none");
             if (V.Is(Completion, V.ByAction))
-                return "Completed only by a Quest action. Its subtasks never start, so they read as notes under it.";
+                return Loc.T("quests.completionNote.byAction");
             // At the top level or under an in-order parent, the game lets an
             // action complete a task outright whatever its subtasks say - the
             // game's own quests do it. Anywhere else the subtasks are checked.
             string early = ActionCanCompleteEarly
-                ? " A Quest action can also complete it before then."
+                ? " " + Loc.T("quests.completionNote.early")
                 : "";
             if (V.Is(Completion, V.AnyOne))
-                return "Starts all its subtasks at once, and completes itself when any one of them is done." + early;
+                return Loc.T("quests.completionNote.anyOne") + early;
             if (V.Is(Completion, V.AnyOrder))
-                return "Starts all its subtasks at once, and completes itself when all of them are done." + early;
-            return "Starts its subtasks one at a time, and completes itself when the last one is done." + early;
+                return Loc.T("quests.completionNote.anyOrder") + early;
+            return Loc.T("quests.completionNote.inOrder") + early;
         }
     }
 
@@ -1382,8 +1402,10 @@ public sealed class QuestTaskViewModel : ObservableObject
 
     // ── Where the count comes from ───────────────────────────────────
 
-    public const string CountedByAction = "Quest action";
-    public const string CountedByVariable = "Variable";
+    // Keys, and the choices themselves: the code compares them, so they stay
+    // the same whatever language is on screen, and the list shows their text.
+    public const string CountedByAction = "quests.countedBy.action";
+    public const string CountedByVariable = "quests.countedBy.variable";
 
     public static IReadOnlyList<string> CounterSources { get; } = new[] { CountedByAction, CountedByVariable };
 
@@ -1449,11 +1471,11 @@ public sealed class QuestTaskViewModel : ObservableObject
         {
             if (!Counts) return "";
             string how = CountsFromVariable
-                ? "Follows the variable while the task is in progress, and completes the task when the variable reaches the target. A Quest action setting the count is overwritten."
-                : "Set or add to it with a Quest action. The task completes itself when the count reaches the target.";
+                ? Loc.T("quests.counterNote.variable")
+                : Loc.T("quests.counterNote.action");
             return IsTopLevel
                 ? how
-                : how + " The journal only draws a count beside a top-level task, so the player will not see this one.";
+                : how + " " + Loc.T("quests.counterNote.hidden");
         }
     }
 }
@@ -1518,7 +1540,7 @@ public sealed class VanillaTaskRowViewModel : ObservableObject
     /// stores: its text belongs to the game and a patch can rewrite it.</summary>
     public string Token => _node.Token;
 
-    public string Name => string.IsNullOrWhiteSpace(Game.Name) ? "(no text)" : Game.Name;
+    public string Name => string.IsNullOrWhiteSpace(Game.Name) ? Loc.T("quests.noText") : Game.Name;
 
     public int Depth => _node.Depth;
 
@@ -1533,14 +1555,15 @@ public sealed class VanillaTaskRowViewModel : ObservableObject
         get
         {
             var marks = new List<string>();
-            if (IsRemoved) marks.Add("taken out");
-            else if (RemovedWithParent) marks.Add("taken out with its task");
-            else if (Hook.IsHidden) marks.Add("hidden");
-            else if (Hook.IsHiddenUntilStarted) marks.Add("hidden until it starts");
-            else if (Hook.IsHiddenUntilConditions) marks.Add("hidden until conditions pass");
-            if (Hook.QuestDescription.Length > 0) marks.Add("description");
-            if (Actions.Count > 0) marks.Add("actions");
-            return (IsTopLevel ? "" : "▸ ") + Name + (marks.Count > 0 ? "  (" + string.Join(", ", marks) + ")" : "");
+            if (IsRemoved) marks.Add(Loc.T("quests.mark.takenOut"));
+            else if (RemovedWithParent) marks.Add(Loc.T("quests.mark.takenOutWithTask"));
+            else if (Hook.IsHidden) marks.Add(Loc.T("quests.mark.hidden"));
+            else if (Hook.IsHiddenUntilStarted) marks.Add(Loc.T("quests.mark.hiddenUntilStarts"));
+            else if (Hook.IsHiddenUntilConditions) marks.Add(Loc.T("quests.mark.hiddenUntilConditions"));
+            if (Hook.QuestDescription.Length > 0) marks.Add(Loc.T("quests.mark.description"));
+            if (Actions.Count > 0) marks.Add(Loc.T("quests.mark.actions"));
+            return (IsTopLevel ? "" : "▸ ") + Name
+                   + (marks.Count > 0 ? "  " + Loc.F("quests.mark.list", "marks", Loc.JoinList(marks)) : "");
         }
     }
 
@@ -1602,10 +1625,11 @@ public sealed class VanillaTaskRowViewModel : ObservableObject
 
     // ── In the journal ───────────────────────────────────────────────
 
-    public const string ShownAsTheGameHasIt = "As the game has it";
-    public const string ShownOnceStarted = "Hidden until it starts";
-    public const string NeverShown = "Always hidden";
-    public const string ShownOnceConditionsPass = "Hidden until conditions pass";
+    // Keys, and the choices themselves - see QuestTaskViewModel.CountedByAction.
+    public const string ShownAsTheGameHasIt = "quests.shown.asGame";
+    public const string ShownOnceStarted = "quests.shown.onceStarted";
+    public const string NeverShown = "quests.shown.never";
+    public const string ShownOnceConditionsPass = "quests.shown.onceConditionsPass";
 
     /// <summary>
     /// The choices for this task. "Hidden until it starts" only on a subtask:
@@ -1668,21 +1692,21 @@ public sealed class VanillaTaskRowViewModel : ObservableObject
         get
         {
             if (Hook.IsHidden)
-                return "The journal never lists it. The quest still waits for it as the game does.";
+                return Loc.T("quests.visibilityNote.never");
             if (Hook.IsHiddenUntilConditions)
                 return ShowNotes.For(ShowConditions.Count, ShowConditionsLive, alsoUntilStarted: false);
             if (Hook.IsHiddenUntilStarted)
             {
                 var parent = _node.Parent;
                 if (parent?.Game?.Completion == TaskCompletion.Manual)
-                    return "Its task is completed by an action, so its subtasks never start: this one is never shown.";
+                    return Loc.T("quests.visibilityNote.byAction");
                 if (parent?.Game != null && parent.Game.Completion != TaskCompletion.SubtasksInSequence)
-                    return "Its task starts all its subtasks together, so this one appears as soon as that task starts.";
-                return "It appears once it starts - under an in-order task, once the subtask before it is done.";
+                    return Loc.T("quests.hiddenNote.together");
+                return Loc.T("quests.visibilityNote.onceStarts");
             }
             return IsTopLevel
-                ? "The journal lists a top-level task once it has started."
-                : "The journal lists every subtask of a task it shows, including the ones that have not started.";
+                ? Loc.T("quests.visibilityNote.topLevel")
+                : Loc.T("quests.hiddenNote.everySubtask");
         }
     }
 
@@ -1721,15 +1745,10 @@ public sealed class VanillaTaskRowViewModel : ObservableObject
         get
         {
             if (RemovedWithParent)
-                return "The task above it is taken out of the quest, and this one goes with it.";
+                return Loc.T("quests.removeNote.withParent");
             if (!Hook.Removed)
-                return "Takes this task" + (_quest.HasChildren(_node) ? " and everything under it" : "")
-                     + " out of the quest. Nothing of the game's is deleted: the quest moves past it the moment it starts, "
-                     + "the journal never lists it, and the game's own scenes that still name it carry on. A save already "
-                     + "part-way through this quest can be left stuck by it.";
-            return "Taken out: the quest moves past this task the moment it starts, as though the game had completed "
-                 + "it, and the journal never lists it. Under a task that finishes with any one of its subtasks, it is "
-                 + "left alone instead, so it cannot finish that task by itself.";
+                return Loc.T(_quest.HasChildren(_node) ? "quests.removeNote.offerWithChildren" : "quests.removeNote.offer");
+            return Loc.T("quests.removeNote.removed");
         }
     }
 
@@ -1750,11 +1769,11 @@ public sealed class VanillaTaskRowViewModel : ObservableObject
 
     private IEnumerable<(string Label, Action Reset)> Changes()
     {
-        if (Hook.Removed) yield return ("taken out", () => IsRemoved = false);
+        if (Hook.Removed) yield return (Loc.T("quests.mark.takenOut"), () => IsRemoved = false);
         if (Hook.Visibility.Length > 0 || Hook.ShowConditions.Count > 0 || Hook.ShowConditionsLive)
-            yield return ("journal", ResetJournal);
-        if (Hook.QuestDescription.Length > 0) yield return ("description", () => QuestDescription = "");
-        if (Hook.Actions.Count > 0) yield return ("actions", ResetActions);
+            yield return (Loc.T("quests.changed.journal"), ResetJournal);
+        if (Hook.QuestDescription.Length > 0) yield return (Loc.T("quests.mark.description"), () => QuestDescription = "");
+        if (Hook.Actions.Count > 0) yield return (Loc.T("quests.mark.actions"), ResetActions);
     }
 
     public string ChangedFieldsText
@@ -1762,7 +1781,7 @@ public sealed class VanillaTaskRowViewModel : ObservableObject
         get
         {
             var labels = Changes().Select(c => c.Label).ToList();
-            return labels.Count == 0 ? "" : "Changed from the game: " + string.Join(", ", labels);
+            return labels.Count == 0 ? "" : Loc.F("quests.changedFromGame", "parts", Loc.JoinList(labels));
         }
     }
 
@@ -1810,11 +1829,11 @@ internal static class ShowNotes
     public static string For(int conditions, bool live, bool alsoUntilStarted)
     {
         string when = conditions == 0
-            ? "No conditions yet, so nothing holds it back: it is shown at once."
+            ? Loc.T("quests.showNote.none")
             : live
-                ? "Shown while all of these pass, and hidden again whenever they stop. Checked every frame."
-                : "Shown the first time all of these pass, and from then on for the rest of that save, whatever they do later.";
-        return alsoUntilStarted ? when + " It also stays hidden until it starts." : when;
+                ? Loc.T("quests.showNote.live")
+                : Loc.T("quests.showNote.once");
+        return alsoUntilStarted ? when + " " + Loc.T("quests.showNote.alsoUntilStarted") : when;
     }
 }
 

@@ -183,7 +183,13 @@ namespace SMSModForge.PackPlugin
                 // "Silent" → no signal, just the stripped trigger.
             }
 
-            registry.Register(key, scene, activationSignal);
+            // Off unless the pack says otherwise: most scenes are story art,
+            // and a pack whose every scene paid out followers would be raising
+            // the day's income on lines that are not photographs at all.
+            bool starmakerPhoto = s["starmakerPhoto"]?.Type == Newtonsoft.Json.Linq.JTokenType.Boolean
+                                  && (bool)s["starmakerPhoto"];
+
+            registry.Register(key, scene, activationSignal, starmakerPhoto);
             return scene;
         }
 

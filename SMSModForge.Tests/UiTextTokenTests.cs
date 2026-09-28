@@ -16,6 +16,7 @@ namespace SMSModForge.Tests;
 /// token instead would make every such label look like a mistake AND make the
 /// layout round it wrong, since the token is far longer than the value.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class UiTextTokenTests
 {
     private readonly ITestOutputHelper _out;

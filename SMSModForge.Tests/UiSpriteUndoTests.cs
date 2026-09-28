@@ -18,6 +18,7 @@ namespace SMSModForge.Tests;
 /// field is a box and a picker now, which removes the mechanism rather than
 /// tuning it: nothing is written until Choose is pressed.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class UiSpriteUndoTests
 {
     private readonly ITestOutputHelper _out;

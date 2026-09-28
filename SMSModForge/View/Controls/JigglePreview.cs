@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -59,13 +60,80 @@ public sealed class JigglePreview : Image
 
     public static readonly DependencyProperty SelectedExpressionProperty =
         DependencyProperty.Register(nameof(SelectedExpression), typeof(string), typeof(JigglePreview),
-            new PropertyMetadata("None"));
+            new PropertyMetadata(""));
 
+    /// <summary>The face to composite, by the name the game gives it; empty
+    /// for none, which is the bust's ordinary face rather than a sprite.</summary>
     public string SelectedExpression
     {
         get => (string)GetValue(SelectedExpressionProperty);
         set => SetValue(SelectedExpressionProperty, value);
     }
+
+    /// <summary>One entry in the preview's expression list: what is stored, and
+    /// what the author reads.</summary>
+    public sealed record ExpressionChoice(string Key, string Label)
+    {
+        public override string ToString() => Label;
+    }
+
+    private static readonly DependencyPropertyKey ExpressionChoicesKey =
+        DependencyProperty.RegisterReadOnly(nameof(ExpressionChoices),
+            typeof(System.Collections.Generic.IReadOnlyList<ExpressionChoice>), typeof(JigglePreview),
+            new PropertyMetadata(null));
+
+    public static readonly DependencyProperty ExpressionChoicesProperty = ExpressionChoicesKey.DependencyProperty;
+
+    /// <summary>
+    /// The faces THIS bust can pull, offered to the picker beside the preview.
+    /// <para/>
+    /// Published by the preview rather than written out in the window, because
+    /// the preview is the only thing that knows. It had been five fixed entries
+    /// in XAML — none, happy, angry, sad, flirty — which was wrong twice over.
+    /// A bust with its expressions switched off, and one of the game's busts
+    /// that has no expression children at all, both offered four faces that did
+    /// nothing when picked; and what the list handed the preview was the
+    /// entry's LABEL, so in any language but English it looked up "Feliz" among
+    /// sprites named "Happy" and quietly found nothing. Every expression in the
+    /// editor stopped working the moment somebody changed language.
+    /// <para/>
+    /// Taken from the textures actually loaded, which is the same list the
+    /// runtime will look through, in the canonical order rather than whatever
+    /// order the dictionary happens to hold.
+    /// </summary>
+    public System.Collections.Generic.IReadOnlyList<ExpressionChoice> ExpressionChoices
+        => (System.Collections.Generic.IReadOnlyList<ExpressionChoice>)GetValue(ExpressionChoicesProperty);
+
+    /// <summary>Re-publish the list after a texture load. "None" is first and
+    /// always there: a bust with no expressions still has its ordinary face,
+    /// and an empty box would read as the preview being broken.</summary>
+    private void PublishExpressionChoices()
+    {
+        var choices = new System.Collections.Generic.List<ExpressionChoice>
+            { new("", Localization.Loc.T("characters.none")) };
+
+        // Canonical order first - the four the game has, in the order the
+        // editor names them everywhere else - then anything else the pack
+        // brought with it, so a custom face is reachable rather than dropped.
+        foreach (string name in ExpressionSpec.Names)
+            if (_expressions.ContainsKey(name)) choices.Add(new(name, Label(name)));
+
+        foreach (var name in _expressions.Keys)
+            if (!choices.Any(c => c.Key == name)) choices.Add(new(name, Label(name)));
+
+        SetValue(ExpressionChoicesKey, choices);
+    }
+
+    /// <summary>The four the editor has words for; anything else is shown as
+    /// the pack spells it.</summary>
+    private static string Label(string name) => name switch
+    {
+        "Happy" => Localization.Loc.T("characters.happy"),
+        "Angry" => Localization.Loc.T("characters.angry"),
+        "Sad" => Localization.Loc.T("characters.sad"),
+        "Flirty" => Localization.Loc.T("characters.flirty"),
+        _ => name,
+    };
 
     public static readonly DependencyProperty SelectedMouthFrameProperty =
         DependencyProperty.Register(nameof(SelectedMouthFrame), typeof(int), typeof(JigglePreview),
@@ -209,6 +277,8 @@ public sealed class JigglePreview : Image
         // A tooltip that outlived its owner sits over the one thing an
         // author is trying to look at. See ToolTipDismisser.
         View.ToolTipDismisser.KeepClearOf(this);
+        // The list of faces names them in the language on screen.
+        Localization.LocText.Follow(this, PublishExpressionChoices);
 
         _bitmap = new WriteableBitmap(JiggleShader.RenderSize, JiggleShader.RenderSize, 96, 96, PixelFormats.Pbgra32, null);
         Source = _bitmap;
@@ -241,14 +311,60 @@ public sealed class JigglePreview : Image
         // preview nobody can see.
         IsVisibleChanged += (_, _) => { if (IsVisible) HookRendering(); else UnhookRendering(); };
 
-        // Hard-pin the size. Width/Height alone aren't enough when a parent
-        // layout (e.g. a DockPanel that wants to fill remaining space) tries
-        // to negotiate — the Min/Max bounds force WPF's measure pass to
-        // settle on exactly FixedSize regardless of available room.
-        Width = MinWidth = MaxWidth = FixedSize;
-        Height = MinHeight = MaxHeight = FixedSize;
+        ApplyZoom();
         HorizontalAlignment = HorizontalAlignment.Left;
         VerticalAlignment = VerticalAlignment.Top;
+    }
+
+    /// <summary>
+    /// How much bigger than <see cref="FixedSize"/> to draw the bust.
+    /// <para/>
+    /// The shader runs at its own size whatever this says: what changes is how
+    /// many screen pixels one of its pixels covers. 1 is the size this control
+    /// was pinned to for years and the only one that needs no resampling at
+    /// all; 2 doubles every pixel, which is exact as well. The halves in
+    /// between are a resample, and they say so by switching off nearest
+    /// neighbour — a bust at 1.5 is a softer picture, not a broken one.
+    /// </summary>
+    public static readonly DependencyProperty ZoomProperty = DependencyProperty.Register(
+        nameof(Zoom), typeof(double), typeof(JigglePreview),
+        new PropertyMetadata(1.0, (d, _) => ((JigglePreview)d).ApplyZoom()));
+
+    public double Zoom
+    {
+        get => (double)GetValue(ZoomProperty);
+        set => SetValue(ZoomProperty, value);
+    }
+
+    /// <summary>
+    /// Size the control to the zoom, and pin it there.
+    /// <para/>
+    /// Width/Height alone are not enough when a parent layout (a DockPanel
+    /// filling remaining space, say) tries to negotiate: the Min/Max bounds
+    /// are what force WPF's measure pass to settle on exactly this size
+    /// regardless of the room on offer. That was the whole reason the control
+    /// was pinned, and it still is — the pin now simply moves.
+    /// <para/>
+    /// Stretch follows: None at 1 keeps one bitmap pixel on one screen pixel,
+    /// and anything else has to be scaled to the box.
+    /// </summary>
+    private void ApplyZoom()
+    {
+        double zoom = Zoom <= 0 ? 1 : Zoom;
+        double side = FixedSize * zoom;
+
+        Width = MinWidth = MaxWidth = side;
+        Height = MinHeight = MaxHeight = side;
+
+        Stretch = zoom == 1 ? Stretch.None : Stretch.Uniform;
+
+        // Whole multiples land every source pixel on a whole number of screen
+        // pixels, so nearest neighbour is exact and sharp. A half step does
+        // not, and nearest neighbour there doubles some rows and not others —
+        // visibly lumpy. Smooth is the honest choice at those.
+        bool whole = System.Math.Abs(zoom - System.Math.Round(zoom)) < 0.001;
+        RenderOptions.SetBitmapScalingMode(
+            this, whole ? BitmapScalingMode.NearestNeighbor : BitmapScalingMode.HighQuality);
     }
 
     /// <summary>
@@ -266,6 +382,9 @@ public sealed class JigglePreview : Image
         nameof(OutfitViewModel.MouthPrefix),
         nameof(OutfitViewModel.ExpressionEnabled),
         nameof(OutfitViewModel.ExpressionPrefix),
+        // Raised when the character's faces change: a face added on the
+        // Speech expressions list is one more file to look for.
+        nameof(OutfitViewModel.ExpressionFilesHint),
         // The textures a pack replaces on one of the game's busts. Raised by
         // the outfit whenever one of its override rows changes, and on a
         // rebuild of the rows themselves.
@@ -308,6 +427,17 @@ public sealed class JigglePreview : Image
 
     private void ReloadTextures()
     {
+        LoadTextures();
+
+        // After every route through the load, including the ones that return
+        // early having cleared everything: the picker beside the preview is
+        // driven by what got loaded, so a bust with nothing to load has to say
+        // so rather than keep the last bust's faces on offer.
+        PublishExpressionChoices();
+    }
+
+    private void LoadTextures()
+    {
         _renderGeneration++;
         _packReplacedMask = false;
         _vanillaJiggle = null;
@@ -330,8 +460,12 @@ public sealed class JigglePreview : Image
                 ? LoadIfExists(Path.Combine(PackRoot, Normalize(m.Mouth.Prefix) + i + ".PNG"))
                 : null;
         _expressions.Clear();
+        // Every face the game will build this bust with - the four, and each
+        // one the character declares - not the four alone, which left a face
+        // the pack invented out of the list beside this picture while the game
+        // showed it.
         if (m.Expression.Enabled)
-            foreach (var name in ExpressionSpec.Names)
+            foreach (var name in Outfit.PackFaces)
                 _expressions[name] = LoadIfExists(Path.Combine(PackRoot, Normalize(m.Expression.Prefix) + name + ".PNG")) ?? Empty();
     }
 
@@ -703,7 +837,10 @@ public sealed class JigglePreview : Image
         var jiggle = JiggleInEffect;
         var tint = BustComposer.ParseTint(Outfit.Tint);
         float time = (float)(DateTime.Now - _startTime).TotalSeconds;
-        byte[]? expression = (SelectedExpression is not (null or "None")
+        // Empty is no face. "None" is still honoured because the picker used
+        // to store that word, and a layout file from before this change can
+        // hand it back on the first render after an update.
+        byte[]? expression = (!string.IsNullOrEmpty(SelectedExpression) && SelectedExpression != "None"
                               && _expressions.TryGetValue(SelectedExpression, out var exp)) ? exp : null;
         byte[]? blink = BlinkOverlayForThisFrame(nowMs / 1000.0);
         byte[]? mouth = MouthOverlayForThisFrame(nowMs / 1000.0);

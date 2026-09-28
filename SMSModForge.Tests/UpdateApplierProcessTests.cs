@@ -29,6 +29,7 @@ namespace SMSModForge.Tests;
 /// real editor is started with the real switch against a real folder, and what
 /// is measured is what ended up on disk.
 /// </summary>
+[Trait("Speed", "Slow")]   // measured ~6s for the class; see CLAUDE.md
 public sealed class UpdateApplierProcessTests : IDisposable
 {
     private readonly ITestOutputHelper _out;

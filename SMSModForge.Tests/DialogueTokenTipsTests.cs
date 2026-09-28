@@ -33,10 +33,26 @@ namespace SMSModForge.Tests;
 /// that is in the XAML and collapsed, clipped or never realised is one nobody
 /// can read.
 /// </summary>
-public sealed class DialogueTokenTipsTests
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
+public sealed class DialogueTokenTipsTests : System.IDisposable
 {
     private readonly ITestOutputHelper _out;
-    public DialogueTokenTipsTests(ITestOutputHelper o) => _out = o;
+
+    /// <summary>
+    /// Somebody is running this on their own machine, with the panel folded
+    /// away because they know the tokens by heart. A folded Expander never
+    /// realises its content, so every check below would report the panel
+    /// missing — which is the author's preference, not a fault in the editor.
+    /// </summary>
+    private readonly bool _was = SMSModForge.Services.EditorPrefs.ShowTextTokenTips;
+
+    public DialogueTokenTipsTests(ITestOutputHelper o)
+    {
+        _out = o;
+        SMSModForge.Services.EditorPrefs.ShowTextTokenTips = true;
+    }
+
+    public void Dispose() => SMSModForge.Services.EditorPrefs.ShowTextTokenTips = _was;
 
     /// <summary>
     /// Every name token confirmed to resolve in game.
@@ -189,9 +205,11 @@ public sealed class DialogueTokenTipsTests
     [Fact]
     public void ItStartsOpenAndCanBeFoldedAway()
     {
-        // Open by default: it exists to be seen by somebody who does not know
-        // the tokens exist. Foldable: for everyone who does, and wants the
-        // column back.
+        // It follows the remembered preference, which starts on: the panel
+        // exists to be seen by somebody who does not know the tokens exist.
+        // Foldable: for everyone who does, and wants the column back. The
+        // preference is set open above and put back afterwards, since this
+        // runs on a machine whose author may have folded it away.
         WindowHarness.Run(window =>
         {
             ShowDialogues(window);

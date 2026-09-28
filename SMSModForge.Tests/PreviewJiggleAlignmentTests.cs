@@ -35,6 +35,7 @@ namespace SMSModForge.Tests;
 /// identical, which is as honest as this can be and better than matching
 /// neither.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class PreviewJiggleAlignmentTests
 {
     private readonly ITestOutputHelper _out;

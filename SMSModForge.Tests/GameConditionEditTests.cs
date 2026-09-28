@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,6 +20,7 @@ namespace SMSModForge.Tests;
 /// the pack's own reset conditions, and the marks and resets that say what an
 /// entry changes.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class GameConditionEditTests
 {
     private readonly ITestOutputHelper _out;

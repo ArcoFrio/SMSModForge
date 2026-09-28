@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using BepInEx.Logging;
 using GameCreator.Runtime.Quests;
@@ -515,8 +515,8 @@ namespace SMSModForge.PackPlugin
                         // game's quests goes back to describing itself, rather
                         // than to a copy of what it said when the pack loaded.
                         if (s.Vanilla && text.Length == 0) VanillaQuestEdits.RestoreDescription(quest);
-                        else if (s.Vanilla) VanillaQuestEdits.SetDescription(quest, text);
-                        else QuestRegistry.SetDescription(quest, text);
+                        else if (s.Vanilla) VanillaQuestEdits.SetDescription(quest, text, ctx.PackId);
+                        else QuestRegistry.SetDescription(quest, text, ctx.PackId);
                         s.AppliedDescription = text;
                     }
                 }
@@ -530,8 +530,74 @@ namespace SMSModForge.PackPlugin
                 foreach (var gate in s.ByGate)
                     Hide(s, gate.Key, !GateOpen(gate.Value, ctx, log));
                 foreach (var pair in s.Hide) ApplyHidden(s, quest, pair.Key, pair.Value);
+#if DEBUG
+                Trace.Report(s, quest, journal, ctx, log);
+#endif
             }
         }
+
+#if DEBUG
+        /// <summary>
+        /// Every task of a watched quest, its state and whether it is out of
+        /// sight, written once and then only when one of them changes.
+        /// <para/>
+        /// Written because the ordinary log cannot answer the question that
+        /// actually comes up. It says a task "is shown from now on" when its
+        /// show conditions pass — and that is not the same thing as the task
+        /// having STARTED. The journal lists started tasks; un-hiding one that
+        /// is still Inactive changes nothing a player can see, and the log
+        /// reads as though the pack did its part. The two are separate facts
+        /// and only one of them was being written down.
+        /// <para/>
+        /// Debug builds only: it is one line per change, which is nothing while
+        /// something is being chased and noise in a player's log forever.
+        /// </summary>
+        private static class Trace
+        {
+            private static readonly Dictionary<string, string> Last = new Dictionary<string, string>();
+
+            public static void Report(Shown s, GcQuest quest, object journalBox, PackContext ctx, ManualLogSource log)
+            {
+                var journal = QuestRuntime.Journal;
+                if (journal == null || log == null) return;
+
+                var said = new System.Text.StringBuilder();
+                foreach (int id in Ids(quest))
+                {
+                    if (said.Length > 0) said.Append(", ");
+                    said.Append(id).Append('=').Append(journal.GetTaskState(quest, id));
+                    bool hidden;
+                    if (s.AppliedHidden.TryGetValue(id, out hidden) && hidden) said.Append("(hidden)");
+                }
+
+                string key = ctx.PackId + "/" + s.QuestKey;
+                string now = said.ToString();
+                string was;
+                if (Last.TryGetValue(key, out was) && was == now) return;
+                Last[key] = now;
+
+                log.LogInfo(Tag + "quest trace - " + key + ": " + now);
+            }
+
+            /// <summary>Every task of the quest, parents before their children,
+            /// which is the order the journal draws them in.</summary>
+            private static IEnumerable<int> Ids(GcQuest quest)
+            {
+                var seen = new List<int>();
+                void Walk(IEnumerable<int> ids)
+                {
+                    foreach (int id in ids)
+                    {
+                        if (seen.Contains(id)) continue;
+                        seen.Add(id);
+                        Walk(quest.Tasks.Children(id));
+                    }
+                }
+                Walk(quest.Tasks.RootIds);
+                return seen;
+            }
+        }
+#endif
 
         private static void Hide(Shown s, int id, bool hide)
         {

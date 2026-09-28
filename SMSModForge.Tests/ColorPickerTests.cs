@@ -17,6 +17,7 @@ namespace SMSModForge.Tests;
 /// Windows colour dialog and is why there is a picker of our own now; the
 /// second was ours, and is what most of these cover.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class ColorPickerTests
 {
     private readonly ITestOutputHelper _out;

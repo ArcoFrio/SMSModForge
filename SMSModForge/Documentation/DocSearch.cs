@@ -59,13 +59,13 @@ public static class DocSearch
                         ? section.Bullets.ToArray()
                         : section.Bullets.Where(b => Has(b.Term, query) || Has(b.Text, query)).ToArray();
 
-                    if (bullets.Length > 0) sections.Add(new DocSection(section.Heading, bullets));
+                    if (bullets.Length > 0) sections.Add(new DocSection(section.HeadingKey, bullets));
                 }
 
                 if (sections.Count == 0) continue;
 
                 matched += sections.Sum(s => s.Bullets.Count);
-                topics.Add(new DocTopic(topic.Title, topic.Summary, sections.ToArray())
+                topics.Add(new DocTopic(topic.TitleKey, topic.SummaryKey, sections.ToArray())
                 {
                     // Expanded, because a hit the reader still has to go and
                     // open is barely a search result.
@@ -73,7 +73,7 @@ public static class DocSearch
                 });
             }
 
-            if (topics.Count > 0) kept.Add(new DocPart(part.Name, topics.ToArray()));
+            if (topics.Count > 0) kept.Add(new DocPart(part.NameKey, topics.ToArray()));
         }
 
         LastMatchCount = matched;

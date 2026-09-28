@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using SMSModForge.Model;
+using SMSModForge.Localization;
 
 namespace SMSModForge.ViewModel;
 
@@ -451,11 +452,11 @@ public sealed class UiNodeViewModel : ObservableObject
             var parts = new System.Collections.Generic.List<string>();
             if (Model.Image != null && !string.IsNullOrEmpty(Model.Image.Sprite))
                 parts.Add(Model.Image.Type.Equals("Sliced", StringComparison.OrdinalIgnoreCase)
-                    ? Model.Image.Sprite + " (sliced)" : Model.Image.Sprite);
+                    ? Loc.F("ui.node.sliced", "sprite", Model.Image.Sprite) : Model.Image.Sprite);
             if (Model.Text != null && !string.IsNullOrEmpty(Model.Text.Value))
                 parts.Add('“' + Trim(Model.Text.Value, 28) + '”');
-            if (Model.Components.Count > 0) parts.Add($"{Model.Components.Count} component(s)");
-            if (!Model.StartActive) parts.Add("starts hidden");
+            if (Model.Components.Count > 0) parts.Add(Loc.P("ui.node.components", Model.Components.Count));
+            if (!Model.StartActive) parts.Add(Loc.T("ui.node.startsHidden"));
             return string.Join(" · ", parts);
         }
     }
@@ -631,15 +632,15 @@ public sealed class UiNodeViewModel : ObservableObject
     // ── Children ─────────────────────────────────────────────────────
 
     /// <summary>Add an object of the pack's own, inside this one.</summary>
-    public UiNodeViewModel AddChild(string name = "New object")
-        => AddChild(new UiNodeDef { Name = name });
+    public UiNodeViewModel AddChild(string? name = null)
+        => AddChild(new UiNodeDef { Name = name ?? Loc.T("ui.node.newName") });
 
     /// <summary>Adopt a ready-made object - a template, usually - as a child of
     /// this one. Its name is made unique here rather than by the template,
     /// which has no idea what else is already in the tree.</summary>
     public UiNodeViewModel AddChild(UiNodeDef def)
     {
-        def.Name = Unique(string.IsNullOrEmpty(def.Name) ? "New object" : def.Name);
+        def.Name = Unique(string.IsNullOrEmpty(def.Name) ? Loc.T("ui.node.newName") : def.Name);
         Model.Children.Add(def);
         var vm = new UiNodeViewModel(def, RemoveChild, _hasChanges, _reset);
         vm.Changed += Bubble;

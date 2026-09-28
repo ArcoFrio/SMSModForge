@@ -1,5 +1,6 @@
 using System.Windows;
 using SMSModForge.Services;
+using SMSModForge.Localization;
 
 namespace SMSModForge.View;
 
@@ -25,8 +26,7 @@ public static class GameFolderPrompt
     {
         using var dialog = new System.Windows.Forms.FolderBrowserDialog
         {
-            Description = "Where Starmaker Story is installed — the folder with the game "
-                        + "exe and BepInEx in it.",
+            Description = Loc.T("gameFolder.pick"),
             UseDescriptionForTitle = true,
             SelectedPath = EditorPrefs.GameFolder,
         };
@@ -36,10 +36,8 @@ public static class GameFolderPrompt
         if (!UpdateInstaller.IsGameFolder(picked))
         {
             MessageBox.Show(owner,
-                "There is no BepInEx\\plugins folder in:\n" + picked +
-                "\n\nPick the folder the game exe is in, with BepInEx beside it. " +
-                "If BepInEx is not installed yet, the README covers it.",
-                "Starmaker Story folder", MessageBoxButton.OK, MessageBoxImage.Warning);
+                Loc.F("gameFolder.noBepInEx", "folder", picked),
+                Loc.T("gameFolder.title"), MessageBoxButton.OK, MessageBoxImage.Warning);
             return false;
         }
 

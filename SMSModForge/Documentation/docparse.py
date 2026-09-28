@@ -1,7 +1,15 @@
-import io,json,re
+import io,json,os,re
 BS=chr(92)
 src=io.open('Documentation/DocTopics.cs',encoding='utf-8').read()
 src=src[src.index('Parts { get; } = new[]'):]
+
+# The docs' words live in the English file; DocTopics.cs holds their keys.
+EN={}
+for line in io.open('Languages/en.txt',encoding='utf-8-sig').read().splitlines():
+    line=line.strip()
+    if line and not line.startswith('#') and not line.startswith('[') and '=' in line:
+        k,v=line.split('=',1)
+        EN[k.strip()]=v.strip().replace(BS+'n',chr(10))
 
 def read_str(s,i):
     while s[i] in ' \n\r\t': i+=1
@@ -10,7 +18,9 @@ def read_str(s,i):
     while True:
         c=s[i]
         if c==BS: out.append(s[i+1]); i+=2; continue
-        if c=='"': return ''.join(out), i+1
+        if c=='"':
+            v=''.join(out)
+            return EN.get(v,v), i+1
         out.append(c); i+=1
 
 parts=[]; tok=re.compile(r'new Doc(Part|Topic|Section|Bullet)\(')
@@ -37,7 +47,7 @@ while True:
         parts[-1]['topics'][-1]['sections'][-1]['bullets'].append(bullet)
         j=j2
     i=j
-json.dump(parts,io.open('/tmp/docs.json','w',encoding='utf-8'),ensure_ascii=False,indent=1)
+json.dump(parts,io.open(os.environ.get('DOCS_JSON','/tmp/docs.json'),'w',encoding='utf-8'),ensure_ascii=False,indent=1)
 nb=sum(len(s['bullets']) for p in parts for t in p['topics'] for s in t['sections'])
 print(f"parsed: {len(parts)} part(s), {sum(len(p['topics']) for p in parts)} topics, {nb} bullets")
 for p in parts:

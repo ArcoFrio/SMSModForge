@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Model;
 
@@ -15,12 +16,15 @@ namespace SMSModForge.Model;
 /// </summary>
 public static class VanillaFrames
 {
-    public sealed record VanillaFrame(string FileName, string DisplayName);
+    public sealed record VanillaFrame(string FileName, string NameKey)
+    {
+        public string DisplayName => Loc.T(NameKey);
+    }
 
     /// <summary>The frames shipped with the editor.</summary>
     public static readonly IReadOnlyList<VanillaFrame> All = new VanillaFrame[]
     {
-        new("PhotoFrame.png", "Photo Frame"),
-        new("SexyFrame.png",  "Sexy Frame"),
+        new("PhotoFrame.png", "scenes.frame.photo"),
+        new("SexyFrame.png",  "scenes.frame.sexy"),
     };
 }

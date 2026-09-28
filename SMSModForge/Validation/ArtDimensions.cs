@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using SMSModForge.Model;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Validation;
 
@@ -95,8 +96,7 @@ internal static class ArtDimensions
         if (!TryReadPngSize(abs, out int w, out int h))
         {
             issues.Add(new(Severity.Warning, where,
-                $"{what} could not be read as a PNG. If it is a JPG or a BMP renamed to .png, " +
-                "the game will not load it.", CodeUnreadable));
+                Loc.F("validation.art.unreadable", "what", what), CodeUnreadable));
             return;
         }
 
@@ -108,15 +108,13 @@ internal static class ArtDimensions
         if (!sameAspect)
         {
             issues.Add(new(Severity.Warning, where,
-                $"{what} is {w}x{h}, which is not the shape of a {frameW}x{frameH} frame. " +
-                "It will be scaled to fit and centred, leaving transparent bars on two sides.",
+                Loc.F("validation.art.aspect", "what", what, "size", $"{w}x{h}", "frame", $"{frameW}x{frameH}"),
                 aspectCode));
             return;
         }
 
         issues.Add(new(Severity.Info, where,
-            $"{what} is {w}x{h} rather than {frameW}x{frameH}. It will be scaled to fit, " +
-            "so it works — but it is the only size whose pixels land exactly as drawn.",
+            Loc.F("validation.art.size", "what", what, "size", $"{w}x{h}", "frame", $"{frameW}x{frameH}"),
             sizeCode));
     }
 
@@ -132,10 +130,10 @@ internal static class ArtDimensions
                 string w = $"characters[{c.Name}].outfits[{o.Key}]";
 
                 Check(issues, packRoot, o.BaseSprite, $"{w}.baseSprite",
-                      BustPixels, BustPixels, CodeBustSize, CodeBustAspect, "The bust");
+                      BustPixels, BustPixels, CodeBustSize, CodeBustAspect, Loc.T("validation.art.bust"));
                 if (o.BlinkEnabled)
                     Check(issues, packRoot, o.BlinkSprite, $"{w}.blinkSprite",
-                          BustPixels, BustPixels, CodeBustSize, CodeBustAspect, "The blink frame");
+                          BustPixels, BustPixels, CodeBustSize, CodeBustAspect, Loc.T("validation.art.blink"));
 
                 // Overlays share the bust's frame exactly: they are separate
                 // sprites drawn on the same rig, so a mismatch shows as a mouth
@@ -144,14 +142,14 @@ internal static class ArtDimensions
                     for (int i = 1; i <= 4; i++)
                         Check(issues, packRoot, o.Mouth.Prefix + i + ".PNG",
                               $"{w}.mouth[{i}]", BustPixels, BustPixels,
-                              CodeBustSize, CodeBustAspect, $"Mouth frame {i}");
+                              CodeBustSize, CodeBustAspect, Loc.F("validation.art.mouthFrame", "number", i));
 
                 if (o.Expression != null && o.Expression.Enabled &&
                     !string.IsNullOrWhiteSpace(o.Expression.Prefix))
                     foreach (var name in new[] { "Happy", "Angry", "Sad", "Flirty" })
                         Check(issues, packRoot, o.Expression.Prefix + name + ".PNG",
                               $"{w}.expression[{name}]", BustPixels, BustPixels,
-                              CodeBustSize, CodeBustAspect, $"The {name} expression");
+                              CodeBustSize, CodeBustAspect, Loc.F("validation.art.expression", "name", name));
             }
         }
 
@@ -159,9 +157,9 @@ internal static class ArtDimensions
         {
             string w = $"places[{p.Key}]";
             Check(issues, packRoot, p.BaseSprite, $"{w}.baseSprite",
-                  LevelWidth, LevelHeight, CodeLevelSize, CodeLevelAspect, "The front layer");
+                  LevelWidth, LevelHeight, CodeLevelSize, CodeLevelAspect, Loc.T("validation.art.frontLayer"));
             Check(issues, packRoot, p.SecondarySprite, $"{w}.secondarySprite",
-                  LevelWidth, LevelHeight, CodeLevelSize, CodeLevelAspect, "The back layer");
+                  LevelWidth, LevelHeight, CodeLevelSize, CodeLevelAspect, Loc.T("validation.art.backLayer"));
         }
 
         foreach (var sc in pack.Scenes)
@@ -179,7 +177,7 @@ internal static class ArtDimensions
             // 297x310 and 388x405 - so a 256 rule would call both of them
             // wrong.
             Check(issues, packRoot, sc.SceneSprite, $"scenes[{sc.Key}].sceneSprite",
-                  ScenePixels, ScenePixels, CodeSceneSize, CodeSceneAspect, "The scene art");
+                  ScenePixels, ScenePixels, CodeSceneSize, CodeSceneAspect, Loc.T("validation.art.scene"));
         }
     }
 }

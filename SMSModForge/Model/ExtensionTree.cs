@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using SMSModForge.Shared;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Model;
 
@@ -150,11 +151,10 @@ public static class TaskStarts
         switch (parent?.Completion)
         {
             case QuestVocabulary.ByAction:
-                return "Never starts: " + Quoted(parent) + " is completed by an action, and the game starts no "
-                     + "subtasks under a task like that.";
+                return Loc.F("quests.starts.never", "task", Quoted(parent));
             case QuestVocabulary.AnyOrder:
             case QuestVocabulary.AnyOne:
-                return "Starts when " + Quoted(parent) + " does, together with every subtask beside it.";
+                return Loc.F("quests.starts.together", "task", Quoted(parent));
         }
 
         var siblings = ExtensionTree.ChildrenOf(rows, parent).Where(r => r.IsBuilt).ToList();
@@ -164,18 +164,18 @@ public static class TaskStarts
         while (before >= 0 && siblings[before].RemovedSelf) skipped.Add(siblings[before--]);
 
         string text = before >= 0
-            ? "Starts once " + Quoted(siblings[before]) + " is done"
+            ? Loc.F("quests.starts.afterPrevious", "task", Quoted(siblings[before]))
             : parent == null
-                ? "Starts when the quest does"
-                : "Starts when " + Quoted(parent) + " does";
+                ? Loc.T("quests.starts.withQuest")
+                : Loc.F("quests.starts.withParent", "task", Quoted(parent));
 
         if (skipped.Count == 1)
-            text += " - " + Quoted(skipped[0]) + ", which your pack takes out, is skipped on the way";
+            text = Loc.F("quests.starts.skippedOne", "text", text, "task", Quoted(skipped[0]));
         else if (skipped.Count > 1)
-            text += " - the " + skipped.Count + " tasks your pack takes out before it are skipped on the way";
-        return text + ".";
+            text = Loc.P("quests.starts.skippedMany", skipped.Count, "text", text);
+        return Loc.F("common.sentence", "text", text);
     }
 
     private static string Quoted(ExtensionTaskNode node)
-        => "“" + (string.IsNullOrWhiteSpace(node.Name) ? "(no text)" : node.Name.Trim()) + "”";
+        => "“" + (string.IsNullOrWhiteSpace(node.Name) ? Loc.T("quests.noText") : node.Name.Trim()) + "”";
 }

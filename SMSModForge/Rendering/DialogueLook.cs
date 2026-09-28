@@ -23,12 +23,12 @@ public static class DialogueLook
     /// #000000FF</c> and <c>FaceColor #FFFFFFFF</c>, and the live component
     /// reports the same three. The asset and the game agree.
     /// </summary>
-    public const string FontName = "Curse Casual Dialogue";
+    public const string FontName = "Curse Casual Dialogue";   // English on purpose: the game's font name.
 
     /// <summary>The material that font draws through, for the record. The face
     /// colour, the black outline and the drop shadow all come from it, and the
     /// rasteriser reads all three out of the export.</summary>
-    public const string MaterialName = "Curse Casual Atlas Material";
+    public const string MaterialName = "Curse Casual Atlas Material";   // English on purpose: the game's material name.
 
     /// <summary>What the line is typed at.</summary>
     public const double BodyPointSize = 38;
@@ -42,21 +42,23 @@ public static class DialogueLook
     /// line in game is smaller than a short one.
     /// <para/>
     /// <c>enableAutoSizing</c> is on, between <see cref="BodyPointSize"/> and
-    /// this. Not reproduced anywhere in the editor: the editor's box is a
-    /// different width in a different font, so shrinking on its own terms would
-    /// be a number that looks precise and agrees with nothing.
+    /// this. The list rows do not shrink by it - a row is a different width, so
+    /// shrinking on its own terms would agree with nothing - but
+    /// <see cref="DialogueFit"/> does, in the game's own box, to tell the author
+    /// when a line is made smaller or runs out of the box.
     /// </summary>
     public const double BodyMinPointSize = 28;
 
     /// <summary>
-    /// The width of the box the game wraps the line inside, in its own units —
-    /// from <c>TMP_Text.bounds</c>, extents 254.56 either side of centre.
+    /// The width of the box the game wraps the line inside, in its own units:
+    /// 1010, read off the dialogue box's own TextMeshPro rect in a running game
+    /// (2026-09-24; see <see cref="DialogueFit"/>).
     /// <para/>
-    /// This is what makes a scaled-down copy honest rather than merely small:
-    /// keep the ratio of point size to box width and a line breaks between the
-    /// same two words here as it does in the game.
+    /// It said 509.12 before, taken from <c>TMP_Text.bounds</c> - which is the
+    /// size of the words drawn, not of the box they are drawn in, so it was only
+    /// ever as wide as whichever line happened to be showing. Nothing used it.
     /// </summary>
-    public const double WrapWidth = 509.12;
+    public const double WrapWidth = DialogueFit.BoxWidth;
 
     /// <summary>How much taller the name is than the line: 62 against 38. The
     /// one proportion worth keeping when both are shrunk to fit a list row.</summary>
@@ -191,6 +193,16 @@ public static class DialogueLook
     /// </summary>
     public const string RailHex = "#6A7178";
 
+    /// <summary>
+    /// The wavy line under a misspelled word.
+    /// <para/>
+    /// Windows' own red, because that is what the box below the list draws and
+    /// a second red would read as a second kind of problem. Fully opaque: a
+    /// mark this thin loses its colour long before it loses its shape.
+    /// </summary>
+    public const string SpellingHex = "#FF3B30";
+
     public static UiColor TokenColor => UiColor.Parse(TokenHex);
     public static UiColor TokenChipColor => UiColor.Parse(TokenChipHex);
+    public static UiColor SpellingColor => UiColor.Parse(SpellingHex);
 }

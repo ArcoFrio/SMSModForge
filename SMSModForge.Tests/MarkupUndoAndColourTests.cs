@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,6 +27,7 @@ namespace SMSModForge.Tests;
 /// the game-look row's pixels - because the fault there was the two reading the
 /// same tag differently.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class MarkupUndoAndColourTests
 {
     private readonly ITestOutputHelper _out;

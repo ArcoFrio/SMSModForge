@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using SMSModForge.Model;
@@ -22,6 +22,7 @@ namespace SMSModForge.Tests;
 /// <see cref="SMSModForge.Shared.MediaKinds"/> classifies — rather than a
 /// string being what it was on the day it was written.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class PickerFilterTests
 {
     private readonly ITestOutputHelper _out;

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Model;
 
@@ -12,14 +13,19 @@ namespace SMSModForge.Model;
 /// <c>Alpha1</c> — because the runtime parses them straight back into the enum
 /// and a friendlier spelling here would mean a translation table on both sides.
 /// </param>
-/// <param name="Label">What the author reads. Free to be plain English.</param>
-/// <param name="Group">
-/// The dropdown heading it sits under. Also where the keyboard-layout warning
-/// lives: the groups whose position moves between layouts say so in the
+/// <param name="Name">What the author reads: a key into the English file,
+/// or, for a key whose cap says it all ("F1", "A"), just that.</param>
+/// <param name="GroupKey">
+/// The dropdown heading it sits under, as a key. Also where the keyboard-layout
+/// warning lives: the groups whose position moves between layouts say so in the
 /// heading, which is the one place an author cannot miss it.
 /// </param>
-public readonly record struct InputKeyOption(string Token, string Label, string Group)
+public readonly record struct InputKeyOption(string Token, string Name, string GroupKey)
 {
+    public string Label => Name.StartsWith("input.", System.StringComparison.Ordinal) ? Loc.T(Name) : Name;
+
+    public string Group => Loc.T(GroupKey);
+
     /// <summary>Shown by the ComboBox when the row is collapsed.</summary>
     public override string ToString() => Label;
 }
@@ -43,15 +49,15 @@ public readonly record struct InputKeyOption(string Token, string Label, string 
 /// </summary>
 public static class InputKeys
 {
-    public const string GroupMouse = "Mouse";
-    public const string GroupCommon = "Common keys";
-    public const string GroupArrows = "Arrows";
-    public const string GroupModifiers = "Modifiers";
-    public const string GroupFunction = "Function keys";
-    public const string GroupNumpad = "Numpad";
-    public const string GroupLetters = "Letters — position varies by layout";
-    public const string GroupDigits = "Number row — position varies by layout";
-    public const string GroupPunctuation = "Punctuation — position varies by layout";
+    public const string GroupMouse = "input.group.mouse";
+    public const string GroupCommon = "input.group.common";
+    public const string GroupArrows = "input.group.arrows";
+    public const string GroupModifiers = "input.group.modifiers";
+    public const string GroupFunction = "input.group.function";
+    public const string GroupNumpad = "input.group.numpad";
+    public const string GroupLetters = "input.group.letters";
+    public const string GroupDigits = "input.group.digits";
+    public const string GroupPunctuation = "input.group.punctuation";
 
     /// <summary>Group order in the dropdown: safe-everywhere first.</summary>
     public static readonly string[] GroupOrder =
@@ -61,8 +67,8 @@ public static class InputKeys
     };
 
     /// <summary>Device filter shown above the key picker.</summary>
-    public const string DeviceKeyboard = "Keyboard";
-    public const string DeviceMouse = "Mouse";
+    public const string DeviceKeyboard = "input.device.keyboard";
+    public const string DeviceMouse = "input.device.mouse";
 
     public static readonly IReadOnlyList<string> Devices =
         new[] { DeviceKeyboard, DeviceMouse };
@@ -79,7 +85,7 @@ public static class InputKeys
 
     /// <summary>The options for one device, in group order.</summary>
     public static IEnumerable<InputKeyOption> For(string device) =>
-        _all.Where(o => (o.Group == GroupMouse) == (device == DeviceMouse));
+        _all.Where(o => (o.GroupKey == GroupMouse) == (device == DeviceMouse));
 
     /// <summary>The author-facing label for a stored token, or the token itself
     /// when a pack names something this list does not carry (hand-edited
@@ -101,46 +107,46 @@ public static class InputKeys
 
         // Mouse. KeyCode covers these, so a mouse button needs no separate
         // param or code path at runtime — only its own place in the picker.
-        Add("Mouse0", "Left mouse button", GroupMouse);
-        Add("Mouse1", "Right mouse button", GroupMouse);
-        Add("Mouse2", "Middle mouse button", GroupMouse);
-        Add("Mouse3", "Mouse button 4 (back)", GroupMouse);
-        Add("Mouse4", "Mouse button 5 (forward)", GroupMouse);
+        Add("Mouse0", "input.key.mouse0", GroupMouse);
+        Add("Mouse1", "input.key.mouse1", GroupMouse);
+        Add("Mouse2", "input.key.mouse2", GroupMouse);
+        Add("Mouse3", "input.key.mouse3", GroupMouse);
+        Add("Mouse4", "input.key.mouse4", GroupMouse);
 
-        Add("Space", "Space", GroupCommon);
-        Add("Return", "Enter", GroupCommon);
-        Add("Escape", "Escape", GroupCommon);
-        Add("Tab", "Tab", GroupCommon);
-        Add("Backspace", "Backspace", GroupCommon);
-        Add("Delete", "Delete", GroupCommon);
-        Add("Insert", "Insert", GroupCommon);
-        Add("Home", "Home", GroupCommon);
-        Add("End", "End", GroupCommon);
-        Add("PageUp", "Page Up", GroupCommon);
-        Add("PageDown", "Page Down", GroupCommon);
+        Add("Space", "input.key.space", GroupCommon);
+        Add("Return", "input.key.return", GroupCommon);
+        Add("Escape", "input.key.escape", GroupCommon);
+        Add("Tab", "input.key.tab", GroupCommon);
+        Add("Backspace", "input.key.backspace", GroupCommon);
+        Add("Delete", "input.key.delete", GroupCommon);
+        Add("Insert", "input.key.insert", GroupCommon);
+        Add("Home", "input.key.home", GroupCommon);
+        Add("End", "input.key.end", GroupCommon);
+        Add("PageUp", "input.key.pageUp", GroupCommon);
+        Add("PageDown", "input.key.pageDown", GroupCommon);
 
-        Add("UpArrow", "Up arrow", GroupArrows);
-        Add("DownArrow", "Down arrow", GroupArrows);
-        Add("LeftArrow", "Left arrow", GroupArrows);
-        Add("RightArrow", "Right arrow", GroupArrows);
+        Add("UpArrow", "input.key.upArrow", GroupArrows);
+        Add("DownArrow", "input.key.downArrow", GroupArrows);
+        Add("LeftArrow", "input.key.leftArrow", GroupArrows);
+        Add("RightArrow", "input.key.rightArrow", GroupArrows);
 
-        Add("LeftShift", "Left Shift", GroupModifiers);
-        Add("RightShift", "Right Shift", GroupModifiers);
-        Add("LeftControl", "Left Ctrl", GroupModifiers);
-        Add("RightControl", "Right Ctrl", GroupModifiers);
-        Add("LeftAlt", "Left Alt", GroupModifiers);
-        Add("RightAlt", "Right Alt (AltGr)", GroupModifiers);
+        Add("LeftShift", "input.key.leftShift", GroupModifiers);
+        Add("RightShift", "input.key.rightShift", GroupModifiers);
+        Add("LeftControl", "input.key.leftControl", GroupModifiers);
+        Add("RightControl", "input.key.rightControl", GroupModifiers);
+        Add("LeftAlt", "input.key.leftAlt", GroupModifiers);
+        Add("RightAlt", "input.key.rightAlt", GroupModifiers);
 
         for (int i = 1; i <= 12; i++) Add("F" + i, "F" + i, GroupFunction);
 
         for (int i = 0; i <= 9; i++)
-            Add("Keypad" + i, "Numpad " + i, GroupNumpad);
-        Add("KeypadPeriod", "Numpad .", GroupNumpad);
-        Add("KeypadDivide", "Numpad /", GroupNumpad);
-        Add("KeypadMultiply", "Numpad *", GroupNumpad);
-        Add("KeypadMinus", "Numpad -", GroupNumpad);
-        Add("KeypadPlus", "Numpad +", GroupNumpad);
-        Add("KeypadEnter", "Numpad Enter", GroupNumpad);
+            Add("Keypad" + i, "input.key.keypad" + i, GroupNumpad);
+        Add("KeypadPeriod", "input.key.keypadPeriod", GroupNumpad);
+        Add("KeypadDivide", "input.key.keypadDivide", GroupNumpad);
+        Add("KeypadMultiply", "input.key.keypadMultiply", GroupNumpad);
+        Add("KeypadMinus", "input.key.keypadMinus", GroupNumpad);
+        Add("KeypadPlus", "input.key.keypadPlus", GroupNumpad);
+        Add("KeypadEnter", "input.key.keypadEnter", GroupNumpad);
 
         for (char c = 'A'; c <= 'Z'; c++)
             Add(c.ToString(), c.ToString(), GroupLetters);
@@ -148,17 +154,17 @@ public static class InputKeys
         for (int i = 0; i <= 9; i++)
             Add("Alpha" + i, i.ToString(), GroupDigits);
 
-        Add("Minus", "-  minus", GroupPunctuation);
-        Add("Equals", "=  equals", GroupPunctuation);
-        Add("LeftBracket", "[  left bracket", GroupPunctuation);
-        Add("RightBracket", "]  right bracket", GroupPunctuation);
-        Add("Backslash", @"\  backslash", GroupPunctuation);
-        Add("Semicolon", ";  semicolon", GroupPunctuation);
-        Add("Quote", "'  apostrophe", GroupPunctuation);
-        Add("Comma", ",  comma", GroupPunctuation);
-        Add("Period", ".  period", GroupPunctuation);
-        Add("Slash", "/  slash", GroupPunctuation);
-        Add("BackQuote", "`  backtick", GroupPunctuation);
+        Add("Minus", "input.key.minus", GroupPunctuation);
+        Add("Equals", "input.key.equals", GroupPunctuation);
+        Add("LeftBracket", "input.key.leftBracket", GroupPunctuation);
+        Add("RightBracket", "input.key.rightBracket", GroupPunctuation);
+        Add("Backslash", "input.key.backslash", GroupPunctuation);
+        Add("Semicolon", "input.key.semicolon", GroupPunctuation);
+        Add("Quote", "input.key.quote", GroupPunctuation);
+        Add("Comma", "input.key.comma", GroupPunctuation);
+        Add("Period", "input.key.period", GroupPunctuation);
+        Add("Slash", "input.key.slash", GroupPunctuation);
+        Add("BackQuote", "input.key.backQuote", GroupPunctuation);
 
         return list;
     }
@@ -198,10 +204,10 @@ public static class InputPhases
     /// <summary>One line per phase, for the picker's tooltip.</summary>
     public static string Describe(string phase) => phase switch
     {
-        Pressed => "True once, the moment the key goes down.",
-        Down => "True the whole time the key is held.",
-        Released => "True once, the moment the key comes back up.",
-        Up => "True the whole time the key is NOT held.",
+        Pressed => Loc.T("input.phase.pressed.tip"),
+        Down => Loc.T("input.phase.down.tip"),
+        Released => Loc.T("input.phase.released.tip"),
+        Up => Loc.T("input.phase.up.tip"),
         _ => "",
     };
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Services;
 
@@ -208,7 +209,7 @@ public static class UpdateInstaller
         }
         catch (Exception ex)
         {
-            problem = "The download could not be unpacked: " + ex.Message;
+            problem = Loc.F("update.unpackFailed", "problem", ex.Message);
             return null;
         }
 
@@ -222,7 +223,7 @@ public static class UpdateInstaller
 
         if (!LooksLikeAnEditorBuild(staged))
         {
-            problem = "The download does not contain an editor build, so nothing was replaced.";
+            problem = Loc.T("update.notAnEditor");
             return null;
         }
         return staged;
@@ -280,7 +281,7 @@ public static class UpdateInstaller
         }
         catch (Exception ex)
         {
-            problem = "The update could not be started: " + ex.Message;
+            problem = Loc.F("update.startFailed", "problem", ex.Message);
             return false;
         }
     }

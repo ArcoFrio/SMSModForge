@@ -50,7 +50,7 @@ public sealed class SceneDef
 
     /// <summary>Human-facing label shown in the editor's scene list.</summary>
     [JsonProperty("displayName", Order = 2)]
-    public string DisplayName { get; set; } = "New Scene";
+    public string DisplayName { get; set; } = "New Scene";   // English on purpose: the value a pack file without one loads with, which must be the same in every language.
 
     /// <summary>
     /// Relative path (from pack root) to the scene-art PNG. Mapped onto the
@@ -102,6 +102,32 @@ public sealed class SceneDef
     /// </summary>
     [JsonProperty("sound", Order = 6)]
     public SceneSoundMode Sound { get; set; } = SceneSoundMode.Silent;
+
+    /// <summary>
+    /// Whether showing this scene counts as taking a Starmaker photo.
+    /// <para/>
+    /// The game's photos live under <c>4_CG_Manager-Photos</c>, and each is a
+    /// GameObject whose own trigger, on being switched on, records the photo
+    /// and switches on <c>PhotoBonus</c> — which is where everything a photo
+    /// pays out is worked out: Anna's mood deciding whether the shot came out
+    /// good or bad, the photography traits, the camera and lens the player
+    /// owns, the adverts running, the skill tree, the day's income and the
+    /// photo counts. A pack scene is cloned from a different prototype,
+    /// <c>4_CG_Manager-Sexy</c>, which carries none of that, so showing one has
+    /// never been a photo in any sense the game recognises.
+    /// <para/>
+    /// Ticking this puts a scene through the game's own payout when it is shown
+    /// - not a copy of it - so everything above applies to it exactly as it
+    /// does to one of the game's photos, and keeps applying when the game
+    /// changes any of it.
+    /// <para/>
+    /// Off by default and deliberately per scene. Most scenes are not photos:
+    /// a pack whose scenes are story CGs would have every one of them paying
+    /// out followers and raising the day's income, which is not a setting
+    /// anybody would think to go and turn off.
+    /// </summary>
+    [JsonProperty("starmakerPhoto", Order = 7, DefaultValueHandling = DefaultValueHandling.Ignore)]
+    public bool StarmakerPhoto { get; set; }
 
     /// <summary>
     /// Whether an animated scene repeats.

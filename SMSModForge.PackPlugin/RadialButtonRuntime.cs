@@ -88,7 +88,7 @@ namespace SMSModForge.PackPlugin
                 // frame is negligible (packs ship a handful of radials).
                 if (b.LabelTMP != null)
                 {
-                    string resolved = TextPlaceholders.Resolve(
+                    string resolved = TextPlaceholders.ResolveAll(
                         b.RawLabel, Plugin.TryGetPackVars(b.PackId));
                     if (b.LabelTMP.text != resolved) b.LabelTMP.text = resolved;
                 }
@@ -161,7 +161,7 @@ namespace SMSModForge.PackPlugin
                     Conditions = ButtonConditionSet.Parse(btn["conditions"] as JArray, pack.PackId),
                     PackId = pack.PackId,
                 };
-                if (TextPlaceholders.HasAny(label))
+                if (TextPlaceholders.HasAnyToken(label))
                 {
                     binding.RawLabel = label;
                     binding.LabelTMP = go.transform.Find("Text (TMP)")?.GetComponent<TextMeshProUGUI>();

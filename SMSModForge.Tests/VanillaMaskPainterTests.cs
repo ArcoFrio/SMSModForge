@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -29,6 +29,7 @@ namespace SMSModForge.Tests;
 /// fail silently: a mistyped binding hides the button, and a host the painter
 /// cannot write to loses the mask on save.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class VanillaMaskPainterTests : IDisposable
 {
     private readonly ITestOutputHelper _out;

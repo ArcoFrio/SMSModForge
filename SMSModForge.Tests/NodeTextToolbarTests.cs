@@ -23,6 +23,7 @@ namespace SMSModForge.Tests;
 /// the caret was reset to. That is a silent wrong answer, not an error, so it
 /// is driven end to end through the real window.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class NodeTextToolbarTests
 {
     private readonly ITestOutputHelper _out;

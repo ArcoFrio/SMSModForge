@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using SMSModForge.Model;
+using SMSModForge.Localization;
 
 namespace SMSModForge.ViewModel;
 
@@ -125,7 +126,7 @@ public sealed class ActorViewModel : ObservableObject
     // spuriously dirty the pack); setters call TwEdit to create-on-write.
 
     /// <summary>Available voice presets shown in the template dropdown.</summary>
-    public string[] VoiceTemplates { get; } = { "Male", "Female", "Custom" };
+    public static System.Collections.Generic.IReadOnlyList<string> VoiceTemplates => CharacterViewModel.VoiceTemplates;
 
     /// <summary>Create-on-write accessor for the actor's typewriter settings.</summary>
     private TypewriterDef TwEdit => Model.Typewriter ??= new TypewriterDef();
@@ -357,9 +358,9 @@ public sealed class ActorExpressionViewModel : ObservableObject
     /// <summary>What the key box says on hover, which a greyed-out box still
     /// needs to - it is the only place that explains why it is greyed out.</summary>
     public string KeyToolTip
-        => IsLocked ? "Neutral: no expression showing, the bust as it is drawn. Every character has it, so it cannot be renamed or removed."
-         : FromTheGame ? "One of the faces the game gave this character. It belongs to the game, and its own conversations ask for it by this name."
-         : "Pack-local expression key (e.g. Happy)";
+        => IsLocked ? Loc.T("expressions.neutral.tip")
+         : FromTheGame ? Loc.T("expressions.games.tip")
+         : Loc.T("expressions.own.tip");
 
     /// <summary>Deletes this row. Disabled when the owner supplied no callback.</summary>
     public RelayCommand RemoveCommand { get; }

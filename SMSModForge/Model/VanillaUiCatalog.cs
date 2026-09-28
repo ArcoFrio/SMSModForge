@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Model;
 
@@ -56,31 +57,33 @@ public static class VanillaUiCatalog
         {
             get
             {
-                if (Objects == 0) return "empty";
+                if (Objects == 0) return Loc.T("ui.catalog.empty");
                 var parts = Contents
                     .Where(kv => kv.Value > 0)
                     .OrderByDescending(kv => kv.Value)
                     .Take(3)
-                    .Select(kv => kv.Value + " " + Friendly(kv.Key));
-                string made = string.Join(", ", parts);
-                return made.Length == 0
-                    ? Objects + " objects"
-                    : Objects + " objects — " + made;
+                    .Select(kv => Friendly(kv.Key) is { } key ? Loc.P(key, kv.Value) : kv.Value + " " + kv.Key)
+                    .ToList();
+                return parts.Count == 0
+                    ? Loc.P("ui.measure.objects", Objects)
+                    : Loc.F("ui.catalog.summary", "objects", Loc.P("ui.measure.objects", Objects), "parts", Loc.JoinList(parts));
             }
         }
 
-        private static string Friendly(string component) => component switch
+        /// <summary>The count key for a kind of component, or null for one
+        /// with no words of its own, which is shown by its name.</summary>
+        private static string? Friendly(string component) => component switch
         {
-            "TextMeshProUGUI" => "labels",
-            "Text" => "labels",
-            "Image" => "images",
-            "Trigger" => "clickable",
-            "Button" => "buttons",
-            "Slider" => "sliders",
-            "Toggle" => "toggles",
-            "ScrollRect" => "scroll areas",
-            "InputField" => "text fields",
-            _ => component,
+            "TextMeshProUGUI" => "ui.catalog.labels",
+            "Text" => "ui.catalog.labels",
+            "Image" => "ui.catalog.images",
+            "Trigger" => "ui.catalog.clickable",
+            "Button" => "ui.catalog.buttons",
+            "Slider" => "ui.catalog.sliders",
+            "Toggle" => "ui.catalog.toggles",
+            "ScrollRect" => "ui.catalog.scrollAreas",
+            "InputField" => "ui.catalog.textFields",
+            _ => null,
         };
     }
 

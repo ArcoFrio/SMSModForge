@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using SMSModForge.Model;
 using V = SMSModForge.Shared.QuestVocabulary;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Validation;
 
@@ -79,8 +80,7 @@ internal static class QuestValidation
             if (!GameLists.Value.TryGetValue(gate.Key, out var game))
             {
                 issues.Add(new(Severity.Warning, where,
-                    $"Conditions are taken out of a list on '{gate.By}' that the game no longer has, so nothing "
-                    + "is taken out of it. Put them back and take them out again where the game has them now.",
+                    Loc.F("validation.quest.gateUnknown", "by", gate.By),
                     "quest.gateUnknown"));
                 continue;
             }
@@ -90,10 +90,10 @@ internal static class QuestValidation
                 if (removed.Index >= 0 && removed.Index < game.Count
                     && string.Equals(game[removed.Index].Type, removed.Type, StringComparison.Ordinal))
                     continue;
-                string what = removed.Title.Length > 0 ? "'" + removed.Title + "'" : "A condition";
                 issues.Add(new(Severity.Warning, where,
-                    $"{what} is no longer where it was in the list on '{gate.By}', so it is not taken out - "
-                    + "the game checks it as before. Put it back and take it out again.",
+                    removed.Title.Length > 0
+                        ? Loc.F("validation.quest.gateChanged", "condition", removed.Title, "by", gate.By)
+                        : Loc.F("validation.quest.gateChangedUnnamed", "by", gate.By),
                     "quest.gateChanged"));
             }
         }
@@ -110,11 +110,11 @@ internal static class QuestValidation
 
             if (string.IsNullOrWhiteSpace(quest.Key))
             {
-                issues.Add(new(Severity.Error, where, "A quest has no runtime name, so nothing can start it and the game has nowhere to save it.", "quest.noKey"));
+                issues.Add(new(Severity.Error, where, Loc.T("validation.quest.noKey"), "quest.noKey"));
                 continue;
             }
             if (!seen.Add(quest.Key))
-                issues.Add(new(Severity.Error, where, $"Two quests are called '{quest.Key}'. They would share one save slot in the game, so the second is left out.", "quest.duplicateKey"));
+                issues.Add(new(Severity.Error, where, Loc.F("validation.quest.duplicateKey", "name", quest.Key), "quest.duplicateKey"));
 
             if (quest.IsVanillaExtension)
             {
@@ -123,21 +123,20 @@ internal static class QuestValidation
             }
 
             if (string.IsNullOrWhiteSpace(VanillaQuests.StripTags(quest.Title)))
-                issues.Add(new(Severity.Warning, $"{where}.title", "This quest has no title, so the journal lists it as a blank row.", "quest.noTitle"));
+                issues.Add(new(Severity.Warning, $"{where}.title", Loc.T("validation.quest.noTitle"), "quest.noTitle"));
 
             if (quest.Tasks.Count == 0)
             {
-                issues.Add(new(Severity.Warning, $"{where}.tasks", "This quest has no tasks. It can be started, but it has nothing to show under it and can never be completed.", "quest.noTasks"));
+                issues.Add(new(Severity.Warning, $"{where}.tasks", Loc.T("validation.quest.noTasks"), "quest.noTasks"));
             }
 
-            CheckTaskDefinitions(pack, quest, "tasks", where, issues,
-                "The game would mix up their progress, so the whole quest is left out until one is renamed.");
+            CheckTaskDefinitions(pack, quest, "tasks", where, issues, "validation.quest.duplicateTaskKey");
 
             bool started = quest.StartConditions.Count > 0
                 || rows.Any(r => r.IsAction && !r.Vanilla && r.Quest == quest.Key && V.Is(r.Operation, V.Start));
             if (!started)
             {
-                issues.Add(new(Severity.Warning, where, "Nothing starts this quest, so it can never be completed. Give it start conditions, or start it with a Quest action from a dialogue node, a rule or a button.", "quest.neverStarted"));
+                issues.Add(new(Severity.Warning, where, Loc.T("validation.quest.neverStarted"), "quest.neverStarted"));
                 continue;
             }
 
@@ -150,18 +149,18 @@ internal static class QuestValidation
             var stuck = quest.Tasks.FirstOrDefault(t => !Finishable(own, t, null));
             if (stuck != null)
                 issues.Add(new(Severity.Warning, where,
-                    $"This quest can never be completed: it stops at '{(string.IsNullOrWhiteSpace(stuck.Name) ? stuck.Key : stuck.Name)}', " +
-                    "which nothing finishes. The tasks that need something are listed separately.",
+                    Loc.F("validation.quest.cannotComplete", "task", string.IsNullOrWhiteSpace(stuck.Name) ? stuck.Key : stuck.Name),
                     "quest.cannotComplete"));
 
             foreach (var top in quest.Tasks)
                 ReportUnfinishable(own, top, null, $"{where}.tasks", issues);
 
-            foreach (var task in quest.AllTasks())
-                if (task.CountTo is > 0 && !quest.Tasks.Contains(task))
-                    issues.Add(new(Severity.Warning, $"{where}.tasks[{task.Key}].countTo",
-                        "The journal only draws a count beside a top-level task. This one counts, but the player will not see the number.",
-                        "quest.hiddenCounter"));
+            // A counting subtask used to be warned about here, because the
+            // journal builds the counter under its subtask rows and then never
+            // switches it on. The runtime now points the one field that does
+            // that at the counter already there, so the number is drawn and
+            // there is nothing left to warn about - see Shared/QuestCounters
+            // and the plugin's SubtaskCounters.
         }
     }
 
@@ -172,36 +171,36 @@ internal static class QuestValidation
     /// and no completion lists on a task that finishes through its subtasks.
     /// </summary>
     private static void CheckTaskDefinitions(ModPack pack, QuestDef quest, string list, string where,
-                                             List<ValidationIssue> issues, string duplicateConsequence)
+                                             List<ValidationIssue> issues, string duplicateMessage)
     {
         var taskKeys = new HashSet<string>(StringComparer.Ordinal);
         foreach (var task in quest.AllTasks())
         {
             string tw = $"{where}.{list}[{task.Key}]";
             if (string.IsNullOrWhiteSpace(task.Key))
-                issues.Add(new(Severity.Error, tw, "A task has no runtime name. The game saves a task's progress under it.", "quest.taskNoKey"));
+                issues.Add(new(Severity.Error, tw, Loc.T("validation.quest.taskNoKey"), "quest.taskNoKey"));
             else if (!taskKeys.Add(task.Key))
-                issues.Add(new(Severity.Error, tw, $"Two tasks in this quest are called '{task.Key}'. {duplicateConsequence}", "quest.duplicateTaskKey"));
+                issues.Add(new(Severity.Error, tw, Loc.F(duplicateMessage, "name", task.Key), "quest.duplicateTaskKey"));
 
             if (string.IsNullOrWhiteSpace(task.Name))
-                issues.Add(new(Severity.Warning, $"{tw}.name", "This task has no text, so the journal shows an empty line for it.", "quest.taskNoText"));
+                issues.Add(new(Severity.Warning, $"{tw}.name", Loc.T("validation.quest.taskNoText"), "quest.taskNoText"));
 
             if (task.CountsFromVariable)
                 CheckCountVariable(pack, task, $"{tw}.countVariable", issues);
 
             if (task.Subtasks.Count > 0 && !V.Completions.Any(c => V.Is(task.Completion, c)))
-                issues.Add(new(Severity.Error, $"{tw}.completion", $"'{task.Completion}' is not a way a task can complete. It will run in order.", "quest.badCompletion"));
+                issues.Add(new(Severity.Error, $"{tw}.completion", Loc.F("validation.quest.badCompletion", "completion", task.Completion), "quest.badCompletion"));
 
             if (task.HideUntilConditions && task.ShowConditions.Count == 0)
                 issues.Add(new(Severity.Warning, $"{tw}.showConditions",
-                    "This task is hidden until conditions pass, but has none, so it is shown at once.",
+                    Loc.T("validation.quest.showConditionsEmpty"),
                     "quest.showConditionsEmpty"));
 
             // What would stop the quest ever finishing is said further down;
             // this is the lists that are never read.
             if (task.Subtasks.Count > 0 && task.Conditions.Count + task.Actions.Count > 0)
                 issues.Add(new(Severity.Warning, tw,
-                    "This task has subtasks, so its own completion conditions and actions are not used. Move them to its subtasks, or remove them.",
+                    Loc.T("validation.quest.headerHasCompletion"),
                     "quest.headerHasCompletion"));
         }
     }
@@ -222,8 +221,7 @@ internal static class QuestValidation
         if (theirs == null)
         {
             issues.Add(new(Severity.Warning, $"{where}.source",
-                $"'{quest.Source}' is not one of the game's quests that ModForge knows. If it is spelled exactly as "
-                + "the game names it, what this entry says still reaches it in game.",
+                Loc.F("validation.quest.unknownVanillaSource", "quest", quest.Source),
                 "quest.unknownVanillaSource"));
         }
         else
@@ -232,8 +230,7 @@ internal static class QuestValidation
             {
                 if (theirs.Task(hook.Task) != null) continue;
                 issues.Add(new(Severity.Warning, $"{where}.vanillaTasks[{hook.Task}]",
-                    $"'{theirs.PlainTitle}' has no task {hook.Task}, so what this says about it never happens. "
-                    + "It was probably written for a different quest.",
+                    Loc.F("validation.quest.unknownVanillaTask", "quest", theirs.PlainTitle, "task", hook.Task),
                     "quest.unknownVanillaTask"));
             }
         }
@@ -261,8 +258,7 @@ internal static class QuestValidation
                 var place = quest.SiteConditions[i];
                 if (place.Conditions.Count == 0 || known.Contains(place.Key)) continue;
                 issues.Add(new(Severity.Warning, $"{where}.siteConditions[{i}]",
-                    "These conditions are for a place that does not start or reset this quest in the game, so "
-                    + "they are never asked. Remove them, or add them again to one of the places listed.",
+                    Loc.T("validation.quest.siteUnknown"),
                     "quest.siteUnknown"));
             }
         }
@@ -271,11 +267,11 @@ internal static class QuestValidation
         {
             if (hook.Visibility.Length > 0 && !hook.IsHidden && !hook.IsHiddenUntilStarted && !hook.IsHiddenUntilConditions)
                 issues.Add(new(Severity.Warning, $"{where}.vanillaTasks[{hook.Task}].visibility",
-                    $"'{hook.Visibility}' is not a way to show a task, so the journal shows it as the game does.",
+                    Loc.F("validation.quest.badVisibility", "visibility", hook.Visibility),
                     "quest.badVisibility"));
             if (hook.IsHiddenUntilConditions && hook.ShowConditions.Count == 0)
                 issues.Add(new(Severity.Warning, $"{where}.vanillaTasks[{hook.Task}].showConditions",
-                    "This task is hidden until conditions pass, but has none, so it is shown at once.",
+                    Loc.T("validation.quest.showConditionsEmpty"),
                     "quest.showConditionsEmpty"));
         }
 
@@ -288,14 +284,13 @@ internal static class QuestValidation
             var tops = tree.Where(n => n.IsTopLevel && !n.Orphan).ToList();
             if (tops.Count > 0 && tops.All(n => n.Removed))
                 issues.Add(new(Severity.Warning, where,
-                    $"Every task of '{theirs.PlainTitle}' is taken out, so the quest completes the moment it starts.",
+                    Loc.F("validation.quest.everyTaskRemoved", "quest", theirs.PlainTitle),
                     "quest.everyTaskRemoved"));
         }
 
         if (quest.Tasks.Count > 0)
             issues.Add(new(Severity.Warning, $"{where}.tasks",
-                "This entry extends one of the game's quests, and these tasks are written as a quest of the pack's "
-                + "own, so nothing reads them. Add tasks to the game's quest from its task list instead.",
+                Loc.T("validation.quest.extensionHasOwnTasks"),
                 "quest.extensionHasOwnTasks"));
 
         bool saysSomething = quest.Description.Length > 0
@@ -308,10 +303,8 @@ internal static class QuestValidation
         if (!saysSomething)
             issues.Add(new(Severity.Warning, where,
                 quest.Source.Length == 0
-                    ? "This entry names none of the game's quests, so it does nothing."
-                    : $"This entry changes nothing about '{(theirs?.PlainTitle ?? quest.Source)}'. Give it a "
-                      + "description, start or reset conditions, tasks of your own, or something to do with one "
-                      + "of the game's.",
+                    ? Loc.T("validation.quest.extensionNamesNothing")
+                    : Loc.F("validation.quest.extensionSaysNothing", "quest", theirs?.PlainTitle ?? quest.Source),
                 "quest.extensionSaysNothing"));
 
         foreach (var other in pack.Quests)
@@ -321,8 +314,7 @@ internal static class QuestValidation
             if (string.CompareOrdinal(other.Key, quest.Key) >= 0) continue;
 
             issues.Add(new(Severity.Warning, where,
-                $"'{other.Key}' also extends this quest. Both apply, and if both write its description the one "
-                + "further down this list wins.",
+                Loc.F("validation.quest.twoExtensions", "entry", other.Key),
                 "quest.twoExtensions"));
             break;
         }
@@ -346,14 +338,12 @@ internal static class QuestValidation
     private static void CheckAddedTasks(ModPack pack, QuestDef quest, VanillaQuests.VanillaQuest? theirs,
                                         string where, List<Row> rows, List<ValidationIssue> issues)
     {
-        CheckTaskDefinitions(pack, quest, "addedTasks", where, issues,
-            "The game would mix up their progress, so the second is left out of the quest until one is renamed.");
+        CheckTaskDefinitions(pack, quest, "addedTasks", where, issues, "validation.quest.duplicateAddedTaskKey");
 
         foreach (var task in quest.AllTasks())
             if (task.Key.Length > 0 && task.Key.All(char.IsDigit))
                 issues.Add(new(Severity.Error, $"{where}.addedTasks[{task.Key}]",
-                    $"'{task.Key}' is all digits, which is how the game's own tasks are named, so Quest actions and "
-                    + "conditions would look for one of the game's tasks instead of this one. Rename it.",
+                    Loc.F("validation.quest.addedTaskNumericKey", "name", task.Key),
                     "quest.addedTaskNumericKey"));
 
         if (theirs == null) return;   // said already: the quest itself is unknown
@@ -370,8 +360,8 @@ internal static class QuestValidation
             {
                 if (node.Parent == null)
                     issues.Add(new(Severity.Warning, tw,
-                        $"'{name}' sits under task {((AddedTaskDef)node.Added).Under}, which '{theirs.PlainTitle}' does not have, "
-                        + "so it is not added to the quest. Remove it, or add it again under one of the quest's tasks.",
+                        Loc.F("validation.quest.addedTaskUnknownParent", "task", name,
+                              "under", ((AddedTaskDef)node.Added).Under, "quest", theirs.PlainTitle),
                         "quest.addedTaskUnknownParent"));
                 continue;
             }
@@ -379,27 +369,19 @@ internal static class QuestValidation
             if (!node.IsBuilt)
             {
                 issues.Add(new(Severity.Warning, tw,
-                    $"'{name}' is a subtask of a subtask. The game's quests are two levels deep, and tasks added to "
-                    + "them are too, so it is not added.",
+                    Loc.F("validation.quest.addedTaskTooDeep", "task", name),
                     "quest.addedTaskTooDeep"));
                 continue;
             }
 
-            if (node.Depth > 0 && node.Added.CountTo is > 0)
-                issues.Add(new(Severity.Warning, $"{tw}.countTo",
-                    "The journal only draws a count beside a top-level task. This one counts, but the player will not see the number.",
-                    "quest.hiddenCounter"));
-
             var parent = node.Parent;
             if (parent?.Game != null && parent.Removed)
                 issues.Add(new(Severity.Warning, tw,
-                    $"'{name}' sits under a task that is taken out of the quest, so the player never sees it and "
-                    + "nothing waits for it.",
+                    Loc.F("validation.quest.addedUnderRemoved", "task", name),
                     "quest.addedUnderRemoved"));
             else if (parent != null && V.Is(parent.Completion, V.ByAction))
                 issues.Add(new(Severity.Warning, tw,
-                    $"'{name}' sits under a task that is completed by an action, and those never start their subtasks, "
-                    + "so it never starts either.",
+                    Loc.F("validation.quest.addedUnderByAction", "task", name),
                     "quest.addedUnderByAction"));
         }
 
@@ -487,8 +469,8 @@ internal static class QuestValidation
         {
             issues.Add(new(Severity.Warning, tw,
                 task.CountTo is > 0
-                    ? "Nothing completes or counts this task, so the quest stops here. Give it completion conditions, or count it with a Quest action."
-                    : "Nothing completes this task, so the quest stops here. Give it completion conditions, or complete it with a Quest action.",
+                    ? Loc.T("validation.quest.counterNeverCompleted")
+                    : Loc.T("validation.quest.taskNeverCompleted"),
                 "quest.taskNeverCompleted"));
             return;
         }
@@ -496,7 +478,7 @@ internal static class QuestValidation
         if (V.Is(task.Completion, V.AnyOne))
         {
             issues.Add(new(Severity.Warning, tw,
-                "This task completes when any one of its subtasks does, and nothing completes any of them, so the quest stops here.",
+                Loc.T("validation.quest.anyOneNeverCompleted"),
                 "quest.taskNeverCompleted"));
             return;
         }
@@ -509,11 +491,10 @@ internal static class QuestValidation
 
     private static void CheckRow(ModPack pack, Row row, List<ValidationIssue> issues)
     {
-        string what = row.IsAction ? "This Quest action" : "This quest condition";
-
         if (row.Quest.Length == 0)
         {
-            issues.Add(new(Severity.Error, row.Where, $"{what} names no quest.", "quest.rowNoQuest"));
+            issues.Add(new(Severity.Error, row.Where,
+                Loc.T(row.IsAction ? "validation.quest.actionNoQuest" : "validation.quest.conditionNoQuest"), "quest.rowNoQuest"));
             return;
         }
 
@@ -521,25 +502,25 @@ internal static class QuestValidation
         {
             if (row.Vanilla)
                 issues.Add(new(Severity.Warning, row.Where,
-                    $"'{row.Quest}' is not one of the game's quests that ModForge knows. If it is spelled exactly as the game names it, it will still work.",
+                    Loc.F("validation.quest.unknownVanillaQuest", "quest", row.Quest),
                     "quest.unknownVanillaQuest"));
             else
                 issues.Add(new(Severity.Error, row.Where,
-                    $"There is no quest called '{row.Quest}' on the Quests tab, so {what.ToLowerInvariant()} does nothing.",
+                    Loc.F(row.IsAction ? "validation.quest.actionUnknownQuest" : "validation.quest.conditionUnknownQuest", "quest", row.Quest),
                     "quest.unknownQuest"));
             return;
         }
 
         if (row.IsAction && !V.Operations.Any(o => V.Is(row.Operation, o)))
         {
-            issues.Add(new(Severity.Error, row.Where, $"'{row.Operation}' is not something a Quest action can do.", "quest.badOperation"));
+            issues.Add(new(Severity.Error, row.Where, Loc.F("validation.quest.badOperation", "operation", row.Operation), "quest.badOperation"));
             return;
         }
 
         bool needsTask = row.IsAction ? V.TakesTask(row.Operation) : row.IsCounter;
         if (needsTask && row.Task.Length == 0)
         {
-            issues.Add(new(Severity.Error, row.Where, $"{what} needs a task and names none.", "quest.rowNoTask"));
+            issues.Add(new(Severity.Error, row.Where, Loc.T(row.IsAction ? "validation.quest.actionNoTask" : "validation.quest.conditionNoTask"), "quest.rowNoTask"));
             return;
         }
 
@@ -550,7 +531,7 @@ internal static class QuestValidation
             if (task == null)
             {
                 issues.Add(new(row.Vanilla ? Severity.Warning : Severity.Error, row.Where,
-                    $"'{row.Quest}' has no task '{row.Task}'.", "quest.unknownTask"));
+                    Loc.F("validation.quest.unknownTask", "quest", row.Quest, "task", row.Task), "quest.unknownTask"));
                 return;
             }
         }
@@ -561,18 +542,18 @@ internal static class QuestValidation
             {
                 if (!task.Counts)
                     issues.Add(new(Severity.Warning, row.Where,
-                        $"'{Name(task)}' does not count, so setting its counter changes nothing the player can see and never completes it.",
+                        Loc.F("validation.quest.notACounter", "task", Name(task)),
                         "quest.notACounter"));
                 else if (task.CounterFollowsVariable)
                     issues.Add(new(Severity.Warning, row.Where,
-                        $"'{Name(task)}' counts from a variable, which overwrites whatever an action sets.",
+                        Loc.F("validation.quest.counterFollowsVariable", "task", Name(task)),
                         "quest.counterFollowsVariable"));
 
                 bool empty = row.Value.Trim().Length == 0;
                 if (empty && V.Is(row.Operation, V.SetCounter))
-                    issues.Add(new(Severity.Error, row.Where, "'set counter' needs a number.", "quest.valueMissing"));
+                    issues.Add(new(Severity.Error, row.Where, Loc.T("validation.quest.valueMissing"), "quest.valueMissing"));
                 else if (!empty && !IsNumberOrVariable(row.Value))
-                    issues.Add(new(Severity.Error, row.Where, $"'{row.Value}' is not a number or a $variable.", "quest.valueNotNumber"));
+                    issues.Add(new(Severity.Error, row.Where, Loc.F("validation.quest.valueNotNumber", "value", row.Value), "quest.valueNotNumber"));
             }
             return;
         }
@@ -580,15 +561,15 @@ internal static class QuestValidation
         if (row.IsCounter)
         {
             if (task != null && !task.Counts)
-                issues.Add(new(Severity.Warning, row.Where, $"'{Name(task)}' does not count, so its count is always 0.", "quest.notACounter"));
+                issues.Add(new(Severity.Warning, row.Where, Loc.F("validation.quest.countAlwaysZero", "task", Name(task)), "quest.notACounter"));
             if (!V.Comparisons.Any(c => V.Is(row.Comparison, c)))
-                issues.Add(new(Severity.Error, row.Where, $"'{row.Comparison}' is not a comparison. The condition is never met.", "quest.badComparison"));
+                issues.Add(new(Severity.Error, row.Where, Loc.F("validation.quest.badComparison", "comparison", row.Comparison), "quest.badComparison"));
             if (!IsNumberOrVariable(row.Value))
-                issues.Add(new(Severity.Error, row.Where, $"'{row.Value}' is not a number or a $variable. The condition is never met.", "quest.valueNotNumber"));
+                issues.Add(new(Severity.Error, row.Where, Loc.F("validation.quest.conditionValueNotNumber", "value", row.Value), "quest.valueNotNumber"));
         }
         else if (!V.States.Any(s => V.Is(row.State, s)))
         {
-            issues.Add(new(Severity.Error, row.Where, $"'{row.State}' is not a state a quest can be in. The condition is never met.", "quest.badState"));
+            issues.Add(new(Severity.Error, row.Where, Loc.F("validation.quest.badState", "state", row.State), "quest.badState"));
         }
     }
 
@@ -601,7 +582,7 @@ internal static class QuestValidation
         string name = (task.CountVariable ?? "").Trim();
         if (name.Length == 0)
         {
-            issues.Add(new(Severity.Error, where, "This task counts from a variable, but no variable is chosen, so its count never moves.", "quest.counterNoVariable"));
+            issues.Add(new(Severity.Error, where, Loc.T("validation.quest.counterNoVariable"), "quest.counterNoVariable"));
             return;
         }
 
@@ -609,24 +590,24 @@ internal static class QuestValidation
         {
             if (!VanillaGameVariables.Contains(name))
             {
-                issues.Add(new(Severity.Warning, where, $"'{name}' isn't one of the game's variables that ModForge knows. If it is spelled exactly as the game names it, it will still work.", "quest.counterUnknownVariable"));
+                issues.Add(new(Severity.Warning, where, Loc.F("validation.quest.counterUnknownVanillaVariable", "name", name), "quest.counterUnknownVariable"));
                 return;
             }
             var kind = VariableTypes.OfVanilla(VanillaGameVariables.TypeOf(name));
             if (kind != VariableKind.Number && kind != VariableKind.Unknown)
-                issues.Add(new(Severity.Warning, where, $"'{name}' holds {VariableTypes.Label(kind)}, not a number, so the count never moves.", "quest.counterNotANumber"));
+                issues.Add(new(Severity.Warning, where, Loc.F("validation.quest.counterNotANumber", "name", name, "kind", VariableTypes.Label(kind)), "quest.counterNotANumber"));
             return;
         }
 
         var declared = pack.Variables.FirstOrDefault(v => v.Name == name);
         if (declared == null)
         {
-            issues.Add(new(Severity.Warning, where, $"'{name}' isn't declared on the Variables tab, so the count never moves.", "quest.counterUnknownVariable"));
+            issues.Add(new(Severity.Warning, where, Loc.F("validation.quest.counterUnknownVariable", "name", name), "quest.counterUnknownVariable"));
             return;
         }
         var packKind = VariableTypes.Of(declared.Type);
         if (packKind != VariableKind.Number)
-            issues.Add(new(Severity.Warning, where, $"'{name}' holds {VariableTypes.Label(packKind)}, not a number, so the count never moves.", "quest.counterNotANumber"));
+            issues.Add(new(Severity.Warning, where, Loc.F("validation.quest.counterNotANumber", "name", name, "kind", VariableTypes.Label(packKind)), "quest.counterNotANumber"));
     }
 
     private static bool IsNumberOrVariable(string value)

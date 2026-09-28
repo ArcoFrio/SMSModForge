@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SMSModForge.Model;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Rendering;
 
@@ -223,7 +224,7 @@ public static class UiSceneRenderer
         // export that was never going to contain it.
         if (string.Equals(text.Kind, "UI.Text", StringComparison.OrdinalIgnoreCase))
         {
-            report.Legacy(path + "  (" + (text.Font.Length > 0 ? text.Font : "no font") + ")");
+            report.Legacy(path + "  (" + (text.Font.Length > 0 ? text.Font : Loc.T("preview.ui.noFont")) + ")");
             return;
         }
 

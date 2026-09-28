@@ -14,9 +14,9 @@
          reports comes from Shared/ForgeVersion.cs. Kept in step, and listed
          here only so the next person to look for a version finds the note
          rather than believing these. -->
-    <Version>1.5.0</Version>
-    <AssemblyVersion>1.5.0.0</AssemblyVersion>
-    <FileVersion>1.5.0.0</FileVersion>
+    <Version>1.6.0</Version>
+    <AssemblyVersion>1.6.0.0</AssemblyVersion>
+    <FileVersion>1.6.0.0</FileVersion>
     <AssemblyName>SMSModForge.PackPlugin</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -69,9 +69,16 @@
     -->
     <Compile Include="ScriptDump.cs" Condition=" '$(Configuration)' == 'Debug' " />
     <Compile Include="QuestJournalDump.cs" Condition=" '$(Configuration)' == 'Debug' " />
+    <Compile Include="PhotoSystemDump.cs" Condition=" '$(Configuration)' == 'Debug' " />
+    <Compile Include="LayoutDump.cs" Condition=" '$(Configuration)' == 'Debug' " />
     <Compile Include="QuestRegistry.cs" />
     <Compile Include="QuestRuntime.cs" />
     <Compile Include="QuestTicker.cs" />
+    <Compile Include="QuestGrowthRuntime.cs" />
+    <Compile Include="GameLineTranslations.cs" />
+    <Compile Include="SubtaskCounters.cs" />
+    <Compile Include="StarmakerPhotos.cs" />
+    <Compile Include="StarmakerGallery.cs" />
     <Compile Include="VanillaQuestEdits.cs" />
     <Compile Include="SaveLoadWarning.cs" />
     <Compile Include="GameGateRuntime.cs" />
@@ -101,6 +108,15 @@
     <Compile Include="ButtonConditionSet.cs" />
     <Compile Include="PackArchive.cs" />
     <Compile Include="PackManifest.cs" />
+    <Compile Include="PluginLanguage.cs" />
+    <Compile Include="PackSwitchSetting.cs" />
+    <Compile Include="PackSwitchBox.cs" />
+    <Compile Include="SaveCarry.cs" />
+    <Compile Include="TypewriterTiming.cs" />
+    <Compile Include="XUnityLink.cs" />
+    <Compile Include="PluginFonts.cs" />
+    <Compile Include="LanguageMenu.cs" />
+    <Compile Include="GameTextTokens.cs" />
     <Compile Include="TextPlaceholders.cs" />
     <Compile Include="VanillaSaveSlot.cs" />
     <Compile Include="PackManualSaveSync.cs" />
@@ -120,6 +136,7 @@
     <Compile Include="SceneFactory.cs" />
     <Compile Include="WallpaperRegistry.cs" />
     <Compile Include="WallpaperFactory.cs" />
+    <Compile Include="WallpaperListFit.cs" />
     <Compile Include="MusicFactory.cs" />
     <Compile Include="SfxRegistry.cs" />
     <Compile Include="SfxFactory.cs" />
@@ -265,7 +282,14 @@
     <Compile Include="..\Shared\QuestIds.cs" Link="Shared\QuestIds.cs" />
     <Compile Include="..\Shared\QuestVocabulary.cs" Link="Shared\QuestVocabulary.cs" />
     <Compile Include="..\Shared\QuestTreeEdits.cs" Link="Shared\QuestTreeEdits.cs" />
+    <Compile Include="..\Shared\QuestCounters.cs" Link="Shared\QuestCounters.cs" />
+    <Compile Include="..\Shared\QuestGrowth.cs" Link="Shared\QuestGrowth.cs" />
     <Compile Include="..\Shared\SaveLoadChecks.cs" Link="Shared\SaveLoadChecks.cs" />
+    <Compile Include="..\Shared\SaveRecord.cs" Link="Shared\SaveRecord.cs" />
+    <Compile Include="..\Shared\PackSwitches.cs" Link="Shared\PackSwitches.cs" />
+    <Compile Include="..\Shared\RichText.cs" Link="Shared\RichText.cs" />
+    <Compile Include="..\Shared\TextTemplates.cs" Link="Shared\TextTemplates.cs" />
+    <Compile Include="..\Shared\XUnityLanguage.cs" Link="Shared\XUnityLanguage.cs" />
     <Compile Include="..\Shared\GameConditionEdits.cs" Link="Shared\GameConditionEdits.cs" />
     <Compile Include="..\Shared\VarText.cs" Link="Shared\VarText.cs" />
     <Compile Include="..\Shared\VarCompare.cs" Link="Shared\VarCompare.cs" />
@@ -276,10 +300,35 @@
     <Compile Include="..\Shared\SpriteSlotNames.cs" Link="Shared\SpriteSlotNames.cs" />
     <Compile Include="..\Shared\AnimationClock.cs" Link="Shared\AnimationClock.cs" />
     <Compile Include="..\Shared\MediaKinds.cs" Link="Shared\MediaKinds.cs" />
+    <Compile Include="..\Shared\PackPaths.cs" Link="Shared\PackPaths.cs" />
     <Compile Include="..\Shared\ModsFolder.cs" Link="Shared\ModsFolder.cs" />
     <Compile Include="..\Shared\PackInstallScan.cs" Link="Shared\PackInstallScan.cs" />
     <Compile Include="..\Shared\ForgeVersion.cs" Link="Shared\ForgeVersion.cs" />
     <Compile Include="..\Shared\PackStatus.cs" Link="Shared\PackStatus.cs" />
+    <Compile Include="..\Shared\TextScripts.cs" Link="Shared\TextScripts.cs" />
+    <Compile Include="..\Shared\TextFile.cs" Link="Shared\TextFile.cs" />
+    <Compile Include="..\Shared\PluralRules.cs" Link="Shared\PluralRules.cs" />
+    <Compile Include="..\Shared\Texts.cs" Link="Shared\Texts.cs" />
+    <Compile Include="..\Shared\GameTexts.cs" Link="Shared\GameTexts.cs" />
+    <Compile Include="..\Shared\LanguageMatch.cs" Link="Shared\LanguageMatch.cs" />
+    <Compile Include="..\Shared\PackTexts.cs" Link="Shared\PackTexts.cs" />
+    <Compile Include="..\Shared\LanguageChoice.cs" Link="Shared\LanguageChoice.cs" />
+    <Compile Include="..\Shared\GameLineNotice.cs" Link="Shared\GameLineNotice.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The words the game shows players come from the editor's English file,
+         under [In the game]: one file per language translates all of ModForge.
+         Built in under the same name as in the editor, which is the name
+         GameTexts looks for. -->
+    <EmbeddedResource Include="..\SMSModForge\Languages\en.txt" Link="Languages\en.txt" LogicalName="SMSModForge.Languages.en.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The flags above Exit on the main menu, one per language, named for its
+         code. National flags, public domain, from flagcdn.com (Flagpedia),
+         80 px wide. See LanguageChoice.Flagged for which ones. -->
+    <EmbeddedResource Include="Flags\*.png" LogicalName="SMSModForge.Flags.%(Filename)%(Extension)" />
   </ItemGroup>
 
 </Project>

@@ -92,13 +92,24 @@ namespace SMSModForge.PackPlugin
                 return false;
             }
 
-            // Sprite path is archive-relative. The legacy external fallback
-            // is gone — packs must ship every wallpaper image they declare.
+            // Sprite path is archive-relative - packs must ship every wallpaper
+            // image they declare. A full path on the author's machine is found
+            // by its ending (PackArchive.Resolve), and the External path is
+            // tried the same way when the sprite path finds nothing: authors
+            // filled in either, and both were skipped outright, so the
+            // wallpaper's button never appeared (author's report, 2026-09-27).
             string rel = (string)w["spritePath"];
             if (string.IsNullOrEmpty(rel) || !pack.Has(rel))
             {
+                string external = (string)w["externalSpritePath"];
+                if (!string.IsNullOrEmpty(external) && pack.Has(external)) rel = external;
+            }
+            if (string.IsNullOrEmpty(rel) || !pack.Has(rel))
+            {
                 logger.LogWarning("[SMSModForge.PackPlugin] Wallpaper '" + key + "' in " +
-                                  pack.PackId + " missing sprite '" + rel + "' in archive — skipping.");
+                                  pack.PackId + ": its image '" + rel + "' is not in the pack, so the "
+                                  + "wallpaper and its button are skipped. The image has to be inside the "
+                                  + "pack's folder when it is exported.");
                 return false;
             }
 

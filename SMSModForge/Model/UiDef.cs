@@ -122,7 +122,7 @@ public sealed class UiDef
     /// the two in step, since the editor and the plugin cannot reference each
     /// other.
     /// </summary>
-    public const string DefaultButtonSound = "Mountain Audio - Bubble Button 1";
+    public const string DefaultButtonSound = "Mountain Audio - Bubble Button 1";   // English on purpose: the game's sound's name.
 
     /// <summary>
     /// Draw order against other independent UI. Higher is nearer the front.

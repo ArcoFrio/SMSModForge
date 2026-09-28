@@ -25,7 +25,7 @@ public sealed class ActorDef
 
     /// <summary>Speech-line display name (e.g. "Anna", "???"). Shown in the dialogue UI.</summary>
     [JsonProperty("displayName", Order = 2)]
-    public string DisplayName { get; set; } = "New Actor";
+    public string DisplayName { get; set; } = "New Actor";   // English on purpose: the value a pack file without one loads with, which must be the same in every language.
 
     /// <summary>
     /// The bust GO name (matching an <see cref="OutfitDef.GameObjectName"/>

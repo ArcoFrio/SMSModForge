@@ -1,4 +1,5 @@
 using System.Text;
+using SMSModForge.Localization;
 
 namespace SMSModForge.View;
 
@@ -19,8 +20,14 @@ namespace SMSModForge.View;
 public static class PickerFilters
 {
     /// <summary>Art that is one picture: everywhere except a scene.</summary>
-    public static string StillArt { get; } = Build(
-        ("Image files", Shared.MediaKinds.StillExtensions));
+    public static string StillArt => Build(
+        (Loc.T("picker.images"), Shared.MediaKinds.StillExtensions));
+
+    /// <summary>PNGs alone, for the fields that take nothing else.</summary>
+    public static string Png => Build((Loc.T("picker.images"), new[] { ".png" }));
+
+    /// <summary>Sounds and music.</summary>
+    public static string Audio => Build((Loc.T("picker.audio"), new[] { ".ogg", ".wav", ".mp3" }));
 
     /// <summary>
     /// A scene's art, which may move.
@@ -29,10 +36,10 @@ public static class PickerFilters
     /// could pick, then split into stills and animations for a folder holding
     /// both.
     /// </summary>
-    public static string SceneArt { get; } = Build(
-        ("Scene art", All()),
-        ("Still images", Shared.MediaKinds.StillExtensions),
-        ("Animated", Animated()));
+    public static string SceneArt => Build(
+        (Loc.T("picker.sceneArt"), All()),
+        (Loc.T("picker.stills"), Shared.MediaKinds.StillExtensions),
+        (Loc.T("picker.animated"), Animated()));
 
     /// <summary>The extensions a scene's art may have.</summary>
     private static string[] All() => Join(Shared.MediaKinds.StillExtensions, Animated());
@@ -75,6 +82,6 @@ public static class PickerFilters
                 .Append(patterns).Append('|');
         }
 
-        return made.Append("All files (*.*)|*.*").ToString();
+        return made.Append(Loc.T("common.allFiles")).Append(" (*.*)|*.*").ToString();
     }
 }

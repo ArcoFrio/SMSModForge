@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SMSModForge.Model;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Services;
 
@@ -34,62 +35,62 @@ public static class PackWalk
 
         foreach (var d in pack.Dialogues)
         {
-            foreach (var hit in Flatten(d.StartConditions, $"Dialogue '{d.Key}' start conditions"))
+            foreach (var hit in Flatten(d.StartConditions, Loc.F("walk.dialogueStart", "name", d.Key)))
                 yield return hit;
 
             foreach (var node in d.Nodes)
-                foreach (var hit in Flatten(node.Conditions, $"Dialogue '{d.Key}' node {node.Id}"))
+                foreach (var hit in Flatten(node.Conditions, Loc.F("walk.dialogueNode", "name", d.Key, "node", node.Id)))
                     yield return hit;
         }
 
         foreach (var r in pack.IntegrationRules)
         {
-            foreach (var hit in Flatten(r.Conditions, $"Integration rule '{r.Key}'")) yield return hit;
+            foreach (var hit in Flatten(r.Conditions, Loc.F("walk.rule", "name", r.Key))) yield return hit;
             foreach (var b in r.Branches)
-                foreach (var hit in Flatten(b.Conditions, $"Integration rule '{r.Key}'"))
+                foreach (var hit in Flatten(b.Conditions, Loc.F("walk.rule", "name", r.Key)))
                     yield return hit;
         }
 
         foreach (var p in pack.Places)
         {
             foreach (var h in p.OnEnter)
-                foreach (var hit in Flatten(h.Conditions, $"Place '{p.Key}' on enter")) yield return hit;
+                foreach (var hit in Flatten(h.Conditions, Loc.F("walk.placeEnter", "name", p.Key))) yield return hit;
             foreach (var h in p.OnExit)
-                foreach (var hit in Flatten(h.Conditions, $"Place '{p.Key}' on exit")) yield return hit;
+                foreach (var hit in Flatten(h.Conditions, Loc.F("walk.placeExit", "name", p.Key))) yield return hit;
             foreach (var b in p.NavigatorButtons)
-                foreach (var hit in Flatten(b.Conditions, $"Place '{p.Key}' navigator")) yield return hit;
+                foreach (var hit in Flatten(b.Conditions, Loc.F("walk.placeNavigator", "name", p.Key))) yield return hit;
         }
 
         foreach (var v in pack.VanillaExtensions)
             foreach (var b in v.NavigatorButtons)
-                foreach (var hit in Flatten(b.Conditions, $"Vanilla extension '{v.Source}'"))
+                foreach (var hit in Flatten(b.Conditions, Loc.F("walk.vanillaExtension", "name", v.Source)))
                     yield return hit;
 
         foreach (var b in pack.MapButtons)
-            foreach (var hit in Flatten(b.Conditions, $"Map button '{b.Label}'")) yield return hit;
+            foreach (var hit in Flatten(b.Conditions, Loc.F("walk.mapButton", "name", b.Label))) yield return hit;
 
         foreach (var w in pack.Wallpapers)
-            foreach (var hit in Flatten(w.UnlockConditions, $"Wallpaper '{w.Key}' unlock conditions"))
+            foreach (var hit in Flatten(w.UnlockConditions, Loc.F("walk.wallpaperUnlock", "name", w.Key)))
                 yield return hit;
 
         foreach (var q in pack.Quests)
         {
-            foreach (var hit in Flatten(q.StartConditions, $"Quest '{q.Key}' start conditions"))
+            foreach (var hit in Flatten(q.StartConditions, Loc.F("walk.questStart", "name", q.Key)))
                 yield return hit;
-            foreach (var hit in Flatten(q.ResetConditions, $"Quest '{q.Key}' reset conditions"))
+            foreach (var hit in Flatten(q.ResetConditions, Loc.F("walk.questReset", "name", q.Key)))
                 yield return hit;
             foreach (var place in q.SiteConditions)
-                foreach (var hit in Flatten(place.Conditions, $"Quest '{q.Key}' conditions at one of the game's places"))
+                foreach (var hit in Flatten(place.Conditions, Loc.F("walk.questPlace", "name", q.Key)))
                     yield return hit;
             foreach (var t in q.AllTasks())
             {
-                foreach (var hit in Flatten(t.Conditions, $"Quest '{q.Key}' task '{t.Key}'"))
+                foreach (var hit in Flatten(t.Conditions, Loc.F("walk.questTask", "name", q.Key, "task", t.Key)))
                     yield return hit;
-                foreach (var hit in Flatten(t.ShowConditions, $"Quest '{q.Key}' task '{t.Key}' show conditions"))
+                foreach (var hit in Flatten(t.ShowConditions, Loc.F("walk.questTaskShow", "name", q.Key, "task", t.Key)))
                     yield return hit;
             }
             foreach (var h in q.VanillaTasks)
-                foreach (var hit in Flatten(h.ShowConditions, $"Quest '{q.Key}' the game's task '{h.Task}' show conditions"))
+                foreach (var hit in Flatten(h.ShowConditions, Loc.F("walk.questGameTaskShow", "name", q.Key, "task", h.Task)))
                     yield return hit;
         }
     }
@@ -102,14 +103,14 @@ public static class PackWalk
         foreach (var d in pack.Dialogues)
             foreach (var node in d.Nodes)
             {
-                string where = $"Dialogue '{d.Key}' node {node.Id}";
+                string where = Loc.F("walk.dialogueNode", "name", d.Key, "node", node.Id);
                 foreach (var a in node.ActionsOnStart) yield return (a, where);
                 foreach (var a in node.ActionsOnFinish) yield return (a, where);
             }
 
         foreach (var r in pack.IntegrationRules)
         {
-            string where = $"Integration rule '{r.Key}'";
+            string where = Loc.F("walk.rule", "name", r.Key);
             foreach (var a in r.Actions) yield return (a, where);
             foreach (var b in r.Branches)
                 foreach (var a in b.Actions) yield return (a, where);
@@ -118,19 +119,19 @@ public static class PackWalk
         foreach (var p in pack.Places)
         {
             foreach (var h in p.OnEnter)
-                foreach (var a in h.Actions) yield return (a, $"Place '{p.Key}' on enter");
+                foreach (var a in h.Actions) yield return (a, Loc.F("walk.placeEnter", "name", p.Key));
             foreach (var h in p.OnExit)
-                foreach (var a in h.Actions) yield return (a, $"Place '{p.Key}' on exit");
+                foreach (var a in h.Actions) yield return (a, Loc.F("walk.placeExit", "name", p.Key));
         }
 
         foreach (var q in pack.Quests)
         {
             foreach (var t in q.AllTasks())
-                foreach (var a in t.Actions) yield return (a, $"Quest '{q.Key}' task '{t.Key}'");
+                foreach (var a in t.Actions) yield return (a, Loc.F("walk.questTask", "name", q.Key, "task", t.Key));
 
             // What a pack hangs on the game's own tasks, in a quest it extends.
             foreach (var h in q.VanillaTasks)
-                foreach (var a in h.Actions) yield return (a, $"Quest '{q.Key}' the game's task '{h.Task}'");
+                foreach (var a in h.Actions) yield return (a, Loc.F("walk.questGameTask", "name", q.Key, "task", h.Task));
         }
     }
 
@@ -151,27 +152,27 @@ public static class PackWalk
             foreach (var node in d.Nodes)
             {
                 var n = node;
-                yield return (() => n.Text, t => n.Text = t, $"Dialogue '{d.Key}' node {n.Id}");
+                yield return (() => n.Text, t => n.Text = t, Loc.F("walk.dialogueNode", "name", d.Key, "node", n.Id));
             }
 
         foreach (var p in pack.Places)
             foreach (var b in p.NavigatorButtons)
             {
                 var button = b;
-                yield return (() => button.Label, t => button.Label = t, $"Place '{p.Key}' navigator");
+                yield return (() => button.Label, t => button.Label = t, Loc.F("walk.placeNavigator", "name", p.Key));
             }
 
         foreach (var v in pack.VanillaExtensions)
             foreach (var b in v.NavigatorButtons)
             {
                 var button = b;
-                yield return (() => button.Label, t => button.Label = t, $"Vanilla extension '{v.Source}'");
+                yield return (() => button.Label, t => button.Label = t, Loc.F("walk.vanillaExtension", "name", v.Source));
             }
 
         foreach (var b in pack.MapButtons)
         {
             var button = b;
-            yield return (() => button.Label, t => button.Label = t, $"Map button '{button.Label}'");
+            yield return (() => button.Label, t => button.Label = t, Loc.F("walk.mapButton", "name", button.Label));
         }
     }
 

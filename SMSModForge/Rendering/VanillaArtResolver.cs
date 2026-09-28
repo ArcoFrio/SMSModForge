@@ -34,7 +34,8 @@ public static class VanillaArtResolver
     /// <summary>
     /// Locate <c>Base.PNG</c> for a bust. Pack outfits take precedence —
     /// a pack that re-skins a vanilla character overrides the shipped
-    /// art — and the vanilla folder is the fallback.
+    /// art, whether it draws the bust itself or replaces the base texture on
+    /// one of the game's - and the vanilla folder is the fallback.
     /// </summary>
     public static string? FindBaseSpritePath(string bustGoName, ModPack pack, string? packRoot)
     {
@@ -42,11 +43,16 @@ public static class VanillaArtResolver
 
         foreach (var c in pack.Characters)
             foreach (var o in c.Outfits)
-                if (string.Equals(o.GameObjectName, bustGoName, StringComparison.OrdinalIgnoreCase) && !string.IsNullOrEmpty(o.BaseSprite) && !string.IsNullOrEmpty(packRoot))
+            {
+                if (!string.Equals(o.GameObjectName, bustGoName, StringComparison.OrdinalIgnoreCase) || string.IsNullOrEmpty(packRoot)) continue;
+                var replaced = Replacement(o, Shared.SpriteSlotNames.Base, packRoot);
+                if (replaced != null) return replaced;
+                if (!string.IsNullOrEmpty(o.BaseSprite))
                 {
                     var abs = Path.Combine(packRoot, o.BaseSprite.Replace('/', Path.DirectorySeparatorChar));
                     if (File.Exists(abs)) return abs;
                 }
+            }
 
         var artRoot = FindArtRoot();
         if (artRoot == null) return null;
@@ -55,27 +61,51 @@ public static class VanillaArtResolver
     }
 
     /// <summary>
-    /// Locate the expression PNG for a (bust, expression key) pair.
-    /// Pack outfits use the <c>ExpressionPrefix + expressionKey + ".PNG"</c>
-    /// convention; vanilla art uses <c>Expression&lt;Key&gt;.PNG</c> inside
-    /// the bust's folder.
+    /// Locate the art for one FACE of a bust - a face, not a line's expression
+    /// key: turn a key into its face with <see cref="ExpressionFaces.FaceFor"/>
+    /// first, the way the game does.
+    /// <para/>
+    /// Where the game gets it, in the same order: a face the pack paints on one
+    /// of the game's busts (replacing one it has, or adding one it never had);
+    /// the pack's own bust, <c>{prefix}{face}.PNG</c>; and the game's own art,
+    /// <c>Expression{face}.PNG</c> in the bust's folder.
     /// </summary>
-    public static string? FindExpressionSpritePath(string bustGoName, string expressionKey, ModPack pack, string? packRoot)
+    public static string? FindExpressionSpritePath(string bustGoName, string face, ModPack pack, string? packRoot)
     {
-        if (string.IsNullOrEmpty(bustGoName) || string.IsNullOrEmpty(expressionKey)) return null;
+        if (string.IsNullOrEmpty(bustGoName) || string.IsNullOrEmpty(face)) return null;
 
         foreach (var c in pack.Characters)
             foreach (var o in c.Outfits)
-                if (string.Equals(o.GameObjectName, bustGoName, StringComparison.OrdinalIgnoreCase) && o.Expression.Enabled && !string.IsNullOrEmpty(o.Expression.Prefix) && !string.IsNullOrEmpty(packRoot))
+            {
+                if (!string.Equals(o.GameObjectName, bustGoName, StringComparison.OrdinalIgnoreCase) || string.IsNullOrEmpty(packRoot)) continue;
+                var replaced = Replacement(o, Shared.SpriteSlotNames.Expression(face), packRoot);
+                if (replaced != null) return replaced;
+                if (o.Expression.Enabled && !string.IsNullOrEmpty(o.Expression.Prefix))
                 {
-                    var rel = o.Expression.Prefix + expressionKey + ".PNG";
+                    var rel = o.Expression.Prefix + face + ".PNG";
                     var abs = Path.Combine(packRoot, rel.Replace('/', Path.DirectorySeparatorChar));
                     if (File.Exists(abs)) return abs;
                 }
+            }
 
         var artRoot = FindArtRoot();
         if (artRoot == null) return null;
-        var vp = Path.Combine(artRoot, bustGoName, "Expression" + expressionKey + ".PNG");
+        var vp = Path.Combine(artRoot, bustGoName, "Expression" + face + ".PNG");
         return File.Exists(vp) ? vp : null;
+    }
+
+    /// <summary>The file a pack paints over <paramref name="slot"/> of one of
+    /// the game's busts, if it names one that is there. A slot ticked with no
+    /// file, or a file that is missing, leaves the game's own - as in game.</summary>
+    private static string? Replacement(OutfitDef outfit, string slot, string packRoot)
+    {
+        foreach (var entry in outfit.SpriteOverrides)
+        {
+            if (entry == null || string.IsNullOrWhiteSpace(entry.Sprite)) continue;
+            if (!string.Equals(entry.Slot, slot, StringComparison.Ordinal)) continue;
+            var abs = Path.Combine(packRoot, entry.Sprite.Replace('/', Path.DirectorySeparatorChar));
+            if (File.Exists(abs)) return abs;
+        }
+        return null;
     }
 }

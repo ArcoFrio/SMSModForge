@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using SMSModForge.Model;
 using SMSModForge.ViewModel;
 using Xunit;
@@ -19,6 +19,7 @@ namespace SMSModForge.Tests;
 /// lines and nothing to attach a change to — and picking a conversation
 /// afterwards replaces whatever was typed.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class EmptyStateGatingTests
 {
     private readonly ITestOutputHelper _out;

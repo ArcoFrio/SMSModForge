@@ -21,6 +21,7 @@ namespace SMSModForge.Tests;
 /// So these measure PIXELS. Asserting that the control was handed the right
 /// font name would pass just as well against a control that never draws.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class DialogueLinePreviewTests
 {
     private readonly ITestOutputHelper _out;
@@ -29,7 +30,7 @@ public sealed class DialogueLinePreviewTests
     private const int Width = 420;
 
     private static DialogueLinePreview Shown(string line, string speaker = "",
-                                             string colour = "")
+                                             string colour = "", bool spelling = false)
     {
         // Pinned to the top left so the control sits at its parent's origin.
         // RenderTargetBitmap.Render draws a visual WITH its offset inside its
@@ -44,6 +45,7 @@ public sealed class DialogueLinePreviewTests
             Line = line,
             Speaker = speaker,
             SpeakerColor = colour,
+            ChecksSpelling = spelling,
         };
         var window = new Window
         {
@@ -51,6 +53,10 @@ public sealed class DialogueLinePreviewTests
             ShowInTaskbar = false, Content = preview,
         };
         window.Show();
+        window.UpdateLayout();
+        WindowHarness.Pump();
+        // Twice: a row's spelling marks are worked out after it is first
+        // drawn, and it is drawn again with them - see CheckSoon.
         window.UpdateLayout();
         WindowHarness.Pump();
         return preview;
@@ -684,6 +690,130 @@ public sealed class DialogueLinePreviewTests
                 SMSModForge.Services.ThemeManager.Apply(was);
                 WindowHarness.Pump();
             }
+        });
+    }
+
+    // ── Spelling ───────────────────────────────────────────────────
+
+    /// <summary>
+    /// Where the red marks are, as a fraction across the row: 0 is the left
+    /// edge, 1 the right. Measured off the drawn pixels rather than off the
+    /// layout, because whether the mark lands under the word it belongs to is
+    /// the whole question.
+    /// </summary>
+    private static (int Count, double Left, double Right) Marks(byte[] pixels, int width, int height)
+    {
+        var red = (Color)ColorConverter.ConvertFromString(DialogueLook.SpellingHex)!;
+        int count = 0, min = int.MaxValue, max = int.MinValue;
+
+        // Tight, because a <color> tag can paint the WORDS a red of its own and
+        // the pixels where one of those meets the panel pass through shades on
+        // the way down. A loose match counted two of those and called it a
+        // spelling mark.
+        const int Tolerance = 24;
+
+        for (int y = 0; y < height; y++)
+        for (int x = 0; x < width; x++)
+        {
+            int i = (y * width + x) * 4;
+            if (Math.Abs(pixels[i] - red.B) > Tolerance) continue;
+            if (Math.Abs(pixels[i + 1] - red.G) > Tolerance) continue;
+            if (Math.Abs(pixels[i + 2] - red.R) > Tolerance) continue;
+            count++;
+            if (x < min) min = x;
+            if (x > max) max = x;
+        }
+        return count == 0 ? (0, 0, 0) : (count, (double)min / width, (double)max / width);
+    }
+
+    [Fact]
+    public void AMisspelledWordIsUnderlined()
+    {
+        if (!Available) return;
+        WindowHarness.Run(_ =>
+        {
+            var drawn = Pixels(Shown("I finaly got here.", spelling: true), out int w, out int h);
+            Assert.NotNull(drawn);
+            var marks = Marks(drawn!, w, h);
+            _out.WriteLine($"{marks.Count} red pixel(s), from {marks.Left:P0} to {marks.Right:P0} across");
+            Assert.True(marks.Count > 0, "nothing was underlined");
+        });
+    }
+
+    [Fact]
+    public void ItIsUnderTheWrongWordAndNotTheWholeLine()
+    {
+        // The measurement that matters. Glyphs are dropped at a wrap and where
+        // the atlas has no character, so counting glyphs would drift the mark
+        // off the word — this is what says it did not.
+        if (!Available) return;
+        WindowHarness.Run(_ =>
+        {
+            var first = Pixels(Shown("finaly is a long correct sentence here", spelling: true),
+                               out int w1, out int h1);
+            var last = Pixels(Shown("this is a long correct sentence finaly", spelling: true),
+                              out int w2, out int h2);
+            Assert.NotNull(first);
+            Assert.NotNull(last);
+
+            var early = Marks(first!, w1, h1);
+            var late = Marks(last!, w2, h2);
+            _out.WriteLine($"word first: {early.Left:P0}..{early.Right:P0}");
+            _out.WriteLine($"word last:  {late.Left:P0}..{late.Right:P0}");
+
+            Assert.True(early.Count > 0 && late.Count > 0, "one of the lines was not marked");
+            // The same misspelling, at opposite ends of the same sentence.
+            Assert.True(early.Right < late.Left,
+                        "the mark did not move with the word it belongs to");
+        });
+    }
+
+    [Fact]
+    public void ACorrectLineIsLeftClean()
+    {
+        // The control. Without it, a mark drawn under every row would pass the
+        // test above.
+        if (!Available) return;
+        WindowHarness.Run(_ =>
+        {
+            var drawn = Pixels(Shown("I got here.", spelling: true), out int w, out int h);
+            Assert.NotNull(drawn);
+            var marks = Marks(drawn!, w, h);
+            _out.WriteLine($"correct line: {marks.Count} red pixel(s)");
+            Assert.Equal(0, marks.Count);
+        });
+    }
+
+    [Fact]
+    public void AndNothingIsMarkedWhenTheOptionIsOff()
+    {
+        // The other control: the same misspelling, checking switched off.
+        if (!Available) return;
+        WindowHarness.Run(_ =>
+        {
+            var drawn = Pixels(Shown("I finaly got here.", spelling: false), out int w, out int h);
+            Assert.NotNull(drawn);
+            var marks = Marks(drawn!, w, h);
+            _out.WriteLine($"option off: {marks.Count} red pixel(s)");
+            Assert.Equal(0, marks.Count);
+        });
+    }
+
+    [Fact]
+    public void TagsAreNotHandedToTheSpeller()
+    {
+        // The row shows the line with its markup applied and the tags gone, so
+        // that is what gets checked. Handing over the raw line would report
+        // "color" and "FF6666" as misspellings of nothing the author can fix.
+        if (!Available) return;
+        WindowHarness.Run(_ =>
+        {
+            var drawn = Pixels(Shown("I <color=#FF6666>got</color> here.", spelling: true),
+                               out int w, out int h);
+            Assert.NotNull(drawn);
+            var marks = Marks(drawn!, w, h);
+            _out.WriteLine($"with markup: {marks.Count} red pixel(s)");
+            Assert.Equal(0, marks.Count);
         });
     }
 }

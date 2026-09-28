@@ -782,11 +782,13 @@ namespace SMSModForge.PackPlugin
             // OnDialogueLineStart → ProcessSFXTriggersForText. Runs
             // AFTER pack-authored actions so an action that mutates a
             // variable referenced in text via [PV:] / [GV:] takes
-            // effect first. Currently the dialogue node text is the
-            // raw authored form; in-text placeholder resolution
-            // happens in DialogueBuilder, so what we scan here is
-            // identical to what the player reads on the line.
-            string text = (string)nj["text"];
+            // effect first. What is scanned is the line as the pack
+            // wrote it - placeholders are resolved in DialogueBuilder,
+            // and a translated line is scanned in the pack's own words,
+            // because its cues listen for those whatever language the
+            // player reads it in - or the words shown, for a line the pack
+            // has none of its own for (see CueText).
+            string text = SMSModForge.Shared.PackTexts.CueText(nj);
             if (!string.IsNullOrEmpty(text) && _ctx.Sfx != null && _ctx.Plugin != null)
                 _ctx.Sfx.FireMatchingPatterns(text, _ctx.Plugin, _ctx.Log);
         }

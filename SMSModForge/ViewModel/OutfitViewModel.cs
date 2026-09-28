@@ -188,6 +188,11 @@ public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode, IMa
     public string ExpressionFilesHint
         => string.Join("/", PackFaceNames().Select(f => f + ".png"));
 
+    /// <summary>The faces a bust the PACK draws is built with, as the game
+    /// builds it (<c>BustFactory.FacesOf</c>): the four, then each face the
+    /// character declares.</summary>
+    public IReadOnlyList<string> PackFaces => PackFaceNames().ToList();
+
     /// <summary>The faces a bust the PACK draws will be given art for: the four
     /// every bust is built with, plus any the character declares of its
     /// own.</summary>

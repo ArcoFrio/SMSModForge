@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using SMSModForge.Rendering;
 using SMSModForge.ViewModel;
+using SMSModForge.Localization;
 
 namespace SMSModForge.View;
 
@@ -108,10 +109,10 @@ public partial class MaskEditorWindow : Window
             // styling and leaves it near-unreadable against the panel. The red
             // is dropped too — it meant "the R channel", which this mask has no
             // concept of, so the panel goes neutral.
-            ActiveRLabel.Text = "Intensity";
+            ActiveRLabel.Text = Loc.T("maskEditor.intensity");
             ActiveRLabel.Foreground = Brushes.White;
             ShowRDot.Foreground = Brushes.White;
-            ShowRToggle.ToolTip = "Show the mask";
+            ShowRToggle.ToolTip = Loc.T("maskEditor.showMask.tip");
             LayerR.BorderBrush = new SolidColorBrush(Color.FromRgb(0x88, 0x88, 0x88));
             LayerR.Background = new SolidColorBrush(Color.FromRgb(0x2A, 0x2A, 0x2A));
             _activeChannel = 0;
@@ -184,9 +185,8 @@ public partial class MaskEditorWindow : Window
         {
             if (!Services.TestMode.Active)
                 MessageBox.Show(PromptOwner,
-                    $"\"{from.Label}\" names a mask that is not there yet:\n{from.MaskPath}\n\n"
-                    + "Paint and save that one first, then it can be copied.",
-                    "Nothing to copy", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Loc.F("maskEditor.copy.missing", "outfit", from.Label, "path", from.MaskPath),
+                    Loc.T("maskEditor.copy.missing.title"), MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
 
@@ -197,11 +197,8 @@ public partial class MaskEditorWindow : Window
         if (!Services.TestMode.Active)
         {
             var answer = MessageBox.Show(PromptOwner,
-                $"Load \"{from.Label}\" over this mask?\n\n"
-                + "Everything on this canvas is replaced"
-                + (_dirty ? ", including the changes you have not saved." : ".")
-                + "\n\nCtrl+Z puts it back.",
-                "Copy layers", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                Loc.F(_dirty ? "maskEditor.copy.askUnsaved" : "maskEditor.copy.ask", "outfit", from.Label),
+                Loc.T("maskEditor.copy.title"), MessageBoxButton.OKCancel, MessageBoxImage.Warning);
             if (answer != MessageBoxResult.OK) return;
         }
 
@@ -245,8 +242,8 @@ public partial class MaskEditorWindow : Window
         if (_dirty)
         {
             var r = MessageBox.Show(PromptOwner,
-                "You have unsaved mask changes. Save before closing?",
-                "Mask Editor",
+                Loc.T("maskEditor.unsaved"),
+                Loc.T("mask.title"),
                 MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
             if (r == MessageBoxResult.Cancel) { e.Cancel = true; return; }
             if (r == MessageBoxResult.Yes && !Save()) { e.Cancel = true; return; }
@@ -816,9 +813,9 @@ public partial class MaskEditorWindow : Window
             var dialog = new SaveFileDialog
             {
                 InitialDirectory = startIn,
-                Filter = "PNG (*.png)|*.png",
+                Filter = "PNG (*.png)|*.png",   // English on purpose: a file format's name.
                 FileName = proposed,
-                Title = "Save mask PNG",
+                Title = Loc.T("maskEditor.save.dialogTitle"),
             };
             if (dialog.ShowDialog(this) != true) return false;
             string abs = dialog.FileName;
@@ -828,8 +825,8 @@ public partial class MaskEditorWindow : Window
             }
             catch
             {
-                MessageBox.Show(PromptOwner, "Mask must be saved inside the pack folder.",
-                                "Save failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(PromptOwner, Loc.T("maskEditor.save.outsidePack"),
+                                Loc.T("save.failed.title"), MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
             _host.MaskPath = relPath;
@@ -846,7 +843,7 @@ public partial class MaskEditorWindow : Window
         }
         catch (Exception ex)
         {
-            MessageBox.Show(PromptOwner, ex.Message, "Save failed",
+            MessageBox.Show(PromptOwner, ex.Message, Loc.T("save.failed.title"),
                             MessageBoxButton.OK, MessageBoxImage.Error);
             return false;
         }

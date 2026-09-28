@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using SMSModForge.Model;
 
 namespace SMSModForge.ViewModel;
@@ -56,6 +57,14 @@ public sealed class ParamRowViewModel : ObservableObject
     public string Tooltip => Schema.Tooltip;
     /// <summary>Options for a <see cref="ParamType.Choice"/> param's dropdown.</summary>
     public string[] FixedOptions => Schema.FixedOptions;
+
+    /// <summary>One option: what is stored, and what the list says for it.</summary>
+    public sealed record Choice(string Value, string Text);
+
+    /// <summary><see cref="FixedOptions"/> as the dropdown shows them - each
+    /// in words where it has any - while what it selects stays the value.</summary>
+    public IReadOnlyList<Choice> FixedChoices
+        => Schema.FixedOptions.Select(o => new Choice(o, ParamSchema.ChoiceText(Schema.Key, o))).ToList();
 
     /// <summary>True when this PackVarRef param references a boolean variable.
     /// Set by the parent VM so the BoolVarRef template can show True/False radios.

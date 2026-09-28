@@ -1,4 +1,5 @@
 using System.Windows;
+using SMSModForge.Localization;
 
 namespace SMSModForge.View;
 
@@ -31,7 +32,7 @@ public partial class ExportSizeWindow : Window
         WindowOwnership.ReturnFocusToOwner(window);
 
         window.HeadlineText.Text =
-            $"This pack folder holds at least {files:N0} files ({megabytes:N0} MB).";
+            Loc.F("exportSize.headline", "files", files.ToString("N0"), "size", megabytes.ToString("N0"));
         window.FolderText.Text = folder;
 
         bool export = window.ShowDialog() == true;

@@ -1355,6 +1355,11 @@ namespace SMSModForge.PackPlugin
                 // Only emit the activation sound when turning the scene ON.
                 if (active && !string.IsNullOrEmpty(entry.ActivationSignal))
                     EmitGc2Signal(entry.ActivationSignal, ctx);
+
+                // ...and the same rule for a scene the pack marks as a photo:
+                // showing it is taking it, hiding it is not un-taking it.
+                if (active && entry.StarmakerPhoto)
+                    StarmakerPhotos.Taken(sceneKey, ctx, ctx.Log);
             }
             else ctx.Log?.LogWarning("[SMSModForge.PackPlugin] Scene '" + sceneKey +
                                      "' not found in pack " + ctx.PackId);

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Automation.Peers;
@@ -17,6 +17,7 @@ namespace SMSModForge.Tests;
 /// completes, counts or fails their tasks - and when each task starts, shown
 /// read-only beside a pack's changes to one.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class GameQuestSitesTests
 {
     private readonly ITestOutputHelper _out;

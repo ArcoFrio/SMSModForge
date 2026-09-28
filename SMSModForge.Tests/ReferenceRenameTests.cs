@@ -17,6 +17,7 @@ namespace SMSModForge.Tests;
 /// pointing at something that no longer existed, with nothing to say so until
 /// the pack ran in the game and a character stopped speaking.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class ReferenceRenameTests
 {
     private readonly ITestOutputHelper _out;

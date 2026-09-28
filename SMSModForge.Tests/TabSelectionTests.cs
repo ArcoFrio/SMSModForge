@@ -27,6 +27,7 @@ namespace SMSModForge.Tests;
 /// click no automation peer performs — the mouse capture, and the release that
 /// gives it up.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public class TabSelectionTests
 {
     // Tab indices, same order as MainWindow's TabItems.

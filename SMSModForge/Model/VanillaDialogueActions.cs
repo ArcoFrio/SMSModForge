@@ -156,7 +156,7 @@ public static class VanillaDialogueActions
             Type = NodeActionTypes.SetGameObjectActive,
             Params = new Dictionary<string, string>
             {
-                ["kind"] = "Direct Path",
+                ["kind"] = "Direct Path",   // English on purpose: a stored value.
                 ["target"] = path!,
                 ["active"] = active,
             },

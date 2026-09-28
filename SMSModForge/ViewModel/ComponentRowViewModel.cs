@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json.Linq;
 using SMSModForge.Model;
+using SMSModForge.Localization;
 
 namespace SMSModForge.ViewModel;
 
@@ -125,10 +126,10 @@ public sealed class ComponentRowViewModel : ObservableObject
             if (!IsGameComponent) return "";
             var e = VanillaComponentCatalog.Find(Model.Type);
             if (e == null)
-                return "Not seen in any extracted level. The runtime will still try to find a loaded type with this name.";
+                return Loc.T("component.unknown.tip");
             return e.IsEngineComponent
-                ? "A Unity engine component. It will be attached, but its parameter names are engine internals and mostly won't apply — the values below are what the extraction saw, not a promise they can be set."
-                : "One of the game's own scripts. Parameter names come from the extraction, so they match its real fields.";
+                ? Loc.T("component.engine.tip")
+                : Loc.T("component.games.tip");
         }
     }
 

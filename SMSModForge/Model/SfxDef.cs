@@ -30,7 +30,7 @@ public sealed class SfxDef
 
     /// <summary>Human-facing label shown in the editor's SFX list.</summary>
     [JsonProperty("displayName", Order = 2)]
-    public string DisplayName { get; set; } = "New SFX";
+    public string DisplayName { get; set; } = "New SFX";   // English on purpose: the value a pack file without one loads with, which must be the same in every language.
 
     /// <summary>
     /// Relative path (from pack root) to the audio file. OGG, WAV

@@ -23,6 +23,25 @@ public enum BustSource
 }
 
 /// <summary>
+/// How a character is spoken of - what a translation needs to know about them.
+/// <para/>
+/// English says "I'm ready" whoever says it; Russian, Spanish, French and
+/// Portuguese do not, and nor do the words that describe somebody named in a
+/// line. A translator that is not told guesses, and it guesses male.
+/// <see cref="Unset"/> is a character nobody has decided about yet, which the
+/// validator reports: the answer is the author's, not the editor's.
+/// </summary>
+public enum Pronouns
+{
+    Unset,
+    Male,
+    Female,
+    /// <summary>Neither: the translation is left to the language's own way of
+    /// speaking of somebody without saying which.</summary>
+    Neutral,
+}
+
+/// <summary>
 /// One character: who speaks, and what (if anything) is shown when they do.
 /// <para/>
 /// This is the merge of what used to be a <c>bust</c> and an <c>actor</c>. The
@@ -90,7 +109,7 @@ public sealed class CharacterDef
     /// <summary>What the player sees on a speech line. The one name an author
     /// actually writes.</summary>
     [JsonProperty("displayName", Order = 3)]
-    public string DisplayName { get; set; } = "New Character";
+    public string DisplayName { get; set; } = "New Character";   // English on purpose: the value a pack file without one loads with, which must be the same in every language.
 
     /// <summary>Speaker-name tint as hex RGB, or null for the default.</summary>
     [JsonProperty("nameColor", Order = 4, NullValueHandling = NullValueHandling.Ignore)]
@@ -152,6 +171,40 @@ public sealed class CharacterDef
     /// <summary>Typing-blip voice, or null for the default.</summary>
     [JsonProperty("typewriter", Order = 12, NullValueHandling = NullValueHandling.Ignore)]
     public TypewriterDef? Typewriter { get; set; }
+
+    /// <summary>
+    /// The pronouns the author chose for a character of the pack's own. Unset
+    /// until they do - a pack written before the field existed loads with none,
+    /// which the validator reports rather than guessing. Not stored for the
+    /// player or the game's characters: theirs are the game's
+    /// (<see cref="EffectivePronouns"/>).
+    /// </summary>
+    [JsonIgnore]
+    public Pronouns Pronouns { get; set; }
+
+    /// <summary>
+    /// <see cref="Pronouns"/> as the manifest spells it: "male", "female",
+    /// "neutral". Read forgivingly - anything else, a hand edit or a value a
+    /// later editor adds, loads as unset rather than failing the pack.
+    /// </summary>
+    [JsonProperty("pronouns", Order = 14, NullValueHandling = NullValueHandling.Ignore)]
+    private string? PronounsText
+    {
+        get => Pronouns == Pronouns.Unset || IsPlayer || IsVanillaCharacter ? null : Pronouns.ToString().ToLowerInvariant();
+        set => Pronouns = System.Enum.TryParse<Pronouns>(value ?? "", ignoreCase: true, out var p)
+                          && System.Enum.IsDefined(typeof(Pronouns), p) ? p : Pronouns.Unset;
+    }
+
+    /// <summary>
+    /// How this character is spoken of: the player's and the game's
+    /// characters' from the game (<see cref="VanillaPronouns"/>), anybody
+    /// else's as the author chose.
+    /// </summary>
+    [JsonIgnore]
+    public Pronouns EffectivePronouns
+        => IsPlayer ? VanillaPronouns.Player
+         : IsVanillaCharacter ? VanillaPronouns.Of(VanillaCharacter)
+         : Pronouns;
 
     /// <summary>
     /// The expression every character of the pack's own carries first:

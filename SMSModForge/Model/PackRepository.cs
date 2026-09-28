@@ -61,7 +61,7 @@ public static class PackRepository
         // only - the file is untouched until the author saves. What changed is
         // hung on the pack so the editor can tell them, and so the first save
         // knows to keep a copy of the original first.
-        LastMigration = PackMigration.Apply(pack);
+        LastMigration = PackMigration.Apply(pack, packRoot);
         LastMigration.SourceManifest = manifest;
         return pack;
     }

@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 using SMSModForge.Model;
+using SMSModForge.Localization;
 
 namespace SMSModForge.View.Converters;
 
@@ -21,12 +22,12 @@ public sealed class BustSourceHeaderConverter : IValueConverter
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         => value switch
         {
-            BustSource.Pack => "THIS PACK'S CHARACTERS",
+            BustSource.Pack => Loc.T("characters.group.pack"),
             // Not "vanilla-based" any more: these are the game's own cast,
             // present in every pack to be used rather than described.
-            BustSource.Vanilla => "THE GAME'S CHARACTERS",
-            BustSource.None => "VOICE ONLY (no bust)",
-            _ => "CHARACTERS",
+            BustSource.Vanilla => Loc.T("characters.group.games"),
+            BustSource.None => Loc.T("characters.group.voiceOnly"),
+            _ => Loc.T("characters.group.rest"),
         };
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

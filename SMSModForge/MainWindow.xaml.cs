@@ -12,6 +12,7 @@ using SMSModForge.Validation;
 using SMSModForge.View;
 using SMSModForge.View.Controls;
 using SMSModForge.ViewModel;
+using SMSModForge.Localization;
 
 namespace SMSModForge;
 
@@ -124,6 +125,8 @@ public partial class MainWindow : Window
                 NoteTabChange();
                 CommitPendingEdits();
             };
+            MainTabs.Loaded += (_, _) => KeepTabsClearOfLanguage();
+            EditingLanguageBar.SizeChanged += (_, _) => KeepTabsClearOfLanguage();
 
             // Shared unit trees: one handler set (selection, multi-select,
             // drag-drop) wired to each — the controllers hold the behavior.
@@ -150,6 +153,12 @@ public partial class MainWindow : Window
             WireUpdates(vm);
         }
         RestoreUiLayout();
+
+        // Switching language is done in place: see OnLanguageChanged. Let go
+        // on the way out, or every window the tests build would be kept alive
+        // by the event and told about every switch after it closed.
+        Loc.Changed += OnLanguageChanged;
+        Closed += (_, _) => Loc.Changed -= OnLanguageChanged;
     }
 
 
@@ -171,7 +180,7 @@ public partial class MainWindow : Window
         _updates.Problem = message =>
         {
             HideUpdateToast();
-            MessageBox.Show(this, message, "Update", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(this, message, Loc.T("update.problem.title"), MessageBoxButton.OK, MessageBoxImage.Warning);
         };
 
         _updates.Ask = release =>
@@ -207,19 +216,409 @@ public partial class MainWindow : Window
             if (Services.UpdateApplier.WasJustUpdated(
                     Environment.GetCommandLineArgs(), out string from))
                 ToastReport(from.Length > 0 && from != MainViewModel.AppVersion
-                    ? $"Updated from {from} to {MainViewModel.AppVersion}."
-                    : $"Updated to {MainViewModel.AppVersion}.");
+                    ? Loc.F("update.updatedFrom", "from", from, "to", MainViewModel.AppVersion)
+                    : Loc.F("update.updatedTo", "to", MainViewModel.AppVersion));
 
             await _updates.OnStartupAsync();
         };
     }
 
 
+    // ── Language ─────────────────────────────────────────────────────────
+
+    /// <summary>
+    /// The Language menu, rebuilt each time it opens: Windows' own language,
+    /// every language there is a file for, then the three things an author
+    /// making or fixing a translation needs.
+    /// </summary>
+    /// <summary>
+    /// The Editing in box never shows nothing. Should it lose its entry - the
+    /// list refilled under it - it is set back to the language actually being
+    /// edited, read from the view model, rather than left blank to look like
+    /// no language at all.
+    /// </summary>
+    private void EditingLanguagePicker_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (EditingLanguagePicker.SelectedIndex >= 0 || EditingLanguagePicker.Items.Count == 0) return;
+        Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, new System.Action(() =>
+        {
+            if (EditingLanguagePicker.SelectedIndex >= 0) return;
+            System.Windows.Data.BindingOperations.GetBindingExpression(EditingLanguagePicker, ComboBox.SelectedValueProperty)?.UpdateTarget();
+        }));
+    }
+
+    private void LanguageMenu_Opened(object sender, RoutedEventArgs e)
+    {
+        if (!ReferenceEquals(e.OriginalSource, LanguageMenu)) return;
+        LanguageMenu.Items.Clear();
+
+        string picked = Services.EditorPrefs.Language;
+        var languages = Loc.Available();
+        string NameOf(string code)
+            => languages.FirstOrDefault(l => string.Equals(l.Code, code, System.StringComparison.OrdinalIgnoreCase))?.Name ?? code;
+
+        void Choice(string header, string code, string? tip = null)
+        {
+            var item = new MenuItem
+            {
+                Header = new AccessText { Text = header.Replace("_", "__") },
+                IsCheckable = true,
+                IsChecked = string.Equals(picked, code, System.StringComparison.OrdinalIgnoreCase),
+                ToolTip = tip,
+            };
+            item.Click += (_, _) => ChooseLanguage(code);
+            LanguageMenu.Items.Add(item);
+        }
+
+        Choice(Loc.F("language.menu.windows", "language", NameOf(Loc.StartingCode(""))), "",
+               Loc.T("language.menu.windows.tip"));
+        LanguageMenu.Items.Add(new Separator());
+        foreach (var language in languages)
+        {
+            var tip = new System.Collections.Generic.List<string>();
+            if (language.IsMachine) tip.Add(Loc.T("language.menu.machine.tip"));
+            // Laid over the one that shipped, or a language of the author's alone.
+            if (language.IsUsers) tip.Add(Loc.T(language.ShippedPath != null ? "language.menu.yoursOver.tip" : "language.menu.yours.tip"));
+            if (!string.IsNullOrWhiteSpace(language.Translators))
+                tip.Add(Loc.F("language.menu.translators", "names", language.Translators));
+            Choice(language.IsMachine ? Loc.F("language.menu.machine", "language", language.Name) : language.Name,
+                   language.Code, tip.Count == 0 ? null : string.Join("\n\n", tip));
+        }
+
+        LanguageMenu.Items.Add(new Separator());
+        void Action(string header, string tip, RoutedEventHandler click, bool enabled = true)
+        {
+            var item = new MenuItem { Header = header, ToolTip = tip, IsEnabled = enabled };
+            // The tooltip is what says why it cannot be used.
+            ToolTipService.SetShowOnDisabled(item, true);
+            item.Click += click;
+            LanguageMenu.Items.Add(item);
+        }
+
+        // Correcting the words on screen, where they are: a pencil beside each.
+        // Not in English, which every translation is made from.
+        bool english = Loc.Current.Code == Loc.EnglishCode;
+        var onScreen = new MenuItem
+        {
+            Header = Loc.T("language.menu.editMode"),
+            IsCheckable = true,
+            IsChecked = UiTextMarks.IsOn(this),
+            IsEnabled = !english,
+            ToolTip = english ? Loc.T("language.menu.editMode.english") : Loc.T("language.menu.editMode.tip"),
+        };
+        ToolTipService.SetShowOnDisabled(onScreen, true);
+        onScreen.Click += (_, _) => UiTextMarks.Set(this, onScreen.IsChecked);
+        LanguageMenu.Items.Add(onScreen);
+        Action(Loc.T("language.menu.findText"),
+               english ? Loc.T("language.menu.editMode.english") : Loc.T("language.menu.findText.tip"),
+               (_, _) => UiTextEditWindow.Open(this, null), enabled: !english);
+        LanguageMenu.Items.Add(new Separator());
+
+        Action(Loc.T("language.menu.newTranslation"), Loc.T("language.menu.newTranslation.tip"), (_, _) => NewTranslation());
+        Action(Loc.T("language.menu.checkTranslation"), Loc.T("language.menu.checkTranslation.tip"), (_, _) => CheckTranslation());
+        Action(Loc.T("language.menu.openFolder"), Loc.T("language.menu.openFolder.tip"), (_, _) => OpenLanguagesFolder());
+    }
+
+    /// <summary>
+    /// Remember the choice, and switch to it - now, in place, with the pack
+    /// and everything about it exactly as it was.
+    /// </summary>
+    private void ChooseLanguage(string code)
+    {
+        if (string.Equals(Services.EditorPrefs.Language, code, System.StringComparison.OrdinalIgnoreCase)) return;
+        if (!Services.TestMode.Active) Services.EditorPrefs.Language = code;
+
+        string effective = Loc.StartingCode(code);
+        if (string.Equals(effective, Loc.Current.Code, System.StringComparison.OrdinalIgnoreCase)) return;
+        SwitchLanguage(effective);
+    }
+
+    /// <summary>
+    /// Show the editor in <paramref name="code"/> without closing it. The
+    /// field being typed in is committed first, so nothing half-typed is
+    /// caught between two languages; everything else follows
+    /// <see cref="Loc.Changed"/>.
+    /// </summary>
+    internal void SwitchLanguage(string code)
+    {
+        CommitPendingEdits();
+        Loc.Use(code);
+    }
+
+    /// <summary>
+    /// Everything on screen, again, in the language just switched to.
+    /// <para/>
+    /// The texts the layout takes from <c>{l:T}</c> are bindings and have
+    /// already changed by themselves. What is left is text worked out by code:
+    /// the view model says its rows again, and every binding in the window is
+    /// read again, so the ones that turn a value into words through a
+    /// converter - a count's sentence, a choice's name - say it in the new
+    /// language. Reading a binding again only ever sets what is shown; nothing
+    /// is written back to the pack.
+    /// <para/>
+    /// Proven the only way that is certain, by looking: the screen walk builds
+    /// the window in English, switches, and reads every tab - see
+    /// <c>LanguageSwitchTests</c>.
+    /// </summary>
+    private void OnLanguageChanged()
+    {
+        if (!Dispatcher.CheckAccess()) { Dispatcher.Invoke(OnLanguageChanged); return; }
+        // English is what every translation is made from: nothing to correct.
+        if (Loc.Current.Code == Loc.EnglishCode) UiTextMarks.Set(this, false);
+        if (DataContext is MainViewModel vm) vm.RefreshLanguage();
+        ReadBindingsAgain(this);
+    }
+
+    /// <summary>Every binding under <paramref name="root"/> - on screen or
+    /// not, in the visual tree or only the logical one - read from its source
+    /// again.</summary>
+    internal static void ReadBindingsAgain(DependencyObject root)
+    {
+        var seen = new HashSet<DependencyObject>();
+        var stack = new Stack<DependencyObject>();
+        stack.Push(root);
+        var found = new List<System.Windows.Data.BindingExpressionBase>();
+        while (stack.Count > 0)
+        {
+            var d = stack.Pop();
+            if (!seen.Add(d)) continue;
+
+            var values = d.GetLocalValueEnumerator();
+            while (values.MoveNext())
+            {
+                var expression = System.Windows.Data.BindingOperations.GetBindingExpressionBase(d, values.Current.Property);
+                if (expression != null) found.Add(expression);
+            }
+
+            if (d is System.Windows.Media.Visual || d is System.Windows.Media.Media3D.Visual3D)
+                for (int i = 0; i < System.Windows.Media.VisualTreeHelper.GetChildrenCount(d); i++)
+                    stack.Push(System.Windows.Media.VisualTreeHelper.GetChild(d, i));
+            foreach (object child in LogicalTreeHelper.GetChildren(d))
+                if (child is DependencyObject c) stack.Push(c);
+            // What hangs off an element without being its child: a context
+            // menu and a tooltip are built once and shown on demand.
+            if (d is FrameworkElement fe)
+            {
+                if (fe.ContextMenu != null) stack.Push(fe.ContextMenu);
+                if (fe.ToolTip is DependencyObject tip) stack.Push(tip);
+            }
+        }
+        foreach (var expression in found) expression.UpdateTarget();
+    }
+
+    /// <summary>Start a translation of the author's own, or bring theirs up
+    /// to date with this version's English.</summary>
+    private void NewTranslation()
+    {
+        if (Services.TestMode.Active) return;
+        string suggested = Loc.Current.Code != Loc.EnglishCode ? Loc.Current.Code
+                         : System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
+        // The codes already here, so somebody updating one of theirs does not
+        // have to guess whether typing it starts over. English is not one: it
+        // is built in and there is no file to bring up to date.
+        var here = Loc.Available()
+                      .Where(l => l.Code != Loc.EnglishCode)
+                      .Select(l => $"{l.Code} ({l.Name})")
+                      .ToList();
+        string message = Loc.T("language.new.prompt");
+        if (here.Count > 0)
+            message += "\n\n" + Loc.F("language.new.have", "codes", Loc.JoinAnd(here));
+
+        string? code = TextPromptWindow.Prompt(this, Loc.T("language.new.title"), message, suggested);
+        code = code?.Trim();
+        if (string.IsNullOrEmpty(code)) return;
+        if (TranslationFiles.NativeName(code) == null)
+        {
+            MessageBox.Show(this, Loc.F("language.new.unknownCode", "code", code), Loc.T("language.new.title"),
+                            MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+
+        try
+        {
+            var (path, existed) = TranslationFiles.CreateOrUpdate(code, Loc.UserFolder, Loc.ShippedFolder);
+            MessageBox.Show(this, Loc.F(existed ? "language.new.updated" : "language.new.created", "path", path),
+                            Loc.T("language.new.title"), MessageBoxButton.OK, MessageBoxImage.Information);
+            System.Diagnostics.Process.Start("explorer.exe", "/select,\"" + path + "\"");
+        }
+        catch (System.Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException)
+        {
+            MessageBox.Show(this, ex.Message, Loc.T("language.new.title"), MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    /// <summary>Read a translation file and say what is wrong with it, with
+    /// the offer to put back keys a Replace All changed.</summary>
+    private void CheckTranslation()
+    {
+        if (Services.TestMode.Active) return;
+        var dialog = new Microsoft.Win32.OpenFileDialog
+        {
+            Title = Loc.T("language.check.dialogTitle"),
+            Filter = Loc.T("language.check.filter") + " (*.txt)|*.txt",
+            InitialDirectory = System.IO.Directory.Exists(Loc.UserFolder) ? Loc.UserFolder : Loc.ShippedFolder,
+        };
+        if (dialog.ShowDialog(this) != true) return;
+
+        var file = Loc.Read(dialog.FileName);
+        if (file == null)
+        {
+            MessageBox.Show(this, Loc.F("language.check.unreadable", "path", dialog.FileName),
+                            Loc.T("language.check.dialogTitle"), MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+
+        var result = Shared.TextCheck.Run(Loc.English, file, TranslationFiles.CodeOf(dialog.FileName));
+        int fixable = result.Findings.Count(f => f.Kind == Shared.TextCheck.Kind.Unknown && f.Suggestion != null);
+        bool fix = TextReportWindow.Show(this,
+            Loc.F("language.check.reportTitle", "file", System.IO.Path.GetFileName(dialog.FileName)),
+            TranslationFiles.Report(result),
+            fixable > 0 ? Loc.P("language.check.fixKeys", fixable) : null);
+        if (!fix) return;
+
+        int done = TranslationFiles.PutKeysBack(dialog.FileName, result);
+        MessageBox.Show(this, Loc.P("language.check.fixed", done, "backup", System.IO.Path.GetFileName(dialog.FileName) + ".bak"),
+                        Loc.T("language.check.dialogTitle"), MessageBoxButton.OK, MessageBoxImage.Information);
+    }
+
+    // ── File ▸ Pack translations ────────────────────────────────────
+
+    /// <summary>The pack's folder, or null after saying the pack needs saving
+    /// first: its translations live beside it.</summary>
+    private string? PackFolderForTranslations()
+    {
+        string? root = ((MainViewModel)DataContext).PackRoot;
+        if (root == null)
+            MessageBox.Show(this, Loc.T("packText.saveFirst"), Loc.T("packText.title"),
+                            MessageBoxButton.OK, MessageBoxImage.Information);
+        return root;
+    }
+
+    /// <summary>Write the pack's text out to translate, or bring a
+    /// translation up to date after the pack changed.</summary>
+    private void PackTranslationNew_Click(object sender, RoutedEventArgs e)
+    {
+        if (Services.TestMode.Active) return;
+        string? root = PackFolderForTranslations();
+        if (root == null) return;
+
+        string? code = TextPromptWindow.Prompt(this, Loc.T("packText.title"), Loc.T("language.new.prompt"), "");
+        code = code?.Trim();
+        if (string.IsNullOrEmpty(code)) return;
+        if (TranslationFiles.NativeName(code) == null)
+        {
+            MessageBox.Show(this, Loc.F("language.new.unknownCode", "code", code), Loc.T("packText.title"),
+                            MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+
+        try
+        {
+            var (path, existed) = ((MainViewModel)DataContext).WithTranslationFilesCurrent(
+                pack => PackTranslations.CreateOrUpdate(pack, root, code));
+            MessageBox.Show(this, Loc.F(existed ? "packText.new.updated" : "packText.new.created", "path", path),
+                            Loc.T("packText.title"), MessageBoxButton.OK, MessageBoxImage.Information);
+            System.Diagnostics.Process.Start("explorer.exe", "/select,\"" + path + "\"");
+        }
+        catch (System.Exception ex) when (ex is System.IO.IOException or System.UnauthorizedAccessException)
+        {
+            MessageBox.Show(this, ex.Message, Loc.T("packText.title"), MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    /// <summary>
+    /// Translate the pack into the languages an author picks, by machine.
+    /// <para/>
+    /// A window rather than a prompt, because there are two things to decide -
+    /// which languages, and whether to send the pack's text to somebody else's
+    /// service at all - and the second one deserves to be read before the
+    /// first is answered.
+    /// </summary>
+    private void PackTranslationTranslate_Click(object sender, RoutedEventArgs e)
+    {
+        if (Services.TestMode.Active) return;
+        string? root = PackFolderForTranslations();
+        if (root == null) return;
+
+        ((MainViewModel)DataContext).WithTranslationFilesCurrent(pack =>
+        {
+            var window = new View.TranslatePackWindow(pack, root) { Owner = this };
+            return window.ShowDialog();
+        });
+    }
+
+    /// <summary>Check every translation the pack has against the pack as it
+    /// stands, with the offer to put back keys a Replace All changed.</summary>
+    private void PackTranslationCheck_Click(object sender, RoutedEventArgs e)
+    {
+        if (Services.TestMode.Active) return;
+        string? root = PackFolderForTranslations();
+        if (root == null) return;
+
+        var all = ((MainViewModel)DataContext).WithTranslationFilesCurrent(
+            pack => PackTranslations.CheckAll(pack, root));
+        if (all.Count == 0)
+        {
+            MessageBox.Show(this, Loc.T("packText.check.none"), Loc.T("packText.title"),
+                            MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        var report = new System.Text.StringBuilder();
+        foreach (var c in all)
+        {
+            if (report.Length > 0) report.AppendLine().AppendLine();
+            string file = System.IO.Path.GetFileName(c.Path);
+            string? language = TranslationFiles.NativeName(c.Code);
+            report.AppendLine(language == null
+                ? Loc.F("packText.check.unknownLanguage", "file", file)
+                : Loc.F("packText.check.file", "language", language, "code", c.Code, "file", file));
+            report.Append(TranslationFiles.Report(c.Result, pack: true));
+        }
+
+        int fixable = all.Sum(c => c.Result.Findings.Count(f => f.Kind == Shared.TextCheck.Kind.Unknown && f.Suggestion != null));
+        bool fix = TextReportWindow.Show(this, Loc.T("packText.title"), report.ToString(),
+                                         fixable > 0 ? Loc.P("language.check.fixKeys", fixable) : null);
+        if (!fix) return;
+
+        int done = 0;
+        var backups = new List<string>();
+        foreach (var c in all)
+        {
+            int put = TranslationFiles.PutKeysBack(c.Path, c.Result);
+            if (put == 0) continue;
+            done += put;
+            backups.Add(System.IO.Path.GetFileName(c.Path) + ".bak");
+        }
+        MessageBox.Show(this, Loc.P("language.check.fixed", done, "backup", Loc.JoinAnd(backups)),
+                        Loc.T("packText.title"), MessageBoxButton.OK, MessageBoxImage.Information);
+    }
+
+    /// <summary>The pack's translations folder, in Explorer.</summary>
+    private void PackTranslationOpen_Click(object sender, RoutedEventArgs e)
+    {
+        if (Services.TestMode.Active) return;
+        string? root = PackFolderForTranslations();
+        if (root == null) return;
+        string folder = PackTranslations.FolderOf(root);
+        System.IO.Directory.CreateDirectory(folder);
+        System.Diagnostics.Process.Start("explorer.exe", "\"" + folder + "\"");
+    }
+
+    /// <summary>The author's own languages folder, in Explorer.</summary>
+    private void OpenLanguagesFolder()
+    {
+        if (Services.TestMode.Active) return;
+        System.IO.Directory.CreateDirectory(Loc.UserFolder);
+        System.Diagnostics.Process.Start("explorer.exe", "\"" + Loc.UserFolder + "\"");
+    }
+
     private async void CheckForUpdates_Click(object sender, RoutedEventArgs e)
     {
         // A check somebody asked for answers in a dialog, because they are
         // waiting for the answer. The automatic one uses the toast.
-        _updates.Report = message => MessageBox.Show(this, message, "Updates",
+        _updates.Report = message => MessageBox.Show(this, message, Loc.T("update.report.title"),
             MessageBoxButton.OK, MessageBoxImage.Information);
         try { await _updates.OnDemandAsync(); }
         finally { _updates.Report = ToastReport; }
@@ -245,8 +644,8 @@ public partial class MainWindow : Window
         // notices the folder has never been set. Both have to agree about what
         // counts as a game folder - see View.GameFolderPrompt.
         if (View.GameFolderPrompt.Ask(this))
-            MessageBox.Show(this, "Saved. Updates will replace the plugin there too.",
-                "Starmaker Story folder", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(this, Loc.T("gameFolder.saved"),
+                Loc.T("gameFolder.title"), MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private void ShowUpdateToast(string text)
@@ -289,8 +688,8 @@ public partial class MainWindow : Window
         if (pending.Count == 0)
         {
             MessageBox.Show(this,
-                "Every name in this pack is already in your Windows dictionary.",
-                "Add pack names", MessageBoxButton.OK, MessageBoxImage.Information);
+                Loc.T("spelling.allKnown"),
+                Loc.T("spelling.addNames.title"), MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
 
@@ -305,19 +704,16 @@ public partial class MainWindow : Window
             .Select(g => string.Join(", ", g.Select(x => x.w))));
 
         var answer = MessageBox.Show(this,
-            $"Add these {pending.Count} name(s) to your Windows dictionary?\n\n{list}\n\n" +
-            "This is the same dictionary Edge and Office use, so they'll be accepted " +
-            "everywhere on this PC — not just in ModForge.",
-            "Add pack names", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+            Loc.P("spelling.addNames.ask", pending.Count, "names", list),
+            Loc.T("spelling.addNames.title"), MessageBoxButton.OKCancel, MessageBoxImage.Question);
         if (answer != MessageBoxResult.OK) return;
 
         int added = SMSModForge.Services.SpellingDictionary.AddToWindowsDictionary(pending);
         if (added < 0)
         {
             MessageBox.Show(this,
-                "Couldn't write to the Windows dictionary at\n" +
-                SMSModForge.Services.SpellingDictionary.WindowsUserDictionaryPath,
-                "Add pack names", MessageBoxButton.OK, MessageBoxImage.Warning);
+                Loc.F("spelling.writeFailed", "path", SMSModForge.Services.SpellingDictionary.WindowsUserDictionaryPath),
+                Loc.T("spelling.addNames.title"), MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
 
@@ -331,6 +727,8 @@ public partial class MainWindow : Window
         timer.Tick += (_, _) =>
         {
             timer.Stop();
+            // The rows' remembered answers are now out of date too.
+            SMSModForge.Services.Speller.Forget();
             var text = NodeTextBox.Text;
             if (string.IsNullOrEmpty(text)) return;
             NodeTextBox.Text = "";
@@ -338,8 +736,8 @@ public partial class MainWindow : Window
         };
         timer.Start();
 
-        MessageBox.Show(this, $"Added {added} name(s) to your Windows dictionary.",
-            "Add pack names", MessageBoxButton.OK, MessageBoxImage.Information);
+        MessageBox.Show(this, Loc.P("spelling.added", added),
+            Loc.T("spelling.addNames.title"), MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     /// <summary>
@@ -408,7 +806,7 @@ public partial class MainWindow : Window
             var suggestions = error.Suggestions.Take(6).ToList();
             if (suggestions.Count == 0)
             {
-                menu.Items.Add(new MenuItem { Header = "(no suggestions)", IsEnabled = false });
+                menu.Items.Add(new MenuItem { Header = Loc.T("spelling.noSuggestions"), IsEnabled = false });
             }
             else
             {
@@ -431,25 +829,23 @@ public partial class MainWindow : Window
                 ? box.Text.Substring(start, length)
                 : "";
 
-            var ignore = new MenuItem { Header = "Ignore all", ToolTip = "Stop flagging this word for the rest of this session." };
+            var ignore = new MenuItem { Header = Loc.T("spelling.ignoreAll"), ToolTip = Loc.T("spelling.ignoreAll.tip") };
             ignore.Click += (_, _) => error.IgnoreAll();
             menu.Items.Add(ignore);
 
             var add = new MenuItem
             {
-                Header = string.IsNullOrEmpty(word) ? "Add to dictionary" : $"Add \"{word}\" to dictionary",
+                Header = string.IsNullOrEmpty(word) ? Loc.T("spelling.addToDictionary") : Loc.F("spelling.addWord", "word", word),
                 IsEnabled = !string.IsNullOrEmpty(word),
-                ToolTip = "Add this word to your Windows dictionary — the same list Edge and " +
-                          "Office use, so it's accepted everywhere on this PC from now on.",
+                ToolTip = Loc.T("spelling.addToDictionary.tip"),
             };
             add.Click += (_, _) =>
             {
                 if (!SMSModForge.Services.SpellingDictionary.AddToWindowsDictionary(word))
                 {
                     MessageBox.Show(this,
-                        "Couldn't write to the Windows dictionary at\n" +
-                        SMSModForge.Services.SpellingDictionary.WindowsUserDictionaryPath,
-                        "Add to dictionary", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        Loc.F("spelling.writeFailed", "path", SMSModForge.Services.SpellingDictionary.WindowsUserDictionaryPath),
+                        Loc.T("spelling.addToDictionary"), MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
                 // The platform checker reloads the file on its own schedule, so
@@ -457,6 +853,15 @@ public partial class MainWindow : Window
                 // it clears the underline now; the dictionary entry is what makes
                 // it stick for every later session and every other app.
                 error.IgnoreAll();
+
+                // The rows in the list keep the answers they were given, so
+                // they are told to ask again once Windows has read the file.
+                var reload = new System.Windows.Threading.DispatcherTimer
+                {
+                    Interval = SMSModForge.Services.SpellingDictionary.ReloadDelay,
+                };
+                reload.Tick += (_, _) => { reload.Stop(); SMSModForge.Services.Speller.Forget(); };
+                reload.Start();
             };
             menu.Items.Add(add);
             menu.Items.Add(new Separator());
@@ -464,10 +869,10 @@ public partial class MainWindow : Window
 
         foreach (var (header, command) in new (string, RoutedUICommand)[]
                  {
-                     ("Cut", ApplicationCommands.Cut),
-                     ("Copy", ApplicationCommands.Copy),
-                     ("Paste", ApplicationCommands.Paste),
-                     ("Select all", ApplicationCommands.SelectAll),
+                     (Loc.T("edit.cut"), ApplicationCommands.Cut),
+                     (Loc.T("edit.copy"), ApplicationCommands.Copy),
+                     (Loc.T("edit.paste"), ApplicationCommands.Paste),
+                     (Loc.T("edit.selectAll"), ApplicationCommands.SelectAll),
                  })
         {
             menu.Items.Add(new MenuItem { Header = header, Command = command, CommandTarget = box });
@@ -603,7 +1008,6 @@ public partial class MainWindow : Window
             VariableTreeView, WallpaperTreeView, MusicTreeView, SfxTreeView, IntegrationTreeView,
             QuestTreeView,
         };
-        const string hint = "Del: delete • F2/F12: rename • Ctrl+C/V: copy/paste • Ctrl+D: duplicate";
         foreach (var list in lists)
         {
             list.InputBindings.Add(new KeyBinding(vm.DeleteItemCommand, Key.Delete, ModifierKeys.None));
@@ -611,7 +1015,7 @@ public partial class MainWindow : Window
             list.InputBindings.Add(new KeyBinding(vm.RenameItemCommand, Key.F12, ModifierKeys.None));
             list.InputBindings.Add(new KeyBinding(vm.CopyItemCommand, Key.C, ModifierKeys.Control));
             list.InputBindings.Add(new KeyBinding(vm.PasteItemCommand, Key.V, ModifierKeys.Control));
-            if (list.ToolTip == null) list.ToolTip = hint;
+            if (list.ToolTip == null) LocText.Bind(list, ToolTipProperty, "sidebar.keys.tip");
         }
 
         // The dialogue node list is its own clipboard scope: Ctrl+C/V here move
@@ -646,7 +1050,7 @@ public partial class MainWindow : Window
         OnTree(u => u.RemoveNodeCommand,    Key.Delete, ModifierKeys.None);
         OnTree(u => u.AddChildCommand,      Key.Insert, ModifierKeys.None);
 
-        UiTree.ToolTip ??= "Ins: add object • Del: remove • Ctrl+C/V: copy/paste • Ctrl+D: duplicate";
+        if (UiTree.ToolTip == null) LocText.Bind(UiTree, ToolTipProperty, "ui.treeKeys.tip");
     }
 
     /// <summary>
@@ -739,7 +1143,7 @@ public partial class MainWindow : Window
     {
         if ((sender as FrameworkElement)?.Tag is not UnitTreeController ctrl) return;
         if (ctrl.Selected is not UnitFolderNode folder) return;
-        var name = TextPromptWindow.Prompt(this, "Rename Folder", "Folder name:", folder.Name);
+        var name = TextPromptWindow.Prompt(this, Loc.T("folders.rename.title"), Loc.T("folders.rename.prompt"), folder.Name);
         if (string.IsNullOrWhiteSpace(name)) return;
         (DataContext as MainViewModel)?.Undo.Checkpoint();
         folder.Name = name.Trim();
@@ -821,7 +1225,7 @@ public partial class MainWindow : Window
             string focus = focused?.GetType().Name ?? "<none>";
             if (focused is DependencyObject d &&
                 Ancestor<System.Windows.Controls.TabItem>(d) is { } owner)
-                focus += " inside tab " + (owner.Header?.ToString() ?? "?");
+                focus += " inside tab " + (owner.Header?.ToString() ?? "?");   // English on purpose: written to the tab-change log.
             if (focused is System.Windows.FrameworkElement { Name.Length: > 0 } named)
                 focus += " named " + named.Name;
 
@@ -837,6 +1241,41 @@ public partial class MainWindow : Window
         if (index < 0 || index >= MainTabs.Items.Count) return index.ToString();
         var header = (MainTabs.Items[index] as System.Windows.Controls.TabItem)?.Header;
         return $"[{index}] {header}";
+    }
+
+    /// <summary>
+    /// Keep the tab headers out from under "Editing in", which sits at the
+    /// right end of their row. The row is the tab control's own, laid out by
+    /// its own template, and knows nothing of what is drawn over it: without
+    /// room kept at its end, a narrow window slides the last tabs underneath
+    /// the language list, where they can be seen but not clicked. Their panel
+    /// wraps onto a second row before it reaches the list instead.
+    /// </summary>
+    internal void KeepTabsClearOfLanguage()
+    {
+        // Its own row: a page inside it can hold a tab control of its own.
+        var headers = Descendant<System.Windows.Controls.Primitives.TabPanel>(
+            MainTabs, p => ReferenceEquals(p.TemplatedParent, MainTabs));
+        if (headers == null) return;
+        double room = EditingLanguageBar.ActualWidth + EditingLanguageBar.Margin.Right + 8;
+        var margin = headers.Margin;
+        if (Math.Abs(margin.Right - room) < 0.5) return;
+        headers.Margin = new Thickness(margin.Left, margin.Top, room, margin.Bottom);
+    }
+
+    /// <summary>First descendant of the given type in the visual tree that
+    /// <paramref name="wanted"/> accepts.</summary>
+    private static T? Descendant<T>(DependencyObject from, Func<T, bool> wanted) where T : DependencyObject
+    {
+        int count = System.Windows.Media.VisualTreeHelper.GetChildrenCount(from);
+        for (int i = 0; i < count; i++)
+        {
+            var child = System.Windows.Media.VisualTreeHelper.GetChild(from, i);
+            if (child is T hit && wanted(hit)) return hit;
+            var deeper = Descendant(child, wanted);
+            if (deeper != null) return deeper;
+        }
+        return null;
     }
 
     /// <summary>Nearest ancestor of the given type, walking the visual tree and
@@ -919,8 +1358,8 @@ public partial class MainWindow : Window
         if (DataContext is MainViewModel vm && vm.HasUnsavedChanges)
         {
             var choice = MessageBox.Show(this,
-                "You have unsaved changes. Save before closing?",
-                "Unsaved changes", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                Loc.T("unsaved.beforeClosing"),
+                Loc.T("unsaved.title"), MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
 
             switch (choice)
             {
@@ -1152,8 +1591,8 @@ public partial class MainWindow : Window
         MenuUnignoreIssue.IsEnabled = issue.Ignored;
 
         MenuIgnoreCode.ToolTip = issue.Code.Length > 0
-            ? "Stop reporting this kind of issue anywhere in the pack."
-            : "This check has no code yet, so it can only be ignored one at a time.";
+            ? Loc.T("issues.ignoreKind.tip")
+            : Loc.T("issues.noCode");
     }
 
     private void IgnoreIssue_Click(object sender, RoutedEventArgs e)
@@ -1170,8 +1609,8 @@ public partial class MainWindow : Window
             // Nothing to key a type-wide rule on. Say so rather than silently
             // doing the single-issue thing under a menu item that promised more.
             MessageBox.Show(this,
-                "This check has no code yet, so it can only be ignored one at a time.",
-                "Ignore every issue like it", MessageBoxButton.OK, MessageBoxImage.Information);
+                Loc.T("issues.noCode"),
+                Loc.T("issues.ignoreKind.title"), MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
         vm.IgnoreIssue(i, wholeCode: true);
@@ -1187,8 +1626,8 @@ public partial class MainWindow : Window
     {
         if (DataContext is not MainViewModel vm) return;
         if (MessageBox.Show(this,
-                $"Report all {vm.IgnoredIssueCount} ignored issue(s) again?",
-                "Stop ignoring all", MessageBoxButton.OKCancel,
+                Loc.P("issues.unignoreAll.ask", vm.IgnoredIssueCount),
+                Loc.T("issues.unignoreAll.title"), MessageBoxButton.OKCancel,
                 MessageBoxImage.Question) == MessageBoxResult.OK)
             vm.ClearIgnoredIssues();
     }
@@ -1201,8 +1640,8 @@ public partial class MainWindow : Window
         if (string.IsNullOrWhiteSpace(vm.PackRoot))
         {
             MessageBox.Show(this,
-                "Save the pack to disk first — the mask editor needs a folder to read the diffuse from and to save the mask into.",
-                "Mask Editor", MessageBoxButton.OK, MessageBoxImage.Information);
+                Loc.T("mask.saveFirst.diffuse"),
+                Loc.T("mask.title"), MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
 
@@ -1241,8 +1680,8 @@ public partial class MainWindow : Window
             // running it. See Services.TestMode.
             if (!Services.TestMode.Active)
                 MessageBox.Show(this,
-                    "Save the pack to disk first — the mask editor needs a folder to save the mask into.",
-                    "Mask Editor", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Loc.T("mask.saveFirst"),
+                    Loc.T("mask.title"), MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
 
@@ -1298,8 +1737,8 @@ public partial class MainWindow : Window
         if (string.IsNullOrWhiteSpace(vm.PackRoot))
         {
             MessageBox.Show(this,
-                "Save the pack to disk first — the mask editor needs a folder to read the level art from and to save the mask into.",
-                "Mask Editor", MessageBoxButton.OK, MessageBoxImage.Information);
+                Loc.T("mask.saveFirst.level"),
+                Loc.T("mask.title"), MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
 
@@ -1328,8 +1767,8 @@ public partial class MainWindow : Window
         if (string.IsNullOrWhiteSpace(vm.PackRoot))
         {
             MessageBox.Show(this,
-                "Save the pack to disk first — the mask editor needs a folder to read the diffuse from and to save the mask into.",
-                "Mask Editor", MessageBoxButton.OK, MessageBoxImage.Information);
+                Loc.T("mask.saveFirst.diffuse"),
+                Loc.T("mask.title"), MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
 
@@ -1556,9 +1995,7 @@ public partial class MainWindow : Window
     private void NewRoomTalk_Click(object sender, RoutedEventArgs e)
     {
         if (DataContext is not MainViewModel vm || vm.SelectedDialogue is null) return;
-        var name = TextPromptWindow.Prompt(this, "New RoomTalk",
-            "Name for the new custom roomtalk. The dialogue will use vanilla:<name>, " +
-            "and the runtime creates the roomtalk node on the fly.");
+        var name = TextPromptWindow.Prompt(this, Loc.T("dialogues.newRoomTalk.title"), Loc.T("dialogues.newRoomTalk.prompt"));
         if (!string.IsNullOrWhiteSpace(name))
             vm.AddCustomRoomTalk(name);
     }
@@ -1705,9 +2142,9 @@ public partial class MainWindow : Window
         if (dialogue == null || !dialogue.IsVanillaBased) return;
 
         if (MessageBox.Show(this,
-                "Put every line of this conversation back the way the game has it?" + Environment.NewLine + Environment.NewLine
-                + dialogue.ChangeSummary + " will be discarded.",
-                "Reset conversation", MessageBoxButton.OKCancel, MessageBoxImage.Question)
+                Loc.T("dialogues.reset.ask") + Environment.NewLine + Environment.NewLine
+                + Loc.F("dialogues.reset.discarded", "changes", dialogue.ChangeSummary),
+                Loc.T("dialogues.reset.title"), MessageBoxButton.OKCancel, MessageBoxImage.Question)
             != MessageBoxResult.OK)
             return;
 
@@ -1728,10 +2165,9 @@ public partial class MainWindow : Window
 
         if (!Services.TestMode.Active
             && MessageBox.Show(this,
-                   "Put this quest back the way the game has it?" + Environment.NewLine + Environment.NewLine
-                   + quest.ChangeSummary + " will be discarded, including any condition taken out of the places "
-                   + "that start or reset it.",
-                   "Reset quest", MessageBoxButton.OKCancel, MessageBoxImage.Question)
+                   Loc.T("quests.reset.ask") + Environment.NewLine + Environment.NewLine
+                   + Loc.F("quests.reset.discarded", "changes", quest.ChangeSummary),
+                   Loc.T("quests.reset.title"), MessageBoxButton.OKCancel, MessageBoxImage.Question)
                != MessageBoxResult.OK)
             return;
 
@@ -1757,7 +2193,7 @@ public partial class MainWindow : Window
     {
         if (DataContext is not MainViewModel vm) return;
         if (vm.SelectedDialogueTreeItem is not DialogueFolderNode folder) return;
-        var name = TextPromptWindow.Prompt(this, "Rename Folder", "Folder name:", folder.Name);
+        var name = TextPromptWindow.Prompt(this, Loc.T("folders.rename.title"), Loc.T("folders.rename.prompt"), folder.Name);
         if (string.IsNullOrWhiteSpace(name)) return;
         vm.Undo.Checkpoint();
         folder.Name = name.Trim();
@@ -1882,7 +2318,7 @@ public partial class MainWindow : Window
     {
         if (DataContext is not MainViewModel vm) return;
         if (vm.SelectedVariableTreeItem is not VariableFolderNode folder) return;
-        var name = TextPromptWindow.Prompt(this, "Rename Folder", "Folder name:", folder.Name);
+        var name = TextPromptWindow.Prompt(this, Loc.T("folders.rename.title"), Loc.T("folders.rename.prompt"), folder.Name);
         if (string.IsNullOrWhiteSpace(name)) return;
         vm.Undo.Checkpoint();
         folder.Name = name.Trim();
@@ -2007,7 +2443,7 @@ public partial class MainWindow : Window
     {
         if (DataContext is not MainViewModel vm) return;
         if (vm.SelectedIntegrationTreeItem is not IntegrationFolderNode folder) return;
-        var name = TextPromptWindow.Prompt(this, "Rename Folder", "Folder name:", folder.Name);
+        var name = TextPromptWindow.Prompt(this, Loc.T("folders.rename.title"), Loc.T("folders.rename.prompt"), folder.Name);
         if (string.IsNullOrWhiteSpace(name)) return;
         vm.Undo.Checkpoint();
         folder.Name = name.Trim();

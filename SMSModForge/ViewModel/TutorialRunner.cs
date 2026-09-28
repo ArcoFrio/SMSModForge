@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Threading;
 using SMSModForge.Tutorials;
+using SMSModForge.Localization;
 
 namespace SMSModForge.ViewModel;
 
@@ -74,7 +75,7 @@ public sealed class TutorialRunner : ObservableObject
 
     /// <summary>"Step 2 of 7" — position is reassuring when the end is not visible.</summary>
     public string Progress =>
-        _tutorial == null ? "" : $"Step {_index + 1} of {_tutorial.Steps.Count}";
+        _tutorial == null ? "" : Loc.F("tutorials.progress", "step", _index + 1, "steps", _tutorial.Steps.Count);
 
     public bool IsLastStep => _tutorial != null && _index == _tutorial.Steps.Count - 1;
 
@@ -105,7 +106,7 @@ public sealed class TutorialRunner : ObservableObject
 
     /// <summary>Shown instead of the button while a step is waiting on work.</summary>
     public string WaitingLabel =>
-        Step is { Kind: not StepKind.Read } && !IsSatisfied ? "Waiting for this step…" : "";
+        Step is { Kind: not StepKind.Read } && !IsSatisfied ? Loc.T("tutorials.waiting") : "";
 
     private bool _showHint;
     /// <summary>True once a Do step has gone unsatisfied long enough to warrant

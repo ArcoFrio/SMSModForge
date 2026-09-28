@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using SMSModForge.Model;
 using SMSModForge.Rendering;
+using SMSModForge.Localization;
 
 namespace SMSModForge.ViewModel;
 
@@ -24,6 +25,11 @@ public sealed class UiViewModel : ObservableObject
 {
     public UiDef Model { get; }
     public ObservableCollection<UiNodeViewModel> Nodes { get; }
+
+    /// <summary>What something added here starts out saying, by its key and
+    /// whether the pack translates it: in the language its words are written
+    /// in, not the editor's - see <see cref="MainViewModel.NewName"/>.</summary>
+    public Func<string, bool, string> NewName { get; set; } = (key, _) => Loc.T(key);
 
     /// <summary>Raised when anything in the tree changes, so the preview can
     /// redraw. One event for the whole extension rather than a subscription per
@@ -87,8 +93,8 @@ public sealed class UiViewModel : ObservableObject
             var entry = Catalog;
             if (entry != null) return entry.Name + "  —  " + entry.Surface.Path;
             if (Model.IsVanillaBased) return Model.Source;        // named, but unknown here
-            if (WantsVanilla) return "(no screen chosen)";
-            return string.IsNullOrWhiteSpace(Model.Name) ? "(new UI)" : Model.Name;
+            if (WantsVanilla) return Loc.T("ui.noScreenChosen");
+            return string.IsNullOrWhiteSpace(Model.Name) ? Loc.T("ui.unnamed") : Model.Name;
         }
     }
 
@@ -153,7 +159,7 @@ public sealed class UiViewModel : ObservableObject
     {
         var parent = SelectedNode ?? Nodes.FirstOrDefault();
         if (parent == null) return;
-        SelectedNode = parent.AddChild();
+        SelectedNode = parent.AddChild(NewName("ui.node.newName", false));
     }, () => Nodes.Count > 0);
 
     private RelayCommand? _addChild;
@@ -322,7 +328,7 @@ public sealed class UiViewModel : ObservableObject
     /// pin a value nobody chose - the editor says what the blank will do.
     /// </summary>
     public string ButtonSoundInEffect
-        => !ButtonsMakeSound ? "" : $"using the game's own click: {UiDef.DefaultButtonSound}";
+        => !ButtonsMakeSound ? "" : Loc.F("ui.defaultClick", "sound", UiDef.DefaultButtonSound);
 
     /// <summary>Whether to say it: only when the field is blank AND something
     /// is going to play. A screen naming its own sound can be read off the
@@ -419,7 +425,7 @@ public sealed class UiViewModel : ObservableObject
         if (arg is not UiTemplate template) return;
         var parent = SelectedNode ?? Nodes.FirstOrDefault();
         if (parent == null) return;
-        SelectedNode = parent.AddChild(template.Build());
+        SelectedNode = parent.AddChild(template.Build(key => NewName(key, true)));
     }, arg => arg is UiTemplate && Nodes.Count > 0);
 
     private RelayCommand? _addChildTemplate;
@@ -467,13 +473,13 @@ public sealed class UiViewModel : ObservableObject
             if (!Model.IsVanillaBased)
             {
                 int mine = Model.Nodes.Sum(CountNodes);
-                return mine == 0 ? "empty" : $"{mine} object(s)";
+                return mine == 0 ? Loc.T("ui.empty") : Loc.P("ui.measure.objects", mine);
             }
             if (Catalog == null) return "";
             var (before, after) = VanillaUiDelta.Measure(Model);
             return after == 0
-                ? $"{before} objects, nothing changed yet"
-                : $"{before} objects, {after} stored";
+                ? Loc.P("ui.measure.unchanged", before)
+                : Loc.F("ui.measure.stored", "objects", Loc.P("ui.measure.objects", before), "stored", after);
         }
     }
 
@@ -528,8 +534,7 @@ public sealed class UiViewModel : ObservableObject
 
     public string Warning
         => Stranded == 0 ? ""
-           : $"{Stranded} change(s) refer to objects this version of the game " +
-             "no longer has. They have been kept, at the top of the tree.";
+           : Loc.P("ui.stranded", Stranded);
 
     private void EnsureSeeded()
     {

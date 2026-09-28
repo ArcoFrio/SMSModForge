@@ -184,6 +184,19 @@ namespace SMSModForge.PackPlugin
 
             bool startActive = (bool?)pl["startActive"] ?? false;
             go.SetActive(startActive);
+
+            // The placement's own conditions drive it from here on, exactly as
+            // a GameObject node's do (PlaceFactory): evaluated every frame, and
+            // put right if anything else switched it. They were never read, so
+            // an NPC the editor let an author gate showed regardless - and one
+            // on a level of the game's was lost for good the moment the game
+            // cleared its NPCs object: Downtown's switches every child off on
+            // arrival (DisableChildren) before turning one crowd group back on
+            // (2026-09-27, an NPC with "Always true" that never appeared).
+            if (pl["activeConditions"] is JArray gateConds && gateConds.Count > 0)
+                GameObjectGateRegistry.ForPack(pack.PackId).Register(
+                    go, gateConds, (bool?)pl["deactivateWhenUnmet"] ?? true,
+                    (level != null ? level.name : "?") + "/NPC " + goName);
             return true;
         }
 

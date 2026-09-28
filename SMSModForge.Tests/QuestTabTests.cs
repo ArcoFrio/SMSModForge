@@ -16,6 +16,7 @@ namespace SMSModForge.Tests;
 /// The Quests tab and the quest rows, in the real window: that what is typed
 /// reaches the pack, and that the rows show what their view models say.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class QuestTabTests
 {
     private readonly ITestOutputHelper _out;
@@ -76,6 +77,41 @@ public sealed class QuestTabTests
             var shown = Texts(list).ToList();
             _out.WriteLine(string.Join(" / ", shown));
             Assert.Contains("Ask the fisherman.", shown);
+        });
+    }
+
+    [Fact]
+    public void WhatHappensToPlayersWhoFinishedItIsPickedOnTheTab_ForThePacksOwnQuestsOnly()
+    {
+        WindowHarness.Run(window =>
+        {
+            var vm = (MainViewModel)window.DataContext;
+            ((TabControl)window.FindName("MainTabs")).SelectedIndex = TabQuests;
+            vm.AddQuestCommand.Execute(null);
+            WindowHarness.Pump();
+            var quest = Assert.Single(vm.Pack.Quests);
+
+            var panel = (GroupBox)window.FindName("QuestStepsAddedPanel");
+            var leave = (RadioButton)window.FindName("StepsAddedLeave");
+            var reopen = (RadioButton)window.FindName("StepsAddedReopen");
+            var over = (RadioButton)window.FindName("StepsAddedStartOver");
+            Assert.True(panel.IsVisible, "the choice is not on screen for a quest of the pack's own");
+            Assert.True(leave.IsChecked);
+
+            reopen.IsChecked = true;   // what a click does
+            WindowHarness.Pump();
+            Assert.Equal(SMSModForge.Shared.QuestGrowth.Reopen, quest.WhenStepsAdded);
+            Assert.False(leave.IsChecked);
+
+            over.IsChecked = true;
+            WindowHarness.Pump();
+            Assert.Equal(SMSModForge.Shared.QuestGrowth.StartOver, quest.WhenStepsAdded);
+            Assert.False(reopen.IsChecked);
+
+            // One of the game's quests: not offered.
+            vm.AddVanillaQuestCommand.Execute(null);
+            WindowHarness.Pump();
+            Assert.False(panel.IsVisible, "the choice is offered on one of the game's quests");
         });
     }
 

@@ -27,7 +27,7 @@ public sealed class WallpaperDef
 
     /// <summary>Human-facing label shown in the editor's wallpaper list.</summary>
     [JsonProperty("displayName", Order = 2)]
-    public string DisplayName { get; set; } = "New Wallpaper";
+    public string DisplayName { get; set; } = "New Wallpaper";   // English on purpose: the value a pack file without one loads with, which must be the same in every language.
 
     /// <summary>
     /// Relative path (from pack root) to the wallpaper PNG. Loaded into

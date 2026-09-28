@@ -148,10 +148,44 @@ public sealed class PackStatusTests
         var report = Judge(Pack(game: "1.7A", forge: "1.0.0", shadowedIn: "ModPacks"));
 
         Assert.Equal(PackStatus.Level.Error, report.Level);
-        Assert.Equal(3, report.Tags.Count);
         Assert.Contains("Incompatible game version (1.7A)", report.Tags);
-        Assert.Contains("Built for ModForge 1.0.0", report.Tags);
         Assert.Contains("Installed twice, using from Mods folder", report.Tags);
+    }
+
+    [Fact]
+    public void TheGameVersionReplacesTheModForgeOne()
+    {
+        // The exception to the rule above, and the only one: these two are not
+        // independent problems. A pack built for another game build gets fixed
+        // by its author rebuilding it, and rebuilding restamps the ModForge
+        // version too - so the ModForge tag beside it is a consequence, not a
+        // second thing to act on. Two version numbers on one row left the
+        // player deciding which was theirs to chase.
+        foreach (string forge in new[] { "1.3.0", "1.0.0", "" })
+        {
+            var report = Judge(Pack(game: "1.7A", forge: forge));
+
+            Assert.Equal(PackStatus.Level.Error, report.Level);
+            Assert.Equal("Incompatible game version (1.7A)", Assert.Single(report.Tags));
+        }
+    }
+
+    [Fact]
+    public void TheModForgeVersionIsStillSaidWhenTheGameBuildAgrees()
+    {
+        // The control for the test above: suppression that fired on every pack
+        // would read exactly the same from the outside as one that works, and
+        // would quietly drop the ModForge warning altogether.
+        foreach (var (forge, expected) in new[]
+                 {
+                     ("1.3.0", "Needs ModForge 1.3.0"),
+                     ("1.0.0", "Built for ModForge 1.0.0"),
+                     ("", "No ModForge version recorded"),
+                 })
+        {
+            var report = Judge(Pack(game: Running, forge: forge));
+            Assert.Equal(expected, Assert.Single(report.Tags));
+        }
     }
 
     [Fact]
@@ -165,6 +199,87 @@ public sealed class PackStatusTests
         Assert.Equal(PackStatus.Level.Error, report.Level);
         Assert.Contains("Needs ModForge 1.3.0", report.Tags);
         Assert.Contains("Installed twice, using from Mods folder", report.Tags);
+    }
+
+    // ── Being read in a language the pack does not have ──────────────
+
+    private static PackStatus.Facts InLanguage(string reading, params string[] has)
+        => new()
+        {
+            GameVersion = Running, RunningGameVersion = Running,
+            ForgeVersion = Runtime, RuntimeForgeVersion = Runtime,
+            Language = reading,
+            Translations = has.ToList(),
+        };
+
+    [Fact]
+    public void APackWithoutYourLanguageSaysSo()
+    {
+        // The pack works; its words just come out as its author wrote them
+        // while everything around them is in the player's language. Worth a
+        // line, because otherwise it reads as a translation that failed.
+        var report = Judge(InLanguage("es", "fr", "de"));
+
+        Assert.Equal(PackStatus.Level.Warning, report.Level);
+        Assert.Equal("Not translated into your language", Assert.Single(report.Tags));
+    }
+
+    [Fact]
+    public void APackWithNoTranslationsAtAllIsSaidNothingAbout()
+    {
+        // The control that keeps this from firing on everybody. A pack with no
+        // translations is simply a pack in its own language, and a line under
+        // every pack installed teaches people to stop reading the colour -
+        // which costs the warnings that matter.
+        Assert.Equal(PackStatus.Level.Fine, Judge(InLanguage("es")).Level);
+    }
+
+    [Fact]
+    public void ReadingInEnglishNeverComplains()
+    {
+        // A pack that does not say what it is written in is English - every
+        // pack made before one could say was. Telling an English reader that
+        // an English pack is not in their language would be wrong on every
+        // pack ever made.
+        Assert.Equal(PackStatus.Level.Fine, Judge(InLanguage("en", "es", "fr")).Level);
+        Assert.Equal(PackStatus.Level.Fine, Judge(InLanguage("en-GB", "es")).Level);
+    }
+
+    [Fact]
+    public void APackIsInItsOwnLanguageForAReaderOfIt()
+    {
+        // A Brazilian pack, with an English translation, read in Brazilian
+        // Portuguese: its own words are the reader's.
+        var own = InLanguage("pt-BR", "en");
+        own.OwnLanguage = "pt-BR";
+        Assert.Equal(PackStatus.Level.Fine, Judge(own).Level);
+
+        // The control: the same pack read in Spanish, which it has not.
+        var other = InLanguage("es", "en");
+        other.OwnLanguage = "pt-BR";
+        Assert.Equal(PackStatus.Level.Warning, Judge(other).Level);
+
+        // And read in English, which it has as a translation.
+        var english = InLanguage("en", "en");
+        english.OwnLanguage = "pt-BR";
+        Assert.Equal(PackStatus.Level.Fine, Judge(english).Level);
+    }
+
+    [Fact]
+    public void CloseEnoughCounts()
+    {
+        // A pack translated into pt-BR is Portuguese to somebody reading pt.
+        // Telling them it is not in their language, while they are reading it
+        // in their language, would be worse than saying nothing.
+        Assert.Equal(PackStatus.Level.Fine, Judge(InLanguage("pt", "pt-BR")).Level);
+        Assert.Equal(PackStatus.Level.Fine, Judge(InLanguage("pt-BR", "pt")).Level);
+        Assert.Equal(PackStatus.Level.Fine, Judge(InLanguage("es", "ES")).Level);
+    }
+
+    [Fact]
+    public void NotKnowingWhatLanguageItIsReadInSaysNothing()
+    {
+        Assert.Equal(PackStatus.Level.Fine, Judge(InLanguage("", "fr")).Level);
     }
 
     // ── What is not evidence of anything ─────────────────────────────

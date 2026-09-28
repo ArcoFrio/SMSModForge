@@ -26,6 +26,7 @@ namespace SMSModForge.Tests;
 /// the right thing: a preview that cycles the wrong frames, or the same frame
 /// forever, both look like a working animation from a distance.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class ScenePreviewGifTests : IDisposable
 {
     private readonly ITestOutputHelper _out;
@@ -114,9 +115,17 @@ public sealed class ScenePreviewGifTests : IDisposable
             // The timer runs at the GIF's own rate, and this one carries no
             // delay field - so a tenth of a second per frame, the number every
             // browser settles on. Three frames is a third of a second.
-            for (int i = 0; i < 12; i++)
+            //
+            // Sampled four times per frame, and that ratio matters. This used
+            // to look every 60ms at a frame that lasts 100, so one stall on a
+            // busy machine stepped the picture twice between two looks - and
+            // the check below, which says each frame follows the one before it,
+            // then failed on a preview that was animating perfectly. It passed
+            // alone and failed in the full suite, which is the worst way for a
+            // test to be wrong. Keep the interval well under the frame.
+            for (int i = 0; i < 30; i++)
             {
-                WindowHarness.Wait(TimeSpan.FromMilliseconds(60));
+                WindowHarness.Wait(TimeSpan.FromMilliseconds(25));
                 var now = PixelOf(art);
                 if (now != seen[^1]) seen.Add(now);
             }

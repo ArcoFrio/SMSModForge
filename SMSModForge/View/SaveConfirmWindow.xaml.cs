@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
 using SMSModForge.Model;
+using SMSModForge.Localization;
 
 namespace SMSModForge.View;
 
@@ -38,11 +39,9 @@ public partial class SaveConfirmWindow : Window
 
     private void Populate(IReadOnlyList<PackChange> changes, string? packRoot)
     {
-        HeadlineText.Text = changes.Count == 1
-            ? "1 change will be written"
-            : changes.Count + " changes will be written";
+        HeadlineText.Text = Loc.P("saveConfirm.headline", changes.Count);
         TargetText.Text = string.IsNullOrEmpty(packRoot)
-            ? "The pack folder is chosen on save."
+            ? Loc.T("saveConfirm.folderChosenOnSave")
             : System.IO.Path.Combine(packRoot, PackRepository.ManifestFileName);
 
         // Group by manifest section so a long list stays navigable — same

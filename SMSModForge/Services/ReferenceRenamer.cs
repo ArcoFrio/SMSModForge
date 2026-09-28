@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SMSModForge.Model;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Services;
 
@@ -161,7 +162,7 @@ public static class ReferenceRenamer
 
         int structural = RenameStructural(pack, kind, name, name, rewrite: false);
         if (structural > 0)
-            hits.Add(structural == 1 ? "1 other reference" : $"{structural} other references");
+            hits.Add(Loc.P("walk.otherReferences", structural));
 
         return hits.Distinct().ToList();
     }

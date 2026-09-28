@@ -66,19 +66,5 @@ namespace SMSModForge.Shared
             return 0;
         }
 
-        /// <summary>What to call a slot on screen.</summary>
-        public static string Label(string slot)
-        {
-            string face = ExpressionOf(slot);
-            if (face != null) return face;
-
-            int frame = MouthFrame(slot);
-            if (frame > 0) return "Mouth " + frame;
-
-            if (slot == Base) return "Base";
-            if (slot == Mask) return "Jiggle mask";
-            if (slot == Blink) return "Blink";
-            return slot ?? "";
-        }
     }
 }

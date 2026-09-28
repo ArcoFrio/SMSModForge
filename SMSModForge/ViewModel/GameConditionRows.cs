@@ -4,6 +4,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SMSModForge.Model;
+using SMSModForge.Localization;
 
 namespace SMSModForge.ViewModel;
 
@@ -233,27 +234,17 @@ public sealed class GameConditionGroupViewModel
 /// </summary>
 internal static class GameConditionGroups
 {
-    public const string ScriptNote =
-        "Taking it out changes the game's script, so everything it guards - the conversation it plays, and "
-        + "anything beside it - happens without it too.";
+    public static string ScriptNote => Loc.T("gameConditions.scriptNote");
 
-    public const string LineNote =
-        "Taking it out changes this line in your version of the conversation, so the line itself is offered "
-        + "without it too. The Dialogues tab shows the same change.";
+    public static string LineNote => Loc.T("gameConditions.lineNote");
 
-    public const string LocationHeader = "Where the game's script is \u2014 it only runs while the player is here";
+    public static string LocationHeader => Loc.T("gameConditions.locationHeader");
 
-    public const string LevelNote =
-        "The game's script sits on this place, so it only runs while the player is here. It is not one of the "
-        + "conditions in the script's list, so there is nothing to take out, and the place is the game's: moving "
-        + "it would mean moving the game's own script.";
+    public static string LevelNote => Loc.T("gameConditions.levelNote");
 
-    public const string RoomNote =
-        "The game's script sits on this place, so the game only ever does this while the player is here. Take it "
-        + "out and your pack's own conditions decide on their own, wherever the player is.";
+    public static string RoomNote => Loc.T("gameConditions.roomNote");
 
-    public const string PickedNote =
-        "How the script picks this conversation among its children. Not a condition that can be taken out.";
+    public static string PickedNote => Loc.T("gameConditions.pickedNote");
 
     /// <summary>
     /// One place that plays a conversation, or one script that starts a quest:
@@ -326,14 +317,10 @@ internal static class GameConditionGroups
                          .Distinct(StringComparer.Ordinal)
                          .ToList();
         int others = ahead.Count(a => string.IsNullOrEmpty(a.Plays));
-        if (others > 0) parts.Add(others == 1 ? "1 other branch" : others + " other branches");
-        return "The game tries " + (parts.Count == 1 && others == 0 ? "this" : "these") + " first: "
-               + JoinAnd(parts) + ". If one of them runs, this one doesn't.";
+        if (others > 0) parts.Add(Loc.P("gameConditions.otherBranches", others));
+        return Loc.F(parts.Count == 1 && others == 0 ? "gameConditions.earlierOne" : "gameConditions.earlierSeveral",
+                     "what", Loc.JoinAnd(parts));
     }
-
-    private static string JoinAnd(IReadOnlyList<string> parts)
-        => parts.Count <= 1 ? string.Join("", parts)
-           : string.Join(", ", parts.Take(parts.Count - 1)) + " and " + parts[parts.Count - 1];
 
     /// <summary>
     /// One line's conditions: the game's, each removable, and any the pack
@@ -360,7 +347,7 @@ internal static class GameConditionGroups
         if (now != null)
             foreach (var added in GameConditionEditing.Compare(game, now).Added)
                 rows.Add(GameConditionRowViewModel.Yours(added,
-                    "Added to this line in your version of the conversation. Change it on the Dialogues tab."));
+                    Loc.T("gameConditions.addedToLine")));
 
         if (rows.Count == 0) return null;
         return new GameConditionGroupViewModel(title, "", rows);

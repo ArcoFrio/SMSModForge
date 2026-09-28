@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Tutorials;
 
@@ -22,10 +23,16 @@ public enum StepKind
 public sealed class TutorialStep
 {
     /// <summary>Heading on the callout. Short — it is read at a glance.</summary>
-    public string Title { get; init; } = "";
+    public string Title { get => Loc.Optional(TitleKey); init => TitleKey = value; }
+
+    /// <summary>The key <see cref="Title"/> is read from in the English file.</summary>
+    public string TitleKey { get; private set; } = "";
 
     /// <summary>What to do, or what is being explained.</summary>
-    public string Body { get; init; } = "";
+    public string Body { get => Loc.Optional(BodyKey); init => BodyKey = value; }
+
+    /// <summary>The key <see cref="Body"/> is read from in the English file.</summary>
+    public string BodyKey { get; private set; } = "";
 
     /// <summary>See <see cref="StepKind"/>.</summary>
     public StepKind Kind { get; init; } = StepKind.Read;
@@ -78,17 +85,26 @@ public sealed class TutorialStep
 
     /// <summary>Optional hint shown when a Do step has been sitting unsatisfied
     /// for a while — the nudge before giving up and using Exit.</summary>
-    public string Hint { get; init; } = "";
+    public string Hint { get => Loc.Optional(HintKey); init => HintKey = value; }
+
+    /// <summary>The key <see cref="Hint"/> is read from in the English file.</summary>
+    public string HintKey { get; private set; } = "";
 }
 
 /// <summary>One tutorial: a title, a sense of what it costs, and its steps.</summary>
 public sealed class TutorialDef
 {
     public string Id { get; init; } = "";
-    public string Title { get; init; } = "";
+    public string Title { get => Loc.Optional(TitleKey); init => TitleKey = value; }
+
+    /// <summary>The key <see cref="Title"/> is read from in the English file.</summary>
+    public string TitleKey { get; private set; } = "";
 
     /// <summary>One line on the button, saying what the author will end up with.</summary>
-    public string Summary { get; init; } = "";
+    public string Summary { get => Loc.Optional(SummaryKey); init => SummaryKey = value; }
+
+    /// <summary>The key <see cref="Summary"/> is read from in the English file.</summary>
+    public string SummaryKey { get; private set; } = "";
 
     /// <summary>
     /// Where this sits in the progression: 1 is the gentlest, and the catalog
@@ -131,7 +147,10 @@ public sealed class TutorialDef
     /// global and still runs 1..n across the whole ladder, so "where am I" has
     /// one answer rather than one per group.
     /// </summary>
-    public string Group { get; init; } = "";
+    public string Group { get => Loc.Optional(GroupKey); init => GroupKey = value; }
+
+    /// <summary>The key <see cref="Group"/> is read from in the English file.</summary>
+    public string GroupKey { get; private set; } = "";
 
     public IReadOnlyList<TutorialStep> Steps { get; init; } = Array.Empty<TutorialStep>();
 }

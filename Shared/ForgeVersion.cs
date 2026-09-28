@@ -22,7 +22,23 @@
         /// Keep in step with the two csproj <c>Version</c> elements; a test
         /// fails if they part company.
         /// </summary>
-        public const string Current = "1.5.0";
+        public const string Current = "1.6.0";
+
+        /// <summary>
+        /// The build of the game this ModForge is made for - what the editor
+        /// stamps into every pack it saves, and what the plugin compares with
+        /// the game it finds itself running in.
+        /// </summary>
+        public const string GameBuild = "1.8E";
+
+        /// <summary>
+        /// Whether ModForge is running in a build of the game other than the
+        /// one it was made for. False when the running build could not be read:
+        /// not knowing is not evidence of a mismatch.
+        /// </summary>
+        public static bool MadeForOtherGame(string runningGameVersion)
+            => !string.IsNullOrEmpty(runningGameVersion)
+               && !string.Equals(runningGameVersion, GameBuild, System.StringComparison.OrdinalIgnoreCase);
 
         /// <summary>How a pack stands relative to the ModForge reading it.</summary>
         public enum Standing

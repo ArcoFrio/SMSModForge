@@ -18,6 +18,7 @@ namespace SMSModForge.Tests;
 /// worse than no field, because it is the thing an author checks instead of the
 /// manifest.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class VersionDisplaySyncTests
 {
     private readonly ITestOutputHelper _out;

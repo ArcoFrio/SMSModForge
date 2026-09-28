@@ -23,6 +23,7 @@ namespace SMSModForge.Tests;
 /// also keeps it honest — it cannot claim the pack is doing something it is
 /// not, or hide something it is.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class OverridePanelReopensTests
 {
     private readonly ITestOutputHelper _out;

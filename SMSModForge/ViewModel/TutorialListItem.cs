@@ -1,4 +1,6 @@
-﻿namespace SMSModForge.ViewModel;
+﻿using SMSModForge.Localization;
+
+namespace SMSModForge.ViewModel;
 
 /// <summary>
 /// A tutorial as the ModForge tab lists it: the definition plus whether this
@@ -29,7 +31,7 @@ public sealed record TutorialListItem(Tutorials.TutorialDef Def, bool IsComplete
     public string LevelLabel => Def.IsOnLadder ? Def.Level.ToString() : "";
 
     /// <summary>Label on the button: finishing once makes it a revisit.</summary>
-    public string ActionLabel => IsOutdated ? "What changed" : IsComplete ? "Again" : "Start";
+    public string ActionLabel => Loc.T(IsOutdated ? "tutorials.whatChanged" : IsComplete ? "tutorials.again" : "tutorials.start");
 
     /// <summary>Tick shown beside a finished one.</summary>
     // An updated tutorial is not ticked: leaving the tick on says "you know
@@ -38,5 +40,5 @@ public sealed record TutorialListItem(Tutorials.TutorialDef Def, bool IsComplete
 
     /// <summary>Shown beside an updated tutorial, so the badge is not a
     /// mystery.</summary>
-    public string UpdatedNote => IsOutdated ? "Updated since you took it" : "";
+    public string UpdatedNote => IsOutdated ? Loc.T("tutorials.updated") : "";
 }

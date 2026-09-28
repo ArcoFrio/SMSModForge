@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using SMSModForge.Shared;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Model;
 
@@ -149,20 +150,21 @@ public static class QuestReferences
     {
         if (task == null) return "";
         var parts = new List<string>();
-        if (task.Removed) parts.Add("taken out of the quest by this pack, which moves past it as soon as it starts");
-        if (task.Added) parts.Add("added by this pack");
+        if (task.Removed) parts.Add(Loc.T("questPicker.task.removed"));
+        if (task.Added) parts.Add(Loc.T("questPicker.task.added"));
         if (task.HasSubtasks)
             parts.Add(QuestVocabulary.Is(task.Completion, QuestVocabulary.ByAction)
-                ? "completed by an action; its subtasks are notes"
-                : "completes itself when " + (QuestVocabulary.Is(task.Completion, QuestVocabulary.AnyOne)
-                    ? "any one subtask is done"
-                    : "its subtasks are done, " + task.Completion));
+                ? Loc.T("questPicker.task.byAction")
+                : QuestVocabulary.Is(task.Completion, QuestVocabulary.AnyOne)
+                    ? Loc.T("questPicker.task.anyOne")
+                    : Loc.F("questPicker.task.allSubtasks", "order", ParamSchema.ChoiceText("completion", task.Completion)));
         if (task.CounterFollowsVariable)
-            parts.Add("counts from a variable"
-                      + (task.CountTo is { } target ? " to " + target.ToString("0.##", CultureInfo.InvariantCulture) : ""));
+            parts.Add(task.CountTo is { } target
+                ? Loc.F("questPicker.task.countsFromVariableTo", "target", target.ToString("0.##", CultureInfo.InvariantCulture))
+                : Loc.T("questPicker.task.countsFromVariable"));
         else if (task.Counts)
-            parts.Add("counts to " + task.CountTo!.Value.ToString("0.##", CultureInfo.InvariantCulture)
-                      + (task.IsTopLevel ? "" : " (the journal only shows counts on top-level tasks)"));
+            parts.Add(Loc.F(task.IsTopLevel ? "questPicker.task.countsTo" : "questPicker.task.countsToHidden",
+                            "target", task.CountTo!.Value.ToString("0.##", CultureInfo.InvariantCulture)));
         return string.Join("; ", parts);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using SMSModForge.Services;
+using SMSModForge.Localization;
 
 namespace SMSModForge;
 
@@ -7,6 +8,14 @@ public partial class App : Application
 {
     protected override void OnStartup(StartupEventArgs e)
     {
+        // First, before anything can say a word: the update applier below
+        // reports in it too, and every window reads its texts as it is built.
+        // Not under the test harness, whose Application runs this too: the
+        // suite is written in English, and the language somebody picked for
+        // their own editor must not decide whether it passes.
+        if (!TestMode.Active)
+            Localization.Loc.Use(Localization.Loc.StartingCode(EditorPrefs.Language));
+
         // Started by the previous version to replace it. There is no editor to
         // show: this process IS the new build, running from where it was staged,
         // and its whole job is to copy itself over the install and start that.
@@ -14,7 +23,7 @@ public partial class App : Application
         if (UpdateApplier.WasAskedToApply(e.Args, out var installFolder, out int oldProcessId))
         {
             if (!UpdateApplier.Apply(installFolder, oldProcessId, out var problem))
-                MessageBox.Show(problem, "Update", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(problem, Loc.T("update.problem.title"), MessageBoxButton.OK, MessageBoxImage.Warning);
             Shutdown();
             return;
         }

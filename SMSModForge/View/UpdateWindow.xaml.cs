@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using SMSModForge.Services;
+using SMSModForge.Localization;
 
 namespace SMSModForge.View;
 
@@ -30,7 +31,7 @@ public partial class UpdateWindow : Window
 
         win.NotesView.Document = MarkdownFlow.ToDocument(
             string.IsNullOrWhiteSpace(release.Notes)
-                ? "This release was published without notes."
+                ? Loc.T("update.noNotes")
                 : release.Notes);
 
         win._release = release;
@@ -56,10 +57,9 @@ public partial class UpdateWindow : Window
     /// appeared because the editor was pretending to be 1.0.0.
     /// </summary>
     public static string VersionLine(ReleaseInfo release)
-        => $"Version {release.VersionText} — you are running "
-         + $"{UpdateFeed.RunningVersion.ToString(3)}."
+        => Loc.F("update.versionLine", "version", release.VersionText, "running", UpdateFeed.RunningVersion.ToString(3))
          + (release.EditorZipBytes > 0
-                ? $" The download is about {release.EditorZipBytes / 1024 / 1024} MB."
+                ? " " + Loc.F("update.downloadSize", "size", release.EditorZipBytes / 1024 / 1024)
                 : "");
 
     /// <summary>
@@ -80,15 +80,12 @@ public partial class UpdateWindow : Window
     public static (string Text, bool OfferFolder) PluginLine(ReleaseInfo release, string? gameFolder)
     {
         if (release.PluginZipUrl == null)
-            return ("This release has no plugin download, so only the editor changes.", false);
+            return (Loc.T("update.noPlugin"), false);
 
         if (!UpdateInstaller.IsGameFolder(gameFolder))
-            return ("This release updates the plugin too, but the editor does not know "
-                  + "where your game is. Set it and both halves stay in step — otherwise "
-                  + "only the editor changes.", true);
+            return (Loc.T("update.noGameFolder"), true);
 
-        return ("The plugin in your game folder will be updated to match. Your packs "
-              + "are not touched.", false);
+        return (Loc.T("update.pluginToo"), false);
     }
 
     private void ShowPluginLine()

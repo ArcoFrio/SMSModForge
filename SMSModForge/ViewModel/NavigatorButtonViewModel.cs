@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using SMSModForge.Model;
+using SMSModForge.Localization;
 
 namespace SMSModForge.ViewModel;
 
@@ -101,9 +102,9 @@ public sealed class NavigatorButtonViewModel : ObservableObject
             if (!PlaceTargetRef.TryParse(Target, out var r)) return "(unset)";
             return r.Kind switch
             {
-                PlaceTargetKind.Vanilla => $"Vanilla → {VanillaPlaces.FindByGoName(r.Key)?.DisplayName ?? r.Key} ({r.Key})",
-                PlaceTargetKind.Self    => $"This pack → {r.Key}",
-                PlaceTargetKind.Pack    => $"Pack {r.PackId} → {r.Key}",
+                PlaceTargetKind.Vanilla => Loc.F("target.arrow.vanilla", "name", VanillaPlaces.FindByGoName(r.Key)?.DisplayName ?? r.Key, "id", r.Key),
+                PlaceTargetKind.Self    => Loc.F("target.arrow.thisPack", "id", r.Key),
+                PlaceTargetKind.Pack    => Loc.F("target.arrow.otherPack", "pack", r.PackId, "id", r.Key),
                 _                       => Target,
             };
         }

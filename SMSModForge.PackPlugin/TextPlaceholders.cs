@@ -27,6 +27,22 @@ namespace SMSModForge.PackPlugin
             => !string.IsNullOrEmpty(text) &&
                text.IndexOf("[PV:", System.StringComparison.Ordinal) >= 0;
 
+        /// <summary>Whether <paramref name="text"/> may hold a token of either
+        /// kind: the pack's <c>[PV:name]</c> or one of the game's words in
+        /// braces (<see cref="GameTextTokens"/>).</summary>
+        public static bool HasAnyToken(string text)
+            => HasAny(text) || GameTextTokens.MayHave(text);
+
+        /// <summary>
+        /// Every token filled in: the pack's <c>[PV:name]</c> first - so a
+        /// variable holding "{PC}" comes out as the name - then the game's
+        /// words in braces. For anything a player reads that is not a line of
+        /// dialogue: a line's braces are the game's to fill, which it does as
+        /// the line is shown.
+        /// </summary>
+        public static string ResolveAll(string text, PackVariableStore vars)
+            => GameTextTokens.Resolve(Resolve(text, vars));
+
         /// <summary>Substitute every <c>[PV:name]</c> token from
         /// <paramref name="vars"/>. Null store leaves tokens verbatim.</summary>
         public static string Resolve(string text, PackVariableStore vars)

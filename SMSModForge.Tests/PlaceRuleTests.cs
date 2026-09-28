@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using SMSModForge.Model;
@@ -19,6 +19,7 @@ namespace SMSModForge.Tests;
 /// script, and the lines it has to be able to be on - and that a place nobody
 /// has touched writes nothing at all.
 /// </summary>
+[Trait("Speed", "Slow")]   // measured ~24s for the class; see CLAUDE.md
 public sealed class PlaceRuleTests
 {
     private readonly ITestOutputHelper _out;
@@ -95,7 +96,7 @@ public sealed class PlaceRuleTests
 
                 // ...and so the player is told about the quest, not about
                 // conversations.
-                Assert.Equal(new[] { "when quests start" }, SaveLoadChecks.WordsOf(manifest)[SaveLoadChecks.Dialogues]);
+                Assert.Equal(new[] { SaveLoadChecks.QuestStartsPart }, SaveLoadChecks.WordsOf(manifest)[SaveLoadChecks.Dialogues]);
                 Assert.Equal(JustADrink, Assert.Single(SaveLoadChecks.QuestsChanged(manifest)).Key);
             }
         }

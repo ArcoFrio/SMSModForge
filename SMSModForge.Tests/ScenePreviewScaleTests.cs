@@ -24,6 +24,7 @@ namespace SMSModForge.Tests;
 /// agree — an author judging a scene against a preview that draws it at a
 /// different size is worse served than one with no preview at all.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class ScenePreviewScaleTests
 {
     private readonly ITestOutputHelper _out;

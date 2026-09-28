@@ -22,6 +22,9 @@ namespace SMSModForge.PackPlugin
     /// matching the schema written by the SMSModForge WPF editor.
     /// </summary>
     [BepInPlugin(pluginGuid, pluginName, pluginVersion)]
+    // Loaded after XUnity.AutoTranslator when it is installed, so its settings
+    // are there to be read before ModForge chooses its language (XUnityLink).
+    [BepInDependency(SMSModForge.Shared.XUnityLanguage.PluginGuid, BepInDependency.DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
         public const string pluginGuid = "treboy.starmakerstory.smsmodforge.packplugin";
@@ -701,6 +704,18 @@ namespace SMSModForge.PackPlugin
         private void Awake()
         {
             Instance = this;
+            // Before anything is read or drawn: the language decides the words
+            // on the main menu and the words of every pack - and it may follow
+            // XUnity.AutoTranslator's, so that is looked for first.
+            XUnityLink.Detect(Logger);
+            PluginLanguage.Configure(Config, Logger);
+            PackSwitchSetting.Configure(Config);
+            // And the letters of that language, which the game's fonts lack.
+            PluginFonts.AddFallbacks(PluginLanguage.Code, Logger);
+            // Where it is chosen on the main menu.
+            LanguageMenu.Log = Logger;
+            LanguageMenu.CoverageOf = CoverageIn;
+            LanguageMenu.Changed = RedrawMenuBanner;
             SceneManager.sceneLoaded += OnSceneLoaded;
             // Node conditions are answered by us rather than by GC2's cloned
             // condition runners — patched once here, before any dialogue exists.
@@ -709,6 +724,8 @@ namespace SMSModForge.PackPlugin
             // And the game's own quest steps a pack holds back until its
             // conditions pass.
             QuestPlaceRules.Install(harmony, Logger);
+            // A pack's line types for as long as it takes to show.
+            TypewriterTiming.Install(harmony, Logger);
             // Drives the manual-save copy hook (mirrors the host mod's SaveManager
             // NanoSave listeners, but for the pack file). Self-gates until a
             // pack is loaded in CoreGameScene.
@@ -718,7 +735,7 @@ namespace SMSModForge.PackPlugin
             // check greps for, and the line somebody reads in a player's log
             // when a diagnostic build has escaped.
             Logger.LogWarning("[SMSModForge.PackPlugin] " + DebugBuildMarker
-                              + " — F8/F10/F11/F12 are live.");
+                              + " — F6/F8/F10/F11/F12 are live.");
 #endif
             Logger.LogInfo("[SMSModForge.PackPlugin] Awake — waiting for CoreGameScene");
         }
@@ -835,6 +852,11 @@ namespace SMSModForge.PackPlugin
             // saves via the main menu).
             _lastSeenSlot = -1;
             VanillaSaveSlot.Reset();
+            // What the loaded save carried belongs to the save being left.
+            SaveCarry.Reset();
+            // The packs' lines are read again with the packs.
+            TypewriterTiming.Reset();
+            XUnityLink.ForgetTexts();
             // Holds a material from the scene being torn down.
             NpcFactory.Reset();
             PlaceRegistry.Reset();
@@ -862,6 +884,7 @@ namespace SMSModForge.PackPlugin
                 c.Scenes?.Reset();
                 c.Wallpapers?.Reset();
                 c.Sfx?.Reset();
+                WallpaperListFit.Reset();
                 c.UpdateRules?.Reset();
                 c.DailyChances?.Reset();
                 TimerRuntime.ResetPack(c.PackId);
@@ -872,6 +895,10 @@ namespace SMSModForge.PackPlugin
             // built here - the speech skin's colour list, and the cast's own
             // Actor assets - so both put back what they found.
             SpeechColorApplier.Forget();
+            // The gallery rows went with the scene, and the sprites belong to
+            // packs that are being unloaded.
+            StarmakerGallery.Forget();
+            SubtaskCounters.Forget();
             VanillaVoiceOverrides.Restore();
             // The key watch list was built out of the conditions those packs
             // ran; nothing should still be polled for a pack that is gone.
@@ -881,6 +908,9 @@ namespace SMSModForge.PackPlugin
             _levelWatches.Clear();
             _levelWatchesBuilt = false;
             _menuBannerAdded = false;
+            _menuRoot = null;
+            _menuFont = null;
+            LanguageMenu.Reset();
         }
 
         /// <summary>
@@ -916,6 +946,8 @@ namespace SMSModForge.PackPlugin
                 .Find("Canvas_MM")?.Find("MainMenu")?.Find("Text (TMP)")?.gameObject;
             if (prototype == null) return;
             var menuRoot = prototype.transform.parent;
+            _menuRoot = menuRoot;
+            _menuFont = prototype.GetComponent<TMPro.TMP_Text>()?.font;
 
             try
             {
@@ -924,26 +956,60 @@ namespace SMSModForge.PackPlugin
                 packs.Sort((a, b) => string.Compare(a.DisplayLabel, b.DisplayLabel,
                                                     System.StringComparison.OrdinalIgnoreCase));
 
+                // Every language a pack can be played in, for the language menu
+                // - of the packs switched on, the only ones that will be played.
+                var packLanguages = new List<string>();
+                foreach (var p in packs)
+                {
+                    if (!p.IsValid || !PackSwitchSetting.IsOn(p.PackId)) continue;
+                    packLanguages.Add(p.Language ?? SMSModForge.Shared.PackTexts.DefaultLanguage);
+                    if (p.Translations != null) packLanguages.AddRange(p.Translations);
+                }
+                LanguageMenu.PackLanguages = packLanguages;
+
                 // Every line the banner will hold, worked out BEFORE anything
                 // is placed: the backdrop has to be sized for the whole thing,
                 // and a pack can take more than one line now that its problems
                 // are listed under it rather than trailing off the side.
-                var lines = new List<KeyValuePair<string, Color>>();
+                var lines = new List<MenuLine>();
+                int switchedOff = 0;
+
+                // The vanilla menu text ends in the game build ("Build 1.8E").
+                // Read here, before the packs, because ModForge itself is
+                // judged by it too: a ModForge made for another build of the
+                // game says so on its own row, in red, whatever the packs say.
+                string vanillaVersion = GetVanillaGameVersion(prototype);
+                GameBuild = vanillaVersion;
+                bool forgeForOtherGame = SMSModForge.Shared.ForgeVersion.MadeForOtherGame(vanillaVersion);
+                if (forgeForOtherGame)
+                    Logger.LogWarning("[SMSModForge.PackPlugin] This ModForge (" + SMSModForge.Shared.ForgeVersion.Current
+                                      + ") is made for the game's " + SMSModForge.Shared.ForgeVersion.GameBuild
+                                      + ", and the game says it is " + vanillaVersion
+                                      + ". Update ModForge from its Discord before trusting any pack.");
 
                 if (packs.Count == 0)
                 {
-                    lines.Add(new KeyValuePair<string, Color>(
-                        "  (no packs detected)", MenuWarningColour));
+                    lines.Add(new MenuLine("  " + SMSModForge.Shared.GameTexts.T("game.menu.noPacks"), MenuWarningColour));
                 }
                 else
                 {
-                    // The vanilla menu text ends in the game build ("Build
-                    // 1.8E") and each pack carries the gameVersion the editor
-                    // stamped at save time, so the two can be compared.
-                    string vanillaVersion = GetVanillaGameVersion(prototype);
-
+                    // Each pack carries the gameVersion the editor stamped at
+                    // save time, compared with the build read above.
                     foreach (var p in packs)
                     {
+                        // Switched off on this menu: its name, greyed, and
+                        // nothing about it - whatever is wrong with a pack
+                        // that is not loaded does not touch the game.
+                        if (p.IsValid && !PackSwitchSetting.IsOn(p.PackId))
+                        {
+                            switchedOff++;
+                            AddPackLines(lines, SMSModForge.Shared.PackStatus.Wrap(
+                                             SMSModForge.Shared.PackStatus.Bullet + p.MenuLabel, MenuLineWidth,
+                                             SMSModForge.Shared.PackStatus.Indent),
+                                         MenuSwitchedOffColour, p.PackId, false);
+                            continue;
+                        }
+
                         // What is wrong with this pack, and how loudly to say
                         // it, decided by PackStatus - which the editor's test
                         // project compiles, so the rule is checked rather than
@@ -957,6 +1023,10 @@ namespace SMSModForge.PackPlugin
                                 ForgeVersion = p.ForgeVersion,
                                 Folder = p.Folder,
                                 ShadowedIn = p.ShadowedIn,
+                                Language = PluginLanguage.Code,
+                                Translations = p.Translations
+                                               ?? new System.Collections.Generic.List<string>(),
+                                OwnLanguage = p.Language,
                             });
 
                         Color colour =
@@ -964,9 +1034,10 @@ namespace SMSModForge.PackPlugin
                           : status.Level == SMSModForge.Shared.PackStatus.Level.Warning ? MenuWarningColour
                           : Color.white;
 
-                        foreach (var line in SMSModForge.Shared.PackStatus.Rows(
-                                     p.MenuLabel, status, MenuLineWidth))
-                            lines.Add(new KeyValuePair<string, Color>(line, colour));
+                        // A pack that could not be read has no box: there is
+                        // nothing of it to load either way.
+                        AddPackLines(lines, SMSModForge.Shared.PackStatus.Rows(p.MenuLabel, status, MenuLineWidth),
+                                     colour, p.IsValid ? p.PackId : null, true);
 
                         // The rows are short because they sit on a menu; the
                         // log is where somebody is told what to DO about each.
@@ -979,21 +1050,31 @@ namespace SMSModForge.PackPlugin
                 InjectMenuBackdrop(prototype, menuRoot, lines.Count);
 
                 int row = 0;
-                InjectMenuRow(prototype, menuRoot, row++, MenuHeader(),
-                              Color.white, MenuHeaderFontSize);
+                InjectMenuRow(prototype, menuRoot, row++, MenuHeader(forgeForOtherGame),
+                              forgeForOtherGame ? Color.red : Color.white, MenuHeaderFontSize);
 
                 foreach (var line in lines)
-                    InjectMenuRow(prototype, menuRoot, row++, line.Key, line.Value,
-                                  MenuPackFontSize);
+                {
+                    var made = InjectMenuRow(prototype, menuRoot, row++,
+                                             line.Switch == null ? line.Text : PackSwitchBox.MakeRoom(line.Text),
+                                             line.Colour, MenuPackFontSize);
+                    if (line.Switch == null) continue;
+                    string id = line.Switch;
+                    PackSwitchBox.Add(made, line.On, on => SwitchPack(id, on), Logger);
+                }
 
                 Logger.LogInfo("[SMSModForge.PackPlugin] Menu banner: " + row +
-                               " row(s) injected (" + packs.Count + " pack(s)).");
+                               " row(s) injected (" + packs.Count + " pack(s)"
+                               + (switchedOff > 0 ? ", " + switchedOff + " switched off" : "") + ").");
             }
             catch (System.Exception ex)
             {
                 Logger.LogWarning("[SMSModForge.PackPlugin] Menu banner inject failed: " + ex.Message);
             }
             _menuBannerAdded = true;
+#if DEBUG
+            LayoutDump.Menu(Logger);
+#endif
         }
 
         /// <summary>
@@ -1074,13 +1155,18 @@ namespace SMSModForge.PackPlugin
         /// two objects would have to be measured against each other to sit side
         /// by side.
         /// </summary>
-        private static string MenuHeader()
+        private static string MenuHeader(bool forgeForOtherGame)
         {
             // Plain spaces rather than a <space> tag, and at full size because
             // they sit outside the <size> below: they cost nothing if the text
             // engine ever disagrees with us about rich text, where an
             // unsupported tag would be shown to the player as itself.
-            return "Mods    <size=50%><color=#C8C8C8>ModForge "
+            if (forgeForOtherGame)
+                return SMSModForge.Shared.GameTexts.T("game.menu.heading") + "    <size=50%>ModForge "
+                     + SMSModForge.Shared.ForgeVersion.Current + " - "
+                     + SMSModForge.Shared.GameTexts.F("game.menu.forgeOtherGame", "version", SMSModForge.Shared.ForgeVersion.GameBuild)
+                     + "</size>";
+            return SMSModForge.Shared.GameTexts.T("game.menu.heading") + "    <size=50%><color=#C8C8C8>ModForge "
                  + SMSModForge.Shared.ForgeVersion.Current
                  + "</color></size>";
         }
@@ -1141,8 +1227,8 @@ namespace SMSModForge.PackPlugin
         /// given vertical index (row 0 = the header, using the wider
         /// header stride). Pure helper for <see cref="TryInjectMenuBanner"/>.
         /// </summary>
-        private void InjectMenuRow(GameObject prototype, Transform menuRoot,
-                                    int rowIndex, string text, Color colour, float size)
+        private GameObject InjectMenuRow(GameObject prototype, Transform menuRoot,
+                                         int rowIndex, string text, Color colour, float size)
         {
             var banner = UnityEngine.Object.Instantiate(prototype, menuRoot);
             banner.name = "SMSModForgeBanner_" + rowIndex;
@@ -1178,6 +1264,52 @@ namespace SMSModForge.PackPlugin
                 newRect.anchoredPosition = protoRect.anchoredPosition + MenuBaseOffset + new Vector2(0, y);
                 newRect.sizeDelta = new Vector2(420, rowIndex == 0 ? 50 : 36);
             }
+            return banner;
+        }
+
+        /// <summary>One line of the pack list, and the pack whose box it
+        /// carries - on a pack's first line only.</summary>
+        private struct MenuLine
+        {
+            public readonly string Text;
+            public readonly Color Colour;
+
+            /// <summary>The pack switched by the box on this line, or null for a
+            /// line with no box.</summary>
+            public readonly string Switch;
+            public readonly bool On;
+
+            public MenuLine(string text, Color colour, string packSwitch = null, bool on = true)
+            {
+                Text = text;
+                Colour = colour;
+                Switch = packSwitch;
+                On = on;
+            }
+        }
+
+        /// <summary>A pack's lines, its box on the first of them.</summary>
+        private static void AddPackLines(List<MenuLine> lines, List<string> rows, Color colour, string packId, bool on)
+        {
+            for (int i = 0; i < rows.Count; i++)
+                lines.Add(new MenuLine(rows[i], colour, i == 0 ? packId : null, on));
+        }
+
+        /// <summary>A pack switched off on the menu: there, but out of play.</summary>
+        private static readonly Color MenuSwitchedOffColour = new Color(0.55f, 0.55f, 0.55f, 1f);
+
+        /// <summary>
+        /// The box beside a pack was clicked. Nothing is loaded or unloaded
+        /// here - packs are read when a game starts or loads - so the setting
+        /// is all that changes, and the menu redraws to show it: the row, and
+        /// the languages offered, which are those of the packs switched on.
+        /// </summary>
+        private void SwitchPack(string packId, bool on)
+        {
+            SaveLoadWarning.Click();
+            PackSwitchSetting.Set(packId, on, Logger);
+            RedrawMenuBanner();
+            LanguageMenu.PacksChanged();
         }
 
         /// <summary>
@@ -1294,6 +1426,8 @@ namespace SMSModForge.PackPlugin
         /// <summary>One pack's discovered identity for the menu banner.</summary>
         private struct DiscoveredPack
         {
+            /// <summary>The pack's file.</summary>
+            public string Path;
             public string DirName;
             public string PackId;
             public bool IsValid;       // manifest parses + has packId
@@ -1323,6 +1457,16 @@ namespace SMSModForge.PackPlugin
             /// <summary>The pack's OWN version, as its author numbered it.
             /// Empty on a pack written before versioning existed.</summary>
             public string Version;
+
+            /// <summary>The languages this pack carries a translation for, read
+            /// off the archive rather than off the manifest - the files are
+            /// what the runtime actually lays over the pack, so the files are
+            /// what the menu should be reporting.</summary>
+            public System.Collections.Generic.List<string> Translations;
+
+            /// <summary>The language the pack's own words are in; null reads as
+            /// English, which is what a pack that does not say is written in.</summary>
+            public string Language;
 
             public string DisplayLabel => string.IsNullOrEmpty(PackId) ? DirName : PackId;
 
@@ -1365,6 +1509,7 @@ namespace SMSModForge.PackPlugin
                 {
                     var entry = new DiscoveredPack
                     {
+                        Path = smspack,
                         DirName = System.IO.Path.GetFileNameWithoutExtension(smspack),
                         Folder = SMSModForge.Shared.PackInstallScan.FolderName(smspack),
                     };
@@ -1382,8 +1527,14 @@ namespace SMSModForge.PackPlugin
                                 entry.GameVersion = (string)json["gameVersion"] ?? "";
                                 entry.Version = (string)json["version"] ?? "";
                                 entry.ForgeVersion = (string)json["forgeVersion"] ?? "";
+                                entry.Language = SMSModForge.Shared.PackTexts.LanguageOf(json);
                                 entry.IsValid = !string.IsNullOrEmpty(entry.PackId);
                             }
+
+                            // Read whether or not the manifest made sense: a
+                            // pack whose JSON is broken still has whatever
+                            // translation files it shipped with.
+                            entry.Translations = TranslationsIn(archive);
                         }
                         catch
                         {
@@ -1416,6 +1567,39 @@ namespace SMSModForge.PackPlugin
         }
 
         /// <summary>
+        /// The language codes a pack archive carries a translation file for.
+        /// <para/>
+        /// Read from the entry table rather than from the manifest, because the
+        /// files are what the runtime lays over the pack when somebody plays
+        /// it. A manifest that claimed a language whose file was never exported
+        /// would put the menu and the game at odds, which is the one thing the
+        /// menu exists not to do.
+        /// </summary>
+        private static System.Collections.Generic.List<string> TranslationsIn(PackArchive archive)
+        {
+            var codes = new System.Collections.Generic.List<string>();
+            if (archive == null) return codes;
+
+            string folder = SMSModForge.Shared.PackTexts.Folder + "/";
+            foreach (string path in archive.Paths)
+            {
+                if (path == null) continue;
+                // Zip entries are written with forward slashes, but a pack
+                // built by something that used the platform's separator would
+                // carry the other one, and a folder check that missed it would
+                // report the pack as having no translations at all.
+                string normalised = path.Replace('\\', '/');
+                if (!normalised.StartsWith(folder, System.StringComparison.OrdinalIgnoreCase)) continue;
+                if (!normalised.EndsWith(SMSModForge.Shared.PackTexts.Extension,
+                                         System.StringComparison.OrdinalIgnoreCase)) continue;
+
+                string code = System.IO.Path.GetFileNameWithoutExtension(normalised);
+                if (!string.IsNullOrEmpty(code) && !codes.Contains(code)) codes.Add(code);
+            }
+            return codes;
+        }
+
+        /// <summary>
         /// Walk the cloned banner's components for one named
         /// "TextMeshProUGUI" — the type the vanilla menu prototype
         /// uses. Component-name lookup keeps the plugin off a
@@ -1442,8 +1626,104 @@ namespace SMSModForge.PackPlugin
         /// </summary>
         private static bool _menuBannerAdded;
 
+        /// <summary>The game's build, as its main menu says it ("1.8E"), for the
+        /// record in each save; empty until the menu has been read.</summary>
+        internal static string GameBuild = "";
+
+        /// <summary>The ids of the packs installed, whether switched on or not.</summary>
+        internal static HashSet<string> InstalledPackIds()
+        {
+            var ids = new HashSet<string>(System.StringComparer.OrdinalIgnoreCase);
+            foreach (var p in DiscoverPacks())
+                if (p.IsValid && !string.IsNullOrEmpty(p.PackId)) ids.Add(p.PackId);
+            return ids;
+        }
+
+        /// <summary>Where the banner went, and the font it is in: the language
+        /// menu is built beside it, in the same font.</summary>
+        private static Transform _menuRoot;
+        private static TMPro.TMP_FontAsset _menuFont;
+
+        /// <summary>
+        /// Take the banner down and put it up again - after a language is
+        /// chosen on the menu, so the pack list and its tags are in it.
+        /// </summary>
+        private void RedrawMenuBanner()
+        {
+            if (_menuRoot == null) return;
+            for (int i = _menuRoot.childCount - 1; i >= 0; i--)
+            {
+                var child = _menuRoot.GetChild(i);
+                if (child.name.StartsWith("SMSModForgeBanner_", System.StringComparison.Ordinal))
+                    UnityEngine.Object.Destroy(child.gameObject);
+            }
+            _menuBannerAdded = false;
+            TryInjectMenuBanner();
+        }
+
+        /// <summary>How much of each installed pack a player reads in
+        /// <paramref name="code"/> - for the warning after choosing it.</summary>
+        private static List<SMSModForge.Shared.LanguageChoice.Coverage> CoverageIn(string code)
+        {
+            var result = new List<SMSModForge.Shared.LanguageChoice.Coverage>();
+            foreach (var p in DiscoverPacks())
+            {
+                if (!p.IsValid || string.IsNullOrEmpty(p.Path)) continue;
+                // Switched off, it is not played in any language.
+                if (!PackSwitchSetting.IsOn(p.PackId)) continue;
+                var archive = PackArchive.TryOpen(p.Path, null);
+                if (archive == null) continue;
+                try
+                {
+                    string text = archive.ReadText(PackArchive.ManifestEntryName);
+                    if (text == null) continue;
+                    var manifest = Newtonsoft.Json.Linq.JObject.Parse(text);
+                    var files = new Dictionary<string, System.Func<SMSModForge.Shared.TextFile>>(
+                        System.StringComparer.OrdinalIgnoreCase);
+                    foreach (var file in SMSModForge.Shared.PackTexts.Files(archive.Paths))
+                    {
+                        string path = file.Value;
+                        files[file.Key] = () =>
+                        {
+                            string words = archive.ReadText(path);
+                            return words == null ? null : SMSModForge.Shared.TextFile.Parse(words);
+                        };
+                    }
+                    result.Add(SMSModForge.Shared.LanguageChoice.Of(p.DisplayLabel, manifest, code, files));
+                }
+                catch (System.Exception ex)
+                {
+                    Log?.LogWarning("[SMSModForge.PackPlugin] Language menu: " + p.DisplayLabel
+                                    + " could not be counted: " + ex.Message);
+                }
+                finally
+                {
+                    archive.Dispose();
+                }
+            }
+            result.Sort((a, b) => string.Compare(a.Pack, b.Pack, System.StringComparison.OrdinalIgnoreCase));
+            return result;
+        }
+
+        /// <summary>Per-frame systems that have failed, each reported once.</summary>
+        private readonly HashSet<string> _failedSystems = new HashSet<string>();
+
+        /// <summary>
+        /// A per-frame system threw: said once, and the rest of the frame goes
+        /// on. The system is tried again next frame - a failure that was one
+        /// frame's bad luck recovers by itself.
+        /// </summary>
+        private void FailedThisFrame(string system, System.Exception ex)
+        {
+            if (_failedSystems.Add(system))
+                Logger.LogError("[SMSModForge.PackPlugin] " + system + " failed; it is skipped for this frame "
+                                + "and everything after it still runs. Reported once. " + ex);
+        }
+
         private void Update()
         {
+            // Once XUnity.AutoTranslator has started, if it is there.
+            XUnityLink.Hook();
             // The GameStart scene init: poll for the main-menu text
             // prototype to appear, then drop our pack-status banner
             // next to it. Pure diagnostics — same shape as the host mod's
@@ -1451,6 +1731,10 @@ namespace SMSModForge.PackPlugin
             if (currentScene.name == "GameStart")
             {
                 if (!_menuBannerAdded) TryInjectMenuBanner();
+                else LanguageMenu.Update(_menuRoot, _menuFont);
+#if DEBUG
+                LayoutDump.WatchMenu(Logger);
+#endif
                 return;
             }
             if (currentScene.name != "CoreGameScene") return;
@@ -1461,40 +1745,71 @@ namespace SMSModForge.PackPlugin
                 // this frame has to be looking at the same sample — and rules
                 // deliberately skip frames further down, which is exactly why
                 // this cannot be left to Input.GetKeyDown at the point of use.
-                InputRuntime.Sample();
+                // Each system in its own guard, below, down to the dialogues: one
+                // throwing used to end the whole frame, every frame - and a
+                // wallpaper button, which starts hidden and is only ever shown
+                // from further down, then never appeared (a player's report,
+                // 2026-09-27, where no other cause was found). Logged once per
+                // system, so a failure every frame does not flood the log.
+                try { InputRuntime.Sample(); } catch (System.Exception ex) { FailedThisFrame("Input", ex); }
                 // Slot-switch detection first — every variable Tick below
                 // reads pack state, so we want the file backing it to
                 // match the currently-active NanoSave slot.
-                TickSaveSlot();
-                TickDailyCatchUp();
-                TickSleepAutosave();
-                TickLevelRefresh();
-                NavigatorRuntime.Tick();
-                RadialButtonRuntime.Tick();
+                try { TickSaveSlot(); } catch (System.Exception ex) { FailedThisFrame("Save slot check", ex); }
+                try { TickDailyCatchUp(); } catch (System.Exception ex) { FailedThisFrame("Daily catch-up", ex); }
+                try { TickSleepAutosave(); } catch (System.Exception ex) { FailedThisFrame("Sleep autosave", ex); }
+                try { TickLevelRefresh(); } catch (System.Exception ex) { FailedThisFrame("Level refresh", ex); }
+                try { NavigatorRuntime.Tick(); } catch (System.Exception ex) { FailedThisFrame("Navigator buttons", ex); }
+                try { RadialButtonRuntime.Tick(); } catch (System.Exception ex) { FailedThisFrame("Radial buttons", ex); }
                 // Activate vanilla weather particles on active pack levels that
                 // declared a weatherType (Inside/Outside) — the pack-place
                 // equivalent of the per-level loop vanilla levels get natively.
-                WeatherRuntime.Tick();
+                try { WeatherRuntime.Tick(); } catch (System.Exception ex) { FailedThisFrame("Weather", ex); }
                 // Fire per-place onEnter/onExit action groups on level
                 // activation edges — BEFORE the dialogue dispatchers tick, so
                 // variables a hook sets are visible to dialogue conditions on
                 // the same frame the level activates.
                 for (int i = 0; i < _contexts.Count; i++)
-                    LevelHooksRuntime.Tick(_contexts[i]);
+                {
+                    try { LevelHooksRuntime.Tick(_contexts[i]); }
+                    catch (System.Exception ex) { FailedThisFrame("Level hooks of " + _contexts[i].PackId, ex); }
+                }
                 // Per-frame wallpaper unlock-condition re-evaluation —
                 // each pack's selector buttons appear the moment their
                 // unlock condition flips true.
                 for (int i = 0; i < _contexts.Count; i++)
-                    _contexts[i].Wallpapers?.Tick(Logger);
+                {
+                    try { _contexts[i].Wallpapers?.Tick(Logger); }
+                    catch (System.Exception ex) { FailedThisFrame("Wallpapers of " + _contexts[i].PackId, ex); }
+                }
+                // ...and every mod's wallpaper buttons kept on the screen, however
+                // many there are.
+                try { WallpaperListFit.Tick(Logger); } catch (System.Exception ex) { FailedThisFrame("Wallpaper list", ex); }
                 // Speaker-name colours, for whatever conversation is on screen
                 // rather than only the pack's own. Costs a reference compare
                 // per frame until a speech UI this has not painted turns up.
-                SpeechColorApplier.Tick(_contexts, Logger);
+                try { SpeechColorApplier.Tick(_contexts, Logger); } catch (System.Exception ex) { FailedThisFrame("Speaker colours", ex); }
                 // ...and the typing voice, for anyone whose Actor asset was not
                 // loaded yet when the pack was. Free once they have all been
                 // found, which is the ordinary case.
-                VanillaVoiceOverrides.Tick(Logger);
-                for (int i = 0; i < _dispatchers.Count; i++) _dispatchers[i].Tick();
+                try { VanillaVoiceOverrides.Tick(Logger); } catch (System.Exception ex) { FailedThisFrame("Typing voices", ex); }
+#if DEBUG
+                // Measure the dialogue box once, the first time one is up.
+                var speechForLayout = GameCreator.Runtime.Dialogue.UnityUI.SpeechUI.Current;
+                if (speechForLayout != null) LayoutDump.Speech(speechForLayout, Logger);
+#endif
+                // ...and the journal's subtask counters, for the same reason:
+                // its row templates load with the journal, which is after the
+                // pack that needs them.
+                try { SubtaskCounters.Tick(Logger); } catch (System.Exception ex) { FailedThisFrame("Journal counters", ex); }
+                // ...and the Starmaker gallery's pack rows, which cannot be
+                // built until the Starmaker screen has loaded.
+                try { StarmakerGallery.Tick(Logger); } catch (System.Exception ex) { FailedThisFrame("Starmaker gallery", ex); }
+                for (int i = 0; i < _dispatchers.Count; i++)
+                {
+                    try { _dispatchers[i].Tick(); }
+                    catch (System.Exception ex) { FailedThisFrame("Dialogues", ex); }
+                }
                 // Cross-pack fire: each dispatcher only nominates its best
                 // candidate; the actual start happens here after comparing
                 // Priority across every loaded pack (ties: pack load order).
@@ -1545,6 +1860,11 @@ namespace SMSModForge.PackPlugin
                     {
                         try { VanillaQuestEdits.RepairOnce(Logger); }
                         catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Quest repair failed: " + ex); }
+
+                        // And the pack's own quests that have tasks this save
+                        // had not seen when it finished them.
+                        try { QuestGrowthRuntime.Apply(_contexts, Logger); }
+                        catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Checking finished quests for new tasks failed: " + ex); }
                     }
 
                     int today = (int)GameVariableBridge.GetNumber("Day");
@@ -1622,6 +1942,20 @@ namespace SMSModForge.PackPlugin
                         // collides with nothing installed.
                         if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.F8))
                             QuestJournalDump.Write(Logger);
+
+                        // The Starmaker photo system: the photos manager and
+                        // the gallery, shape and scripts. Its own key for the
+                        // same reason as F8 - both subtrees are switched off
+                        // at load, so neither F11 nor F10 can reach them, and
+                        // what a photo tick box would have to switch is
+                        // exactly what this turns out to be.
+                        //
+                        // F6 and not F7: UnityExplorer opens on F7, and two
+                        // things on one key is how a dump gets read as the
+                        // wrong one's output - or, worse, goes unnoticed
+                        // because a window opened over it.
+                        if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.F6))
+                            PhotoSystemDump.Write(Logger);
                     }
                     catch (System.Exception)
                     {
@@ -1817,6 +2151,11 @@ namespace SMSModForge.PackPlugin
                 c.Vars.SaveToSlot(1);             // the autosave slot
                 if (monday) c.Vars.SaveToSlot(2); // Monday backup, mirroring SaveToFile(2)
             }
+            // And what the save keeps of the packs not running, and its record -
+            // with what this session has told the player, which only this
+            // commits.
+            SaveCarry.Complete(SavesRoot, 1, _contexts, Logger, SaveCarry.LiveTold);
+            if (monday) SaveCarry.Complete(SavesRoot, 2, _contexts, Logger, SaveCarry.LiveTold);
 
             Logger.LogInfo("[SMSModForge.PackPlugin] Player slept (now day " + day +
                            ") — autosave (" + reason + "): pack variables committed to slot 1" +
@@ -1891,9 +2230,20 @@ namespace SMSModForge.PackPlugin
             Logger.LogInfo("[SMSModForge.PackPlugin] Bound pack saves to slot " + slot +
                            " (NANOSAVE_" + slot.ToString("D4") + ").");
 
+            // What the save holds for packs not running now, kept for every
+            // save made from it.
+            try
+            {
+                var running = new List<string>();
+                foreach (var c in _contexts)
+                    if (c?.Vars != null) running.Add(c.PackId);
+                SaveCarry.Capture(SavesRoot, slot, running, Logger);
+            }
+            catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Reading the save's other packs failed: " + ex); }
+
             // A save was loaded: is there anything the player should hear
             // before playing it with these packs?
-            try { SaveLoadWarning.Check(slot, _contexts, SavesRoot, Logger); }
+            try { SaveLoadWarning.Check(slot, _contexts, Logger); }
             catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Save check failed: " + ex); }
         }
 
@@ -2070,6 +2420,20 @@ namespace SMSModForge.PackPlugin
             var manifests = new List<PackManifest>();
             foreach (var live in SMSModForge.Shared.PackInstallScan.Resolve(candidates))
             {
+                // Unticked on the main menu. Its data in the save is carried
+                // along untouched (see SaveCarry), so switching it back on picks
+                // up where it left off.
+                if (!PackSwitchSetting.IsOn(live.PackId))
+                {
+                    Logger.LogInfo("[SMSModForge.PackPlugin] '" + live.PackId
+                                   + "' is switched off on the main menu - not loaded.");
+                    // Its file let go of, so it can be replaced or removed
+                    // while the game runs.
+                    try { read[live.Path].Archive?.Dispose(); }
+                    catch (System.Exception) { }
+                    continue;
+                }
+
                 manifests.Add(read[live.Path]);
 
                 // Named rather than silently dropped: a pack that does not load
@@ -2207,7 +2571,7 @@ namespace SMSModForge.PackPlugin
                 Plugin = this,
                 Vars = new PackVariableStore(m.PackId, SavesRoot, Logger),
                 Actors = new ActorRegistry(Logger),
-                ActorFactory = new RuntimeActorFactory(Logger),
+                ActorFactory = new RuntimeActorFactory(Logger, m.PackId),
                 Scenes = new SceneRegistry(),
                 Wallpapers = new WallpaperRegistry(),
                 Sfx = new SfxRegistry(),
@@ -2241,6 +2605,31 @@ namespace SMSModForge.PackPlugin
             // SceneFactory tolerates the absence of a "scenes" key.
             try { SceneFactory.BuildAll(m, ctx.Scenes, Logger); }
             catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Scene build failed in " + m.PackId + ": " + ex); }
+
+            // The ones marked as Starmaker photos also want a row in the
+            // gallery. Taken from the built scene rather than from the archive,
+            // so the sprite is the one on screen and is read once.
+            try
+            {
+                foreach (var scene in ctx.Scenes.All)
+                {
+                    if (scene == null || !scene.StarmakerPhoto || scene.SceneGo == null) continue;
+                    var art = scene.SceneGo.transform.Find("Core/Art");
+                    var sr = art == null ? null : art.GetComponent<SpriteRenderer>();
+                    if (sr == null || sr.sprite == null)
+                    {
+                        Logger.LogWarning("[SMSModForge.PackPlugin] Starmaker gallery: '" + scene.Key
+                                          + "' in " + m.PackId + " has no art to show in the gallery.");
+                        continue;
+                    }
+                    StarmakerGallery.Include(ctx, scene.Key, sr.sprite);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Logger.LogWarning("[SMSModForge.PackPlugin] Starmaker gallery: " + m.PackId
+                                  + "'s photos could not be collected: " + ex.Message);
+            }
 
             // Build wallpapers — selector buttons start hidden and the
             // per-frame Tick reveals each one once its unlock condition
@@ -2389,17 +2778,52 @@ namespace SMSModForge.PackPlugin
             // player entry — hand-edited, or written before the key was reserved
             // — must not be able to give the shared character a different name.
             // Its typing voice still registers from the loop above, by key.
+            //
+            // Its NAME follows the pack, not the editor: the language the pack
+            // is being played in, which is the player's only where the pack
+            // has a translation into it. Labelling the player "Você" over
+            // English lines reads as the editor having half-translated
+            // somebody else's work.
+            string playerEnglish = SMSModForge.Shared.GameTexts.English.Get("game.player");
+            string playerShown = PluginLanguage.WordIn(m.PlayedIn, "game.player");
+
             ctx.Actors.Declare(new Newtonsoft.Json.Linq.JObject
             {
                 ["key"] = PlayerCharacterKey,
-                ["displayName"] = "You",
+                ["displayName"] = playerShown,
                 ["bustSource"] = "None",
             });
+
+            // A translated name loses its colour, because the colorizer matches
+            // on the name AS DRAWN: the game's pair still says "You" while the
+            // label now says "Você", so nothing matches and the name comes out
+            // plain. It reads as the character being set up wrong rather than
+            // as anything to do with language.
+            if (!string.Equals(playerShown, playerEnglish, System.StringComparison.Ordinal))
+            {
+                try { SpeechColorApplier.CarryColour(playerEnglish, playerShown, Logger); }
+                catch (System.Exception ex)
+                {
+                    Logger.LogWarning("[SMSModForge.PackPlugin] Speech colours: '" + playerShown
+                                      + "' could not be given the player's colour: " + ex.Message);
+                }
+            }
 
             // The pack's quests that move on their own. Read after the variables
             // are declared, since their conditions read them.
             try { ctx.Quests = QuestTicker.Build(m); }
             catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Quest conditions could not be read in " + m.PackId + ": " + ex); }
+
+            // The journal builds a subtask's counter and then never switches it
+            // on. Put right only for somebody who has a pack that needs it -
+            // the prefab is shared, so this reaches the game's own quests for
+            // the rest of the session too.
+            try { SubtaskCounters.WantedFor(m, Logger); }
+            catch (System.Exception ex)
+            {
+                Logger.LogWarning("[SMSModForge.PackPlugin] Subtask counters: " + m.PackId
+                                  + " could not be read for counting subtasks: " + ex.Message);
+            }
 
             // Registered whether or not the pack has any dialogues. The per-frame
             // loop drives rules, level hooks, gated objects, wallpapers and quests
@@ -2407,6 +2831,18 @@ namespace SMSModForge.PackPlugin
             // rules and quests only - used to be left out of it entirely, so none
             // of those ever ran for it.
             _contexts.Add(ctx);
+
+            // What each of the pack's quests holds now, for a new game's first
+            // save. A save being loaded is bound later, and brings its own.
+            if (ctx.Vars != null && ctx.Vars.ActiveSlot < 1)
+            {
+                try { QuestGrowthRuntime.Remember(new[] { ctx }); }
+                catch (System.Exception ex)
+                {
+                    Logger.LogWarning("[SMSModForge.PackPlugin] Quests: " + ctx.PackId
+                                      + " could not record its quests' tasks: " + ex.Message);
+                }
+            }
 
             // Build dialogues.
             var dialogues = m.Root["dialogues"] as Newtonsoft.Json.Linq.JArray;
@@ -2421,6 +2857,15 @@ namespace SMSModForge.PackPlugin
             // rather than rebuilt. Building one would leave the game playing
             // its own copy while the pack's sat beside it doing nothing.
             VanillaDialogueInjector.ApplyAll(dialogues, ctx);
+
+            // The game's own lines in those conversations, in the pack's
+            // translation of them, whenever it has them - see GameLineNotice.
+            try { GameLineTranslations.Apply(ctx, Logger); }
+            catch (System.Exception ex)
+            {
+                Logger.LogWarning("[SMSModForge.PackPlugin] Game lines: " + ctx.PackId
+                                  + " could not show its translation of the game's lines: " + ex.Message);
+            }
 
             // The game's quest steps this pack holds back - found after its
             // changes to the conversations, so a step is looked for in the

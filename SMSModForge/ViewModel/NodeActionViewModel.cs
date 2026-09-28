@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using SMSModForge.Model;
+using SMSModForge.Localization;
 
 namespace SMSModForge.ViewModel;
 
@@ -85,7 +86,7 @@ public sealed class NodeActionViewModel : ObservableObject
 
     public bool IsDiceTotalValid => DiceChanceTotal == 100;
 
-    public string DiceTotalLabel => "Total: " + DiceChanceTotal + "% (must be exactly 100%)";
+    public string DiceTotalLabel => Loc.F("action.dice.total", "total", DiceChanceTotal);
 
     internal void NotifyDiceTotals()
     {
@@ -265,11 +266,11 @@ public sealed class NodeActionViewModel : ObservableObject
     public const string CatBust    = "Bust";
     public const string CatOverlay = "GameObjects";
     public const string CatScene   = "Scene";
-    public const string CatPath    = "Direct Path";
+    public const string CatPath    = "Direct Path";   // English on purpose: a value packs store; the list shows it through choice.kind.
 
     /// <summary>Legacy token for <see cref="CatOverlay"/> before the rename.
     /// Migrated to <see cref="CatOverlay"/> on load; the runtime still accepts it.</summary>
-    private const string CatOverlayLegacy = "Level Overlay";
+    private const string CatOverlayLegacy = "Level Overlay";   // English on purpose: a value older packs stored.
 
     /// <summary>Map a stored category token to its canonical value (migrating the
     /// pre-rename "Level Overlay" token). Internal because the GameObjectActive
@@ -471,8 +472,9 @@ public sealed class NodeActionViewModel : ObservableObject
     public const string VariableFamilyType = "Variable";
 
     public static IReadOnlyList<string> VariableSources { get; } = new[] { "Pack", "Vanilla" };
+    // English on purpose: values the code compares; the list shows them through choice.variableOperation.
     public const string OpRandomFromList = "Random from list";
-    public const string OpCountList = "List count";
+    public const string OpCountList = "List count";   // English on purpose: as above.
     public static IReadOnlyList<string> VariableOperations { get; } = new[] { "Set", "Increment", OpRandomFromList, OpCountList };
 
     /// <summary>True for SetVariable / IncrementVariable / PickRandomFromList / CountList.</summary>
@@ -639,7 +641,7 @@ public sealed class NodeActionViewModel : ObservableObject
         get
         {
             string raw = GetParam("vanilla");
-            if (string.IsNullOrEmpty(raw)) return "(unknown step)";
+            if (string.IsNullOrEmpty(raw)) return Loc.T("action.unknownStep");
             if (raw.StartsWith("Instruction", StringComparison.Ordinal))
                 raw = raw.Substring("Instruction".Length);
             return Spaced(raw);
@@ -712,12 +714,12 @@ public sealed class NodeActionViewModel : ObservableObject
             if (kind == "object")
             {
                 into.Add(new VanillaDetail(Label(path),
-                    (string?)holder["path"] ?? (string?)holder["name"] ?? "(none)"));
+                    (string?)holder["path"] ?? (string?)holder["name"] ?? Loc.T("common.none")));
                 return;
             }
             if (kind == "none")
             {
-                into.Add(new VanillaDetail(Label(path), "(none)"));
+                into.Add(new VanillaDetail(Label(path), Loc.T("common.none")));
                 return;
             }
             if (kind == "variable" && holder["variable"] is Newtonsoft.Json.Linq.JObject v)
@@ -782,12 +784,13 @@ public sealed class NodeActionViewModel : ObservableObject
         OnPropertyChanged(nameof(VarValueBool));
     }
 
-    // ── Bool variables get a tick box, not a text field ─────────────────
+    // ── Bool variables get True / False, not a text field ───────────────
     //
     // "true" and "false" are the only two values a Bool accepts, and typing
     // them by hand is the step in this editor most likely to go wrong: True,
     // TRUE, 1 and yes all look reasonable and none of them match, because the
-    // runtime compares the stored string. A tick box cannot be spelled wrong.
+    // runtime compares the stored string. A pair of buttons cannot be spelled
+    // wrong - the same pair the condition row has.
     //
     // Resolved through a hook rather than a reference to the pack: an action
     // row is constructed from a NodeActionDef alone and has no route to the
@@ -829,7 +832,7 @@ public sealed class NodeActionViewModel : ObservableObject
     public bool VarValueIsText => !VarValueIsBool;
 
     /// <summary>
-    /// The value as a tick box.
+    /// The value as the True / False pair.
     /// <para/>
     /// Anything that is not exactly "true" reads as false, matching the
     /// runtime's own comparison, and writing always produces the lower-case
@@ -853,6 +856,11 @@ public sealed class NodeActionViewModel : ObservableObject
             SetParam("value", value);
             OnPropertyChanged();
             OnPropertyChanged(nameof(ValueNamesAVariable));
+
+            // Same as the condition side: the True/False radios read this
+            // through VarValueBool, and a write nobody tells them about leaves
+            // the pair showing the old answer.
+            OnPropertyChanged(nameof(VarValueBool));
         }
     }
 
@@ -936,10 +944,9 @@ public sealed class NodeActionViewModel : ObservableObject
     /// control beats a tooltip nobody opens.</summary>
     public string SwitchHelp => SwitchMode switch
     {
-        SwitchOff => "Switches it off, whether or not it was on.",
-        SwitchFlip => "Switches it to the opposite of whatever it is now — on if it " +
-                      "is off, off if it is on.",
-        _ => "Switches it on, whether or not it was off.",
+        SwitchOff => Loc.T("action.switch.off.help"),
+        SwitchFlip => Loc.T("action.switch.flip.help"),
+        _ => Loc.T("action.switch.on.help"),
     };
 
     /// <summary>The old boolean view of the same param, kept because the
@@ -1246,14 +1253,14 @@ public sealed class NodeActionViewModel : ObservableObject
     /// including the part the game does on its own.</summary>
     public string QuestOperationHelp => QuestOperation switch
     {
-        Shared.QuestVocabulary.Start => "Adds the quest to the journal and starts its first task. Does nothing to a quest that has already started.",
-        Shared.QuestVocabulary.CompleteTask => "The task must be in progress. Finishing it starts the next one, and the last one finishes the quest.",
-        Shared.QuestVocabulary.FailTask => "The task must be in progress. Failing a top-level task fails the quest.",
-        Shared.QuestVocabulary.SetCounter => "The task must be in progress and count. Reaching its target completes it.",
-        Shared.QuestVocabulary.AddToCounter => "The task must be in progress and count. Reaching its target completes it. Empty adds 1.",
-        Shared.QuestVocabulary.Track => "Marks the quest with the bookmark in the journal. Completing it removes the mark.",
-        Shared.QuestVocabulary.Untrack => "Removes the bookmark.",
-        Shared.QuestVocabulary.Reset => "Takes the quest out of the journal and back to not started, tasks and counters included, so it can be started again.",
+        Shared.QuestVocabulary.Start => Loc.T("action.quest.start.help"),
+        Shared.QuestVocabulary.CompleteTask => Loc.T("action.quest.completeTask.help"),
+        Shared.QuestVocabulary.FailTask => Loc.T("action.quest.failTask.help"),
+        Shared.QuestVocabulary.SetCounter => Loc.T("action.quest.setCounter.help"),
+        Shared.QuestVocabulary.AddToCounter => Loc.T("action.quest.addToCounter.help"),
+        Shared.QuestVocabulary.Track => Loc.T("action.quest.track.help"),
+        Shared.QuestVocabulary.Untrack => Loc.T("action.quest.untrack.help"),
+        Shared.QuestVocabulary.Reset => Loc.T("action.quest.reset.help"),
         _ => "",
     };
 
@@ -1288,7 +1295,7 @@ public sealed class NodeActionViewModel : ObservableObject
     {
         get
         {
-            if (string.IsNullOrEmpty(Type)) return "(empty action)";
+            if (string.IsNullOrEmpty(Type)) return Loc.T("action.empty");
             if (Model.Params.Count == 0) return Type;
             var pairs = new List<string>(Model.Params.Count);
             foreach (var kv in Model.Params) pairs.Add(kv.Key + "=" + kv.Value);

@@ -133,6 +133,11 @@ namespace SMSModForge.Shared
         /// that they rewrote dialogue they never opened. The kinds themselves
         /// stay as they are, because a save is marked with them.
         /// </summary>
+        public const string QuestsPart = "quests";
+        public const string ConversationsPart = "conversations";
+        public const string QuestStartsPart = "questStarts";
+        public const string ConversationPlaysPart = "conversationPlays";
+
         public static Dictionary<string, List<string>> WordsOf(JObject manifest)
         {
             var words = new Dictionary<string, List<string>>(StringComparer.Ordinal);
@@ -186,12 +191,12 @@ namespace SMSModForge.Shared
                 }
             }
 
-            // Bare parts: whoever says them adds "the game's own" to the first
-            // and "its" to the rest (Describe).
+            // Parts, by name: whoever says them picks the words for where each
+            // falls in the sentence (Describe).
             var said = new List<string>();
-            if (rewrites) said.Add("conversations");
-            if (starts) said.Add("when quests start");
-            if (plays) said.Add("when conversations play");
+            if (rewrites) said.Add(ConversationsPart);
+            if (starts) said.Add(QuestStartsPart);
+            if (plays) said.Add(ConversationPlaysPart);
             if (said.Count > 0) words[Dialogues] = said;
             return words;
         }
@@ -267,6 +272,88 @@ namespace SMSModForge.Shared
 
         // ── What the player is told ──────────────────────────────────────
 
+        /// <summary>
+        /// A pack the save has data for that is not running, and why: switched
+        /// off on the main menu, installed but not loaded, or not installed.
+        /// Its version is the one the save recorded (<see cref="SaveRecord"/>)
+        /// where there is a record.
+        /// </summary>
+        public sealed class AbsentPack
+        {
+            public string Id;
+            public string Version;
+
+            /// <summary><see cref="SaveRecord.SwitchedOff"/>, <see cref="SaveRecord.NotLoaded"/>
+            /// or <see cref="SaveRecord.NotInstalled"/>.</summary>
+            public string State;
+
+            public AbsentPack(string id, string version, string state)
+            {
+                Id = id ?? "";
+                Version = version ?? "";
+                State = state ?? SaveRecord.NotInstalled;
+            }
+
+            /// <summary>How the warning names it: quoted, with its version beside it.</summary>
+            public string Label
+            {
+                get { return GameTexts.Quoted(Id) + (string.IsNullOrEmpty(Version) ? "" : "  v" + Version); }
+            }
+        }
+
+        /// <summary>
+        /// The packs a save has data for that are not running, each with why
+        /// (<see cref="SaveRecord.WhyNotRunning"/>) and the version the save's
+        /// record gives it.
+        /// </summary>
+        public static List<AbsentPack> Absent(IEnumerable<string> fileNamesInSlot, ICollection<string> runningPackIds,
+                                              ICollection<string> installedPackIds, ICollection<string> switchedOffPackIds,
+                                              SaveRecord record)
+        {
+            var absent = new List<AbsentPack>();
+            foreach (string id in MissingPacks(fileNamesInSlot, runningPackIds))
+            {
+                var had = record == null ? null : record.Find(id);
+                absent.Add(new AbsentPack(id, had == null ? "" : had.Version,
+                                          SaveRecord.WhyNotRunning(id, installedPackIds, switchedOffPackIds)));
+            }
+            return absent;
+        }
+
+        /// <summary>
+        /// Of the packs not running, the ones the player has not been told
+        /// about for this save yet. Each pack on its own: being told about one
+        /// says nothing about another that has gone since.
+        /// <para/>
+        /// The notice was shown on every load, so a player who had switched a
+        /// pack off on purpose was told the same thing every time they played
+        /// (2026-09-27).
+        /// </summary>
+        public static List<AbsentPack> NotYetTold(IEnumerable<AbsentPack> absent, IEnumerable<string> told)
+        {
+            var already = new HashSet<string>(told ?? Enumerable.Empty<string>(), StringComparer.OrdinalIgnoreCase);
+            return (absent ?? Enumerable.Empty<AbsentPack>())
+                .Where(a => a != null && !string.IsNullOrEmpty(a.Id) && !already.Contains(a.Id))
+                .ToList();
+        }
+
+        /// <summary>
+        /// What a save remembers having told the player, after a load: only the
+        /// packs that are still not running, so one that runs with the save
+        /// again comes off the list - taking it away after that tells them
+        /// once more - and then the ones told now.
+        /// </summary>
+        /// <param name="toldBefore">The save's list as it was loaded.</param>
+        /// <param name="stillAbsent">The packs it has data for that are not running now.</param>
+        /// <param name="toldNow">The packs the notice has just named.</param>
+        public static List<string> Told(IEnumerable<string> toldBefore, IEnumerable<string> stillAbsent,
+                                        IEnumerable<string> toldNow)
+        {
+            var absentNow = new HashSet<string>(stillAbsent ?? Enumerable.Empty<string>(), StringComparer.OrdinalIgnoreCase);
+            return SaveRecord.Ids((toldBefore ?? Enumerable.Empty<string>()).Where(absentNow.Contains)
+                                  .Concat(toldNow ?? Enumerable.Empty<string>()));
+        }
+
         /// <summary>One of the game's quests whose tasks a pack changes, and
         /// where the save stands with it.</summary>
         public sealed class ChangedQuest
@@ -329,33 +416,38 @@ namespace SMSModForge.Shared
         public static SaveWarningText Warning(IList<PackChanges> unseen, IList<string> missing,
                                               IList<ChangedQuest> quests = null)
         {
+            var absent = (missing ?? new List<string>()).Select(id => new AbsentPack(id, "", SaveRecord.NotInstalled)).ToList();
+            return WarningFor(unseen, absent, quests);
+        }
+
+        /// <param name="absent">Packs this save has data for that are not
+        /// running: switched off on the main menu, or not installed.</param>
+        public static SaveWarningText WarningFor(IList<PackChanges> unseen, IList<AbsentPack> absent,
+                                              IList<ChangedQuest> quests = null)
+        {
             var risky = (unseen ?? new List<PackChanges>()).Where(p => p != null && p.Kinds != null && p.Kinds.Count > 0).ToList();
-            bool gone = missing != null && missing.Count > 0;
+            var missing = (absent ?? new List<AbsentPack>()).Where(a => a != null && !string.IsNullOrEmpty(a.Id)).ToList();
+            bool gone = missing.Count > 0;
             if (risky.Count == 0 && !gone) return null;
 
-            var text = new SaveWarningText { Title = "Before you continue" };
+            var text = new SaveWarningText { Title = GameTexts.T("game.save.title") };
             if (risky.Count == 1)
             {
-                text.Paragraphs.Add(
-                    "'" + risky[0].PackId + "' changes " + Describe(risky[0]) + ", and "
-                    + (CannotTell(risky[0])
-                           ? "ModForge can't tell whether this save has been played with that."
-                           : "this save hasn't been played with that yet.")
-                    + " Your progress could break - now, or if you remove the pack later.");
+                text.Paragraphs.Add(GameTexts.F(
+                    CannotTell(risky[0]) ? "game.save.onePack.cannotTell" : "game.save.onePack",
+                    "pack", GameTexts.Quoted(risky[0].PackId), "what", Describe(risky[0])));
             }
             else if (risky.Count > 1)
             {
                 // What each one changes goes in the list, which scrolls: the
                 // sentence stays the same length however many packs there are.
-                text.Paragraphs.Add(
-                    "These packs change the game's own content, and "
-                    + (risky.Any(CannotTell)
-                           ? "ModForge can't tell whether this save has been played with all of it."
-                           : "this save hasn't been played with that yet.")
-                    + " Your progress could break - now, or if you remove them later.");
+                text.Paragraphs.Add(GameTexts.T(
+                    risky.Any(CannotTell) ? "game.save.somePacks.cannotTell" : "game.save.somePacks"));
                 text.Details.Add(new SaveWarningSection(
-                    "What each pack changes:",
-                    risky.Select(p => "'" + p.PackId + "': " + Sentence(Said(p)))));
+                    GameTexts.T("game.save.eachPack"),
+                    risky.Select(p => GameTexts.F("game.save.packChanges",
+                        "pack", GameTexts.Quoted(p.PackId),
+                        "what", GameTexts.JoinAnd(Said(p).Select(w => Words(w, "listed")).ToList())))));
             }
 
             var listed = (quests ?? new List<ChangedQuest>())
@@ -367,18 +459,31 @@ namespace SMSModForge.Shared
             if (risky.Count > 0 && listed.Count > 0)
             {
                 text.Details.Add(new SaveWarningSection(
-                    listed.Count == 1 ? "Quest changed:" : "Quests changed:",
-                    listed.Select(q => q.Name + ": " + Standing(q.Progress))));
+                    GameTexts.P("game.save.questsChanged", listed.Count),
+                    listed.Select(q => GameTexts.F("game.save.quest", "quest", q.Name, "standing", Standing(q.Progress)))));
             }
-            if (risky.Count > 0) text.After.Add("Starting a new game is safest.");
+            if (risky.Count > 0) text.After.Add(GameTexts.T("game.save.newGameSafest"));
 
             if (gone)
             {
-                bool one = missing.Count == 1;
-                text.After.Add(
-                    "This save " + (risky.Count > 0 ? "also " : "") + "has data from " + Quoted(missing) + ", which "
-                    + (one ? "isn't" : "aren't") + " installed. " + (one ? "Its" : "Their")
-                    + " data won't be kept in the saves you make from now on.");
+                // Named in the list, which scrolls, rather than in the sentence:
+                // there can be many, and a player needs to see which are switched
+                // off - one tick away - and which have gone altogether.
+                string said = GameTexts.P(risky.Count > 0 ? "game.save.missingAlso" : "game.save.missing", missing.Count);
+                if (risky.Count > 0) text.After.Add(said);
+                else text.Paragraphs.Add(said);
+
+                foreach (var why in new[]
+                         {
+                             new KeyValuePair<string, string>(SaveRecord.SwitchedOff, "game.save.switchedOff"),
+                             new KeyValuePair<string, string>(SaveRecord.NotLoaded, "game.save.notLoaded"),
+                             new KeyValuePair<string, string>(SaveRecord.NotInstalled, "game.save.notInstalled"),
+                         })
+                {
+                    var these = missing.Where(a => a.State == why.Key).ToList();
+                    if (these.Count > 0)
+                        text.Details.Add(new SaveWarningSection(GameTexts.T(why.Value), these.Select(a => a.Label)));
+                }
             }
             return text;
         }
@@ -413,13 +518,13 @@ namespace SMSModForge.Shared
             switch (progress)
             {
                 case QuestTreeEdits.SaveProgress.MayGetStuck:
-                    return "in progress, but a new task was added before where you are - it may get stuck";
+                    return GameTexts.T("game.save.standing.mayGetStuck");
                 case QuestTreeEdits.SaveProgress.InProgress:
-                    return "in progress, should be fine";
+                    return GameTexts.T("game.save.standing.inProgress");
                 case QuestTreeEdits.SaveProgress.Finished:
-                    return "already finished, so you won't see the changes";
+                    return GameTexts.T("game.save.standing.finished");
                 default:
-                    return "not started yet, fine";
+                    return GameTexts.T("game.save.standing.notStarted");
             }
         }
 
@@ -428,32 +533,34 @@ namespace SMSModForge.Shared
         /// can follow "'X' changes".</summary>
         public static string Describe(PackChanges pack)
         {
+            // "the game's own quests and conversations", "when the game's own
+            // quests start", "the game's own conversations and when its quests
+            // start": only the first thing named names the game, so each part
+            // has words for coming first and words for coming after.
             var said = Said(pack);
             var framed = new List<string>();
             for (int i = 0; i < said.Count; i++)
-            {
-                string word = said[i];
-                // "the game's own quests and conversations", "when the game's
-                // own quests start", "the game's own conversations and when its
-                // quests start": only the first thing named names the game, and
-                // a "when" clause carries its possessive after the "when".
-                if (word.StartsWith("when ", StringComparison.Ordinal))
-                {
-                    string rest = word.Substring("when ".Length);
-                    framed.Add(i == 0 ? "when the game's own " + rest : "when its " + rest);
-                }
-                else framed.Add(i == 0 ? "the game's own " + word : word);
-            }
-            return Sentence(framed);
+                framed.Add(Words(said[i], i == 0 ? "first" : "then"));
+            return GameTexts.JoinAnd(framed);
+        }
+
+        /// <summary>A part's words for where it falls: <c>first</c> in the
+        /// sentence, <c>then</c> after another, or <c>listed</c> on its own
+        /// pack's line. A part this version has no words for is said as its
+        /// name.</summary>
+        private static string Words(string part, string where)
+        {
+            string key = "game.change." + part + "." + where;
+            return GameTexts.Current.Has(key) ? GameTexts.T(key) : part;
         }
 
         /// <summary>"the game's own quests and conversations", for a caller
         /// holding only the kinds.</summary>
         public static string Describe(IList<string> kinds) => Describe(new PackChanges("", kinds));
 
-        /// <summary>What one pack changes, kind by kind, in the words that fit
-        /// its own case - "quests", "conversations", "when its conversations
-        /// play".</summary>
+        /// <summary>What one pack changes, kind by kind, as the parts that fit
+        /// its own case - quests, conversations, when its conversations
+        /// play.</summary>
         private static List<string> Said(PackChanges pack)
         {
             var words = new List<string>();
@@ -471,23 +578,16 @@ namespace SMSModForge.Shared
         {
             switch (kind)
             {
-                case Quests: return "quests";
-                case Dialogues: return "conversations";
+                case Quests: return QuestsPart;
+                case Dialogues: return ConversationsPart;
                 default: return kind;
             }
         }
 
-        /// <summary>"A", "A and B", "A, B and C".</summary>
-        public static string Sentence(IList<string> items)
-        {
-            if (items == null || items.Count == 0) return "";
-            if (items.Count == 1) return items[0];
-            return string.Join(", ", items.Take(items.Count - 1).ToArray()) + " and " + items[items.Count - 1];
-        }
-
-        /// <summary>The same, quoted - a pack id is a name and not a word.</summary>
+        /// <summary>Names, quoted and joined - a pack id is a name and not a
+        /// word: "'A' and 'B'".</summary>
         public static string Quoted(IList<string> names)
-            => Sentence((names ?? new List<string>()).Select(n => "'" + n + "'").ToList());
+            => GameTexts.JoinAnd((names ?? new List<string>()).Select(GameTexts.Quoted).ToList());
     }
 
     /// <summary>
@@ -515,8 +615,8 @@ namespace SMSModForge.Shared
         /// <summary>Said below the list.</summary>
         public readonly List<string> After = new List<string>();
 
-        public const string ContinueLabel = "Continue";
-        public const string ReturnLabel = "Return to Main Menu";
+        public static string ContinueLabel { get { return GameTexts.T("game.save.continue"); } }
+        public static string ReturnLabel { get { return GameTexts.T("game.save.returnToMenu"); } }
 
         /// <summary>All of it on one line, in the order it is shown - for the
         /// log.</summary>

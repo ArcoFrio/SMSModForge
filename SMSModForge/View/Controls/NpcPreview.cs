@@ -10,6 +10,7 @@ using System.Windows.Shapes;
 using SMSModForge.Rendering;
 using SMSModForge.ViewModel;
 using Path = System.IO.Path;
+using SMSModForge.Localization;
 
 namespace SMSModForge.View.Controls;
 
@@ -66,7 +67,6 @@ public sealed class NpcPreview : Grid
     private readonly TextBlock _placeholder = new()
     {
         Foreground = Brushes.Gray, TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap,
-        Text = "Set a pose sprite to preview.",
     };
 
     // We decouple SOURCE resolution from OUTPUT resolution. The shader samples
@@ -110,6 +110,7 @@ public sealed class NpcPreview : Grid
         // A tooltip that outlived its owner sits over the one thing an
         // author is trying to look at. See ToolTipDismisser.
         View.ToolTipDismisser.KeepClearOf(this);
+        LocText.Bind(_placeholder, TextBlock.TextProperty, "preview.npc.noPose");
 
         Width = MinWidth = MaxWidth = BoxSize;
         Height = MinHeight = MaxHeight = BoxSize;

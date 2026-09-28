@@ -15,6 +15,7 @@ namespace SMSModForge.Tests;
 /// changed general store needs the second, and the difference between them is
 /// whether the nodes carry a bind.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class UiCopyTests
 {
     private readonly ITestOutputHelper _out;

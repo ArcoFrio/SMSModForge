@@ -1,4 +1,4 @@
-using BepInEx.Logging;
+﻿using BepInEx.Logging;
 using GameCreator.Runtime.Dialogue.UnityUI;
 using System.Collections;
 using System.Collections.Generic;
@@ -208,6 +208,77 @@ namespace SMSModForge.PackPlugin
                 _colorField.SetValue(pair, kv.Value);
                 list.Add(pair);
             }
+        }
+
+        /// <summary>
+        /// Give <paramref name="translated"/> the colour <paramref name="original"/>
+        /// already had.
+        /// <para/>
+        /// The colorizer matches on the NAME AS DRAWN — the word in each pair
+        /// against the text of the label. So translating a name silently takes
+        /// its colour away: the pair still says "You" while the label now says
+        /// "Você", nothing matches, and the name draws in the plain colour. It
+        /// does not look like a translation bug, it looks like the character
+        /// was set up wrong.
+        /// <para/>
+        /// That only bites for a colour somebody ELSE registered, which means
+        /// the game's own characters and the player. A pack's own actors carry
+        /// their colour beside their name, so the pair is built from the
+        /// translated name and matches by construction.
+        /// <para/>
+        /// Returns whether a colour was found to carry. There is nothing to do
+        /// when the game gives that name no colour of its own, and saying so is
+        /// worth a line in the log: it is the difference between "this name has
+        /// no colour" and "this name lost the one it had".
+        /// </summary>
+        public static bool CarryColour(string original, string translated, ManualLogSource log)
+        {
+            if (string.IsNullOrEmpty(original) || string.IsNullOrEmpty(translated)) return false;
+            if (string.Equals(original, translated, System.StringComparison.Ordinal)) return false;
+            if (!ResolveTypes(log)) return false;
+
+            bool carried = false;
+            foreach (var colorizer in FindColorizers())
+            {
+                if (colorizer == null) continue;
+                if (!(_wordColorsField.GetValue(colorizer) is IList list)) continue;
+
+                object was = null;
+                bool already = false;
+                foreach (var item in list)
+                {
+                    if (item == null) continue;
+                    var word = _wordField.GetValue(item) as string ?? "";
+                    if (string.Equals(word, original, System.StringComparison.OrdinalIgnoreCase)) was = item;
+                    else if (string.Equals(word, translated, System.StringComparison.OrdinalIgnoreCase)) already = true;
+                }
+                if (was == null || already) continue;
+
+                // Kept so Forget puts this list back as it was: these are
+                // shared objects and one of them is a prefab, so a pair added
+                // here would otherwise outlive the pack that needed it.
+                if (!_wasThere.ContainsKey(colorizer))
+                {
+                    var before = new object[list.Count];
+                    for (int i = 0; i < list.Count; i++) before[i] = list[i];
+                    _wasThere[colorizer] = before;
+                }
+
+                var pair = System.Activator.CreateInstance(_wordColorPairType);
+                _wordField.SetValue(pair, translated);
+                _colorField.SetValue(pair, _colorField.GetValue(was));
+                list.Add(pair);
+                carried = true;
+            }
+
+            if (carried)
+                log?.LogInfo("[SMSModForge.PackPlugin] Speech colours: '" + translated
+                             + "' now draws in the colour '" + original + "' draws in.");
+            else
+                log?.LogInfo("[SMSModForge.PackPlugin] Speech colours: nothing gives '" + original
+                             + "' a colour of its own, so '" + translated
+                             + "' needs none carried over.");
+            return carried;
         }
 
         private static bool ResolveTypes(ManualLogSource log)

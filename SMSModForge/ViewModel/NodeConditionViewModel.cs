@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using SMSModForge.Model;
+using SMSModForge.Localization;
 
 namespace SMSModForge.ViewModel;
 
@@ -22,7 +23,7 @@ public sealed class NodeConditionViewModel : ObservableObject
     public bool IsLocked { get; }
 
     /// <summary>What a dialogue's pinned level row says above itself.</summary>
-    public const string PinnedLevelHeader = "Required \u2014 this dialogue only starts in this level";
+    public static string PinnedLevelHeader => Loc.T("condition.pinnedLevel");
 
     /// <summary>
     /// The line shown above a locked row, which also gives it its framed look;
@@ -100,7 +101,7 @@ public sealed class NodeConditionViewModel : ObservableObject
 
     /// <summary>Display strings for the group AND/OR combo (index 0 = AND/All, 1 = OR/Any).</summary>
     public static IReadOnlyList<string> GroupModeOptions { get; } =
-        new[] { "AND — all of these", "OR — any of these" };
+        new[] { Loc.T("condition.group.all"), Loc.T("condition.group.any") };
 
     /// <summary>0 = <c>All</c> (AND), 1 = <c>Any</c> (OR). Bound to the group header combo.</summary>
     public int GroupModeIndex
@@ -378,7 +379,9 @@ public sealed class NodeConditionViewModel : ObservableObject
         NodeConditionTypes.GameVariableNumberLessOrEqual,
     };
 
+    // English on purpose: values the code compares; the list shows them through choice.variableSource.
     public static IReadOnlyList<string> VariableSources { get; } = new[] { "Pack", "Vanilla" };
+    // English on purpose: values packs store; the list shows them through choice.comparison.
     public static IReadOnlyList<string> VariableComparisons { get; } =
         new[] { "equals", "greater than", "greater or equal", "less than", "less or equal", "exists" };
 
@@ -599,6 +602,13 @@ public sealed class NodeConditionViewModel : ObservableObject
             SetParam("value", value);
             OnPropertyChanged();
             OnPropertyChanged(nameof(ValueNamesAVariable));
+
+            // The True/False pair reads this same value through VarValueBool.
+            // Two radios in one group, one of them inverted, only stay honest
+            // while every write says so: without this they go on showing what
+            // the value WAS, and then clicking the one that looks unchecked
+            // writes the value already stored — a click that does nothing.
+            OnPropertyChanged(nameof(VarValueBool));
         }
     }
 
@@ -636,11 +646,11 @@ public sealed class NodeConditionViewModel : ObservableObject
     {
         get
         {
-            if (string.IsNullOrEmpty(Type)) return "(empty condition)";
-            string prefix = Negate ? "NOT " : "";
+            if (string.IsNullOrEmpty(Type)) return Loc.T("condition.display.empty");
+            string prefix = Negate ? Loc.T("condition.display.not") + " " : "";
             if (IsGroup)
-                return prefix + (Type == NodeConditionTypes.GroupAny ? "ANY" : "ALL")
-                       + " of " + Children.Count;
+                return prefix + Loc.F(Type == NodeConditionTypes.GroupAny ? "condition.display.any" : "condition.display.all",
+                                      "count", Children.Count);
             if (Model.Params.Count == 0) return prefix + Type;
             var pairs = new List<string>(Model.Params.Count);
             foreach (var kv in Model.Params) pairs.Add(kv.Key + "=" + kv.Value);

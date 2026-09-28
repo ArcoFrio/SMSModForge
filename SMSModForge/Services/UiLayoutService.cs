@@ -20,6 +20,8 @@ public static class UiLayoutService
 
     public static Dictionary<string, double> Load()
     {
+        // Nothing the test suite does is the author's: see TestMode.
+        if (TestMode.Active) return new Dictionary<string, double>();
         try
         {
             if (File.Exists(FilePath))
@@ -32,6 +34,7 @@ public static class UiLayoutService
 
     public static void Save(Dictionary<string, double> sizes)
     {
+        if (TestMode.Active) return;
         try
         {
             var dir = Path.GetDirectoryName(FilePath)!;

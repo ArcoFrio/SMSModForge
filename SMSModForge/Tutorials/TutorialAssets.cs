@@ -92,7 +92,7 @@ public static class TutorialAssets
     /// audio from elsewhere carries its attribution in its filename, and
     /// renaming it would quietly strip that.
     /// </summary>
-    public static string Music => $"{PackFolder}/Audio/Neon Rain.mp3";
+    public static string Music => $"{PackFolder}/Audio/Neon Rain.mp3";   // English on purpose: a file's name.
 
     /// <summary>A sound effect — a door opening, as a WAV.</summary>
     public static string Sfx => $"{PackFolder}/Audio/15419__pagancow__dorm-door-opening.wav";

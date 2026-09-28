@@ -44,6 +44,24 @@ public sealed class DialogueLinePreview : Control
         // Background is deliberately NOT used: a Control paints it through its
         // ControlTemplate, and this one has none - it draws itself, so there is
         // one place the look lives rather than two.
+
+        // A word added to the dictionary changes the marks; asked again, only
+        // while showing, so a row that has gone is not kept alive by it.
+        Loaded += (_, _) => { Services.Speller.Changed -= SpellingChanged; Services.Speller.Changed += SpellingChanged; };
+        Unloaded += (_, _) => Services.Speller.Changed -= SpellingChanged;
+    }
+
+    private void SpellingChanged()
+    {
+        // Said on whichever thread changed the speller, and every thread has
+        // its own; this draws on its own thread, so it is asked there.
+        if (!Dispatcher.CheckAccess())
+        {
+            Dispatcher.BeginInvoke(new Action(SpellingChanged));
+            return;
+        }
+        _cached = null;
+        InvalidateVisual();
     }
 
     // ── What to draw ──────────────────────────────────────────────────
@@ -82,6 +100,23 @@ public sealed class DialogueLinePreview : Control
     {
         get => (string)GetValue(SpeakerColorProperty) ?? "";
         set => SetValue(SpeakerColorProperty, value ?? "");
+    }
+
+    public static readonly DependencyProperty ChecksSpellingProperty =
+        DependencyProperty.Register(nameof(ChecksSpelling), typeof(bool),
+            typeof(DialogueLinePreview), new FrameworkPropertyMetadata(false, Redraw));
+
+    /// <summary>
+    /// Underline the misspelled words, as the editing box below the list does.
+    /// <para/>
+    /// Follows the same Options switch as the box, because they are one answer
+    /// to one question: an author who turned spell checking off did not mean
+    /// "off in the box and on in the list".
+    /// </summary>
+    public bool ChecksSpelling
+    {
+        get => (bool)GetValue(ChecksSpellingProperty);
+        set => SetValue(ChecksSpellingProperty, value);
     }
 
     private static void Redraw(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -269,7 +304,12 @@ public sealed class DialogueLinePreview : Control
                                   set.Font, set.Alpha, set.Width, set.Height, NameColor());
         }
 
-        DrawStyled(target, pixels, height, Scaled(Shift(body, inset, 0), scale), set, pieces);
+        var placed = Scaled(Shift(body, inset, 0), scale);
+        DrawStyled(target, pixels, height, placed, set, pieces);
+
+        // After the words, so a mark sits over the line rather than under it.
+        if (ChecksSpelling && !DrawSpelling(target, pixels, height, placed, pieces, scale, out string words))
+            CheckSoon(words);
 
         // The DPI stamped on the bitmap is what makes one of its pixels land on
         // one of the screen's rather than being stretched to fit.
@@ -409,6 +449,122 @@ public sealed class DialogueLinePreview : Control
     private const double Pad = 1.5;
 
     /// <summary>A solid rectangle, premultiplied, over whatever is there.</summary>
+    // ── Spelling ───────────────────────────────────────────────────
+
+    /// <summary>
+    /// Underline the misspelled words, the way the editing box below the list
+    /// does.
+    /// <para/>
+    /// This row is not a TextBox — it is the game's own glyph atlas, blitted —
+    /// so WPF cannot squiggle it and the marks have to be drawn. Which words
+    /// still comes from Windows' speller and the author's own dictionary
+    /// (<see cref="Services.Speller"/>), so a word added there stops being
+    /// underlined here as well as in the box.
+    /// <para/>
+    /// The text checked is what the row SHOWS: the pieces joined, tags already
+    /// dropped. Checking the raw line would hand the speller <c>&lt;color=#FF6666&gt;</c>
+    /// and get back three misspellings nobody can act on.
+    /// </summary>
+    /// <returns>False when the words have not been checked yet, and
+    /// <paramref name="shown"/> is what to check: nothing is drawn for them
+    /// now, and the row is drawn again once they have been.</returns>
+    private static bool DrawSpelling(byte[] target, int width, int height,
+                                     TextLayout body, List<Piece> pieces, double scale, out string shown)
+    {
+        var joined = new System.Text.StringBuilder();
+        foreach (var piece in pieces) joined.Append(piece.Text);
+        shown = joined.ToString();
+        if (!Services.Speller.TryKnown(shown, out var bad)) return false;
+        if (bad.Count == 0) return true;
+
+        foreach (var word in bad)
+        {
+            // The glyphs of this word, which is where the index carried
+            // through the layout earns its keep: wrapping drops the space it
+            // broke at and the atlas may have no glyph for a character, so
+            // counting glyphs would drift a word to the left of itself.
+            int line = int.MinValue;
+            double left = double.MaxValue, right = double.MinValue, bottom = double.MinValue;
+
+            void Flush()
+            {
+                if (right > left) Squiggle(target, width, height, left, right, bottom, scale);
+                left = double.MaxValue;
+                right = bottom = double.MinValue;
+            }
+
+            foreach (var glyph in body.Glyphs)
+            {
+                if (glyph.Index < word.At || glyph.Index >= word.At + word.Length) continue;
+
+                // A word split across a wrap gets a mark on each line.
+                if (line != int.MinValue && glyph.Line != line) Flush();
+                line = glyph.Line;
+
+                left = Math.Min(left, glyph.X);
+                right = Math.Max(right, glyph.Right);
+                bottom = Math.Max(bottom, glyph.Bottom);
+            }
+            Flush();
+        }
+        return true;
+    }
+
+    /// <summary>The words waiting to be checked for this row, if any.</summary>
+    private string? _checking;
+
+    /// <summary>
+    /// Check <paramref name="shown"/> once everything waiting to be drawn has
+    /// been, and draw the row again with its marks.
+    /// <para/>
+    /// Not now: asking Windows takes about forty milliseconds a line, and a
+    /// conversation of a hundred lines asked in the middle of drawing held the
+    /// whole window for four seconds - after every undo, since an undo draws
+    /// the list again. Each row now shows at once and its marks follow, one row
+    /// at a time behind whatever else the window is doing; a line checked
+    /// before is not asked again at all (<see cref="Services.Speller"/>).
+    /// </summary>
+    private void CheckSoon(string shown)
+    {
+        if (_checking == shown) return;
+        _checking = shown;
+        Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, new Action(() =>
+        {
+            if (_checking != shown) return;   // the row moved on to other words
+            _checking = null;
+            Services.Speller.Check(shown);
+            _cached = null;
+            InvalidateVisual();
+        }));
+    }
+
+    /// <summary>
+    /// A wavy line under one stretch of a row.
+    /// <para/>
+    /// Two pixels of period at 100% scaling, which is what Windows draws and
+    /// what makes it read as a spelling mark rather than an underline. Scaled
+    /// with the display so it does not disappear on a high-DPI screen.
+    /// </summary>
+    private static void Squiggle(byte[] target, int width, int height,
+                                 double left, double right, double bottom, double scale)
+    {
+        var colour = DialogueLook.SpellingColor;
+        if (colour.A == 0) return;
+
+        int thickness = Math.Max(1, (int)Math.Round(scale));
+        int period = Math.Max(2, (int)Math.Round(2 * scale));
+        double top = bottom + thickness;
+
+        for (int x = (int)Math.Floor(left); x < (int)Math.Ceiling(right); x++)
+        {
+            // Up on one half of the period, down on the other: the cheapest
+            // zigzag there is, and at this size a smoother curve is invisible.
+            int step = ((x - (int)Math.Floor(left)) / period) % 2;
+            double y = top + (step == 0 ? 0 : thickness);
+            FillRect(target, width, height, x, y, x + 1, y + thickness, colour);
+        }
+    }
+
     private static void FillRect(byte[] target, int width, int height,
                                  double x0, double y0, double x1, double y1, UiColor colour)
     {

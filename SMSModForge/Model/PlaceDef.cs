@@ -37,7 +37,7 @@ public sealed class PlaceDef
     /// Human-facing label shown on the navigator button. Free text.
     /// </summary>
     [JsonProperty("displayName", Order = 3)]
-    public string DisplayName { get; set; } = "New Place";
+    public string DisplayName { get; set; } = "New Place";   // English on purpose: the value a pack file without one loads with, which must be the same in every language.
 
     /// <summary>Relative path (from pack root) to the base sprite PNG (2048×1136).</summary>
     [JsonProperty("baseSprite", Order = 4)]

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using SMSModForge.Model;
 using SMSModForge.Services;
+using SMSModForge.Localization;
 
 namespace SMSModForge.ViewModel;
 
@@ -451,5 +452,5 @@ public sealed class GameObjectViewModel : ObservableObject
     }
 
     /// <summary>Short label for headers / tooltips.</summary>
-    public string Display => string.IsNullOrWhiteSpace(Name) ? "(unnamed GameObject)" : Name;
+    public string Display => string.IsNullOrWhiteSpace(Name) ? Loc.T("gameObject.unnamed") : Name;
 }

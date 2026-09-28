@@ -26,6 +26,7 @@ namespace SMSModForge.Tests;
 /// nothing told it to look again when one changed — an override row raises its
 /// own change notification, not the outfit's.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class VanillaPreviewOverrideTests : IDisposable
 {
     private readonly ITestOutputHelper _out;

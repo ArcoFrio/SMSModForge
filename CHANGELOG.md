@@ -1,5 +1,831 @@
 # Changelog
 
+## 1.6.0
+
+ModForge in your language, and your pack in your players'. The editor comes in
+eight languages besides English and switches between them without a restart;
+every pack can be translated - by hand, from a file anyone can edit, or by
+machine in one go - and edited in any of its languages; and the game plays a
+pack in the player's language, chosen from flags on its main menu. Characters
+have pronouns so translations get "ready" and "lista" right. Packs can be
+switched on and off from the main menu without losing their progress, and the
+Places tab's undo is fast again.
+
+### Before you update
+
+**Players whose Windows is set to another language see ModForge's words in
+it.** The plugin's language setting starts at `auto`, which follows Windows:
+a player with Windows in Spanish gets the pack list and the save warning in
+Spanish, and every pack that has a Spanish translation in Spanish. Setting
+`Language = en` in the plugin's config file keeps everything as it was.
+
+**Players with XUnity.AutoTranslator: ModForge follows its language.** With the
+setting at `auto`, ModForge shows its words and plays packs in the language
+XUnity.AutoTranslator translates the game into, rather than Windows'. Choosing a
+language on the main menu afterwards changes only the mods' language; XUnity
+and the game's language are left exactly as its own settings have them.
+
+**Every character of your pack's own needs its pronouns chosen.** The
+Characters tab has a new Pronouns box - Male, Female or Neutral - and a pack
+made before it has none chosen, so after updating the validation list shows an
+error for each of your characters until you pick one, and Publish asks before
+going ahead with them. Nothing else about the pack changes, and the game's
+characters and the player need nothing: theirs come from the game.
+
+**The player types the same way in every pack.** "You" now always types at
+45 characters a second, pitch 0.4-0.7, and a pack can no longer change it: the
+typing voice fields are shown greyed for the player. A pack that set a voice
+for "You" has it removed when it is opened - the list of what was brought up
+to date says so, and the first save keeps a copy of the original - and the game
+no longer uses one found in a pack that has not been saved since. Before, such
+a setting only changed "You" on that pack's own lines, while the game's own
+"You" kept its voice, so the player typed two ways.
+
+### Characters' pronouns, and translations that use them
+
+**A Pronouns box on the Characters tab, right under the name.** English says
+"I'm ready" whoever says it; Russian, Spanish, French, Portuguese and German do
+not - "Я готов" or "Я готова", "listo" or "lista" - and nor do the words that
+describe somebody named in a line ("mi mejor amigo" or "mi mejor amiga"). A
+machine translator is told neither, and it guesses male. Choosing Male, Female
+or Neutral tells the Translate window who each line's speaker is and who each
+name in it is, and it passes that on. Neutral leaves the language to speak of
+them the way it speaks of anybody it has not been told about.
+
+**The game's characters and the player already have theirs,** read out of the
+game itself: what its lines say about each of them, and for the ones too minor
+to be talked about, how the game draws them. The player is male, as the game
+speaks of them. They show greyed out, like the game's names.
+
+**A voice-only character's settings show when you select them.** A character
+with no bust - a voice, like John Dick - has no outfit to select, and the panel
+with the name, pronouns, colour and typing voice only showed with an outfit
+selected, so none of those could be changed for them. It shows for any
+character now, with the outfit's own panels left out when there is none, and
+so are the default outfit and the speech expressions, which do nothing for a
+character nothing is drawn for. A voice-only character you add is selected
+straight away, too; before, the selection stayed on whoever it was on.
+
+**How it reaches the translator.** Each line goes to Google with a short note
+in front of it - "She says:" - and each name with "(she)" or "(he)" after it,
+each in markers of its own, and the notes are cut off what comes back before
+anything is written. Tried on Google Translate before it was built: Russian
+came back "Я устала, но я готова" and "уже ушла домой?", Spanish "Estoy
+cansada, pero estoy lista" and "mi mejor amiga", where every one of them was
+masculine without. It is not perfect - a line of two sentences can lose the
+speaker by the second - but it is right far more often than a guess. A line
+whose notes come back out of place is asked for again without them, so a note
+never ends up in your translation. Japanese, Korean and Chinese get no notes:
+their words do not change this way.
+
+### The editor in your language
+
+**A Language menu.** It lists every language the editor has a translation
+for, and starts in Windows' own language when there is one, English when there
+is not. **Picking a language switches the editor to it at once** - no restart,
+and your pack stays open exactly as it was: unsaved changes, what is selected,
+the undo history, and a translation of your pack you are in the middle of
+editing. The choice is remembered; "Windows' language" at the top goes back to
+following Windows.
+
+**Spanish, Portuguese (Brazil), Chinese (Simplified), German, French,
+Russian, Japanese and Korean come with the editor.** All eight were translated
+by a machine and nobody has checked them yet, which the Language menu says
+beside each one. Corrections are welcome and easy: fix the file in any text
+editor and pass it on, or send it in.
+
+**Correct the editor's words right where they are: Language ▸ Edit texts on
+screen.** In any language but English, it puts a small pencil beside every
+text on screen. Click one to see the English and write your own words - a text
+that says a number shows each form your language uses - and they are on screen
+at once, everywhere. A {gap} the sentence needs is checked, so a correction
+cannot leave a hole where a pack's name goes. The texts in menus, messages and
+tooltips have no pencil; **Language ▸ Find a text to edit** searches every
+text of the editor by its words, in English or in your language. Back to
+ModForge's words takes a correction out again.
+
+**Your corrections sit on top of the translation that came with the editor,
+rather than replacing it.** They are saved in your languages folder, holding
+only what you changed, and the rest comes from the editor's own translation -
+so updating the editor still brings its new and improved texts. The same is
+now true of a whole translation of your own in that folder: its words show
+wherever it has some for the English as it is now, and the editor's own
+translation fills in the rest, where before one missing line showed in
+English.
+
+**Three lists beside a dialogue line are in your language now.** Kind (Text,
+Choice, Random) and Jump (Continue, Exit, Jump) showed their English names
+whatever language the editor was in, and so did "(none)" beside a line with no
+children, in the save window's list of changes, and in an action's details.
+
+**Translations are plain text files anyone can make, fix and pass on.** One
+line per text, `key = text`, with the English it was translated from written
+above it. Open one in Notepad, Notepad++ or anything else, write your language
+after each `=`, and save. Leave a line empty and that one text shows in English
+until somebody translates it. Put a file you were given in your languages
+folder (Language ▸ Open my languages folder), named for its language - `es.txt`,
+`pt-BR.txt`, `zh-Hans.txt` - and it appears in the menu. A translation of your
+own wins over one that came with the editor, and updating the editor never
+touches your folder.
+
+- **Language ▸ New or update a translation…** writes a file to start from,
+  every text in it, in English, ready to be written over. Run it again after an
+  update and it brings your file up to date without losing a word of yours:
+  new texts arrive in English, and a text whose English changed is marked
+  `# changed from:` with the old English, so you can find what to look at. The
+  file it replaces is kept beside it as `es.txt.bak`, so a merge that does
+  something you did not expect is one rename away from undone.
+- **Language ▸ Check a translation…** reads a file and says, line by line,
+  what is missing, what is broken and what is out of date: a `{name}` gap or a
+  `<b>` tag lost in translation, a count missing one of the forms the
+  language needs, a line the editor cannot read. A Replace All that went too
+  far and changed keys as well as words is spotted and can be put right with
+  one button; the file as it was is kept beside it.
+
+Plurals are the language's own: "1 issue, 2 issues" in English, one form in
+Japanese, three in Russian, and the file says which forms each text needs.
+
+One file translates all of ModForge: the editor, and under `[In the game]`, the
+few words the game plugin shows players. Put the same file in the game's
+`BepInEx\plugins\SMSModForge\Languages` folder and players see those in it too.
+
+### Your pack in your players' language
+
+**File ▸ Pack translations ▸ New or update a translation…** writes a file into
+the pack's new `translations` folder - `translations/es.txt` for Spanish - with
+every text a player reads in it: dialogue lines and choices, character names,
+quest titles, descriptions and tasks, navigator and world map buttons, and the
+texts on your screens. Each has a note saying where it appears and who says it,
+and the default text above it. Translate it by hand, or give the whole file
+to an AI tool and ask it to translate only the text after each `=`; the notes
+at the top of the file say how. Run it again after changing the pack and it
+brings the file up to date without losing anything already translated.
+
+**Edit your pack in any of its languages.** The **Editing in** list, at the
+right end of the row of tabs, switches every text a player reads - lines,
+names, quest and task wording, button labels, the text on your screens - to
+one of the pack's translations,
+everywhere at once. Type over a line and you are correcting the translation;
+the default text is untouched. A bar across the window says so for as long
+as a translation is up, because typing into the wrong language is easy to do
+and slow to notice.
+
+Everything the game finds things by - keys, the names of objects, the targets
+of buttons - is shared by every language and never changes when you switch.
+Anything you change that is not a text is changed for every language.
+
+**A line you add while looking at a translation is that translation's.** Add a
+line while looking at the Spanish and the line is added to the pack, for every
+language - but its words are the Spanish you typed, and its default text
+stays empty. The same goes for a text that was empty, such as a task with
+no journal paragraph. Your pack's check lists each one as an error until you
+write its default text, because until then a player of any
+other language reads it in Spanish. Nobody reads a blank line in the meantime:
+the game shows the player's language if it has the line, otherwise the first
+translation that does.
+
+**Tell ModForge what language your pack is written in.** The ModForge tab has a
+new **Written in** list under the pack's version. It is English unless you say
+otherwise, and an English pack's file does not change. A pack written in
+another language gets: its default text for players reading that language even
+when it carries a close translation (a Brazilian pack is read in Brazilian
+Portuguese by a Brazilian, not in its Portugal Portuguese file); the right
+language in the menu's "not in your language" note; and the machine translator
+told what it is translating from. Packs that do not say are sent to the machine
+as "work it out", so an older pack written in another language is not
+translated as though it were English. A grey line under the list says what it
+is for, and the First steps tutorial now has a step about it, beside exporting
+and publishing.
+
+**The pack's check notices a line in the wrong language.** A line of your
+pack's default text that is plainly in another language - Spanish typed into an
+English pack while you meant to type it into the Spanish translation - gets a
+warning that double-clicks straight to it. Another alphabet (Japanese, Korean,
+Chinese, Cyrillic and others) is always noticed. Between English, Spanish and
+Portuguese only a line that is plainly the other language is, and short lines
+are left alone: a warning on a correct line is worse than a missed one. It was
+run over the game's own 19,000 lines of English and over ModForge's own
+translations without a single false alarm. When most of a pack reads as
+another language, you get one warning suggesting you change **Written in**,
+rather than one per line. A character who speaks another language on purpose
+can be silenced line by line like any other warning.
+
+**The editor says when a line is too long for the game's dialogue box.** The
+game shrinks a long line, down to a limit, so that it fits; a line longer still
+runs out of the box and over whatever is below it. A short note under a line's
+Text box now says so as you type - the size it is shrunk to, in grey, or in red
+when it runs out of the box - for whichever language you are editing, since a
+translation is often longer than the line it came from. The pack's check warns
+about every line that runs out of the box, in the default text and in each
+translation. It is measured with the game's own font and box, so it is a close
+prediction rather than the game itself: a line right at the edge is worth a
+look in game. Lines in Chinese, Japanese and Korean are drawn by a Windows
+font the editor cannot measure the same way, so they are not checked.
+
+A translation is saved like everything else. Switching away from a language
+keeps what you changed in it for the next save, so a switch never loses a word
+and never writes one either; the list of changes shown before a save lists
+each translation's changes under its language - the line, what it said and
+what it says now - and closing the pack without saving asks first, as it does
+for any other change. Undo works across both: it takes back a correction to
+the Spanish and a change to the pack alike, and it puts you back in the
+language you were in when you made it.
+
+**Fixed: the list of changes before a save said nothing about a translation you
+had edited.** Switching back to the default text wrote the translation there
+and then, so by the time you saved there was nothing left to list - and a save
+made while the translation was still up listed only the pack's own changes.
+
+**File ▸ Pack translations ▸ Translate the pack…** translates everything a
+player reads into the languages you tick, by machine, and writes it into the
+pack. The window says what it is about to do before it does it: your pack's
+text goes to Google's free translation service, which is not an official one -
+it can refuse, it can block your connection for a while if asked too often, and
+it can change without warning. Nothing is ever sent while somebody is playing;
+the translation is written into your pack and stays there.
+
+Some things it takes care of on your behalf:
+
+- **A line you translated yourself is never touched.** What is still to do is
+  read from the file, so anything that already says something is left exactly
+  as you wrote it. The same goes for a line you correct afterwards.
+- **A run that stops keeps everything it got.** Rate limits are expected rather
+  than exceptional, so results are written as they arrive. Run it again and it
+  carries on from where it stopped, doing only what is left.
+- **A line that came back damaged is not written.** Machine translators drop a
+  {gap}, reorder a tag or put a space inside a [PV:token]; those are taken out
+  of the text before it is sent and put back afterwards, and a line that did not
+  survive the trip keeps your own words and is counted in the report.
+- **A line you have since changed is translated again**, rather than being left
+  as a translation of something your pack no longer says.
+- **A line that reads the same in another language stays done.** A name the
+  machine gives back unchanged is marked `# same in this language` in the file,
+  so it is not offered again, and you can mark a line that way yourself. A line
+  with nothing in it to translate ("...", "?!") is not counted as waiting
+  either, except in Chinese and Japanese, which write those their own way.
+
+**Character names are kept out of the machine translation.** A translator
+reads a name as the word it looks like - a character called Hope comes back as
+Hoffnung in German, in every line that mentions her. So unless you tick
+**Translate character names too** in the Translate window (it starts unticked,
+and is remembered per pack), names are never sent:
+
+- Each character's name stays exactly as you wrote it, in the name itself and
+  wherever a line mentions it with a capital letter - "Hope" and "Hope's", but
+  not "hope". Your player, "You", is not a name and is translated as usual.
+- The game's own characters' names are kept too when your lines mention them,
+  whether or not the box is ticked - by their names only: "Anna", "Nina" of
+  Nurse Nina, "Frost" of Doctor Frost. The descriptions the game files some
+  characters under ("Technician", "Park Woman", "Mobster 1") are words, and are
+  translated. ModForge knows how the game's names are written in Russian,
+  Japanese, Korean and Chinese and uses that - "Anna" is Анна, アンナ, 안나,
+  安娜 - so they never appear in the list of names to check. Every one of them
+  has a spelling in all four; where the game does not settle it, the commonest
+  form is used - a Japanese name in Chinese in the characters it is most often
+  written with (Chihiro 千寻, Sakura 樱), Master Zhen as 甄.
+- In a line, each name is taken out before the line is sent and put back
+  afterwards, the same way a {gap} or a tag is. A line the translator hands back
+  without one of its names, or with one twice, is not written - so a name can
+  only ever be where the translator put it.
+- Languages written in another alphabet - Russian, Japanese, Korean, Chinese -
+  need each name spelled in it. The Translate window lists the names for them;
+  type how each is written, or press Translate and Google suggests spellings
+  first, shown in italics, for you to check before anything is translated,
+  because a suggestion can still come back as a word. A name left empty stays
+  in Latin letters. The window opens wide enough for every column of that list,
+  always shows every language in full, and gives any extra height to the list
+  of names. Chinese suggestions used to come back empty, because Google's
+  Chinese answer carried one percent sign too many beside the place the name
+  goes, and a Chinese or Japanese answer could be punctuated differently from
+  one sentence to the next ("！" in one, "!" in the other). Both are read now.
+  And a name Google's free service leaves in Latin letters - in Chinese it
+  left every one - is asked of the Google Translate website before the column
+  is left empty; the website spells nearly all of them. The website is also
+  asked when the free service refuses outright ("too many requests") with no
+  check for you to answer - before, the names step simply stopped there. When
+  a language still gets no suggestion, the window shows what Google actually
+  answered, so you can see why.
+- Google's suggestions, and any spelling you type, are kept when you close the
+  Translate window. Before, closing it before pressing Translate a second time
+  threw the suggestions away, and the next press asked Google all over again -
+  more traffic towards a block. A name Google was asked about once is not asked
+  again; one it could not spell stays in Latin letters unless you type it.
+
+Two things to know. A name is put back in its base form: in Russian it does not
+change its ending with its place in the sentence, and a word that agrees with
+the character - a Russian verb, a French or Spanish adjective - may come out
+masculine, because the translator never saw who it was about. And names already
+translated by an earlier run stay as they are: correct those with **Editing in**.
+
+**Export and Publish offer to translate first.** When some of what players
+read is not yet in every language ModForge has, exporting or publishing asks
+whether to translate it by machine before the pack is written. Only lines that
+are still untranslated are sent: nothing you or the machine already translated
+is touched. Yes translates in the same window as above, where you can watch it
+or stop it, and the export goes ahead when you close it, with whatever it got.
+No exports the pack as it is. Options ▸ Offer to translate before exporting
+turns the question off for the pack you have open.
+
+**When Google's free service stops working, the Google Translate website takes
+over.** Before sending any of your pack, ModForge translates a test sentence.
+If that comes back wrong - because the service changed, as it did in September -
+ModForge now tries the Google Translate website instead, in a small window you
+can watch, and uses it if the same test passes there. The report says which
+one did the work. The page in that window is locked while ModForge works it, so
+a stray click cannot land in the text being translated; it unlocks the moment
+Google asks you something there. Chinese through the website works too: the
+page writes the markers ModForge puts in each line with full-width percent
+signs (％), which lost every line of a Chinese batch and every Chinese spelling
+of a name; they are now read either way. The window needs Microsoft Edge
+WebView2, which comes with Windows 11.
+
+**When Google stops to check that a person is asking, the check appears in the
+Translate window.** Google's free service can decide your connection is sending
+automated queries and refuse it until somebody answers a captcha. Until now that
+simply ended the run, with no captcha anywhere to answer, and waiting was the
+only way out. Now its check is shown over the list of languages - at the start
+of a run, in the middle of one, and when asking for the spellings of names.
+Answer it and the translation carries on by itself; ModForge never answers it
+for you, and Stop ends the run with everything so far kept. If the free service
+still refuses once you have passed it, the Google Translate website carries on
+instead, in the same browser, which knows you passed. Refused again straight
+after a check, the run stops rather than asking you over and over.
+
+Often the free service's refusal has no check on it at all - only "try again
+later". ModForge sees that within a few seconds, says so, and carries on
+through the Google Translate website instead, which does show a check you can
+answer when it wants one; the languages after it go on there too.
+
+**File ▸ Pack translations ▸ Check the pack's translations** reads every file
+in the folder and lists what is missing, what lost a `{gap}`, a tag or a
+`[PV:...]` token on the way, and what the pack has changed since it was
+translated. Keys a Replace All damaged can be put back with one button.
+
+The folder is exported with the pack. **Players get the pack in their language
+by themselves** when it has a translation for it; nobody picks anything.
+
+**A translation never shows a line the pack no longer says.** Each translated
+line remembers the words it was translated from. Change a line in the pack
+and players see your new words, in the pack's language, until the translation
+is brought up to date - not an old translation of something else.
+
+Sound cues that listen for words in a line still hear its default text,
+whatever language the player reads the line in.
+
+**Translate the game's own lines in the conversations you extend.** When your
+pack adds to or changes one of the game's conversations, the game's lines you
+left alone are now in your translation files too, under a heading of their
+own, and you can write their translation while a translation is up, the same
+as your own lines. The machine translates them too. Your pack's default text
+never changes: those lines stay the game's own words. Rewrite one of them in
+your pack and its old translation is marked out of date. Players see these
+translations only if they choose to (see below).
+
+**Fixed: typing over one of the game's lines while a translation was up
+rewrote the line for everyone.** The Spanish went into your pack as your
+version of the game's line, and every player saw it, whatever language they
+played in. It now goes into the translation.
+
+### In the game
+
+**{PC} and the game's other words in braces work everywhere, not just in
+dialogue.** The player's name, what they call their family, and every other
+word the game fills in inside a line of dialogue are now filled in wherever
+your pack's words are shown: quest titles, descriptions and tasks, speakers'
+names, navigator and map button labels, and the text on your screens. They
+are filled in the way the game fills them in a line - from the same list, bold
+or coloured where the game makes them so - and they follow the save that is
+loaded. `[PV:name]` works in all of those places too, and keeps up as the
+variable changes. Before, a quest called "{PC}'s first day" showed the braces.
+
+**Fixed: `[PV:name]` in a line you add to one of the game's conversations
+showed as typed.** Lines in your own conversations had their variables filled
+in; a line added to, or rewritten in, one of the game's did not. Both do now.
+
+**Renaming a variable renames it in every text.** A rename rewrote `[PV:name]`
+in dialogue lines and button labels only, so the same token in a character's
+name, a quest's text or one of your screens went on naming a variable that no
+longer existed. It now reaches every text a player reads, and the list of
+where a variable is used includes them.
+
+**Switch packs on and off on the main menu.** Each pack in the mod list has a
+box beside its name: untick it and the pack is not loaded the next time a game
+starts or loads, and its row turns grey. Nothing needs moving out of the Mods
+folder any more to play without a pack. The choice is the same for every save,
+and the language menu offers only the languages of the packs that are on.
+
+**A pack that is off keeps its progress.** Until now, a save only ever carried
+the data of the packs that were running: play an evening without a pack, save,
+and that pack's progress was gone from the new save. Now the data of every pack
+the loaded save has - switched off, missing or broken - goes into each save you
+make from it, unchanged, and is all there again when the pack runs. And a slot
+you save over no longer keeps the pack data of the save that was there, which a
+pack switched back on would have read as yours.
+
+**The save warning says why a pack is not running.** A save with data for a
+pack that is not running lists it under one of three headings: switched off
+(one tick away on the main menu), installed but could not be loaded (the log
+says why), or not installed - with the version the save was made with, when the
+save knows it. The warning used to say only that the pack was not installed,
+and that its data would not be kept; now it is kept.
+
+**Each save records what it was made with.** `SMSModForge-save.json`, beside
+the game's own files in the save's folder: the ModForge version, the game
+build, when it was saved, the language, XUnity.AutoTranslator's language when
+it is installed, and every pack the save has data for, with its version and
+whether it was running, switched off, not loaded or not installed. It is what
+lets the warning above name a missing pack's version, and it is readable in any
+text editor when somebody is sorting out a save.
+
+**ModForge and XUnity.AutoTranslator work together.** Most translations of the
+game are made with XUnity.AutoTranslator. When it is installed:
+
+- "Computer's language" in the Language list becomes "Same as
+  XUnity.AutoTranslator", and follows its language.
+- Its language is offered in the list even when neither ModForge nor a pack is
+  in it: ModForge's own words stay in English, the game is translated by
+  XUnity, and packs that have that language are played in it.
+- The language chosen on the menu is the mods' alone. XUnity reads its own
+  language once, when the game starts, and cannot change it while the game
+  runs, so ModForge does not touch it: the game is in XUnity's language, the
+  mods in yours.
+- XUnity is told to leave alone what ModForge has already translated - a
+  pack's translation, a pack written in another language, ModForge's own words
+  in yours - so nothing is translated twice, and a line a pack wrote in German
+  is not read as English and translated again.
+
+**A pack's lines type for as long as they take to show.** The game times its
+typing sound by the length of the line as written, formatting included, and
+reveals only the letters you can see - so on a line with a colour or bold in
+it, the sound went on after the text had finished, and a click in that time
+only stopped the sound instead of moving on. A pack's lines, and the game's
+lines a pack shows in its translation, are now timed by what shows of them;
+everything else keeps the game's own timing.
+
+**Packs show the game's own lines in their translations too.** In the
+conversations your pack extends, the game's lines are shown in your
+translation of them, whenever it has them in the player's language, so a
+conversation reads in one language from start to end. Mods exist that
+translate the whole game, and a pack's words for the game's lines would mix
+with theirs, so the first time it matters the player is told so, once: inside
+the warning about their save when there is one, on its own otherwise.
+
+**The pack list on the main menu and the save warning speak the player's
+language** where ModForge has a translation for it. The plugin's new
+`Language` setting, in `BepInEx\config\treboy.starmakerstory.smsmodforge.packplugin.cfg`,
+decides it for ModForge's words and for every pack: `auto` (the first time)
+follows the language Windows is set to; `en`, `es`, `ja` and so on pick one.
+The game itself stays in English.
+
+**Choose the language on the game's main menu.** Click a flag above the Exit
+button, bottom-right; each flag has the language's name beside it, and "Mod
+language" over them says they are the mods' language, not the game's. The one
+in use stands out in orange. The choice is saved and
+ModForge's words switch at once. Packs are played in it from the next game you
+start or load. If some packs are less than half translated into the language
+you picked, a window lists them with how much of each is translated, and lets
+you keep the language or go back to the one you had. To follow Windows' language
+again, or to pick a language only one of your packs comes in, set `Language` in
+the plugin's settings file.
+
+**No more stop when a line in Chinese, Japanese or Korean first appears.** The
+fonts that draw those letters made each one the first time a line showed it -
+opening the Windows font file and drawing it inside that frame - so the game
+paused for a moment on every line with letters it had not shown yet. Every
+letter a pack uses is now made while the pack loads, behind the loading screen,
+and the log says how many and how long it took.
+
+**ModForge says so when the game is a different build from the one it is made
+for.** The ModForge line at the top of the menu's mod list turns red and reads
+"made for the game's 1.8E" when the game says it is another build. Until now
+only the packs were checked against the game, so after a game update every pack
+went red while ModForge itself - which needs updating first - said nothing.
+
+**A pack that is not in your language says so on the menu.** When ModForge is
+being read in something other than the pack's default language, a pack that carries translations
+but not one for your language is marked - its default text will show while
+everything around them is in yours. A pack with no translations at all is not
+marked, because that is simply a pack in its own language and a note under
+every pack installed would teach people to stop reading them.
+
+**Letters the game's fonts do not have show in the game.** Its fonts draw
+Latin, so the plugin puts Windows' own fonts behind them and only the letters
+the game lacks come from Windows'. Two things decide which fonts: the language
+ModForge is set to, which brings Segoe UI and with it Cyrillic and Greek; and
+the pack's own text, which is read as the player will see it and asks for a
+Chinese, Japanese, Korean or Thai font when it finds one of those. A pack with
+nothing but European letters in it loads no extra fonts.
+
+### Your scenes
+
+**A scene can count as a Starmaker photo.** Tick "Treat as a Starmaker photo"
+on a scene and showing it pays out exactly as taking one of the game's own
+photos does: Anna's mood decides whether the shot came out, and a bad one pays
+nothing; the photography traits, the camera and lens the player owns, any
+adverts running and the skill tree all apply, along with the day's income and
+the photo counts. None of that is copied into ModForge - the scene is handed to
+the game's own payout - so it keeps working when the game changes any of it.
+
+**...and it appears in the Starmaker gallery.** The photo is added to the end
+of the gallery row once the player has seen it, and stays there — remembered in
+your pack's own save data, so it survives a reload and does not touch any of
+the game's own gallery flags. There is nothing to set up: ticking the box is
+all of it.
+
+Off unless you turn it on, and per scene, because most scenes are story art
+rather than photographs.
+
+### Your quests
+
+**Choose what happens when you add tasks to a quest players have already
+finished.** Until now, a player who had finished one of your quests never saw
+tasks you added to it in a later version. The Quests tab now asks, per quest:
+
+- **Leave it finished** - as before, and still the default.
+- **Reopen at the new steps** - the next time they load their save, the quest
+  is in progress again: every task they did stays done, and the first new one
+  starts. Only when the new tasks all come after the ones the quest had, and
+  the player had done all of those. Anything else stays finished, so nobody is
+  stuck behind a task they cannot reach.
+- **Start it over** - their progress is cleared and the quest goes back to not
+  started, so it starts again the way it always does.
+
+ModForge remembers which tasks each quest had the last time a save was played
+with your pack. For saves from before this version, the tasks a player never
+did that come after the last one they did count as new. Only your own quests:
+a game quest you add tasks to stays as the player left it.
+
+### Fixes
+
+**Undo and redo on the Places tab are much quicker.** Undoing an object you
+had moved, turned or resized in the preview rebuilt the whole editor - every
+tab, every place - and then the Places tab's panels, about a second and a half
+on a large pack. An undo that changed one place now puts back just that place,
+and one that only moved things moves them back where they are on screen, the
+way dragging moved them: about a tenth of a second on the same pack. Anything
+bigger - a change across several places, or to other tabs - is undone the way
+it always was.
+
+**The middle square of the scale gizmo is no longer touchier than the arms.**
+Dragging the square that scales both ways changed the size many times faster
+than dragging an arm the same distance, because it measured from the centre of
+the object, right next to where you grab it. It now scales at the same rate as
+the arms: up and to the right to grow, down and to the left to shrink.
+
+**A save tells you about a missing pack once, not every time you load it.** A
+save with data from a pack that isn't running - switched off, or not installed
+- said so every time it was loaded, so a player who had switched a pack off on
+purpose read the same notice every evening. Now each save says it once for each
+pack, and remembers that the way it remembers everything else: when the game
+autosaves as you sleep. Quit before sleeping and you are told again next time.
+A save from the save menu keeps what the last autosave remembered, like the
+rest of what it copies. A different pack going missing later is still news, and
+is said. If the pack runs with the save again and you sleep with it, the save
+forgets it was told, so taking the pack away after that says it once more.
+Warnings about packs that change the game's own quests or conversations are
+not affected.
+
+**NPCs placed on the game's own levels now appear in packs that have no places
+of their own.** A pack that added nothing to the map but put an NPC on one of
+the game's levels - Downtown, say, under its NPCs object - had that NPC left out
+in the game, with a warning in the log saying the level "has NPC placements ...
+but this build path has no NPC context". The game plugin got ready for a pack's
+NPCs only while building the pack's own places, and skipped that for a pack
+without any. It now does it for every pack. The pack needs no changes; players
+need this version of the plugin. The same fix also clears a pack's "show when"
+conditions properly each time a save is loaded, for packs with no places.
+
+**An NPC's conditions now decide when it shows.** The conditions you set on an
+NPC placement were saved but never used in the game: the NPC showed or not by
+its "Start active" box alone. They now work the way a GameObject's do, checked
+all the time. This matters most on some of the game's own levels: Downtown
+switches off everything under its NPCs object each time the player arrives, so
+an NPC you placed there vanished on arrival. Give it a condition - "Always
+true" keeps it there - and it comes straight back. An NPC with no conditions is
+still left to the level.
+
+**Setting a yes/no variable uses True and False buttons, like checking one.**
+The Variable action set a Bool with a single tick labelled "set to true", so
+an unticked box could be read as "not set" just as easily as "set to false" -
+while the Variable condition for the same variable already asked with a True
+and a False button. The action now has the same pair. Nothing about your
+actions changes: the value each one sets is exactly what it was.
+
+**The Editing in box no longer goes blank.** Switching the editor's own
+language, from the Language menu, left the Editing in box empty, as if the
+pack were not being edited in any language at all. It now keeps showing the
+language you are editing, renamed into the editor's new language, and only
+picking another one from its list changes it.
+
+**Something you add is named in your pack's language, not the editor's.** A
+new SFX, character, quest, dialogue, folder or any other record was named in
+the language the editor was shown in, so an author reading the editor in
+Portuguese got "Novo SFX" in a pack written in English. New records are now
+named in the pack's default language. While Editing in a translation, a name
+that is translated - a character's name, a quest's title - starts in that
+language, since that is what you are typing; one that is the same in every
+language, like an SFX's, stays in the default language. A new screen on the
+UI tab works the same way: its title and buttons start in the language being
+edited rather than the editor's.
+
+**Spelling is checked in the language a line is written in.** The node Text
+box and the node list were always spell-checked as US English, so a pack
+written in another language, or a line edited in a translation with Editing
+in, was underlined from one end to the other. They are now checked in the
+pack's own language, or in the language being edited. A language Windows has
+no spelling dictionary for is not underlined at all; Windows' language
+settings can add one.
+
+**A wallpaper named by a full path now appears.** A wallpaper whose image was
+typed or pasted as a full path on your computer - "Z:\Modding\MyPack\Wallpapers\Elf.png"
+rather than "Wallpapers/Elf.png" - was skipped in the game, and its button
+never appeared: the game plugin looked for that exact path inside the pack. It
+now finds the file by the end of the path when the file is in the pack, for
+wallpapers and for every other file a pack names, and a wallpaper also tries
+its External path when the Sprite path finds nothing. Opening such a pack in
+the editor names its wallpapers from the pack's folder instead (the list of
+what was brought up to date says so).
+
+**The validation list says when a file won't reach players.** A full path on
+your computer was checked against your own disk, where the file is, and passed
+- while players, who only get the pack's files, had nothing. It is reported
+now, with what to do, and so is a wallpaper with no image at all.
+
+**Every mod's wallpaper buttons stay on the wallpaper screen.** The game's
+list has room for twenty buttons and no scrolling, and its own fourteen come
+first - so the seventh wallpaper added by mods, from ModForge or any other
+mod, was drawn below the panel, where nobody could click it. When there are
+more buttons than fit, they are now made smaller until all of them do, and
+back to their usual size when there is room again.
+
+**One failing system in the game no longer stops the others.** Everything the
+game plugin does each frame - level refreshes, buttons, weather, wallpapers,
+dialogues - ran in one piece, and one of them failing ended the rest for that
+frame, every frame: a wallpaper's button, shown only from further down, never
+appeared. Each now runs on its own, and a failure is written to the log once.
+
+**Sound cues play in lines your pack adds to the game's own conversations.**
+A cue like "*slap*" in a line your pack added to one of the game's
+conversations, or in a line of the game's whose words you rewrote, never played
+- the line had its speaker and actions, and no sound. It plays now, the same
+way it does in your pack's own conversations.
+
+**Sound cues play whatever language the line is read in.** They are listened
+for in your pack's own words, so a line a player reads translated - "*шлёп*"
+where you wrote "*slap*" - plays the same sound. A line that has words only in
+a translation, and none in your pack's own language, is listened to in the
+words it has; before, its cues were silent.
+
+**A quest step that counts now shows its number when it sits under another
+step.** The journal builds the counter under a subtask row - the brackets, the
+current number, the separator, the maximum, all bound to the right fields - and
+then never switches it on; only a top-level step names that counter in the one
+field that enables it. So a counting subtask drew as a plain line while its
+number ticked up out of sight, which looks exactly like a quest that is broken.
+The counter was hidden three ways over — never switched on, its pieces
+switched off, and every one of them painted transparent — and ModForge now
+undoes all three, so the game fills the number in as it does for any other
+step. It is done only when a pack you have
+installed actually counts on a subtask, and the editor no longer warns that
+such a count will not be seen, because it will be.
+
+**A pack's Chinese, Japanese and Korean showed as empty boxes.** The fonts
+were chosen from the language the PLAYER had set, which says nothing about
+what a pack is written in - a Portuguese player opening a Chinese pack got a
+font with no Chinese in it. Cyrillic and Greek worked, which made it look like
+the mechanism was fine and the art was wrong. The pack's own text is what is
+read now, so a Japanese name in an English line brings a Japanese font with it.
+
+**...and then a few Chinese characters still did.** A pack is read as a whole,
+so a pack containing any Japanese was read as Japanese and never asked for a
+Chinese font at all. That half worked, which is why it took a second look: a
+Japanese font has Chinese characters in it, so most of the text drew and only
+the simplified-only forms came out as boxes, scattered through lines that were
+otherwise perfect. Every writing system found in a pack now gets its own font.
+
+**A translated name lost its colour.** The game colours a speaker's name by
+matching the name as it is drawn, so a player reading ModForge in Portuguese
+saw "Você" in plain white where "You" is grey — which reads as the character
+being set up wrong rather than as anything to do with language. A name that is
+translated now carries its colour across with it.
+
+**Every pack called the player by the ModForge language, including packs with
+no translation.** A player with ModForge in Portuguese saw "Você" where an
+English pack says "You", in the middle of lines that were still in English.
+The player's name follows the pack: it is translated for a pack that carries a
+translation the player is reading it in, and left as the author wrote it
+otherwise.
+
+**A pack on the menu no longer shows two version numbers at once.** A pack
+built for another version of the game was listed as "Incompatible game version
+(1.7A) - Built for ModForge 1.5.0", which is two numbers and one problem:
+rebuilding the pack fixes the game version and restamps the ModForge one with
+it. Only the game version is shown when it does not match. The log still says
+everything.
+
+**Two tasks of a quest with the same name can be told apart.** The game's own
+quests do it - a step and the step under it named the same thing - and the
+closed box shows only the name, so which of them a row pointed at was a coin
+toss with nothing left behind to find it by. Where a name is shared, the task's
+id is shown beside it. Names nothing else shares are left alone.
+
+**A face you give a character now shows everywhere a face is picked or
+shown.** Four places each kept their own list, and none quite matched the game:
+the picture on the Busts tab showed only the game's four faces, so one you
+invented was missing beside it; a line's Expression list only caught up when you
+changed the line's speaker; the list an action picks an expression from never
+offered a face of your own at all; and the picture beside a line looked for the
+expression's name instead of the face it is set to show, so a face named
+differently from its expression showed nothing there while it worked in the
+game. All four now follow the character's expression list the way the game
+does, and pick up a face the moment you add it. The picture beside a line also
+shows a texture you replaced on one of the game's busts - its base or a face -
+instead of the game's own.
+
+**The bust preview's expression list is the faces that bust actually has.** It
+was four fixed entries, offered even on a bust with its expressions switched
+off or one of the game's that has none, where picking one did nothing. It now
+lists what the preview loaded. This also fixes the expressions doing nothing in
+any language but English: the list was handing the preview the translated word,
+so it looked for "Feliz" among sprites named "Happy" and quietly found none.
+
+**Misspelled words are underlined in the node list's game-look rows too.**
+They were only marked in the editing box below the list, because a row drawn
+the way the game draws it is the game's own glyph atlas rather than a text box,
+and WPF only underlines inside one. The marks are drawn now — but the words
+still come from Windows' speller and your own dictionary, so a name you added
+there stops being underlined in both places at once. Follows the same Options
+switch as the box.
+
+**Undo and redo no longer wait for the pack to be checked.** Putting a change
+back re-validated the entire pack before the editor would redraw — about 640ms
+on a two-megabyte pack, against 43ms to read the undo snapshot itself. That was
+most of the pause, and none of it was anything an author pressing Ctrl+Z was
+waiting for. Undo no longer checks the pack at all, which is what every other
+edit in the editor already did: the issue list is built when you open, save or
+publish a pack, and typing a line or deleting a character has never touched it.
+Validate (F5) rebuilds it whenever you want it rebuilt.
+
+**Undo and redo in a long conversation are much quicker.** Every undo draws
+the conversation's list again, and every row asked Windows' spell checker about
+its words again - about forty milliseconds a line, so a hundred-line
+conversation stood still for four seconds after moving one line. A line's
+spelling is now remembered until you add a word to the dictionary, and a row
+that has not been checked yet shows at once and gets its underlines a moment
+later. On a two-megabyte pack, undoing a moved line went from about four
+seconds to about one and a half.
+
+**The bust preview can be made bigger or smaller.** A size picker under it
+offers ½×, 1×, 1½× and 2×, and the panel it sits in grows with it — the
+preview is pinned to its own size, so before this there was no way to give it
+more room without giving the backdrop the room instead. 1× and 2× land one of
+the preview's pixels on one of the screen's and stay pixel-sharp; the half
+steps have to be resampled and look slightly softer. Your choice is remembered.
+
+**+ Root now takes the speaker from the line it follows** — actor, expression
+and outfit — and nothing else. A root starts a fresh strand, so it still does
+not inherit the conditions, actions, jump and timings that + Child and
++ Sibling carry: those were written about somewhere else. Picking those three
+again was all a new strand ever cost.
+
+**Naming an actor who has already spoken in a conversation brings back the
+expression and outfit they last wore.** The line was keeping the *previous*
+speaker's, whose keys mean nothing to the new one — so every switch of speaker
+meant re-picking both, and forgetting to left a line asking for a face that
+character does not have. The last look, not the first, so an actor who changed
+partway through stays changed.
+
+**Clicking False did nothing, wherever a True/False pair is offered.** On a
+Variable condition, on a Set-variable action, and anywhere a row names a Bool
+variable, picking the button that was not already picked left the value exactly
+as it was. The converter behind the False button inverted on the way in and not
+on the way out, so it wrote *true* — and because the outgoing button writes
+first and the incoming one second, the wrong answer landed last. Copy and paste
+made it easiest to notice, but it was every such pair, every time. Both
+directions are now pinned by a test.
+
+**A Bool variable's default value is asked with two buttons** — Starts true /
+Starts false — rather than one tick box. An unticked box reads as "not set"
+just as easily as "starts false", and a default is the one thing worth stating
+outright. Same pair, same words, as the condition and action rows.
+
+**The place preview's tooltip showed � between its hints.** It now reads
+"Scroll to zoom (toward the pointer) · middle-drag to pan · double middle-click
+to reset".
+
+**Checking a translation read as a contradiction**: "4005 of 4005 texts
+translated (100%)" followed by "162 texts are still the same as the English".
+They count different things — the first is how many texts the file has a line
+for, the second how many of those lines are still word for word the English,
+which is right for a name, a shortcut or a type the editor writes out. The
+report now says "filled in" for the first and explains the second.
+
+**Language ▸ New or update a translation asked for "the language's code" and
+left you to guess.** It now lists the codes with the languages they mean, says
+any code Windows knows will do, names the translations already installed —
+typing one of those updates it rather than starting over — and says where the
+file is written.
+
 ## 1.5.0
 
 The game's own quests, yours to change: add and take out their tasks, change

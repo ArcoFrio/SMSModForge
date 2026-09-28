@@ -7,8 +7,8 @@ namespace SMSModForge.PackPlugin
 {
     /// <summary>
     /// Per-pack registry of GameObjects whose active state is driven by
-    /// authored conditions (<c>activeConditions</c> on a place's
-    /// <c>gameObjects</c> node).
+    /// authored conditions (<c>activeConditions</c> on a
+    /// <c>gameObjects</c> node, or on an NPC placement in one).
     /// <para/>
     /// This is the declarative alternative to gating an object from an
     /// integration rule: the condition lives on the object it controls, so a
@@ -16,7 +16,8 @@ namespace SMSModForge.PackPlugin
     /// own — no if/else-if cascade, no "remember what I last switched on"
     /// bookkeeping, and no ordering between rules to get right.
     /// <para/>
-    /// Registered by <see cref="PlaceFactory"/> as each object is built and
+    /// Registered by <see cref="PlaceFactory"/> and <see cref="NpcFactory"/>
+    /// as each object is built, and
     /// evaluated once per frame from <see cref="Plugin"/>'s tick, alongside the
     /// integration rules. Keyed by pack id (the same way
     /// <see cref="TimerRuntime"/> is) because objects are built before the

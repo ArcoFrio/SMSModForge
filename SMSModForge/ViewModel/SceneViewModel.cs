@@ -1,4 +1,5 @@
 ﻿using SMSModForge.Model;
+using SMSModForge.Localization;
 
 namespace SMSModForge.ViewModel;
 
@@ -118,19 +119,19 @@ public sealed class SceneViewModel : ObservableObject
             switch (MediaProbe.KindOf(Model.SceneSprite))
             {
                 case MediaProbe.MediaKind.Gif:
-                    return "Animated GIF — decoded to frames when you save.";
+                    return Loc.T("scenes.media.gif");
                 case MediaProbe.MediaKind.Video:
                     string abs = AbsoluteSpritePath();
                     var sound = abs.Length == 0 ? null : MediaProbe.HasAudio(abs);
-                    if (sound == true) return "Video, with sound.";
-                    if (sound == false) return "Video, silent.";
-                    return "Video — could not read its tracks, so the volume is offered.";
+                    if (sound == true) return Loc.T("scenes.media.videoSound");
+                    if (sound == false) return Loc.T("scenes.media.videoSilent");
+                    return Loc.T("scenes.media.videoUnknown");
                 case MediaProbe.MediaKind.Still:
                     return "";
                 default:
                     return string.IsNullOrWhiteSpace(Model.SceneSprite)
                         ? ""
-                        : "Not a picture, GIF or video this tool can use.";
+                        : Loc.T("scenes.media.unusable");
             }
         }
     }
@@ -208,6 +209,14 @@ public sealed class SceneViewModel : ObservableObject
     {
         get => Model.Sound;
         set { Model.Sound = value; OnPropertyChanged(); }
+    }
+
+    /// <summary>Whether showing this scene counts as taking a Starmaker photo
+    /// - see <see cref="SceneDef.StarmakerPhoto"/>.</summary>
+    public bool StarmakerPhoto
+    {
+        get => Model.StarmakerPhoto;
+        set { if (Model.StarmakerPhoto == value) return; Model.StarmakerPhoto = value; OnPropertyChanged(); }
     }
 
     public string Display => string.IsNullOrWhiteSpace(DisplayName) ? Key : $"{DisplayName} ({Key})";

@@ -1,4 +1,4 @@
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using Xunit;
 using Xunit.Abstractions;
@@ -17,6 +17,7 @@ namespace SMSModForge.Tests;
 /// a dismisser that does nothing at all looks like. Each of these opens a real
 /// tooltip first, so the close has something to prove.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class ToolTipDismisserTests
 {
     private readonly ITestOutputHelper _out;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Model;
 
@@ -27,10 +28,16 @@ namespace SMSModForge.Model;
 public sealed class UiTemplate
 {
     public string Key { get; }
-    public string Name { get; }
+    public string Name => Loc.T(NameKey);
+
+    /// <summary>The key <see cref="Name"/> is read from.</summary>
+    public string NameKey { get; }
 
     /// <summary>What it is and when to reach for it, in one line.</summary>
-    public string Summary { get; }
+    public string Summary => Loc.T(SummaryKey);
+
+    /// <summary>The key <see cref="Summary"/> is read from.</summary>
+    public string SummaryKey { get; }
 
     /// <summary>Whether this is a whole screen to start a UI from, as opposed
     /// to a piece to drop inside one.</summary>
@@ -42,16 +49,32 @@ public sealed class UiTemplate
                        Func<UiNodeDef> build)
     {
         Key = key;
-        Name = name;
-        Summary = summary;
+        NameKey = name;
+        SummaryKey = summary;
         IsScreen = isScreen;
         _build = build;
     }
 
     /// <summary>A fresh tree. Never a shared one: two UIs made from the same
     /// template are two separate things, and handing out the same objects would
-    /// make editing one edit the other.</summary>
-    public UiNodeDef Build() => _build();
+    /// make editing one edit the other.
+    /// <para/>
+    /// <paramref name="text"/> gives the words it starts with, by key: the
+    /// language they are written into, which is the pack's rather than the
+    /// editor's - a Portuguese reader of the editor put "Sim" and "Não" on a
+    /// pack written in English (2026-09-27). The editor's language without it.</summary>
+    public UiNodeDef Build(Func<string, string>? text = null)
+    {
+        var was = _text;
+        _text = text ?? Loc.T;
+        try { return _build(); }
+        finally { _text = was; }
+    }
+
+    /// <summary>Where <see cref="T"/> reads from while a tree is being built.</summary>
+    [ThreadStatic] private static Func<string, string>? _text;
+
+    private static string T(string key) => (_text ?? Loc.T)(key);
 
     public override string ToString() => Name;
 
@@ -68,13 +91,13 @@ public sealed class UiTemplate
     // Named rather than repeated, so that a sprite the game renames in a patch
     // is one edit here instead of a hunt through six trees.
 
-    private const string PanelSprite = "Semi Rounded";
+    private const string PanelSprite = "Semi Rounded";   // English on purpose: the game's sprite names.
     private const string WindowSprite = "Rounded";
     private const string ButtonSprite = "Button_Rectangle_05_Deco_White_Bg";
     private const string CloseIcon = "Close";
 
-    private const string TitleFont = "Alata-Regular-Outline 120 SDF";
-    private const string BodyFont = "Curse Casual SDF";
+    private const string TitleFont = "Alata-Regular-Outline 120 SDF";   // English on purpose: the game's font name.
+    private const string BodyFont = "Curse Casual SDF";   // English on purpose: the game's font name.
     private const string TitleColour = "#000E20FF";
     private const string BodyColour = "#000000FF";
 
@@ -84,37 +107,29 @@ public sealed class UiTemplate
 
     public static readonly IReadOnlyList<UiTemplate> All = new[]
     {
-        new UiTemplate("panel", "Blank panel",
-            "One panel and nothing else. For when the shape is yours to decide.",
+        new UiTemplate("panel", "ui.template.panel.name", "ui.template.panel.summary",
             true, BlankPanel),
 
-        new UiTemplate("window", "Window",
-            "A titled window with a close button, the shape the game's own menus use.",
+        new UiTemplate("window", "ui.template.window.name", "ui.template.window.summary",
             true, Window),
 
-        new UiTemplate("dialog", "Dialog",
-            "A window that asks something, with a message and two buttons.",
+        new UiTemplate("dialog", "ui.template.dialog.name", "ui.template.dialog.summary",
             true, Dialog),
 
-        new UiTemplate("list", "List panel",
-            "A titled panel with a column of rows, like the game's tooltips.",
+        new UiTemplate("list", "ui.template.list.name", "ui.template.list.summary",
             true, ListPanel),
 
-        new UiTemplate("tooltip", "Tooltip",
-            "A small panel with a heading and a line or two of text.",
+        new UiTemplate("tooltip", "ui.template.tooltip.name", "ui.template.tooltip.summary",
             true, Tooltip),
 
-        new UiTemplate("button", "Button",
-            "One button with a label on it.",
-            false, () => Button("Button", "Button", 0, 0)),
+        new UiTemplate("button", "ui.template.button.name", "ui.template.button.summary",
+            false, () => Button("Button", T("ui.template.text.button"), 0, 0)),
 
-        new UiTemplate("row", "List row",
-            "One row of a list, the grey bar the game's tooltips are made of.",
-            false, () => Row("Row", "Row", 0)),
+        new UiTemplate("row", "ui.template.row.name", "ui.template.row.summary",
+            false, () => Row("Row", T("ui.template.text.row"), 0)),
 
-        new UiTemplate("label", "Label",
-            "A line of text on its own.",
-            false, () => Text("Label", "Label", 400, 60, 0, 0, BodyFont, 40, BodyColour)),
+        new UiTemplate("label", "ui.template.label.name", "ui.template.label.summary",
+            false, () => Text("Label", T("ui.template.text.label"), 400, 60, 0, 0, BodyFont, 40, BodyColour)),
     };
 
     // ── The screens ──────────────────────────────────────────────────
@@ -126,7 +141,7 @@ public sealed class UiTemplate
     {
         var window = Panel("Window", WindowSprite, 650, 600);
         window.Outline = WindowOutline();
-        window.Children.Add(Title("Title", "Title"));
+        window.Children.Add(Title("Title", T("ui.template.text.title")));
         window.Children.Add(CloseButton());
         return window;
     }
@@ -136,20 +151,20 @@ public sealed class UiTemplate
         var window = Window();
         window.Name = "Dialog";
 
-        var message = Text("Message", "Are you sure?", 500, 160, 0, 20, BodyFont, 44, BodyColour);
+        var message = Text("Message", T("ui.template.text.message"), 500, 160, 0, 20, BodyFont, 44, BodyColour);
         window.Children.Add(message);
 
         // Side by side and clear of each other: 150 wide at 95 either side of
         // the middle leaves 40 between them, which is what the game leaves.
-        window.Children.Add(Bottom(Button("Confirm", "Yes", 95, 60)));
-        window.Children.Add(Bottom(Button("Cancel", "No", -95, 60)));
+        window.Children.Add(Bottom(Button("Confirm", T("ui.template.text.yes"), 95, 60)));
+        window.Children.Add(Bottom(Button("Cancel", T("ui.template.text.no"), -95, 60)));
         return window;
     }
 
     private static UiNodeDef ListPanel()
     {
         var panel = Panel("List", PanelSprite, 400, 620);
-        panel.Children.Add(Title("Title", "List"));
+        panel.Children.Add(Title("Title", T("ui.template.text.list")));
 
         // 77 apart, which is the spacing the game's own list rows use.
         for (int i = 0; i < 6; i++)
@@ -161,9 +176,9 @@ public sealed class UiTemplate
     private static UiNodeDef Tooltip()
     {
         var panel = Panel("Tooltip", PanelSprite, 340, 220);
-        panel.Children.Add(Title("Heading", "Heading", 300, 40));
+        panel.Children.Add(Title("Heading", T("ui.template.text.heading"), 300, 40));
 
-        var body = Text("Body", "What this is for.", 300, 100, 0, -25, BodyFont, 30, BodyColour);
+        var body = Text("Body", T("ui.template.text.body"), 300, 100, 0, -25, BodyFont, 30, BodyColour);
         panel.Children.Add(body);
         return panel;
     }

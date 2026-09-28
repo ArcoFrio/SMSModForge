@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,6 +16,7 @@ namespace SMSModForge.Tests;
 /// scrolled a whole group per step, and the letters group is taller than the
 /// list, so most letters could not be reached.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class InputKeyPickerTests
 {
     private readonly ITestOutputHelper _out;

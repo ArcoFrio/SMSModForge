@@ -211,15 +211,22 @@ namespace SMSModForge.PackPlugin
             }
             Log("Manual save (" + (liveFallback ? "overwrite" : "new slot") +
                 "): pack files from slot " + source + " → slot " + targetSlot + ".");
+
+            // And what the save keeps of the packs not running, and its record.
+            // What the player has been told is carried from the source like the
+            // pack files are: a save from the menu transfers what the last
+            // commit wrote, never what the session has changed since. Read
+            // before the target is written, which may be the same slot.
+            var told = SaveCarry.CommittedTold(Plugin.SavesRoot, source, Plugin.Log);
+            SaveCarry.Complete(Plugin.SavesRoot, targetSlot, Plugin.LoadedContexts, Plugin.Log, told);
         }
 
         /// <summary>Most-recently-modified NANOSAVE_xxxx slot number, or -1.</summary>
         private int FindLatestSlot()
         {
-            var store = Plugin.LoadedContexts.FirstOrDefault(c => c?.Vars != null)?.Vars;
-            string anyPath = store?.SlotFilePath(1);
-            if (anyPath == null) return -1;
-            string savesRoot = Path.GetDirectoryName(Path.GetDirectoryName(anyPath));
+            // The saves folder itself rather than a running pack's idea of it:
+            // with every pack switched off, the save still keeps theirs.
+            string savesRoot = Plugin.SavesRoot;
             if (!Directory.Exists(savesRoot)) return -1;
 
             string latest = Directory.GetDirectories(savesRoot, "NANOSAVE_*")

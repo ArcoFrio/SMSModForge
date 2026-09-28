@@ -23,6 +23,7 @@ namespace SMSModForge.Tests;
 /// switched by Visibility, and a binding that resolves to nothing in WPF hides
 /// a control silently — which would look exactly like the setting working.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class GameLookRowTests : IDisposable
 {
     private readonly ITestOutputHelper _out;

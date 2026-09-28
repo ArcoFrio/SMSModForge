@@ -37,7 +37,7 @@ namespace SMSModForge.PackPlugin
         {
             if (_label == null || string.IsNullOrEmpty(Raw)) return;
 
-            string resolved = TextPlaceholders.Resolve(Raw, Plugin.TryGetPackVars(PackId));
+            string resolved = TextPlaceholders.ResolveAll(Raw, Plugin.TryGetPackVars(PackId));
 
             // Only on a change: assigning TMP's text marks the mesh dirty and
             // forces a rebuild, and doing that every frame to a label that has

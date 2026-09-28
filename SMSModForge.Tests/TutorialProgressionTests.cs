@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using SMSModForge.Tutorials;
@@ -14,6 +14,7 @@ namespace SMSModForge.Tests;
 /// tutorial says where it broke instead of leaving someone to find it by
 /// getting stuck.
 /// </summary>
+[Trait("Speed", "Slow")]   // measured ~31s for the class; see CLAUDE.md
 public class TutorialProgressionTests
 {
     public static IEnumerable<object[]> Tutorials()

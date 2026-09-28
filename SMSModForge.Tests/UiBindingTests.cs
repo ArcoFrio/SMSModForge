@@ -34,6 +34,7 @@ namespace SMSModForge.Tests;
 /// not fail, which is worse than no test. Confirmed by putting the real bug
 /// back and watching this go red.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public class UiBindingTests
 {
     private readonly ITestOutputHelper _out;

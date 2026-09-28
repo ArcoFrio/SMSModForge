@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -23,6 +23,7 @@ namespace SMSModForge.Tests;
 /// plugin runs them. What the plugin does with the game's objects is read off
 /// the game's IL and cannot run here.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class VanillaQuestTreeTests
 {
     private readonly ITestOutputHelper _out;

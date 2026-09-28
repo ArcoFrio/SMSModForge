@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -19,6 +19,7 @@ namespace SMSModForge.Tests;
 /// button anywhere on the dark area, and labels that stay readable on every
 /// theme.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class MaskEditorCanvasTests
 {
     private readonly ITestOutputHelper _out;

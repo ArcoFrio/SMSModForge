@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using SMSModForge.Model;
 using SMSModForge.Rendering;
+using SMSModForge.Localization;
 
 namespace SMSModForge.View.Controls;
 
@@ -75,6 +76,9 @@ public sealed class UiPreview : Grid
         // A tooltip that outlived its owner sits over the one thing an
         // author is trying to look at. See ToolTipDismisser.
         View.ToolTipDismisser.KeepClearOf(this);
+        // Its words are worked out as it draws: drawn again when the language
+        // changes, so none is left in the old one.
+        LocText.Follow(this, Refresh);
 
         RenderOptions.SetBitmapScalingMode(_image, BitmapScalingMode.HighQuality);
         Children.Add(_image);
@@ -342,10 +346,7 @@ public sealed class UiPreview : Grid
 
         if (!VanillaUiLibrary.IsAvailable)
         {
-            Say("The vanilla UI has not been extracted yet.\n\n" +
-                "Run Tools ▸ SMSModForge ▸ Extract Vanilla UI Surfaces in the game's " +
-                "Unity project, then Export TMP Font Assets, and put the result in " +
-                "the editor's VanillaUi folder.");
+            Say(Loc.T("preview.ui.notExtracted"));
             return;
         }
 
@@ -353,17 +354,15 @@ public sealed class UiPreview : Grid
         if (entry == null)
         {
             Say(string.IsNullOrWhiteSpace(BaseToken)
-                ? "Nothing selected."
-                : $"There is no vanilla UI called “{BaseToken}”.");
+                ? Loc.T("preview.ui.nothingSelected")
+                : Loc.F("preview.ui.noSuchUi", "name", BaseToken));
             return;
         }
 
         var surface = VanillaUiLibrary.SurfaceFor(entry);
         if (surface == null)
         {
-            Say($"“{entry.Surface.Path}” is in the catalog but its tree was not " +
-                "shipped. The catalog and the surfaces come from the same " +
-                "extraction, so one without the other means a partial copy.");
+            Say(Loc.F("preview.ui.surfaceMissing", "surface", entry.Surface.Path));
             return;
         }
 
@@ -373,9 +372,7 @@ public sealed class UiPreview : Grid
             // switched off, so Unity never gave the RectTransform a size and
             // every rectangle under it measured as a point. Saying so beats
             // showing an empty box that looks like a bug here.
-            Say($"“{entry.Surface.Path}” cannot be drawn.\n\n" +
-                "Its Canvas component is disabled in the game, so Unity never " +
-                "gave it a size and nothing under it has a position to draw at.");
+            Say(Loc.F("preview.ui.canvasDisabled", "surface", entry.Surface.Path));
             return;
         }
 
@@ -390,8 +387,7 @@ public sealed class UiPreview : Grid
             var node = surface.Base(entry.Id);
             if (node == null)
             {
-                Say($"“{entry.Id}” is not on “{entry.Surface.Path}” any more. " +
-                    "The catalog and the surface may be from different extractions.");
+                Say(Loc.F("preview.ui.nodeMissing", "ui", entry.Id, "surface", entry.Surface.Path));
                 return;
             }
             pixels = UiSceneRenderer.RenderBase(surface, node, VanillaUiLibrary.Assets, report);
@@ -399,7 +395,7 @@ public sealed class UiPreview : Grid
 
         Report = report;
 
-        if (pixels.Length == 0) { Say("Nothing was drawn."); return; }
+        if (pixels.Length == 0) { Say(Loc.T("preview.ui.nothingDrawn")); return; }
 
         int w = (int)Math.Round(surface.Width), h = (int)Math.Round(surface.Height);
         var bitmap = BitmapSource.Create(w, h, 96, 96, PixelFormats.Pbgra32, null,
@@ -415,8 +411,7 @@ public sealed class UiPreview : Grid
     {
         if (!VanillaUiLibrary.IsAvailable)
         {
-            Say("The vanilla UI has not been extracted yet, so there are no " +
-                "sprites or fonts to draw with.");
+            Say(Loc.T("preview.ui.noSprites"));
             return;
         }
 
@@ -433,7 +428,7 @@ public sealed class UiPreview : Grid
         finally { restore(); }
         Report = report;
 
-        if (pixels.Length == 0) { Say("Nothing to draw yet."); return; }
+        if (pixels.Length == 0) { Say(Loc.T("preview.ui.nothingYet")); return; }
 
         int w = (int)Math.Round(CanvasWidth), h = (int)Math.Round(CanvasHeight);
         var bitmap = BitmapSource.Create(w, h, 96, 96, PixelFormats.Pbgra32, null,
@@ -453,13 +448,13 @@ public sealed class UiPreview : Grid
         var r = Report;
         if (r == null) return "";
         var parts = new System.Collections.Generic.List<string>();
-        if (r.MissingSprites.Count > 0) parts.Add($"{r.MissingSprites.Count} missing sprite(s)");
-        if (r.MissingFonts.Count > 0) parts.Add($"{r.MissingFonts.Count} missing font(s)");
-        if (r.MissingGlyphs.Count > 0) parts.Add($"{r.MissingGlyphs.Count} unbaked glyph(s)");
-        if (r.LegacyText.Count > 0) parts.Add($"{r.LegacyText.Count} legacy text object(s)");
+        if (r.MissingSprites.Count > 0) parts.Add(Loc.P("preview.ui.missingSprites", r.MissingSprites.Count));
+        if (r.MissingFonts.Count > 0) parts.Add(Loc.P("preview.ui.missingFonts", r.MissingFonts.Count));
+        if (r.MissingGlyphs.Count > 0) parts.Add(Loc.P("preview.ui.missingGlyphs", r.MissingGlyphs.Count));
+        if (r.LegacyText.Count > 0) parts.Add(Loc.P("preview.ui.legacyText", r.LegacyText.Count));
         if (r.Untrustworthy.Count > 0)
-            parts.Add($"{r.Untrustworthy.Count} object(s) whose position the game will change");
-        return string.Join(", ", parts);
+            parts.Add(Loc.P("preview.ui.untrustworthy", r.Untrustworthy.Count));
+        return Loc.JoinList(parts);
     }
 
     private void Say(string what)

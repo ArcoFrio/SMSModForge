@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using SMSModForge.Model;
+using SMSModForge.Localization;
 
 namespace SMSModForge.ViewModel;
 
@@ -104,21 +105,21 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
 
             var parts = new List<string>();
             if (!string.Equals(Model.Key, one.Key, StringComparison.OrdinalIgnoreCase))
-                parts.Add($"dialogue key ({Model.Key})");
-            if (Model.NameColor != null) parts.Add("name colour");
-            if (Model.Typewriter != null) parts.Add("voice");
-            if (CanResetDefaultOutfit) parts.Add("default outfit");
-            if (Model.Expressions.Count > 0) parts.Add("expressions");
-            if (Model.GiftLikes.Count > 0) parts.Add("gift likes");
+                parts.Add(Loc.F("characters.changed.key", "key", Model.Key));
+            if (Model.NameColor != null) parts.Add(Loc.T("characters.changed.nameColour"));
+            if (Model.Typewriter != null) parts.Add(Loc.T("characters.changed.voice"));
+            if (CanResetDefaultOutfit) parts.Add(Loc.T("characters.changed.defaultOutfit"));
+            if (Model.Expressions.Count > 0) parts.Add(Loc.T("characters.changed.expressions"));
+            if (Model.GiftLikes.Count > 0) parts.Add(Loc.T("characters.changed.giftLikes"));
 
             int busts = Model.Outfits.Count(o => o.PackArt);
-            if (busts > 0) parts.Add(busts == 1 ? "1 added bust" : $"{busts} added busts");
+            if (busts > 0) parts.Add(Loc.P("characters.changed.busts", busts));
 
             int textures = Model.Outfits.Sum(o => o.SpriteOverrides.Count);
             if (textures > 0)
-                parts.Add(textures == 1 ? "1 replaced texture" : $"{textures} replaced textures");
+                parts.Add(Loc.P("characters.changed.textures", textures));
 
-            return string.Join(", ", parts);
+            return Loc.JoinList(parts);
         }
     }
 
@@ -225,19 +226,19 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
             var parts = new List<string>();
 
             int faces = Model.Expressions.Count;
-            if (faces > 0) parts.Add(faces == 1 ? "1 expression" : $"{faces} expressions");
+            if (faces > 0) parts.Add(Loc.P("characters.loses.expressions", faces));
 
             int busts = Model.Outfits.Count(o => o.PackArt);
-            if (busts > 0) parts.Add(busts == 1 ? "1 bust of yours" : $"{busts} busts of yours");
+            if (busts > 0) parts.Add(Loc.P("characters.loses.busts", busts));
 
             int textures = Model.Outfits.Sum(o => o.SpriteOverrides.Count);
             if (textures > 0)
-                parts.Add(textures == 1 ? "1 replaced texture" : $"{textures} replaced textures");
+                parts.Add(Loc.P("characters.changed.textures", textures));
 
-            if (Model.Typewriter != null) parts.Add("the voice");
-            if (Model.NameColor != null) parts.Add("the name colour");
+            if (Model.Typewriter != null) parts.Add(Loc.T("characters.loses.voice"));
+            if (Model.NameColor != null) parts.Add(Loc.T("characters.loses.nameColour"));
 
-            return parts.Count == 0 ? "" : string.Join(", ", parts);
+            return parts.Count == 0 ? "" : Loc.JoinList(parts);
         }
     }
 
@@ -291,6 +292,9 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
         OnPropertyChanged(nameof(DisplayName));
         OnPropertyChanged(nameof(Display));
         OnPropertyChanged(nameof(Name));
+        OnPropertyChanged(nameof(Pronouns));
+        OnPropertyChanged(nameof(CanEditPronouns));
+        OnPropertyChanged(nameof(NeedsPronouns));
         OnPropertyChanged(nameof(BustSource));
         OnPropertyChanged(nameof(DefaultOutfit));
         OnPropertyChanged(nameof(WearableBusts));
@@ -477,7 +481,7 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
     /// readable from the game's files, so it was read out of a running one.
     /// </summary>
     public SMSModForge.Shared.VanillaSpeech.Speaker? Speaker
-        => SMSModForge.Shared.VanillaSpeech.For(VanillaKey);
+        => Model.IsPlayer ? SMSModForge.Shared.VanillaSpeech.Player : SMSModForge.Shared.VanillaSpeech.For(VanillaKey);
 
     /// <summary>
     /// The faces the game can ask this character for.
@@ -563,6 +567,31 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
         }
     }
 
+    /// <summary>
+    /// How the character is spoken of: what the author chose for one of the
+    /// pack's own, and the game's answer - shown, not editable - for the player
+    /// and the game's characters, whose are not this pack's to decide.
+    /// </summary>
+    public Pronouns Pronouns
+    {
+        get => Model.EffectivePronouns;
+        set
+        {
+            if (!CanEditPronouns || Model.Pronouns == value) return;
+            Model.Pronouns = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(NeedsPronouns));
+        }
+    }
+
+    /// <summary>Whether the pronouns are the author's to choose: a character of
+    /// the pack's own.</summary>
+    public bool CanEditPronouns => CanEditIdentity;
+
+    /// <summary>Not chosen yet: said beside the box, as well as in the
+    /// validation list.</summary>
+    public bool NeedsPronouns => CanEditPronouns && Model.Pronouns == Pronouns.Unset;
+
     /// <summary>Dialogue reference. Derived until hand-edited; editing it pins
     /// both names, since a half-derived pair is more surprising than neither.</summary>
     public string Key
@@ -632,6 +661,14 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
     public bool CanEditNameColor => !Model.IsPlayer;
 
     /// <summary>
+    /// Whether the typing voice is the author's to change. Not the player's:
+    /// a pack's setting reached only that pack's own "You" lines - the game's
+    /// "You" kept its voice - so one person typed two ways (author,
+    /// 2026-09-27).
+    /// </summary>
+    public bool CanEditVoice => !Model.IsPlayer;
+
+    /// <summary>
     /// The colour the GAME writes this name in, as #RRGGBB, or null when it
     /// writes it plain.
     /// <para/>
@@ -681,6 +718,7 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
             OnPropertyChanged(nameof(IsPackBust));
             OnPropertyChanged(nameof(IsVanillaBust));
             OnPropertyChanged(nameof(HasNoBust));
+            OnPropertyChanged(nameof(HasBust));
             OnPropertyChanged(nameof(CanEditNameColor));
             OnPropertyChanged(nameof(WearableBusts));
             BustSourceChanged?.Invoke(this, EventArgs.Empty);
@@ -695,6 +733,14 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
     public bool IsPackBust => Model.BustSource == BustSource.Pack;
     public bool IsVanillaBust => Model.BustSource == BustSource.Vanilla;
     public bool HasNoBust => Model.BustSource == BustSource.None;
+
+    /// <summary>
+    /// Whether anything is ever drawn for this character. What only a bust
+    /// uses - a default outfit, faces for a line to pick - is left out for a
+    /// voice (the player, John Dick): there is nothing on screen for it to
+    /// change (author, 2026-09-27).
+    /// </summary>
+    public bool HasBust => !HasNoBust;
 
     /// <summary>
     /// The game's busts, for the picker. Whole records rather than names so the
@@ -917,7 +963,8 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
     // character never materialises a TypewriterDef and dirties the pack;
     // setters create on write.
 
-    public string[] VoiceTemplates { get; } = { "Male", "Female", "Custom" };
+    /// <summary>The voice presets, as the Template dropdown lists them.</summary>
+    public static IReadOnlyList<string> VoiceTemplates { get; } = new[] { "Male", "Female", "Custom" };
 
     /// <summary>
     /// What this character sounds like before the pack says anything.
@@ -940,8 +987,8 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
     public string GameVoiceSummary
         => Speaker == null
            ? ""
-           : $"The game gives {Speaker.Name} {Speaker.Frequency} characters a second at pitch "
-             + $"{Speaker.PitchMin:0.##}-{Speaker.PitchMax:0.##}.";
+           : Loc.F("characters.gameVoice", "name", Speaker.Name, "speed", Speaker.Frequency,
+                    "pitch", $"{Speaker.PitchMin:0.##}-{Speaker.PitchMax:0.##}");
 
     /// <summary>
     /// The typewriter to write into, created on the first edit.

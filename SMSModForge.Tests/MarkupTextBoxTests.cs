@@ -23,6 +23,7 @@ namespace SMSModForge.Tests;
 /// control that drops a character while somebody types would be far worse than
 /// one that shows no formatting at all.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class MarkupTextBoxTests
 {
     private readonly ITestOutputHelper _out;

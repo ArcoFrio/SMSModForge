@@ -33,6 +33,7 @@ namespace SMSModForge.Tests;
 /// index, a tree container, a named field element — and none of it exists
 /// without one.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class IssueNavigationTests
 {
     private readonly ITestOutputHelper _out;

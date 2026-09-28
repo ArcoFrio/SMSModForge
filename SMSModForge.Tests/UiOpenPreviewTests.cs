@@ -18,6 +18,7 @@ namespace SMSModForge.Tests;
 /// authored rather than frozen half-open. These tests check the property that
 /// makes that true, not that a cleanup step was remembered.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class UiOpenPreviewTests
 {
     private readonly ITestOutputHelper _out;

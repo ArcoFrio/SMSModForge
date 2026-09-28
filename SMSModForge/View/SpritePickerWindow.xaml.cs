@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using SMSModForge.Rendering;
+using SMSModForge.Localization;
 
 namespace SMSModForge.View;
 
@@ -78,8 +79,8 @@ public partial class SpritePickerWindow : Window
     {
         var dialog = new Microsoft.Win32.OpenFileDialog
         {
-            Title = "Choose a picture from the pack",
-            Filter = "Images (*.png;*.jpg)|*.png;*.jpg|All files (*.*)|*.*",
+            Title = Loc.T("spritePicker.browse.title"),
+            Filter = PickerFilters.StillArt,
             InitialDirectory = Directory.Exists(_packRoot) ? _packRoot : null,
         };
         if (dialog.ShowDialog(this) != true) return;

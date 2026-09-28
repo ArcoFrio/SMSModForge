@@ -8,6 +8,7 @@ using Microsoft.Win32;
 using SMSModForge.Model;
 using SMSModForge.Services;
 using SMSModForge.Validation;
+using SMSModForge.Localization;
 
 namespace SMSModForge.ViewModel;
 
@@ -34,7 +35,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
     /// Open, and a successful Save.</summary>
     private void MarkSaved()
     {
-        _savedSnapshot = PackRepository.SerializeAsSaved(Pack);
+        using (OwnWords()) _savedSnapshot = PackRepository.SerializeAsSaved(Pack);
+        _language?.MarkSaved();
         _versionOnDisk = Pack.PackVersion;
     }
 
@@ -44,7 +46,430 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
     /// it catches edits regardless of which field changed. The window's close
     /// handler reads this to prompt before discarding work.
     /// </summary>
-    public bool HasUnsavedChanges => PackRepository.SerializeAsSaved(Pack) != _savedSnapshot;
+    public bool HasUnsavedChanges
+    {
+        get
+        {
+            using (OwnWords())
+                if (PackRepository.SerializeAsSaved(Pack) != _savedSnapshot) return true;
+
+            // A translation edited and not yet written - the one up now, or
+            // one switched away from. The pack in its own words has not
+            // changed, so the comparison above cannot see either.
+            return _language?.Unsaved == true || _heldTranslations.Count > 0;
+        }
+    }
+
+    // ── Editing the pack in one of its translations ─────────────────────
+
+    /// <summary>
+    /// The language the pack is being edited in, or null for its own words.
+    /// <para/>
+    /// While one is up, every text a player reads shows that language, and
+    /// editing one edits the translation. Nothing the game finds things by
+    /// changes - see <see cref="Services.Translation.LanguageSession"/>, and
+    /// the tests that compare a whole manifest before and after.
+    /// </summary>
+    private Services.Translation.LanguageSession? _language;
+
+    /// <summary>
+    /// One entry in the language list. Its label changes in place when the
+    /// editor's own language does - "Default (English)" becomes "Standard
+    /// (Englisch)" - rather than the entry being swapped for a new one: a box
+    /// whose chosen entry is swapped out shows nothing at all, which read as
+    /// the pack no longer being edited in any language (2026-09-27).
+    /// </summary>
+    public sealed class EditingLanguageOption : ObservableObject
+    {
+        public EditingLanguageOption(string code, string label)
+        {
+            Code = code;
+            _label = label;
+        }
+
+        public string Code { get; }
+
+        private string _label;
+        public string Label
+        {
+            get => _label;
+            set { if (_label == value) return; _label = value; OnPropertyChanged(); }
+        }
+
+        public override string ToString() => Label;
+    }
+
+    /// <summary>The pack's own words, then every language it could be edited
+    /// in: those it already has, and those ModForge itself can be read in, so
+    /// a new language is started by switching to it.</summary>
+    public ObservableCollection<EditingLanguageOption> EditingLanguageOptions { get; } = new();
+
+    /// <summary>The code of the language being edited; "" for the pack's own
+    /// words. Setting it switches.</summary>
+    public string EditingLanguage
+    {
+        get => _language?.Code ?? "";
+        set
+        {
+            // A list being refilled empties the box for a moment, and an empty
+            // box writes "" back here - which would leave the translation being
+            // edited without anybody asking to.
+            if (_refillingLanguageOptions) return;
+            // Nothing chosen is not a choice. A box that lost its entry says
+            // null; only an entry picked from the list switches, and the pack's
+            // own words are an entry of their own (""). Anything else is said
+            // back, so the box shows what is really being edited.
+            if (value == null || !EditingLanguageOptions.Any(o => string.Equals(o.Code, value, StringComparison.OrdinalIgnoreCase)))
+            {
+                OnPropertyChanged(nameof(EditingLanguage));
+                return;
+            }
+            SwitchEditingLanguage(value);
+        }
+    }
+
+    private bool _refillingLanguageOptions;
+
+    /// <summary>
+    /// Translations edited and switched away from, not yet saved: each
+    /// language's file as it will be written, by code.
+    /// <para/>
+    /// Held rather than written on the spot, so a translation is saved like
+    /// everything else - listed with the pack's own changes before the save,
+    /// written by it, and asked about when the pack is closed without one.
+    /// Written when switching away, it was already on disk by the time of the
+    /// save, and the list of changes had nothing to say about it.
+    /// </summary>
+    private readonly Dictionary<string, string> _heldTranslations = new(StringComparer.OrdinalIgnoreCase);
+
+    public bool IsEditingTranslation => _language != null;
+
+    /// <summary>The pack in its own words for as long as the scope is open.
+    /// Wraps every read that must see the pack as it is rather than as it is
+    /// being shown: saving, comparing, taking an undo step.</summary>
+    private IDisposable OwnWords() => _language?.OwnWords(Pack) ?? NoScope.Instance;
+
+    private sealed class NoScope : IDisposable
+    {
+        public static readonly NoScope Instance = new();
+        public void Dispose() { }
+    }
+
+    private string OwnWordsSaved()
+    {
+        using (OwnWords()) return PackRepository.SerializeAsSaved(Pack);
+    }
+
+    /// <summary>
+    /// What an undo step remembers. An ordinary one is the pack; one taken
+    /// while a language is up is the pack in its own words AND what the
+    /// language showed, because either alone restores the wrong thing.
+    /// </summary>
+    private string UndoSnapshot()
+    {
+        if (_language == null) return PackRepository.Serialize(Pack);
+
+        string own;
+        using (OwnWords()) own = PackRepository.Serialize(Pack);
+        return Services.Translation.LanguageSession.Wrap(_language.Code, _language.Shown(Pack), own);
+    }
+
+    /// <summary>
+    /// Switch the language the pack is edited in.
+    /// <para/>
+    /// Leaving a language keeps what it says, to be written with the next save
+    /// (<see cref="_heldTranslations"/>), so switching away never loses a word
+    /// and never writes one either. The switch is an undo step of its own, so
+    /// it can be undone like any other edit - which also means an undo can
+    /// never land somewhere with the wrong language's words in it.
+    /// </summary>
+    public void SwitchEditingLanguage(string code)
+    {
+        code ??= "";
+        if (string.Equals(code, _language?.Code ?? "", StringComparison.OrdinalIgnoreCase)) return;
+
+        // A translation lives beside the pack, so there has to be somewhere to
+        // put it. A pack that has never been saved has nowhere yet.
+        if (code.Length > 0 && PackRoot == null)
+        {
+            Tell(Loc.T("editingLanguage.saveFirst"), Loc.T("editingLanguage.title"), MessageBoxImage.Information);
+            RaiseEditingLanguage();
+            return;
+        }
+
+        CommitPendingRenames();
+        Undo.Checkpoint();
+
+        RebindKeepingSelection(() =>
+        {
+            if (_language != null)
+            {
+                HoldEditingLanguage();
+                _language.Restore();
+                _language = null;
+            }
+            if (code.Length > 0)
+                _language = Services.Translation.LanguageSession.Enter(Pack, code, TranslationFileOf(code));
+        }, asUndoStep: true);
+
+        RaiseEditingLanguage();
+        RefreshEditingLanguageOptions();
+    }
+
+    /// <summary>
+    /// A language's translation as it stands in the editor: held since it was
+    /// switched away from, or else as its file on disk says. Read fresh each
+    /// time, so nothing that works on it can change what is held.
+    /// </summary>
+    private Shared.TextFile? TranslationFileOf(string code)
+    {
+        if (_heldTranslations.TryGetValue(code, out var held)) return Shared.TextFile.Parse(held);
+        return PackRoot == null ? null : Loc.Read(PackTranslations.PathOf(PackRoot, code));
+    }
+
+    /// <summary>What the language being edited would write to its file now.</summary>
+    private string? EditingLanguageText()
+    {
+        if (_language == null || PackRoot == null) return null;
+
+        string code = _language.Code;
+        var file = _language.Translation(Pack, TranslationFileOf(code));
+
+        // With the lines typed only in this language, which have no words of
+        // the pack's own and would otherwise be set aside as unused.
+        Shared.TextFile source;
+        using (OwnWords()) source = PackTranslations.Source(Pack, file);
+        return PackTranslations.Text(Pack, code, source, file);
+    }
+
+    /// <summary>Keep what the language being edited says, to be written with
+    /// the next save - when anything in it has changed.</summary>
+    private void HoldEditingLanguage()
+    {
+        if (_language == null || !_language.Unsaved) return;
+        string? text = EditingLanguageText();
+        if (text != null) _heldTranslations[_language.Code] = text;
+    }
+
+    /// <summary>Write what the language being edited says now to its file,
+    /// staying in it, and every translation held since it was switched away
+    /// from. Called on save, and before anything that works on the files
+    /// themselves.</summary>
+    private void WriteEditingLanguage()
+    {
+        if (PackRoot == null) return;
+        if (_language != null)
+        {
+            string? text = EditingLanguageText();
+            if (text != null)
+            {
+                Directory.CreateDirectory(PackTranslations.FolderOf(PackRoot));
+                Loc.Write(PackTranslations.PathOf(PackRoot, _language.Code), text);
+            }
+            _heldTranslations.Remove(_language.Code);
+        }
+        foreach (var held in _heldTranslations)
+        {
+            Directory.CreateDirectory(PackTranslations.FolderOf(PackRoot));
+            Loc.Write(PackTranslations.PathOf(PackRoot, held.Key), held.Value);
+        }
+        _heldTranslations.Clear();
+    }
+
+    /// <summary>
+    /// What a save would change in the translations: each one held since it
+    /// was switched away from, and the one being edited, against its file on
+    /// disk - for the list shown before the save.
+    /// </summary>
+    internal List<PackChange> TranslationChangesToSave()
+    {
+        var changes = new List<PackChange>();
+        if (PackRoot == null) return changes;
+
+        var after = new Dictionary<string, string>(_heldTranslations, StringComparer.OrdinalIgnoreCase);
+        if (_language != null && _language.Unsaved)
+        {
+            string? text = EditingLanguageText();
+            if (text != null) after[_language.Code] = text;
+        }
+        foreach (var language in after.OrderBy(a => a.Key, StringComparer.OrdinalIgnoreCase))
+            changes.AddRange(TranslationDiff.Compute(language.Key,
+                                                     Loc.Read(PackTranslations.PathOf(PackRoot, language.Key)),
+                                                     Shared.TextFile.Parse(language.Value)));
+        return changes;
+    }
+
+    /// <summary>
+    /// Forget the language without writing it: the pack it belongs to is being
+    /// replaced, and has already been saved or deliberately discarded by the
+    /// time this runs.
+    /// </summary>
+    private void DropEditingLanguage()
+    {
+        _heldTranslations.Clear();
+        if (_language == null) return;
+        _language.Restore();
+        _language = null;
+        RaiseEditingLanguage();
+    }
+
+    /// <summary>
+    /// Run <paramref name="use"/> on the pack in its own words, with the
+    /// translation files on disk current - for whatever reads or writes those
+    /// files directly: bringing one up to date, checking them, translating by
+    /// machine.
+    /// <para/>
+    /// Not merely inside <see cref="OwnWords"/>. While a language is up, the
+    /// session holds what that language shows, and writes it over the file on
+    /// the next save - so a machine translation written into the file behind
+    /// its back would be thrown away. The language is written and left first,
+    /// and entered again afterwards from the file as <paramref name="use"/>
+    /// left it.
+    /// </summary>
+    public T WithTranslationFilesCurrent<T>(Func<ModPack, T> use)
+    {
+        // Translations held since they were switched away from go into their
+        // files first: what works on the files must see them.
+        if (_language == null && _heldTranslations.Count > 0) WriteEditingLanguage();
+        if (_language == null || PackRoot == null) return use(Pack);
+
+        string code = _language.Code;
+        RebindKeepingSelection(() =>
+        {
+            WriteEditingLanguage();
+            _language.Restore();
+            _language = null;
+        }, asUndoStep: false);
+        try
+        {
+            return use(Pack);
+        }
+        finally
+        {
+            RebindKeepingSelection(() =>
+            {
+                var file = Loc.Read(PackTranslations.PathOf(PackRoot!, code));
+                _language = Services.Translation.LanguageSession.Enter(Pack, code, file);
+            }, asUndoStep: false);
+            RaiseEditingLanguage();
+        }
+    }
+
+    private void RaiseEditingLanguage()
+    {
+        OnPropertyChanged(nameof(EditingLanguage));
+        OnPropertyChanged(nameof(IsEditingTranslation));
+        OnPropertyChanged(nameof(HasUnsavedChanges));
+        RaiseTextLanguage();
+    }
+
+    /// <summary>
+    /// The language the pack's words on screen are in: the one being edited,
+    /// or the pack's own. What the node Text box and the rows are spell-checked
+    /// in - they were always checked as US English, so a pack written in
+    /// Portuguese, or a line being edited in Russian, was underlined from end
+    /// to end (2026-09-27). As a culture Windows' speller knows by name:
+    /// "pt" is asked for as pt-BR, "zh-Hans" as zh-CN.
+    /// </summary>
+    public System.Windows.Markup.XmlLanguage TextLanguage
+        => System.Windows.Markup.XmlLanguage.GetLanguage(TextLanguageTag);
+
+    /// <summary><see cref="TextLanguage"/> as its tag.</summary>
+    public string TextLanguageTag
+    {
+        get
+        {
+            string code = _language?.Code ?? Pack?.OwnLanguage ?? "";
+            if (string.IsNullOrWhiteSpace(code)) code = "en";
+            try { return System.Globalization.CultureInfo.CreateSpecificCulture(code).Name is { Length: > 0 } specific ? specific : code; }
+            catch (System.Globalization.CultureNotFoundException) { return code; }
+        }
+    }
+
+    /// <summary>
+    /// What a record the author has just added is called, in the language
+    /// its name is written in - never the one the editor is shown in. It was
+    /// the editor's, so a pack written in English got "Novo SFX" from an
+    /// author reading the editor in Portuguese (2026-09-27).
+    /// <para/>
+    /// A name the pack translates - a character's, a quest's title - is in the
+    /// language being edited, since that is the only language it is typed
+    /// into. One it does not translate - an SFX's, a dialogue's, a folder's -
+    /// is the same name in every language, so it is in the pack's own words
+    /// whichever language is being edited. English when the editor has no
+    /// translation into that language.
+    /// </summary>
+    public string NewName(string key, bool translated = false)
+        => NewNames.In(translated && _language != null ? _language.Code : Pack.OwnLanguage, key);
+
+    private void RaiseTextLanguage()
+    {
+        OnPropertyChanged(nameof(TextLanguage));
+        OnPropertyChanged(nameof(TextLanguageTag));
+        Services.Speller.UseLanguage(TextLanguageTag);
+    }
+
+    /// <summary>
+    /// Fill the language list: the pack's own words, then every language the
+    /// pack has a file for and every one ModForge can be read in, once each.
+    /// </summary>
+    public void RefreshEditingLanguageOptions()
+    {
+        var codes = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var code in Loc.AvailableCodes()) codes.Add(code);
+        if (PackRoot != null)
+            foreach (var code in Services.Translation.PackTranslationJob.Languages(PackRoot))
+                codes.Add(code);
+        // The pack's own words are the first entry, not a translation of them.
+        string own = Pack.OwnLanguage;
+        codes.Remove(own);
+
+        var wanted = new List<EditingLanguageOption>
+        {
+            new("", Loc.F("editingLanguage.own", "language", TranslationFiles.NativeName(own) ?? own)),
+        };
+        foreach (var code in codes)
+            wanted.Add(new(code, (TranslationFiles.NativeName(code) ?? code) + "  (" + code + ")"));
+
+        _refillingLanguageOptions = true;
+        try
+        {
+            if (wanted.Select(o => o.Code).SequenceEqual(EditingLanguageOptions.Select(o => o.Code)))
+            {
+                // The same languages, perhaps named in another language now:
+                // renamed where they are, so the one selected stays selected.
+                for (int i = 0; i < wanted.Count; i++)
+                    EditingLanguageOptions[i].Label = wanted[i].Label;
+            }
+            else
+            {
+                EditingLanguageOptions.Clear();
+                foreach (var o in wanted) EditingLanguageOptions.Add(o);
+            }
+        }
+        finally { _refillingLanguageOptions = false; }
+        OnPropertyChanged(nameof(EditingLanguage));
+        RaiseTextLanguage();
+    }
+
+    /// <summary>
+    /// Say everything again, in the language the editor has just switched to.
+    /// <para/>
+    /// The window's own texts follow by themselves (see
+    /// <see cref="Localization.LocSource"/>). What is left is what the code
+    /// worked out and kept: every row, list and summary the views are built
+    /// from, which the rebuild undo already uses makes again, landing on the
+    /// same things; the language list's first entry; and the pack's issues,
+    /// which are sentences.
+    /// </summary>
+    public void RefreshLanguage()
+    {
+        CommitPendingRenames();
+        RebindKeepingSelection(() => { }, asUndoStep: false);
+        RefreshEditingLanguageOptions();
+        if (PackRoot != null && Issues.Count > 0) Validate();
+        OnPropertyChanged(string.Empty);
+    }
 
     /// <summary>Whole-editor undo/redo. Snapshots the pack at commit boundaries
     /// (driven by the window's focus + Ctrl+Z/Y handlers) and restores by
@@ -56,8 +481,247 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
     /// so the editor lands back where the user was.</summary>
     private void OnUndoRestore(string json)
     {
+        string? code = null;
+        Shared.TextFile? shown = null;
+        if (Services.Translation.LanguageSession.Unwrap(json, out var c, out var texts, out var own))
+        {
+            json = own;
+            code = c;
+            shown = texts;
+        }
+
+        // One place, or one extension of a level, is all most steps on the
+        // Places tab change: put that back and leave the rest of the editor
+        // alone - and when all it changed is where things sit, move them back
+        // on the views already on screen, the way the gizmo moved them. Not
+        // while a language is up: its session remembers the pack's objects,
+        // and every one of them would have to be the same.
+        if (code == null && _language == null)
+        {
+            var entry = Model.SnapshotDiff.OneEntry(Undo.Leaving, json);
+            if (entry != null && (TryRestoreTransforms(entry, json) || TryRestoreOneEntry(entry, json))) return;
+        }
+
         var pack = PackRepository.Deserialize(json);
         if (pack == null) return;
+
+        RebindKeepingSelection(() =>
+        {
+            Pack = pack;
+            // A step taken in a language comes back in that language: the pack
+            // in its own words, with what the language showed laid over it.
+            _language = code == null ? null : Services.Translation.LanguageSession.Enter(pack, code, shown);
+
+            // It knows what the language said at that step, not what the file
+            // on disk says - so it cannot claim nothing is unsaved.
+            _language?.MarkUnsaved();
+        }, asUndoStep: false);
+        RaiseEditingLanguage();
+    }
+
+    /// <summary>
+    /// Put back an undo step that changed one place, or one extension of a
+    /// level, and nothing else: that entry is swapped for the one in the
+    /// snapshot and only its own view is built again. The whole editor used to
+    /// be - every tab, every place - so undoing an object nudged in the
+    /// preview took a second or more on a large pack (2026-09-27).
+    /// <para/>
+    /// Held to the same result as a full restore: the pack afterwards must
+    /// serialize to exactly the snapshot being restored, or the full restore
+    /// runs after all. False whenever it did not do the whole job itself.
+    /// </summary>
+    private bool TryRestoreOneEntry(Model.SnapshotDiff.Entry entry, string json)
+    {
+        bool done;
+        Undo.Suspended = true;
+        try
+        {
+            done = entry.Section switch
+            {
+                "places" => SwapPlace(entry),
+                "vanillaExtensions" => SwapVanillaExtension(entry),
+                _ => false,
+            };
+            if (done)
+            {
+                // Names an entry gives other lists - a level, an object - in
+                // case the step renamed one. Each is a moment's work.
+                RebuildPlaceNameOptions();
+                RebuildGameObjectNameOptions();
+                RebuildSelectedNodeOverlayOptions();
+            }
+        }
+        catch (Newtonsoft.Json.JsonException) { done = false; }
+        finally { Undo.Suspended = false; }
+
+        // Nothing less than the full restore would have produced will do.
+        return done && string.Equals(UndoSnapshot(), json, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// Put back a step that only moved, turned or resized objects on a place -
+    /// a drag of the gizmo, undone - by writing the numbers back through the
+    /// views already on screen. Swapping the place's view for a new one made
+    /// the Places tab build its panels again, a third of a second on a large
+    /// pack, for objects that had only moved (2026-09-27).
+    /// <para/>
+    /// The trees have to be the same shape, and the result is held to the
+    /// snapshot like every other way of restoring: anything the numbers do not
+    /// cover leaves the pack different from it, and the next way is tried.
+    /// </summary>
+    private bool TryRestoreTransforms(Model.SnapshotDiff.Entry entry, string json)
+    {
+        IList<GameObjectViewModel>? views = null;
+        List<GameObjectDef>? defs = null;
+        try
+        {
+            switch (entry.Section)
+            {
+                case "places":
+                {
+                    if (entry.Index < 0 || entry.Index >= Pack.Places.Count) return false;
+                    int at = IndexOfModel(Places, Pack.Places[entry.Index], p => p.Model);
+                    var def = EntryOf<PlaceDef>(entry);
+                    if (at < 0 || def == null || def.Key != Pack.Places[entry.Index].Key) return false;
+                    views = Places[at].GameObjects;
+                    defs = def.GameObjects;
+                    break;
+                }
+                case "vanillaExtensions":
+                {
+                    if (entry.Index < 0 || entry.Index >= Pack.VanillaExtensions.Count) return false;
+                    int at = IndexOfModel(VanillaExtensions, Pack.VanillaExtensions[entry.Index], v => v.Model);
+                    var def = EntryOf<VanillaPlaceExtensionDef>(entry);
+                    if (at < 0 || def == null || def.Source != Pack.VanillaExtensions[entry.Index].Source) return false;
+                    views = VanillaExtensions[at].GameObjects;
+                    defs = def.GameObjects;
+                    break;
+                }
+                default: return false;
+            }
+        }
+        catch (Newtonsoft.Json.JsonException) { return false; }
+
+        if (!SameShape(views, defs)) return false;
+        Undo.Suspended = true;
+        try { MoveBack(views, defs); }
+        finally { Undo.Suspended = false; }
+        return string.Equals(UndoSnapshot(), json, StringComparison.Ordinal);
+    }
+
+    private static bool SameShape(IList<GameObjectViewModel> views, List<GameObjectDef> defs)
+    {
+        if (views.Count != defs.Count) return false;
+        for (int i = 0; i < views.Count; i++)
+        {
+            var v = views[i];
+            var d = defs[i];
+            if (!SameShape(v.Children, d.Children) || v.Npcs.Count != d.Npcs.Count) return false;
+            for (int n = 0; n < v.Npcs.Count; n++)
+                if (!SameShape(v.Npcs[n].Children, d.Npcs[n].Children)) return false;
+        }
+        return true;
+    }
+
+    /// <summary>Each object and NPC part to where the snapshot has it, through
+    /// its view, so the preview, the boxes and the gizmo follow as they do a drag.</summary>
+    private static void MoveBack(IList<GameObjectViewModel> views, List<GameObjectDef> defs)
+    {
+        for (int i = 0; i < views.Count; i++)
+        {
+            var v = views[i];
+            var d = defs[i];
+            if (v.X != d.X) v.X = d.X;
+            if (v.Y != d.Y) v.Y = d.Y;
+            if (v.RotationZ != d.RotationZ) v.RotationZ = d.RotationZ;
+            if (v.ScaleX != d.ScaleX) v.ScaleX = d.ScaleX;
+            if (v.ScaleY != d.ScaleY) v.ScaleY = d.ScaleY;
+            MoveBack(v.Children, d.Children);
+            for (int n = 0; n < v.Npcs.Count; n++)
+            {
+                var pv = v.Npcs[n];
+                var pd = d.Npcs[n];
+                MoveBack(pv.Body, pd.Body);
+                MoveBack(pv.Shadow, pd.Shadow);
+                MoveBack(pv.Blink, pd.Blink);
+                MoveBack(pv.Wet, pd.Wet);
+                MoveBack(pv.Children, pd.Children);
+            }
+        }
+    }
+
+    private static void MoveBack(NpcTransformViewModel v, NpcTransform? d)
+    {
+        if (d == null) return;
+        if (v.X != d.X) v.X = d.X;
+        if (v.Y != d.Y) v.Y = d.Y;
+        if (v.Z != d.Z) v.Z = d.Z;
+        if (v.RotX != d.RotX) v.RotX = d.RotX;
+        if (v.RotY != d.RotY) v.RotY = d.RotY;
+        if (v.RotZ != d.RotZ) v.RotZ = d.RotZ;
+        if (v.ScaleX != d.ScaleX) v.ScaleX = d.ScaleX;
+        if (v.ScaleY != d.ScaleY) v.ScaleY = d.ScaleY;
+        if (v.ScaleZ != d.ScaleZ) v.ScaleZ = d.ScaleZ;
+    }
+
+    private T? EntryOf<T>(Model.SnapshotDiff.Entry entry) where T : class
+        => Newtonsoft.Json.JsonConvert.DeserializeObject<T>(entry.To, PackRepository.ManifestSettings);
+
+    private bool SwapPlace(Model.SnapshotDiff.Entry entry)
+    {
+        if (entry.Index < 0 || entry.Index >= Pack.Places.Count) return false;
+        var was = Pack.Places[entry.Index];
+        var def = EntryOf<PlaceDef>(entry);
+        if (def == null || def.Key != was.Key) return false;
+        int at = IndexOfModel(Places, was, p => p.Model);
+        if (at < 0) return false;
+
+        bool selected = ReferenceEquals(SelectedPlace, Places[at]);
+        Pack.Places[entry.Index] = def;
+        var vm = new PlaceViewModel(def);
+        Places[at] = vm;
+        PlaceTree.Build(Places);
+        if (selected) SelectedPlace = vm;
+        return true;
+    }
+
+    private bool SwapVanillaExtension(Model.SnapshotDiff.Entry entry)
+    {
+        if (entry.Index < 0 || entry.Index >= Pack.VanillaExtensions.Count) return false;
+        var was = Pack.VanillaExtensions[entry.Index];
+        var def = EntryOf<VanillaPlaceExtensionDef>(entry);
+        if (def == null || def.Source != was.Source) return false;
+        int at = IndexOfModel(VanillaExtensions, was, v => v.Model);
+        if (at < 0) return false;
+
+        bool selected = ReferenceEquals(SelectedVanillaExtension, VanillaExtensions[at]);
+        Pack.VanillaExtensions[entry.Index] = def;
+        var vm = new VanillaPlaceExtensionViewModel(def);
+        VanillaExtensions[at] = vm;
+        if (selected) SelectedVanillaExtension = vm;
+        return true;
+    }
+
+    private static int IndexOfModel<TVm, TModel>(IList<TVm> views, TModel model, Func<TVm, TModel> modelOf)
+        where TModel : class
+    {
+        for (int i = 0; i < views.Count; i++)
+            if (ReferenceEquals(modelOf(views[i]), model)) return i;
+        return -1;
+    }
+
+    /// <summary>
+    /// Rebuild every view over the pack, landing back on whatever was being
+    /// edited.
+    /// <para/>
+    /// Shared by undo and by switching the language a pack is edited in: both
+    /// change what the model holds underneath the views, and both would
+    /// otherwise drop the author onto the first item of every list - which,
+    /// after switching to Spanish to check one line, reads as the editor
+    /// having thrown them somewhere else.
+    /// </summary>
+    private void RebindKeepingSelection(Action swap, bool asUndoStep)
+    {
 
         string? dlgKey = SelectedDialogue?.Key;
         int? nodeId = SelectedNode?.Id;
@@ -92,12 +756,23 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         Undo.Suspended = true;
         try
         {
-            Pack = pack;
+            swap();
             RebindAll();
-            Validate();
+            // ...and nothing else. Putting a change back does not re-check the
+            // pack, because no other edit does either: the issue list is built
+            // when a pack is opened, saved or published, and typing a line or
+            // deleting a character never touches it. Undo used to be the one
+            // edit in the editor that refreshed it, which was not a rule so
+            // much as an accident of where the call had been put - and it cost
+            // about 640ms on a large pack, against 43ms to read the snapshot
+            // that actually does the work.
         }
         finally { Undo.Suspended = false; }
-        Undo.AbsorbCurrentAsBaseline();
+
+        // An undo is already a step; a switch of language is one of its own,
+        // so the language can be switched back by undoing it.
+        if (asUndoStep) Undo.Checkpoint();
+        else Undo.AbsorbCurrentAsBaseline();
 
         if (dlgKey != null)
         {
@@ -357,7 +1032,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
             LevelOptions,
             o => o is NavigatorTargetOption nav
                  && nav.Token.StartsWith("place:", System.StringComparison.Ordinal)
-                 ? "This pack" : "The game's own");
+                 ? Loc.T("common.group.thisPack") : Loc.T("common.group.gamesOwn"));
     private System.ComponentModel.ICollectionView? _levelOptionsGrouped;
 
     /// <summary>
@@ -589,6 +1264,9 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
             ExportPackCommand?.Raise();
             ExportPackAsCommand?.Raise();
             PublishPackCommand?.Raise();
+            // The languages a pack can be edited in include the ones it already
+            // has a file for, and those live in its folder.
+            RefreshEditingLanguageOptions();
         }
     }
 
@@ -617,10 +1295,19 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         }
     }
 
-    public string Title => $"SMSModForge {AppVersion} for {ModPack.CurrentGameVersion} — {Pack.PackId}" + (PackRoot is null ? " (unsaved)" : $" — {PackRoot}");
+    public string Title
+    {
+        get
+        {
+            string title = Loc.F("window.title", "version", AppVersion, "game", ModPack.CurrentGameVersion, "pack", Pack.PackId);
+            return PackRoot is null
+                ? Loc.F("window.titleUnsaved", "title", title)
+                : Loc.F("window.titleSaved", "title", title, "folder", PackRoot);
+        }
+    }
 
     /// <summary>Menu-bar corner label: the game build this editor targets.</summary>
-    public string GameVersionHeader => $"for Starmaker Story {ModPack.CurrentGameVersion}";
+    public string GameVersionHeader => Loc.F("window.forGame", "version", ModPack.CurrentGameVersion);
 
     private OutfitViewModel? _selectedOutfit;
     public OutfitViewModel? SelectedOutfit
@@ -834,12 +1521,14 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
 
         var def = new UiDef
         {
-            Name = UniqueUiName(template?.Name ?? "New UI"),
+            Name = UniqueUiName(NewName(template?.NameKey ?? "ui.newName")),
             Id = Guid.NewGuid().ToString("N")[..8],
             Template = template?.Key ?? "",
         };
 
-        if (template != null) def.Nodes.Add(template.Build());
+        // Its texts are words a player reads, so they are in the language
+        // being edited, like anything else typed there.
+        if (template != null) def.Nodes.Add(template.Build(key => NewName(key, translated: true)));
 
         // Animated on arrival unless the author says otherwise. Set when the
         // screen is MADE rather than defaulted in the format: an absent "open"
@@ -866,7 +1555,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
     private UiViewModel AddUi(UiDef def)
     {
         Pack.Uis.Add(def);
-        var vm = new UiViewModel(def);
+        var vm = new UiViewModel(def) { NewName = NewName };
         vm.PropertyChanged += UiRenamed;
         Uis.Add(vm);
         SelectedUi = vm;
@@ -956,7 +1645,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         // The delta pass prunes it back on save, so this cannot grow a manifest.
         foreach (var u in Pack.Uis)
         {
-            var row = new UiViewModel(u);
+            var row = new UiViewModel(u) { NewName = NewName };
             row.PropertyChanged += UiRenamed;
             Uis.Add(row);
         }
@@ -1033,6 +1722,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
                 if (_selectedNode != null) _selectedNode.PropertyChanged += OnSelectedNodeActorMaybeChanged;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(SelectedNodeActorBustKey));
+                OnPropertyChanged(nameof(SelectedNodeFace));
+                RaiseSelectedNodeFit();
                 // Refresh the GO-path autocomplete from the current model so newly
                 // added / renamed overlays show up when editing this node's actions.
                 RebuildGameObjectNameOptions();
@@ -1094,11 +1785,20 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         if (e.PropertyName == nameof(DialogueNodeViewModel.Actor))
         {
             OnPropertyChanged(nameof(SelectedNodeActorBustKey));
+            OnPropertyChanged(nameof(SelectedNodeFace));
             OnPropertyChanged(nameof(SelectedNodeActorIsPlayer));
                 OnPropertyChanged(nameof(SelectedNodeShowsSpeaker));
             RebuildSelectedNodeExpressionOptions();
             RebuildSelectedNodeOutfitOptions();
             ApplyDefaultOutfitForActorChange();
+        }
+        else if (e.PropertyName == nameof(DialogueNodeViewModel.Expression))
+        {
+            OnPropertyChanged(nameof(SelectedNodeFace));
+        }
+        else if (e.PropertyName is nameof(DialogueNodeViewModel.Text) or nameof(DialogueNodeViewModel.Kind))
+        {
+            RaiseSelectedNodeFit();
         }
         else if (e.PropertyName == nameof(DialogueNodeViewModel.Tag))
         {
@@ -1176,6 +1876,59 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
     /// Rebuilt when the selected node or its actor changes.
     /// </summary>
     public ObservableCollection<string> SelectedNodeExpressionOptions { get; } = new();
+
+    /// <summary>
+    /// The face the selected line shows, for the preview beside it: its
+    /// Expression turned into a face through the speaker's expression list,
+    /// the way the game does it (<see cref="Rendering.ExpressionFaces"/>).
+    /// </summary>
+    public string SelectedNodeFace
+        => Rendering.ExpressionFaces.FaceFor(SpeakerFor(SelectedNode?.Actor ?? "")?.Model.Expressions,
+                                             SelectedNode?.Expression);
+
+    /// <summary>
+    /// How the selected line will sit in the game's dialogue box, in a few
+    /// words under the Text box: shrunk to a smaller size, or running out of
+    /// the box altogether. Empty when it fits at the full size, and when it
+    /// cannot be measured - letters the game's font lacks, or no extracted
+    /// font beside the editor - because a guess there would look like a fact.
+    /// <para/>
+    /// Of whatever the box shows, so while a translation is up it is that
+    /// language's line being measured: a Spanish line runs longer than the
+    /// English it came from.
+    /// </summary>
+    public string SelectedNodeFitNote
+    {
+        get
+        {
+            var fit = SelectedNodeFit();
+            return fit?.Verdict switch
+            {
+                Rendering.DialogueFit.Verdict.Shrinks => Loc.F("dialogues.fit.shrinks", "size",
+                    fit.Value.PointSize.ToString("0.#", System.Globalization.CultureInfo.CurrentCulture)),
+                Rendering.DialogueFit.Verdict.Spills => Loc.T("dialogues.fit.spills"),
+                _ => "",
+            };
+        }
+    }
+
+    /// <summary>Whether the note above is the serious one: the line runs out
+    /// of the box, rather than merely being made smaller.</summary>
+    public bool SelectedNodeFitSpills => SelectedNodeFit()?.Verdict == Rendering.DialogueFit.Verdict.Spills;
+
+    private Rendering.DialogueFit.Result? SelectedNodeFit()
+    {
+        var node = SelectedNode;
+        if (node == null || node.Model.Kind != DialogueNodeKind.Text || string.IsNullOrWhiteSpace(node.Text)) return null;
+        var font = Rendering.VanillaUiLibrary.IsAvailable ? Rendering.VanillaUiLibrary.Assets.Font(Rendering.DialogueLook.FontName)?.Font : null;
+        return font == null ? null : Rendering.DialogueFit.Of(font, node.Text);
+    }
+
+    private void RaiseSelectedNodeFit()
+    {
+        OnPropertyChanged(nameof(SelectedNodeFitNote));
+        OnPropertyChanged(nameof(SelectedNodeFitSpills));
+    }
 
     private void RebuildSelectedNodeExpressionOptions()
     {
@@ -1602,8 +2355,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         if (refs == 0) return;
 
         RefreshConditionAndActionRows();
-        Announce("Rename",
-            $"Renamed '{from}' to '{to}' and updated {refs} reference{(refs == 1 ? "" : "s")}.");
+        Announce(Loc.T("rename.title"),
+            Loc.P("rename.fromTo", refs, "from", from, "to", to));
     }
 
     public void CommitPendingVariableRename()
@@ -1625,8 +2378,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         int refs = Services.VariableRenamer.RenameReferences(Pack, from, current);
         if (refs == 0) return;
         RefreshConditionAndActionRows();
-        Announce("Rename",
-            $"Renamed '{from}' to '{current}' and updated {refs} reference{(refs == 1 ? "" : "s")}.");
+        Announce(Loc.T("rename.title"),
+            Loc.P("rename.fromTo", refs, "from", from, "to", current));
     }
 
     private SceneViewModel? _selectedScene;
@@ -1834,8 +2587,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         string to = character.TheirOwnKey;
         if (Characters.Any(c => c != character && string.Equals(c.Key, to, StringComparison.OrdinalIgnoreCase)))
         {
-            Announce("Reset key",
-                $"Another character is already keyed '{to}', so this one has been left alone.");
+            Announce(Loc.T("characters.resetKey.title"),
+                Loc.F("characters.resetKey.taken", "key", to));
             return;
         }
 
@@ -1860,11 +2613,10 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
 
         string going = character.ResetEverythingSummary;
         var answer = Ask(
-            $"Put {character.DisplayName} back the way the game has them?\n\n"
-            + (going.Length > 0 ? "This pack loses " + going + "." : "")
-            + "\n\nNothing is written until you save, and the original is kept "
-            + "beside the manifest when you do.",
-            "Reset character",
+            Loc.F("characters.reset.ask", "name", character.DisplayName) + "\n\n"
+            + (going.Length > 0 ? Loc.F("characters.reset.loses", "what", going) : "")
+            + "\n\n" + Loc.T("characters.reset.nothingWritten"),
+            Loc.T("characters.reset.title"),
             MessageBoxButton.YesNo, MessageBoxImage.Warning,
             whenNobodyIsThere: MessageBoxResult.No);
 
@@ -2048,6 +2800,41 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
     /// <summary>Bound by Options ▸ Check for updates on start. Two-way, and
     /// written straight through to the stored preference — there is no in-memory
     /// copy to fall out of step with it.</summary>
+    /// <summary>
+    /// How big the bust preview is drawn, remembered between sessions.
+    /// <para/>
+    /// The column it sits in is sized from this too, so the panel around the
+    /// preview grows with it rather than the preview growing inside a panel
+    /// that stays put — which is the version where only the backdrop moves.
+    /// </summary>
+    public double BustPreviewZoom
+    {
+        get => Services.EditorPrefs.BustPreviewZoom;
+        set
+        {
+            Services.EditorPrefs.BustPreviewZoom = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(BustPreviewColumnWidth));
+        }
+    }
+
+    /// <summary>The sizes offered, for the picker.</summary>
+    public System.Collections.Generic.IReadOnlyList<double> BustPreviewZoomSteps
+        => Services.EditorPrefs.ZoomSteps;
+
+    /// <summary>
+    /// What the preview column has to be for the preview to fit in it, chrome
+    /// included. Bound rather than typed, because the preview is pinned to its
+    /// own size and a column narrower than that clips it.
+    /// </summary>
+    public System.Windows.GridLength BustPreviewColumnWidth
+        => new(View.Controls.JigglePreview.FixedSize * BustPreviewZoom + BustPreviewChrome);
+
+    /// <summary>Margins, the border's padding, and the scrollbar the panel
+    /// keeps room for. Measured once off the 540 the column was fixed at when
+    /// the preview was 512 wide.</summary>
+    private const double BustPreviewChrome = 28;
+
     /// <summary>Whether node rows are drawn the way the game draws a line. See
     /// EditorPrefs for why this starts off.</summary>
     public bool GameLookNodeRows
@@ -2149,9 +2936,10 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
             var parts = DocParts;                       // runs the filter
             int topics = parts.Sum(p => p.Topics.Count);
             int hits = Documentation.DocSearch.LastMatchCount;
-            if (topics == 0) return "Nothing matches that.";
-            return hits + (hits == 1 ? " result in " : " results in ") +
-                   topics + (topics == 1 ? " topic" : " topics");
+            if (topics == 0) return Loc.T("docs.search.none");
+            return Loc.F("docs.search.found",
+                         "results", Loc.P("docs.search.results", hits),
+                         "topics", Loc.P("docs.search.topics", topics));
         }
     }
 
@@ -2196,6 +2984,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         QuestTree = new UnitTreeController(() => Pack.QuestFolders,
             o => ((QuestViewModel)o).Key, o => ((QuestViewModel)o).Display,
             o => QuestPickedInTree((QuestViewModel)o), () => Undo.Checkpoint());
+        foreach (var tree in new[] { ActorTree, PlaceTree, SceneTree, NpcTree, WallpaperTree, MusicTree, SfxTree, QuestTree })
+            tree.NewFolderName = () => NewName("common.newFolder");
 
         // Quest action and condition rows list the pack's quests and their
         // tasks. A row is built from its own definition and cannot reach the
@@ -2240,9 +3030,11 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         SortView(Quests, nameof(QuestViewModel.Display));
         SortView(IntegrationRules, nameof(UpdateRuleViewModel.Display));
 
-        Undo = new Services.UndoService(() => PackRepository.Serialize(Pack));
+        Undo = new Services.UndoService(UndoSnapshot);
         Undo.RestoreRequested += OnUndoRestore;
         Undo.StateChanged += () => UndoCommand?.Raise();  // global requery refreshes both
+        // So the language list has its entries before any pack is opened.
+        RefreshEditingLanguageOptions();
         // Snapshot the pre-command state before every command-driven mutation,
         // so each add/remove/toggle is its own undo step (text-field edits are
         // checkpointed separately on focus-loss by the window).
@@ -2632,11 +3424,11 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         foreach (var v in VanillaPlaces.All)
             targetOpts.Add(new NavigatorTargetOption(
                 Token: $"vanilla:{v.GoName}",
-                DisplayLabel: $"Vanilla — {v.DisplayName} ({v.GoName})"));
+                DisplayLabel: Loc.F("target.vanilla", "name", v.DisplayName, "id", v.GoName)));
         foreach (var p in Places)
             targetOpts.Add(new NavigatorTargetOption(
                 Token: $"self:{p.Key}",
-                DisplayLabel: $"This pack — {p.DisplayName} ({p.Key})"));
+                DisplayLabel: Loc.F("target.thisPack", "name", p.DisplayName, "id", p.Key)));
         // In-place sync, never Clear — see SyncOptions. This reruns on every
         // place add/remove/rename while navigator-button target combos are
         // bound to it, so a Clear would blank their authored targets.
@@ -2657,15 +3449,15 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
     /// gets its Save-As dialog. If that is cancelled the changes are still
     /// pending, and the answer is no: the same reasoning the close guard uses.
     /// </summary>
-    private bool ConfirmDiscardChanges(string whatFollows)
+    private bool ConfirmDiscardChanges(string question)
     {
         if (!HasUnsavedChanges) return true;
 
         // Cancel under the harness: a test that has edited a pack must not be
         // able to lose it to a prompt nobody answered.
         var choice = Ask(
-            "You have unsaved changes. Save before " + whatFollows + "?",
-            "Unsaved changes", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning,
+            Loc.T(question),
+            Loc.T("unsaved.title"), MessageBoxButton.YesNoCancel, MessageBoxImage.Warning,
             MessageBoxResult.Cancel);
 
         switch (choice)
@@ -2709,7 +3501,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
 
     private void NewPack()
     {
-        if (!ConfirmDiscardChanges("starting a new pack")) return;
+        if (!ConfirmDiscardChanges("unsaved.beforeNewPack")) return;
+        DropEditingLanguage();
         Pack = PackRepository.CreateEmpty("Untitled");
         PackRoot = null;
         RebindAll();
@@ -2767,14 +3560,17 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         OnPropertyChanged(nameof(PackVersionIsValid));
         OnPropertyChanged(nameof(HasPack));
         OnPropertyChanged(nameof(AutoVersionNote));
+        OnPropertyChanged(nameof(PackLanguage));
+        // The first entry names the pack's own language.
+        RefreshEditingLanguageOptions();
     }
 
     private void OpenPack()
     {
         var dialog = new OpenFileDialog
         {
-            Filter = "Mod pack manifest|modpack.json;bustpack.json|All files|*.*",
-            Title = "Open modpack.json",
+            Filter = Loc.T("open.filter") + "|modpack.json;bustpack.json|" + Loc.T("common.allFiles") + "|*.*",
+            Title = Loc.T("open.title"),
         };
         // Reopen where the last pack was opened from (independent of the Export
         // cache); first run leaves it at the OS default.
@@ -2799,10 +3595,11 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
     {
         // Guarded HERE rather than in each caller: the Open dialog and the
         // recent list both land here, and so will anything added later.
-        if (!ConfirmDiscardChanges("opening another pack")) return;
+        if (!ConfirmDiscardChanges("unsaved.beforeOpening")) return;
 
         try
         {
+            DropEditingLanguage();
             Pack = PackRepository.Load(dir);
             var migration = PackRepository.LastMigration;
 
@@ -2827,11 +3624,11 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
             // test stops the whole suite dead on somebody's screen waiting for
             // a click nobody is there to give. See Services.TestMode.
             if (migration != null && migration.Migrated && !Services.TestMode.Active)
-                Tell(migration.Describe(), "Pack updated", MessageBoxImage.Information);
+                Tell(migration.Describe(), Loc.T("open.migrated.title"), MessageBoxImage.Information);
         }
         catch (Exception ex)
         {
-            Tell(ex.Message, "Open failed", MessageBoxImage.Error);
+            Tell(ex.Message, Loc.T("open.failed.title"), MessageBoxImage.Error);
         }
     }
 
@@ -2839,7 +3636,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
     {
         if (!Directory.Exists(path))
         {
-            Tell($"Folder no longer exists:\n{path}", "Open failed", MessageBoxImage.Warning);
+            Tell(Loc.F("open.folderGone", "folder", path), Loc.T("open.failed.title"), MessageBoxImage.Warning);
             return;
         }
         OpenPackFromPath(path);
@@ -2887,12 +3684,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
             && _versionOnDisk != null && current < _versionOnDisk.Value)
         {
             var answer = Ask(
-                $"This pack is saved as {_versionOnDisk}, and you are about to save "
-                + $"it as {current} - a lower version.\n\n"
-                + "Players comparing version numbers will read the new copy as "
-                + "older than the one they already have.\n\n"
-                + $"Save it as {current} anyway?",
-                "Version goes backwards", MessageBoxButton.YesNo, MessageBoxImage.Warning,
+                Loc.F("save.versionBackwards", "saved", _versionOnDisk, "new", current),
+                Loc.T("save.versionBackwards.title"), MessageBoxButton.YesNo, MessageBoxImage.Warning,
                 MessageBoxResult.Yes);
             if (answer != MessageBoxResult.Yes) return false;
         }
@@ -2930,6 +3723,61 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         }
     }
 
+    /// <summary>
+    /// The language the pack's own words are written in. What its
+    /// translations are made from, what a player without a translation into
+    /// their language reads, and what the machine translator is told.
+    /// <para/>
+    /// Not while a translation is being edited: the pack's own words are
+    /// packed away then, and deciding what language they are in while looking
+    /// at another one invites choosing the one on screen.
+    /// </summary>
+    public string PackLanguage
+    {
+        get => Pack.OwnLanguage;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value) || IsEditingTranslation
+                || string.Equals(value, Pack.OwnLanguage, StringComparison.OrdinalIgnoreCase)) return;
+            Pack.Language = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(HasUnsavedChanges));
+            RefreshEditingLanguageOptions();
+        }
+    }
+
+    /// <summary>Every language a pack can be written in, as its speakers name
+    /// it. Built once: the list is the same for every pack.</summary>
+    public IReadOnlyList<EditingLanguageOption> PackLanguageOptions => AllPackLanguages();
+    private static IReadOnlyList<EditingLanguageOption>? _packLanguageOptions;
+
+    /// <summary>Every language a pack can be written in, each named as its
+    /// own speakers write it - which is never translated, so a reader can find
+    /// their language in the list whatever language the editor is in.</summary>
+    internal static IReadOnlyList<EditingLanguageOption> AllPackLanguages()
+        => _packLanguageOptions ??= BuildPackLanguageOptions();
+
+    private static IReadOnlyList<EditingLanguageOption> BuildPackLanguageOptions()
+    {
+        // Every language Windows knows by itself, with Chinese split by script
+        // - a reader of one cannot read the other, so "Chinese" alone would
+        // leave the game guessing - and Brazilian Portuguese named as such,
+        // being the code ModForge's own translation uses.
+        var codes = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var culture in System.Globalization.CultureInfo.GetCultures(System.Globalization.CultureTypes.NeutralCultures))
+        {
+            string code = culture.Name;
+            if (code.Length == 0 || code.StartsWith("zh", StringComparison.OrdinalIgnoreCase)) continue;
+            if (Shared.TextFile.IsKey(code) && TranslationFiles.NativeName(code) != null) codes.Add(code);
+        }
+        foreach (string code in new[] { "zh-Hans", "zh-Hant", "pt-BR" })
+            if (TranslationFiles.NativeName(code) != null) codes.Add(code);
+
+        return codes.Select(c => new EditingLanguageOption(c, TranslationFiles.NativeName(c) + "  (" + c + ")"))
+                    .OrderBy(o => o.Label, StringComparer.CurrentCultureIgnoreCase)
+                    .ToList();
+    }
+
     /// <summary>Whether what is typed is a version at all — drives the field's
     /// warning, rather than refusing the keystroke.</summary>
     public bool PackVersionIsValid => Model.PackVersion.Parse(Pack.Version) != null;
@@ -2949,8 +3797,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
     /// finished for the day.
     /// </summary>
     public string AutoVersionNote =>
-        "Moved when you publish, not when you save - a version is what players "
-        + "got. Type one here to set it yourself.";
+        Loc.T("home.autoVersionNote");
 
     public bool HasPack => PackRoot != null || Pack.Characters.Count > 0
                            || Pack.Dialogues.Count > 0 || Pack.Places.Count > 0;
@@ -3025,12 +3872,9 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         if (outfit == null || from == null || ReferenceEquals(from, outfit)) return;
 
         var answer = Ask(
-            $"\"{outfit.Key}\" will use the same mask file as \"{from.Key}\":\n"
-            + (string.IsNullOrWhiteSpace(from.MaskSprite) ? "(no mask)" : from.MaskSprite)
-            + "\n\nThat is the same file, not a copy — editing this outfit's mask "
-            + "afterwards changes the default outfit's as well. Paint one of them "
-            + "separately by saving it under a new name from the mask editor.\n\nUse it?",
-            "Same mask as the default outfit",
+            Loc.F("outfits.sameMask.ask", "outfit", outfit.Key, "from", from.Key,
+                  "mask", string.IsNullOrWhiteSpace(from.MaskSprite) ? Loc.T("outfits.sameMask.none") : from.MaskSprite),
+            Loc.T("outfits.sameMask.title"),
             MessageBoxButton.OKCancel, MessageBoxImage.Warning,
             whenNobodyIsThere: MessageBoxResult.OK);
         if (answer != MessageBoxResult.OK) return;
@@ -3038,7 +3882,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         outfit.MaskSprite = from.MaskSprite;
     }
 
-    private bool SavePack()
+    internal bool SavePack()
     {
         // Any in-progress variable rename becomes real here: saving is a
         // commit point, so references get rewritten before the manifest is
@@ -3059,7 +3903,10 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         if (!SettleVersionBeforeWriting()) return false;
         try
         {
-            PackRepository.Save(Pack, PackRoot);
+            // In its own words, whatever is on screen. Saving while the Spanish
+            // is up must not put the Spanish into the pack.
+            using (OwnWords()) PackRepository.Save(Pack, PackRoot);
+            WriteEditingLanguage();
             Validate();
             MarkSaved();
             foreach (var ext in VanillaExtensions) ext.RefreshChangeIndicator();
@@ -3068,7 +3915,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         }
         catch (Exception ex)
         {
-            Tell(ex.Message, "Save failed", MessageBoxImage.Error);
+            Tell(ex.Message, Loc.T("save.failed.title"), MessageBoxImage.Error);
             return false;
         }
     }
@@ -3095,7 +3942,12 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         if (Services.TestMode.Active) return true;
         if (!ConfirmOnSave || ConfirmSave == null) return true;
 
-        var changes = PackDiff.Compute(_savedSnapshot, PackRepository.SerializeAsSaved(Pack));
+        string now;
+        using (OwnWords()) now = PackRepository.SerializeAsSaved(Pack);
+        var changes = PackDiff.Compute(_savedSnapshot, now);
+        // And what the save writes into the translations, which the pack
+        // itself does not show.
+        changes.AddRange(TranslationChangesToSave());
         if (changes.Count == 0) return true;
 
         var (proceed, suppress) = ConfirmSave(changes, PackRoot);
@@ -3152,6 +4004,18 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         }
     }
 
+    /// <summary>Whether an export or a publish offers to translate what is
+    /// still untranslated first. Per pack; see <see cref="OfferTranslationBeforeExport"/>.</summary>
+    public bool OfferTranslationOnExport
+    {
+        get => !Services.EditorPrefs.IsQuietOnExportTranslation(Pack.PackId);
+        set
+        {
+            Services.EditorPrefs.SetQuietOnExportTranslation(Pack.PackId, !value);
+            OnPropertyChanged();
+        }
+    }
+
     public bool ConfirmOnSave
     {
         get => Services.EditorPrefs.ConfirmOnSave;
@@ -3188,8 +4052,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         var dialog = new SaveFileDialog
         {
             FileName = PackRepository.ManifestFileName,
-            Filter = "Mod pack manifest (modpack.json)|modpack.json",
-            Title = "Save pack to folder",
+            Filter = Loc.T("save.filter") + "|modpack.json",
+            Title = Loc.T("save.dialogTitle"),
         };
         if (Services.TestMode.Active) return;   // no picker, and nobody to use it
         if (dialog.ShowDialog() != true) return;
@@ -3203,12 +4067,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         {
             string suggested = Services.PackFolderSafety.SuggestSubfolder(dir, Pack.PackId);
             var answer = Ask(
-                $"That is {risk}.\n\n" +
-                "A pack owns its whole folder: everything inside it, including " +
-                "every subfolder, is bundled into the .smspack when you export. " +
-                "Saving here would make all of it part of the pack.\n\n" +
-                $"Create a folder for the pack instead?\n{suggested}",
-                "Save pack", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning,
+                Loc.F("save.folderRisk", "risk", risk, "folder", suggested),
+                Loc.T("save.folderRisk.title"), MessageBoxButton.YesNoCancel, MessageBoxImage.Warning,
                 // Yes under the harness: make the subfolder rather than
                 // saving into whatever folder a test happened to point at.
                 MessageBoxResult.Yes);
@@ -3219,7 +4079,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
                 try { Directory.CreateDirectory(suggested); dir = suggested; }
                 catch (Exception ex)
                 {
-                    Tell(ex.Message, "Could not create the folder", MessageBoxImage.Error);
+                    Tell(ex.Message, Loc.T("save.folderFailed.title"), MessageBoxImage.Error);
                     return;
                 }
             }
@@ -3256,6 +4116,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         if (remembered == null) { ExportPackAs(); return; }
 
         if (!EnsureSavedForExport()) return;
+        if (!OfferTranslationBeforeExport()) return;
         RunExport(remembered);
     }
 
@@ -3264,6 +4125,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
     private void ExportPackAs()
     {
         if (!EnsureSavedForExport()) return;
+        if (!OfferTranslationBeforeExport()) return;
 
         var remembered = Services.ExportPathService.Get(PackRoot);
         var dialog = new SaveFileDialog
@@ -3271,8 +4133,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
             FileName = remembered != null
                 ? Path.GetFileName(remembered)
                 : Pack.PackId + PackExporter.FileExtension,
-            Filter = "ModForge pack (*" + PackExporter.FileExtension + ")|*" + PackExporter.FileExtension,
-            Title = "Export pack to .smspack file",
+            Filter = Loc.F("export.filter", "extension", PackExporter.FileExtension) + "|*" + PackExporter.FileExtension,
+            Title = Loc.T("export.dialogTitle"),
             // Reopen at this pack's last export, else where any pack was last
             // exported (e.g. the game's ModPacks folder), else the pack folder.
             InitialDirectory = (remembered != null ? Path.GetDirectoryName(remembered) : null)
@@ -3332,6 +4194,53 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         return answer.Export;
     }
 
+    /// <summary>
+    /// Before an export or a publish: when some of what players read is not in
+    /// every language ModForge has, offer to translate it by machine first.
+    /// <para/>
+    /// Only what is still untranslated, by the rule the Translate window and
+    /// the run itself use (<see cref="Services.Translation.PackTranslationJob.Missing"/>):
+    /// a line anybody wrote in a translation is translated and stays exactly as
+    /// it is, one emptied again is waiting, and one marked as reading the same
+    /// in that language is done. So the offer comes back only when there is
+    /// real work - a new line, a changed one - and not after every run.
+    /// <para/>
+    /// Yes opens the Translate window already running, with every language that
+    /// needs it ticked: the window is where the run shows its progress, can be
+    /// stopped, and says what happened. The export goes ahead when it is closed,
+    /// with whatever was translated; a run cut short keeps its work either way.
+    /// No exports as it is; Cancel exports nothing. Nobody at the keyboard (the
+    /// test harness) is No: a test must never send anybody's text anywhere.
+    /// </summary>
+    /// <returns>False when the author cancelled the export.</returns>
+    internal bool OfferTranslationBeforeExport()
+    {
+        if (PackRoot == null || !OfferTranslationOnExport) return true;
+        string root = PackRoot;
+
+        return WithTranslationFilesCurrent(pack =>
+        {
+            var waiting = Services.Translation.PackTranslationJob.StillToTranslate(pack, root)
+                                                                 .Where(w => w.Missing > 0).ToList();
+            if (waiting.Count == 0) return true;
+
+            string languages = string.Join("\n", waiting.Select(w => Loc.F("exportTranslate.language",
+                "language", w.Name, "missing", w.Missing.ToString(), "total", w.Total.ToString())));
+            var answer = Ask(Loc.F("exportTranslate.ask", "pack", pack.PackId, "languages", languages),
+                             Loc.T("exportTranslate.title"), MessageBoxButton.YesNoCancel, MessageBoxImage.Question,
+                             MessageBoxResult.No);
+            if (answer == MessageBoxResult.Cancel) return false;
+            if (answer != MessageBoxResult.Yes || Services.TestMode.Active) return true;
+
+            var window = new View.TranslatePackWindow(pack, root, startNow: true)
+            {
+                Owner = System.Windows.Application.Current?.MainWindow,
+            };
+            window.ShowDialog();
+            return true;
+        });
+    }
+
     private bool EnsureSavedForExport()
     {
         // Belt and braces: the commands' CanExecute already requires
@@ -3339,9 +4248,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         if (PackRoot is null)
         {
             Tell(
-                "Save the pack to disk before exporting — the .smspack zip " +
-                "is built from the on-disk folder.",
-                "Export pack", MessageBoxImage.Information);
+                Loc.T("export.saveFirst"),
+                Loc.T("export.title"), MessageBoxImage.Information);
             return false;
         }
         return SavePack();   // SavePack already reported any failure
@@ -3372,7 +4280,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
             return (current, Model.VersionBump.Change.None);
 
         var change = Model.VersionBump.Classify(
-            Model.PublishRecord.Read(PackRoot), PackRepository.SerializeAsSaved(Pack));
+            Model.PublishRecord.Read(PackRoot), OwnWordsSaved());
 
         return (Model.VersionBump.Next(current, change), change);
     }
@@ -3404,28 +4312,27 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         if (errors > 0)
         {
             var carryOn = Ask(
-                $"{Pack.PackId} has {errors} validation error(s).\n\n"
-                + "Errors are things the runtime cannot resolve - a missing sprite, a "
-                + "dialogue pointing at a character that is not there - so players would "
-                + "meet them as the pack half-working.\n\n"
-                + "Publish anyway?",
-                "Publish with errors", MessageBoxButton.YesNo, MessageBoxImage.Warning,
+                Loc.P("publish.errors", errors, "pack", Pack.PackId),
+                Loc.T("publish.errors.title"), MessageBoxButton.YesNo, MessageBoxImage.Warning,
                 MessageBoxResult.No);
             if (carryOn != MessageBoxResult.Yes) return;
         }
 
-        // 2. The version this release carries.
+        // 2. What players read, in every language ModForge has - if the author wants it.
+        if (!OfferTranslationBeforeExport()) return;
+
+        // 3. The version this release carries.
         var (version, change) = VersionForPublish();
         string moving = change == Model.VersionBump.Change.None
-            ? $"version {version}"
-            : $"version {Pack.Version} to {version}";
+            ? Loc.F("publish.dialogTitle", "pack", Pack.PackId, "version", version)
+            : Loc.F("publish.dialogTitleMoving", "pack", Pack.PackId, "from", Pack.Version, "to", version);
 
         var remembered = Services.PublishPathService.Get(PackRoot);
         var dialog = new SaveFileDialog
         {
             FileName = Model.PackPublisher.ArchiveNameFor(Pack.PackId, version),
-            Filter = "Player download (*.zip)|*.zip",
-            Title = "Publish " + Pack.PackId + " - " + moving,
+            Filter = Loc.T("publish.filter") + "|*.zip",
+            Title = moving,
             InitialDirectory = (remembered != null ? Path.GetDirectoryName(remembered) : null)
                 ?? Services.DialogFoldersService.Get(Services.DialogFoldersService.Key.Export)
                 ?? PackRoot,
@@ -3464,14 +4371,11 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
             // Only now, and only on success. A failed publish that moved the
             // record would make the NEXT release under-report what changed,
             // by comparing against a release nobody ever got.
-            Model.PublishRecord.Write(PackRoot, PackRepository.SerializeAsSaved(Pack));
+            Model.PublishRecord.Write(PackRoot, OwnWordsSaved());
 
-            Tell($"Published {Pack.PackId} v{version}.\n\n"
-                 + $"{made.OutputPath}\n"
-                 + $"{made.Bytes / 1024.0 / 1024.0:N1} MB, containing {made.EntryPath}\n\n"
-                 + "Tell players to extract it into their game folder - the one with the "
-                 + "game's .exe in it. That is the whole installation.",
-                 "Published", MessageBoxImage.Information);
+            Tell(Loc.F("publish.done", "pack", Pack.PackId, "version", version, "path", made.OutputPath,
+                       "size", (made.Bytes / 1024.0 / 1024.0).ToString("N1"), "entry", made.EntryPath),
+                 Loc.T("publish.done.title"), MessageBoxImage.Information);
 
             ShowInFolder(made.OutputPath);
             return made;
@@ -3481,7 +4385,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
             // Put the version back. Nothing shipped, so nothing claims it.
             Pack.PackVersion = was;
             RefreshPackVersionDisplay();
-            Tell(ex.Message, "Publish failed", MessageBoxImage.Error);
+            Tell(ex.Message, Loc.T("publish.failed.title"), MessageBoxImage.Error);
             return null;
         }
     }
@@ -3527,13 +4431,13 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
             double srcMb = result.SourceBytes / 1024.0 / 1024.0;
             double outMb = result.CompressedBytes / 1024.0 / 1024.0;
             Tell(
-                $"Exported {Pack.PackId} v{Pack.Version} - {result.FileCount} file(s), "
-                + $"{srcMb:N1} MB source, {outMb:N1} MB packed:\n{result.OutputPath}",
-                "Export complete", MessageBoxImage.Information);
+                Loc.P("export.done", result.FileCount, "pack", Pack.PackId, "version", Pack.Version,
+                      "source", srcMb.ToString("N1"), "packed", outMb.ToString("N1"), "path", result.OutputPath),
+                Loc.T("export.done.title"), MessageBoxImage.Information);
         }
         catch (Exception ex)
         {
-            Tell(ex.Message, "Export failed", MessageBoxImage.Error);
+            Tell(ex.Message, Loc.T("export.failed.title"), MessageBoxImage.Error);
         }
     }
 
@@ -3550,7 +4454,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         // Names are left blank and derived: a new character's key and
         // GameObject follow whatever display name gets typed, until the author
         // overrides one. Existing characters never re-derive.
-        var def = new CharacterDef { DisplayName = "New Character", BustSource = source };
+        var def = new CharacterDef { DisplayName = NewName("characters.newName", translated: true), BustSource = source };
         // Every character starts able to be asked for no face at all.
         def.Expressions.Add(CharacterDef.NewNeutral());
         var vm = new CharacterViewModel(def, () => Characters, isNew: true);
@@ -3560,6 +4464,10 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         Pack.Characters.Add(def);
         Characters.Add(HookSpeaker(vm));
         foreach (var o in def.Outfits) vm.Outfits.Add(new OutfitViewModel(o, vm));
+        // The new character, selected - through the character rather than an
+        // outfit, since a voice-only one has none and selecting "no outfit"
+        // left whoever was selected before (author, 2026-09-27).
+        SelectedCharacter = vm;
         SelectedOutfit = vm.Outfits.FirstOrDefault();
         OnPropertyChanged(nameof(SelectedCharacter));
         // Offered as a speaker straight away. The list was only rebuilt when the
@@ -3579,10 +4487,10 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         var ch = SelectedCharacter;
         if (ch == null) return;
         // OK under the harness: a test that asked for a delete meant it.
-        if (Ask($"Delete '{ch.Display}' and its {ch.Outfits.Count} outfit(s)?" +
+        if (Ask(Loc.P("characters.delete.ask", ch.Outfits.Count, "name", ch.Display) +
                 System.Environment.NewLine + System.Environment.NewLine +
-                "Dialogue lines that name it as the speaker are left as they are.",
-                "Delete character", MessageBoxButton.OKCancel,
+                Loc.T("characters.delete.linesStay"),
+                Loc.T("characters.delete.title"), MessageBoxButton.OKCancel,
                 MessageBoxImage.Warning, MessageBoxResult.OK) != MessageBoxResult.OK)
             return;
         Undo.Checkpoint();
@@ -3598,7 +4506,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         var ch = SelectedCharacter;
         var o = SelectedOutfit;
         if (ch == null || o == null) return;
-        if (Ask($"Delete outfit '{o.Display}'?", "Delete outfit",
+        if (Ask(Loc.F("outfits.delete.ask", "name", o.Display), Loc.T("outfits.delete.title"),
                 MessageBoxButton.OKCancel, MessageBoxImage.Warning,
                 MessageBoxResult.OK) != MessageBoxResult.OK)
             return;
@@ -3635,7 +4543,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         {
             Key = $"place{Pack.Places.Count + 1}",
             InternalName = $"Place{Pack.Places.Count + 1}",
-            DisplayName = "New Place",
+            DisplayName = NewName("places.newName"),
             BaseSprite = "",
             SecondarySprite = "",
             MaskSprite = "",
@@ -3966,7 +4874,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
 
     private void AddDialogueFolder()
     {
-        var folder = new DialogueFolderNode("New Folder");
+        var folder = new DialogueFolderNode(NewName("common.newFolder"));
         if (SelectedDialogueTreeItem is DialogueFolderNode target)
         {
             target.Children.Insert(0, folder);
@@ -4064,7 +4972,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
 
     private void AddVariableFolder()
     {
-        var folder = new VariableFolderNode("New Folder");
+        var folder = new VariableFolderNode(NewName("common.newFolder"));
         if (SelectedVariableTreeItem is VariableFolderNode target)
         {
             target.Children.Insert(0, folder);
@@ -4310,6 +5218,16 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
     /// </summary>
     private CharacterViewModel HookSpeaker(CharacterViewModel vm)
     {
+        // A face added, renamed or removed on the Busts tab is one a line can
+        // ask for now: the lists that offer faces, and the face the line's
+        // preview shows, follow at once rather than when the line's speaker
+        // next changes.
+        vm.ExpressionsChanged += (_, _) =>
+        {
+            RebuildSelectedNodeExpressionOptions();
+            RebuildExpressionKeyOptions();
+            OnPropertyChanged(nameof(SelectedNodeFace));
+        };
         vm.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(CharacterViewModel.NameColor) ||
@@ -4481,7 +5399,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
                     // The GameObject name, not the key: that is what a dialogue
                     // node switches into and what an action targets a bust by.
                     // The key follows it, as it does when typed.
-                    RenameKey("Outfit", SelectedOutfit!, v => v.GameObjectName,
+                    RenameKey("rename.outfit", SelectedOutfit!, v => v.GameObjectName,
                               (v, k) => v.GameObjectName = k,
                               Characters.SelectMany(c => c.Outfits)
                                         .Where(x => x != SelectedOutfit).Select(x => x.GameObjectName),
@@ -4489,31 +5407,31 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
                 break;
             case TabPlaces:
                 if (SelectedPlace != null)
-                    RenameKey("Place", SelectedPlace, v => v.Key, (v, k) => { v.Key = k; RebuildDialogueRoomTalkOptions(); PlaceTree.Sort(); PlaceTree.SyncToModel(); },
+                    RenameKey("rename.place", SelectedPlace, v => v.Key, (v, k) => { v.Key = k; RebuildDialogueRoomTalkOptions(); PlaceTree.Sort(); PlaceTree.SyncToModel(); },
                               Places.Where(x => x != SelectedPlace).Select(x => x.Key),
                               Services.RefKind.Place);
                 break;
             case TabDialogues:
                 if (SelectedDialogue != null)
-                    RenameKey("Dialogue", SelectedDialogue, v => v.Key, (v, k) => v.Key = k,
+                    RenameKey("rename.dialogue", SelectedDialogue, v => v.Key, (v, k) => v.Key = k,
                               Dialogues.Where(x => x != SelectedDialogue).Select(x => x.Key),
                               Services.RefKind.Dialogue);
                 break;
             case TabScenes:
                 if (SelectedScene != null)
-                    RenameKey("Scene", SelectedScene, v => v.Key, (v, k) => { v.Key = k; RebuildSceneOptions(); SceneTree.Sort(); SceneTree.SyncToModel(); },
+                    RenameKey("rename.scene", SelectedScene, v => v.Key, (v, k) => { v.Key = k; RebuildSceneOptions(); SceneTree.Sort(); SceneTree.SyncToModel(); },
                               Scenes.Where(x => x != SelectedScene).Select(x => x.Key),
                               Services.RefKind.Scene);
                 break;
             case TabNpcs:
                 if (SelectedNpc != null)
-                    RenameKey("NPC", SelectedNpc, v => v.Key, (v, k) => { v.Key = k; RebuildNpcOptions(); NpcTree.Sort(); NpcTree.SyncToModel(); },
+                    RenameKey("rename.npc", SelectedNpc, v => v.Key, (v, k) => { v.Key = k; RebuildNpcOptions(); NpcTree.Sort(); NpcTree.SyncToModel(); },
                               Npcs.Where(x => x != SelectedNpc).Select(x => x.Key),
                               Services.RefKind.Npc);
                 break;
             case TabVariables:
                 if (SelectedVariable != null)
-                    RenameKey("Variable", SelectedVariable, v => v.Name,
+                    RenameKey("rename.variable", SelectedVariable, v => v.Name,
                               (v, k) =>
                               {
                                   // Rewrite every reference BEFORE the declaration
@@ -4528,25 +5446,25 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
                                   RebuildVariableNameOptions();
                                   if (refs > 0) RefreshConditionAndActionRows();
                                   LastRenameSummary = refs > 0
-                                      ? $"Renamed to '{k}' and updated {refs} reference{(refs == 1 ? "" : "s")}."
-                                      : $"Renamed to '{k}' (no references found).";
+                                      ? Loc.P("rename.to", refs, "name", k)
+                                      : Loc.F("rename.toNothingFollowed", "name", k);
                               },
                               Variables.Where(x => x != SelectedVariable).Select(x => x.Name));
                 break;
             case TabWallpapers:
                 if (SelectedWallpaper != null)
-                    RenameKey("Wallpaper", SelectedWallpaper, v => v.Key, (v, k) => { v.Key = k; WallpaperTree.Sort(); WallpaperTree.SyncToModel(); },
+                    RenameKey("rename.wallpaper", SelectedWallpaper, v => v.Key, (v, k) => { v.Key = k; WallpaperTree.Sort(); WallpaperTree.SyncToModel(); },
                               Wallpapers.Where(x => x != SelectedWallpaper).Select(x => x.Key));
                 break;
             case TabMusic:
                 if (SelectedMusic != null)
-                    RenameKey("Music", SelectedMusic, v => v.Key, (v, k) => { v.Key = k; RebuildMusicKeyOptions(); MusicTree.Sort(); MusicTree.SyncToModel(); },
+                    RenameKey("rename.music", SelectedMusic, v => v.Key, (v, k) => { v.Key = k; RebuildMusicKeyOptions(); MusicTree.Sort(); MusicTree.SyncToModel(); },
                               Music.Where(x => x != SelectedMusic).Select(x => x.Key),
                               Services.RefKind.Music);
                 break;
             case TabSfx:
                 if (SelectedSfx != null)
-                    RenameKey("SFX", SelectedSfx, v => v.Key, (v, k) => { v.Key = k; RebuildSfxKeyOptions(); SfxTree.Sort(); SfxTree.SyncToModel(); },
+                    RenameKey("rename.sfx", SelectedSfx, v => v.Key, (v, k) => { v.Key = k; RebuildSfxKeyOptions(); SfxTree.Sort(); SfxTree.SyncToModel(); },
                               Sfx.Where(x => x != SelectedSfx).Select(x => x.Key),
                               Services.RefKind.Sfx);
                 break;
@@ -4555,7 +5473,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
                     // Actions and conditions naming the quest follow it. Its
                     // players' saved progress cannot: that is filed under an id
                     // made from the key, which is why the tab says so beside it.
-                    RenameKey("Quest", SelectedQuest, v => v.Key,
+                    RenameKey("rename.quest", SelectedQuest, v => v.Key,
                               (v, k) => { v.Key = k; QuestTree.Sort(); QuestTree.SyncToModel(); },
                               Quests.Where(x => x != SelectedQuest).Select(x => x.Key),
                               Services.RefKind.Quest);
@@ -4565,7 +5483,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
                     // Folder membership is stored BY KEY, so a rename has to be
                     // written back or the rule would fall out of its folder on
                     // the next load.
-                    RenameKey("Rule", SelectedIntegrationRule, v => v.Key,
+                    RenameKey("rename.rule", SelectedIntegrationRule, v => v.Key,
                               (v, k) => { v.Key = k; SortIntegrationTree(IntegrationTree); SyncIntegrationFoldersToModel(); },
                               IntegrationRules.Where(x => x != SelectedIntegrationRule).Select(x => x.Key));
                 break;
@@ -4655,7 +5573,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
                                 Services.RefKind? follows = null)
     {
         var current = get(vm);
-        var entered = PromptForText?.Invoke("Rename " + what, "New name:", current);
+        var entered = PromptForText?.Invoke(Loc.T(what), Loc.T("rename.newName"), current);
         if (string.IsNullOrWhiteSpace(entered) || entered.Trim() == current) return;
         LastRenameSummary = "";
         Undo.Checkpoint();
@@ -4675,13 +5593,13 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
 
         if (refs > 0)
         {
-            LastRenameSummary = $"Renamed to '{wanted}' and updated {refs} reference{(refs == 1 ? "" : "s")}.";
+            LastRenameSummary = Loc.P("rename.to", refs, "name", wanted);
             RefreshConditionAndActionRows();
         }
         // Only speak up when the rename reached beyond the item itself —
         // rewriting parts of the pack the user can't see shouldn't be silent.
         if (!string.IsNullOrEmpty(LastRenameSummary))
-            Announce("Rename", LastRenameSummary);
+            Announce(Loc.T("rename.title"), LastRenameSummary);
     }
 
     /// <summary>Duplicate/paste an outfit into the selected outfit's character (else the first character).</summary>
@@ -4905,15 +5823,15 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         foreach (var r in VanillaRoomTalks.All)
             roomTalkOpts.Add(new NavigatorTargetOption(
                 Token: $"vanilla:{r.Name}",
-                DisplayLabel: $"Vanilla — {r.DisplayName} ({r.Name})"));
+                DisplayLabel: Loc.F("target.vanilla", "name", r.DisplayName, "id", r.Name)));
         foreach (var p in Places)
             roomTalkOpts.Add(new NavigatorTargetOption(
                 Token: $"place:{p.Key}",
-                DisplayLabel: $"This pack — {p.DisplayName} (place:{p.Key})"));
+                DisplayLabel: Loc.F("target.thisPack", "name", p.DisplayName, "id", "place:" + p.Key)));
         foreach (var name in Pack.CustomRoomTalks)
             roomTalkOpts.Add(new NavigatorTargetOption(
                 Token: $"vanilla:{name}",
-                DisplayLabel: $"This pack — custom roomtalk ({name})"));
+                DisplayLabel: Loc.F("target.customRoomTalk", "name", name)));
         // In-place sync, never Clear — see SyncOptions. A Clear here nulled the
         // Roomtalk combo's selection and wrote the empty value back, which is
         // why a dialogue's roomtalk kept vanishing on reload.
@@ -4950,11 +5868,11 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         foreach (var v in VanillaPlaces.All)
             levelOpts.Add(new NavigatorTargetOption(
                 Token: $"vanilla:{v.GoName}",
-                DisplayLabel: $"Vanilla — {v.DisplayName} ({v.GoName})"));
+                DisplayLabel: Loc.F("target.vanilla", "name", v.DisplayName, "id", v.GoName)));
         foreach (var p in Places)
             levelOpts.Add(new NavigatorTargetOption(
                 Token: $"place:{p.Key}",
-                DisplayLabel: $"This pack — {p.DisplayName} (place:{p.Key})"));
+                DisplayLabel: Loc.F("target.thisPack", "name", p.DisplayName, "id", "place:" + p.Key)));
         // In-place sync, never Clear — see SyncOptions.
         SyncOptions(LevelOptions,
             levelOpts.OrderBy(l => l.DisplayLabel, System.StringComparer.OrdinalIgnoreCase).ToList());
@@ -4965,7 +5883,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         var def = new DialogueDef
         {
             Key = $"dialogue{Pack.Dialogues.Count + 1}",
-            DisplayName = "New Dialogue",
+            DisplayName = NewName("dialogues.newName"),
             RoomTalk = "vanilla:Beach",
         };
         Pack.Dialogues.Add(def);
@@ -5084,7 +6002,13 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
     private void AddDialogueRootNode()
     {
         if (SelectedDialogue is null) return;
-        var n = SelectedDialogue.AddNode(parentId: null);
+
+        // A root takes the speaker from the line it follows — the selected one,
+        // or the last in the conversation when nothing is selected — and
+        // nothing else. See DialogueViewModel.CarrySpeaker for why only those
+        // three fields.
+        var from = (SelectedNode ?? SelectedDialogue.Nodes.LastOrDefault())?.Model;
+        var n = SelectedDialogue.AddNode(parentId: null, speakerFrom: from);
         SelectedNode = n;
     }
 
@@ -5092,8 +6016,9 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
     // from (everything but the text — see DialogueViewModel.CloneForNewNode).
     // The next line of a scene almost always keeps the same speaker, outfit and
     // expression, and re-picking all three per line was the bulk of the clicking
-    // in a long dialogue. "+ Root" deliberately doesn't: a root starts a fresh
-    // strand, often with a different speaker entirely.
+    // in a long dialogue. "+ Root" carries the speaker and no more: a root is a
+    // fresh strand, so a condition or a jump written for somewhere else would
+    // follow it there and be wrong.
 
     private void AddDialogueChildNode()
     {
@@ -5229,12 +6154,28 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         SyncOptions(ActorBustOptions,
             actorBustOpts.OrderBy(o => o.DisplayLabel, System.StringComparer.OrdinalIgnoreCase).ToList());
 
-        // Vanilla bust prefab carries these four expression children; any pack
-        // actor that doesn't declare overrides expects the same names. Seed
-        // them, fold in custom keys, then surface the whole list alphabetically.
+        RebuildExpressionKeyOptions();
+    }
+
+    /// <summary>
+    /// Every expression key a line or an action can ask for: the game's four,
+    /// which every bust is built with, and every key a character of the pack
+    /// declares.
+    /// <para/>
+    /// From the characters. It was built from the old actor list, which is
+    /// emptied once its actors are folded into characters - so an action that
+    /// sets an expression was only ever offered the four, never a face a
+    /// character of the pack was given.
+    /// </summary>
+    private void RebuildExpressionKeyOptions()
+    {
         var exprOpts = new System.Collections.Generic.List<string> { "Happy", "Angry", "Sad", "Flirty" };
         var seenExpr = new HashSet<string>(System.StringComparer.Ordinal)
             { "Happy", "Angry", "Sad", "Flirty" };
+        foreach (var c in Characters)
+            foreach (var e in c.Expressions)
+                if (!string.IsNullOrEmpty(e.Key) && seenExpr.Add(e.Key))
+                    exprOpts.Add(e.Key);
         foreach (var a in Actors)
             foreach (var e in a.Expressions)
                 if (!string.IsNullOrEmpty(e.Key) && seenExpr.Add(e.Key))
@@ -5249,7 +6190,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         var def = new ActorDef
         {
             Key = $"actor{Pack.Actors.Count + 1}",
-            DisplayName = "New Actor",
+            DisplayName = NewName("actors.newName"),
         };
         Pack.Actors.Add(def);
         var vm = new ActorViewModel(def);
@@ -5665,7 +6606,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         var def = new SceneDef
         {
             Key = $"scene{Pack.Scenes.Count + 1}",
-            DisplayName = "New Scene",
+            DisplayName = NewName("scenes.newName"),
             VanillaFrame = VanillaFrames.All[0].FileName,
             Sound = SceneSoundMode.Silent,
         };
@@ -5713,7 +6654,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         var def = new NpcDef
         {
             Key = $"npc{Pack.Npcs.Count + 1}",
-            DisplayName = "New NPC",
+            DisplayName = NewName("npcs.newName"),
         };
         Pack.Npcs.Add(def);
         var vm = new NpcViewModel(def);
@@ -5767,7 +6708,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         var def = new WallpaperDef
         {
             Key = $"wallpaper{Pack.Wallpapers.Count + 1}",
-            DisplayName = "New Wallpaper",
+            DisplayName = NewName("wallpapers.newName"),
         };
         Pack.Wallpapers.Add(def);
         var vm = new WallpaperViewModel(def);
@@ -5823,7 +6764,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         var def = new MusicDef
         {
             Key = $"music{Pack.Music.Count + 1}",
-            DisplayName = "New Music",
+            DisplayName = NewName("music.newName"),
         };
         Pack.Music.Add(def);
         var vm = new MusicViewModel(def);
@@ -5901,7 +6842,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         // The key follows the title from here until somebody renames it - so a
         // quest is never saved under "Quest3" because its title came second.
         vm.DeriveKeyFromTitle(() => Quests.Select(x => x.Key));
-        vm.Title = "New quest";
+        vm.Title = NewName("quests.newName", translated: true);
         QuestTree.PlaceNew(vm);
         SelectedQuest = vm;
     }
@@ -5966,10 +6907,8 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
             d => string.Equals(d.Model.Source, entry.Token, StringComparison.OrdinalIgnoreCase));
         if (dialogue == null)
         {
-            var answer = Ask("Your pack does not change the conversation " + entry.Id + " yet.\n\n"
-                             + "Add it to your vanilla conversations to open it? Nothing about it changes until "
-                             + "you edit it, and you can remove it again from the Dialogues tab.",
-                             "Open the game's conversation", MessageBoxButton.YesNo, MessageBoxImage.Question,
+            var answer = Ask(Loc.F("dialogues.openGames.ask", "conversation", entry.Id),
+                             Loc.T("dialogues.openGames.title"), MessageBoxButton.YesNo, MessageBoxImage.Question,
                              whenNobodyIsThere: MessageBoxResult.Yes);
             if (answer != MessageBoxResult.Yes) return false;
 
@@ -6095,7 +7034,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
 
         // The key setter tells the quest, and the handler in MakeQuestVm
         // rewrites the rows - so this only has to pick a name free in the quest.
-        RenameKey("Task", task, t => t.Key, (t, k) => t.Key = k,
+        RenameKey("rename.task", task, t => t.Key, (t, k) => t.Key = k,
                   quest.AllTaskKeys.Where(k => k != task.Key));
     }
 
@@ -6137,7 +7076,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         var def = new SfxDef
         {
             Key = $"sfx{Pack.Sfx.Count + 1}",
-            DisplayName = "New SFX",
+            DisplayName = NewName("sfx.newName"),
         };
         Pack.Sfx.Add(def);
         var vm = new SfxViewModel(def);
@@ -6230,7 +7169,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         var def = new UpdateRuleDef
         {
             Key = $"rule{Pack.IntegrationRules.Count + 1}",
-            DisplayName = "New Rule",
+            DisplayName = NewName("integration.newName"),
         };
         Pack.IntegrationRules.Add(def);
         var vm = new UpdateRuleViewModel(def);
@@ -6356,7 +7295,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
 
     private void AddIntegrationFolder()
     {
-        var folder = new IntegrationFolderNode("New Folder");
+        var folder = new IntegrationFolderNode(NewName("common.newFolder"));
         if (SelectedIntegrationTreeItem is IntegrationFolderNode target)
         {
             target.Children.Insert(0, folder);
@@ -6476,11 +7415,18 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
     {
         Issues.Clear();
         if (PackRoot is null) return;
-        foreach (var issue in PackValidator.Validate(Pack, PackRoot, ShowIgnoredIssues))
+        // The pack as it is saved, not as a language being edited shows it:
+        // the issues are the pack's, and a line typed only in a translation is
+        // one of them precisely because the pack's own words for it are empty.
+        List<ValidationIssue> found;
+        using (OwnWords()) found = PackValidator.Validate(Pack, PackRoot, ShowIgnoredIssues);
+        foreach (var issue in found)
             Issues.Add(issue);
         OnPropertyChanged(nameof(IgnoredIssueCount));
         OnPropertyChanged(nameof(HasIgnoredIssues));
     }
+
+
 
     private bool _showIgnoredIssues;
 

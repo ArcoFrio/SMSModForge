@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.IO;
 using System.Linq;
 using SMSModForge.Model;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Validation;
 
@@ -175,9 +176,7 @@ public static class PackValidator
                     if (!ContainsWord(text, word)) continue;
                     issues.Add(new(Severity.Warning,
                         $"dialogues[{d.Key}].nodes[{n.Id}].text",
-                        $"This line writes \"{word}\". Players choose what they call their " +
-                        $"family, so {token} says it back the way they picked it — writing the " +
-                        "word says it to everyone, including whoever chose something else.",
+                        Loc.F("validation.dialogue.kinWord", "word", word, "token", token),
                         "dialogue.kinWord"));
                     break;   // one note per line is enough to make the point
                 }
@@ -264,11 +263,7 @@ public static class PackValidator
 
                 issues.Add(new(Severity.Warning,
                     $"dialogues[{d.Key}].nodes[{n.Id}].actionsOnStart",
-                    $"This node is one of a Choice's options and has {n.ActionsOnStart.Count} " +
-                    "action(s) on start. When an option counts as STARTED is not something the " +
-                    "pack can rely on — it may be when the menu is drawn rather than when the " +
-                    "player picks it, in which case these run for options nobody chose. Move " +
-                    "them to Actions on finish, which happens once the option has been taken.",
+                    Loc.P("validation.dialogue.choiceOptionOnStart", n.ActionsOnStart.Count),
                     "dialogue.choiceOptionOnStart"));
             }
         }
@@ -300,11 +295,7 @@ public static class PackValidator
 
                 issues.Add(new(Severity.Warning,
                     $"dialogues[{d.Key}].nodes[{n.Id}].kind",
-                    "This node is a Choice with no children, so it is a menu offering " +
-                    "nothing to pick. If it is meant to be a line, set Kind to Text. " +
-                    "Older packs collect these on their own: adding a node with + Child " +
-                    "or + Sibling used to copy the kind of the node it came from, so " +
-                    "every option under a Choice was saved as a Choice as well.",
+                    Loc.T("validation.dialogue.choiceWithoutOptions"),
                     "dialogue.choiceWithoutOptions"));
             }
         }
@@ -344,9 +335,7 @@ public static class PackValidator
                 // before the runtime ever sees it, so it cannot be checked here.
                 if (name.Length == 0 || IsTemplated(name) || declared.Contains(name)) continue;
                 issues.Add(new(Severity.Warning, where,
-                    $"Text uses [PV:{name}], but no variable called '{name}' is declared in " +
-                    "this pack. An undeclared name reads as an empty string, so the token " +
-                    "disappears from the line rather than showing up as a mistake.",
+                    Loc.F("validation.text.unknownPackVar", "name", name),
                     "text.unknownPackVar"));
             }
 
@@ -355,9 +344,7 @@ public static class PackValidator
             int closed = TokenRx.Matches(text).Count;
             if (opens > closed)
                 issues.Add(new(Severity.Warning, where,
-                    "Text has a [PV: that never closes with a ]. The token only counts " +
-                    "when it ends in a square bracket, so this one is shown to the player " +
-                    "exactly as it was typed.",
+                    Loc.T("validation.text.malformedToken"),
                     "text.malformedToken"));
         }
 
@@ -424,13 +411,10 @@ public static class PackValidator
         static bool Deferred(string v) =>
             string.IsNullOrWhiteSpace(v) || v.StartsWith("$") || IsTemplated(v);
 
-        void Ref(string value, HashSet<string> known, string what, string code, string where,
-                 string extra = "")
+        void Ref(string value, HashSet<string> known, string message, string code, string where)
         {
             if (Deferred(value) || known.Contains(value.Trim())) return;
-            issues.Add(new(Severity.Warning, where,
-                $"'{value}' is not {what} in this pack. A runtime name follows its display " +
-                "name, so renaming one leaves references behind." + extra, code));
+            issues.Add(new(Severity.Warning, where, Loc.F(message, "name", value), code));
         }
 
         void Action(NodeActionDef a, string where)
@@ -447,14 +431,14 @@ public static class PackValidator
 
             if (a.Type == NodeActionTypes.PlaySFX &&
                 a.Params.TryGetValue("clip", out var clip))
-                Ref(clip, sfx, "an effect", "action.unknownSfx", aw);
+                Ref(clip, sfx, "validation.action.unknownSfx", "action.unknownSfx", aw);
 
             // Scene is a category on the targeting row rather than a type of
             // its own, so the kind decides whether target names a scene.
             if (a.Params.TryGetValue("kind", out var kind) &&
                 string.Equals(kind, "Scene", System.StringComparison.OrdinalIgnoreCase) &&
                 a.Params.TryGetValue("target", out var scene))
-                Ref(scene, scenes, "a scene", "action.unknownScene", aw);
+                Ref(scene, scenes, "validation.action.unknownScene", "action.unknownScene", aw);
 
             // Animation is a Scenes-category feature, and saying so here is
             // the whole point: the runtime refuses it elsewhere, and an author
@@ -471,9 +455,9 @@ public static class PackValidator
                 a.Params.TryGetValue("kind", out var target);
                 if (!string.Equals(target, "Scene", System.StringComparison.OrdinalIgnoreCase))
                     issues.Add(new(Severity.Error, $"{aw}.sprite",
-                        $"'{art}' is animated, and animation is only supported for the Scenes " +
-                        $"category — this action targets '{target ?? "nothing"}'. Point it at a " +
-                        "scene, or use a still image here.",
+                        target == null
+                            ? Loc.F("validation.action.animatedSpriteNoTarget", "art", art)
+                            : Loc.F("validation.action.animatedSpriteCategory", "art", art, "target", target),
                         "action.animatedSpriteCategory"));
             }
 
@@ -539,28 +523,30 @@ public static class PackValidator
         CheckKinWordsInText(issues, pack);
         CheckTextTokens(issues, pack);
         CheckUnitReferences(issues, pack);
+        try { TranslationValidation.Check(issues, pack, packRoot); }
+        catch (System.Exception ex) when (ex is IOException or UnauthorizedAccessException) { /* a file that will not open is not a problem in the pack */ }
 
         if (string.IsNullOrWhiteSpace(pack.PackId))
-            issues.Add(new(Severity.Error, "$.packId", "packId is required", "pack.idMissing"));
+            issues.Add(new(Severity.Error, "$.packId", Loc.T("validation.pack.idMissing"), "pack.idMissing"));
 
         var seenKeys = new HashSet<string>();
         foreach (var character in pack.Characters)
         {
             var where = $"characters[{character.Name}]";
             if (string.IsNullOrWhiteSpace(character.Name))
-                issues.Add(new(Severity.Error, where, "Character name is required", "character.nameMissing"));
+                issues.Add(new(Severity.Error, where, Loc.T("validation.character.nameMissing"), "character.nameMissing"));
 
             foreach (var outfit in character.Outfits)
             {
                 var oWhere = $"{where}.outfits[{outfit.Key}]";
 
                 if (string.IsNullOrWhiteSpace(outfit.Key))
-                    issues.Add(new(Severity.Error, oWhere, "Outfit key is required", "outfit.keyMissing"));
+                    issues.Add(new(Severity.Error, oWhere, Loc.T("validation.outfit.keyMissing"), "outfit.keyMissing"));
                 else if (!seenKeys.Add(outfit.Key))
-                    issues.Add(new(Severity.Error, oWhere, $"Duplicate outfit key '{outfit.Key}'", "outfit.duplicateKey"));
+                    issues.Add(new(Severity.Error, oWhere, Loc.F("validation.outfit.duplicateKey", "key", outfit.Key), "outfit.duplicateKey"));
 
                 if (string.IsNullOrWhiteSpace(outfit.GameObjectName))
-                    issues.Add(new(Severity.Error, oWhere, "gameObjectName is required", "outfit.gameObjectNameMissing"));
+                    issues.Add(new(Severity.Error, oWhere, Loc.T("validation.outfit.gameObjectNameMissing"), "outfit.gameObjectNameMissing"));
 
                 // A borrowed character's own outfits are the game's bust names
                 // and carry no art on purpose, so there is nothing to check for
@@ -577,23 +563,23 @@ public static class PackValidator
                 {
                     if (VanillaBusts.FindByGoName(outfit.GameObjectName) == null)
                         issues.Add(new(Severity.Warning, oWhere,
-                            $"'{outfit.GameObjectName}' isn't a bust in the 1.8E catalog — the runtime will still look for it under 2_Bust_Manager, but check the name", "outfit.unknownVanillaBust"));
+                            Loc.F("validation.outfit.unknownVanillaBust", "name", outfit.GameObjectName), "outfit.unknownVanillaBust"));
 
                     var slotsSeen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                     foreach (var replaced in outfit.SpriteOverrides)
                     {
-                        string label = SMSModForge.Shared.SpriteSlotNames.Label(replaced.Slot);
+                        string label = SpriteSlotLabels.Of(replaced.Slot);
                         string rWhere = $"{oWhere}.spriteOverrides[{replaced.Slot}]";
 
                         if (string.IsNullOrWhiteSpace(replaced.Slot))
                         {
                             issues.Add(new(Severity.Error, rWhere,
-                                "A replaced texture has no slot, so nothing will be replaced", "outfit.overrideNoSlot"));
+                                Loc.T("validation.outfit.overrideNoSlot"), "outfit.overrideNoSlot"));
                             continue;
                         }
                         if (!slotsSeen.Add(replaced.Slot))
                             issues.Add(new(Severity.Error, rWhere,
-                                $"'{label}' is replaced twice — only one of them will be used", "outfit.overrideDuplicate"));
+                                Loc.F("validation.outfit.overrideDuplicate", "texture", label), "outfit.overrideDuplicate"));
 
                         // Ticked and nothing chosen. Kept rather than dropped
                         // on save, because it is an author part-way through
@@ -602,7 +588,7 @@ public static class PackValidator
                         // nothing else would say so.
                         if (string.IsNullOrWhiteSpace(replaced.Sprite))
                             issues.Add(new(Severity.Warning, rWhere,
-                                $"'{label}' is ticked for replacement with no art chosen — the game keeps its own", "outfit.overrideNoArt"));
+                                Loc.F("validation.outfit.overrideNoArt", "texture", label), "outfit.overrideNoArt"));
                         else
                             CheckFile(packRoot, replaced.Sprite, rWhere, issues);
                     }
@@ -616,7 +602,7 @@ public static class PackValidator
                 // reach whichever won.
                 if (outfit.PackArt && VanillaBusts.FindByGoName(outfit.GameObjectName) != null)
                     issues.Add(new(Severity.Error, oWhere,
-                        $"'{outfit.GameObjectName}' is already one of the game's busts — give this one a name of its own", "outfit.collidesWithVanillaBust"));
+                        Loc.F("validation.outfit.collidesWithVanillaBust", "name", outfit.GameObjectName), "outfit.collidesWithVanillaBust"));
 
                 CheckFile(packRoot, outfit.BaseSprite,  $"{oWhere}.baseSprite",  issues);
                 CheckOptionalFile(packRoot, outfit.MaskSprite, $"{oWhere}.maskSprite", issues);
@@ -645,10 +631,10 @@ public static class PackValidator
                 var j = outfit.Jiggle;
                 if (j.Strength < -0.5f || j.Strength > 0.5f)
                     issues.Add(new(Severity.Warning, $"{oWhere}.jiggle.strength",
-                        $"strength {j.Strength} is outside the usual -0.5..0.5 range", "outfit.jiggleStrengthRange"));
+                        Loc.F("validation.outfit.jiggleStrengthRange", "value", j.Strength), "outfit.jiggleStrengthRange"));
                 if (j.NoiseStrength < 0f || j.NoiseStrength > 0.5f)
                     issues.Add(new(Severity.Warning, $"{oWhere}.jiggle.noiseStrength",
-                        $"noiseStrength {j.NoiseStrength} is outside the usual 0..0.5 range", "outfit.jiggleNoiseRange"));
+                        Loc.F("validation.outfit.jiggleNoiseRange", "value", j.NoiseStrength), "outfit.jiggleNoiseRange"));
             }
         }
 
@@ -666,13 +652,13 @@ public static class PackValidator
         {
             var pWhere = $"places[{place.Key}]";
             if (string.IsNullOrWhiteSpace(place.Key))
-                issues.Add(new(Severity.Error, pWhere, "Place key is required", "place.keyMissing"));
+                issues.Add(new(Severity.Error, pWhere, Loc.T("validation.place.keyMissing"), "place.keyMissing"));
             else if (!seenPlaceKeys.Add(place.Key))
-                issues.Add(new(Severity.Error, pWhere, $"Duplicate place key '{place.Key}'", "place.duplicateKey"));
+                issues.Add(new(Severity.Error, pWhere, Loc.F("validation.place.duplicateKey", "key", place.Key), "place.duplicateKey"));
 
             if (string.IsNullOrWhiteSpace(place.InternalName))
                 issues.Add(new(Severity.Warning, $"{pWhere}.internalName",
-                    "internalName is empty; loader will fall back to the key", "place.internalNameEmpty"));
+                    Loc.T("validation.place.internalNameEmpty"), "place.internalNameEmpty"));
 
             CheckFile(packRoot, place.BaseSprite,      $"{pWhere}.baseSprite",      issues);
             CheckFile(packRoot, place.SecondarySprite, $"{pWhere}.secondarySprite", issues);
@@ -700,16 +686,15 @@ public static class PackValidator
                 var pl = placements[pi].Placement;
                 var plWhere = $"{pWhere}.{placements[pi].Path}.npcs[{pi}]";
                 if (string.IsNullOrWhiteSpace(pl.Npc))
-                    issues.Add(new(Severity.Error, plWhere, "NPC placement has no npc key", "place.npcPlacementNoKey"));
+                    issues.Add(new(Severity.Error, plWhere, Loc.T("validation.place.npcPlacementNoKey"), "place.npcPlacementNoKey"));
                 else if (!npcKeysInPack.Contains(pl.Npc))
                     issues.Add(new(Severity.Error, plWhere,
-                        $"NPC placement references unknown NPC '{pl.Npc}'", "place.npcPlacementUnknown"));
+                        Loc.F("validation.place.npcPlacementUnknown", "npc", pl.Npc), "place.npcPlacementUnknown"));
 
                 string effName = string.IsNullOrWhiteSpace(pl.Name) ? pl.Npc : pl.Name;
                 if (!string.IsNullOrWhiteSpace(effName) && !seenPlacementNames.Add(effName))
                     issues.Add(new(Severity.Warning, plWhere,
-                        $"Two NPC placements resolve to the same GameObject name '{effName}' in this level — " +
-                        "give one an explicit Name so they don't collide", "place.npcPlacementNameClash"));
+                        Loc.F("validation.place.npcPlacementNameClash", "name", effName), "place.npcPlacementNameClash"));
             }
         }
 
@@ -725,16 +710,16 @@ public static class PackValidator
                 sourceRef.Kind != PlaceTargetKind.Vanilla)
             {
                 issues.Add(new(Severity.Error, $"{eWhere}.source",
-                    $"Vanilla source '{ext.Source}' is malformed (expected 'vanilla:<goName>')", "ext.sourceMalformed"));
+                    Loc.F("validation.ext.sourceMalformed", "source", ext.Source), "ext.sourceMalformed"));
             }
             else
             {
                 if (VanillaPlaces.FindByGoName(sourceRef.Key) == null)
                     issues.Add(new(Severity.Warning, $"{eWhere}.source",
-                        $"Vanilla level '{sourceRef.Key}' is not in the 1.8E catalog", "ext.unknownVanillaLevel"));
+                        Loc.F("validation.unknownVanillaLevel", "level", sourceRef.Key), "ext.unknownVanillaLevel"));
                 if (!seenExtensionSources.Add(ext.Source))
                     issues.Add(new(Severity.Warning, $"{eWhere}.source",
-                        $"Multiple vanilla extensions target '{ext.Source}' — buttons will pile up on the same nav strip; consider consolidating", "ext.duplicateSource"));
+                        Loc.F("validation.ext.duplicateSource", "source", ext.Source), "ext.duplicateSource"));
             }
 
             foreach (var btn in ext.NavigatorButtons)
@@ -748,12 +733,12 @@ public static class PackValidator
             var npc = pack.Npcs[i];
             var nWhere = $"npcs[{i}:{npc.Key}]";
             if (string.IsNullOrWhiteSpace(npc.Key))
-                issues.Add(new(Severity.Error, nWhere, "NPC key is required", "npc.keyMissing"));
+                issues.Add(new(Severity.Error, nWhere, Loc.T("validation.npc.keyMissing"), "npc.keyMissing"));
             else if (!seenNpcKeys.Add(npc.Key))
-                issues.Add(new(Severity.Error, nWhere, $"Duplicate NPC key '{npc.Key}'", "npc.duplicateKey"));
+                issues.Add(new(Severity.Error, nWhere, Loc.F("validation.npc.duplicateKey", "key", npc.Key), "npc.duplicateKey"));
 
             if (string.IsNullOrWhiteSpace(npc.Sprite))
-                issues.Add(new(Severity.Error, $"{nWhere}.sprite", "NPC sprite path is required", "npc.spriteMissing"));
+                issues.Add(new(Severity.Error, $"{nWhere}.sprite", Loc.T("validation.npc.spriteMissing"), "npc.spriteMissing"));
             else
                 CheckFile(packRoot, npc.Sprite, $"{nWhere}.sprite", issues);
 
@@ -764,7 +749,7 @@ public static class PackValidator
 
             if (npc.Blink.MaxWait < npc.Blink.MinWait)
                 issues.Add(new(Severity.Warning, $"{nWhere}.blink",
-                    $"Blink max wait ({npc.Blink.MaxWait}) is below min ({npc.Blink.MinWait})", "npc.blinkWaitRange"));
+                    Loc.F("validation.npc.blinkWaitRange", "max", npc.Blink.MaxWait, "min", npc.Blink.MinWait), "npc.blinkWaitRange"));
         }
 
         // ── Map buttons (World Map radial entries) ────────────────
@@ -776,8 +761,7 @@ public static class PackValidator
             if (!PlaceTargetRef.TryParse(mb.Target, out var tref))
             {
                 issues.Add(new(Severity.Error, $"{mWhere}.target",
-                    $"Map button target '{mb.Target}' is malformed " +
-                    "(expected 'vanilla:<goName>', 'pack:<packId>.<key>', or 'self:<key>')", "map.targetMalformed"));
+                    Loc.F("validation.map.targetMalformed", "target", mb.Target), "map.targetMalformed"));
             }
             else
             {
@@ -786,22 +770,22 @@ public static class PackValidator
                     case PlaceTargetKind.Vanilla:
                         if (VanillaPlaces.FindByGoName(tref.Key) == null)
                             issues.Add(new(Severity.Warning, $"{mWhere}.target",
-                                $"Vanilla level '{tref.Key}' is not in the 1.8E catalog", "map.unknownVanillaLevel"));
+                                Loc.F("validation.unknownVanillaLevel", "level", tref.Key), "map.unknownVanillaLevel"));
                         break;
                     case PlaceTargetKind.Self:
                         if (!placeKeysInPack.Contains(tref.Key))
                             issues.Add(new(Severity.Error, $"{mWhere}.target",
-                                $"self target '{tref.Key}' has no matching place in this pack", "map.selfTargetMissing"));
+                                Loc.F("validation.map.selfTargetMissing", "key", tref.Key), "map.selfTargetMissing"));
                         break;
                 }
             }
 
             if (string.IsNullOrWhiteSpace(mb.District))
                 issues.Add(new(Severity.Error, $"{mWhere}.district",
-                    "Map button district is required", "map.districtMissing"));
+                    Loc.T("validation.map.districtMissing"), "map.districtMissing"));
             else if (WorldMapDistricts.FindByGoName(mb.District) == null)
                 issues.Add(new(Severity.Warning, $"{mWhere}.district",
-                    $"District '{mb.District}' is not in the 1.8E World Map catalog (Seaside, TheLine, NeonRow, Shopside, Foundry)", "map.unknownDistrict"));
+                    Loc.F("validation.map.unknownDistrict", "district", mb.District), "map.unknownDistrict"));
         }
 
         // ── Variables ─────────────────────────────────────────────
@@ -812,9 +796,9 @@ public static class PackValidator
         {
             var vWhere = $"variables[{v.Name}]";
             if (string.IsNullOrWhiteSpace(v.Name))
-                issues.Add(new(Severity.Error, vWhere, "Variable name is required", "variable.nameMissing"));
+                issues.Add(new(Severity.Error, vWhere, Loc.T("validation.variable.nameMissing"), "variable.nameMissing"));
             else if (!seenVarNames.Add(v.Name))
-                issues.Add(new(Severity.Error, vWhere, $"Duplicate variable name '{v.Name}'", "variable.duplicateName"));
+                issues.Add(new(Severity.Error, vWhere, Loc.F("validation.variable.duplicateName", "name", v.Name), "variable.duplicateName"));
 
             // Verify defaultValue parses for the chosen type.
             switch (v.Type)
@@ -822,19 +806,19 @@ public static class PackValidator
                 case PackVariableType.Bool:
                     if (!bool.TryParse(v.DefaultValue, out _))
                         issues.Add(new(Severity.Warning, $"{vWhere}.defaultValue",
-                            $"Bool default '{v.DefaultValue}' does not parse as true/false; runtime will treat as false", "variable.boolDefault"));
+                            Loc.F("validation.variable.boolDefault", "value", v.DefaultValue), "variable.boolDefault"));
                     break;
                 case PackVariableType.Int:
                     if (!int.TryParse(v.DefaultValue, System.Globalization.NumberStyles.Integer,
                                       System.Globalization.CultureInfo.InvariantCulture, out _))
                         issues.Add(new(Severity.Warning, $"{vWhere}.defaultValue",
-                            $"Int default '{v.DefaultValue}' does not parse as an integer; runtime will treat as 0", "variable.intDefault"));
+                            Loc.F("validation.variable.intDefault", "value", v.DefaultValue), "variable.intDefault"));
                     break;
                 case PackVariableType.Float:
                     if (!float.TryParse(v.DefaultValue, System.Globalization.NumberStyles.Float,
                                         System.Globalization.CultureInfo.InvariantCulture, out _))
                         issues.Add(new(Severity.Warning, $"{vWhere}.defaultValue",
-                            $"Float default '{v.DefaultValue}' does not parse as a number; runtime will treat as 0", "variable.floatDefault"));
+                            Loc.F("validation.variable.floatDefault", "value", v.DefaultValue), "variable.floatDefault"));
                     break;
                 case PackVariableType.String:
                     // Anything is a valid string.
@@ -855,9 +839,9 @@ public static class PackValidator
         {
             var aWhere = $"characters[{a.Key}]";
             if (string.IsNullOrWhiteSpace(a.Key))
-                issues.Add(new(Severity.Error, aWhere, "Character key is required", "character.keyMissing"));
+                issues.Add(new(Severity.Error, aWhere, Loc.T("validation.character.keyMissing"), "character.keyMissing"));
             else if (!seenActorKeys.Add(a.Key))
-                issues.Add(new(Severity.Error, aWhere, $"Duplicate character key '{a.Key}'", "character.duplicateKey"));
+                issues.Add(new(Severity.Error, aWhere, Loc.F("validation.character.duplicateKey", "key", a.Key), "character.duplicateKey"));
 
             // Having no bust is a declared choice now rather than an omission,
             // so it is only worth reporting when a character claims a source it
@@ -870,26 +854,36 @@ public static class PackValidator
             {
                 issues.Add(new(Severity.Warning, $"{aWhere}.outfits",
                     a.BustSource == BustSource.Vanilla
-                        ? "Set to borrow vanilla busts, but none is chosen — nothing will be shown"
-                        : "Set to use this pack's own outfits, but has none — add one, or switch the bust source to vanilla or none", "character.noVanillaBustChosen"));
+                        ? Loc.T("validation.character.noVanillaBustChosen")
+                        : Loc.T("validation.character.noPackOutfits"), "character.noVanillaBustChosen"));
             }
             else if (!string.IsNullOrWhiteSpace(defaultBust) &&
                      !bustNamesInPack.Contains(defaultBust) &&
                      VanillaBusts.FindByGoName(defaultBust) == null)
             {
                 issues.Add(new(Severity.Warning, $"{aWhere}.defaultBust",
-                    $"Default bust '{defaultBust}' isn't a vanilla bust in the 1.8E catalog and isn't a GameObjectName from any outfit in this pack — runtime will still try GameObject.Find under 2_Bust_Manager, but verify the name", "character.unknownDefaultBust"));
+                    Loc.F("validation.character.unknownDefaultBust", "bust", defaultBust), "character.unknownDefaultBust"));
             }
+
+            // Chosen by nobody yet: a character of the pack's own. The player's
+            // and the game's characters' are the game's. An error rather than a
+            // warning, because the author asked for it to be one (2026-09-27):
+            // left unset, every translation guesses, and guesses male.
+            if (!a.IsPlayer && !a.IsVanillaCharacter && a.Pronouns == Pronouns.Unset)
+                issues.Add(new(Severity.Error, $"{aWhere}.pronouns",
+                    Loc.F("validation.character.pronounsMissing",
+                          "name", string.IsNullOrWhiteSpace(a.DisplayName) ? a.Key : a.DisplayName),
+                    "character.pronounsMissing"));
 
             var seenExprKeys = new HashSet<string>();
             foreach (var e in a.Expressions)
             {
                 if (string.IsNullOrWhiteSpace(e.Key))
                     issues.Add(new(Severity.Error, $"{aWhere}.expressions[empty]",
-                        "Expression key is required", "character.expressionKeyMissing"));
+                        Loc.T("validation.character.expressionKeyMissing"), "character.expressionKeyMissing"));
                 else if (!seenExprKeys.Add(e.Key))
                     issues.Add(new(Severity.Error, $"{aWhere}.expressions[{e.Key}]",
-                        $"Duplicate expression key '{e.Key}' on actor", "character.duplicateExpressionKey"));
+                        Loc.F("validation.character.duplicateExpressionKey", "key", e.Key), "character.duplicateExpressionKey"));
             }
         }
 
@@ -899,9 +893,9 @@ public static class PackValidator
         {
             var dWhere = $"dialogues[{d.Key}]";
             if (string.IsNullOrWhiteSpace(d.Key))
-                issues.Add(new(Severity.Error, dWhere, "Dialogue key is required", "dialogue.keyMissing"));
+                issues.Add(new(Severity.Error, dWhere, Loc.T("validation.dialogue.keyMissing"), "dialogue.keyMissing"));
             else if (!seenDialogueKeys.Add(d.Key))
-                issues.Add(new(Severity.Error, dWhere, $"Duplicate dialogue key '{d.Key}'", "dialogue.duplicateKey"));
+                issues.Add(new(Severity.Error, dWhere, Loc.F("validation.dialogue.duplicateKey", "key", d.Key), "dialogue.duplicateKey"));
 
             // Where and when a dialogue starts is only the pack's business
             // when the pack is the one starting it.
@@ -924,7 +918,7 @@ public static class PackValidator
             else if (string.IsNullOrWhiteSpace(d.LevelToken))
             {
                 issues.Add(new(Severity.Error, $"{dWhere}.startConditions",
-                    "Pick a level — the required level condition decides where this dialogue can start", "dialogue.noStartLevel"));
+                    Loc.T("validation.dialogue.noStartLevel"), "dialogue.noStartLevel"));
             }
             else if (d.DisableVanillaTrigger && !d.VanillaRoomTalkAvailable)
             {
@@ -932,7 +926,7 @@ public static class PackValidator
                 // nothing to act on, which is worth saying out loud because the
                 // author ticked it expecting an effect.
                 issues.Add(new(Severity.Warning, $"{dWhere}.disableVanillaTrigger",
-                    "'Prioritize this dialogue over vanilla' has no effect here — this level has no vanilla entry dialogue to suppress", "dialogue.prioritizeNoEffect"));
+                    Loc.T("validation.dialogue.prioritizeNoEffect"), "dialogue.prioritizeNoEffect"));
             }
 
             for (int si = 0; si < d.StartConditions.Count; si++)
@@ -954,20 +948,20 @@ public static class PackValidator
                 bool ours = mine(n);
                 if (!nodeIds.Add(n.Id) && ours)
                     issues.Add(new(Severity.Error, $"{dWhere}.nodes[id={n.Id}]",
-                        $"Duplicate node id {n.Id}", "dialogue.duplicateNodeId"));
+                        Loc.F("validation.dialogue.duplicateNodeId", "id", n.Id), "dialogue.duplicateNodeId"));
                 if (!string.IsNullOrEmpty(n.Tag) && !tags.Add(n.Tag) && ours)
                     issues.Add(new(Severity.Warning, $"{dWhere}.nodes[id={n.Id}].tag",
-                        $"Tag '{n.Tag}' is used by multiple nodes — jumps target the first one found", "dialogue.duplicateTag"));
+                        Loc.F("validation.dialogue.duplicateTag", "tag", n.Tag), "dialogue.duplicateTag"));
             }
 
             // Root list references must exist.
             foreach (var rid in d.RootNodeIds)
                 if (!nodeIds.Contains(rid))
                     issues.Add(new(Severity.Error, $"{dWhere}.rootNodeIds",
-                        $"Root id {rid} doesn't exist among the nodes", "dialogue.rootIdMissing"));
+                        Loc.F("validation.dialogue.rootIdMissing", "id", rid), "dialogue.rootIdMissing"));
             if (d.Nodes.Count > 0 && d.RootNodeIds.Count == 0)
                 issues.Add(new(Severity.Warning, $"{dWhere}.rootNodeIds",
-                    "Dialogue has nodes but no root — runtime will pick the first node as root", "dialogue.noRoot"));
+                    Loc.T("validation.dialogue.noRoot"), "dialogue.noRoot"));
 
             // Which nodes are options on a Choice. A choice child's text is
             // the label on the button the player clicks, so an empty one is a
@@ -990,14 +984,14 @@ public static class PackValidator
                 {
                     if (choiceChildren.Contains(n.Id))
                         issues.Add(new(Severity.Error, $"{nWhere}.text",
-                            "This node is an option on a Choice, so its text is the button label — an empty one shows the player a blank button", "node.choiceOptionNoText"));
+                            Loc.T("validation.node.choiceOptionNoText"), "node.choiceOptionNoText"));
                     else if (n.Kind == DialogueNodeKind.Choice)
                         issues.Add(new(Severity.Warning, $"{nWhere}.text",
-                            "A Choice node's text is the prompt shown beneath its options, so an empty one leaves a blank line under them", "node.choicePromptEmpty"));
+                            Loc.T("validation.node.choicePromptEmpty"), "node.choicePromptEmpty"));
                     else if (n.Kind == DialogueNodeKind.Text &&
                              n.ActionsOnStart.Count == 0 && n.ActionsOnFinish.Count == 0)
                         issues.Add(new(Severity.Warning, $"{nWhere}.text",
-                            "Text node has no line and no actions, so it has nothing to do", "node.emptyTextNode"));
+                            Loc.T("validation.node.emptyTextNode"), "node.emptyTextNode"));
                 }
 
                 // Actor + expression sanity.
@@ -1013,24 +1007,23 @@ public static class PackValidator
                     && !actorKeysInPack.Contains(n.Actor)
                     && !VanillaActors(d).Contains(n.Actor))
                     issues.Add(new(Severity.Warning, $"{nWhere}.actor",
-                        $"Actor '{n.Actor}' isn't defined in this pack, and isn't in the "
-                        + "conversation this extends", "node.unknownActor"));
+                        Loc.F("validation.node.unknownActor", "actor", n.Actor), "node.unknownActor"));
 
                 // Children must exist.
                 foreach (var cid in n.Children)
                     if (!nodeIds.Contains(cid))
                         issues.Add(new(Severity.Error, $"{nWhere}.children",
-                            $"Child id {cid} doesn't exist among the nodes", "node.childIdMissing"));
+                            Loc.F("validation.node.childIdMissing", "id", cid), "node.childIdMissing"));
 
                 // Jump tag must exist when the mode is Jump.
                 if (n.Jump != null && n.Jump.Mode == JumpMode.Jump)
                 {
                     if (string.IsNullOrWhiteSpace(n.Jump.TargetTag))
                         issues.Add(new(Severity.Error, $"{nWhere}.jump",
-                            "Jump mode is Jump but targetTag is empty", "node.jumpTagEmpty"));
+                            Loc.T("validation.node.jumpTagEmpty"), "node.jumpTagEmpty"));
                     else if (!tags.Contains(n.Jump.TargetTag))
                         issues.Add(new(Severity.Error, $"{nWhere}.jump",
-                            $"Jump target tag '{n.Jump.TargetTag}' isn't a tag on any node in this dialogue", "node.jumpTagUnknown"));
+                            Loc.F("validation.node.jumpTagUnknown", "tag", n.Jump.TargetTag), "node.jumpTagUnknown"));
                 }
 
                 // A node's own conditions are evaluated once, when GC2 reaches
@@ -1049,6 +1042,20 @@ public static class PackValidator
                     ValidateNodeAction(n.ActionsOnFinish[ai], $"{nWhere}.actionsOnFinish[{ai}]",
                                        packVarNames, actorKeysInPack, issues);
             }
+        }
+
+        // Wallpaper images: one the game cannot find means no wallpaper and no
+        // button for it - the plugin skips it and says so only in its log. The
+        // sprite path first; the external one is what the plugin tries next.
+        foreach (var w in pack.Wallpapers)
+        {
+            string image = !string.IsNullOrWhiteSpace(w.SpritePath) ? w.SpritePath! : w.ExternalSpritePath ?? "";
+            if (string.IsNullOrWhiteSpace(image))
+                issues.Add(new(Severity.Warning, $"wallpapers.{w.Key}.spritePath",
+                               Loc.F("validation.wallpaper.noImage", "name", string.IsNullOrWhiteSpace(w.DisplayName) ? w.Key : w.DisplayName),
+                               "wallpaper.noImage"));
+            else
+                CheckFile(packRoot, image, $"wallpapers.{w.Key}.spritePath", issues);
         }
 
         // Wallpaper unlock conditions — the standard condition list, polled
@@ -1181,14 +1188,16 @@ public static class PackValidator
                         v.EndsWith("_" + bare, System.StringComparison.OrdinalIgnoreCase))
                     .OrderBy(v => v).Take(3).ToList();
                 issues.Add(new(Severity.Error, where,
-                    $"Level '{token}' doesn't exist — this condition can never pass" +
-                    (near.Count > 0 ? $". Did you mean {string.Join(" or ", near.Select(n => "vanilla:" + n))}?" : ""), "level.unknownVanilla"));
+                    near.Count > 0
+                        ? Loc.F("validation.level.unknownVanillaNear", "level", token,
+                                "names", Loc.JoinOr(near.Select(n => "vanilla:" + n)))
+                        : Loc.F("validation.level.unknownVanilla", "level", token), "level.unknownVanilla"));
             }
             else if (scheme.Equals("place", System.StringComparison.OrdinalIgnoreCase))
             {
                 if (!placeKeys.Contains(body))
                     issues.Add(new(Severity.Error, where,
-                        $"Level '{token}' names no place in this pack — this condition can never pass", "level.unknownPlace"));
+                        Loc.F("validation.level.unknownPlace", "level", token), "level.unknownPlace"));
             }
         }
 
@@ -1285,7 +1294,7 @@ public static class PackValidator
         var cWhere = $"{whereParent}.{c.Type}";
         if (string.IsNullOrEmpty(c.Type))
         {
-            issues.Add(new(Severity.Error, cWhere, "Condition type is required", "condition.typeMissing"));
+            issues.Add(new(Severity.Error, cWhere, Loc.T("validation.condition.typeMissing"), "condition.typeMissing"));
             return;
         }
         // AND/OR groups carry nested children instead of params. They're not in
@@ -1302,7 +1311,7 @@ public static class PackValidator
         }
         if (System.Array.IndexOf(NodeConditionTypes.AllRecognized, c.Type) < 0)
         {
-            issues.Add(new(Severity.Error, cWhere, $"Unknown condition type '{c.Type}'", "condition.unknownType"));
+            issues.Add(new(Severity.Error, cWhere, Loc.F("validation.condition.unknownType", "type", c.Type), "condition.unknownType"));
             return;
         }
 
@@ -1318,53 +1327,48 @@ public static class PackValidator
                 bool vanilla = c.Params.TryGetValue("source", out var src) &&
                                string.Equals(src, "vanilla", System.StringComparison.OrdinalIgnoreCase);
                 if (!c.Params.TryGetValue("name", out var n) || string.IsNullOrWhiteSpace(n))
-                    issues.Add(new(Severity.Error, cWhere, "Param 'name' is required", "condition.paramNameMissing"));
+                    issues.Add(new(Severity.Error, cWhere, Loc.T("validation.param.nameMissing"), "condition.paramNameMissing"));
                 else if (vanilla)
                 {
                     if (!VanillaGameVariables.Contains(n))
                         issues.Add(new(Severity.Warning, cWhere,
-                            $"Vanilla variable '{n}' isn't in the 1.8E catalog", "condition.unknownVanillaVariable"));
+                            Loc.F("validation.unknownVanillaVariable", "name", n), "condition.unknownVanillaVariable"));
                 }
                 else if (!IsTemplated(n) && !packVarNames.Contains(n))
                     issues.Add(new(Severity.Warning, cWhere,
-                        $"Variable '{n}' isn't declared in this pack — condition will read the default", "condition.undeclaredVariable"));
+                        Loc.F("validation.condition.undeclaredVariable", "name", n), "condition.undeclaredVariable"));
                 if (c.Type != NodeConditionTypes.VariableExists &&
                     (!c.Params.ContainsKey("value") || string.IsNullOrWhiteSpace(c.Params["value"])))
-                    issues.Add(new(Severity.Warning, cWhere, "Param 'value' is required for this condition", "condition.paramValueMissing"));
+                    issues.Add(new(Severity.Warning, cWhere, Loc.T("validation.condition.valueMissing"), "condition.paramValueMissing"));
                 break;
             }
             case NodeConditionTypes.GameVariableEquals:
-                if (!c.Params.ContainsKey("name")) issues.Add(new(Severity.Error, cWhere, "Param 'name' is required", "condition.paramNameMissing"));
-                if (!c.Params.ContainsKey("value")) issues.Add(new(Severity.Warning, cWhere, "Param 'value' is required", "condition.paramValueMissing"));
+                if (!c.Params.ContainsKey("name")) issues.Add(new(Severity.Error, cWhere, Loc.T("validation.param.nameMissing"), "condition.paramNameMissing"));
+                if (!c.Params.ContainsKey("value")) issues.Add(new(Severity.Warning, cWhere, Loc.T("validation.param.valueMissing"), "condition.paramValueMissing"));
                 break;
             case NodeConditionTypes.LevelActive:
-                if (!c.Params.ContainsKey("level")) issues.Add(new(Severity.Error, cWhere, "Param 'level' is required", "condition.paramLevelMissing"));
+                if (!c.Params.ContainsKey("level")) issues.Add(new(Severity.Error, cWhere, Loc.T("validation.param.levelMissing"), "condition.paramLevelMissing"));
                 break;
             case NodeConditionTypes.InputKey:
             {
                 if (!c.Params.TryGetValue("key", out var ikey) || string.IsNullOrWhiteSpace(ikey))
-                    issues.Add(new(Severity.Error, cWhere, "Param 'key' is required", "input.keyMissing"));
+                    issues.Add(new(Severity.Error, cWhere, Loc.T("validation.param.keyMissing"), "input.keyMissing"));
                 else if (!InputKeys.IsKnown(ikey))
                     issues.Add(new(Severity.Warning, cWhere,
-                        $"'{ikey}' is not one of the keys the picker offers. The runtime " +
-                        "resolves any Unity KeyCode name, so a hand-written one may still " +
-                        "work — but a misspelling never matches anything and never says so.",
+                        Loc.F("validation.input.unknownKey", "key", ikey),
                         "input.unknownKey"));
 
                 string phase = c.Params.TryGetValue("phase", out var ph) ? ph : "";
                 if (phase.Length > 0 && !InputPhases.All.Contains(phase))
                     issues.Add(new(Severity.Error, cWhere,
-                        $"'{phase}' is not one of Pressed, Down, Released or Up.", "input.badPhase"));
+                        Loc.F("validation.input.badPhase", "phase", phase), "input.badPhase"));
                 // An edge on a node's own conditions is this condition's one real
                 // trap: GC2 checks those once, when it reaches the node, so "was it
                 // pressed in that exact instant" is a coin flip the author will
                 // read as the condition being broken.
                 else if (context == ConditionContext.OneShot && InputPhases.IsEdge(phase))
                     issues.Add(new(Severity.Warning, cWhere,
-                        $"{phase} is true for one moment, but a node's own conditions are " +
-                        "checked once, when the conversation reaches the node. The two will " +
-                        "almost never line up. Use Down or Up here, or move the check to an " +
-                        "integration rule, which is re-tested every frame.",
+                        Loc.F("validation.input.edgeInOneShot", "phase", phase),
                         "input.edgeInOneShot"));
                 break;
             }
@@ -1373,59 +1377,59 @@ public static class PackValidator
                 // category row and the runtime still reads it, so a pack that
                 // predates the change is complete as it stands.
                 if (!c.Params.ContainsKey("target") && !c.Params.ContainsKey("path"))
-                    issues.Add(new(Severity.Error, cWhere, "Param 'target' is required", "condition.paramTargetMissing"));
+                    issues.Add(new(Severity.Error, cWhere, Loc.T("validation.param.targetMissing"), "condition.paramTargetMissing"));
                 break;
             case NodeConditionTypes.VariableStartsWith:
             {
                 bool vanillaPfx = c.Params.TryGetValue("source", out var psrc) &&
                                   string.Equals(psrc, "vanilla", System.StringComparison.OrdinalIgnoreCase);
                 if (!c.Params.TryGetValue("name", out var pn) || string.IsNullOrWhiteSpace(pn))
-                    issues.Add(new(Severity.Error, cWhere, "Param 'name' is required", "condition.paramNameMissing"));
+                    issues.Add(new(Severity.Error, cWhere, Loc.T("validation.param.nameMissing"), "condition.paramNameMissing"));
                 else if (vanillaPfx)
                 {
                     if (!VanillaGameVariables.Contains(pn))
                         issues.Add(new(Severity.Warning, cWhere,
-                            $"Vanilla variable '{pn}' isn't in the 1.8E catalog", "condition.unknownVanillaVariable"));
+                            Loc.F("validation.unknownVanillaVariable", "name", pn), "condition.unknownVanillaVariable"));
                 }
                 else if (!IsTemplated(pn) && !packVarNames.Contains(pn))
                     issues.Add(new(Severity.Warning, cWhere,
-                        $"Variable '{pn}' isn't declared in this pack — condition will read the default", "condition.undeclaredVariable"));
+                        Loc.F("validation.condition.undeclaredVariable", "name", pn), "condition.undeclaredVariable"));
 
                 // An empty prefix would match everything, so the runtime refuses
                 // it; that's almost always a half-filled row rather than intent.
                 if (!c.Params.TryGetValue("value", out var pv) || string.IsNullOrEmpty(pv))
                     issues.Add(new(Severity.Warning, cWhere,
-                        "Param 'value' (the prefix) is empty — this condition never passes", "condition.emptyPrefix"));
+                        Loc.T("validation.condition.emptyPrefix"), "condition.emptyPrefix"));
                 break;
             }
             case NodeConditionTypes.ListContains:
             case NodeConditionTypes.ListCount:
             {
                 if (!c.Params.TryGetValue("list", out var ln) || string.IsNullOrWhiteSpace(ln))
-                    issues.Add(new(Severity.Error, cWhere, "Param 'list' is required", "condition.paramListMissing"));
+                    issues.Add(new(Severity.Error, cWhere, Loc.T("validation.param.listMissing"), "condition.paramListMissing"));
                 else if (!IsTemplated(ln) && !packVarNames.Contains(ln))
                     issues.Add(new(Severity.Warning, cWhere,
-                        $"Variable '{ln}' isn't declared in this pack — the condition will read an empty list", "condition.undeclaredListVariable"));
+                        Loc.F("validation.condition.undeclaredListVariable", "name", ln), "condition.undeclaredListVariable"));
 
                 if (c.Type == NodeConditionTypes.ListContains)
                 {
                     if (!c.Params.TryGetValue("value", out var lv) || string.IsNullOrEmpty(lv))
                         issues.Add(new(Severity.Warning, cWhere,
-                            "Param 'value' is empty — this will never match an entry", "condition.emptyListValue"));
+                            Loc.T("validation.condition.emptyListValue"), "condition.emptyListValue"));
                 }
                 else
                 {
                     if (!c.Params.TryGetValue("value", out var cv) ||
                         !float.TryParse(cv, System.Globalization.NumberStyles.Float,
                                         System.Globalization.CultureInfo.InvariantCulture, out _))
-                        issues.Add(new(Severity.Error, cWhere, "Param 'value' must be a number", "condition.valueNotNumber"));
+                        issues.Add(new(Severity.Error, cWhere, Loc.T("validation.condition.valueNotNumber"), "condition.valueNotNumber"));
 
                     // Unknown comparison silently falls back to "equals" at
                     // runtime, which is a quiet wrong answer — flag the typo.
                     if (c.Params.TryGetValue("comparison", out var cmp) && !string.IsNullOrEmpty(cmp) &&
                         System.Array.IndexOf(ListComparisons, cmp) < 0)
                         issues.Add(new(Severity.Error, cWhere,
-                            $"Unknown comparison '{cmp}' — expected one of: {string.Join(", ", ListComparisons)}", "condition.unknownComparison"));
+                            Loc.F("validation.condition.unknownComparison", "comparison", cmp, "options", string.Join(", ", ListComparisons)), "condition.unknownComparison"));
                 }
                 break;
             }
@@ -1436,9 +1440,7 @@ public static class PackValidator
                 // stays permanently true — silently a no-op, so flag it.
                 if (context != ConditionContext.Rule)
                     issues.Add(new(Severity.Warning, cWhere,
-                        "'Timer' only restarts when an integration rule fires. In this " +
-                        "host there's no fire event, so it elapses once and then passes " +
-                        "forever. Move it to an integration rule.", "condition.timerOutsideRule"));
+                        Loc.T("validation.condition.timerOutsideRule"), "condition.timerOutsideRule"));
 
                 bool randomized = c.Params.TryGetValue("randomize", out var rz) &&
                                   string.Equals(rz, "true", System.StringComparison.OrdinalIgnoreCase);
@@ -1452,20 +1454,19 @@ public static class PackValidator
                     bool okMax = c.Params.TryGetValue("maxSeconds", out var mx) &&
                                  float.TryParse(mx, num, inv, out var mxV) && mxV >= 0;
                     if (!okMin) issues.Add(new(Severity.Error, cWhere,
-                        "Param 'minSeconds' must be a number >= 0 when Randomize is on", "condition.timerMinNotNumber"));
+                        Loc.T("validation.condition.timerMinNotNumber"), "condition.timerMinNotNumber"));
                     if (!okMax) issues.Add(new(Severity.Error, cWhere,
-                        "Param 'maxSeconds' must be a number >= 0 when Randomize is on", "condition.timerMaxNotNumber"));
+                        Loc.T("validation.condition.timerMaxNotNumber"), "condition.timerMaxNotNumber"));
                     if (okMin && okMax &&
                         float.TryParse(c.Params["minSeconds"], num, inv, out var a) &&
                         float.TryParse(c.Params["maxSeconds"], num, inv, out var b) && b < a)
                         issues.Add(new(Severity.Warning, cWhere,
-                            $"'maxSeconds' ({b}) is below 'minSeconds' ({a}) — the runtime " +
-                            "swaps them, but the range is probably backwards.", "condition.timerMaxBelowMin"));
+                            Loc.F("validation.condition.timerMaxBelowMin", "max", b, "min", a), "condition.timerMaxBelowMin"));
                 }
                 else if (!c.Params.TryGetValue("seconds", out var sec) ||
                          !float.TryParse(sec, num, inv, out var secV) || secV < 0)
                 {
-                    issues.Add(new(Severity.Error, cWhere, "Param 'seconds' must be a number >= 0", "condition.timerSecondsNotNumber"));
+                    issues.Add(new(Severity.Error, cWhere, Loc.T("validation.condition.timerSecondsNotNumber"), "condition.timerSecondsNotNumber"));
                 }
                 break;
             }
@@ -1475,17 +1476,12 @@ public static class PackValidator
                 // frame, so the authored chance is meaningless: flag those.
                 if (context == ConditionContext.Polled)
                     issues.Add(new(Severity.Warning, cWhere,
-                        "'Random' re-rolls on every evaluation, and this condition is " +
-                        "re-checked every frame (~60×/sec), so its chance doesn't mean what " +
-                        "it says. Replace with 'DailyChance' (rolls once per in-game day), " +
-                        "or a LevelRandom variable + a numeric comparison (once per visit). " +
-                        "'Random' is fine on a dialogue NODE's conditions or a level hook, " +
-                        "which are evaluated once.", "condition.randomPerFrame"));
+                        Loc.T("validation.condition.randomPerFrame"), "condition.randomPerFrame"));
                 if (!c.Params.TryGetValue("chance", out var ch) ||
                     !float.TryParse(ch, System.Globalization.NumberStyles.Float,
                                     System.Globalization.CultureInfo.InvariantCulture, out var chV) ||
                     chV < 0f || chV > 1f)
-                    issues.Add(new(Severity.Warning, cWhere, "Param 'chance' should be a float in [0,1]", "condition.chanceRange"));
+                    issues.Add(new(Severity.Warning, cWhere, Loc.T("validation.condition.chanceRange"), "condition.chanceRange"));
                 break;
             case NodeConditionTypes.DailyChance:
                 if (!c.Params.TryGetValue("chance", out var dch) ||
@@ -1493,7 +1489,7 @@ public static class PackValidator
                                     System.Globalization.CultureInfo.InvariantCulture, out var dchV) ||
                     dchV < 0f || dchV > 100f)
                     issues.Add(new(Severity.Warning, cWhere,
-                        "Param 'chance' should be a whole percentage in [0,100]", "condition.dailyChanceRange"));
+                        Loc.T("validation.condition.dailyChanceRange"), "condition.dailyChanceRange"));
                 break;
         }
     }
@@ -1505,7 +1501,7 @@ public static class PackValidator
         var aWhere = $"{whereParent}.{a.Type}";
         if (string.IsNullOrEmpty(a.Type))
         {
-            issues.Add(new(Severity.Error, aWhere, "Action type is required", "action.typeMissing"));
+            issues.Add(new(Severity.Error, aWhere, Loc.T("validation.action.typeMissing"), "action.typeMissing"));
             return;
         }
         // A vanilla step is known but not offered: it is placed by seeding a
@@ -1515,7 +1511,7 @@ public static class PackValidator
 
         if (System.Array.IndexOf(NodeActionTypes.All, a.Type) < 0)
         {
-            issues.Add(new(Severity.Error, aWhere, $"Unknown action type '{a.Type}'", "action.unknownType"));
+            issues.Add(new(Severity.Error, aWhere, Loc.F("validation.action.unknownType", "type", a.Type), "action.unknownType"));
             return;
         }
 
@@ -1526,7 +1522,7 @@ public static class PackValidator
                     if (a.Branches == null || a.Branches.Count < 2)
                     {
                         issues.Add(new(Severity.Error, aWhere,
-                            "DiceRoll needs at least 2 branches", "action.diceTooFewBranches"));
+                            Loc.T("validation.action.diceTooFewBranches"), "action.diceTooFewBranches"));
                         break;
                     }
                     int total = 0;
@@ -1535,11 +1531,11 @@ public static class PackValidator
                         var b = a.Branches[i];
                         if (b.Chance < 1)
                             issues.Add(new(Severity.Error, aWhere,
-                                $"Branch {i + 1} chance must be at least 1%", "action.diceBranchChanceLow"));
+                                Loc.F("validation.action.diceBranchChanceLow", "branch", i + 1), "action.diceBranchChanceLow"));
                         total += b.Chance;
                         if (b.Action == null)
                             issues.Add(new(Severity.Error, aWhere,
-                                $"Branch {i + 1} has no action", "action.diceBranchNoAction"));
+                                Loc.F("validation.action.diceBranchNoAction", "branch", i + 1), "action.diceBranchNoAction"));
                         else
                             // 0-based, like actionsOnStart[i] and the rest. The
                             // message above stays 1-based because that one is read
@@ -1549,7 +1545,7 @@ public static class PackValidator
                     }
                     if (total != 100)
                         issues.Add(new(Severity.Error, aWhere,
-                            $"Branch chances sum to {total}% — must be exactly 100%", "action.diceChancesWrongTotal"));
+                            Loc.F("validation.action.diceChancesWrongTotal", "total", total), "action.diceChancesWrongTotal"));
                     break;
                 }
             case NodeActionTypes.SetVariable:
@@ -1557,51 +1553,50 @@ public static class PackValidator
                 bool varVanilla = a.Params.TryGetValue("source", out var aSrc) &&
                                   string.Equals(aSrc, "vanilla", System.StringComparison.OrdinalIgnoreCase);
                 if (!a.Params.TryGetValue("name", out var n) || string.IsNullOrWhiteSpace(n))
-                    issues.Add(new(Severity.Error, aWhere, "Param 'name' is required", "action.paramNameMissing"));
+                    issues.Add(new(Severity.Error, aWhere, Loc.T("validation.param.nameMissing"), "action.paramNameMissing"));
                 else if (varVanilla)
                 {
                     if (!VanillaGameVariables.Contains(n))
                         issues.Add(new(Severity.Warning, aWhere,
-                            $"Vanilla variable '{n}' isn't in the 1.8E catalog", "action.unknownVanillaVariable"));
+                            Loc.F("validation.unknownVanillaVariable", "name", n), "action.unknownVanillaVariable"));
                 }
                 else if (!IsTemplated(n) && !packVarNames.Contains(n))
                     issues.Add(new(Severity.Warning, aWhere,
-                        $"Variable '{n}' isn't declared in this pack", "action.undeclaredVariable"));
+                        Loc.F("validation.action.undeclaredVariable", "name", n), "action.undeclaredVariable"));
                 // An explicit empty value is legitimate — it clears the variable.
                 // Only a wholly ABSENT key reads as an unfilled row.
                 if (a.Type == NodeActionTypes.SetVariable && !a.Params.ContainsKey("value"))
                     issues.Add(new(Severity.Warning, aWhere,
-                        "Param 'value' is required — leave the field blank to clear the " +
-                        "variable and it will be stored as an explicit empty value", "action.paramValueMissing"));
+                        Loc.T("validation.action.valueMissing"), "action.paramValueMissing"));
                 if (a.Type == NodeActionTypes.IncrementVariable && !a.Params.ContainsKey("delta"))
-                    issues.Add(new(Severity.Warning, aWhere, "Param 'delta' is required", "action.paramDeltaMissing"));
+                    issues.Add(new(Severity.Warning, aWhere, Loc.T("validation.param.deltaMissing"), "action.paramDeltaMissing"));
                 break;
             case NodeActionTypes.LeaveBust:
                 if (!a.Params.TryGetValue("actor", out var act) || string.IsNullOrWhiteSpace(act))
-                    issues.Add(new(Severity.Error, aWhere, "Param 'actor' is required", "action.paramActorMissing"));
+                    issues.Add(new(Severity.Error, aWhere, Loc.T("validation.param.actorMissing"), "action.paramActorMissing"));
                 else if (!actorKeysInPack.Contains(act))
                     issues.Add(new(Severity.Warning, aWhere,
-                        $"Actor '{act}' isn't defined in this pack", "action.unknownActor"));
+                        Loc.F("validation.action.unknownActor", "actor", act), "action.unknownActor"));
                 break;
             case NodeActionTypes.SetGameObjectActive:
                 // Unified Set-Active uses 'target' (+ 'kind'); 'path' is the
                 // legacy param, still accepted for pre-unify packs.
                 if (!a.Params.ContainsKey("target") && !a.Params.ContainsKey("path"))
-                    issues.Add(new(Severity.Error, aWhere, "Param 'target' is required", "action.paramTargetMissing"));
-                if (!a.Params.ContainsKey("active")) issues.Add(new(Severity.Warning, aWhere, "Param 'active' (true/false) is required", "action.paramActiveMissing"));
+                    issues.Add(new(Severity.Error, aWhere, Loc.T("validation.param.targetMissing"), "action.paramTargetMissing"));
+                if (!a.Params.ContainsKey("active")) issues.Add(new(Severity.Warning, aWhere, Loc.T("validation.param.activeMissing"), "action.paramActiveMissing"));
                 break;
             case NodeActionTypes.EmitSignal:
-                if (!a.Params.ContainsKey("signal")) issues.Add(new(Severity.Error, aWhere, "Param 'signal' is required", "action.paramSignalMissing"));
+                if (!a.Params.ContainsKey("signal")) issues.Add(new(Severity.Error, aWhere, Loc.T("validation.param.signalMissing"), "action.paramSignalMissing"));
                 break;
             case NodeActionTypes.SwitchMusic:
-                if (!a.Params.ContainsKey("music")) issues.Add(new(Severity.Error, aWhere, "Param 'music' is required", "action.paramMusicMissing"));
+                if (!a.Params.ContainsKey("music")) issues.Add(new(Severity.Error, aWhere, Loc.T("validation.param.musicMissing"), "action.paramMusicMissing"));
                 break;
             case NodeActionTypes.Wait:
                 if (!a.Params.TryGetValue("seconds", out var s) ||
                     !float.TryParse(s, System.Globalization.NumberStyles.Float,
                                     System.Globalization.CultureInfo.InvariantCulture, out var sv) ||
                     sv < 0f)
-                    issues.Add(new(Severity.Error, aWhere, "Param 'seconds' must be a non-negative float", "action.secondsNotNumber"));
+                    issues.Add(new(Severity.Error, aWhere, Loc.T("validation.action.secondsNotNumber"), "action.secondsNotNumber"));
                 break;
         }
     }
@@ -1652,8 +1647,7 @@ public static class PackValidator
         if (!PlaceTargetRef.TryParse(btn.Target, out var tref))
         {
             issues.Add(new(Severity.Error, bWhere,
-                $"Navigator target '{btn.Target}' is malformed " +
-                "(expected 'vanilla:<goName>', 'pack:<packId>.<key>', or 'self:<key>')", "nav.targetMalformed"));
+                Loc.F("validation.nav.targetMalformed", "target", btn.Target), "nav.targetMalformed"));
             return;
         }
 
@@ -1662,18 +1656,18 @@ public static class PackValidator
             case PlaceTargetKind.Vanilla:
                 if (VanillaPlaces.FindByGoName(tref.Key) == null)
                     issues.Add(new(Severity.Warning, bWhere,
-                        $"Vanilla level '{tref.Key}' is not in the 1.8E catalog", "nav.unknownVanillaLevel"));
+                        Loc.F("validation.unknownVanillaLevel", "level", tref.Key), "nav.unknownVanillaLevel"));
                 break;
             case PlaceTargetKind.Self:
                 if (!placeKeysInPack.Contains(tref.Key))
                     issues.Add(new(Severity.Error, bWhere,
-                        $"self target '{tref.Key}' has no matching place in this pack", "nav.selfTargetMissing"));
+                        Loc.F("validation.map.selfTargetMissing", "key", tref.Key), "nav.selfTargetMissing"));
                 break;
             case PlaceTargetKind.Pack:
                 // We can't verify a cross-pack reference at author time;
                 // surface it as info so the user knows the dependency is implicit.
                 issues.Add(new(Severity.Info, bWhere,
-                    $"Cross-pack target '{tref.PackId}.{tref.Key}' — relies on the other pack being installed", "nav.crossPackTarget"));
+                    Loc.F("validation.nav.crossPackTarget", "target", tref.PackId + "." + tref.Key), "nav.crossPackTarget"));
                 break;
         }
     }
@@ -1685,7 +1679,7 @@ public static class PackValidator
     {
         if (strength < 0f || strength > 1.5f)
             issues.Add(new(Severity.Warning, where,
-                $"parallax strength {strength} is outside the 0..1.5 range vanilla levels use", "place.parallaxRange"));
+                Loc.F("validation.place.parallaxRange", "value", strength), "place.parallaxRange"));
     }
 
     /// <summary>
@@ -1726,21 +1720,48 @@ public static class PackValidator
         }
     }
 
+    /// <summary>Whether a full path is inside the pack's folder.</summary>
+    private static bool Inside(string fullPath, string packRoot)
+    {
+        if (string.IsNullOrWhiteSpace(packRoot)) return false;
+        try
+        {
+            string root = Path.GetFullPath(packRoot).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                          + Path.DirectorySeparatorChar;
+            return Path.GetFullPath(fullPath).StartsWith(root, StringComparison.OrdinalIgnoreCase);
+        }
+        catch (Exception) { return false; }
+    }
+
     private static void CheckFile(string packRoot, string relPath, string where, List<ValidationIssue> issues)
     {
         if (string.IsNullOrWhiteSpace(relPath))
         {
-            issues.Add(new(Severity.Warning, where, "Empty path", "art.emptyPath"));
+            issues.Add(new(Severity.Warning, where, Loc.T("validation.art.emptyPath"), "art.emptyPath"));
             return;
         }
         // A pack that has never been saved has no folder to resolve against, so
         // there is nothing to check the file against yet. Previously this threw
         // out of Path.Combine and took the whole validation pass with it —
         // reachable simply by typing a sprite path before the first save.
+        // A full path on the author's machine. Path.Combine hands a full path
+        // back unchanged, so this used to be checked against the author's own
+        // disk - where it is - and pass, while players, who get only the
+        // pack's files, had nothing there: a wallpaper pasted in this way was
+        // skipped in the game and its button never appeared (2026-09-27).
+        if (Shared.PackPaths.IsFullPath(relPath))
+        {
+            bool inPack = Inside(relPath, packRoot);
+            issues.Add(new(Severity.Warning, where,
+                           Loc.F(inPack ? "validation.art.fullPathInPack" : "validation.art.fullPathOutsidePack", "path", relPath),
+                           inPack ? "art.fullPathInPack" : "art.fullPathOutsidePack"));
+            return;
+        }
+
         if (string.IsNullOrWhiteSpace(packRoot)) return;
 
         var abs = Path.Combine(packRoot, relPath.Replace('/', Path.DirectorySeparatorChar));
         if (!File.Exists(abs))
-            issues.Add(new(Severity.Warning, where, $"File not found: {abs}", "art.fileNotFound"));
+            issues.Add(new(Severity.Warning, where, Loc.F("validation.art.fileNotFound", "path", abs), "art.fileNotFound"));
     }
 }

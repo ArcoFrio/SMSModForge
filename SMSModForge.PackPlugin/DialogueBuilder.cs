@@ -278,6 +278,7 @@ namespace SMSModForge.PackPlugin
         private static Node BuildBareNode(JObject nj, PackContext ctx)
         {
             string text = ResolvePlaceholders((string)nj["text"] ?? "", ctx);
+            TypewriterTiming.PackLine(text);
             return new Node(text);
         }
 

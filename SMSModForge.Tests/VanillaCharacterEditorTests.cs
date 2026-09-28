@@ -22,6 +22,7 @@ namespace SMSModForge.Tests;
 /// the character onto the outfit. A view-model test would pass on every one of
 /// those while the panel showed nothing.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class VanillaCharacterEditorTests
 {
     private readonly ITestOutputHelper _out;

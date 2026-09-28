@@ -30,7 +30,7 @@ public sealed class UpdateRuleDef
     /// authoring aid — has no runtime effect.
     /// </summary>
     [JsonProperty("displayName", Order = 2)]
-    public string DisplayName { get; set; } = "New Rule";
+    public string DisplayName { get; set; } = "New Rule";   // English on purpose: the value a pack file without one loads with, which must be the same in every language.
 
     /// <summary>
     /// Free-form description shown beside the rule's name in the

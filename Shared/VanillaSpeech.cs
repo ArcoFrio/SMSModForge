@@ -309,6 +309,21 @@
             return map;
         }
 
+        /// <summary>
+        /// The player, "You", as the game has them type: 45 characters a
+        /// second at pitch 0.4-0.7. Not read out of the game like the rest -
+        /// the extraction never recorded the player - but given by the author
+        /// of SMSAndroids, who knows the game, and matched to what their pack
+        /// had set (2026-09-27).
+        /// <para/>
+        /// Kept out of <see cref="All"/> and <see cref="For"/> on purpose: those
+        /// answer for the game's cast, and the plugin asks them about faces and
+        /// name colours the player does not have. The same in every pack - no
+        /// pack can change it.
+        /// </summary>
+        public static readonly Speaker Player =
+            new Speaker("player", "You", null, null, true, 45, 0.4f, 0.7f, null, null, null);
+
         /// <summary>This character as a speaker, or null for one the game never
         /// gave a voice -- a bust in a crowd, or a pack's own character.</summary>
         public static Speaker For(string characterKey)

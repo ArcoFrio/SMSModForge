@@ -43,7 +43,7 @@ public static class TabChangeWatch
             var sb = new StringBuilder();
             sb.AppendLine(new string('-', 70));
             sb.AppendLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}  {from}  ->  {to}");
-            sb.AppendLine($"keyboard focus: {focus}");
+            sb.AppendLine($"keyboard focus: {focus}");   // English on purpose: written to the tab-change log.
             sb.AppendLine(stack);
 
             Directory.CreateDirectory(Path.GetDirectoryName(FilePath)!);

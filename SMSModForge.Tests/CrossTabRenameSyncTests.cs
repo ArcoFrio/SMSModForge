@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using SMSModForge.ViewModel;
 using Xunit;
 using Xunit.Abstractions;
@@ -18,6 +18,7 @@ namespace SMSModForge.Tests;
 /// same omission is invisible until somebody happens to look at the right
 /// dropdown after the right edit.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class CrossTabRenameSyncTests
 {
     private readonly ITestOutputHelper _out;

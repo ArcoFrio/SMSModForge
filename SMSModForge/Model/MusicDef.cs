@@ -33,7 +33,7 @@ public sealed class MusicDef
 
     /// <summary>Human-facing label shown in the editor's music list.</summary>
     [JsonProperty("displayName", Order = 2)]
-    public string DisplayName { get; set; } = "New Music";
+    public string DisplayName { get; set; } = "New Music";   // English on purpose: the value a pack file without one loads with, which must be the same in every language.
 
     /// <summary>
     /// Relative path (from pack root) to the audio file. OGG, WAV

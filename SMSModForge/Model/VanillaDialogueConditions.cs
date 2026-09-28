@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using Newtonsoft.Json.Linq;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Model;
 
@@ -127,12 +128,13 @@ public static class VanillaDialogueConditions
         bool negate = false;
         switch (comparison)
         {
+            // English on purpose: the comparison words packs store.
             case "Equals": how = "equals"; break;
             case "Different": how = "equals"; negate = true; break;
-            case "Greater": how = "greater than"; break;
-            case "GreaterOrEqual": how = "greater or equal"; break;
-            case "Less": how = "less than"; break;
-            case "LessOrEqual": how = "less or equal"; break;
+            case "Greater": how = "greater than"; break;           // English on purpose: stored values.
+            case "GreaterOrEqual": how = "greater or equal"; break; // English on purpose: stored values.
+            case "Less": how = "less than"; break;                  // English on purpose: stored values.
+            case "LessOrEqual": how = "less or equal"; break;       // English on purpose: stored values.
             default: return null;
         }
 
@@ -208,7 +210,7 @@ public static class VanillaDialogueConditions
                 // spelling it migrates AWAY from, and seeding the old one meant
                 // every seeded line was rewritten the instant it was shown -
                 // which reads as the author having changed it.
-                ["kind"] = "Direct Path", ["target"] = path!,
+                ["kind"] = "Direct Path", ["target"] = path!,   // English on purpose: a stored value.
             },
         };
     }

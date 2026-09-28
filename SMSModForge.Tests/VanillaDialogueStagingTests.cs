@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using SMSModForge.Model;
 using SMSModForge.ViewModel;
@@ -15,6 +15,7 @@ namespace SMSModForge.Tests;
 /// derivation that quietly answers fewer lines — or more of them, wrongly —
 /// shows up as a failure rather than as a field that got emptier.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class VanillaDialogueStagingTests
 {
     private readonly ITestOutputHelper _out;

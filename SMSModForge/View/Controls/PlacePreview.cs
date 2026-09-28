@@ -17,6 +17,7 @@ using SMSModForge.Model;
 using SMSModForge.Rendering;
 using SMSModForge.ViewModel;
 using Path = System.IO.Path;
+using SMSModForge.Localization;
 
 namespace SMSModForge.View.Controls;
 
@@ -280,7 +281,6 @@ public sealed class PlacePreview : Grid
     {
         ClipToBounds = true,
         Focusable = false,
-        ToolTip = "Scroll to zoom (toward the pointer) � middle-drag to pan � double middle-click to reset",
     };
 
     /// <summary>User zoom on top of the fit-to-width scale. 1 = fit.</summary>
@@ -316,6 +316,10 @@ public sealed class PlacePreview : Grid
         // A tooltip that outlived its owner sits over the one thing an
         // author is trying to look at. See ToolTipDismisser.
         View.ToolTipDismisser.KeepClearOf(this);
+        LocText.Bind(_viewport, ToolTipProperty, "preview.place.zoom.tip");
+        // Its words are worked out as it draws: drawn again when the language
+        // changes, so none is left in the old one.
+        LocText.Follow(this, () => { Refresh(); RefreshObjectMenu(); UpdateGizmoToolbar(); });
 
         // Fill the width the container gives us; the height follows the native
         // aspect (see MeasureOverride) and the on-screen scale is recomputed on
@@ -636,13 +640,13 @@ public sealed class PlacePreview : Grid
         if (string.IsNullOrWhiteSpace(frontPath) && string.IsNullOrWhiteSpace(backPath))
         {
             ShowPlaceholder(string.IsNullOrEmpty(root)
-                ? "Save the pack and set a back or front sprite path."
-                : "No back or front sprite path set.");
+                ? Loc.T("preview.place.saveAndSet")
+                : Loc.T("preview.place.noSprites"));
             return;
         }
         if (string.IsNullOrEmpty(root))
         {
-            ShowPlaceholder("Save the pack first so paths can be resolved.");
+            ShowPlaceholder(Loc.T("preview.saveFirst"));
             return;
         }
 
@@ -666,8 +670,8 @@ public sealed class PlacePreview : Grid
         {
             // Every path that was given failed to load, so name one.
             ShowPlaceholder(absFront != null && !File.Exists(absFront)
-                ? $"Front sprite not found:\n{absFront}"
-                : $"Back sprite not found:\n{absBack}");
+                ? Loc.F("preview.place.frontMissing", "path", absFront)
+                : Loc.F("preview.place.backMissing", "path", absBack));
             return;
         }
 
@@ -1329,10 +1333,10 @@ public sealed class PlacePreview : Grid
                                : 1.0),
                     RenderTransform = new MatrixTransform(m),
                     ToolTip = o.Name +
-                              "\nsorting order " + o.SortingOrder +
-                              (o.SortingOrder < LevelArtOrder ? "  (behind the level art)" : "") +
-                              (o.StartActive ? "" : "\n(starts inactive)") +
-                              (entry.ParentInactive ? "\n(a parent starts inactive — the game draws nothing here)" : ""),
+                              "\n" + Loc.F("preview.place.sortingOrder", "order", o.SortingOrder) +
+                              (o.SortingOrder < LevelArtOrder ? "  " + Loc.T("preview.place.behindArt") : "") +
+                              (o.StartActive ? "" : "\n" + Loc.T("preview.place.startsInactive")) +
+                              (entry.ParentInactive ? "\n" + Loc.T("preview.place.parentInactive") : ""),
                 };
                 RenderOptions.SetBitmapScalingMode(img, BitmapScalingMode.NearestNeighbor);
                 var pathForClick = entry.Path;
@@ -2012,9 +2016,9 @@ public sealed class PlacePreview : Grid
             // The placement's own order wins — depth belongs to the room.
             int bodyOrder = pl.Model.SortingOrder ?? def.SortingOrder;
             string tip = (string.IsNullOrWhiteSpace(pl.Name) ? pl.Npc : pl.Name)
-                       + "  (" + pl.Npc + ")\nsorting order " + bodyOrder
-                       + (pl.StartActive ? "" : "\n(starts inactive)")
-                       + (entry.ParentInactive ? "\n(a parent starts inactive — the game draws nothing here)" : "");
+                       + "  (" + pl.Npc + ")\n" + Loc.F("preview.place.sortingOrder", "order", bodyOrder)
+                       + (pl.StartActive ? "" : "\n" + Loc.T("preview.place.startsInactive"))
+                       + (entry.ParentInactive ? "\n" + Loc.T("preview.place.parentInactive") : "");
 
             // Shadow (child of the body): a tinted circle, order from the def.
             if (def.ShadowEnabled)
@@ -2104,11 +2108,9 @@ public sealed class PlacePreview : Grid
                         // States the offset the preview ACTUALLY used, so "it
                         // isn't offsetting" can be told from "it is, and that's
                         // what -2.3 local units looks like on this pose".
-                        ToolTip = tip + "\n(reflection — Y offset "
-                                + def.ReflectionOffsetY.ToString("0.###",
-                                      System.Globalization.CultureInfo.InvariantCulture)
-                                + ", tint " + (string.IsNullOrWhiteSpace(def.ReflectionTint) ? "none" : def.ReflectionTint)
-                                + ")",
+                        ToolTip = tip + "\n" + Loc.F("preview.place.reflection",
+                                "offset", def.ReflectionOffsetY.ToString("0.###", System.Globalization.CultureInfo.InvariantCulture),
+                                "tint", string.IsNullOrWhiteSpace(def.ReflectionTint) ? Loc.T("preview.place.noTint") : def.ReflectionTint),
                     };
                     RenderOptions.SetBitmapScalingMode(rimg, BitmapScalingMode.HighQuality);
                     drawables.Add((def.ReflectionSortingOrder, NpcBodyTie, rimg));
@@ -2847,10 +2849,10 @@ public sealed class PlacePreview : Grid
                 break;
             case GizmoHandle.RotX: t.RotX = _startRotX + dm.Y * RotDragDegPerPx; break;
             case GizmoHandle.RotY: t.RotY = _startRotY + dm.X * RotDragDegPerPx; break;
-            case GizmoHandle.ScaleX: t.ScaleX = ScaleFrom(_startScaleX, p, _dragUx); break;
-            case GizmoHandle.ScaleY: t.ScaleY = ScaleFrom(_startScaleY, p, _dragUy); break;
+            case GizmoHandle.ScaleX: t.ScaleX = _startScaleX * AxisScaleFactor(_dragOrigin, _dragStartMouse, p, _dragUx); break;
+            case GizmoHandle.ScaleY: t.ScaleY = _startScaleY * AxisScaleFactor(_dragOrigin, _dragStartMouse, p, _dragUy); break;
             case GizmoHandle.ScaleUniform:
-                double f = Dist(p, _dragOrigin) / Math.Max(1.0, Dist(_dragStartMouse, _dragOrigin));
+                double f = UniformScaleFactor(_dragStartMouse, p, _dragUx, _dragUy);
                 t.ScaleX = _startScaleX * f; t.ScaleY = _startScaleY * f;
                 break;
         }
@@ -2880,16 +2882,48 @@ public sealed class PlacePreview : Grid
     private static double CanvasAngle(Point m, Point o)
         => Math.Atan2(-(m.Y - o.Y), m.X - o.X) * 180 / Math.PI;
 
-    private double ScaleFrom(double startScale, Point mouse, Vector axis)
+    /// <summary>
+    /// What dragging an axis handle from <paramref name="grab"/> to
+    /// <paramref name="mouse"/> multiplies the scale by: how far along the axis
+    /// the pointer is from the centre now, against how far it was. The handle
+    /// sits at the end of its arm, so a drag the arm's length doubles it.
+    /// </summary>
+    internal static double AxisScaleFactor(Point origin, Point grab, Point mouse, Vector axis)
     {
-        Vector u = axis; if (u.Length < 1e-6) return startScale; u.Normalize();
-        double projNow = (mouse - _dragOrigin).X * u.X + (mouse - _dragOrigin).Y * u.Y;
-        double projStart = (_dragStartMouse - _dragOrigin).X * u.X + (_dragStartMouse - _dragOrigin).Y * u.Y;
-        if (Math.Abs(projStart) < 1.0) return startScale;
-        return startScale * projNow / projStart;
+        Vector u = axis; if (u.Length < 1e-6) return 1; u.Normalize();
+        double projNow = (mouse - origin).X * u.X + (mouse - origin).Y * u.Y;
+        double projStart = (grab - origin).X * u.X + (grab - origin).Y * u.Y;
+        if (Math.Abs(projStart) < 1.0) return 1;
+        return projNow / projStart;
     }
 
-    private static double Dist(Point a, Point b) => (a - b).Length;
+    /// <summary>
+    /// What dragging the square in the middle multiplies the scale by: up and
+    /// to the right grows, down and to the left shrinks, at the rate an axis
+    /// handle does - a drag the length of an arm doubles it.
+    /// <para/>
+    /// It measured the pointer's distance from the centre against where it
+    /// was grabbed, which is the square itself - a few pixels from the centre,
+    /// so the same drag that nudged an axis handle multiplied the size several
+    /// times over (2026-09-27). Never below a hundredth: the square makes
+    /// things bigger or smaller, and a mirror image is the axis handles' to make.
+    /// </summary>
+    internal static double UniformScaleFactor(Point grab, Point mouse, Vector ux, Vector uy)
+    {
+        Vector along = Unit(ux) + Unit(uy);
+        if (along.Length < 1e-6) along = new Vector(1, -1);   // up and right, on screen
+        along.Normalize();
+        Vector drag = mouse - grab;
+        double f = 1 + (drag.X * along.X + drag.Y * along.Y) / GizmoAxisLen;
+        return Math.Max(0.01, f);
+    }
+
+    private static Vector Unit(Vector v)
+    {
+        if (v.Length < 1e-6) return new Vector(0, 0);
+        v.Normalize();
+        return v;
+    }
 
     // ── Toolbar ─────────────────────────────────────────────────────────
 
@@ -2897,22 +2931,22 @@ public sealed class PlacePreview : Grid
     {
         _gizmoTitle = new TextBlock { Foreground = Brushes.White, FontSize = 11, Margin = new Thickness(0, 0, 0, 4), TextWrapping = TextWrapping.Wrap };
 
-        _btnBody = MakeChip("Body", () => SetPart(GizmoPart.Body));
-        _btnShadow = MakeChip("Shadow", () => SetPart(GizmoPart.Shadow));
-        _btnBlink = MakeChip("Blink", () => SetPart(GizmoPart.Blink));
-        _btnWet = MakeChip("Wet", () => SetPart(GizmoPart.Wet));
-        _btnReflection = MakeChip("Reflection", () => SetPart(GizmoPart.Reflection));
+        _btnBody = MakeChip(Chip("preview.gizmo.body"), () => SetPart(GizmoPart.Body));
+        _btnShadow = MakeChip(Chip("preview.gizmo.shadow"), () => SetPart(GizmoPart.Shadow));
+        _btnBlink = MakeChip(Chip("preview.gizmo.blink"), () => SetPart(GizmoPart.Blink));
+        _btnWet = MakeChip(Chip("preview.gizmo.wet"), () => SetPart(GizmoPart.Wet));
+        _btnReflection = MakeChip(Chip("preview.gizmo.reflection"), () => SetPart(GizmoPart.Reflection));
         _partRow = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 0, 0, 4) };
         foreach (var b in new[] { _btnBody, _btnShadow, _btnBlink, _btnWet, _btnReflection })
             _partRow.Children.Add(b);
 
-        _btnMove = MakeChip("Move", () => SetMode(GizmoMode.Move));
-        _btnRotate = MakeChip("Rotate", () => SetMode(GizmoMode.Rotate));
-        _btnScale = MakeChip("Scale", () => SetMode(GizmoMode.Scale));
+        _btnMove = MakeChip(Chip("preview.gizmo.move"), () => SetMode(GizmoMode.Move));
+        _btnRotate = MakeChip(Chip("preview.gizmo.rotate"), () => SetMode(GizmoMode.Rotate));
+        _btnScale = MakeChip(Chip("preview.gizmo.scale"), () => SetMode(GizmoMode.Scale));
         var modeRow = new StackPanel { Orientation = Orientation.Horizontal };
         foreach (var b in new[] { _btnMove, _btnRotate, _btnScale }) modeRow.Children.Add(b);
 
-        var close = MakeChip("✕", Deselect);
+        var close = MakeChip(new TextBlock { Text = "✕" }, Deselect);
 
         var stack = new StackPanel();
         stack.Children.Add(_gizmoTitle);
@@ -2936,13 +2970,24 @@ public sealed class PlacePreview : Grid
         UpdateGizmoToolbar();
     }
 
-    private static Button MakeChip(string text, System.Action onClick)
+    /// <summary>A chip's word for <paramref name="key"/>, bound rather than set:
+    /// the toolbar is built once, and a word set here would stay in whatever
+    /// language the editor had when the preview first loaded.</summary>
+    private static TextBlock Chip(string key)
     {
+        var label = new TextBlock();
+        LocText.Bind(label, TextBlock.TextProperty, key);
+        return label;
+    }
+
+    private static Button MakeChip(TextBlock label, System.Action onClick)
+    {
+        // An explicit light foreground so the app's implicit (theme) TextBlock
+        // colour can't turn it dark-on-dark.
+        label.Foreground = ChipText;
         var b = new Button
         {
-            // TextBlock content with an explicit light foreground so the app's
-            // implicit (theme) TextBlock colour can't turn it dark-on-dark.
-            Content = new TextBlock { Text = text, Foreground = ChipText },
+            Content = label,
             Margin = new Thickness(0, 0, 4, 0),
             Padding = new Thickness(8, 2, 8, 2),
             FontSize = 11,
@@ -2995,10 +3040,10 @@ public sealed class PlacePreview : Grid
         if (!reflectable && _selPart == GizmoPart.Reflection) _selPart = GizmoPart.Body;
 
         _gizmoTitle.Text = !isNpc
-            ? $"GameObject: {_selNodePath}"
+            ? Loc.F("preview.place.selectedObject", "path", _selNodePath)
             : _selPart == GizmoPart.Reflection
-                ? $"Reflection of {_selPlacement!.Npc} — shared by every placement"
-                : $"NPC: {(string.IsNullOrWhiteSpace(_selPlacement!.Name) ? _selPlacement.Npc : _selPlacement.Name)}";
+                ? Loc.F("preview.place.selectedReflection", "npc", _selPlacement!.Npc)
+                : Loc.F("preview.place.selectedNpc", "npc", string.IsNullOrWhiteSpace(_selPlacement!.Name) ? _selPlacement.Npc : _selPlacement.Name);
 
         Paint(_btnBody, _selPart == GizmoPart.Body);
         Paint(_btnShadow, _selPart == GizmoPart.Shadow);
@@ -3046,9 +3091,9 @@ public sealed class PlacePreview : Grid
             VerticalAlignment = VerticalAlignment.Bottom,
             Cursor = Cursors.SizeNWSE,
             Opacity = 0.75,
-            ToolTip = "Drag to resize the hierarchy",
             Template = GripTemplate(),
         };
+        LocText.Bind(grip, ToolTipProperty, "preview.place.resizeHierarchy.tip");
         grip.DragDelta += (_, e) =>
         {
             _objectMenu.Width = Math.Min(MenuMaxWidth,
@@ -3122,7 +3167,7 @@ public sealed class PlacePreview : Grid
 
         _objectMenuList.Children.Add(new TextBlock
         {
-            Text = "Hierarchy", FontWeight = FontWeights.Bold, FontSize = 11, Foreground = Brushes.White,
+            Text = Loc.T("preview.place.hierarchy"), FontWeight = FontWeights.Bold, FontSize = 11, Foreground = Brushes.White,
             Margin = new Thickness(2, 0, 0, 3),
         });
 
@@ -3240,7 +3285,7 @@ public sealed class PlacePreview : Grid
         if (onToggle != null)
         {
             arrow.Cursor = Cursors.Hand;
-            arrow.ToolTip = "Fold this object's children";
+            arrow.ToolTip = Loc.T("preview.place.fold.tip");
             // Handling the DOWN is what keeps the row's own click from firing:
             // the Button never captures, so folding does not also re-select.
             arrow.MouseLeftButtonDown += (_, e) => { onToggle(); e.Handled = true; };
@@ -3262,9 +3307,9 @@ public sealed class PlacePreview : Grid
                            : new SolidColorBrush(Color.FromArgb(0xAA, 0xB0, 0xB6, 0xBE)),
                 VerticalAlignment = VerticalAlignment.Center,
                 Cursor = Cursors.Hand,
-                ToolTip = entry.HiddenBySelf ? "Hidden from the preview — click to show. Preview only; the object is untouched."
-                        : entry.Hidden ? "Hidden because a parent is hidden. Its own toggle is still on."
-                        : "Hide this object and everything under it. Preview only — nothing is saved to the pack.",
+                ToolTip = entry.HiddenBySelf ? Loc.T("preview.place.hidden.tip")
+                        : entry.Hidden ? Loc.T("preview.place.hiddenByParent.tip")
+                        : Loc.T("preview.place.hide.tip"),
             };
             // Same as the fold arrow: swallowing the DOWN stops the row's own
             // click, so toggling visibility does not also change the selection.
@@ -3390,8 +3435,8 @@ public sealed class PlacePreview : Grid
         catch { return null; }
     }
 
-    private static FontFamily NumberFont() => _numberFont ??= LoadFont("Barton.otf", "Segoe UI");
-    private static FontFamily LabelFont() => _labelFont ??= LoadFont("Curse Casual.ttf", "Segoe UI");
+    private static FontFamily NumberFont() => _numberFont ??= LoadFont("Barton.otf", "Segoe UI");   // English on purpose: font names.
+    private static FontFamily LabelFont() => _labelFont ??= LoadFont("Curse Casual.ttf", "Segoe UI");   // English on purpose: a font file's name.
 
     private static FontFamily LoadFont(string fileName, string fallback)
     {

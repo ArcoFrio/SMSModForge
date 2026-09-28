@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Windows.Data;
+using SMSModForge.Localization;
 
 namespace SMSModForge.View.Converters;
 
@@ -16,7 +17,7 @@ public sealed class PreviewHeaderConverter : IValueConverter
     public static readonly PreviewHeaderConverter Instance = new();
 
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-        => value is true ? "Preview (live JiggleSprite)" : "Preview (vanilla bust)";
+        => Loc.T(value is true ? "preview.header.live" : "preview.header.vanilla");
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         => throw new NotSupportedException();

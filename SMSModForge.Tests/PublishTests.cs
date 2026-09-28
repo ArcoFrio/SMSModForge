@@ -23,6 +23,7 @@ namespace SMSModForge.Tests;
 /// the pack already in the right place, and by numbering that event rather than
 /// the ones around it.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class PublishTests : IDisposable
 {
     private readonly ITestOutputHelper _out;

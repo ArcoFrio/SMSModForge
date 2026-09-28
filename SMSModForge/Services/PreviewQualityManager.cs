@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using SMSModForge.ViewModel;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Services;
 
@@ -20,8 +21,16 @@ namespace SMSModForge.Services;
 /// </summary>
 public sealed class PreviewQualityDef : ObservableObject
 {
+    /// <summary>What the preset is saved as. Never shown - <see cref="DisplayName"/> is.</summary>
     public string Name { get; init; } = "";
-    public string Description { get; init; } = "";
+
+    /// <summary>The key of its name in the English file; its description
+    /// is the same key and <c>.tip</c>.</summary>
+    public string NameKey => "previewQuality." + Name.ToLowerInvariant();
+
+    public string DisplayName => Loc.T(NameKey);
+
+    public string Description => Loc.T(NameKey + ".tip");
 
     /// <summary>Upper bound on shader passes per second.</summary>
     public int MaxFps { get; init; }
@@ -50,10 +59,10 @@ public static class PreviewQualityManager
     // that the NPC preview can render much larger surfaces than the bust one.
     public static IReadOnlyList<PreviewQualityDef> All { get; } = new[]
     {
-        new PreviewQualityDef { Name = "Ultra",  MaxFps = 60, SuperSample = true,  Description = "60 fps, 4× anti-aliasing. Smoothest motion, highest CPU." },
-        new PreviewQualityDef { Name = "High",   MaxFps = 30, SuperSample = true,  Description = "30 fps, 4× anti-aliasing. Same fidelity as Ultra at ~half the CPU." },
-        new PreviewQualityDef { Name = "Medium", MaxFps = 30, SuperSample = false, Description = "30 fps, no anti-aliasing. Slight motion-edge shimmer; much lighter." },
-        new PreviewQualityDef { Name = "Low",    MaxFps = 20, SuperSample = false, Description = "20 fps, no anti-aliasing. Lightest; choppier motion." },
+        new PreviewQualityDef { Name = "Ultra",  MaxFps = 60, SuperSample = true },
+        new PreviewQualityDef { Name = "High",   MaxFps = 30, SuperSample = true },
+        new PreviewQualityDef { Name = "Medium", MaxFps = 30, SuperSample = false },
+        new PreviewQualityDef { Name = "Low",    MaxFps = 20, SuperSample = false },
     };
 
     // Index 2 ("Medium") is the default + fallback.
@@ -85,12 +94,15 @@ public static class PreviewQualityManager
 
     private static string? LoadName()
     {
+        // Nothing the test suite does is the author's: see TestMode.
+        if (TestMode.Active) return null;
         try { return File.Exists(FilePath) ? JsonConvert.DeserializeObject<string>(File.ReadAllText(FilePath)) : null; }
         catch { return null; }
     }
 
     private static void SaveName(string name)
     {
+        if (TestMode.Active) return;
         try
         {
             var dir = Path.GetDirectoryName(FilePath)!;

@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Services;
 
@@ -92,12 +93,12 @@ public static class UpdateFeed
         }
         catch (OperationCanceledException)
         {
-            failure?.Invoke("The check was cancelled.");
+            failure?.Invoke(Loc.T("update.cancelled"));
             return null;
         }
         catch (Exception ex)
         {
-            failure?.Invoke("Could not reach the update server: " + ex.Message);
+            failure?.Invoke(Loc.F("update.unreachable", "problem", ex.Message));
             return null;
         }
 
@@ -108,13 +109,13 @@ public static class UpdateFeed
         }
         catch (Exception ex)
         {
-            failure?.Invoke("The update server answered with something unreadable: " + ex.Message);
+            failure?.Invoke(Loc.F("update.unreadable", "problem", ex.Message));
             return null;
         }
 
         if (release == null)
         {
-            failure?.Invoke("No release has been published yet.");
+            failure?.Invoke(Loc.T("update.noRelease"));
             return null;
         }
         return release.Version > RunningVersion ? release : null;

@@ -21,6 +21,7 @@ namespace SMSModForge.Tests;
 /// VP8 in a .webm — can be one Windows has never heard of. The preview says so
 /// instead of looking broken.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class ScenePreviewVideoTests
 {
     private readonly ITestOutputHelper _out;

@@ -121,6 +121,53 @@ namespace SMSModForge.PackPlugin
             // The pack's tasks that are hidden until conditions pass and have
             // been shown for good in this save.
             Declare(RevealedTasksName, PackVariableType.List, "[]", persisted: true);
+            // The pack's scenes that have been shown as a Starmaker photo, and
+            // so belong in the gallery. Declared here rather than by the author:
+            // ticking the box is the whole of what they do.
+            Declare(TakenPhotosName, PackVariableType.List, "[]", persisted: true);
+            // The tasks each of the pack's quests had the last time this save
+            // was played, so a later version's new ones can be told apart.
+            Declare(QuestStepsName, PackVariableType.String, "{}", persisted: true);
+        }
+
+        private const string QuestStepsName = "__questSteps";
+
+        /// <summary>
+        /// The keys of the tasks <paramref name="questKey"/> had the last time
+        /// this save was played with the pack, or null when the save has no
+        /// record of it - a save from before the record was kept, or one that
+        /// has never had the quest. See <c>QuestGrowth</c>.
+        /// </summary>
+        public HashSet<string> QuestStepsSeen(string questKey)
+        {
+            string raw = _values.TryGetValue(QuestStepsName, out var s) ? s ?? "" : "";
+            try
+            {
+                if (raw.Length == 0 || !(JObject.Parse(raw)[questKey ?? ""] is JArray keys)) return null;
+                var seen = new HashSet<string>(StringComparer.Ordinal);
+                foreach (var k in keys)
+                {
+                    string key = (string)k;
+                    if (!string.IsNullOrEmpty(key)) seen.Add(key);
+                }
+                return seen;
+            }
+            catch (Exception) { return null; }
+        }
+
+        /// <summary>Record the tasks <paramref name="questKey"/> has now, for
+        /// this save. Written with the next save, like everything else.</summary>
+        public void RememberQuestSteps(string questKey, IEnumerable<string> keys)
+        {
+            if (string.IsNullOrEmpty(questKey)) return;
+            string raw = _values.TryGetValue(QuestStepsName, out var s) ? s ?? "" : "";
+            JObject all;
+            try { all = raw.Length > 0 ? JObject.Parse(raw) : new JObject(); }
+            catch (Exception) { all = new JObject(); }
+            var arr = new JArray();
+            foreach (var k in keys ?? Enumerable.Empty<string>()) arr.Add(k);
+            all[questKey] = arr;
+            _values[QuestStepsName] = all.ToString(Newtonsoft.Json.Formatting.None);
         }
 
         private const string GameChangesSeenName = "__gameChangesSeen";
@@ -181,6 +228,57 @@ namespace SMSModForge.PackPlugin
             foreach (var k in _revealed.OrderBy(k => k, StringComparer.Ordinal)) arr.Add(k);
             _revealedFrom = arr.ToString(Newtonsoft.Json.Formatting.None);
             _values[RevealedTasksName] = _revealedFrom;
+        }
+
+        // ── Photos the pack's own scenes have been shown as ─────────────
+
+        private HashSet<string> _photos;
+        private string _photosFrom;
+
+        /// <summary>Internal marker, underscored like the rest so it stays out
+        /// of the pack's public variable surface. An author ticks "Treat as a
+        /// Starmaker photo" and nothing else: which photos have been taken is
+        /// the runtime's business, not a variable to declare and keep in
+        /// step.</summary>
+        private const string TakenPhotosName = "__takenPhotos";
+
+        /// <summary>Whether this scene has been shown as a photo in this save,
+        /// which is what puts it in the gallery.</summary>
+        public bool IsPhotoTaken(string sceneKey)
+        {
+            SyncPhotos();
+            return _photos.Contains(sceneKey ?? "");
+        }
+
+        /// <summary>Remember that it has. Written with the next save, like
+        /// everything else here.</summary>
+        public void TakePhoto(string sceneKey)
+        {
+            if (string.IsNullOrEmpty(sceneKey)) return;
+            SyncPhotos();
+            if (!_photos.Add(sceneKey)) return;
+            var arr = new JArray();
+            foreach (var k in _photos.OrderBy(k => k, StringComparer.Ordinal)) arr.Add(k);
+            _photosFrom = arr.ToString(Newtonsoft.Json.Formatting.None);
+            _values[TakenPhotosName] = _photosFrom;
+        }
+
+        private void SyncPhotos()
+        {
+            string raw = _values.TryGetValue(TakenPhotosName, out var s) ? s ?? "" : "";
+            if (_photos != null && string.Equals(raw, _photosFrom, StringComparison.Ordinal)) return;
+            _photos = new HashSet<string>(StringComparer.Ordinal);
+            try
+            {
+                if (raw.Length > 0)
+                    foreach (var item in JArray.Parse(raw))
+                    {
+                        var k = (string)item;
+                        if (!string.IsNullOrEmpty(k)) _photos.Add(k);
+                    }
+            }
+            catch (Exception) { }
+            _photosFrom = raw;
         }
 
         private void SyncRevealed()
@@ -295,6 +393,9 @@ namespace SMSModForge.PackPlugin
             // session go the same way.
             _values[GameChangesSeenName] = "";
             _values[RevealedTasksName] = "[]";
+            // What the session recorded of the quests is the new game's; the
+            // loaded save's file says what IT saw.
+            _values[QuestStepsName] = "{}";
             WrittenBeforeChangeMarks = false;
 
             // Reset ONLY when there is a file to load.

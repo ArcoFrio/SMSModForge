@@ -18,6 +18,7 @@ namespace SMSModForge.Tests;
 /// property off an ancestor. Every one of those is the kind of thing that
 /// compiles, binds to nothing, and silently does nothing at all.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class ComboBoxSearchTests
 {
     private readonly ITestOutputHelper _out;

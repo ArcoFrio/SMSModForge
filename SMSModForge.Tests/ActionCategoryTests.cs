@@ -20,6 +20,7 @@ namespace SMSModForge.Tests;
 /// which is why the last test here checks all of them at once rather than only
 /// the one that was reported.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class ActionCategoryTests
 {
     private readonly ITestOutputHelper _out;

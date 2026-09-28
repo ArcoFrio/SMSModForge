@@ -73,10 +73,10 @@ namespace SMSModForge.PackPlugin
         // ── What the ticker changes ──────────────────────────────────────
 
         /// <summary>Replace a game quest's description, keeping what it had.</summary>
-        public static void SetDescription(GcQuest quest, string text)
+        public static void SetDescription(GcQuest quest, string text, string packId)
         {
             SnapshotOf(quest);
-            QuestRegistry.SetDescription(quest, text);
+            QuestRegistry.SetDescription(quest, text, packId);
         }
 
         /// <summary>Put back the description the game gave the quest - the one
@@ -300,7 +300,7 @@ namespace SMSModForge.PackPlugin
                         continue;
                     }
 
-                    var spec = QuestRuntime.ReadTask(a.Json);
+                    var spec = QuestRuntime.ReadTask(a.Json, packId);
                     data.Add(id, new TTreeDataItem<GcTask>(id, QuestRegistry.NewTask(spec)));
                     nodes.Add(id, new TreeNode(id, parent));
                     made[a] = id;
@@ -328,7 +328,7 @@ namespace SMSModForge.PackPlugin
                                           + "quest already has. It is left out.");
                             continue;
                         }
-                        data.Add(subId, new TTreeDataItem<GcTask>(subId, QuestRegistry.NewTask(QuestRuntime.ReadTask(sub))));
+                        data.Add(subId, new TTreeDataItem<GcTask>(subId, QuestRegistry.NewTask(QuestRuntime.ReadTask(sub, packId))));
                         nodes.Add(subId, new TreeNode(subId, id));
                         nodes[id].Children.Add(subId);
                         count++;

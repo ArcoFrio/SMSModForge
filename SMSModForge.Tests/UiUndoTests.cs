@@ -13,6 +13,7 @@ namespace SMSModForge.Tests;
 /// Reported: Ctrl+Z drops the selection, so there is nothing on screen to tell
 /// you whether it worked; and Ctrl+Y afterwards does not put the change back.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class UiUndoTests
 {
     private readonly ITestOutputHelper _out;

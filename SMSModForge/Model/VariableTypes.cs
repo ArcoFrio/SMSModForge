@@ -1,4 +1,6 @@
-﻿namespace SMSModForge.Model;
+﻿using SMSModForge.Localization;
+
+namespace SMSModForge.Model;
 
 /// <summary>
 /// What kind of value a variable holds, in the words an author uses rather
@@ -83,11 +85,11 @@ public static class VariableTypes
     /// editor look broken rather than uninformed.</summary>
     public static string Label(VariableKind kind) => kind switch
     {
-        VariableKind.YesNo => "yes/no",
-        VariableKind.Number => "number",
-        VariableKind.Text => "text",
-        VariableKind.List => "list",
-        VariableKind.Position => "position",
+        VariableKind.YesNo => Loc.T("variable.kind.yesNo"),
+        VariableKind.Number => Loc.T("variable.kind.number"),
+        VariableKind.Text => Loc.T("variable.kind.text"),
+        VariableKind.List => Loc.T("variable.kind.list"),
+        VariableKind.Position => Loc.T("variable.kind.position"),
         _ => "",
     };
 

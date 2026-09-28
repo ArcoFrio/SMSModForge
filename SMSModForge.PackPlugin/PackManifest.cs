@@ -27,6 +27,31 @@ namespace SMSModForge.PackPlugin
         public PackArchive Archive { get; private set; }
         public JObject Root { get; private set; }
 
+        /// <summary>
+        /// The language this pack is being played in, or null when it is being
+        /// played as its author wrote it.
+        /// <para/>
+        /// Set when a translation of the pack is laid over the manifest. It is
+        /// what ModForge's own words about a pack follow: a pack with no Spanish
+        /// is an English pack, and calling its player "Tú" while every line
+        /// around it is in English makes the editor look like it half-translated
+        /// somebody's work.
+        /// </summary>
+        public string TranslatedInto { get; internal set; }
+
+        /// <summary>The translation the pack is played in, when it is - kept
+        /// for the game's own lines in the conversations the pack extends,
+        /// which are not in the manifest (see <see cref="GameLineTranslations"/>).</summary>
+        public SMSModForge.Shared.TextFile Translation { get; internal set; }
+
+        /// <summary>The language the pack's own words are in: its manifest's
+        /// <c>language</c>, English when it does not say.</summary>
+        public string Language => SMSModForge.Shared.PackTexts.LanguageOf(Root);
+
+        /// <summary>The language the pack is being played in: a translation's,
+        /// or its own.</summary>
+        public string PlayedIn => TranslatedInto ?? Language;
+
         public JArray Characters => Root["characters"] as JArray;
         public JArray Places => Root["places"] as JArray;
         public JArray MapButtons => Root["mapButtons"] as JArray;
@@ -81,7 +106,23 @@ namespace SMSModForge.PackPlugin
             }
 
             string packId = (string)root["packId"] ?? archive.PackId;
-            return new PackManifest { PackId = packId, Archive = archive, Root = root };
+            var manifest = new PackManifest { PackId = packId, Archive = archive, Root = root };
+            // In the player's language, where the pack has a translation into
+            // it - here, so nothing that reads the manifest ever sees the
+            // other words.
+            PluginLanguage.Translate(manifest, logger);
+
+            // And the letters those words are written in. After the translation,
+            // so a pack played in Chinese is scanned as Chinese — and asked of
+            // the manifest rather than of the player's language, because what a
+            // pack is written in has nothing to do with what the player set.
+            try { PluginFonts.AddForText(manifest.Root.ToString(), packId, logger); }
+            catch (System.Exception ex)
+            {
+                logger?.LogWarning("[SMSModForge.PackPlugin] Fonts: " + packId
+                                   + " could not be scanned for letters the game lacks: " + ex.Message);
+            }
+            return manifest;
         }
 
         /// <summary>True when the archive contains a file at the given

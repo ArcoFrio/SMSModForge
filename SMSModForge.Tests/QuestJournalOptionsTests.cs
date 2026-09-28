@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using System.Windows.Controls;
 using SMSModForge.Model;
 using SMSModForge.ViewModel;
@@ -17,6 +17,7 @@ namespace SMSModForge.Tests;
 /// flag - is read off the game's IL and cannot be run here. This holds the half
 /// that can: what the pack stores, and what the tab offers and says.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class QuestJournalOptionsTests
 {
     private readonly ITestOutputHelper _out;

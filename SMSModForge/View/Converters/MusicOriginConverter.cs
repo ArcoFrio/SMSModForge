@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 using SMSModForge.Model;
+using SMSModForge.Localization;
 
 namespace SMSModForge.View.Converters;
 
@@ -24,8 +25,8 @@ public sealed class MusicOriginConverter : IValueConverter
 {
     public static readonly MusicOriginConverter Instance = new();
 
-    public const string PackHeading = "This pack";
-    public const string GameHeading = "The game's own";
+    public static string PackHeading => Loc.T("common.group.thisPack");
+    public static string GameHeading => Loc.T("common.group.gamesOwn");
 
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {

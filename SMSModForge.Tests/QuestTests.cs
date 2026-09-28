@@ -271,6 +271,52 @@ public sealed class QuestTests
     }
 
     [Fact]
+    public void TwoTasksWithOneNameAreToldApartByTheirIds()
+    {
+        // A step and the step under it, both called the same thing. The closed
+        // box shows the NAME, so without this the row reads perfectly well and
+        // points at whichever of the two happened to be picked - a mistake that
+        // leaves nothing behind to find it by.
+        var twins = new QuestDef
+        {
+            Key = "twins",
+            Title = "Twins",
+            Tasks =
+            {
+                new QuestTaskDef
+                {
+                    Key = "visit", Name = "Talk to her.",
+                    Subtasks = { new QuestTaskDef { Key = "again", Name = "Talk to her." } },
+                },
+                new QuestTaskDef { Key = "home", Name = "Go home." },
+            },
+        };
+
+        var quests = new List<QuestDef> { twins };
+        QuestPickerViewModel.PackQuests = () => quests;
+        try
+        {
+            var picker = new QuestPickerViewModel(new Dictionary<string, string>(), () => { },
+                                                  offersWholeQuest: false) { QuestKey = "twins" };
+            var options = picker.TaskOptions;
+            foreach (var o in options) _out.WriteLine($"'{o.Name}'  |  '{o.Label}'");
+
+            Assert.Equal("Talk to her.  (visit)", options.Single(o => o.Token == "visit").Name);
+            Assert.Equal("Talk to her.  (again)", options.Single(o => o.Token == "again").Name);
+
+            // Which is also what the list row says, not only the closed box:
+            // the indent tells you which is the subtask, but not which of them
+            // you just chose.
+            Assert.Contains("(again)", options.Single(o => o.Token == "again").Label);
+
+            // The control. A name nothing else shares is left alone - an id
+            // beside every task would be noise on every row in the editor.
+            Assert.Equal("Go home.", options.Single(o => o.Token == "home").Name);
+        }
+        finally { QuestPickerViewModel.PackQuests = null; }
+    }
+
+    [Fact]
     public void AStoredTaskTheListDoesNotHaveStillShows()
     {
         // Otherwise opening a row whose task was deleted would show an empty box

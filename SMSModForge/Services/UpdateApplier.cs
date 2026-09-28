@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Services;
 
@@ -92,15 +93,12 @@ public static class UpdateApplier
         }
         catch (UnauthorizedAccessException)
         {
-            problem = "The editor's folder could not be written to:\n" + installFolder +
-                      "\n\nThis usually means it is installed somewhere that needs " +
-                      "administrator rights. Moving it out of Program Files, or " +
-                      "unpacking the download yourself, will both work.";
+            problem = Loc.F("update.folderLocked", "folder", installFolder);
             return false;
         }
         catch (Exception ex)
         {
-            problem = "The update could not be copied into place: " + ex.Message;
+            problem = Loc.F("update.copyFailed", "problem", ex.Message);
             return false;
         }
 
@@ -120,8 +118,7 @@ public static class UpdateApplier
         {
             // The files ARE updated at this point, so this is not a failed
             // update - just one nobody was let back into.
-            problem = "The update is installed, but the editor could not be " +
-                      "restarted: " + ex.Message;
+            problem = Loc.F("update.restartFailed", "problem", ex.Message);
             return false;
         }
         return true;

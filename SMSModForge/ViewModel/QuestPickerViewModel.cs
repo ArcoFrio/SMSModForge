@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SMSModForge.Model;
 using V = SMSModForge.Shared.QuestVocabulary;
+using SMSModForge.Localization;
 
 namespace SMSModForge.ViewModel;
 
@@ -142,7 +143,7 @@ public sealed class QuestPickerViewModel : ObservableObject
             string quest = QuestKey;
             if (quest.Length == 0) return "";
             if (!QuestReferences.QuestExists(Quests, IsVanilla, quest))
-                return IsVanilla ? "not one of the game's quests" : "no quest with this name on the Quests tab";
+                return Loc.T(IsVanilla ? "questPicker.notGames" : "questPicker.notOnTab");
             string label = QuestReferences.QuestLabel(Quests, IsVanilla, quest);
             return label == quest ? "" : label;
         }
@@ -180,28 +181,58 @@ public sealed class QuestPickerViewModel : ObservableObject
         get
         {
             var options = new List<QuestTaskOption>();
-            if (OffersWholeQuest) options.Add(new QuestTaskOption(WholeQuestToken, "(the quest itself)", "(the quest itself)"));
+            if (OffersWholeQuest) options.Add(new QuestTaskOption(WholeQuestToken, Loc.T("questPicker.wholeQuest"), Loc.T("questPicker.wholeQuest")));
 
             var tasks = QuestReferences.TasksOf(Quests, IsVanilla, QuestKey);
             if (tasks != null)
+            {
+                // Two tasks in one quest can carry the same name. The game's
+                // own quests do it - a step and a step under it both called
+                // "Talk to her" - and a pack adding a step beside one already
+                // named that does it too. The name alone then names both, in
+                // the closed box as well as in the list, and choosing the wrong
+                // one is a mistake that leaves no trace to find later: the row
+                // reads correctly and points at the other task.
+                //
+                // Where a name is shared, its id goes beside it. An id is not
+                // something anybody should have to read, which is why it is not
+                // shown the rest of the time - but between two tasks with one
+                // name it is the only thing that tells them apart.
+                var used = new Dictionary<string, int>(StringComparer.Ordinal);
                 foreach (var t in tasks)
                 {
-                    string name = string.IsNullOrWhiteSpace(t.Name) ? "(" + t.Token + ")" : t.Name;
+                    string n = NameOf(t);
+                    used[n] = used.TryGetValue(n, out int count) ? count + 1 : 1;
+                }
+
+                foreach (var t in tasks)
+                {
+                    string name = NameOf(t);
+                    if (used[name] > 1 && name != Bare(t.Token)) name += "  (" + t.Token + ")";
+
                     options.Add(new QuestTaskOption(t.Token, name,
                         new string(' ', t.Depth * 4) + (t.Depth > 0 ? "▸ " : "") + name
-                        + (t.Counts ? "  [counts]" : "")
-                        + (t.Added ? "  [yours]" : "")
-                        + (t.Removed ? "  [taken out]" : "")));
+                        + (t.Counts ? "  " + Loc.T("questPicker.mark.counts") : "")
+                        + (t.Added ? "  " + Loc.T("questPicker.mark.yours") : "")
+                        + (t.Removed ? "  " + Loc.T("questPicker.mark.takenOut") : "")));
                 }
+            }
 
             // A stored task this list does not have still shows as itself, so
             // opening a row never looks like it lost its value.
             string stored = TaskKey;
             if (stored.Length > 0 && options.All(o => o.Token != stored))
-                options.Add(new QuestTaskOption(stored, stored, stored + "  (not found)"));
+                options.Add(new QuestTaskOption(stored, stored, stored + "  " + Loc.T("questPicker.notFound")));
             return options;
         }
     }
+
+    /// <summary>A task with no name of its own is shown as its id, since
+    /// something has to be shown.</summary>
+    private static string NameOf(QuestTaskInfo t)
+        => string.IsNullOrWhiteSpace(t.Name) ? Bare(t.Token) : t.Name;
+
+    private static string Bare(string token) => "(" + token + ")";
 
     /// <summary>
     /// What the task list's SelectedValue is bound to. The same as

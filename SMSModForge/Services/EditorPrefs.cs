@@ -28,6 +28,7 @@ public static class EditorPrefs
     private const string KeyAutoVersion = "autoVersion";
     private const string KeyWarnLowerVersion = "warnLowerVersion";
     private const string KeyQuietExportSize = "quietExportSizeFor";
+    private const string KeyQuietExportTranslation = "quietExportTranslationFor";
     private const string KeySpellCheckNodeText = "spellCheckNodeText";
 
     /// <summary>
@@ -102,6 +103,102 @@ public static class EditorPrefs
     }
 
     /// <summary>
+    /// Packs whose author does not want to be offered a translation before an
+    /// export. Per pack, like the size warning: a pack kept in one language on
+    /// purpose is kept that way every time, and the offer is still worth making
+    /// for the others.
+    /// </summary>
+    public static bool IsQuietOnExportTranslation(string? packId)
+        => InList(KeyQuietExportTranslation, packId);
+
+    public static void SetQuietOnExportTranslation(string? packId, bool quiet)
+        => SetInList(KeyQuietExportTranslation, packId, quiet);
+
+    private const string KeyTranslateNames = "translateNamesFor";
+    private const string KeyNameSpellings = "nameSpellings";
+    private const string KeyNameSuggestions = "nameSuggestions";
+
+    /// <summary>
+    /// Packs whose author wants character names machine-translated like any
+    /// other text. Off unless asked for: a translator reads a name as the word
+    /// it looks like. Per pack, and remembered, so the translation offered
+    /// before an export does what the Translate window was last told.
+    /// </summary>
+    public static bool IsTranslatingNames(string? packId) => InList(KeyTranslateNames, packId);
+
+    public static void SetTranslatingNames(string? packId, bool on) => SetInList(KeyTranslateNames, packId, on);
+
+    /// <summary>
+    /// How the author spelled a name in a language written in another
+    /// alphabet, once checked. Kept for the editor rather than for one pack:
+    /// the game's own characters are the same in every pack.
+    /// </summary>
+    public static string? NameSpelling(string code, string name) => SpellingIn(KeyNameSpellings, code, name);
+
+    public static void SetNameSpelling(string code, string name, string spelling)
+        => SetSpellingIn(KeyNameSpellings, code, name, string.IsNullOrWhiteSpace(spelling) ? null : spelling.Trim());
+
+    /// <summary>
+    /// What Google suggested for a name, not yet checked: kept until it is, so
+    /// closing the Translate window does not throw it away - and Google is not
+    /// asked again for what it already answered, which is only more traffic
+    /// towards a block. Empty when Google was asked and suggested nothing;
+    /// null when it was never asked.
+    /// </summary>
+    public static string? NameSuggestion(string code, string name) => SpellingIn(KeyNameSuggestions, code, name);
+
+    /// <summary>Null forgets it: checked, or to be asked again.</summary>
+    public static void SetNameSuggestion(string code, string name, string? suggestion)
+        => SetSpellingIn(KeyNameSuggestions, code, name, suggestion?.Trim());
+
+    private static string? SpellingIn(string key, string code, string name)
+    {
+        var all = Spellings(key);
+        return all.TryGetValue(code ?? "", out var inLanguage) && inLanguage.TryGetValue(name ?? "", out var spelled)
+            ? spelled : null;
+    }
+
+    private static void SetSpellingIn(string key, string code, string name, string? spelling)
+    {
+        if (string.IsNullOrWhiteSpace(code) || string.IsNullOrWhiteSpace(name)) return;
+        var all = Spellings(key);
+        if (!all.TryGetValue(code, out var inLanguage)) all[code] = inLanguage = new Dictionary<string, string>(StringComparer.Ordinal);
+        if (spelling == null) inLanguage.Remove(name);
+        else inLanguage[name] = spelling;
+        if (inLanguage.Count == 0) all.Remove(code);
+        SetString(key, JsonConvert.SerializeObject(all));
+    }
+
+    private static Dictionary<string, Dictionary<string, string>> Spellings(string key)
+    {
+        try
+        {
+            return JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(GetString(key, "{}"))
+                   ?? new Dictionary<string, Dictionary<string, string>>();
+        }
+        catch (JsonException) { return new Dictionary<string, Dictionary<string, string>>(); }
+    }
+
+    private static bool InList(string key, string? packId)
+    {
+        if (string.IsNullOrEmpty(packId)) return false;
+        foreach (string had in GetString(key, "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+            if (string.Equals(had, packId, StringComparison.OrdinalIgnoreCase)) return true;
+        return false;
+    }
+
+    private static void SetInList(string key, string? packId, bool on)
+    {
+        if (string.IsNullOrEmpty(packId)) return;
+        var have = new List<string>();
+        foreach (string had in GetString(key, "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+            if (!string.Equals(had, packId, StringComparison.OrdinalIgnoreCase)) have.Add(had);
+        if (on) have.Add(packId!);
+        // Commas separate them; ids cannot hold one, but strip it rather than trust that.
+        SetString(key, string.Join(",", have.Select(h => h.Replace(",", ""))));
+    }
+
+    /// <summary>
     /// Whether the dialogue node's Text box runs Windows' spell checker. On by
     /// default — node text is the one field in the editor a player actually
     /// reads. Off is a real preference, not just an escape hatch: a pack
@@ -111,6 +208,22 @@ public static class EditorPrefs
     {
         get => GetBool(KeySpellCheckNodeText, defaultValue: true);
         set => SetBool(KeySpellCheckNodeText, value);
+    }
+
+    private const string KeyLanguage = "language";
+
+    /// <summary>
+    /// The language the editor shows, as a translation file's code - "es",
+    /// "pt-BR". Empty means the author never picked one, and the editor
+    /// follows Windows' own language when it has a translation for it.
+    /// <para/>
+    /// Read once, at start: the windows read their texts as they are built,
+    /// so a change applies the next time the editor starts.
+    /// </summary>
+    public static string Language
+    {
+        get => GetString(KeyLanguage, "");
+        set => SetString(KeyLanguage, value ?? "");
     }
 
     private const string KeyGameLookNodeRows = "gameLookNodeRows";
@@ -269,6 +382,47 @@ public static class EditorPrefs
         SetString(KeyTutorialsDone, string.Join(",", all));
     }
 
+    private const string KeyBustPreviewZoom = "bustPreviewZoom";
+
+    /// <summary>
+    /// How big the bust preview is drawn, as a multiple of its own size.
+    /// <para/>
+    /// One by default, which is the size it was fixed at before this and the
+    /// only one that puts a bitmap pixel on a screen pixel. Remembered because
+    /// an author who wants a closer look at a mask wants it on every outfit,
+    /// not once. Read back through the same steps it is offered in, so a hand-
+    /// edited file cannot produce a size the preview was never checked at.
+    /// </summary>
+    public static double BustPreviewZoom
+    {
+        get
+        {
+            double saved = GetDouble(KeyBustPreviewZoom, 1);
+            foreach (double step in ZoomSteps) if (Math.Abs(step - saved) < 0.001) return step;
+            return 1;
+        }
+        set => SetDouble(KeyBustPreviewZoom, value);
+    }
+
+    /// <summary>The sizes the preview is offered at. Whole steps are exact;
+    /// the halves resample, which the control says by dropping nearest
+    /// neighbour.</summary>
+    public static readonly double[] ZoomSteps = { 0.5, 1, 1.5, 2 };
+
+    private static double GetDouble(string key, double defaultValue)
+    {
+        var prefs = Load();
+        if (!prefs.TryGetValue(key, out var raw) || raw == null) return defaultValue;
+        try { return Convert.ToDouble(raw, System.Globalization.CultureInfo.InvariantCulture); }
+        catch { return defaultValue; }
+    }
+
+    private static void SetDouble(string key, double value)
+    {
+        Load()[key] = value;
+        Save();
+    }
+
     private static string GetString(string key, string fallback)
     {
         var d = Load();
@@ -284,6 +438,11 @@ public static class EditorPrefs
     private static Dictionary<string, object> Load()
     {
         if (_cache != null) return _cache;
+        // Under the test suite, the defaults, kept in memory: the suite
+        // neither reads the author's preferences - a test then passes or
+        // fails by what they last picked, such as the bust preview's size -
+        // nor writes over them.
+        if (TestMode.Active) return _cache = new Dictionary<string, object>();
         try
         {
             _cache = File.Exists(FilePath)
@@ -313,6 +472,7 @@ public static class EditorPrefs
     /// cannot be saved is not worth interrupting an author over.</summary>
     private static void Save()
     {
+        if (TestMode.Active) return;
         try
         {
             var dir = Path.GetDirectoryName(FilePath)!;

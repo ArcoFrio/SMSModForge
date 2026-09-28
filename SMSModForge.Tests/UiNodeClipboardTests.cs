@@ -17,6 +17,7 @@ namespace SMSModForge.Tests;
 /// way in and again on the way out, so neither the original nor an earlier
 /// paste can be changed by editing a later one.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class UiNodeClipboardTests
 {
     private readonly ITestOutputHelper _out;

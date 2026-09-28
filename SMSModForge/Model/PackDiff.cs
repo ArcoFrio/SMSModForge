@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Model;
 
@@ -92,8 +93,8 @@ public static class PackDiff
             {
                 Kind = PackChangeKind.Added,
                 Section = "pack",
-                Path = "(whole manifest)",
-                After = "no previous saved state to compare against",
+                Path = Loc.T("diff.wholeManifest"),
+                After = Loc.T("diff.nothingToCompare"),
             });
             return changes;
         }
@@ -244,10 +245,11 @@ public static class PackDiff
                                    .Where(l => !string.IsNullOrEmpty(l))
                                    .Take(3).ToList();
             string what = movedLabels.Count == 0
-                ? after.Count + " entries"
-                : string.Join(", ", movedLabels) + (movedIds.Count > movedLabels.Count
-                    ? " and " + (movedIds.Count - movedLabels.Count) + " more" : "");
-            Emit(outp, PackChangeKind.Reordered, path, "different order", Truncate(what));
+                ? Loc.P("diff.entries", after.Count)
+                : movedIds.Count > movedLabels.Count
+                    ? Loc.P("diff.andMore", movedIds.Count - movedLabels.Count, "items", Loc.JoinList(movedLabels))
+                    : Loc.JoinList(movedLabels);
+            Emit(outp, PackChangeKind.Reordered, path, Loc.T("diff.differentOrder"), Truncate(what));
         }
     }
 
@@ -337,7 +339,7 @@ public static class PackDiff
         switch (token.Type)
         {
             case JTokenType.Null:
-                return "(none)";
+                return Loc.T("common.none");
             // Newtonsoft renders a JSON bool as "True"/"False"; the manifest
             // (and every other row in this table) says true/false.
             case JTokenType.Boolean:
@@ -370,6 +372,6 @@ public static class PackDiff
         }
     }
 
-    private static string Truncate(string s)
+    internal static string Truncate(string s)
         => s.Length <= MaxValueLength ? s : s.Substring(0, MaxValueLength - 1) + "…";
 }

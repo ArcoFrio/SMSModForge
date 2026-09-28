@@ -23,6 +23,7 @@ namespace SMSModForge.Tests;
 /// Both were found by a person looking, which is the problem: looking is what
 /// missed them the first time. They are gates now.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public class TutorialCoverageTests
 {
     private readonly ITestOutputHelper _out;

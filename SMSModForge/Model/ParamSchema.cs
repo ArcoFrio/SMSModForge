@@ -1,4 +1,6 @@
-﻿namespace SMSModForge.Model;
+﻿using SMSModForge.Localization;
+
+namespace SMSModForge.Model;
 
 /// <summary>
 /// Logical kind of a single action / condition parameter, used by the
@@ -137,7 +139,10 @@ public sealed class ParamSchema
 
     /// <summary>Label shown to the left of the editor row. Title-cased,
     /// short — the runtime key stays out of the UI.</summary>
-    public string Label { get; }
+    public string Label => Loc.Optional(LabelKey);
+
+    /// <summary>The key <see cref="Label"/> is read from in the English file.</summary>
+    public string LabelKey { get; }
 
     /// <summary>Which editor control to render for this param.</summary>
     public ParamType Type { get; }
@@ -148,7 +153,37 @@ public sealed class ParamSchema
     public string DefaultValue { get; }
 
     /// <summary>Optional hover tooltip shown on the editor row.</summary>
-    public string Tooltip { get; }
+    public string Tooltip => Loc.Optional(TooltipKey);
+
+    /// <summary>The key <see cref="Tooltip"/> is read from, or empty.</summary>
+    public string TooltipKey { get; }
+
+    /// <summary>
+    /// What a <see cref="ParamType.Choice"/> option says on screen. The option
+    /// itself is what the pack stores and the runtime reads, so it never
+    /// changes; a word like "greater than" gets a text in every language, and
+    /// a name of Unity's like <c>CanvasGroup</c>, which has none, shows as it is.
+    /// </summary>
+    public static string ChoiceText(string param, string option)
+    {
+        string key = ChoiceKey(param, option);
+        return Loc.English.Has(key) ? Loc.T(key) : option;
+    }
+
+    /// <summary><c>choice.comparison.greaterThan</c> for "greater than".</summary>
+    public static string ChoiceKey(string param, string option)
+    {
+        var sb = new System.Text.StringBuilder("choice.").Append(param).Append('.');
+        bool upper = false, first = true;
+        foreach (char c in option ?? "")
+        {
+            if (!char.IsLetterOrDigit(c)) { upper = !first; continue; }
+            sb.Append(first ? char.ToLowerInvariant(c) : upper ? char.ToUpperInvariant(c) : c);
+            first = false;
+            upper = false;
+        }
+        return sb.ToString();
+    }
 
     /// <summary>The selectable values for a <see cref="ParamType.Choice"/>
     /// param. Ignored by every other type.</summary>
@@ -187,10 +222,10 @@ public sealed class ParamSchema
                        bool emptyIsAValue = false)
     {
         Key = key;
-        Label = label;
+        LabelKey = label;
         Type = type;
         DefaultValue = defaultValue;
-        Tooltip = tooltip;
+        TooltipKey = tooltip;
         FixedOptions = fixedOptions ?? System.Array.Empty<string>();
         EnabledWhen = enabledWhen;
         EnabledWhenValue = enabledWhenValue;

@@ -127,6 +127,7 @@ namespace SMSModForge.PackPlugin
             // second copy of every action.
             var running = Running(target, ctx);
             running.Nodes.Clear();
+            running.Cues.Clear();
 
             // Removals first: a line that is going does not need its fields
             // written, and removing before adding keeps a re-used id from
@@ -158,7 +159,7 @@ namespace SMSModForge.PackPlugin
                     }
 
                     int skipped = 0;
-                    int written = Write(line, node, log, ref skipped);
+                    int written = Write(line, node, log, ctx.Vars, ref skipped);
 
                     // Conditions and actions do not go ON the node - Game
                     // Creator evaluates a clone of its condition list, and the
@@ -179,6 +180,7 @@ namespace SMSModForge.PackPlugin
                         running.Nodes[id] = node;
                         written++;
                     }
+                    if (Named(node, "text")) Listen(running, id, node);
 
                     applied.FieldsSkipped += skipped;
                     if (written <= 0) continue;
@@ -274,6 +276,7 @@ namespace SMSModForge.PackPlugin
                 // something were being listened for.
                 added[childId] = madeId;
                 running.Nodes[madeId] = authored;
+                Listen(running, madeId, authored);
             }
 
             return SetChildren(content, parentId, wanted, ctx) ? wanted.Count : 0;
@@ -340,7 +343,7 @@ namespace SMSModForge.PackPlugin
         /// <summary>Every field of a line the pack owns outright.</summary>
         private static void WriteWhole(Node target, JObject node, PackContext ctx, ref int skipped)
         {
-            SetText(target, (string)node["text"] ?? "");
+            SetText(target, PackLine(node, ctx.Vars));
             SetKind(target, (string)node["kind"]);
             SetTag(target, (string)node["tag"] ?? "");
             SetDuration(target, (string)node["duration"]);
@@ -367,7 +370,7 @@ namespace SMSModForge.PackPlugin
         /// class exists to avoid.
         /// </summary>
         private static int Write(Node target, JObject node, ManualLogSource log,
-                                 ref int skipped)
+                                 PackVariableStore vars, ref int skipped)
         {
             var overrides = node[SMSModForge.Shared.VanillaDialogueKeys.Overrides] as JArray;
             if (overrides == null || overrides.Count == 0) return 0;
@@ -378,7 +381,7 @@ namespace SMSModForge.PackPlugin
                 switch ((string)name)
                 {
                     case "text":
-                        if (SetText(target, (string)node["text"] ?? "")) written++;
+                        if (SetText(target, PackLine(node, vars))) written++;
                         break;
 
                     case "kind":
@@ -457,10 +460,21 @@ namespace SMSModForge.PackPlugin
         /// TextAreaField. Its constructor already knows how, and a hand-built
         /// copy would be one refactor away from being subtly different.
         /// </summary>
-        private static bool SetText(Node target, string text)
+        /// <summary>
+        /// A line of the pack's, with its <c>[PV:name]</c> filled in - as a
+        /// line of the pack's own conversations has it (DialogueBuilder). A
+        /// line added to one of the game's conversations, or rewritten in one,
+        /// showed the token as typed (2026-09-27). The game's words in braces
+        /// are left to the game, which fills them as the line is shown.
+        /// </summary>
+        private static string PackLine(JObject node, PackVariableStore vars)
+            => TextPlaceholders.Resolve((string)node["text"] ?? "", vars);
+
+        internal static bool SetText(Node target, string text)
         {
             if (_fldText == null) return false;
             _fldText.SetValue(target, _fldText.GetValue(new Node(text)));
+            TypewriterTiming.PackLine(text);
             return true;
         }
 
@@ -536,6 +550,14 @@ namespace SMSModForge.PackPlugin
         private sealed class Run
         {
             public readonly Dictionary<int, JObject> Nodes = new Dictionary<int, JObject>();
+
+            /// <summary>The words each of the pack's lines here listens for sound
+            /// cues in (<see cref="SMSModForge.Shared.PackTexts.CueText"/>): only
+            /// lines whose words are the pack's - a line it added, or one whose
+            /// text it rewrote. The game's own words are the game's, and a
+            /// pack's cues do not play on them.</summary>
+            public readonly Dictionary<int, string> Cues = new Dictionary<int, string>();
+
             public PackContext Ctx;
         }
 
@@ -553,9 +575,36 @@ namespace SMSModForge.PackPlugin
             run = new Run { Ctx = ctx };
             Hooked[dialogue] = run;
 
-            dialogue.EventStartNext += id => Fire(run, id, "actionsOnStart");
+            dialogue.EventStartNext += id =>
+            {
+                Fire(run, id, "actionsOnStart");
+                PlayCues(run, id);
+            };
             dialogue.EventFinishNext += id => Fire(run, id, "actionsOnFinish");
             return run;
+        }
+
+        /// <summary>A line of the pack's here whose words carry sound cues.</summary>
+        private static void Listen(Run run, int id, JObject node)
+        {
+            string cue = SMSModForge.Shared.PackTexts.CueText(node);
+            if (!string.IsNullOrEmpty(cue)) run.Cues[id] = cue;
+        }
+
+        /// <summary>
+        /// The pack's sound cues in a line of its own, as a line starts - after
+        /// its actions, the order the dispatcher keeps for a conversation the
+        /// pack built. These never played in the game's conversations: a line a
+        /// pack added there had its speaker and actions, and its "*slap*"
+        /// stayed silent in every language.
+        /// </summary>
+        private static void PlayCues(Run run, int nodeId)
+        {
+            string cue;
+            if (!run.Cues.TryGetValue(nodeId, out cue)) return;
+            var ctx = run.Ctx;
+            if (ctx == null || ctx.Sfx == null || ctx.Plugin == null) return;
+            ctx.Sfx.FireMatchingPatterns(cue, ctx.Plugin, ctx.Log);
         }
 
         private static void Fire(Run run, int nodeId, string key)
@@ -585,7 +634,7 @@ namespace SMSModForge.PackPlugin
 
         /// <summary>The game's own dialogue at this path, or null when this
         /// scene has no such thing.</summary>
-        private static Dialogue Find(string source)
+        internal static Dialogue Find(string source)
         {
             string prefix = SMSModForge.Shared.VanillaDialogueKeys.SourcePrefix;
             string path = source.StartsWith(prefix, System.StringComparison.OrdinalIgnoreCase)

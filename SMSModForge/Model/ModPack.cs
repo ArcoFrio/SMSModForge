@@ -54,7 +54,7 @@ public sealed class ModPack
     /// pack's stamp to the version in the vanilla main-menu header and
     /// paints mismatches red.
     /// </summary>
-    public const string CurrentGameVersion = "1.8E";
+    public const string CurrentGameVersion = Shared.ForgeVersion.GameBuild;
 
     /// <summary>Game version this pack was authored against (see
     /// <see cref="CurrentGameVersion"/>). Written automatically on save —
@@ -97,6 +97,33 @@ public sealed class ModPack
     public string ForgeVersion { get; set; } = "";
 
     public bool ShouldSerializeForgeVersion() => !string.IsNullOrEmpty(ForgeVersion);
+
+    /// <summary>
+    /// The language the pack's own words are written in - the ones every
+    /// translation is made from, and what a player reads when the pack has no
+    /// translation into their language.
+    /// <para/>
+    /// Written only when it is not English. Every pack made before a pack could
+    /// say was written in English, so leaving it out means the same thing it
+    /// always did, and saving an English pack does not add a line to it.
+    /// </summary>
+    [JsonProperty(Shared.PackTexts.LanguageField, Order = 4)]
+    public string Language { get; set; } = Shared.PackTexts.DefaultLanguage;
+
+    public bool ShouldSerializeLanguage()
+        => !string.IsNullOrWhiteSpace(Language)
+           && !string.Equals(Language.Trim(), Shared.PackTexts.DefaultLanguage, System.StringComparison.OrdinalIgnoreCase);
+
+    /// <summary><see cref="Language"/>, or English when it is blank or not a code.</summary>
+    [JsonIgnore]
+    public string OwnLanguage
+    {
+        get
+        {
+            string code = (Language ?? "").Trim();
+            return code.Length > 0 && Shared.TextFile.IsKey(code) ? code : Shared.PackTexts.DefaultLanguage;
+        }
+    }
 
     /// <summary>The version as a number rather than as text. Unreadable or
     /// absent reads as 0.0.0, which is what a pack that has never been

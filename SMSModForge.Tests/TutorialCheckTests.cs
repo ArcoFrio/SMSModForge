@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using SMSModForge.Localization;
 using SMSModForge.Model;
 using SMSModForge.Tutorials;
 using Xunit;
@@ -19,6 +20,7 @@ namespace SMSModForge.Tests;
 /// So these are the negatives. Each one arranges the near-miss a person would
 /// plausibly produce and insists the step still says no.
 /// </summary>
+[Trait("Speed", "Slow")]   // measured ~20s for the class; see CLAUDE.md
 public class TutorialCheckTests
 {
     private const string Tutorial = "lines-that-choose";
@@ -140,5 +142,61 @@ public class TutorialCheckTests
         d.Nodes[^1].JumpMode = JumpMode.Jump;
         d.Nodes[^1].JumpTargetTag = "back";
         Assert.True(step.IsDone!(w.Vm, scratch), "a backward jump onto a tag does not pass the step");
+    }
+
+    /// <summary>
+    /// A new character or scene arrives named in the pack's language
+    /// ("Nuevo personaje", "Nueva escena"). The naming steps used to look for
+    /// the English "New " alone, so in any other language the placeholder
+    /// passed as a name and the step finished without the rename it asks for.
+    /// The editor is shown in Portuguese meanwhile: the placeholder is not in
+    /// the editor's language, and the step must know it anyway.
+    /// </summary>
+    [Fact]
+    public void Naming_a_character_sees_the_placeholder_in_the_editors_language()
+    {
+        var (w, step, scratch) = Reach("first-steps", "Give them a name");
+        using var _ = w;
+        try
+        {
+            // Made before the switch, so it still carries the English placeholder.
+            Assert.False(step.IsDone!(w.Vm, scratch), "the English placeholder passes as a name");
+
+            w.Vm.PackLanguage = "es";
+            Loc.Use("pt-BR");
+            w.Vm.AddCharacterCommand.Execute(null);
+            string placeholder = w.Vm.SelectedCharacter!.DisplayName;
+            Assert.NotEqual(Loc.English.Get("characters.newName"), placeholder);   // really another language
+            Assert.NotEqual(Loc.T("characters.newName"), placeholder);   // and not the editor's
+            Assert.False(step.IsDone!(w.Vm, scratch), $"a character still called \"{placeholder}\" passes as named");
+
+            w.Vm.SelectedCharacter!.DisplayName = "Lucía";
+            Assert.True(step.IsDone!(w.Vm, scratch), "a named character does not pass");
+        }
+        finally { Loc.Use(Loc.EnglishCode); }
+    }
+
+    [Fact]
+    public void Naming_a_scene_sees_the_placeholder_in_the_editors_language()
+    {
+        var (w, step, scratch) = Reach("rules", "Make one");
+        using var _ = w;
+        try
+        {
+            w.SaveToRoot();
+            w.CopyAssets();
+            w.Vm.PackLanguage = "es";
+            Loc.Use("pt-BR");
+            w.Vm.AddSceneCommand.Execute(null);
+            w.Vm.SelectedScene!.SceneSprite = TutorialAssets.Scene;
+            string placeholder = w.Vm.SelectedScene!.DisplayName;
+            Assert.NotEqual(Loc.English.Get("scenes.newName"), placeholder);   // really another language
+            Assert.NotEqual(Loc.T("scenes.newName"), placeholder);   // and not the editor's
+            Assert.False(step.IsDone!(w.Vm, scratch), $"a scene still called \"{placeholder}\" passes as named");
+
+            w.Vm.SelectedScene!.DisplayName = "La gran foto";
+            Assert.True(step.IsDone!(w.Vm, scratch), "a named scene does not pass");
+        }
+        finally { Loc.Use(Loc.EnglishCode); }
     }
 }

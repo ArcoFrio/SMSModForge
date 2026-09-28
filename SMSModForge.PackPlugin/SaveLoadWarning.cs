@@ -28,9 +28,10 @@ namespace SMSModForge.PackPlugin
     ///   it to none, and only loading one sets it), which is also what the
     ///   manual-save copy treats as "new game", so a new game is never warned
     ///   - it starts with the changes in place.</item>
-    ///   <item>The save's folder holds data for a pack that is not installed.
-    ///   Only installed packs' files are ever read, and only theirs are carried
-    ///   into the saves a player makes, so that data would be left behind.</item>
+    ///   <item>The save's folder holds data for a pack that is not running.
+    ///   Said once for each save and each pack, not on every load
+    ///   (<see cref="SaveLoadChecks.NotYetTold"/>); a pack that runs with the
+    ///   save again is said again the next time it has gone.</item>
     /// </list>
     /// The decision and the wording are <see cref="SaveLoadChecks.Warning"/>,
     /// shared with the editor's tests; this is the window.
@@ -45,7 +46,11 @@ namespace SMSModForge.PackPlugin
         private sealed class Pending
         {
             public List<SaveLoadChecks.PackChanges> Unseen;
-            public List<string> Missing;
+            public List<SaveLoadChecks.AbsentPack> Absent;
+
+            /// <summary>Every pack the save has data for that is not running,
+            /// told before or not: what the told list is kept to.</summary>
+            public List<string> AllAbsent;
             public int Slot;
         }
 
@@ -75,7 +80,20 @@ namespace SMSModForge.PackPlugin
         public static bool IsOpen => _window != null;
 
         /// <summary>Whether anything is still to be shown or answered.</summary>
-        public static bool IsWaiting => _pending != null || IsOpen;
+        public static bool IsWaiting => _pending != null || _linesOnly || IsOpen;
+
+        // ── The game's own lines, in the packs' translations ────────────
+        //
+        // Told once, the first time a loaded save has a pack that translates
+        // them into the player's language: inside the warning when there is
+        // one, on its own otherwise. See GameLineNotice.
+
+        /// <summary>The packs that show the game's lines translated, when the
+        /// player has not been told yet.</summary>
+        private static List<string> _linePacks = new List<string>();
+
+        /// <summary>Nothing to warn about, only the notice to give.</summary>
+        private static bool _linesOnly;
 
         public static void Reset()
         {
@@ -84,6 +102,8 @@ namespace SMSModForge.PackPlugin
             if (_window != null) UnityEngine.Object.Destroy(_window);
             _window = null;
             _answered = false;
+            _linePacks = new List<string>();
+            _linesOnly = false;
         }
 
         /// <summary>
@@ -91,25 +111,31 @@ namespace SMSModForge.PackPlugin
         /// say. Called once per load, the moment the plugin learns which save
         /// was loaded.
         /// </summary>
-        public static void Check(int slot, IReadOnlyList<PackContext> contexts, string savesRoot, ManualLogSource log)
+        public static void Check(int slot, IReadOnlyList<PackContext> contexts, ManualLogSource log)
         {
             if (slot < 1) return;
 
             var running = contexts.Where(c => c?.Vars != null).ToList();
 
-            string folder = Path.Combine(savesRoot ?? "", "NANOSAVE_" + slot.ToString("D4"));
-            var files = new List<string>();
-            try
-            {
-                if (Directory.Exists(folder))
-                    files.AddRange(Directory.GetFiles(folder).Select(Path.GetFileName));
-            }
-            catch (Exception e)
-            {
-                log?.LogWarning(Tag + "could not list " + folder + ": " + e.Message);
-            }
+            // The packs the save has data for that are not running, told apart:
+            // one switched off is a tick away on the main menu, one not
+            // installed is not - and each is named at the version the save
+            // recorded, when it has a record (SaveCarry read both at binding).
+            var absent = SaveLoadChecks.Absent(SaveCarry.LoadedFiles, running.Select(c => c.PackId).ToList(),
+                                               SaveCarry.Installed, PackSwitchSetting.Off, SaveCarry.Loaded);
 
-            var missing = SaveLoadChecks.MissingPacks(files, running.Select(c => c.PackId).ToList());
+            // Told once for each save, each pack on its own - not on every
+            // load. A pack running with the save again comes off the list, and
+            // once the autosave commits that, taking it away tells them again.
+            var allAbsent = absent.Select(a => a.Id).ToList();
+            var toldBefore = SaveCarry.LiveTold;
+            SaveCarry.NoteTold(SaveLoadChecks.Told(toldBefore, allAbsent, null));
+            var untold = SaveLoadChecks.NotYetTold(absent, toldBefore);
+            if (untold.Count < absent.Count)
+                log?.LogInfo(Tag + "slot " + slot + " also has data from "
+                             + string.Join(", ", allAbsent.Where(id => !untold.Any(a => a.Id == id)).ToArray())
+                             + ", not running now - the player was told when it was first found, so not again.");
+            absent = untold;
             var unseen = running
                 .Select(c => new SaveLoadChecks.PackChanges(
                     c.PackId, SaveLoadChecks.NotYetSeen(c.GameChanges, c.Vars.GameChangesSeen), c.ChangeWords)
@@ -120,9 +146,24 @@ namespace SMSModForge.PackPlugin
                 .ToList();
             var risky = running.Where(c => unseen.Any(p => p.PackId == c.PackId)).ToList();
 
-            if (SaveLoadChecks.Warning(unseen, missing) == null) return;
+            _linePacks = new List<string>();
+            if (!PluginLanguage.GameLinesNoticeShown)
+                foreach (var c in running)
+                {
+                    try { if (GameLineTranslations.Usable(c) > 0) _linePacks.Add(c.PackId); }
+                    catch (Exception e)
+                    {
+                        log?.LogWarning(Tag + c.PackId + ": could not count its translation of the game's lines: " + e.Message);
+                    }
+                }
 
-            _pending = new Pending { Unseen = unseen, Missing = missing, Slot = slot };
+            if (SaveLoadChecks.WarningFor(unseen, absent) == null)
+            {
+                _linesOnly = _linePacks.Count > 0;
+                return;
+            }
+
+            _pending = new Pending { Unseen = unseen, Absent = absent, AllAbsent = allAbsent, Slot = slot };
             _toAcknowledge = risky;
         }
 
@@ -166,13 +207,22 @@ namespace SMSModForge.PackPlugin
         /// the loading screen.</summary>
         public static void ShowIfPending(ManualLogSource log)
         {
-            if (_pending == null || _window != null) return;
+            if (_window != null) return;
+            if (_pending == null)
+            {
+                if (_linesOnly)
+                {
+                    _linesOnly = false;
+                    TellAboutGameLines(log);
+                }
+                return;
+            }
             var pending = _pending;
             _pending = null;
             _log = log;
             _answered = false;
 
-            var text = SaveLoadChecks.Warning(pending.Unseen, pending.Missing, ChangedQuests(pending.Unseen, log));
+            var text = SaveLoadChecks.WarningFor(pending.Unseen, pending.Absent, ChangedQuests(pending.Unseen, log));
             if (text == null) return;
             log?.LogWarning(Tag + "slot " + pending.Slot + ": " + text.Plain());
 
@@ -192,12 +242,66 @@ namespace SMSModForge.PackPlugin
                 return;
             }
 
+            // The notice about the game's lines rides along, rather than
+            // being a second window after this one.
+            if (_linePacks.Count > 0)
+                text.After.Add(GameLineNotice.Body(_linePacks, PluginLanguage.NameOf(PluginLanguage.Code)));
+
             try { _window = Build(text); }
             catch (Exception e)
             {
                 log?.LogError(Tag + "the warning could not be shown: " + e);
                 Acknowledge();
             }
+            if (_window != null && _linePacks.Count > 0) PluginLanguage.NoteGameLinesNoticeShown(log);
+
+            // On screen: the packs it names have been told about. Noted for the
+            // autosave to commit, like any other change - quit before it and
+            // the save still has not told them, so it says it again. Not
+            // before the notice appeared, which told nobody.
+            if (_window != null && pending.Absent.Count > 0)
+                SaveCarry.NoteTold(SaveLoadChecks.Told(SaveCarry.LiveTold, pending.AllAbsent,
+                                                       pending.Absent.Select(a => a.Id)));
+        }
+
+        /// <summary>
+        /// The notice about the game's lines on its own, for a save with
+        /// nothing else to say about it. Not given where nothing could be
+        /// clicked - it waits for a load where it can be.
+        /// </summary>
+        private static void TellAboutGameLines(ManualLogSource log)
+        {
+            _log = log;
+            _answered = false;
+            var text = GameLineNotice.Notice(_linePacks, PluginLanguage.NameOf(PluginLanguage.Code));
+            log?.LogInfo(Tag + text.Plain());
+
+#pragma warning disable 0618
+            bool clickable = EventSystem.current != null || UnityEngine.Object.FindObjectOfType<EventSystem>() != null;
+#pragma warning restore 0618
+            if (!clickable) return;
+
+            try
+            {
+                _window = Window("SMSModForge_GameLines", text, new[]
+                {
+                    new WindowButton(SaveWarningText.ContinueLabel, GoOnColour, CloseNotice),
+                }, GameFont());
+                PluginLanguage.NoteGameLinesNoticeShown(log);
+            }
+            catch (Exception e)
+            {
+                log?.LogError(Tag + "the notice about the game's lines could not be shown: " + e);
+            }
+        }
+
+        private static void CloseNotice()
+        {
+            if (_answered || _window == null) return;
+            _answered = true;
+            Click();
+            var window = _window;
+            Fold(window, () => { if (ReferenceEquals(_window, window)) _window = null; _answered = false; });
         }
 
         private static void Acknowledge()
@@ -207,7 +311,7 @@ namespace SMSModForge.PackPlugin
         }
 
         /// <summary>The game's own button click, the one its menus make.</summary>
-        private static void Click()
+        internal static void Click()
         {
             var clip = UiAssets.Sound(UiFactory.DefaultButtonSound);
             if (clip != null) GameAudio.PlayUi(clip, UiButtonClick.DefaultClickVolume);
@@ -282,9 +386,42 @@ namespace SMSModForge.PackPlugin
         /// <summary>Space between the list's box and the list inside it.</summary>
         private const float DetailsInset = 12f;
 
-        private static GameObject Build(SaveWarningText text)
+        /// <summary>The button that goes on, and the one that does not.</summary>
+        internal static readonly Color GoOnColour = new Color(0.22f, 0.45f, 0.78f);
+        internal static readonly Color OtherColour = new Color(0.32f, 0.32f, 0.38f);
+
+        /// <summary>One of a window's buttons, left to right.</summary>
+        internal struct WindowButton
         {
-            var root = new GameObject("SMSModForge_SaveWarning", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster),
+            public readonly string Label;
+            public readonly Color Colour;
+            public readonly Action OnClick;
+
+            public WindowButton(string label, Color colour, Action onClick)
+            {
+                Label = label;
+                Colour = colour;
+                OnClick = onClick;
+            }
+        }
+
+        private static GameObject Build(SaveWarningText text)
+            => Window("SMSModForge_SaveWarning", text, new[]
+            {
+                new WindowButton(SaveWarningText.ContinueLabel, GoOnColour, Continue),
+                new WindowButton(SaveWarningText.ReturnLabel, OtherColour, ReturnToMainMenu),
+            }, GameFont());
+
+        /// <summary>
+        /// A warning window over everything: its title, what it says, a list
+        /// in a box of its own, and buttons. This one's look, shared by every
+        /// warning ModForge puts in front of a player, so they read as the
+        /// same kind of thing. <see cref="Fold"/> takes it away.
+        /// </summary>
+        internal static GameObject Window(string name, SaveWarningText text, IList<WindowButton> buttonsLeftToRight,
+                                          TMP_FontAsset font)
+        {
+            var root = new GameObject(name, typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster),
                                       typeof(CanvasGroup));
             var canvas = root.GetComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
@@ -294,8 +431,6 @@ namespace SMSModForge.PackPlugin
             scaler.referenceResolution = new Vector2(1920, 1080);
             scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
             scaler.matchWidthOrHeight = 1f;
-
-            var font = GameFont();
 
             // Everything behind it is dimmed, and takes no clicks.
             var dim = Child(root.transform, "Dim");
@@ -349,8 +484,8 @@ namespace SMSModForge.PackPlugin
             rowSize.preferredHeight = 76;
             rowSize.minHeight = 76;
 
-            AddButton(buttons, SaveWarningText.ContinueLabel, new Color(0.22f, 0.45f, 0.78f), font, Continue);
-            AddButton(buttons, SaveWarningText.ReturnLabel, new Color(0.32f, 0.32f, 0.38f), font, ReturnToMainMenu);
+            foreach (var button in buttonsLeftToRight)
+                AddButton(buttons, button.Label, button.Colour, font, button.OnClick);
 
             var closer = root.AddComponent<SaveWarningCloser>();
             closer.Panel = panel;
@@ -358,6 +493,22 @@ namespace SMSModForge.PackPlugin
 
             if (details != null) FitDetails(panel, details);
             return root;
+        }
+
+        /// <summary>Take a <see cref="Window"/> away the way the game's own
+        /// panels go - folding flat - then destroy it and call
+        /// <paramref name="gone"/>.</summary>
+        internal static void Fold(GameObject window, Action gone)
+        {
+            if (window == null) { gone?.Invoke(); return; }
+            Action destroy = () =>
+            {
+                if (window != null) UnityEngine.Object.Destroy(window);
+                gone?.Invoke();
+            };
+            var closer = window.GetComponent<SaveWarningCloser>();
+            if (closer != null) closer.Close(destroy);
+            else destroy();
         }
 
         /// <summary>

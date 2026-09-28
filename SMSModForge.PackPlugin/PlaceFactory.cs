@@ -23,8 +23,14 @@ namespace SMSModForge.PackPlugin
     {
         public static void BuildAll(PackManifest pack, GameObject baseBust, ManualLogSource logger)
         {
-            var places = pack.Places;
-            if (places == null || places.Count == 0) return;
+            // Both of these are for EVERY pack, before the question of whether
+            // it has places of its own: a pack with none can still put things
+            // on the game's levels - its vanilla extensions, built after this
+            // by NavigatorRuntime - and those need them just the same. Both
+            // were below the "no places" return, so a pack that only added to
+            // the game's levels had every NPC it placed there skipped as "no
+            // NPC context", and its conditions never cleared between loads
+            // (2026-09-27, a pack placing one NPC in Downtown).
 
             // The scene is rebuilt on every CoreGameScene load, so drop the
             // previous run's condition gates before they're re-registered
@@ -32,8 +38,12 @@ namespace SMSModForge.PackPlugin
             GameObjectGateRegistry.ResetPack(pack.PackId);
 
             // NPC placements are nodes in each place's GameObject tree, so the
-            // tree walk below builds them inline — no separate NPC pass.
+            // tree walk below builds them inline — no separate NPC pass. The
+            // vanilla extensions ask for the same context by the pack's id.
             var npcCtx = NpcFactory.CreateContext(pack, baseBust);
+
+            var places = pack.Places;
+            if (places == null || places.Count == 0) return;
 
             var level5 = GameObject.Find("5_Levels")?.transform;
             var navigator = GameObject.Find("9_MainCanvas")?.transform.Find("Navigator");

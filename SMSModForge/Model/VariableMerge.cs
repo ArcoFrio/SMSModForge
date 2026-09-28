@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Model;
 
@@ -22,11 +23,13 @@ public static class VariableMerge
 {
     /// <summary>The comparisons a merged condition can carry, in the order they
     /// are offered.</summary>
+    // English on purpose: values packs store; the list shows them through choice.comparison.
     public static readonly string[] Comparisons =
         { "equals", "greater than", "greater or equal", "less than", "less or equal" };
 
     /// <summary>What each superseded type meant: its operator, and whether it
     /// read the game's store rather than the pack's.</summary>
+    // English on purpose: the same stored values, one per superseded type.
     private static readonly Dictionary<string, (string Comparison, bool Vanilla)> Superseded =
         new(StringComparer.Ordinal)
     {

@@ -31,7 +31,7 @@ public sealed class SpriteOverrideViewModel : ObservableObject, IMaskEditorHost
     public string Slot { get; }
 
     /// <summary>What to call it on screen.</summary>
-    public string Label => SpriteSlotNames.Label(Slot);
+    public string Label => SpriteSlotLabels.Of(Slot);
 
     /// <summary>True for the jiggle mask, which is a data texture on the
     /// material rather than a sprite — so its row offers the mask painter the

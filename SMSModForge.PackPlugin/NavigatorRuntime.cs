@@ -175,7 +175,7 @@ namespace SMSModForge.PackPlugin
                 // Only labels with [PV:] tokens pay the per-Tick refresh;
                 // plain labels were baked by CreateButtonGameObject and the
                 // TMP reference stays null.
-                if (TextPlaceholders.HasAny(label))
+                if (TextPlaceholders.HasAnyToken(label))
                 {
                     binding.RawLabel = label;
                     binding.LabelTMP = go.transform.Find("Text (TMP)")?.GetComponent<TextMeshProUGUI>();
@@ -201,7 +201,7 @@ namespace SMSModForge.PackPlugin
                 // label costs no TMP re-layout.
                 if (visible && b.LabelTMP != null)
                 {
-                    string resolved = TextPlaceholders.Resolve(
+                    string resolved = TextPlaceholders.ResolveAll(
                         b.RawLabel, Plugin.TryGetPackVars(b.PackId));
                     if (b.LabelTMP.text != resolved) b.LabelTMP.text = resolved;
                 }

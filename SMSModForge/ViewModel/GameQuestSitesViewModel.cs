@@ -5,6 +5,7 @@ using System.Linq;
 using Newtonsoft.Json.Linq;
 using SMSModForge.Model;
 using Refs = SMSModForge.Model.VanillaQuestReferences;
+using SMSModForge.Localization;
 
 namespace SMSModForge.ViewModel;
 
@@ -69,8 +70,8 @@ public sealed class GameQuestSiteViewModel : ObservableObject
             : Array.Empty<NodeConditionViewModel>();
         Untranslated = untranslated.Count == 0
             ? ""
-            : "Also checked, in the game's own words (ModForge has no condition like "
-              + (untranslated.Count == 1 ? "it" : "them") + "): " + string.Join("; ", untranslated.Distinct());
+            : Loc.P("quests.site.untranslated", untranslated.Distinct().Count(),
+                    "conditions", string.Join("; ", untranslated.Distinct()));
     }
 
     public Refs.Site Site { get; }
@@ -100,8 +101,7 @@ public sealed class GameQuestSiteViewModel : ObservableObject
     public ConditionListViewModel? ExtraConditions { get; }
 
     public string ExtraNote =>
-        "Asked along with everything left above, over and over. The conversation or script still runs as the game "
-        + "has it.";
+        Loc.T("quests.site.extraNote");
 
     /// <summary>
     /// What the pack's version of this place does, once it changes anything
@@ -113,13 +113,9 @@ public sealed class GameQuestSiteViewModel : ObservableObject
         get
         {
             if (!IsEditable || !IsChanged) return "";
-            string what = Does == Shared.GameConditionEdits.Resets
-                ? "the quest goes back to not started"
-                : "the quest starts";
             bool ahead = Site.IsDialogue ? Site.Plays.Any(p => p.Ahead.Count > 0) : Site.Ahead.Count > 0;
-            return "Your pack decides this place now: " + what + " as soon as everything above passes - what is "
-                   + "left of the game's conditions, where it is, and yours - whether or not the game itself gets "
-                   + "here." + (ahead ? " What the game tries first no longer decides it." : "");
+            return Loc.T(Does == Shared.GameConditionEdits.Resets ? "quests.site.rule.resets" : "quests.site.rule.starts")
+                   + (ahead ? " " + Loc.T("quests.site.rule.ahead") : "");
         }
     }
 
@@ -137,10 +133,10 @@ public sealed class GameQuestSiteViewModel : ObservableObject
             int removed = ConditionGroups.Sum(g => g.RemovedCount);
             int added = ExtraConditions?.Count ?? 0;
             var parts = new List<string>();
-            if (removed > 0) parts.Add(removed + " of the game's conditions taken out");
-            if ((_place?.RoomsOut.Count ?? 0) > 0) parts.Add("it can happen anywhere");
-            if (added > 0) parts.Add(added + (added == 1 ? " condition of yours added" : " conditions of yours added"));
-            return parts.Count == 0 ? "" : "Changed: " + string.Join(", ", parts) + ".";
+            if (removed > 0) parts.Add(Loc.P("quests.site.changed.removed", removed));
+            if ((_place?.RoomsOut.Count ?? 0) > 0) parts.Add(Loc.T("quests.site.changed.anywhere"));
+            if (added > 0) parts.Add(Loc.P("quests.site.changed.added", added));
+            return parts.Count == 0 ? "" : Loc.F("quests.site.changed", "parts", Loc.JoinList(parts));
         }
     }
 
@@ -203,33 +199,34 @@ public sealed class GameQuestSiteViewModel : ObservableObject
             foreach (var lead in site.After)
             {
                 if (lead.When.Count == 0) continue;
-                var group = GameConditionGroups.ForLine("Line on the way: " + Line(lead.Actor, lead.Line),
+                var group = GameConditionGroups.ForLine(Loc.F("quests.site.lineOnTheWay", "line", Line(lead.Actor, lead.Line)),
                                                         site.Dialogue!, lead.Node, canEdit);
                 if (group != null) groups.Add(group);
             }
-            var own = GameConditionGroups.ForLine("This line", site.Dialogue!, site.Node.Value, canEdit);
+            var own = GameConditionGroups.ForLine(Loc.T("quests.site.thisLine"), site.Dialogue!, site.Node.Value, canEdit);
             if (own != null) groups.Add(own);
 
             var lines = groups.Where(g => g.Rows.Count > 0).ToList();
             foreach (var play in site.Plays)
             {
                 var group = GameConditionGroups.ForScript(
-                    "The conversation plays from " + ScriptName(play.By, play.Script)
-                    + (string.IsNullOrEmpty(play.Event) ? "" : ", set off by " + EventWords(play.Event!)),
+                    string.IsNullOrEmpty(play.Event)
+                        ? Loc.F("quests.site.playsFrom", "script", ScriptName(play.By, play.Script))
+                        : Loc.F("quests.site.playsFromSetOff", "script", ScriptName(play.By, play.Script), "event", EventWords(play.Event!)),
                     play.By, play.Script, play.When, play.Gates, canEdit, showLocation: true, play.Ahead,
                     RoomIsOut(play.By), RoomOut(play.By));
                 // Kept with nothing in it: where the conversation is played
                 // from is worth knowing even when nothing is checked there.
                 lines.Add(group.Rows.Count > 0 || group.HasNote
                     ? group
-                    : new GameConditionGroupViewModel(group.Title, "The game checks nothing before playing it from here.",
+                    : new GameConditionGroupViewModel(group.Title, Loc.T("quests.site.checksNothing"),
                                                       group.Rows));
             }
             return lines;
         }
 
         groups.Add(GameConditionGroups.ForScript(
-            "The script's conditions", site.By ?? "", site.Script ?? "", site.When, site.Gates, canEdit,
+            Loc.T("quests.site.scriptConditions"), site.By ?? "", site.Script ?? "", site.When, site.Gates, canEdit,
             showLocation: true, site.Ahead, RoomIsOut(site.By ?? ""), RoomOut(site.By ?? "")));
         return groups.Where(g => g.Rows.Count > 0 || g.HasNote).ToList();
     }
@@ -241,9 +238,13 @@ public sealed class GameQuestSiteViewModel : ObservableObject
     /// its script lives.
     /// </summary>
     private static string ScriptName(string? by, string? script)
-        => (string.IsNullOrEmpty(by) ? "(unnamed object)" : by)
-           + (string.IsNullOrEmpty(script) ? "" : " (" + script + ")")
-           + (VanillaDialogueSeed.PlaceOf(by) is { } place ? ", in " + place.DisplayName : "");
+    {
+        string name = string.IsNullOrEmpty(by) ? Loc.T("quests.site.unnamedObject") : by!;
+        if (!string.IsNullOrEmpty(script)) name = Loc.F("quests.site.objectScript", "object", name, "script", script);
+        return VanillaDialogueSeed.PlaceOf(by) is { } place
+            ? Loc.F("quests.site.inPlace", "script", name, "place", place.DisplayName)
+            : name;
+    }
 
     /// <summary>What the step does, in a few words.</summary>
     public string What
@@ -253,15 +254,15 @@ public sealed class GameQuestSiteViewModel : ObservableObject
             string type = Site.Step.Type;
             switch (type)
             {
-                case "InstructionQuestsActivate": return "Starts the quest";
-                case "InstructionQuestsDeactivate": return "Puts the quest back to not started";
-                case "InstructionQuestsTaskComplete": return "Completes it";
-                case "InstructionQuestsTaskFail": return "Fails it";
-                case "InstructionQuestsTaskAbandon": return "Abandons it";
+                case "InstructionQuestsActivate": return Loc.T("quests.site.step.starts");
+                case "InstructionQuestsDeactivate": return Loc.T("quests.site.step.resets");
+                case "InstructionQuestsTaskComplete": return Loc.T("quests.site.step.completes");
+                case "InstructionQuestsTaskFail": return Loc.T("quests.site.step.fails");
+                case "InstructionQuestsTaskAbandon": return Loc.T("quests.site.step.abandons");
                 case "InstructionQuestTaskValue":
                     return AddsTo(Site.Step.Value) is { } added
-                        ? "Adds " + added + " to its count"
-                        : "Changes its count: " + (Site.Step.Title ?? type);
+                        ? Loc.F("quests.site.step.addsToCount", "amount", added)
+                        : Loc.F("quests.site.step.changesCount", "step", Site.Step.Title ?? type);
             }
             return Site.Step.Title is { Length: > 0 } title ? title : type;
         }
@@ -287,35 +288,36 @@ public sealed class GameQuestSiteViewModel : ObservableObject
     {
         get
         {
-            if (Site.IsDialogue) return "In the conversation " + (Site.Dialogue ?? "(unnamed)");
+            if (Site.IsDialogue) return Loc.F("quests.site.inConversation", "conversation", Site.Dialogue ?? Loc.T("quests.site.unnamed"));
 
-            string text = "The " + (string.IsNullOrEmpty(Site.Script) ? "" : Site.Script + " ")
-                        + "script on " + (string.IsNullOrEmpty(Site.By) ? "(unnamed object)" : Site.By)
-                        + (VanillaDialogueSeed.PlaceOf(Site.By) is { } room ? " (in " + room.DisplayName + ")" : "");
-            if (!string.IsNullOrEmpty(Site.Event)) text += " (set off by " + EventWords(Site.Event!) + ")";
+            string on = string.IsNullOrEmpty(Site.By) ? Loc.T("quests.site.unnamedObject") : Site.By!;
+            string text = string.IsNullOrEmpty(Site.Script)
+                ? Loc.F("quests.site.scriptOn", "object", on)
+                : Loc.F("quests.site.namedScriptOn", "script", Site.Script, "object", on);
+            if (VanillaDialogueSeed.PlaceOf(Site.By) is { } room) text = Loc.F("quests.site.inRoom", "text", text, "room", room.DisplayName);
+            if (!string.IsNullOrEmpty(Site.Event)) text = Loc.F("quests.site.setOffBy", "text", text, "event", EventWords(Site.Event!));
             if (Site.AroundDialogue is { } around)
             {
                 if (around.After is { } after)
                 {
                     string name = Named(after);
-                    text += after.Waits switch
+                    text = after.Waits switch
                     {
-                        true => ", once the conversation " + name + " it plays has finished",
-                        false => ", straight after it starts the conversation " + name
-                                 + ", without waiting for it to finish",
-                        _ => ", after the step that plays the conversation " + name,
+                        true => Loc.F("quests.site.afterFinished", "text", text, "conversation", name),
+                        false => Loc.F("quests.site.afterStarts", "text", text, "conversation", name),
+                        _ => Loc.F("quests.site.afterStep", "text", text, "conversation", name),
                     };
                 }
                 if (around.Before is { } before)
-                    text += (around.After != null ? ", and" : ",") + " just before it plays the conversation "
-                          + Named(before);
+                    text = Loc.F(around.After != null ? "quests.site.andBefore" : "quests.site.before",
+                                 "text", text, "conversation", Named(before));
             }
             return text;
         }
     }
 
     private static string Named(Refs.Play play)
-        => string.IsNullOrEmpty(play.Dialogue) ? "(one it picks while the game runs)" : play.Dialogue!;
+        => string.IsNullOrEmpty(play.Dialogue) ? Loc.T("quests.site.pickedWhileRunning") : play.Dialogue!;
 
     /// <summary>What an author reads about the object being there at all.</summary>
     public string Standing
@@ -323,10 +325,10 @@ public sealed class GameQuestSiteViewModel : ObservableObject
         get
         {
             var parts = new List<string>();
-            if (Site.Prefab) parts.Add("It is on a prefab, so it only runs once the game puts that in a scene.");
-            else if (Site.Active == false) parts.Add("The object was switched off when the game was read, so it only runs once something switches it on.");
+            if (Site.Prefab) parts.Add(Loc.T("quests.site.onPrefab"));
+            else if (Site.Active == false) parts.Add(Loc.T("quests.site.switchedOff"));
             if (Site.Branches.Count > 0)
-                parts.Add("Inside the branch " + string.Join(" › ", Site.Branches.Select(b => "“" + b + "”")) + ".");
+                parts.Add(Loc.F("quests.site.insideBranch", "branch", string.Join(" › ", Site.Branches.Select(b => "“" + b + "”"))));
             return string.Join(" ", parts);
         }
     }
@@ -342,8 +344,8 @@ public sealed class GameQuestSiteViewModel : ObservableObject
         get
         {
             if (!Site.IsDialogue) return "";
-            string moment = Site.Moment == "onFinish" ? "Once this line is done: " : "As this line appears: ";
-            return moment + Line(Site.Actor, Site.Line);
+            return Loc.F(Site.Moment == "onFinish" ? "quests.site.onceLineDone" : "quests.site.asLineAppears",
+                         "line", Line(Site.Actor, Site.Line));
         }
     }
 
@@ -352,7 +354,7 @@ public sealed class GameQuestSiteViewModel : ObservableObject
     /// <summary>The lines the player passes through to get there, top first.</summary>
     public string Path => Site.After.Count == 0
         ? ""
-        : "Reached through: " + string.Join("  →  ", Site.After.Select(l => Line(l.Actor, l.Line)));
+        : Loc.F("quests.site.reachedThrough", "lines", string.Join("  →  ", Site.After.Select(l => Line(l.Actor, l.Line))));
 
     public bool HasPath => Path.Length > 0;
 
@@ -362,7 +364,7 @@ public sealed class GameQuestSiteViewModel : ObservableObject
 
     public bool HasReached => Reached.Count > 0;
 
-    public string ReachedLabel => Site.IsDialogue ? "Only if, along the way:" : "Only if:";
+    public string ReachedLabel => Site.IsDialogue ? Loc.T("quests.site.onlyIfAlongTheWay") : Loc.T("quests.site.onlyIf");
 
     /// <summary>What the conversation needs to be played at all. Several
     /// places read as an Any-of.</summary>
@@ -380,9 +382,9 @@ public sealed class GameQuestSiteViewModel : ObservableObject
         {
             if (!Site.IsDialogue) return "";
             if (Site.Plays.Count == 0)
-                return "Nothing ModForge has read plays this conversation by name: the game picks it while it runs.";
+                return Loc.T("quests.site.nothingPlaysIt");
             if (Plays.Count == 0 && Site.Plays.All(p => p.Ahead.Count == 0))
-                return "The conversation plays with nothing checked first.";
+                return Loc.T("quests.site.playsUnchecked");
             return "";
         }
     }
@@ -439,7 +441,7 @@ public sealed class GameQuestSiteViewModel : ObservableObject
 
     private static string Line(string? actor, string? line)
     {
-        string said = "“" + (string.IsNullOrWhiteSpace(line) ? "(no text)" : line!.Trim()) + "”";
+        string said = "“" + (string.IsNullOrWhiteSpace(line) ? Loc.T("quests.noText") : line!.Trim()) + "”";
         string who = VanillaDialogueCatalog.SpokenActorName(actor);
         return who.Length > 0 ? who + ": " + said : said;
     }
@@ -500,11 +502,10 @@ public static class GameQuestSites
     /// </summary>
     public static string CoverageNote
         => !Refs.IsAvailable
-            ? "ModForge has no record of what the game does with its quests in this build."
+            ? Loc.T("quests.site.noRecord")
             : Refs.IsComplete
                 ? ""
-                : "Read from the game's conversations and the scripts that play them. Scripts elsewhere in the game "
-                  + "have not been read yet, so there can be more than this.";
+                : Loc.T("quests.site.partialRecord");
 
     public static IReadOnlyList<GameQuestSiteGroup> ForQuest(string? quest) => ForQuest(quest, null);
 
@@ -515,10 +516,10 @@ public static class GameQuestSites
         var sites = Refs.For(quest);
         var groups = new List<GameQuestSiteGroup>();
         if (sites == null) return groups;
-        Add(groups, "Started by", sites.Starts, Shared.GameConditionEdits.Starts, owner);
-        Add(groups, "Put back to not started by", sites.Resets, Shared.GameConditionEdits.Resets, owner);
-        Add(groups, "Asked about by", sites.Checks);
-        Add(groups, "Also named by", sites.Other);
+        Add(groups, Loc.T("quests.site.group.startedBy"), sites.Starts, Shared.GameConditionEdits.Starts, owner);
+        Add(groups, Loc.T("quests.site.group.resetBy"), sites.Resets, Shared.GameConditionEdits.Resets, owner);
+        Add(groups, Loc.T("quests.site.group.askedBy"), sites.Checks);
+        Add(groups, Loc.T("quests.site.group.namedBy"), sites.Other);
         return groups;
     }
 
@@ -527,12 +528,12 @@ public static class GameQuestSites
         var sites = Refs.For(quest, taskId);
         var groups = new List<GameQuestSiteGroup>();
         if (sites == null) return groups;
-        Add(groups, "Completed by", sites.Completes);
-        Add(groups, "Counted by", sites.Counts);
-        Add(groups, "Failed by", sites.Fails);
-        Add(groups, "Abandoned by", sites.Abandons);
-        Add(groups, "Asked about by", sites.Checks);
-        Add(groups, "Also named by", sites.Other);
+        Add(groups, Loc.T("quests.site.group.completedBy"), sites.Completes);
+        Add(groups, Loc.T("quests.site.group.countedBy"), sites.Counts);
+        Add(groups, Loc.T("quests.site.group.failedBy"), sites.Fails);
+        Add(groups, Loc.T("quests.site.group.abandonedBy"), sites.Abandons);
+        Add(groups, Loc.T("quests.site.group.askedBy"), sites.Checks);
+        Add(groups, Loc.T("quests.site.group.namedBy"), sites.Other);
         return groups;
     }
 
@@ -542,7 +543,7 @@ public static class GameQuestSites
         if (!Refs.IsAvailable || string.IsNullOrEmpty(quest)) return "";
         var sites = Refs.For(quest);
         return sites == null || sites.Starts.Count == 0
-            ? "Nothing ModForge has read starts this quest."
+            ? Loc.T("quests.site.nothingStarts")
             : "";
     }
 
@@ -564,12 +565,12 @@ public static class GameQuestSites
         var parts = new List<string>();
         if (!completed)
             parts.Add(throughSubtasks
-                ? "Nothing ModForge has read completes this task directly: it completes when its subtasks do."
-                : "Nothing ModForge has read completes this task.");
+                ? Loc.T("quests.site.throughSubtasks")
+                : Loc.T("quests.site.nothingCompletes"));
         if (any)
         {
-            parts.Add("A step here only takes effect while the task is in progress.");
-            if (counts) parts.Add("A count that reaches its target completes the task.");
+            parts.Add(Loc.T("quests.site.onlyInProgress"));
+            if (counts) parts.Add(Loc.T("quests.site.countCompletes"));
         }
         return string.Join(" ", parts);
     }

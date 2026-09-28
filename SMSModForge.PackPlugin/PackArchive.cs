@@ -56,6 +56,13 @@ namespace SMSModForge.PackPlugin
         private readonly Dictionary<string, string> _extractedCache
             = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
+        /// <summary>Full paths already looked up by their ending
+        /// (<see cref="SMSModForge.Shared.PackPaths"/>), found or not - the
+        /// search walks every file in the pack, and a wallpaper is asked for
+        /// more than once.</summary>
+        private readonly Dictionary<string, string> _byEnding
+            = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
         private PackArchive(string sourcePath, ZipArchive zip, string packId,
                             Dictionary<string, ZipArchiveEntry> entries)
         {
@@ -143,10 +150,28 @@ namespace SMSModForge.PackPlugin
         /// relative path. Doubles as the replacement for the loose-file
         /// <c>File.Exists</c> checks every factory used to do before load.
         /// </summary>
-        public bool Has(string rel)
+        /// <summary>Every file in the pack, by its path inside it.</summary>
+        public IEnumerable<string> Paths => _entries.Keys;
+
+        public bool Has(string rel) => Resolve(rel) != null;
+
+        /// <summary>
+        /// The file in the pack a manifest path means: the path itself, or - for
+        /// a full path on the author's machine, typed or pasted into a field -
+        /// the file in the pack it ends with. Null when the pack has neither.
+        /// </summary>
+        private string Resolve(string rel)
         {
-            if (string.IsNullOrEmpty(rel)) return false;
-            return _entries.ContainsKey(Normalize(rel));
+            if (string.IsNullOrEmpty(rel)) return null;
+            string key = Normalize(rel);
+            if (_entries.ContainsKey(key)) return key;
+            if (!SMSModForge.Shared.PackPaths.IsFullPath(rel)) return null;
+
+            string found;
+            if (_byEnding.TryGetValue(key, out found)) return found;
+            found = SMSModForge.Shared.PackPaths.FindByEnding(rel, _entries.Keys);
+            _byEnding[key] = found;
+            return found;
         }
 
         /// <summary>Read an entry as UTF-8 text. Returns null when the entry
@@ -187,7 +212,7 @@ namespace SMSModForge.PackPlugin
         public string ExtractToTemp(string rel)
         {
             if (!TryGetEntry(rel, out var entry)) return null;
-            string key = Normalize(rel);
+            string key = Resolve(rel);
             if (_extractedCache.TryGetValue(key, out var cached) && File.Exists(cached))
                 return cached;
 
@@ -214,8 +239,8 @@ namespace SMSModForge.PackPlugin
         private bool TryGetEntry(string rel, out ZipArchiveEntry entry)
         {
             entry = null;
-            if (string.IsNullOrEmpty(rel)) return false;
-            return _entries.TryGetValue(Normalize(rel), out entry);
+            string key = Resolve(rel);
+            return key != null && _entries.TryGetValue(key, out entry);
         }
 
         /// <summary>

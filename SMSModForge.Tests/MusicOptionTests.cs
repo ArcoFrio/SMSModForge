@@ -18,6 +18,7 @@ namespace SMSModForge.Tests;
 /// A test that only counted the items would pass either way, so these walk the
 /// view's groups and check both sides land where they belong.
 /// </summary>
+[Trait("Speed", "Slow")]   // measured ~11s for the class; see CLAUDE.md
 public class MusicOptionTests
 {
     private static MainViewModel WithTracks(params string[] keys)

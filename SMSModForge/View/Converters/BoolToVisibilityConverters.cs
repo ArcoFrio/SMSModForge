@@ -48,6 +48,13 @@ public sealed class InverseBoolToVisibilityConverter : IValueConverter
 /// Inverts a <see cref="bool"/> value: true → false, false → true.
 /// Used for binding a False RadioButton's IsChecked to the same BoolValue
 /// that the True RadioButton binds to directly.
+/// <para/>
+/// It has to invert BOTH ways. It did not: <c>ConvertBack</c> returned the
+/// value unchanged, so checking a False radio wrote <c>true</c> — and because
+/// WPF unchecks the outgoing radio first, whose own binding had just written
+/// the right answer, the wrong one landed second and the click did nothing at
+/// all. That is three places at once: the True/False pair on a Variable
+/// condition, on a Set-variable action, and on a Bool variable's default.
 /// </summary>
 public sealed class InverseBoolConverter : IValueConverter
 {
@@ -56,6 +63,11 @@ public sealed class InverseBoolConverter : IValueConverter
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         => value is bool b && !b;
 
+    /// <summary>
+    /// An indeterminate box writes nothing rather than guessing: these pairs
+    /// are two-state, and a null on the way back means "no answer", which is
+    /// not the same as "false".
+    /// </summary>
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        => value is bool b && b;
+        => value is bool b ? !b : Binding.DoNothing;
 }

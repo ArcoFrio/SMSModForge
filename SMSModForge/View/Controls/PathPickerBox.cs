@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using SMSModForge.Localization;
 
 namespace SMSModForge.View.Controls;
 
@@ -52,12 +53,13 @@ public sealed class PathPickerBox : DockPanel
 
     public static readonly DependencyProperty FilterProperty =
         DependencyProperty.Register(nameof(Filter), typeof(string), typeof(PathPickerBox),
-            new PropertyMetadata("Image files (*.png)|*.png|All files (*.*)|*.*"));
+            new PropertyMetadata(null));
 
-    /// <summary>OpenFileDialog filter. Defaults to PNG since most pack paths are sprites.</summary>
+    /// <summary>OpenFileDialog filter. Defaults to PNG since most pack paths are sprites -
+    /// read when the dialog opens, so it is in the language on screen then.</summary>
     public string Filter
     {
-        get => (string)GetValue(FilterProperty);
+        get => (string)GetValue(FilterProperty) ?? PickerFilters.Png;
         set => SetValue(FilterProperty, value);
     }
 
@@ -69,12 +71,12 @@ public sealed class PathPickerBox : DockPanel
         Content = "…",
         Width = 26,
         Margin = new Thickness(4, 0, 0, 0),
-        ToolTip = "Choose a file",
     };
 
     public PathPickerBox()
     {
         LastChildFill = true;
+        LocText.Bind(_browse, ToolTipProperty, "picker.choose.tip");
         SetDock(_browse, Dock.Right);
         Children.Add(_browse);
         Children.Add(_box);
@@ -101,7 +103,7 @@ public sealed class PathPickerBox : DockPanel
         var dlg = new Microsoft.Win32.OpenFileDialog
         {
             Filter = Filter,
-            Title = "Choose file",
+            Title = Loc.T("picker.dialogTitle"),
             InitialDirectory = ResolveInitialDirectory(),
         };
         if (dlg.ShowDialog() != true) return;
@@ -123,9 +125,8 @@ public sealed class PathPickerBox : DockPanel
         if (!fullPick.StartsWith(fullRoot, StringComparison.OrdinalIgnoreCase))
         {
             MessageBox.Show(
-                "The file must be inside the pack folder so it gets bundled on export:\n" +
-                root + "\n\nCopy it into the pack folder first, then pick it from there.",
-                "Outside pack folder", MessageBoxButton.OK, MessageBoxImage.Warning);
+                Loc.F("picker.outsidePack", "folder", root),
+                Loc.T("picker.outsidePack.title"), MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         // Wire format: forward slashes, pack-relative.

@@ -14,7 +14,13 @@ public readonly record struct PlacedGlyph(
     double Width,
     double Height,
     int Line,
-    int Run = 0)
+    int Run = 0,
+    /// <summary>Where this glyph's character sits in the string that was laid
+    /// out — the runs concatenated, which is what the reader sees. Carried
+    /// rather than counted afterwards: wrapping drops the space it broke at,
+    /// a trailing space is trimmed, and a character with no glyph in the atlas
+    /// is skipped, so glyph number N is not character number N.</summary>
+    int Index = 0)
 {
     public double Right => X + Width;
     public double Bottom => Y + Height;
@@ -150,7 +156,7 @@ public static class TmpTextLayout
                 double gy = baseline - m.BearingY * g;
                 layout.Glyphs.Add(new PlacedGlyph(
                     placed.Unicode, placed.Glyph, gx, gy,
-                    m.Width * g, m.Height * g, i, placed.Run));
+                    m.Width * g, m.Height * g, i, placed.Run, placed.Index));
             }
             layout.LineWidths.Add(line.Width);
 
@@ -172,7 +178,7 @@ public static class TmpTextLayout
     /// be re-laid without working them out again from a size that may not be
     /// the one it was measured at.</summary>
     private readonly record struct Pending(int Unicode, TmpFont.Glyph Glyph, double PenX,
-                                           double Scale, double Advance, int Run);
+                                           double Scale, double Advance, int Run, int Index);
 
     private sealed class Line
     {
@@ -219,6 +225,10 @@ public static class TmpTextLayout
         // word that overruns can be moved down whole rather than split.
         int breakAt = -1;
         double breakPen = 0;
+
+        // How much of the whole string the runs before this one took up, so a
+        // glyph can say where its character is in the text as read.
+        int consumed = 0;
 
         foreach (var run in runs)
         {
@@ -300,10 +310,12 @@ public static class TmpTextLayout
                 }
 
                 pen += kern;
-                line.Add(new Pending(ch, glyph, pen, scale, advance, run.Tag));
+                line.Add(new Pending(ch, glyph, pen, scale, advance, run.Tag, consumed + i));
                 pen += advance;
                 previous = glyph;
             }
+
+            consumed += text.Length;
         }
 
         line.Width = pen;

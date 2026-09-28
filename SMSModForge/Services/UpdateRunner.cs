@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Services;
 
@@ -100,7 +101,7 @@ public sealed class UpdateRunner
 
         if (release == null)
         {
-            Report?.Invoke(failure ?? $"You are up to date — this is {UpdateFeed.RunningVersion.ToString(3)}.");
+            Report?.Invoke(failure ?? Loc.F("update.upToDate", "version", UpdateFeed.RunningVersion.ToString(3)));
             return;
         }
         await OfferAsync(release, cancel).ConfigureAwait(true);
@@ -114,8 +115,7 @@ public sealed class UpdateRunner
             // uploading. Saying "there is an update" and then failing to
             // install it would be worse than the silence.
             if (!_quiet)
-                Report?.Invoke($"Version {release.VersionText} has been published, but "
-                             + "its editor download is not there yet. Try again shortly.");
+                Report?.Invoke(Loc.F("update.notYet", "version", release.VersionText));
             return;
         }
 
@@ -139,14 +139,14 @@ public sealed class UpdateRunner
             Directory.CreateDirectory(folder);
 
             // ── The editor ────────────────────────────────────────────
-            Say?.Invoke($"Downloading {release.VersionText}…");
+            Say?.Invoke(Loc.F("update.downloading", "version", release.VersionText));
             string editorZip = Path.Combine(folder, "editor.zip");
             var progress = new Progress<double>(p =>
-                Say?.Invoke($"Downloading {release.VersionText}… {p * 100:0}%"));
+                Say?.Invoke(Loc.F("update.downloadingPercent", "version", release.VersionText, "percent", (p * 100).ToString("0"))));
             await UpdateInstaller.DownloadAsync(Http, release.EditorZipUrl!, editorZip, progress, cancel)
                                  .ConfigureAwait(true);
 
-            Say?.Invoke("Unpacking…");
+            Say?.Invoke(Loc.T("update.unpacking"));
             string? staged = UpdateInstaller.StageEditorZip(editorZip, release.VersionText, out var problem);
             if (staged == null)
             {
@@ -161,7 +161,7 @@ public sealed class UpdateRunner
             // here is a failure with the old editor still on screen to say so.
             if (release.PluginZipUrl != null && UpdateInstaller.IsGameFolder(EditorPrefs.GameFolder))
             {
-                Say?.Invoke("Updating the plugin…");
+                Say?.Invoke(Loc.T("update.plugin"));
                 string trouble = "";
                 try
                 {
@@ -184,17 +184,11 @@ public sealed class UpdateRunner
                 // hand-over, while there is still an editor on screen to say it.
                 if (trouble.Length > 0)
                     Problem?.Invoke(
-                        "The editor will still be updated, but the plugin in your game "
-                      + "folder could not be replaced:\n\n" + trouble
-                      + "\n\nThe usual reason is something holding the file open — the "
-                      + "game, or a build that put it there. Close it and run "
-                      + "Options ▸ Check for updates now again, or unpack the plugin zip "
-                      + "over your game folder by hand. Until then the two are out of "
-                      + "step, and a pack written against one can fail against the other.");
+                        Loc.F("update.pluginFailed", "problem", trouble));
             }
 
             // ── Hand over ─────────────────────────────────────────────
-            Say?.Invoke($"Restarting to finish {release.VersionText}…");
+            Say?.Invoke(Loc.F("update.restarting", "version", release.VersionText));
 
             if (!UpdateInstaller.LaunchApplier(staged, UpdateInstaller.InstallFolder, out var launchProblem))
             {

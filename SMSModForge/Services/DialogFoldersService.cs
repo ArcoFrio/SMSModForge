@@ -46,7 +46,7 @@ public static class DialogFoldersService
     /// <summary>Remember <paramref name="dir"/> as the folder for <paramref name="key"/>.</summary>
     public static void Set(string key, string? dir)
     {
-        if (string.IsNullOrWhiteSpace(dir)) return;
+        if (string.IsNullOrWhiteSpace(dir) || TestMode.Active) return;
         try
         {
             var map = Load();
@@ -60,6 +60,8 @@ public static class DialogFoldersService
 
     private static Dictionary<string, string> Load()
     {
+        // Nothing the test suite does is the author's: see TestMode.
+        if (TestMode.Active) return new Dictionary<string, string>();
         try
         {
             if (File.Exists(FilePath))

@@ -29,7 +29,7 @@ public sealed class QuestDef
     /// journal itself, the way the game's "Secrets (Adrian)" is.
     /// </summary>
     [JsonProperty("title", Order = 2)]
-    public string Title { get; set; } = "New quest";
+    public string Title { get; set; } = "New quest";   // English on purpose: the value a pack file without one loads with, which must be the same in every language.
 
     /// <summary>The paragraph under the title.</summary>
     [JsonProperty("description", Order = 3)]
@@ -135,6 +135,18 @@ public sealed class QuestDef
     /// show for itself.</summary>
     public bool ShouldSerializeSiteConditions()
         => SiteConditions.Any(s => s.Conditions.Count > 0 || s.RoomsOut.Count > 0 || s.Rule != null);
+
+    /// <summary>
+    /// What happens to a player who had already finished this quest when a
+    /// later version of the pack gives it steps it did not have: one of
+    /// <see cref="QuestGrowth.Choices"/>. Only on a quest of the pack's own;
+    /// written only when it is not the default, leaving it finished.
+    /// </summary>
+    [JsonProperty(QuestGrowth.Key, Order = 11)]
+    public string WhenStepsAdded { get; set; } = QuestGrowth.LeaveFinished;
+
+    public bool ShouldSerializeWhenStepsAdded()
+        => !IsVanillaExtension && QuestGrowth.ChoiceOf(WhenStepsAdded) != QuestGrowth.LeaveFinished;
 }
 
 /// <summary>

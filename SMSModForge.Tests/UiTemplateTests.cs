@@ -16,6 +16,7 @@ namespace SMSModForge.Tests;
 /// except the picture. So the first test draws every template against the real
 /// extraction and insists the renderer found everything it asked for.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class UiTemplateTests
 {
     private readonly ITestOutputHelper _out;

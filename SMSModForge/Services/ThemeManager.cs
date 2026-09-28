@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Media;
 using Newtonsoft.Json;
 using SMSModForge.ViewModel;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Services;
 
@@ -22,7 +23,13 @@ namespace SMSModForge.Services;
 /// </summary>
 public sealed class ThemeDef : ObservableObject
 {
+    /// <summary>What the theme is saved as. Never shown - <see cref="DisplayName"/> is.</summary>
     public string Name { get; init; } = "";
+
+    /// <summary>The key of its name in the English file.</summary>
+    public string NameKey => "theme." + Name.ToLowerInvariant();
+
+    public string DisplayName => Loc.T(NameKey);
 
     /// <summary>App background, behind the tab content.</summary>
     public string Window { get; init; } = "#F2F2F2";

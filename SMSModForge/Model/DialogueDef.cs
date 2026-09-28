@@ -51,7 +51,7 @@ public sealed class DialogueDef
 
     /// <summary>Human-readable name shown in the editor's dialogue list.</summary>
     [JsonProperty("displayName", Order = 2)]
-    public string DisplayName { get; set; } = "New Dialogue";
+    public string DisplayName { get; set; } = "New Dialogue";   // English on purpose: the value a pack file without one loads with, which must be the same in every language.
 
     /// <summary>
     /// The vanilla roomtalk this dialogue can take priority over, as

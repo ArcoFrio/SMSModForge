@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -26,6 +26,7 @@ namespace SMSModForge.Tests;
 /// painting nothing looks exactly like one that is working, from every angle
 /// except the only one that matters.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class NodeNestingTests : IDisposable
 {
     private readonly ITestOutputHelper _out;

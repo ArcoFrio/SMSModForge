@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SMSModForge.Model;
+using SMSModForge.Localization;
 
 namespace SMSModForge.ViewModel;
 
@@ -133,15 +134,15 @@ public sealed class UiOpenViewModel : ObservableObject
         {
             var d = _get();
             if (d == null || !d.DoesAnything)
-                return Closing ? "vanishes at once" : "appears at once";
+                return Loc.T(Closing ? "ui.open.vanishes" : "ui.open.appears");
 
             string what = Closing
-                ? (d.Fade && d.ScaleFrom != null ? "fades and shrinks"
-                 : d.Fade ? "fades out" : "shrinks")
-                : (d.Fade && d.ScaleFrom != null ? "fades and grows"
-                 : d.Fade ? "fades in" : "grows");
+                ? (d.Fade && d.ScaleFrom != null ? Loc.T("ui.open.fadesShrinks")
+                 : d.Fade ? Loc.T("ui.open.fadesOut") : Loc.T("ui.open.shrinks"))
+                : (d.Fade && d.ScaleFrom != null ? Loc.T("ui.open.fadesGrows")
+                 : d.Fade ? Loc.T("ui.open.fadesIn") : Loc.T("ui.open.grows"));
 
-            return $"{what} over {d.Duration:0.##}s, {d.Easing}";
+            return Loc.F("ui.open.summary", "what", what, "seconds", d.Duration.ToString("0.##"), "curve", d.Easing);
         }
     }
 

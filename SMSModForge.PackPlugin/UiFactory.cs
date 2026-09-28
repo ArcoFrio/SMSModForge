@@ -516,12 +516,12 @@ namespace SMSModForge.PackPlugin
             // A label naming a variable follows it, rather than being the value
             // that variable happened to hold when the pack was written. Only
             // where a token actually appears - see UiLiveText.
-            if (TextPlaceholders.HasAny(value))
+            if (TextPlaceholders.HasAnyToken(value))
             {
                 var live = go.GetComponent<UiLiveText>() ?? go.AddComponent<UiLiveText>();
                 live.Raw = value;
                 live.PackId = pack != null ? pack.PackId : null;
-                tmp.text = TextPlaceholders.Resolve(
+                tmp.text = TextPlaceholders.ResolveAll(
                     value, Plugin.TryGetPackVars(live.PackId));
             }
             else

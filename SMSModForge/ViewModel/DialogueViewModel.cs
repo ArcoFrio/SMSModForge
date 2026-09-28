@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using SMSModForge.Model;
+using SMSModForge.Localization;
 
 namespace SMSModForge.ViewModel;
 
@@ -264,10 +265,7 @@ public sealed class DialogueViewModel : ObservableObject
         if (vanilla == null) return System.Array.Empty<GameConditionGroupViewModel>();
         return vanilla.Starts
             .Select(start => GameConditionGroups.ForScript(
-                "Played from " + (string.IsNullOrEmpty(start.By) ? "(unnamed object)" : start.By)
-                + (string.IsNullOrEmpty(start.Script) ? "" : " (" + start.Script + ")")
-                + (string.IsNullOrEmpty(start.Event) ? "" : ", set off by "
-                   + GameQuestSiteViewModel.EventWords(start.Event!)),
+                PlayedFrom(start.By, start.Script, start.Event),
                 start.By, start.Script, start.When, start.Gates, canEdit: true, ahead: start.Ahead))
             .Where(g => g.Rows.Count > 0 || g.HasNote)
             .ToList();
@@ -325,7 +323,7 @@ public sealed class DialogueViewModel : ObservableObject
         var baseline = Baseline?.Node(node?.Id ?? 0);
         if (node == null) return System.Array.Empty<string>();
         if (baseline == null)
-            return IsVanillaBased ? new[] { "(new line)" } : System.Array.Empty<string>();
+            return IsVanillaBased ? new[] { Loc.T("dialogues.newLine") } : System.Array.Empty<string>();
         return VanillaDialogueDelta.ChangedFields(node, baseline);
     }
 
@@ -352,8 +350,42 @@ public sealed class DialogueViewModel : ObservableObject
             if (e.PropertyName == nameof(DialogueNodeViewModel.IsChangedFromVanilla)
                 || e.PropertyName == nameof(DialogueNodeViewModel.ChangedFieldsText)) return;
 
+            if (e.PropertyName == nameof(DialogueNodeViewModel.Actor)) CarryTheirLook(row);
+
             Recount();
         };
+    }
+
+    /// <summary>
+    /// A speaker who has been on before brings their look with them: naming an
+    /// actor on a line takes the expression and outfit they were last wearing
+    /// in this conversation.
+    /// <para/>
+    /// Last, not first — an actor who changed into something halfway through is
+    /// still in it, and the line being written now comes after that. Only a
+    /// speaker already in the conversation is answered for: the first time
+    /// somebody appears there is nothing to copy and the fields are left as
+    /// they are.
+    /// <para/>
+    /// The expression and outfit on the node at that moment belong to whoever
+    /// was named a moment ago, and their keys mean nothing to the new speaker —
+    /// so this replaces them rather than filling in blanks.
+    /// </summary>
+    private void CarryTheirLook(DialogueNodeViewModel row)
+    {
+        string actor = row.Actor ?? "";
+        if (actor.Length == 0) return;
+
+        // Nodes are held in tree order, which is play order, so "before" is
+        // simply an earlier index.
+        int at = Nodes.IndexOf(row);
+        for (int i = at - 1; i >= 0; i--)
+        {
+            if (!string.Equals(Nodes[i].Actor, actor, System.StringComparison.OrdinalIgnoreCase)) continue;
+            row.Expression = Nodes[i].Expression;
+            row.Outfit = Nodes[i].Outfit;
+            return;
+        }
     }
 
     private void Recount()
@@ -373,7 +405,7 @@ public sealed class DialogueViewModel : ObservableObject
         {
             if (!IsVanillaBased) return "";
             var baseline = Baseline;
-            if (baseline == null) return "the game has no such conversation";
+            if (baseline == null) return Loc.T("dialogues.summary.noSuchConversation");
 
             // Added and changed counted apart. Adding one line under another
             // changes that other line too - its list of children is different
@@ -383,14 +415,14 @@ public sealed class DialogueViewModel : ObservableObject
             int removed = VanillaDialogueDelta.RemovedNodes(Model.Nodes, baseline).Count;
             int gates = GateRemovals;
 
-            if (added == 0 && changed == 0 && removed == 0 && gates == 0) return "unchanged from the game";
+            if (added == 0 && changed == 0 && removed == 0 && gates == 0) return Loc.T("dialogues.summary.unchanged");
 
             var parts = new List<string>();
-            if (added > 0) parts.Add(added + " added");
-            if (changed > 0) parts.Add(changed + (changed == 1 ? " line changed" : " lines changed"));
-            if (removed > 0) parts.Add(removed + " removed");
-            if (gates > 0) parts.Add(gates + (gates == 1 ? " condition to play it taken out" : " conditions to play it taken out"));
-            return string.Join(", ", parts);
+            if (added > 0) parts.Add(Loc.P("dialogues.summary.added", added));
+            if (changed > 0) parts.Add(Loc.P("dialogues.summary.changed", changed));
+            if (removed > 0) parts.Add(Loc.P("dialogues.summary.removed", removed));
+            if (gates > 0) parts.Add(Loc.P("dialogues.summary.gates", gates));
+            return Loc.JoinList(parts);
         }
     }
 
@@ -401,19 +433,19 @@ public sealed class DialogueViewModel : ObservableObject
     /// <summary>What a reset button should say for a field name.</summary>
     public static string FieldLabel(string field) => field switch
     {
-        "kind" => "kind",
-        "actor" => "speaker",
-        "expression" => "expression",
-        "outfit" => "outfit",
-        "text" => "line",
-        "tag" => "tag",
-        "children" => "what follows it",
-        "conditions" => "conditions",
-        "actionsOnStart" => "actions on start",
-        "actionsOnFinish" => "actions on finish",
-        "jump" => "what happens after",
-        "duration" => "how it advances",
-        "timeout" => "timeout",
+        "kind" => Loc.T("dialogues.field.kind"),
+        "actor" => Loc.T("dialogues.field.actor"),
+        "expression" => Loc.T("dialogues.field.expression"),
+        "outfit" => Loc.T("dialogues.field.outfit"),
+        "text" => Loc.T("dialogues.field.text"),
+        "tag" => Loc.T("dialogues.field.tag"),
+        "children" => Loc.T("dialogues.field.children"),
+        "conditions" => Loc.T("dialogues.field.conditions"),
+        "actionsOnStart" => Loc.T("dialogues.field.actionsOnStart"),
+        "actionsOnFinish" => Loc.T("dialogues.field.actionsOnFinish"),
+        "jump" => Loc.T("dialogues.field.jump"),
+        "duration" => Loc.T("dialogues.field.duration"),
+        "timeout" => Loc.T("dialogues.field.timeout"),
         _ => field,
     };
 
@@ -599,7 +631,17 @@ public sealed class DialogueViewModel : ObservableObject
     public string Display => string.IsNullOrWhiteSpace(DisplayName) ? Key : DisplayName;
 
     /// <summary>Comma-separated root ids for the right-pane summary.</summary>
-    public string RootsSummary => Model.RootNodeIds.Count == 0 ? "(no root)" : string.Join(", ", Model.RootNodeIds);
+    public string RootsSummary => Model.RootNodeIds.Count == 0 ? Loc.T("dialogues.noRoot") : string.Join(", ", Model.RootNodeIds);
+
+    /// <summary>Where the game plays one of its own conversations from, as a heading.</summary>
+    private static string PlayedFrom(string? by, string? script, string? eventType)
+    {
+        string name = string.IsNullOrEmpty(by) ? Loc.T("quests.site.unnamedObject") : by!;
+        if (!string.IsNullOrEmpty(script)) name = Loc.F("quests.site.objectScript", "object", name, "script", script);
+        return string.IsNullOrEmpty(eventType)
+            ? Loc.F("dialogues.playedFrom", "script", name)
+            : Loc.F("dialogues.playedFromSetOff", "script", name, "event", GameQuestSiteViewModel.EventWords(eventType!));
+    }
 
     // ── Node ops ──────────────────────────────────────────────────────
 
@@ -652,9 +694,11 @@ public sealed class DialogueViewModel : ObservableObject
     /// every authored field from it — see <see cref="CloneForNewNode"/>.
     /// </summary>
     public DialogueNodeViewModel AddNode(int? parentId = null, DialogueNodeKind kind = DialogueNodeKind.Text,
-                                          DialogueNodeDef? template = null)
+                                          DialogueNodeDef? template = null,
+                                          DialogueNodeDef? speakerFrom = null)
     {
         var def = template != null ? CloneForNewNode(template) : new DialogueNodeDef { Kind = kind };
+        if (template == null && speakerFrom != null) CarrySpeaker(speakerFrom, def);
         def.Id = NextNodeId();
         Model.Nodes.Add(def);
         if (parentId.HasValue)
@@ -708,6 +752,23 @@ public sealed class DialogueViewModel : ObservableObject
         def.Tag = null;
         def.Children = new List<int>();
         return def;
+    }
+
+    /// <summary>
+    /// Who is speaking and how they look — and nothing else.
+    /// <para/>
+    /// What a new ROOT takes from the line before it. A root starts a fresh
+    /// strand, so inheriting a whole node the way + Child does would carry
+    /// conditions, actions, a jump and a timeout that were written about
+    /// somewhere else entirely. The speaker is the part that does carry: a new
+    /// strand is usually the same scene, and picking the actor, the expression
+    /// and the outfit again was all a new root ever cost.
+    /// </summary>
+    private static void CarrySpeaker(DialogueNodeDef from, DialogueNodeDef to)
+    {
+        to.Actor = from.Actor;
+        to.Expression = from.Expression;
+        to.Outfit = from.Outfit;
     }
 
     public void RemoveNode(DialogueNodeViewModel nodeVm)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Tutorials;
 
@@ -43,28 +44,24 @@ public static class TutorialCatalog
         new TutorialDef
         {
             Id = "first-steps",
-            Group = "Getting started",
-            Title = "First steps",
-            Summary = "Make a pack, put a character in it, and give it to somebody.",
+            Group = "tutorial.group.gettingStarted",
+            Title = "tutorial.firstSteps.title",
+            Summary = "tutorial.firstSteps.summary",
             Level = 1,
             Revision = 2,
             Steps = new[]
             {
                 new TutorialStep
                 {
-                    Title = "What you will end up with",
-                    Body = "A pack on disk with one character in it, ready for the game to " +
-                           "load. Nothing here is throwaway — this is a real pack, and the next " +
-                           "tutorial carries on in the same one.",
+                    Title = "tutorial.firstSteps.willEndUp.title",
+                    Body = "tutorial.firstSteps.willEndUp.body",
                     Kind = StepKind.Read,
                     Tab = TabModForge,
                 },
                 new TutorialStep
                 {
-                    Title = "Start a fresh pack",
-                    Body = "Use File then New pack. Starting clean matters here: the steps that " +
-                           "follow watch for things appearing, and in a pack you have already " +
-                           "been working in some of them are there before you begin.",
+                    Title = "tutorial.firstSteps.startFreshPack.title",
+                    Body = "tutorial.firstSteps.startFreshPack.body",
                     Kind = StepKind.Do,
                     Tab = TabModForge,
                     Anchor = "menu:file",
@@ -73,29 +70,22 @@ public static class TutorialCatalog
                     // emptying the current one by hand.
                     OnEnter = (vm, s) => s.Set("pack", vm.Pack),
                     IsDone = (vm, s) => !ReferenceEquals(vm.Pack, s.Get<Model.ModPack>("pack")),
-                    Hint = "File then New pack. Anything unsaved will be offered back to you first.",
+                    Hint = "tutorial.firstSteps.startFreshPack.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "Save it somewhere",
-                    Body = "Use File then Save, and make a NEW empty folder for it — not your " +
-                           "Desktop or Documents. A pack owns its whole folder: everything " +
-                           "inside ends up in the exported file. Saving here also matters " +
-                           "because previews and file pickers resolve paths against that " +
-                           "folder, and stay empty until there is one.",
+                    Title = "tutorial.firstSteps.saveSomewhere.title",
+                    Body = "tutorial.firstSteps.saveSomewhere.body",
                     Kind = StepKind.Do,
                     Tab = TabModForge,
                     Anchor = "menu:file",
                     IsDone = (vm, s) => !string.IsNullOrEmpty(vm.PackRoot),
-                    Hint = "File then Save, or Ctrl+S. Make a new folder rather than reusing one.",
+                    Hint = "tutorial.firstSteps.saveSomewhere.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "Some art to work with",
-                    Body = "Practice sprites have been copied into a TutorialArt folder inside " +
-                           "your pack: busts, a room, a couple of NPCs and a scene. They are " +
-                           "yours now — edit them, replace them, or delete the folder when you " +
-                           "are done with it.",
+                    Title = "tutorial.firstSteps.someArtWork.title",
+                    Body = "tutorial.firstSteps.someArtWork.body",
                     Kind = StepKind.Read,
                     Tab = TabModForge,
                     // Copied on arrival rather than asked for: fetching files is
@@ -104,81 +94,50 @@ public static class TutorialCatalog
                 },
                 new TutorialStep
                 {
-                    Title = "Add a character",
-                    Body = "Characters are anyone who speaks. Use + Character, which is the one " +
-                           "that draws its own bust rather than borrowing the game's.",
+                    Title = "tutorial.firstSteps.addCharacter.title",
+                    Body = "tutorial.firstSteps.addCharacter.body",
                     Kind = StepKind.Do,
                     Tab = TabCharacters,
                     Anchor = "btn:addCharacter",
                     OnEnter = (vm, s) => s.Set("chars", vm.Characters.Count),
                     IsDone = (vm, s) => s.GrewSince("chars", vm.Characters.Count),
-                    Hint = "+ Character sits in the toolbar above the character list.",
+                    Hint = "tutorial.firstSteps.addCharacter.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "Give them a name",
-                    Body = "This is what players read above a line of dialogue, and the only " +
-                           "name you have to write — the identifiers the pack uses internally " +
-                           "follow from it.",
+                    Title = "tutorial.firstSteps.giveThemName.title",
+                    Body = "tutorial.firstSteps.giveThemName.body",
                     Kind = StepKind.Do,
                     Tab = TabCharacters,
                     Anchor = "field:characterName",
                     // Rejecting the placeholder is the point: a character still
                     // called "New Character" means the step was skipped.
                     IsDone = (vm, s) => vm.SelectedCharacter is { } c &&
-                                        c.DisplayName.Trim().Length > 0 &&
-                                        !c.DisplayName.StartsWith("New ", StringComparison.OrdinalIgnoreCase),
-                    Hint = "Type over the placeholder name in the Identity box.",
+                                        !StillPlaceholder(c.DisplayName, "characters.newName"),
+                    Hint = "tutorial.firstSteps.giveThemName.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "Give them a face",
-                    Body = "Every character needs at least one outfit, and every outfit needs a " +
-                           "base sprite: the picture of them from the chest up. Point this one " +
-                           "at one of the five practice busts. They live in TutorialArt/Busts, " +
-                           "one folder each, and the base picture is the file whose name ends in " +
-                           "Base00 — so Bust1 is TutorialArt/Busts/Bust1/Bust1Base00.png, and " +
-                           "Bust2 through Bust5 follow the same pattern.\n\n" +
-                           "Any of them works here. They differ in shape on purpose, which will " +
-                           "matter when you paint a jiggle mask later; the fuller ones give you " +
-                           "more to see. The other files in those folders are the blink, mouth " +
-                           "and expression art, and a later tutorial uses them.\n\n" +
-                           "Bust art is 256 by 256 pixels, PNG, with a transparent background. " +
-                           "Other sizes are scaled to fit rather than refused, but 256 is the " +
-                           "only size whose pixels land exactly as you drew them, and anything " +
-                           "that is not square gets transparent bars on two sides. When you come " +
-                           "to draw your own, that is the shape to draw.",
+                    Title = "tutorial.firstSteps.giveThemFace.title",
+                    Body = "tutorial.firstSteps.giveThemFace.body",
                     Kind = StepKind.Do,
                     Tab = TabCharacters,
                     Anchor = "field:baseSprite",
                     IsDone = (vm, s) => vm.SelectedOutfit is { } o && o.BaseSprite.Trim().Length > 0,
-                    Hint = "Use the Browse button beside Base, under Sprites.",
+                    Hint = "tutorial.firstSteps.giveThemFace.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "There they are",
-                    Body = "The preview draws the bust the way the game will, and keeps up as " +
-                           "you work — worth watching rather than exporting to find out.",
+                    Title = "tutorial.firstSteps.thereThey.title",
+                    Body = "tutorial.firstSteps.thereThey.body",
                     Kind = StepKind.Read,
                     Tab = TabCharacters,
                     Anchor = "panel:characterPreview",
                 },
                 new TutorialStep
                 {
-                    Title = "Say what this outfit has",
-                    Body = "A bust can carry more than its base picture: a blink frame, four " +
-                           "mouth frames that animate while it talks, and four expressions. " +
-                           "The three tickboxes are how you DECLARE which of those exist — they " +
-                           "are not features to switch on, they are you telling the game what " +
-                           "art to go looking for.\n\n" +
-                           "You are not using any of them yet, so untick all three: Has Blink " +
-                           "frame, Has Mouth frames, Has Expressions. Getting this wrong is " +
-                           "worth understanding now, because it fails silently — a ticked box " +
-                           "with no art behind it reads as a BROKEN outfit, and the game skips " +
-                           "the whole character rather than skipping the blink. A missing " +
-                           "character with no error is almost always this.\n\n" +
-                           "Leave Mask empty. An empty mask means the bust does not move, which " +
-                           "is a perfectly good answer and the one you want until you paint one.",
+                    Title = "tutorial.firstSteps.sayOutfitHas.title",
+                    Body = "tutorial.firstSteps.sayOutfitHas.body",
                     Kind = StepKind.Do,
                     Tab = TabCharacters,
                     // The dim swallows clicks outside a lit hole, so a step that
@@ -187,53 +146,36 @@ public static class TutorialCatalog
                     AlsoAllow = new[] { "panel:outfitExpressions" },
                     IsDone = (vm, s) => vm.SelectedOutfit is { } o &&
                                         !o.BlinkEnabled && !o.MouthEnabled && !o.ExpressionEnabled,
-                    Hint = "Two tickboxes in the Sprites box, one in Expressions just below it.",
+                    Hint = "tutorial.firstSteps.sayOutfitHas.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "That is a pack",
-                    Body = "Save it, and File then Export pack bundles the folder into a single " +
-                           ".smspack — the file the game loads. Drop that into the Mods folder " +
-                           "in your game folder, beside the game's .exe, and it is installed.\n\n" +
-                           "Export is the quick loop, for trying your own work in the game. Use " +
-                           "it as often as you like: it changes nothing about the pack itself.\n\n" +
-                           "There is nothing to see in the game yet, because a character only " +
-                           "appears once something gives them a line.",
+                    Title = "tutorial.firstSteps.pack.title",
+                    Body = "tutorial.firstSteps.pack.body",
                     Kind = StepKind.Read,
                     Tab = TabModForge,
                     Anchor = "menu:file",
                 },
                 new TutorialStep
                 {
-                    Title = "Giving it to somebody else",
-                    Body = "File then Publish for players is the other end of that. It checks " +
-                           "the pack over first and says so if anything is broken, then writes a " +
-                           "zip holding one thing: your pack, already sitting in a Mods folder. " +
-                           "Whoever downloads it extracts that into their game folder and is " +
-                           "finished — there is no step left for them to get wrong, which is " +
-                           "where most mods are lost. Nothing else is in the archive, so " +
-                           "installing two packs never asks anybody to overwrite anything.\n\n" +
-                           "It opens the folder it wrote to afterwards, so the file is never " +
-                           "somewhere you have to go looking for.",
+                    Title = "tutorial.firstSteps.givingSomebodyElse.title",
+                    Body = "tutorial.firstSteps.givingSomebodyElse.body",
                     Kind = StepKind.Read,
                     Tab = TabModForge,
                     Anchor = "menu:file",
                 },
                 new TutorialStep
                 {
-                    Title = "The number beside your pack",
-                    Body = "Publishing also moves the pack's version, and only publishing does. " +
-                           "Saving does not, and neither does exporting: a version says what " +
-                           "players were given, and an afternoon of saving gives them nothing.\n\n" +
-                           "It moves on its own, by what actually changed since your last " +
-                           "release. Something new — a character, a room, a conversation — moves " +
-                           "the middle number. A change to something that was already there " +
-                           "moves the last one. The first is yours alone: type it into the " +
-                           "Version box when you decide a release is a new thing rather than " +
-                           "more of the old one.\n\n" +
-                           "A place of your own is next: it builds a room and puts a door to it " +
-                           "in the bedroom you wake up in, and every tutorial after that goes " +
-                           "through the same door.",
+                    Title = "tutorial.firstSteps.writtenIn.title",
+                    Body = "tutorial.firstSteps.writtenIn.body",
+                    Kind = StepKind.Read,
+                    Tab = TabModForge,
+                    Anchor = "panel:packLanguage",
+                },
+                new TutorialStep
+                {
+                    Title = "tutorial.firstSteps.numberBesidePack.title",
+                    Body = "tutorial.firstSteps.numberBesidePack.body",
                     Kind = StepKind.Read,
                     Tab = TabModForge,
                     Anchor = "menu:file",
@@ -244,38 +186,34 @@ public static class TutorialCatalog
         new TutorialDef
         {
             Id = "a-place",
-            Group = "Places",
-            Title = "A place of your own",
-            Summary = "Build a room out of two layers, give it depth, and a door from your bedroom.",
+            Group = "tutorial.group.places",
+            Title = "tutorial.aPlace.title",
+            Summary = "tutorial.aPlace.summary",
             Level = 2,
             Steps = new[]
             {
                 new TutorialStep
                 {
-                    Title = "Rooms are two pictures",
-                    Body = "A place is built from a base layer — the room itself — and a " +
-                           "secondary layer seen past it. Keeping them apart is what lets a " +
-                           "room have depth instead of looking like a painted backdrop.",
+                    Title = "tutorial.aPlace.roomsTwoPictures.title",
+                    Body = "tutorial.aPlace.roomsTwoPictures.body",
                     Kind = StepKind.Read,
                     Tab = TabPlaces,
                 },
                 new TutorialStep
                 {
-                    Title = "Add a place",
-                    Body = "Use + Place, under Your places. The other list is for adding things " +
-                           "to rooms the game already has, which is a different job.",
+                    Title = "tutorial.aPlace.addPlace.title",
+                    Body = "tutorial.aPlace.addPlace.body",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
                     Anchor = "btn:addPlace",
                     OnEnter = (vm, s) => s.Set("places", vm.Places.Count),
                     IsDone = (vm, s) => s.GrewSince("places", vm.Places.Count),
-                    Hint = "+ Place is in the toolbar above the left-hand list.",
+                    Hint = "tutorial.aPlace.addPlace.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "The room itself",
-                    Body = "Set the back sprite to TutorialArt/Locations/RoomB.png. That is the " +
-                           "layer players read as the room they are standing in.",
+                    Title = "tutorial.aPlace.roomItself.title",
+                    Body = "tutorial.aPlace.roomItself.body",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
                     Anchor = "field:placeSecondarySprite",
@@ -283,28 +221,22 @@ public static class TutorialCatalog
                     // tab calls "Back sprite" is bound to SecondarySprite. The
                     // step says back, so it must land on the row that says back.
                     IsDone = (vm, s) => vm.SelectedPlace is { } p && p.SecondarySprite.Trim().Length > 0,
-                    Hint = "Level art, then the Back sprite row.",
+                    Hint = "tutorial.aPlace.roomItself.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "And something standing in it",
-                    Body = "Now set the front sprite to TutorialArt/Locations/Room.png — a vase " +
-                           "on a transparent background. This layer draws in front of the back " +
-                           "one, so it reads as an object in the room rather than part of the " +
-                           "wall behind it.",
+                    Title = "tutorial.aPlace.somethingStanding.title",
+                    Body = "tutorial.aPlace.somethingStanding.body",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
                     Anchor = "field:placeBaseSprite",
                     IsDone = (vm, s) => vm.SelectedPlace is { } p && p.BaseSprite.Trim().Length > 0,
-                    Hint = "Level art, then the Front sprite row.",
+                    Hint = "tutorial.aPlace.somethingStanding.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "Give it some depth",
-                    Body = "Turn off Same as front under Behaviour, and set the back layer to " +
-                           "drift by a different amount from the front. Anything different will " +
-                           "do — the further apart they are, the deeper the room reads. Watch " +
-                           "the preview with Preview parallax switched on.",
+                    Title = "tutorial.aPlace.giveSomeDepth.title",
+                    Body = "tutorial.aPlace.giveSomeDepth.body",
                     Kind = StepKind.Free,
                     Tab = TabPlaces,
                     Anchor = "field:parallax",
@@ -314,16 +246,12 @@ public static class TutorialCatalog
                     // can really answer.
                     IsDone = (vm, s) => vm.SelectedPlace is { } p && !p.ParallaxSecondaryLinked &&
                                         Math.Abs(p.ParallaxSecondaryStrength - p.ParallaxStrength) > 0.001f,
-                    Hint = "Untick Same as front, then change the Parallax — back value.",
+                    Hint = "tutorial.aPlace.giveSomeDepth.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "A way back out",
-                    Body = "Add a navigator button and set its Target to My Room. These are the " +
-                           "buttons along the bottom of a room, and without one your place is " +
-                           "somewhere players can arrive but not leave. Sending it back to the " +
-                           "bedroom closes the loop: in through the door you are about to build, " +
-                           "out through this.",
+                    Title = "tutorial.aPlace.wayBackOut.title",
+                    Body = "tutorial.aPlace.wayBackOut.body",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
                     // The group, not the + button: the target picker appears in
@@ -332,61 +260,44 @@ public static class TutorialCatalog
                     Anchor = "panel:navigatorButtons",
                     IsDone = (vm, s) => vm.SelectedPlace is { } p &&
                                         p.NavigatorButtons.Any(b => b.Target == BedroomToken),
-                    Hint = "+ Add navigator button, then pick My Room in the row's Target box.",
+                    Hint = "tutorial.aPlace.wayBackOut.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "Say what the button reads",
-                    Body = "Set the button's Label. Without one the game falls back to a name " +
-                           "worked out from the target, which is usually close but rarely what " +
-                           "you would have written — and it is the difference between a button " +
-                           "that says \"My Room\" and one that says whatever the level happens " +
-                           "to be called underneath.\n\n" +
-                           "Write what a player would call the place. The label also takes " +
-                           "[PV:name] tokens, so a button can change what it says once " +
-                           "something in the pack has happened.",
+                    Title = "tutorial.aPlace.sayButtonReads.title",
+                    Body = "tutorial.aPlace.sayButtonReads.body",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
                     Anchor = "panel:navigatorButtons",
                     IsDone = (vm, s) => vm.SelectedPlace is { } p &&
                                         p.NavigatorButtons.Any(b => b.Label.Trim().Length > 0),
-                    Hint = "The Label box on the navigator button row.",
+                    Hint = "tutorial.aPlace.sayButtonReads.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "A door from your bedroom",
-                    Body = "Now the way in. The bedroom every save starts in is the one place " +
-                           "you can always reach, so that is where the door goes — a vanilla " +
-                           "extension puts your own buttons onto a vanilla place's strip. Under " +
-                           "Vanilla extensions, below the places list, use + Source.",
+                    Title = "tutorial.aPlace.doorBedroom.title",
+                    Body = "tutorial.aPlace.doorBedroom.body",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
                     Anchor = "btn:addVanillaSource",
                     OnEnter = (vm, s) => s.Set("ext", vm.VanillaExtensions.Count),
                     IsDone = (vm, s) => s.GrewSince("ext", vm.VanillaExtensions.Count),
-                    Hint = "+ Source is under Vanilla extensions, below the places list.",
+                    Hint = "tutorial.aPlace.doorBedroom.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "Aim it at the bedroom",
-                    Body = "It arrives pointing at the Beach, which is only a default and not " +
-                           "what you want. Set Source place to My Room — that is 5_MyRoom, the " +
-                           "one you wake up in. An extension attaches your buttons to whichever " +
-                           "vanilla place this names, so this box decides where the door is.",
+                    Title = "tutorial.aPlace.aimBedroom.title",
+                    Body = "tutorial.aPlace.aimBedroom.body",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
                     Anchor = "panel:vanillaSource",
                     IsDone = (vm, s) => vm.VanillaExtensions.Any(e => e.Source == BedroomToken),
-                    Hint = "Source place, in the pane on the right. Pick My Room.",
+                    Hint = "tutorial.aPlace.aimBedroom.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "Point it at your room",
-                    Body = "Add a navigator button on that extension, and set its Target to the " +
-                           "place you built. This is the whole trick for seeing your work: the " +
-                           "bedroom is there the moment a save loads, so one button there " +
-                           "reaches anything you build from now on without playing through to " +
-                           "find it.",
+                    Title = "tutorial.aPlace.pointRoom.title",
+                    Body = "tutorial.aPlace.pointRoom.body",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
                     Anchor = "panel:extNavigatorButtons",
@@ -395,25 +306,20 @@ public static class TutorialCatalog
                     // that THIS one leads home.
                     OnEnter = (vm, s) => s.Set("extnav", ExtensionButtonsHome(vm)),
                     IsDone = (vm, s) => s.GrewSince("extnav", ExtensionButtonsHome(vm)),
-                    Hint = "+ Add navigator button, then set its Target to your place.",
+                    Hint = "tutorial.aPlace.pointRoom.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "Go and look at it",
-                    Body = "Save, export, and load any game. The button is on the bedroom's " +
-                           "strip, and it takes you straight into the room you just built. " +
-                           "Everything the later tutorials add goes in that room, so this one " +
-                           "door is all you need from here.",
+                    Title = "tutorial.aPlace.goLook.title",
+                    Body = "tutorial.aPlace.goLook.body",
                     Kind = StepKind.Read,
                     Tab = TabModForge,
                     Anchor = "menu:file",
                 },
                 new TutorialStep
                 {
-                    Title = "A room that exists",
-                    Body = "Two layers, some depth, and a round trip to your bedroom and back. " +
-                           "Export and you can walk into it. Validate first — it will tell you " +
-                           "if either button is pointing at nothing.",
+                    Title = "tutorial.aPlace.roomExists.title",
+                    Body = "tutorial.aPlace.roomExists.body",
                     Kind = StepKind.Read,
                     Tab = TabModForge,
                     Anchor = "btn:validate",
@@ -424,144 +330,96 @@ public static class TutorialCatalog
         new TutorialDef
         {
             Id = "dressing-the-room",
-            Group = "Places",
-            Title = "Putting things in the room",
-            Summary = "Add objects to a place, layer them, and leave one switched off.",
+            Group = "tutorial.group.places",
+            Title = "tutorial.dressingTheRoom.title",
+            Summary = "tutorial.dressingTheRoom.summary",
             Level = 3,
             Steps = new[]
             {
                 new TutorialStep
                 {
-                    Title = "A room is more than two pictures",
-                    Body = "The back and front layers are the room itself. Everything ELSE in it " +
-                           "is a GameObject: its own picture, at its own position, with its own " +
-                           "place in the stack — and, unlike the layers, something a dialogue or " +
-                           "a rule can switch on and off while the game runs.\n\n" +
-                           "That is how a room changes. A door that opens is two objects, one " +
-                           "switched off. A coat left on a chair is an object that appears once " +
-                           "a conversation has happened. A lamp that comes on at night is the " +
-                           "same trick again.\n\n" +
-                           "Object art is NOT a level layer, so it is not 2048 by 1136. Draw it " +
-                           "at whatever size the thing really is, on a transparent background; " +
-                           "it is placed in the room rather than filling it.",
+                    Title = "tutorial.dressingTheRoom.roomMoreThanTwo.title",
+                    Body = "tutorial.dressingTheRoom.roomMoreThanTwo.body",
                     Kind = StepKind.Read,
                     Tab = TabPlaces,
                 },
                 new TutorialStep
                 {
-                    Title = "Open the room you built",
-                    Body = "This carries on in the same pack. Click your place in the list on " +
-                           "the left — the one you made two tutorials ago, not a vanilla " +
-                           "extension.",
+                    Title = "tutorial.dressingTheRoom.openRoomBuilt.title",
+                    Body = "tutorial.dressingTheRoom.openRoomBuilt.body",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
                     Anchor = "panel:placeList",
                     IsDone = (vm, s) => vm.SelectedPlace != null,
-                    Hint = "Your places are the upper list; vanilla extensions are below it.",
+                    Hint = "tutorial.dressingTheRoom.openRoomBuilt.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "Add an object",
-                    Body = "Use + Add GameObject. It arrives empty and unnamed, which is fine — " +
-                           "the next step is what makes it a thing.",
+                    Title = "tutorial.dressingTheRoom.addObject.title",
+                    Body = "tutorial.dressingTheRoom.addObject.body",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
                     Anchor = "panel:placeGameObjects",
                     OnEnter = (vm, s) => s.Set("gos", CountGameObjects(vm)),
                     IsDone = (vm, s) => s.GrewSince("gos", CountGameObjects(vm)),
-                    Hint = "+ Add GameObject, under the GameObjects box.",
+                    Hint = "tutorial.dressingTheRoom.addObject.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "Give it a name and a picture",
-                    Body = "The name is how everything else finds this object — a rule that " +
-                           "switches it on names it, and names repeat all over a level, so pick " +
-                           "something you would recognise months from now.\n\n" +
-                           "For the picture use TutorialArt/Locations/Vase.png. It is worth " +
-                           "looking at before you pick it: it is a vase and almost nothing " +
-                           "else, on a transparent background, at the size a vase actually is. " +
-                           "Compare that to Room.png, which contains the same vase inside a " +
-                           "full 2048 by 1136 room — the padding IS the difference between a " +
-                           "layer and a prop. Art with a room's worth of empty space around it " +
-                           "cannot be placed, only laid over everything.",
+                    Title = "tutorial.dressingTheRoom.giveNamePicture.title",
+                    Body = "tutorial.dressingTheRoom.giveNamePicture.body",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
                     Anchor = "panel:placeGameObjects",
                     IsDone = (vm, s) => FirstGameObject(vm) is { } g &&
                                         g.Name.Trim().Length > 0 && g.Sprite.Trim().Length > 0,
-                    Hint = "Select the object in the tree, then fill in Name and its sprite.",
+                    Hint = "tutorial.dressingTheRoom.giveNamePicture.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "Put it where you want it",
-                    Body = "Drag the object in the preview. The gizmo moves the real position — " +
-                           "this is not a preview-only control, it is the same X and Y you " +
-                           "could type in by hand, and typing is the fallback when you want an " +
-                           "exact number rather than a look.\n\n" +
-                           "Put the vase somewhere it could plausibly stand. It will be drawing " +
-                           "over the whole room at the moment, which the next step fixes.",
+                    Title = "tutorial.dressingTheRoom.putWhereWant.title",
+                    Body = "tutorial.dressingTheRoom.putWhereWant.body",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
                     Anchor = "panel:placePreview",
                     AlsoAllow = new[] { "panel:placeGameObjects" },
                     OnEnter = (vm, s) => s.Set("pos", PropPosition(vm)),
                     IsDone = (vm, s) => PropPosition(vm) != s.Get<string>("pos"),
-                    Hint = "Click the object in the preview, then drag it.",
+                    Hint = "tutorial.dressingTheRoom.putWhereWant.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "Decide what it stands in front of",
-                    Body = "Sorting order is the stack. The back layer sits at -12 and the front " +
-                           "layer at -10, so an object at -11 stands BETWEEN them: behind the " +
-                           "furniture in the front layer, in front of the wall behind it. " +
-                           "Anything above -10 draws over the whole room.\n\n" +
-                           "A new object starts at 0, which is over everything. Set it to -11 " +
-                           "and watch the preview put it into the room rather than on top of it.",
+                    Title = "tutorial.dressingTheRoom.decideStandsFront.title",
+                    Body = "tutorial.dressingTheRoom.decideStandsFront.body",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
                     Anchor = "panel:placeGameObjects",
                     AlsoAllow = new[] { "panel:placePreview" },
                     IsDone = (vm, s) => FirstGameObject(vm) is { } g && g.SortingOrder < 0,
-                    Hint = "Sorting order, on the selected object. -11 puts it between the layers.",
+                    Hint = "tutorial.dressingTheRoom.decideStandsFront.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "Leave it switched off",
-                    Body = "Untick Start active. The object is still in the room, at the position " +
-                           "you gave it — it simply is not shown when the player arrives.\n\n" +
-                           "This is half of every change a room ever makes. The other half is a " +
-                           "Set-Active action, from a dialogue node or an integration rule, " +
-                           "naming this object. Build the object switched off now and the rule " +
-                           "that reveals it has something to point at later.",
+                    Title = "tutorial.dressingTheRoom.leaveSwitchedOff.title",
+                    Body = "tutorial.dressingTheRoom.leaveSwitchedOff.body",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
                     Anchor = "panel:placeGameObjects",
                     IsDone = (vm, s) => FirstGameObject(vm) is { StartActive: false },
-                    Hint = "Start active, on the selected object. Untick it.",
+                    Hint = "tutorial.dressingTheRoom.leaveSwitchedOff.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "What the preview is telling you",
-                    Body = "An object that starts switched off is drawn faded, so you can still " +
-                           "position it — the game will draw nothing there until something turns " +
-                           "it on. Fade objects that start inactive turns that off while you " +
-                           "work.\n\n" +
-                           "The same goes for anything under a switched-off parent: the game " +
-                           "draws none of it, so the preview fades all of it. If a whole group " +
-                           "of your objects has gone pale, that is why.",
+                    Title = "tutorial.dressingTheRoom.previewTelling.title",
+                    Body = "tutorial.dressingTheRoom.previewTelling.body",
                     Kind = StepKind.Read,
                     Tab = TabPlaces,
                     Anchor = "panel:placePreview",
                 },
                 new TutorialStep
                 {
-                    Title = "A room that can change",
-                    Body = "You now have a room with something in it that is not part of the " +
-                           "picture — placed, layered, and waiting to be switched on.\n\n" +
-                           "Objects nest, so one can be a container for several and switching " +
-                           "the parent moves all of them at once. And the Documentation section " +
-                           "covers the rest of what a place carries: masks, weather, and the " +
-                           "beach ambience a room can keep or drop.",
+                    Title = "tutorial.dressingTheRoom.roomCanChange.title",
+                    Body = "tutorial.dressingTheRoom.roomCanChange.body",
                     Kind = StepKind.Read,
                     Tab = TabModForge,
                 },
@@ -571,68 +429,46 @@ public static class TutorialCatalog
         new TutorialDef
         {
             Id = "on-the-world-map",
-            Group = "Map Buttons",
-            Title = "On the world map",
-            Summary = "Put a place on the world map so a player can travel to it directly.",
+            Group = "tutorial.group.mapButtons",
+            Title = "tutorial.onTheWorldMap.title",
+            Summary = "tutorial.onTheWorldMap.summary",
             Level = 4,
             Steps = new[]
             {
                 new TutorialStep
                 {
-                    Title = "Two ways to reach a room",
-                    Body = "You have already built one: a navigator button on the bedroom's " +
-                           "strip, which is a door from one room to another. It works, and it " +
-                           "is the right shape for somewhere that sits BEHIND another place — a " +
-                           "back office off a shop, a bedroom off a hall.\n\n" +
-                           "The world map is the other way, and it means something different. " +
-                           "A place on the map is a destination in its own right rather than a " +
-                           "room reached through another one.\n\n" +
-                           "The map is not open from everywhere, mind: the player reaches it by " +
-                           "going to the Garage, into the Car, and pressing Drive. So a map " +
-                           "button suits somewhere they would deliberately travel to, and a " +
-                           "navigator button suits somewhere they walk into from next door. " +
-                           "Most places want one or the other, not both.",
+                    Title = "tutorial.onTheWorldMap.twoWaysReachRoom.title",
+                    Body = "tutorial.onTheWorldMap.twoWaysReachRoom.body",
                     Kind = StepKind.Read,
                     Tab = TabMapButtons,
                 },
                 new TutorialStep
                 {
-                    Title = "Add a map button",
-                    Body = "Use + Map button. It appears as a card in the list — the map buttons " +
-                           "tab has no separate editor, each button IS its row.",
+                    Title = "tutorial.onTheWorldMap.addMapButton.title",
+                    Body = "tutorial.onTheWorldMap.addMapButton.body",
                     Kind = StepKind.Do,
                     Tab = TabMapButtons,
                     Anchor = "btn:addMapButton",
                     AlsoAllow = new[] { "panel:mapButtonList" },
                     OnEnter = (vm, s) => s.Set("mapbtns", vm.MapButtons.Count),
                     IsDone = (vm, s) => s.GrewSince("mapbtns", vm.MapButtons.Count),
-                    Hint = "+ Map button, at the top of the tab.",
+                    Hint = "tutorial.onTheWorldMap.addMapButton.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "Say where it goes",
-                    Body = "Set Target place to the room you built. A button with no target is " +
-                           "the quietest mistake in the editor: it saves, it exports, it appears " +
-                           "on the map, and clicking it does nothing at all.\n\n" +
-                           "Validate catches it, which is the reason to run Validate before " +
-                           "every export rather than after something goes wrong.",
+                    Title = "tutorial.onTheWorldMap.sayWhereGoes.title",
+                    Body = "tutorial.onTheWorldMap.sayWhereGoes.body",
                     Kind = StepKind.Do,
                     Tab = TabMapButtons,
                     Anchor = "panel:mapButtonList",
                     IsDone = (vm, s) => vm.MapButtons.Count > 0 &&
                                         vm.MapButtons[^1].Target.Trim().Length > 0,
-                    Hint = "Target place, on the card you just added.",
+                    Hint = "tutorial.onTheWorldMap.sayWhereGoes.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "Choose which menu it lives in",
-                    Body = "The world map is not one list of buttons — it is five radial menus, " +
-                           "one per district: Seaside, The Line, Neon Row, Shopside and " +
-                           "Foundry. District decides which one your button joins.\n\n" +
-                           "A new button arrives in Foundry because it had to arrive somewhere. " +
-                           "That is a default, not a decision. Pick the district your place " +
-                           "actually belongs to — a player who opens the wrong menu will not " +
-                           "find it, and nothing will tell them it exists.",
+                    Title = "tutorial.onTheWorldMap.chooseWhichMenuLives.title",
+                    Body = "tutorial.onTheWorldMap.chooseWhichMenuLives.body",
                     Kind = StepKind.Do,
                     Tab = TabMapButtons,
                     Anchor = "panel:mapButtonList",
@@ -641,47 +477,31 @@ public static class TutorialCatalog
                     IsDone = (vm, s) => vm.MapButtons.Count > 0 &&
                                         vm.MapButtons[^1].District.Trim().Length > 0 &&
                                         vm.MapButtons[^1].District != s.Get<string>("district"),
-                    Hint = "District, on the same card. Any of the five except the one it started in.",
+                    Hint = "tutorial.onTheWorldMap.chooseWhichMenuLives.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "Give it something to read",
-                    Body = "Label is the text on the button. Write what a player would call the " +
-                           "place, not what you called it in the editor.\n\n" +
-                           "It also accepts [PV:name], which is replaced with one of your pack's " +
-                           "variables while the game runs — so a button can read \"The Shop\" " +
-                           "before a conversation and \"Anna's Shop\" after one, without a " +
-                           "second button.",
+                    Title = "tutorial.onTheWorldMap.giveSomethingRead.title",
+                    Body = "tutorial.onTheWorldMap.giveSomethingRead.body",
                     Kind = StepKind.Do,
                     Tab = TabMapButtons,
                     Anchor = "panel:mapButtonList",
                     IsDone = (vm, s) => vm.MapButtons.Count > 0 &&
                                         vm.MapButtons[^1].Label.Trim().Length > 0,
-                    Hint = "Label, on the same card.",
+                    Hint = "tutorial.onTheWorldMap.giveSomethingRead.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "The two you can leave alone",
-                    Body = "Music switches the background track when the button is used, which " +
-                           "is worth setting for somewhere with its own atmosphere and worth " +
-                           "leaving empty otherwise — an empty Music keeps whatever was playing.\n\n" +
-                           "Conditions decide whether the button is shown at all. An empty list " +
-                           "means always, which is what you want for now. Fill it in and the " +
-                           "place stays off the map until the player has earned it — the same " +
-                           "condition rows you will meet on dialogues and rules.",
+                    Title = "tutorial.onTheWorldMap.twoCanLeaveAlone.title",
+                    Body = "tutorial.onTheWorldMap.twoCanLeaveAlone.body",
                     Kind = StepKind.Read,
                     Tab = TabMapButtons,
                     Anchor = "panel:mapButtonList",
                 },
                 new TutorialStep
                 {
-                    Title = "Somewhere to go",
-                    Body = "Validate, export, and open the world map in game: your place is in " +
-                           "the district you chose, under the label you wrote.\n\n" +
-                           "You now have both routes — a door from the bedroom and a place on " +
-                           "the map — and they are independent. Removing one does not affect " +
-                           "the other, which is worth knowing when a place becomes reachable " +
-                           "two ways by accident.",
+                    Title = "tutorial.onTheWorldMap.somewhereGo.title",
+                    Body = "tutorial.onTheWorldMap.somewhereGo.body",
                     Kind = StepKind.Read,
                     Tab = TabModForge,
                     Anchor = "btn:validate",
@@ -736,40 +556,35 @@ public static class TutorialCatalog
         new TutorialDef
         {
             Id = "smoke",
-            Group = "Diagnostics",
-            Title = "Check the tutorial system",
-            Summary = "Three steps that prove the highlighting, the gating and the exit all work.",
+            Group = "tutorial.group.diagnostics",
+            Title = "tutorial.smoke.title",
+            Summary = "tutorial.smoke.summary",
             Level = 0,
             Steps = new[]
             {
                 new TutorialStep
                 {
-                    Title = "This is a tutorial step",
-                    Body = "Everything outside the bright area is dimmed, and clicks there do " +
-                           "nothing, so there is only one place to go. Exit tutorial is always " +
-                           "available, at any step.",
+                    Title = "tutorial.smoke.tutorialStep.title",
+                    Body = "tutorial.smoke.tutorialStep.body",
                     Kind = StepKind.Read,
                     Tab = TabModForge,
                     Anchor = "tab:modforge",
                 },
                 new TutorialStep
                 {
-                    Title = "Now do something",
-                    Body = "Add a character. This step will not move on until one has actually " +
-                           "been added, and it will notice however you add it — the button here, " +
-                           "or any other way.",
+                    Title = "tutorial.smoke.nowDoSomething.title",
+                    Body = "tutorial.smoke.nowDoSomething.body",
                     Kind = StepKind.Do,
                     Tab = TabCharacters,
                     Anchor = "btn:addCharacter",
                     OnEnter = (vm, s) => s.Set("chars", vm.Characters.Count),
                     IsDone = (vm, s) => s.GrewSince("chars", vm.Characters.Count),
-                    Hint = "Use + Character in the toolbar above the list.",
+                    Hint = "tutorial.smoke.nowDoSomething.hint",
                 },
                 new TutorialStep
                 {
-                    Title = "That is the whole idea",
-                    Body = "Read steps wait for Next, Do steps wait for the work, and Free steps " +
-                           "accept anything reasonable. Finish to close the overlay.",
+                    Title = "tutorial.smoke.wholeIdea.title",
+                    Body = "tutorial.smoke.wholeIdea.body",
                     Kind = StepKind.Read,
                     Anchor = "",
                 },
@@ -811,6 +626,25 @@ public static class TutorialCatalog
 
     /// <summary>The vanilla bedroom every save starts in.</summary>
     private const string BedroomToken = "vanilla:5_MyRoom";
+
+    /// <summary>
+    /// Whether <paramref name="name"/> is still the placeholder a new item
+    /// arrives with, so a "give it a name" step can tell it was skipped.
+    /// <para/>
+    /// The placeholder is written in the pack's language, or the one being
+    /// edited ("Nueva escena") - see <see cref="NewNames"/> - so asking only
+    /// whether the name starts with the English "New " let every other
+    /// language through unrenamed. Any language's counts: an item made before
+    /// the pack's language was changed keeps the one it was made with, and one
+    /// made by an earlier version is in whatever the editor was shown in.
+    /// </summary>
+    internal static bool StillPlaceholder(string name, string newNameKey)
+    {
+        string n = name.Trim();
+        return n.Length == 0
+            || n.StartsWith(Loc.T(newNameKey), StringComparison.OrdinalIgnoreCase)
+            || NewNames.Everywhere(newNameKey).Any(p => n.StartsWith(p, StringComparison.OrdinalIgnoreCase));
+    }
 
     /// <summary>
     /// Whether a navigator / map target points at a place in THIS pack.

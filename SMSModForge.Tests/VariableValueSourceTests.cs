@@ -18,6 +18,7 @@ namespace SMSModForge.Tests;
 /// So it is named the same thing the Set-variable editor already named it, and
 /// it is only there once there is a <c>$name</c> to look up.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class VariableValueSourceTests
 {
     private readonly ITestOutputHelper _out;

@@ -58,6 +58,22 @@ namespace SMSModForge.Shared
             /// <summary>Folder holding another copy of the same pack, or "".</summary>
             public string ShadowedIn = "";
 
+            /// <summary>
+            /// The language ModForge is showing, or "" when it is showing the
+            /// words as they were written.
+            /// </summary>
+            public string Language = "";
+
+            /// <summary>
+            /// The languages this pack carries a translation for. Empty for a
+            /// pack with none, which is most of them.
+            /// </summary>
+            public List<string> Translations = new List<string>();
+
+            /// <summary>The language the pack's own words are in - its
+            /// manifest's <c>language</c>, English when it does not say.</summary>
+            public string OwnLanguage = "en";
+
             private static string ForgeVersion_Current()
             {
                 return Shared.ForgeVersion.Current;
@@ -91,7 +107,7 @@ namespace SMSModForge.Shared
             if (!facts.Readable)
             {
                 report.Level = Level.Error;
-                report.Tags.Add("Could not be read");
+                report.Tags.Add(GameTexts.T("game.pack.unreadable"));
                 return report;
             }
 
@@ -103,38 +119,53 @@ namespace SMSModForge.Shared
             // Only when both stamps exist: a pack from before the stamp, or a
             // game whose version could not be read, is not evidence of a
             // mismatch.
-            if (!string.IsNullOrEmpty(facts.GameVersion) &&
+            bool wrongGame =
+                !string.IsNullOrEmpty(facts.GameVersion) &&
                 !string.IsNullOrEmpty(facts.RunningGameVersion) &&
                 !string.Equals(facts.GameVersion, facts.RunningGameVersion,
-                               System.StringComparison.OrdinalIgnoreCase))
+                               System.StringComparison.OrdinalIgnoreCase);
+
+            if (wrongGame)
             {
                 report.Level = Level.Error;
-                report.Tags.Add("Incompatible game version (" + facts.GameVersion + ")");
+                report.Tags.Add(GameTexts.F("game.pack.otherGameVersion", "version", facts.GameVersion));
             }
 
-            switch (ForgeVersion.Judge(facts.ForgeVersion, facts.RuntimeForgeVersion))
+            // The ModForge stamp, but only when the game build agrees. These
+            // two are not independent problems to be listed side by side: a
+            // pack written for another build of the game is going to be fixed
+            // by its author rebuilding it, and rebuilding it restamps the
+            // ModForge version as well. Saying both put two numbers on one row
+            // - "Incompatible game version (1.7A) - Built for ModForge 1.0.0"
+            // - and left the player deciding which of them to act on, when only
+            // one of them is theirs to act on and the other is a consequence of
+            // it. The game version replaces it.
+            if (!wrongGame)
             {
-                // Something the pack asks for arrived after this runtime was
-                // built, so it is genuinely missing.
-                case ForgeVersion.Standing.PackIsNewer:
-                    report.Level = Level.Error;
-                    report.Tags.Add("Needs ModForge " + facts.ForgeVersion);
-                    break;
+                switch (ForgeVersion.Judge(facts.ForgeVersion, facts.RuntimeForgeVersion))
+                {
+                    // Something the pack asks for arrived after this runtime was
+                    // built, so it is genuinely missing.
+                    case ForgeVersion.Standing.PackIsNewer:
+                        report.Level = Level.Error;
+                        report.Tags.Add(GameTexts.F("game.pack.needsForge", "version", facts.ForgeVersion));
+                        break;
 
-                // Should work, but is not what the tool would write today.
-                case ForgeVersion.Standing.PackIsOlder:
-                    Raise(report, Level.Warning);
-                    report.Tags.Add("Built for ModForge " + facts.ForgeVersion);
-                    break;
+                    // Should work, but is not what the tool would write today.
+                    case ForgeVersion.Standing.PackIsOlder:
+                        Raise(report, Level.Warning);
+                        report.Tags.Add(GameTexts.F("game.pack.olderForge", "version", facts.ForgeVersion));
+                        break;
 
-                // No stamp at all. Worth saying rather than passing over in
-                // silence: it means nothing here can tell whether the pack and
-                // the runtime agree, and "we cannot check" is a different thing
-                // from "we checked and it is fine".
-                case ForgeVersion.Standing.Unknown:
-                    Raise(report, Level.Warning);
-                    report.Tags.Add("No ModForge version recorded");
-                    break;
+                    // No stamp at all. Worth saying rather than passing over in
+                    // silence: it means nothing here can tell whether the pack and
+                    // the runtime agree, and "we cannot check" is a different thing
+                    // from "we checked and it is fine".
+                    case ForgeVersion.Standing.Unknown:
+                        Raise(report, Level.Warning);
+                        report.Tags.Add(GameTexts.T("game.pack.noForgeVersion"));
+                        break;
+                }
             }
 
             // Installed twice, with one copy live. This is how somebody edits a
@@ -142,10 +173,55 @@ namespace SMSModForge.Shared
             if (!string.IsNullOrEmpty(facts.ShadowedIn))
             {
                 Raise(report, Level.Warning);
-                report.Tags.Add("Installed twice, using from " + facts.Folder + " folder");
+                report.Tags.Add(GameTexts.F("game.pack.installedTwice", "folder", facts.Folder));
+            }
+
+            // Being read in a language this pack was not translated into, so
+            // its words come out as its author wrote them while everything
+            // around them is in the player's language.
+            //
+            // Two things keep this from firing on everybody.
+            //
+            // Only for a pack that HAS translations. A pack with none is simply
+            // a pack in its own language, and saying so about every pack
+            // installed would put a line under all of them and teach people to
+            // stop reading the colour - which costs the real warnings above.
+            //
+            // And only when ModForge is being read in something other than the
+            // language the pack is written in: its own words are in the
+            // player's language already.
+            if (!string.IsNullOrEmpty(facts.Language)
+                && !Speaks(new List<string> { string.IsNullOrEmpty(facts.OwnLanguage) ? "en" : facts.OwnLanguage },
+                           facts.Language)
+                && facts.Translations != null && facts.Translations.Count > 0
+                && !Speaks(facts.Translations, facts.Language))
+            {
+                Raise(report, Level.Warning);
+                report.Tags.Add(GameTexts.T("game.pack.notInYourLanguage"));
             }
 
             return report;
+        }
+
+        /// <summary>
+        /// Whether one of <paramref name="has"/> is the language wanted.
+        /// <para/>
+        /// A pack translated into "pt-BR" counts for a player reading "pt": the
+        /// words are Portuguese either way, and telling somebody their pack is
+        /// untranslated while they are reading it in their own language would
+        /// be worse than saying nothing.
+        /// </summary>
+        private static bool Speaks(List<string> has, string wanted)
+        {
+            foreach (string code in has)
+            {
+                if (string.IsNullOrEmpty(code)) continue;
+                if (string.Equals(code, wanted, System.StringComparison.OrdinalIgnoreCase)) return true;
+                if (string.Equals(PluralRules.LanguageOf(code), PluralRules.LanguageOf(wanted),
+                                  System.StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+            return false;
         }
 
         /// <summary>Raise the level, never lower it.</summary>

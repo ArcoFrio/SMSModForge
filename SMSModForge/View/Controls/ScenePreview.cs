@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using SMSModForge.Localization;
 
 namespace SMSModForge.View.Controls;
 
@@ -199,6 +200,9 @@ public sealed class ScenePreview : Grid
         // A tooltip that outlived its owner sits over the one thing an
         // author is trying to look at. See ToolTipDismisser.
         View.ToolTipDismisser.KeepClearOf(this);
+        // Its words are worked out as it draws: drawn again when the language
+        // changes, so none is left in the old one.
+        LocText.Follow(this, Refresh);
 
         Width = MinWidth = MaxWidth = FixedSize;
         Height = MinHeight = MaxHeight = FixedSize;
@@ -257,14 +261,14 @@ public sealed class ScenePreview : Grid
         if (string.IsNullOrWhiteSpace(sprite))
         {
             ShowPlaceholder(string.IsNullOrEmpty(root)
-                ? "Save the pack and set a scene sprite path."
-                : "No scene sprite path set.");
+                ? Loc.T("preview.scene.saveAndSet")
+                : Loc.T("preview.scene.noSprite"));
             return;
         }
 
         if (string.IsNullOrEmpty(root))
         {
-            ShowPlaceholder("Save the pack first so paths can be resolved.");
+            ShowPlaceholder(Loc.T("preview.saveFirst"));
             return;
         }
 
@@ -272,7 +276,7 @@ public sealed class ScenePreview : Grid
         string scenePath = Path.Combine(root, sprite);
         if (!File.Exists(scenePath))
         {
-            ShowPlaceholder($"Scene sprite not found:\n{scenePath}");
+            ShowPlaceholder(Loc.F("preview.scene.missing", "path", scenePath));
             return;
         }
 
@@ -406,10 +410,7 @@ public sealed class ScenePreview : Grid
 
         if (still == null)
         {
-            ShowPlaceholder("Video scene\n" + name
-                            + "\n\nWindows has no decoder for this format, so it cannot be "
-                            + "previewed here. It still plays in game - the game brings its "
-                            + "own.");
+            ShowPlaceholder(Loc.F("preview.scene.noDecoder", "file", name));
             return;
         }
 
@@ -425,7 +426,7 @@ public sealed class ScenePreview : Grid
         ShowFrame(root);
         _placeholder.Visibility = Visibility.Collapsed;
 
-        _note.Text = "First frame only - Windows cannot play this format. It animates in game.";
+        _note.Text = Loc.T("preview.scene.firstFrameOnly");
         _note.Visibility = Visibility.Visible;
     }
 

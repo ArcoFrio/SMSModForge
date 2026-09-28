@@ -21,6 +21,10 @@ namespace SMSModForge.PackPlugin
         public string Description = "";
         public int SortOrder;
         public readonly List<TaskSpec> Tasks = new List<TaskSpec>();
+
+        /// <summary>What happens to a player who had finished the quest when
+        /// this version gives it tasks it did not have - see <see cref="QuestGrowth"/>.</summary>
+        public string WhenStepsAdded = QuestGrowth.LeaveFinished;
     }
 
     /// <summary>One task, and the subtasks under it.</summary>
@@ -29,6 +33,10 @@ namespace SMSModForge.PackPlugin
         public string Key = "";
         public string Name = "";
         public string Description = "";
+
+        /// <summary>The pack the task's words are from: what a
+        /// <c>[PV:name]</c> in them is read from.</summary>
+        public string PackId = "";
 
         /// <summary>How the game decides this task is done. The game's own
         /// quests use SubtasksInSequence for 191 of their 230 tasks, including
@@ -269,8 +277,10 @@ namespace SMSModForge.PackPlugin
             // catalogue's entry with it.
             quest.hideFlags = HideFlags.DontUnloadUnusedAsset;
 
-            Set(quest, "m_Title", new PropertyGetString(spec.Title ?? ""));
-            Set(quest, "m_Description", new PropertyGetString(spec.Description ?? ""));
+            // Through the pack's own getter, so a {PC} or a [PV:name] in them
+            // reads as the name or the value each time the journal draws it.
+            Set(quest, "m_Title", GetStringPackText.For(spec.Title, spec.PackId));
+            Set(quest, "m_Description", GetStringPackText.For(spec.Description, spec.PackId));
             Set(quest, "m_SortOrder", spec.SortOrder);
             Set(quest, "m_UniqueId", new UniqueID(guid));
 
@@ -345,8 +355,8 @@ namespace SMSModForge.PackPlugin
         {
             var task = new GcTask();
             Set(task, "m_Completion", spec.Completion);
-            Set(task, "m_Name", new PropertyGetString(spec.Name ?? ""));
-            Set(task, "m_Description", new PropertyGetString(spec.Description ?? ""));
+            Set(task, "m_Name", GetStringPackText.For(spec.Name, spec.PackId));
+            Set(task, "m_Description", GetStringPackText.For(spec.Description, spec.PackId));
             Set(task, "m_UseCounter", spec.Counter ? ProgressType.Value : ProgressType.None);
             if (spec.Counter) Set(task, "m_CountTo", new PropertyGetDecimal(spec.CountTo));
             if (spec.HideUntilStarted || spec.HideUntilConditions) Set(task, "m_IsHidden", true);
@@ -395,8 +405,8 @@ namespace SMSModForge.PackPlugin
         /// (<c>TQuestUI.Refresh</c>), so the new text is what the player sees
         /// the next time the quest is on screen.
         /// </summary>
-        internal static void SetDescription(GcQuest quest, string text)
-            => Set(quest, "m_Description", new PropertyGetString(text ?? ""));
+        internal static void SetDescription(GcQuest quest, string text, string packId)
+            => Set(quest, "m_Description", GetStringPackText.For(text, packId));
 
         /// <summary>
         /// The description property a quest carries, so it can be put back.

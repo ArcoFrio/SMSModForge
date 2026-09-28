@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Model;
 
@@ -81,11 +82,7 @@ public static class PackMigration
             if (!Migrated) return "";
 
             var lines = _changes.Select(c => "  • " + c);
-            return "This pack was written by an earlier version of ModForge and has been "
-                 + "brought up to date:\n\n"
-                 + string.Join("\n", lines)
-                 + "\n\nNothing has been written yet — your file is untouched until you save. "
-                 + "When you do, a copy of the original is kept beside it.";
+            return Loc.F("migration.report", "changes", string.Join("\n", lines));
         }
     }
 
@@ -112,7 +109,9 @@ public static class PackMigration
     /// already-current pack has to report nothing — because this runs on every
     /// load, including the load right after a save.
     /// </summary>
-    public static Report Apply(ModPack? pack)
+    /// <param name="packRoot">The pack's folder, for the steps that need to
+    /// know what is inside it; null leaves those out.</param>
+    public static Report Apply(ModPack? pack, string? packRoot = null)
     {
         var report = new Report();
         if (pack == null) return report;
@@ -123,59 +122,61 @@ public static class PackMigration
         // that have nothing to migrate.
         int adopted = CharacterMerge.Apply(pack);
         if (adopted > 0)
-            report.Note("Actors folded into characters", adopted);
+            report.Note(Loc.T("migration.actorsFolded"), adopted);
 
         int recognised = CharacterMerge.LastAdoptedVanilla;
         if (recognised > 0)
-            report.Note("Vanilla characters recognised and linked to the game's cast", recognised);
+            report.Note(Loc.T("migration.vanillaRecognised"), recognised);
 
         int folded = FoldNegatedBooleans(pack);
         if (folded > 0)
-            report.Note("\"Negate\" folded into True/False on boolean checks", folded);
+            report.Note(Loc.T("migration.negateFolded"), folded);
 
         int merged = MergeSupersededActions(pack);
         if (merged > 0)
-            report.Note("Actions merged into the ones that replaced them", merged);
+            report.Note(Loc.T("migration.actionsMerged"), merged);
 
         int variables = MergeVariableConditions(pack);
         if (variables > 0)
-            report.Note("Variable checks merged into one with a Comparison field", variables);
+            report.Note(Loc.T("migration.variableChecksMerged"), variables);
 
         int reset = ResetBorrowedCharactersWrittenBefore(pack);
         if (reset > 0)
-            report.Note("The game's characters put back the way the game has them — nothing a "
-                        + "pack said about them before this version reached the game anyway", reset);
+            report.Note(Loc.T("migration.borrowedReset"), reset);
 
         int renamed = NormaliseBorrowedIdentifiers(pack);
         if (renamed > 0)
-            report.Note("Machine-written names on the game's characters put back the way "
-                        + "the editor derives them now", renamed);
+            report.Note(Loc.T("migration.borrowedRenamed"), renamed);
 
         int reclaimed = TakeBackWhatIsNotThePacksToSay(pack);
         if (reclaimed > 0)
-            report.Note("Fields on the game's characters that a pack no longer sets - name, "
-                        + "bust source, default outfit - put back to the game's", reclaimed);
+            report.Note(Loc.T("migration.borrowedReclaimed"), reclaimed);
 
         int redundant = DropWhatMatchesTheDefault(pack);
         if (redundant > 0)
-            report.Note("Settings dropped from the game's characters that only repeated "
-                        + "what those characters already had", redundant);
+            report.Note(Loc.T("migration.borrowedRedundant"), redundant);
+
+        int madeRelative = WallpapersByTheirPathInThePack(pack, packRoot);
+        if (madeRelative > 0)
+            report.Note(Loc.T("migration.wallpaperPathsRelative"), madeRelative);
+
+        int playerVoice = ForgetThePlayersVoice(pack);
+        if (playerVoice > 0)
+            report.Note(Loc.T("migration.playerVoice"), playerVoice);
 
         int restated = DropRestatedFaces(pack);
         if (restated > 0)
-            report.Note("Expressions dropped from the game's characters that only "
-                        + "restated faces the game already gives them", restated);
+            report.Note(Loc.T("migration.restatedFaces"), restated);
 
         int neutral = GiveEveryCharacterNeutral(pack);
         if (neutral > 0)
-            report.Note("Characters given the neutral expression every character now starts with", neutral);
+            report.Note(Loc.T("migration.neutralGiven"), neutral);
 
         if (GiveItAVersion(pack))
-            report.Note($"Given a version to start from ({pack.Version})");
+            report.Note(Loc.F("migration.versionGiven", "version", pack.Version));
 
         if (StampTheToolThatWroteIt(pack))
-            report.Note("Stamped with the ModForge version that writes it, so the "
-                        + "game can tell you when a pack needs a newer one");
+            report.Note(Loc.T("migration.stamped"));
 
         return report;
     }
@@ -397,6 +398,60 @@ public static class PackMigration
             }
         }
         return taken;
+    }
+
+    /// <summary>
+    /// A wallpaper image named by a full path on the author's machine that is
+    /// inside the pack's folder, named by its path in the pack instead:
+    /// "Z:\Modding\Elfenlied\Wallpapers\Elf.png" becomes "Wallpapers/Elf.png".
+    /// <para/>
+    /// The box takes whatever is pasted into it, and a full path is found by
+    /// nothing a player has: the plugin read the pack for the path as written,
+    /// skipped the wallpaper, and its button never appeared (an author's
+    /// report, 2026-09-27). A path outside the pack is left as it is - there is
+    /// no path in the pack to give it - and the validator says so.
+    /// </summary>
+    private static int WallpapersByTheirPathInThePack(ModPack pack, string? packRoot)
+    {
+        if (string.IsNullOrEmpty(packRoot) || pack.Wallpapers == null) return 0;
+        string root;
+        try { root = Path.GetFullPath(packRoot).TrimEnd('\\', '/') + Path.DirectorySeparatorChar; }
+        catch (Exception) { return 0; }
+
+        int changed = 0;
+        foreach (var w in pack.Wallpapers)
+        {
+            string? path = w.SpritePath;
+            if (string.IsNullOrEmpty(path) || !Shared.PackPaths.IsFullPath(path)) continue;
+            string full;
+            try { full = Path.GetFullPath(path); }
+            catch (Exception) { continue; }
+            if (!full.StartsWith(root, StringComparison.OrdinalIgnoreCase)) continue;
+            w.SpritePath = full.Substring(root.Length).Replace(Path.DirectorySeparatorChar, '/');
+            changed++;
+        }
+        return changed;
+    }
+
+    /// <summary>
+    /// A typing voice a pack set for the player. The player types the same way
+    /// in every pack now (<see cref="Shared.VanillaSpeech.Player"/>), the
+    /// editor greys the fields, and the plugin no longer asks - so a voice left
+    /// in the file would be a setting that does nothing, shown nowhere, and
+    /// there to mislead. SMSAndroids' own was exactly the voice now given to
+    /// everyone.
+    /// </summary>
+    private static int ForgetThePlayersVoice(ModPack pack)
+    {
+        if (pack.Characters == null) return 0;
+        int dropped = 0;
+        foreach (var character in pack.Characters)
+            if (character.IsPlayer && character.Typewriter != null)
+            {
+                character.Typewriter = null;
+                dropped++;
+            }
+        return dropped;
     }
 
     /// <summary>

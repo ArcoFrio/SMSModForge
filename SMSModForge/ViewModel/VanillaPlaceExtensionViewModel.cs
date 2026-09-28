@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using SMSModForge.Model;
+using SMSModForge.Localization;
 
 namespace SMSModForge.ViewModel;
 
@@ -167,15 +168,15 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
         get
         {
             if (!VanillaLevelCatalog.IsAvailable)
-                return "No vanilla level catalog found. Run Tools › SMSModForge › Extract Vanilla Levels in the game's Unity project, drop the output in Resources/VanillaLevelArt, and rebuild.";
+                return Loc.T("places.vanilla.noCatalog");
             var lv = CatalogLevel;
             if (lv == null)
                 return string.IsNullOrEmpty(Model.Source)
-                    ? "Pick a source place to preview it."
-                    : $"'{Model.Source}' isn't in the extracted catalog.";
+                    ? Loc.T("places.vanilla.pick")
+                    : Loc.F("places.vanilla.notInCatalog", "place", Model.Source);
             int nodes = CountNodes(lv.Hierarchy);
-            return $"{nodes} GameObject(s) in the vanilla hierarchy."
-                 + (string.IsNullOrEmpty(PreviewBaseSprite) ? "  (no extracted art for this level)" : "");
+            return Loc.P("places.vanilla.objects", nodes)
+                 + (string.IsNullOrEmpty(PreviewBaseSprite) ? "  " + Loc.T("places.vanilla.noArt") : "");
         }
     }
 

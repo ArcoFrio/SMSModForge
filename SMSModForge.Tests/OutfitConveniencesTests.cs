@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using SMSModForge.Model;
@@ -18,6 +18,7 @@ namespace SMSModForge.Tests;
 /// so every one of them was typed again by hand — which is where the typos that
 /// make a bust not load come from.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class OutfitConveniencesTests : IDisposable
 {
     private readonly ITestOutputHelper _out;

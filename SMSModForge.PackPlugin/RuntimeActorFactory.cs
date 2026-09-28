@@ -74,7 +74,15 @@ namespace SMSModForge.PackPlugin
         private PropertyGetAudio _donorGibberish;
         private bool _donorSearched;
 
-        public RuntimeActorFactory(ManualLogSource log) { _log = log; }
+        public RuntimeActorFactory(ManualLogSource log, string packId = "")
+        {
+            _log = log;
+            _packId = packId ?? "";
+        }
+
+        /// <summary>Whose names these are: what a <c>[PV:name]</c> in one
+        /// is read from.</summary>
+        private readonly string _packId;
 
         /// <summary>
         /// Return the cached Actor for <paramref name="key"/>, or build a
@@ -209,7 +217,12 @@ namespace SMSModForge.PackPlugin
         {
             if (_fldActorTypewriter == null) return;
 
-            bool hasCfg = _twByKey.TryGetValue(key, out var cfg);
+            // The player types the same way in every pack: whatever a pack
+            // saved for them is not asked for (author, 2026-09-27).
+            bool isPlayer = string.Equals(key, SMSModForge.Shared.VanillaSpeech.Player.Key,
+                                          System.StringComparison.OrdinalIgnoreCase);
+            TwConfig cfg = default(TwConfig);
+            bool hasCfg = !isPlayer && _twByKey.TryGetValue(key, out cfg);
             bool enabled = !hasCfg || cfg.Enabled;
 
             object tw = _fldActorTypewriter.GetValue(actor);
@@ -237,7 +250,9 @@ namespace SMSModForge.PackPlugin
             // now shows his real numbers, which makes matching them here the
             // difference between a panel that describes the game and one that
             // lies about it.
-            var theirs = hasCfg ? null : SMSModForge.Shared.VanillaSpeech.For(key);
+            var theirs = hasCfg ? null
+                       : isPlayer ? SMSModForge.Shared.VanillaSpeech.Player
+                       : SMSModForge.Shared.VanillaSpeech.For(key);
 
             int freq = hasCfg ? cfg.Frequency : theirs != null ? theirs.Frequency : DefaultFrequency;
             float pmin = hasCfg ? cfg.PitchMin : theirs != null ? theirs.PitchMin : DefaultPitchMin;
@@ -308,7 +323,10 @@ namespace SMSModForge.PackPlugin
             }
             var actant = _fldActorActant.GetValue(actor);
             if (actant == null) return;
-            _fldActantName.SetValue(actant, new PropertyGetString(displayName));
+            // Tokens in a name are filled in as the name is shown - "{PC}'s
+            // double" reads as the player's name - which a plain string, what
+            // this always was, never did.
+            _fldActantName.SetValue(actant, GetStringPackText.For(displayName, _packId));
         }
     }
 }

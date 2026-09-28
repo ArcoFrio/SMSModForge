@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using SMSModForge.Model;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Services;
 
@@ -18,8 +19,11 @@ namespace SMSModForge.Services;
 ///   variable-taking action is covered the day it's added.</item>
 ///   <item><b>The <c>$varName</c> source syntax</b> — <c>PickRandomFromList</c>
 ///   accepts either a literal list or <c>$var</c>.</item>
-///   <item><b>[PV:name] tokens</b> — live-substituted in dialogue text and in
-///   navigator / map button labels.</item>
+///   <item><b>[PV:name] tokens</b> — in every text a player reads: dialogue
+///   lines, navigator and map button labels, and (through the list of the
+///   pack's texts, <see cref="Translation.LanguageSession.Slots"/>) character
+///   names, quest titles, descriptions and tasks, and the texts on screens -
+///   where the game plugin fills them in too since 2026-09-27.</item>
 /// </list>
 /// <para/>
 /// Vanilla-sourced references are deliberately skipped: a Variable* condition
@@ -110,7 +114,47 @@ public static class VariableRenamer
             }
         }
 
+        // Every other text a player reads. [PV:name] is filled in in all of
+        // them now, so a rename that left one behind would leave it naming a
+        // variable that no longer exists - read as nothing, the token gone.
+        foreach (var slot in OtherTexts(pack))
+        {
+            string before = slot.Get() ?? "";
+            int c = RenameTokens(before, oldName, newName, out var after);
+            if (c > 0) slot.Set(after);
+            n += c;
+        }
+
         return n;
+    }
+
+    /// <summary>The texts a player reads that the walks above do not reach:
+    /// everything but dialogue lines and button labels, which they do.</summary>
+    private static IEnumerable<Translation.LanguageSession.Slot> OtherTexts(ModPack pack)
+        => Translation.LanguageSession.Slots(pack, out _)
+            .Where(s => s.Kind != Shared.PackTexts.Kind.Line
+                        && s.Kind != Shared.PackTexts.Kind.NavigatorLabel
+                        && s.Kind != Shared.PackTexts.Kind.MapLabel);
+
+    /// <summary>Where one of <see cref="OtherTexts"/> is, said the way the
+    /// rest of the list says it.</summary>
+    private static string WhereIs(ModPack pack, Translation.LanguageSession.Slot slot)
+    {
+        switch (slot.Kind)
+        {
+            case Shared.PackTexts.Kind.CharacterName:
+                return Loc.F("walk.character", "name", slot.Owner);
+            case Shared.PackTexts.Kind.TaskName:
+            case Shared.PackTexts.Kind.TaskQuestDescription:
+                return Loc.F("walk.questTask", "name", slot.Owner, "task", slot.Detail);
+            case Shared.PackTexts.Kind.GameTaskQuestDescription:
+                return Loc.F("walk.questGameTask", "name", slot.Owner, "task", slot.Detail);
+            case Shared.PackTexts.Kind.UiText:
+                string name = pack.Uis.FirstOrDefault(u => u.Id == slot.Owner)?.Name;
+                return Loc.F("walk.ui", "name", string.IsNullOrEmpty(name) ? slot.Owner : name);
+            default:
+                return Loc.F("walk.quest", "name", slot.Owner);
+        }
     }
 
     /// <summary>Every place a variable is referenced, as human-readable
@@ -122,14 +166,14 @@ public static class VariableRenamer
 
         foreach (var d in pack.Dialogues)
         {
-            if (CountConditions(d.StartConditions, name) > 0) hits.Add($"Dialogue '{d.Key}' start conditions");
+            if (CountConditions(d.StartConditions, name) > 0) hits.Add(Loc.F("walk.dialogueStart", "name", d.Key));
             foreach (var node in d.Nodes)
             {
                 int c = CountConditions(node.Conditions, name)
                       + CountActions(node.ActionsOnStart, name)
                       + CountActions(node.ActionsOnFinish, name)
                       + (HasToken(node.Text, name) ? 1 : 0);
-                if (c > 0) hits.Add($"Dialogue '{d.Key}' node {node.Id}");
+                if (c > 0) hits.Add(Loc.F("walk.dialogueNode", "name", d.Key, "node", node.Id));
             }
         }
         foreach (var r in pack.IntegrationRules)
@@ -137,23 +181,23 @@ public static class VariableRenamer
             int c = CountConditions(r.Conditions, name) + CountActions(r.Actions, name);
             foreach (var b in r.Branches)
                 c += CountConditions(b.Conditions, name) + CountActions(b.Actions, name);
-            if (c > 0) hits.Add($"Integration rule '{r.Key}'");
+            if (c > 0) hits.Add(Loc.F("walk.rule", "name", r.Key));
         }
         foreach (var p in pack.Places)
         {
             int c = p.OnEnter.Concat(p.OnExit).Sum(h => CountConditions(h.Conditions, name) + CountActions(h.Actions, name))
                   + p.NavigatorButtons.Sum(b => CountConditions(b.Conditions, name) + (HasToken(b.Label, name) ? 1 : 0));
-            if (c > 0) hits.Add($"Place '{p.Key}'");
+            if (c > 0) hits.Add(Loc.F("walk.place", "name", p.Key));
         }
         foreach (var v in pack.VanillaExtensions)
             if (v.NavigatorButtons.Sum(b => CountConditions(b.Conditions, name) + (HasToken(b.Label, name) ? 1 : 0)) > 0)
-                hits.Add($"Vanilla extension '{v.Source}'");
+                hits.Add(Loc.F("walk.vanillaExtension", "name", v.Source));
         foreach (var b in pack.MapButtons)
             if (CountConditions(b.Conditions, name) > 0 || HasToken(b.Label, name))
-                hits.Add($"Map button '{b.Label}'");
+                hits.Add(Loc.F("walk.mapButton", "name", b.Label));
         foreach (var w in pack.Wallpapers)
             if (CountConditions(w.UnlockConditions, name) > 0)
-                hits.Add($"Wallpaper '{w.Key}' unlock conditions");
+                hits.Add(Loc.F("walk.wallpaperUnlock", "name", w.Key));
         foreach (var q in pack.Quests)
         {
             int c = CountConditions(q.StartConditions, name)
@@ -163,7 +207,14 @@ public static class VariableRenamer
                                           + CountActions(t.Actions, name)
                                           + (t.CountsFromVariable && !t.CountVariableIsVanilla && t.CountVariable == name ? 1 : 0))
                   + q.VanillaTasks.Sum(h => CountActions(h.Actions, name) + CountConditions(h.ShowConditions, name));
-            if (c > 0) hits.Add($"Quest '{q.Key}'");
+            if (c > 0) hits.Add(Loc.F("walk.quest", "name", q.Key));
+        }
+
+        foreach (var slot in OtherTexts(pack))
+        {
+            if (!HasToken(slot.Get(), name)) continue;
+            string where = WhereIs(pack, slot);
+            if (!hits.Contains(where)) hits.Add(where);
         }
 
         return hits;

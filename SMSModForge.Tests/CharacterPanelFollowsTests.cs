@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,6 +17,7 @@ namespace SMSModForge.Tests;
 /// neutral expression every character carries, and the Actor picker filing
 /// speakers under whose they are.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class CharacterPanelFollowsTests
 {
     private readonly ITestOutputHelper _out;

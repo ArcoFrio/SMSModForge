@@ -5,9 +5,9 @@
     <!-- One source of truth for the version. The About line and the title
          bar read it back off the assembly, so they cannot drift from what
          was actually built. -->
-    <Version>1.5.0</Version>
-    <AssemblyVersion>1.5.0.0</AssemblyVersion>
-    <FileVersion>1.5.0.0</FileVersion>
+    <Version>1.6.0</Version>
+    <AssemblyVersion>1.6.0.0</AssemblyVersion>
+    <FileVersion>1.6.0.0</FileVersion>
     <Product>SMSModForge</Product>
     <TargetFramework>net8.0-windows</TargetFramework>
     <RootNamespace>SMSModForge</RootNamespace>
@@ -28,6 +28,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4191.47" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <!-- SFX preview playback. The pack's SFX are OGG Vorbis, which WPF's
          MediaPlayer can't decode; NAudio.Vorbis (NAudio + NVorbis) decodes OGG
@@ -133,8 +134,7 @@
       told an author to pick a sound would have pointed at a file the build
       never copied — present in the repo, absent everywhere it mattered.
     -->
-    <Content Include="Resources\TutorialAssets\**\*.png;Resources\TutorialAssets\**\*.PNG;Resources\TutorialAssets\**\*.ogg;Resources\TutorialAssets\**\*.wav;Resources\TutorialAssets\**\*.mp3"
-             Exclude="Resources\TutorialAssets\**\modpack.json">
+    <Content Include="Resources\TutorialAssets\**\*.png;Resources\TutorialAssets\**\*.PNG;Resources\TutorialAssets\**\*.ogg;Resources\TutorialAssets\**\*.wav;Resources\TutorialAssets\**\*.mp3" Exclude="Resources\TutorialAssets\**\modpack.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -246,7 +246,14 @@
     <Compile Include="..\Shared\QuestIds.cs" Link="Shared\QuestIds.cs" />
     <Compile Include="..\Shared\QuestVocabulary.cs" Link="Shared\QuestVocabulary.cs" />
     <Compile Include="..\Shared\QuestTreeEdits.cs" Link="Shared\QuestTreeEdits.cs" />
+    <Compile Include="..\Shared\QuestCounters.cs" Link="Shared\QuestCounters.cs" />
+    <Compile Include="..\Shared\QuestGrowth.cs" Link="Shared\QuestGrowth.cs" />
     <Compile Include="..\Shared\SaveLoadChecks.cs" Link="Shared\SaveLoadChecks.cs" />
+    <Compile Include="..\Shared\SaveRecord.cs" Link="Shared\SaveRecord.cs" />
+    <Compile Include="..\Shared\PackSwitches.cs" Link="Shared\PackSwitches.cs" />
+    <Compile Include="..\Shared\RichText.cs" Link="Shared\RichText.cs" />
+    <Compile Include="..\Shared\TextTemplates.cs" Link="Shared\TextTemplates.cs" />
+    <Compile Include="..\Shared\XUnityLanguage.cs" Link="Shared\XUnityLanguage.cs" />
     <Compile Include="..\Shared\GameConditionEdits.cs" Link="Shared\GameConditionEdits.cs" />
     <Compile Include="..\Shared\VarText.cs" Link="Shared\VarText.cs" />
     <Compile Include="..\Shared\VarCompare.cs" Link="Shared\VarCompare.cs" />
@@ -260,7 +267,34 @@
     <Compile Include="..\Shared\PackInstallScan.cs" Link="Shared\PackInstallScan.cs" />
     <Compile Include="..\Shared\ForgeVersion.cs" Link="Shared\ForgeVersion.cs" />
     <Compile Include="..\Shared\PackStatus.cs" Link="Shared\PackStatus.cs" />
+    <Compile Include="..\Shared\TextScripts.cs" Link="Shared\TextScripts.cs" />
     <Compile Include="..\Shared\MediaKinds.cs" Link="Shared\MediaKinds.cs" />
+    <Compile Include="..\Shared\PackPaths.cs" Link="Shared\PackPaths.cs" />
+    <Compile Include="..\Shared\TextFile.cs" Link="Shared\TextFile.cs" />
+    <Compile Include="..\Shared\PluralRules.cs" Link="Shared\PluralRules.cs" />
+    <Compile Include="..\Shared\Texts.cs" Link="Shared\Texts.cs" />
+    <Compile Include="..\Shared\GameTexts.cs" Link="Shared\GameTexts.cs" />
+    <Compile Include="..\Shared\LanguageMatch.cs" Link="Shared\LanguageMatch.cs" />
+    <Compile Include="..\Shared\PackTexts.cs" Link="Shared\PackTexts.cs" />
+    <Compile Include="..\Shared\LanguageChoice.cs" Link="Shared\LanguageChoice.cs" />
+    <Compile Include="..\Shared\GameLineNotice.cs" Link="Shared\GameLineNotice.cs" />
+    <!-- The editor's alone: the plugin reads translations, it never checks or writes one. -->
+    <Compile Include="..\Shared\TextCheck.cs" Link="Shared\TextCheck.cs" />
+    <Compile Include="..\Shared\TextFileWriter.cs" Link="Shared\TextFileWriter.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--
+      The editor's words. English is built into the exe, because it is the
+      authority on what texts exist and a missing file must not leave the
+      editor with none. It is ALSO copied beside the exe, with every shipped
+      translation, for people to read and translate from.
+    -->
+    <EmbeddedResource Include="Languages\en.txt" LogicalName="SMSModForge.Languages.en.txt" />
+    <Content Include="Languages\*.txt">
+      <Link>Languages\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

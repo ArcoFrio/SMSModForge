@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using SMSModForge.Model;
 using SMSModForge.ViewModel;
 using Xunit;
@@ -19,6 +19,7 @@ namespace SMSModForge.Tests;
 /// One item in each list is the case that strands somebody, so that is the
 /// case these use.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class SidebarSelectionTests
 {
     private readonly ITestOutputHelper _out;

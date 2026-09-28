@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using System.Windows.Controls;
 using SMSModForge.Model;
 using SMSModForge.ViewModel;
@@ -12,6 +12,7 @@ namespace SMSModForge.Tests;
 /// its entries about the game's quests in a list of their own - the same split
 /// the Places and Dialogues tabs make.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class QuestSidebarTests
 {
     private readonly ITestOutputHelper _out;

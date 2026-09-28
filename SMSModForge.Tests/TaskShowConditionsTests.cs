@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -22,6 +22,7 @@ namespace SMSModForge.Tests;
 /// ticks "Hide it again when they stop passing". The runtime half - the
 /// remembered list in the pack's save data - cannot run here.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class TaskShowConditionsTests
 {
     private readonly ITestOutputHelper _out;

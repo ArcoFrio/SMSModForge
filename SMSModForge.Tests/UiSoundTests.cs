@@ -18,6 +18,7 @@ namespace SMSModForge.Tests;
 /// sounds first and the game's second - so a pack can shadow a game sound with
 /// one of its own, and a sound that is still loading is not frozen out.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class UiSoundTests
 {
     private readonly ITestOutputHelper _out;

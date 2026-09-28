@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using SMSModForge.Localization;
 
 namespace SMSModForge.Services;
 
@@ -47,7 +48,7 @@ public static class PackFolderSafety
         // through.
         try
         {
-            if (Directory.GetParent(untrimmed) == null) return "the root of a drive";
+            if (Directory.GetParent(untrimmed) == null) return Loc.T("save.risk.driveRoot");
         }
         catch { /* unreadable path — fall through to the other checks */ }
 
@@ -70,7 +71,7 @@ public static class PackFolderSafety
             if (known.Length == 0) continue;
             if (string.Equals(full, known.TrimEnd(Path.DirectorySeparatorChar),
                               StringComparison.OrdinalIgnoreCase))
-                return "a folder Windows uses for your own files";
+                return Loc.T("save.risk.knownFolder");
         }
 
         // Downloads has no SpecialFolder on .NET, and is the other place a
@@ -81,7 +82,7 @@ public static class PackFolderSafety
                 Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
             if (string.Equals(full, downloads.TrimEnd(Path.DirectorySeparatorChar),
                               StringComparison.OrdinalIgnoreCase))
-                return "your Downloads folder";
+                return Loc.T("save.risk.downloads");
         }
         catch { /* ignore */ }
 
@@ -92,7 +93,7 @@ public static class PackFolderSafety
             int count = Directory.EnumerateFiles(full, "*", SearchOption.AllDirectories)
                                  .Take(CrowdedFileCount + 1).Count();
             if (count > CrowdedFileCount)
-                return $"a folder that already holds more than {CrowdedFileCount} files";
+                return Loc.F("save.risk.crowded", "count", CrowdedFileCount);
         }
         catch { /* unreadable — not our business to block on */ }
 

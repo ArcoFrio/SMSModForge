@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using SMSModForge.Model;
+using SMSModForge.Localization;
 
 namespace SMSModForge.ViewModel;
 
@@ -194,7 +195,7 @@ public sealed class DialogueNodeViewModel : ObservableObject
             var fields = Owner?.ChangedFields(Model);
             return fields == null || fields.Count == 0
                 ? ""
-                : "Changed from the game: " + string.Join(", ", fields);
+                : Loc.F("quests.changedFromGame", "parts", Loc.JoinList(fields));
         }
     }
 
@@ -211,12 +212,12 @@ public sealed class DialogueNodeViewModel : ObservableObject
     /// <summary>Whether this line is one the pack added rather than one of the
     /// game's — which is what makes its reset a deletion.</summary>
     public bool IsAddedLine
-        => IsVanillaLine && (Owner?.ChangedFields(Model).Contains("(new line)") ?? false);
+        => IsVanillaLine && (Owner?.ChangedFields(Model).Contains(Loc.T("dialogues.newLine")) ?? false);
 
     /// <summary>What the whole-line reset does, said plainly on the button.</summary>
     public string ResetTooltip => IsAddedLine
-        ? "Remove this line. The game has no version of it to go back to."
-        : "Put this line back the way the game has it.";
+        ? Loc.T("dialogues.resetLine.added.tip")
+        : Loc.T("dialogues.resetLine.tip");
 
     /// <summary>
     /// One changed field, and a way to put just that one back.
@@ -418,7 +419,7 @@ public sealed class DialogueNodeViewModel : ObservableObject
     }
 
     /// <summary>Comma-separated child ids, suitable for showing in the list.</summary>
-    public string ChildrenSummary => Model.Children.Count == 0 ? "(none)" : string.Join(", ", Model.Children);
+    public string ChildrenSummary => Model.Children.Count == 0 ? Loc.T("common.none") : string.Join(", ", Model.Children);
 
     // ── Tree depth (set by the parent DialogueViewModel) ─────────────
 
@@ -464,7 +465,7 @@ public sealed class DialogueNodeViewModel : ObservableObject
         {
             string raw = string.IsNullOrEmpty(Text) ? "" : Text;
             string preview = System.Text.RegularExpressions.Regex.Replace(raw, @"\s+", " ").Trim();
-            return preview.Length == 0 ? "(no text)" : preview;
+            return preview.Length == 0 ? Loc.T("quests.noText") : preview;
         }
     }
 

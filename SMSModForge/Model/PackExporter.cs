@@ -199,6 +199,13 @@ public static class PackExporter
         // downloads for nothing.
         if (PublishRecord.Is(relPath)) return true;
 
+        // The copy of a translation kept when File ▸ Pack translations put
+        // its keys back: the author's safety net, and a file the plugin would
+        // never read.
+        string norm = relPath.Replace('\\', '/');
+        if (norm.StartsWith(Shared.PackTexts.Folder + "/", StringComparison.OrdinalIgnoreCase)
+            && norm.EndsWith(".bak", StringComparison.OrdinalIgnoreCase)) return true;
+
         // Split on both Unix and Windows separators so the segment checks
         // catch nested matches regardless of where the relative path came
         // from.

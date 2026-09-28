@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using SMSModForge.Model;
+using SMSModForge.Localization;
 
 namespace SMSModForge.ViewModel;
 
@@ -276,9 +277,13 @@ public sealed class UnitTreeController : ObservableObject
             if (i is UnitFolderNode fn) SortLevel(fn.Children);
     }
 
+    /// <summary>What a new folder is called - in the pack's own language,
+    /// which the editor's owner sets (<see cref="MainViewModel.NewName"/>).</summary>
+    public Func<string> NewFolderName { get; set; } = () => Loc.T("common.newFolder");
+
     public void AddFolder()
     {
-        var folder = new UnitFolderNode("New Folder");
+        var folder = new UnitFolderNode(NewFolderName());
         if (Selected is UnitFolderNode target)
         {
             target.Children.Insert(0, folder);

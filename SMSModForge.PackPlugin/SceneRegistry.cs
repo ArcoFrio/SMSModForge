@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace SMSModForge.PackPlugin
@@ -19,6 +19,10 @@ namespace SMSModForge.PackPlugin
     {
         public sealed class Entry
         {
+            /// <summary>The pack-local key this was registered under, so
+            /// anything walking the registry can name what it found.</summary>
+            public string Key;
+
             public GameObject SceneGo;
 
             /// <summary>
@@ -27,15 +31,26 @@ namespace SMSModForge.PackPlugin
             /// either kept intact or stripped without replacement).
             /// </summary>
             public string ActivationSignal;
+
+            /// <summary>Whether showing this scene counts as taking a Starmaker
+            /// photo - see <see cref="StarmakerPhotos"/>.</summary>
+            public bool StarmakerPhoto;
         }
 
         private readonly Dictionary<string, Entry> _byKey =
             new Dictionary<string, Entry>(System.StringComparer.Ordinal);
 
-        public void Register(string key, GameObject sceneGo, string activationSignal)
+        public void Register(string key, GameObject sceneGo, string activationSignal,
+                             bool starmakerPhoto = false)
         {
             if (string.IsNullOrEmpty(key) || sceneGo == null) return;
-            _byKey[key] = new Entry { SceneGo = sceneGo, ActivationSignal = activationSignal };
+            _byKey[key] = new Entry
+            {
+                Key = key,
+                SceneGo = sceneGo,
+                ActivationSignal = activationSignal,
+                StarmakerPhoto = starmakerPhoto,
+            };
         }
 
         public bool TryGet(string key, out Entry entry) => _byKey.TryGetValue(key, out entry);

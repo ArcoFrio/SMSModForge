@@ -179,6 +179,70 @@ public sealed class OlderPackCompatibility
         }
     }
 
+    /// <summary>
+    /// The player's lines come through the migrations that changed the player
+    /// (their typing voice became the game's, 2026-09-27) as they went in:
+    /// every line spoken by the player still is, with the same words, in the
+    /// file the game reads. Asked after a report of the player's lines playing
+    /// as an empty box - which turned out to be a different, empty dialogue -
+    /// so that a real cause would be caught here next time.
+    /// </summary>
+    [Fact]
+    public void ThePlayersLinesSurviveThePlayersMigrations()
+    {
+        var packs = Subjects().ToList();
+        if (packs.Count == 0)
+        {
+            _out.WriteLine("SMSMODFORGE_OLD_PACKS not set - nothing to check.");
+            return;
+        }
+
+        foreach (string path in packs)
+        {
+            string name = Path.GetFileName(path);
+            var original = Newtonsoft.Json.JsonConvert.DeserializeObject<ModPack>(File.ReadAllText(path));
+            if (original?.PackId == null) { _out.WriteLine($"{name}: not a pack"); continue; }
+
+            var before = PlayersLines(original);
+            string root = Path.Combine(Path.GetTempPath(), "smsforge-player-" + Guid.NewGuid().ToString("N"));
+            try
+            {
+                Directory.CreateDirectory(root);
+                File.Copy(path, Path.Combine(root, PackRepository.ManifestFileName));
+                PackRepository.Save(PackRepository.Load(root), root);
+
+                // What the game reads: the file, not the editor's model.
+                var saved = Newtonsoft.Json.JsonConvert.DeserializeObject<ModPack>(
+                    File.ReadAllText(Path.Combine(root, PackRepository.ManifestFileName)))!;
+                var after = PlayersLines(saved);
+
+                _out.WriteLine($"── {name}: {before.Count} line(s) for the player, {after.Count} after opening and saving");
+                Assert.Equal(before.Count, after.Count);
+                foreach (var line in before)
+                {
+                    Assert.True(after.TryGetValue(line.Key, out var text), $"{name}: the player's line {line.Key} is gone");
+                    Assert.Equal(line.Value, text);
+                }
+                Assert.Contains(saved.Characters, c => c.IsPlayer);
+            }
+            finally
+            {
+                try { Directory.Delete(root, true); } catch (IOException) { }
+            }
+        }
+    }
+
+    /// <summary>The player's lines, by dialogue and line, with their words.</summary>
+    private static Dictionary<string, string> PlayersLines(ModPack pack)
+    {
+        var lines = new Dictionary<string, string>(StringComparer.Ordinal);
+        foreach (var d in pack.Dialogues ?? new List<DialogueDef>())
+            foreach (var n in d.Nodes)
+                if (string.Equals(n.Actor, CharacterDef.PlayerKey, StringComparison.OrdinalIgnoreCase))
+                    lines[d.Key + "/" + n.Id] = n.Text ?? "";
+        return lines;
+    }
+
     /// <summary>Every character key the pack gives a line to.</summary>
     private static HashSet<string> Speakers(ModPack pack)
     {

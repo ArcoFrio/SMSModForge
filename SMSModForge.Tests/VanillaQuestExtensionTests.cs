@@ -19,6 +19,7 @@ namespace SMSModForge.Tests;
 /// tab offers. The plugin's half is read off the game's own IL and cannot run
 /// here.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class VanillaQuestExtensionTests
 {
     private readonly ITestOutputHelper _out;

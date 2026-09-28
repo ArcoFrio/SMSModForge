@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -23,6 +23,7 @@ namespace SMSModForge.Tests;
 /// text the plugin reads - so a change to how a section is saved cannot quietly
 /// stop the game from warning about it.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class SaveLoadChecksTests
 {
     private readonly ITestOutputHelper _out;
@@ -243,7 +244,7 @@ public sealed class SaveLoadChecksTests
         var (pack, quest) = BarPack();
         var manifest = JObject.Parse(PackRepository.SerializeAsSaved(pack));
         Assert.Equal(new[] { C.Dialogues }, C.Of(manifest));
-        Assert.Equal(new[] { "when quests start" }, C.WordsOf(manifest)[C.Dialogues]);
+        Assert.Equal(new[] { C.QuestStartsPart }, C.WordsOf(manifest)[C.Dialogues]);
 
         var text = C.Warning(new[] { new C.PackChanges("TestPack", C.Of(manifest), C.WordsOf(manifest)) }, null!)!;
         Show(text);
@@ -257,7 +258,7 @@ public sealed class SaveLoadChecksTests
         quest.Source = "";
         pack.Quests.Clear();
         var loose = JObject.Parse(PackRepository.SerializeAsSaved(pack));
-        Assert.Equal(new[] { "when conversations play" }, C.WordsOf(loose)[C.Dialogues]);
+        Assert.Equal(new[] { C.ConversationPlaysPart }, C.WordsOf(loose)[C.Dialogues]);
         Assert.StartsWith("'TestPack' changes when the game's own conversations play,",
             C.Warning(new[] { new C.PackChanges("TestPack", C.Of(loose), C.WordsOf(loose)) }, null!)!.Paragraphs[0]);
     }
@@ -279,14 +280,14 @@ public sealed class SaveLoadChecksTests
 
         var manifest = JObject.Parse(PackRepository.SerializeAsSaved(vm.Pack));
         Assert.Equal(new[] { C.Dialogues }, C.Of(manifest));
-        Assert.Equal(new[] { "when quests start" }, C.WordsOf(manifest)[C.Dialogues]);
+        Assert.Equal(new[] { C.QuestStartsPart }, C.WordsOf(manifest)[C.Dialogues]);
         Assert.Equal("Vanessa Quest", Assert.Single(C.QuestsChanged(manifest)).Key);
 
         // The same line rewritten as well is a conversation change on top.
         var talk = vm.VanillaDialogues.Single();
         talk.Model.Nodes.Single(n => n.Id == unchecked((int)-1608623911)).Text = "Different words.";
         var rewritten = JObject.Parse(PackRepository.SerializeAsSaved(vm.Pack));
-        Assert.Equal(new[] { "conversations" }, C.WordsOf(rewritten)[C.Dialogues]);
+        Assert.Equal(new[] { C.ConversationsPart }, C.WordsOf(rewritten)[C.Dialogues]);
     }
 
     [Fact]
@@ -299,7 +300,7 @@ public sealed class SaveLoadChecksTests
         conversation.Model.Nodes.First(n => n.Id == conversation.Model.RootNodeIds[0]).Text = "Suit yourself.";
 
         var manifest = JObject.Parse(PackRepository.SerializeAsSaved(pack));
-        Assert.Equal(new[] { "conversations", "when quests start" }, C.WordsOf(manifest)[C.Dialogues]);
+        Assert.Equal(new[] { C.ConversationsPart, C.QuestStartsPart }, C.WordsOf(manifest)[C.Dialogues]);
         var text = C.Warning(new[] { new C.PackChanges("TestPack", C.Of(manifest), C.WordsOf(manifest)) }, null!)!;
         Show(text);
         Assert.StartsWith("'TestPack' changes the game's own conversations and when its quests start,",
@@ -356,7 +357,7 @@ public sealed class SaveLoadChecksTests
         // A save last written before 1.5.0 was played with the pack, but
         // nothing wrote down with which of its changes. Rewritten conversations
         // are the one risky change a pack could already make then.
-        var lines = new Dictionary<string, List<string>> { [C.Dialogues] = new List<string> { "conversations" } };
+        var lines = new Dictionary<string, List<string>> { [C.Dialogues] = new List<string> { C.ConversationsPart } };
         var old = C.Warning(new[]
         {
             new C.PackChanges("Alpha", new[] { C.Dialogues }, lines) { SaveBeforeMarks = true },
@@ -375,8 +376,8 @@ public sealed class SaveLoadChecksTests
         // Everything else a pack can change is newer than the marks, so an older
         // save has certainly never been played with it.
         const string never = "this save hasn't been played with that yet.";
-        var starts = new Dictionary<string, List<string>> { [C.Dialogues] = new List<string> { "when quests start" } };
-        var plays = new Dictionary<string, List<string>> { [C.Dialogues] = new List<string> { "when conversations play" } };
+        var starts = new Dictionary<string, List<string>> { [C.Dialogues] = new List<string> { C.QuestStartsPart } };
+        var plays = new Dictionary<string, List<string>> { [C.Dialogues] = new List<string> { C.ConversationPlaysPart } };
         foreach (var pack in new[]
                  {
                      new C.PackChanges("Alpha", new[] { C.Dialogues }, starts) { SaveBeforeMarks = true },
@@ -411,18 +412,54 @@ public sealed class SaveLoadChecksTests
         var both = C.Warning(new[] { new C.PackChanges("Alpha", new[] { C.Quests }) }, new[] { "Gamma" })!;
         foreach (var t in new[] { gone, alone, both }) Show(t);
 
-        Assert.Equal("This save has data from 'Gamma' and 'Delta', which aren't installed. Their data won't be kept "
-                     + "in the saves you make from now on.", Assert.Single(gone.After));
-        Assert.Equal("This save has data from 'Gamma', which isn't installed. Its data won't be kept in the saves "
-                     + "you make from now on.", Assert.Single(alone.After));
-        Assert.Empty(gone.Paragraphs);
-        Assert.Empty(gone.Details);
+        Assert.Equal("This save has data from packs that aren't running now. Nothing is lost: it's kept in the "
+                     + "saves you make, and it's all there again when they run.", Assert.Single(gone.Paragraphs));
+        Assert.StartsWith("This save has data from a pack that isn't running now.", Assert.Single(alone.Paragraphs));
+        Assert.Empty(gone.After);
+        // Named in the list, which scrolls, not in the sentence.
+        var listed = Assert.Single(gone.Details);
+        Assert.Equal("Not installed:", listed.Heading);
+        Assert.Equal(new[] { "'Gamma'", "'Delta'" }, listed.Items);
 
         // Both reasons in one window, the second saying it is another.
         Assert.StartsWith("'Alpha' changes the game's own quests,", Assert.Single(both.Paragraphs));
         Assert.Equal(2, both.After.Count);
         Assert.Equal("Starting a new game is safest.", both.After[0]);
-        Assert.StartsWith("This save also has data from 'Gamma', which isn't installed.", both.After[1]);
+        Assert.StartsWith("This save also has data from a pack that isn't running now.", both.After[1]);
+    }
+
+    [Fact]
+    public void APackSwitchedOffIsToldApartFromOneNotLoadedAndOneNotInstalled_WithTheVersionTheSaveRecorded()
+    {
+        var files = new[] { "SAVE.GZ", "SMSModForge_Alpha.json", "SMSModForge_Beta.json", "SMSModForge_Gamma.json",
+                            "SMSModForge_Delta.json", SaveRecord.FileName };
+        var record = new SaveRecord();
+        record.Packs.Add(new SaveRecord.Pack { Id = "Beta", Version = "1.2.0" });
+        record.Packs.Add(new SaveRecord.Pack { Id = "Gamma", Version = "0.3.1" });
+
+        // Alpha runs; Beta is installed and unticked; Delta is installed and
+        // ticked but did not load; Gamma is gone. A switch left over from a
+        // pack since uninstalled does not make it "switched off".
+        var installed = new[] { "Alpha", "BETA", "Delta" };
+        var absent = C.Absent(files, new[] { "Alpha" }, installed, new[] { "beta", "gamma" }, record);
+        Assert.Equal(new[] { "Beta", "Delta", "Gamma" }, absent.Select(a => a.Id));
+        Assert.Equal(new[] { SaveRecord.SwitchedOff, SaveRecord.NotLoaded, SaveRecord.NotInstalled },
+                     absent.Select(a => a.State));
+
+        var text = C.WarningFor(new List<C.PackChanges>(), absent)!;
+        Show(text);
+        Assert.Equal(3, text.Details.Count);
+        Assert.Equal("Switched off - tick them on the main menu to run them:", text.Details[0].Heading);
+        Assert.Equal(new[] { "'Beta'  v1.2.0" }, text.Details[0].Items);
+        Assert.Equal("Installed, but could not be loaded - BepInEx's log says why:", text.Details[1].Heading);
+        Assert.Equal(new[] { "'Delta'" }, text.Details[1].Items);
+        Assert.Equal("Not installed:", text.Details[2].Heading);
+        Assert.Equal(new[] { "'Gamma'  v0.3.1" }, text.Details[2].Items);
+
+        // The record is not a pack's file, so it is never taken for one.
+        Assert.Null(C.PackIdOfSaveFile(SaveRecord.FileName));
+        // An older save has no record: the ids alone, no versions.
+        Assert.Equal("'Gamma'", C.Absent(files, new[] { "Alpha" }, installed, null!, null!).Last().Label);
     }
 
     [Fact]
@@ -461,7 +498,7 @@ public sealed class SaveLoadChecksTests
 
         // Only said beside a warning about the packs' changes.
         var onlyMissing = C.Warning(new List<C.PackChanges>(), new[] { "Gamma" }, quests)!;
-        Assert.Empty(onlyMissing.Details);
+        Assert.DoesNotContain(onlyMissing.Details, d => d.Heading.StartsWith("Quest", StringComparison.Ordinal));
     }
 
     [Fact]

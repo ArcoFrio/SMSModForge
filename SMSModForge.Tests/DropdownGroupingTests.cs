@@ -19,6 +19,7 @@ namespace SMSModForge.Tests;
 /// files things wrongly is worse than no heading: it sends an author to the
 /// wrong place confidently.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class DropdownGroupingTests
 {
     private readonly ITestOutputHelper _out;

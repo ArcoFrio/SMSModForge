@@ -58,28 +58,29 @@ namespace SMSModForge.PackPlugin
                     Key = key,
                     Title = (string)q["title"] ?? key,
                     Description = (string)q["description"] ?? "",
+                    WhenStepsAdded = QuestGrowth.ChoiceOf((string)q[QuestGrowth.Key]),
                 };
-                ReadTasks(q["tasks"] as JArray, spec.Tasks);
+                ReadTasks(q["tasks"] as JArray, spec.Tasks, manifest.PackId);
                 specs.Add(spec);
             }
             return specs;
         }
 
-        private static void ReadTasks(JArray tasks, List<TaskSpec> into)
+        private static void ReadTasks(JArray tasks, List<TaskSpec> into, string packId)
         {
             if (tasks == null) return;
             foreach (var token in tasks)
             {
                 if (!(token is JObject t)) continue;
                 if (string.IsNullOrEmpty((string)t["key"])) continue;
-                into.Add(ReadTask(t));
+                into.Add(ReadTask(t, packId));
             }
         }
 
         /// <summary>One task and its subtasks, as the manifest writes them - for
         /// a quest of the pack's own, and for a task a pack adds to one of the
         /// game's.</summary>
-        internal static TaskSpec ReadTask(JObject t)
+        internal static TaskSpec ReadTask(JObject t, string packId)
         {
             double countTo = 0;
             var raw = t["countTo"];
@@ -91,6 +92,7 @@ namespace SMSModForge.PackPlugin
                 Key = ((string)t["key"] ?? "").Trim(),
                 Name = (string)t["name"] ?? "",
                 Description = (string)t["description"] ?? "",
+                PackId = packId ?? "",
                 Completion = CompletionOf((string)t["completion"]),
                 Counter = countTo > 0,
                 CountTo = countTo,
@@ -98,7 +100,7 @@ namespace SMSModForge.PackPlugin
                 HideUntilConditions = t[QuestTreeEdits.HideUntilConditionsKey]?.Type == JTokenType.Boolean
                                       && (bool)t[QuestTreeEdits.HideUntilConditionsKey],
             };
-            ReadTasks(t["subtasks"] as JArray, spec.Subtasks);
+            ReadTasks(t["subtasks"] as JArray, spec.Subtasks, packId);
             return spec;
         }
 

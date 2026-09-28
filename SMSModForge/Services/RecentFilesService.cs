@@ -15,6 +15,10 @@ public static class RecentFilesService
 
     public static List<string> Load()
     {
+        // The suite opens packs from temporary folders by the hundred; they
+        // went into the author's own File > Recent list, and pushed their
+        // real packs off it (2026-09-27). Nothing the suite does is theirs.
+        if (TestMode.Active) return new List<string>();
         try
         {
             if (!File.Exists(FilePath)) return new List<string>();
@@ -26,6 +30,7 @@ public static class RecentFilesService
 
     public static void Add(string path)
     {
+        if (TestMode.Active) return;
         var list = Load();
         list.RemoveAll(p => string.Equals(p, path, StringComparison.OrdinalIgnoreCase));
         list.Insert(0, path);

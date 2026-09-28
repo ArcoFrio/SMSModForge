@@ -27,6 +27,11 @@ public sealed class UndoService
 
     public UndoService(Func<string> serialize) => _serialize = serialize;
 
+    /// <summary>The snapshot an undo or redo is leaving, while
+    /// <see cref="RestoreRequested"/> runs: what the editor shows until the
+    /// host puts the other one back - so the host can tell how little changed.</summary>
+    public string Leaving { get; private set; } = "";
+
     /// <summary>Raised by <see cref="Undo"/>/<see cref="Redo"/> with the snapshot
     /// JSON the host should load.</summary>
     public event Action<string>? RestoreRequested;
@@ -75,6 +80,7 @@ public sealed class UndoService
     {
         if (_undo.Count == 0) return;
         _redo.Push(_baseline);
+        Leaving = _baseline;
         _baseline = _undo.Pop();
         RestoreRequested?.Invoke(_baseline);
         StateChanged?.Invoke();
@@ -84,6 +90,7 @@ public sealed class UndoService
     {
         if (_redo.Count == 0) return;
         _undo.Push(_baseline);
+        Leaving = _baseline;
         _baseline = _redo.Pop();
         RestoreRequested?.Invoke(_baseline);
         StateChanged?.Invoke();

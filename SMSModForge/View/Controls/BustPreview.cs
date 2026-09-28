@@ -7,6 +7,7 @@ using System.Windows.Media.Imaging;
 using SMSModForge.Model;
 using SMSModForge.Rendering;
 using SMSModForge.ViewModel;
+using SMSModForge.Localization;
 
 namespace SMSModForge.View.Controls;
 
@@ -46,15 +47,20 @@ public sealed class BustPreview : Grid
         set => SetValue(BustKeyProperty, value);
     }
 
-    public static readonly DependencyProperty ExpressionKeyProperty =
-        DependencyProperty.Register(nameof(ExpressionKey), typeof(string), typeof(BustPreview),
+    public static readonly DependencyProperty FaceProperty =
+        DependencyProperty.Register(nameof(Face), typeof(string), typeof(BustPreview),
             new PropertyMetadata("", OnInputChanged));
 
-    /// <summary>Optional expression key (e.g. "Happy"). Empty = no overlay.</summary>
-    public string ExpressionKey
+    /// <summary>
+    /// The face to show - the FACE, not the line's expression key: the
+    /// speaker's expression list turns one into the other, and only the game's
+    /// four are named the same both ways. See <see cref="Rendering.ExpressionFaces"/>.
+    /// Empty = no overlay.
+    /// </summary>
+    public string Face
     {
-        get => (string)GetValue(ExpressionKeyProperty);
-        set => SetValue(ExpressionKeyProperty, value);
+        get => (string)GetValue(FaceProperty);
+        set => SetValue(FaceProperty, value);
     }
 
     private readonly Image _baseImage = new()
@@ -86,6 +92,9 @@ public sealed class BustPreview : Grid
         // A tooltip that outlived its owner sits over the one thing an
         // author is trying to look at. See ToolTipDismisser.
         View.ToolTipDismisser.KeepClearOf(this);
+        // Its words are worked out as it draws: drawn again when the language
+        // changes, so none is left in the old one.
+        LocText.Follow(this, Refresh);
 
         Width = MinWidth = MaxWidth = FixedSize;
         Height = MinHeight = MaxHeight = FixedSize;
@@ -108,7 +117,7 @@ public sealed class BustPreview : Grid
         var vm = MainViewModel;
         if (vm?.Pack == null || string.IsNullOrEmpty(BustKey))
         {
-            ShowPlaceholder("No bust selected");
+            ShowPlaceholder(Loc.T("preview.bust.none"));
             return;
         }
 
@@ -120,21 +129,17 @@ public sealed class BustPreview : Grid
             // vanilla art folder being absent from this build.
             string reason;
             if (VanillaArtResolver.FindArtRoot() == null)
-                reason = "No VanillaBustArt folder shipped with this build. " +
-                         "Run Tools/UnityEditor/SMSModForgeArtExtractor.cs inside the vanilla " +
-                         "game's Unity project, drop the output into " +
-                         "SMSModForge/Resources/VanillaBustArt/, and rebuild.";
+                reason = Loc.T("preview.bust.noArtFolder");
             else if (string.IsNullOrEmpty(vm.PackRoot))
-                reason = "Save the pack first so the editor can resolve pack-relative paths.";
+                reason = Loc.T("preview.bust.saveFirst");
             else
-                reason = "No art for '" + BustKey + "' — neither a pack outfit " +
-                         "nor a shipped vanilla bust matches that GameObject name.";
+                reason = Loc.F("preview.bust.noArt", "bust", BustKey);
             ShowPlaceholder(reason);
             return;
         }
 
         _baseImage.Source = TryLoad(basePath);
-        var exprPath = VanillaArtResolver.FindExpressionSpritePath(BustKey, ExpressionKey, vm.Pack, vm.PackRoot);
+        var exprPath = VanillaArtResolver.FindExpressionSpritePath(BustKey, Face, vm.Pack, vm.PackRoot);
         _expressionImage.Source = exprPath != null ? TryLoad(exprPath) : null;
         _placeholder.Visibility = Visibility.Collapsed;
         _baseImage.Visibility = Visibility.Visible;

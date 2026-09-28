@@ -17,6 +17,7 @@ namespace SMSModForge.Tests;
 /// symptom is a preview that looks correct and is simply stale, which is worse
 /// than one that is obviously broken.
 /// </summary>
+[Trait("Speed", "Slow")]   // builds a real window; see CLAUDE.md
 public sealed class UiPreviewRefreshTests
 {
     private readonly ITestOutputHelper _out;
