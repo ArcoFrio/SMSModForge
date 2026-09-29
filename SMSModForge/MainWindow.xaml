@@ -6358,8 +6358,12 @@
                                                VerticalAlignment="Center" Foreground="Gray" FontStyle="Italic"
                                                ToolTip="{l:T dialogues.choiceOption.tip}"
                                                Visibility="{Binding IsChoiceChild, Converter={StaticResource BoolToVisibility}}"/>
+                                    <!-- The actor is hidden only on an option of a Choice, which is a
+                                         button rather than a line. Never for the player: hiding it
+                                         there left no way to pick anybody else for the line
+                                         (1.6.2). -->
                                     <TextBlock Text="{l:T dialogues.actor}"       Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"
-                                               Visibility="{Binding DataContext.SelectedNodeShowsSpeaker, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"/>
+                                               Visibility="{Binding IsChoiceChild, Converter={StaticResource InverseBoolToVisibility}}"/>
                                     <!-- Editable autocomplete: bind ONLY Text (not SelectedItem). Binding
                                          both to the same property makes SelectedItem null-out and flush an
                                          empty value back to the node being navigated away from when its
@@ -6373,34 +6377,34 @@
                                               ItemsSource="{Binding DataContext.ActorOptionsGrouped,
                                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                               IsEditable="True"
-                                              Visibility="{Binding DataContext.SelectedNodeShowsSpeaker, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"
+                                              Visibility="{Binding IsChoiceChild, Converter={StaticResource InverseBoolToVisibility}}"
                                               Text="{Binding Actor, UpdateSourceTrigger=PropertyChanged}">
                                         <ComboBox.GroupStyle>
                                             <StaticResource ResourceKey="MusicOriginGroupStyle"/>
                                         </ComboBox.GroupStyle>
                                     </ComboBox>
-                                    <!-- Speaker, expression and outfit are hidden for the two nodes
-                                         that have no speaker worth asking about: the player, whose bust
-                                         belongs to the game, and an option on a Choice, which is a button
-                                         rather than a line. See SelectedNodeShowsSpeaker. -->
+                                    <!-- Expression and outfit are hidden for the two nodes that have
+                                         no bust worth asking about: the player's, whose bust belongs to
+                                         the game, and an option on a Choice, which is a button rather
+                                         than a line. See SelectedNodeShowsExpressionAndOutfit. -->
                                     <TextBlock Text="{l:T dialogues.expression}"  Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"
-                                               Visibility="{Binding DataContext.SelectedNodeShowsSpeaker, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"/>
-                                    <ComboBox ToolTip="{l:T dialogues.whichExpressionSpeakerWears.tip}" view:IssueTarget.Field="expression" Grid.Row="3" Grid.Column="1"
+                                               Visibility="{Binding DataContext.SelectedNodeShowsExpressionAndOutfit, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"/>
+                                    <ComboBox x:Name="NodeExpressionPicker" ToolTip="{l:T dialogues.whichExpressionSpeakerWears.tip}" view:IssueTarget.Field="expression" Grid.Row="3" Grid.Column="1"
                                               ItemsSource="{Binding DataContext.SelectedNodeExpressionOptions,
                                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                               IsEditable="True"
-                                              Visibility="{Binding DataContext.SelectedNodeShowsSpeaker, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"
+                                              Visibility="{Binding DataContext.SelectedNodeShowsExpressionAndOutfit, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"
                                               Text="{Binding Expression, UpdateSourceTrigger=PropertyChanged}"/>
                                     <!-- Outfit: optional per-node bust switch. The picker lists the
                                          speaking actor's authored outfits; empty keeps the current bust.
                                          A $varName picks the outfit dynamically from a pack variable. -->
                                     <TextBlock Text="{l:T dialogues.outfit}"      Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"
-                                               Visibility="{Binding DataContext.SelectedNodeShowsSpeaker, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"/>
+                                               Visibility="{Binding DataContext.SelectedNodeShowsExpressionAndOutfit, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"/>
                                     <ComboBox Grid.Row="4" Grid.Column="1"
                                               ItemsSource="{Binding DataContext.SelectedNodeOutfitOptions,
                                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                               IsEditable="True"
-                                              Visibility="{Binding DataContext.SelectedNodeShowsSpeaker, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"
+                                              Visibility="{Binding DataContext.SelectedNodeShowsExpressionAndOutfit, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"
                                               Text="{Binding Outfit, UpdateSourceTrigger=PropertyChanged}"
                                               ToolTip="{l:T dialogues.switchActorOneTheir.tip}"/>
                                     <TextBlock Text="{l:T dialogues.text}"        Grid.Row="5" Grid.Column="0" VerticalAlignment="Top" Margin="0,4,0,0"/>

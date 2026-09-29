@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.6.2
+
+A fix for the dialogue editor: a line given to the player could not be given
+back to anybody else. Nothing changes in the game: the plugin is the same apart
+from its version number.
+
+### Fixed
+
+- **A line spoken by the player can be given to somebody else again.** Picking
+  the player as a node's actor hid the Actor field along with Expression and
+  Outfit, so there was nothing left to change it back with. Expression and
+  Outfit still hide for the player, whose bust is the game's; the Actor field
+  now stays, and only an option of a Choice, which is a button rather than a
+  line, goes without one.
+
 ## 1.6.1
 
 A smaller release, about translating packs. A pack's translations get a

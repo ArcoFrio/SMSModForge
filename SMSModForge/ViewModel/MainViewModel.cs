@@ -1756,7 +1756,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
                     RebuildSelectedNodeOutfitOptions();
                 }
                 OnPropertyChanged(nameof(SelectedNodeActorIsPlayer));
-                OnPropertyChanged(nameof(SelectedNodeShowsSpeaker));
+                OnPropertyChanged(nameof(SelectedNodeShowsExpressionAndOutfit));
                 // Tag list is per-dialogue but excludes the selected node, so it
                 // rebuilds on every node change rather than only on actor changes.
                 RebuildSelectedNodeJumpTagOptions();
@@ -1800,7 +1800,7 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
             OnPropertyChanged(nameof(SelectedNodeActorBustKey));
             OnPropertyChanged(nameof(SelectedNodeFace));
             OnPropertyChanged(nameof(SelectedNodeActorIsPlayer));
-                OnPropertyChanged(nameof(SelectedNodeShowsSpeaker));
+                OnPropertyChanged(nameof(SelectedNodeShowsExpressionAndOutfit));
             RebuildSelectedNodeExpressionOptions();
             RebuildSelectedNodeOutfitOptions();
             ApplyDefaultOutfitForActorChange();
@@ -1977,18 +1977,24 @@ public sealed class MainViewModel : ObservableObject, IGameConditionEditor
         SpeakerFor(SelectedNode?.Actor ?? "")?.IsPlayer == true;
 
     /// <summary>
-    /// Whether the selected node has a speaker worth asking about.
+    /// Whether the selected node has a bust worth asking about: its
+    /// expression and outfit.
     /// <para/>
     /// Two nodes do not. The PLAYER's bust belongs to the game, so a pack has
     /// no expressions or outfits to offer for it. And an option on a Choice is
-    /// a button rather than a line: whatever actor, expression or outfit it
-    /// carries changes nothing, because the option is drawn as text in a menu
-    /// and the scene behind it is still showing whoever spoke the prompt.
+    /// a button rather than a line: whatever expression or outfit it carries
+    /// changes nothing, because the option is drawn as text in a menu and the
+    /// scene behind it is still showing whoever spoke the prompt.
     /// <para/>
     /// Offering the fields anyway invites an author to set them and wonder why
     /// nothing happens, which is worse than not offering them.
+    /// <para/>
+    /// The actor is another matter. An option on a Choice hides it too, but the
+    /// player's line must keep it: this was once the actor's rule as well, and
+    /// a line given to the player had no field left to give it to anybody else
+    /// (the author, 1.6.2).
     /// </summary>
-    public bool SelectedNodeShowsSpeaker
+    public bool SelectedNodeShowsExpressionAndOutfit
         => !SelectedNodeActorIsPlayer && SelectedNode?.IsChoiceChild != true;
 
     /// <summary>

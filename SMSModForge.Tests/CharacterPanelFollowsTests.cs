@@ -424,6 +424,52 @@ public sealed class CharacterPanelFollowsTests
         });
     }
 
+    [Fact]
+    public void APlayersLineKeepsItsActor_SoItCanBeGivenToSomebodyElse()
+    {
+        // The player's bust is the game's, so a line of theirs has no
+        // expression or outfit to pick - but it does have an actor, and the
+        // Actor field went with the other two: a line given to the player
+        // could not be given back (the author, 1.6.2).
+        WindowHarness.Run(window =>
+        {
+            var vm = (MainViewModel)window.DataContext;
+            vm.AddCharacterCommand.Execute(null);
+            string mine = vm.Characters.Last().Key;
+            ShowTab(window, "Dialogues");
+            vm.AddDialogueCommand.Execute(null);
+            WindowHarness.Pump();
+            if (vm.SelectedDialogue!.Nodes.Count == 0) { vm.AddDialogueRootNodeCommand.Execute(null); WindowHarness.Pump(); }
+            var node = vm.SelectedDialogue.Nodes.First();
+            vm.SelectedNode = node;
+            WindowHarness.Pump();
+
+            var actor = (ComboBox)window.FindName("NodeActorPicker");
+            var expression = (ComboBox)window.FindName("NodeExpressionPicker");
+            actor.Text = CharacterDef.PlayerKey;
+            WindowHarness.Pump();
+            _out.WriteLine($"player's line: actor shown={actor.IsVisible}, expression shown={expression.IsVisible}");
+            Assert.Equal(CharacterDef.PlayerKey, node.Actor);
+            Assert.True(actor.IsVisible, "a line of the player's has no Actor field to change it with");
+            Assert.False(expression.IsVisible);
+
+            // Given back, through the field itself.
+            actor.Text = mine;
+            WindowHarness.Pump();
+            Assert.Equal(mine, node.Actor);
+            Assert.True(actor.IsVisible);
+            Assert.True(expression.IsVisible);
+
+            // An option of a Choice is a button, not a line: no actor there.
+            node.Kind = DialogueNodeKind.Choice;
+            vm.AddDialogueChildNodeCommand.Execute(null);
+            WindowHarness.Pump();
+            Assert.True(vm.SelectedNode!.IsChoiceChild);
+            Assert.False(actor.IsVisible);
+            Assert.False(expression.IsVisible);
+        });
+    }
+
     // ── The mask editor's sliders ─────────────────────────────────────
 
     [Theory]

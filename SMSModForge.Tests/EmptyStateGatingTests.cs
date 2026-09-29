@@ -138,13 +138,13 @@ public sealed class EmptyStateGatingTests
             _out.WriteLine($"option: IsChoiceChild={option.IsChoiceChild}");
 
             Assert.True(option.IsChoiceChild);
-            Assert.False(vm.SelectedNodeShowsSpeaker);
+            Assert.False(vm.SelectedNodeShowsExpressionAndOutfit);
 
             // And the prompt itself still is asked - it is a real line.
             vm.SelectedNode = prompt;
             WindowHarness.Pump();
             Assert.False(prompt.IsChoiceChild);
-            Assert.True(vm.SelectedNodeShowsSpeaker);
+            Assert.True(vm.SelectedNodeShowsExpressionAndOutfit);
         });
     }
 }
